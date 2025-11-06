@@ -17,7 +17,10 @@
       "Bash(git branch:*)",
       "Bash(git remote add:*)",
       "Bash(git push:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File deploy-ftp.ps1)",
+      "Bash(curl -I https://jan-erik-andersen.de)",
+      "Bash(curl:*)"
     ],
     "deny": [],
     "ask": []

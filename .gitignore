@@ -8,6 +8,10 @@ FTP.md
 .env
 .env.local
 
+# Deployment scripts
+deploy-ftp.ps1
+deploy.py
+
 # IDE
 .vscode/
 .idea/

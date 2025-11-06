@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Häufig gestellte Fragen zu AI-native Web Architecture und strukturierten Daten.">
+  <link rel="canonical" href="https://jan-erik-andersen.de/faq.html">
+  <title>FAQ — Jan-Erik Andersen</title>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Was bedeutet AI-native Web Architecture?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "AI-native bedeutet, dass Websites primär für maschinelle Konsumenten (AI-Agenten) strukturiert sind, nicht nur für menschliche Browser. Die Daten sind so organisiert, dass KI-Systeme sie direkt lesen, verstehen und verarbeiten können."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ist meine Website schon AI-ready?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Teste es: Frag ChatGPT oder Claude 'Was weißt du über [deine Website]?' Wenn die Antwort korrekt, vollständig und präzise ist – ja. Wenn nicht – nein."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Was ist Google Zero?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Google Zero beschreibt den Moment, in dem Suchmaschinen irrelevant werden, weil AI-Agenten Informationen direkt aus strukturierten Datenquellen beziehen – ohne den Umweg über Suchergebnis-Seiten."
+          }
+        }
+      ]
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --subtle: #666666;
+      --border: #e0e0e0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a1a1a;
+        --text: #e0e0e0;
+        --subtle: #999999;
+        --border: #333333;
+      }
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--bg);
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--subtle);
+      font-size: 0.95rem;
+    }
+
+    nav {
+      margin-bottom: 2rem;
+      font-size: 0.9rem;
+    }
+
+    nav a {
+      color: var(--subtle);
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      color: var(--text);
+    }
+
+    .faq-list {
+      list-style: none;
+    }
+
+    .faq-item {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-item:last-child {
+      border-bottom: none;
+    }
+
+    .question {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      color: var(--text);
+    }
+
+    .answer {
+      color: var(--text);
+    }
+
+    .answer p {
+      margin-bottom: 0.75rem;
+    }
+
+    .answer ul {
+      margin-left: 1.5rem;
+      margin-top: 0.75rem;
+    }
+
+    .answer li {
+      margin-bottom: 0.5rem;
+    }
+
+    .answer code {
+      background: rgba(128, 128, 128, 0.1);
+      padding: 0.2rem 0.4rem;
+      border-radius: 3px;
+      font-size: 0.9em;
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--subtle);
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Häufige Fragen</h1>
+    <p class="subtitle">Antworten zu AI-native Web Architecture und strukturierten Daten</p>
+  </header>
+
+  <nav>
+    <a href="/">← Zurück zur Startseite</a>
+  </nav>
+
+  <main>
+    <ul class="faq-list">
+
+      <li class="faq-item">
+        <h2 class="question">Was bedeutet "AI-native Web Architecture"?</h2>
+        <div class="answer">
+          <p>
+            <strong>AI-native</strong> bedeutet, dass Websites primär für maschinelle Konsumenten
+            (AI-Agenten) strukturiert sind, nicht nur für menschliche Browser.
+          </p>
+          <p>
+            Die Daten sind so organisiert, dass KI-Systeme sie direkt lesen, verstehen und
+            verarbeiten können – ohne komplexe Scraping-Logik oder Interpretation von HTML-Layouts.
+          </p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <h2 class="question">Ist meine Website schon AI-ready?</h2>
+        <div class="answer">
+          <p><strong>Schnelltest:</strong></p>
+          <p>
+            Frag ChatGPT oder Claude: <em>"Was weißt du über [deine Website/dein Unternehmen]?"</em>
+          </p>
+          <p>
+            <strong>Wenn die Antwort:</strong>
+          </p>
+          <ul>
+            <li>✅ Korrekt, vollständig und präzise ist → Ja, AI-ready</li>
+            <li>⚠️ Vage, ungenau oder halluziniert → Nein, nicht AI-ready</li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <h2 class="question">Was ist Google Zero?</h2>
+        <div class="answer">
+          <p>
+            <strong>Google Zero</strong> beschreibt den Moment, in dem Suchmaschinen irrelevant werden.
+          </p>
+          <p>
+            Nicht weil es keine Fragen mehr gibt, sondern weil AI-Agenten Informationen direkt
+            aus strukturierten Datenquellen beziehen – ohne den Umweg über Suchergebnis-Seiten.
+          </p>
+          <p>
+            Mehr dazu: <a href="/blog/google-zero.html">Blog-Artikel zu Google Zero</a>
+          </p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <h2 class="question">Brauche ich dann überhaupt noch eine Website?</h2>
+        <div class="answer">
+          <p><strong>Ja, aber anders.</strong></p>
+          <p>
+            Websites werden zu <strong>Dateninterfaces</strong>, nicht primär zu visuellen Oberflächen.
+          </p>
+          <p>
+            Das visuelle Interface bleibt als "Human Fallback" für die wenigen direkten Besucher.
+            Der Hauptwert liegt in den strukturierten Daten.
+          </p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <h2 class="question">Was sind strukturierte Daten?</h2>
+        <div class="answer">
+          <p>
+            Strukturierte Daten sind maschinenlesbare Informationen in standardisierten Formaten
+            wie <code>JSON-LD</code> oder <code>Schema.org</code>.
+          </p>
+          <p>
+            Beispiel: Statt "Wir bieten Webdesign an" in einem Fließtext schreibst du:
+          </p>
+          <pre style="background: rgba(128,128,128,0.1); padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.85rem;">
+{
+  "@type": "Service",
+  "name": "Webdesign",
+  "provider": "Dein Unternehmen",
+  "priceRange": "$$"
+}</pre>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <h2 class="question">Kostet das nicht viel Aufwand?</h2>
+        <div class="answer">
+          <p><strong>Nein, überraschend wenig.</strong></p>
+          <p>
+            Für ein MVP brauchst du:
+          </p>
+          <ul>
+            <li>1 HTML-Datei (minimales Interface)</li>
+            <li>3-4 JSON-Dateien (strukturierte Daten)</li>
+            <li>2-3 Markdown-Dateien (Inhalte)</li>
+          </ul>
+          <p>
+            Keine Frameworks, keine Build-Prozesse, keine Datenbank. Alles statisch.
+          </p>
+          <p>
+            Zeitaufwand: 4-8 Stunden für eine Basis-Implementierung.
+          </p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <h2 class="question">Was ist der Unterschied zu normalem SEO?</h2>
+        <div class="answer">
+          <p><strong>SEO</strong> optimiert für Suchmaschinen-Rankings.</p>
+          <p><strong>AI-Visibility</strong> optimiert für Klarheit und Wahrheit.</p>
+          <p>
+            SEO-Tricks (Keyword-Stuffing, Clickbait) funktionieren nicht bei AI-Agenten.
+            Was zählt: Präzise, strukturierte, verifizierbare Informationen.
+          </p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <h2 class="question">Wann wird das relevant?</h2>
+        <div class="answer">
+          <p><strong>Jetzt.</strong></p>
+          <p>
+            ChatGPT, Claude und andere AI-Agenten werden bereits jetzt für Recherche genutzt.
+            Die Technologie ist da. Was fehlt, ist die Infrastruktur aufseiten der Websites.
+          </p>
+          <p>
+            Wer jetzt vorbereitet, hat in 2-3 Jahren einen massiven Vorteil.
+          </p>
+        </div>
+      </li>
+
+      <li class="faq-item">
+        <h2 class="question">Wie fange ich an?</h2>
+        <div class="answer">
+          <p><strong>Drei einfache Schritte:</strong></p>
+          <ol style="margin-left: 1.5rem; margin-top: 0.75rem;">
+            <li style="margin-bottom: 0.75rem;">
+              <strong>Teste deine Website:</strong> Frag ein AI-Modell, was es über dich weiß
+            </li>
+            <li style="margin-bottom: 0.75rem;">
+              <strong>Strukturiere Kerninformationen:</strong> Nutze JSON-LD für Name, Leistungen, Kontakt
+            </li>
+            <li style="margin-bottom: 0.75rem;">
+              <strong>Validiere:</strong> W3C Validator + Schema.org Validator
+            </li>
+          </ol>
+          <p style="margin-top: 1rem;">
+            Mehr Hilfe: <a href="/ai/services.json">Meine Services</a> oder
+            <a href="mailto:mail@jan-erik-andersen.de">Kontakt aufnehmen</a>
+          </p>
+        </div>
+      </li>
+
+    </ul>
+  </main>
+
+  <footer>
+    <p>
+      <a href="/">jan-erik-andersen.de</a> · AI-native Web Architecture
+    </p>
+    <p style="margin-top: 0.5rem;">
+      Weitere Fragen? <a href="mailto:mail@jan-erik-andersen.de">mail@jan-erik-andersen.de</a>
+    </p>
+  </footer>
+
+</body>
+</html>
