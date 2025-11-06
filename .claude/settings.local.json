@@ -26,7 +26,8 @@
       "Bash(for url in https://jan-erik-andersen.de/ai/manifest.jsonld https://jan-erik-andersen.de/ai/services.json https://jan-erik-andersen.de/ai/portfolio.json https://jan-erik-andersen.de/ai/identity.json https://jan-erik-andersen.de/blog/feed.json https://jan-erik-andersen.de/blog/google-zero.json https://jan-erik-andersen.de/blog/google-zero.md)",
       "Bash(do echo \"Testing: $url\")",
       "Bash(done)",
-      "Bash(bash test-headers.sh:*)"
+      "Bash(bash test-headers.sh:*)",
+      "Bash(nslookup:*)"
     ],
     "deny": [],
     "ask": []

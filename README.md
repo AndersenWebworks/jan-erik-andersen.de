@@ -1,10 +1,19 @@
 
-# README — MVP-PLAN „andersen-signal v0.1“
+# andersen-signal v0.1 — AI-native Web Architecture MVP
 
-Ziel dieses MVP: **Nachweisen**, dass eine sehr einfache, semantisch saubere Website
-von KI-Systemen leichter **korrekt** verstanden werden kann als eine typische, rein visuelle Website.
+**Status:** ✅ Live auf GitHub Pages
+**URL:** https://jan-erik-andersen.de
+**Deployed:** 7. November 2025
 
-Der MVP ist bewusst klein, statisch und ohne Abhängigkeiten.
+---
+
+## Ziel
+
+**Nachweisen**, dass eine semantisch saubere, strukturierte Website von AI-Agenten
+leichter und **korrekter** verstanden werden kann als traditionelle Websites.
+
+**Ergebnis:** ✅ Beweis erbracht
+→ Siehe [LEARNINGS.md](LEARNINGS.md) für Details
 
 ---
 
@@ -62,25 +71,73 @@ Notiere für jede Frage: **korrekt / unklar / falsch** in `metrics.json`.
 
 ---
 
-## 4) Meilensteine
+## 4) Hosting & Deployment
 
-- **v0.1:** Struktur + Inhalte + manuelle Tests dokumentiert.
-- **v0.2:** Automatisierte Checks (JSON‑Schema‑Linting, Link‑Check) per CI.
-- **v1.0:** Repo als wiederverwendbare Vorlage (Template).
+**Aktuell:** GitHub Pages (migration von KAS/All-Inkl)
+
+**Warum GitHub Pages:**
+- ✅ Kostenlos
+- ✅ Keine ModSecurity-Blockierung (AI-Agents funktionieren)
+- ✅ Globales CDN
+- ✅ HTTPS automatisch
+- ✅ git push = Deployment
+
+**Setup-Anleitung:** [GITHUB-PAGES-SETUP.md](GITHUB-PAGES-SETUP.md)
 
 ---
 
-## 5) Akzeptanzkriterien (Go/No‑Go)
+## 5) Test-Ergebnisse
 
-- **GO**, wenn:
-  - HTML/JSON‑LD validieren,
-  - Verständnisfragen überwiegend **korrekt** beantwortet werden,
-  - Deploy funktioniert (statisch, reproduzierbar).
+**Status:** ✅ Alle Tests bestanden
 
-- **NO‑GO**, wenn:
-  - Validierung scheitert,
-  - Antworten überwiegend **unklar/falsch** sind,
-  - Deploy unstabil ist.
+- ✅ **HTML/JSON-LD:** Validiert
+- ✅ **AI-Agent-Test:** 6/6 Fragen korrekt beantwortet
+- ✅ **ChatGPT:** Funktioniert via GitHub Raw URLs
+- ✅ **Alle Endpoints:** HTTP 200 OK
+- ⏳ **Google Rich Results:** Pending (Indexierung läuft)
+
+**Details:** [verify/README.md](verify/README.md)
+
+---
+
+## 6) Wichtigste Learnings
+
+1. **Traditional Hosting blockiert AI-Agents** (ModSecurity/WAF)
+2. **JAMstack ist AI-friendly by default** (GitHub Pages, Netlify, Cloudflare)
+3. **Domain-Trust braucht Zeit** (7-14 Tage für ChatGPT Custom Domain)
+4. **GitHub Raw URLs funktionieren sofort** (Workaround für neue Domains)
+
+**Vollständige Dokumentation:** [LEARNINGS.md](LEARNINGS.md)
+
+---
+
+## 7) Akzeptanzkriterien
+
+**✅ GO** — Alle Kriterien erfüllt:
+  - ✅ HTML/JSON-LD validieren
+  - ✅ AI-Verständnisfragen korrekt beantwortet (6/6)
+  - ✅ Deploy funktioniert (GitHub Pages live)
+
+---
+
+## 8) Projekt-Dateien
+
+**Wichtige Dokumente:**
+- [LEARNINGS.md](LEARNINGS.md) — Alle Erkenntnisse aus dem Projekt
+- [GITHUB-PAGES-SETUP.md](GITHUB-PAGES-SETUP.md) — Hosting-Setup-Anleitung
+- [verify/README.md](verify/README.md) — Test-Dokumentation
+
+**Website-Dateien:**
+- [index.html](index.html) — Homepage mit Person Schema
+- [faq.html](faq.html) — FAQ mit FAQPage Schema
+- [blog/](blog/) — Blog mit feed.json + BlogPosting Schema
+- [ai/](ai/) — Strukturierte Daten (JSON-LD, JSON)
+- [content/](content/) — Markdown-Inhalte
+
+---
+
+**Projekt abgeschlossen:** 7. November 2025
+**Status:** ✅ MVP erfolgreich, live und dokumentiert
 
 ---
 
