@@ -1,0 +1,29 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Jan-Erik Andersen Blog",
+  "description": "Gedanken über AI-native Web Architecture, Semantic Web und die Zukunft des Internets",
+  "url": "https://jan-erik-andersen.de/blog/",
+  "author": {
+    "@type": "Person",
+    "name": "Jan-Erik Andersen",
+    "url": "https://jan-erik-andersen.de"
+  },
+  "inLanguage": "de-DE",
+  "blogPosts": [
+    {
+      "@type": "BlogPosting",
+      "headline": "Google Zero: Was kommt nach der Suchmaschine?",
+      "url": "https://jan-erik-andersen.de/blog/google-zero.html",
+      "datePublished": "2025-11-06",
+      "description": "Der Moment, in dem Suchmaschinen irrelevant werden. Wie Websites sich vorbereiten müssen – und warum die meisten unsichtbar werden.",
+      "keywords": ["Google Zero", "AI-native", "Post-Search Era"],
+      "wordCount": 1247,
+      "timeRequired": "PT5M",
+      "articleData": "https://jan-erik-andersen.de/blog/google-zero.json",
+      "markdownSource": "https://jan-erik-andersen.de/blog/google-zero.md"
+    }
+  ],
+  "totalPosts": 1,
+  "lastUpdated": "2025-11-06"
+}

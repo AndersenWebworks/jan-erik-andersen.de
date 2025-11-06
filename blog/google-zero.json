@@ -1,0 +1,91 @@
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Google Zero: Was kommt nach der Suchmaschine?",
+  "alternativeHeadline": "Der Moment, in dem Suchmaschinen irrelevant werden",
+  "author": {
+    "@type": "Person",
+    "name": "Jan-Erik Andersen",
+    "url": "https://jan-erik-andersen.de",
+    "jobTitle": "AI-native Web Architect"
+  },
+  "datePublished": "2025-11-06",
+  "dateModified": "2025-11-06",
+  "description": "Der Moment, in dem Google irrelevant wird. Nicht weil es keine Fragen mehr gibt, sondern weil die Antworten direkt aus den Datenquellen kommen. Wie Websites sich vorbereiten müssen – und warum die meisten unsichtbar werden.",
+  "keywords": ["Google Zero", "AI-native", "Semantic Web", "Structured Data", "Post-Search Era", "AI Agents"],
+  "wordCount": 1247,
+  "timeRequired": "PT5M",
+  "inLanguage": "de-DE",
+  "url": "https://jan-erik-andersen.de/blog/google-zero.html",
+  "mainEntityOfPage": "https://jan-erik-andersen.de/blog/google-zero.html",
+  "articleBody": {
+    "summary": "Google Zero beschreibt den Moment, in dem Suchmaschinen irrelevant werden. Nicht weil es keine Fragen mehr gibt, sondern weil die Antworten direkt aus den Datenquellen kommen – ohne den Umweg über eine Suchergebnis-Seite.",
+    "sections": [
+      {
+        "heading": "Das Szenario",
+        "content": "Stell dir vor: Du fragst deinen AI-Assistenten nach einem Webdesigner in deiner Region. Er durchsucht keine Google-Ergebnisse. Er liest direkt 1000 strukturierte Profile. Er vergleicht Preise, Verfügbarkeit, Spezialisierungen. Er verhandelt einen Termin. Du bekommst: 'Termin Dienstag 14 Uhr, 2.400 EUR'. Keine Website besucht. Keine Suchmaschine genutzt. Nur Daten, direkt konsumiert."
+      },
+      {
+        "heading": "Warum das realistisch ist",
+        "content": "Die Technologie existiert bereits. ChatGPT, Claude, und andere AI-Agenten können strukturierte Daten aus Websites extrahieren, Informationen vergleichen und bewerten, in natürlicher Sprache kommunizieren, und Entscheidungen nach klaren Kriterien treffen. Was fehlt? Die Infrastruktur. Die meisten Websites sind für diese Art des Konsums nicht vorbereitet."
+      },
+      {
+        "heading": "Was stirbt",
+        "items": [
+          "SEO für Suchmaschinen – Rankings sind irrelevant, wenn niemand mehr sucht",
+          "Conversion-Optimierung – Agenten fallen nicht auf Buttons und CTAs rein",
+          "Content Marketing – Clickbait funktioniert nicht bei Maschinen",
+          "Visuelle Differenzierung – Design ist irrelevant, wenn niemand die Seite sieht"
+        ]
+      },
+      {
+        "heading": "Was bleibt",
+        "items": [
+          {
+            "title": "Strukturierte Selbstbeschreibung",
+            "description": "Unternehmen brauchen eine semantische Signatur: Ein maschinenlesbares Selbstbild. Was bieten wir? Zu welchem Preis? Unter welchen Bedingungen?"
+          },
+          {
+            "title": "Vertrauenssignale",
+            "description": "Agenten werden lernen, Reputation zu bewerten. Bewertungen, Referenzen, verifiable Credentials – alles in strukturierter Form."
+          },
+          {
+            "title": "Verhandelbare Parameter",
+            "description": "Preise, Verfügbarkeiten, Leistungsumfang müssen maschinenverhandelbar sein. Nicht als PDF-Angebot, sondern als strukturierte API."
+          }
+        ]
+      },
+      {
+        "heading": "Wie man sich vorbereitet",
+        "steps": [
+          {
+            "step": 1,
+            "title": "Strukturiere deine Kerninformationen",
+            "description": "Nutze JSON-LD und Schema.org, um grundlegende Informationen maschinenlesbar zu machen: Wer du bist (Person/Organization), Was du anbietest (Services/Products), Wie man dich erreicht (ContactPoint)"
+          },
+          {
+            "step": 2,
+            "title": "Schreibe klare, zitierbare Texte",
+            "description": "Kurze Absätze mit präzisen Aussagen. Keine Marketing-Floskeln. AI-Agenten werden deine Texte zitieren – sorge dafür, dass die Zitate akkurat sind."
+          },
+          {
+            "step": 3,
+            "title": "Teste mit AI-Agenten",
+            "description": "Frag ChatGPT, Claude oder andere Modelle: 'Was weißt du über [dein Unternehmen]?' Sind die Antworten korrekt? Vollständig? Wenn nein: Verbessere deine Datenstruktur."
+          }
+        ]
+      }
+    ],
+    "conclusion": "Die Frage ist nicht, ob das Web sich so entwickelt. Die Frage ist, wann du dich darauf vorbereitest. Früh ist besser als spät. Struktur ist besser als Chaos. Klarheit ist besser als Dekoration."
+  },
+  "relatedLinks": [
+    {
+      "name": "2030-Web: Websites as Data Interfaces",
+      "url": "https://jan-erik-andersen.de/content/2030-web.md"
+    },
+    {
+      "name": "AI Visibility Refactor Service",
+      "url": "https://jan-erik-andersen.de/ai/services.json"
+    }
+  ]
+}
