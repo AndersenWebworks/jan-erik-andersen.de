@@ -12,7 +12,7 @@
         "Validierungsberichte (W3C, Schema.org)"
       ],
       "typical_duration": "2-4 Wochen",
-      "starting_price": "2400 EUR",
+      "pricing": "Auf Anfrage",
       "target_audience": [
         "Tech-Unternehmen",
         "Beratungen mit erklärungsbedürftigen Leistungen",
@@ -31,7 +31,7 @@
         "Beispieldialoge mit AI-Agenten"
       ],
       "typical_duration": "1-2 Wochen",
-      "starting_price": "1800 EUR",
+      "pricing": "Auf Anfrage",
       "target_audience": [
         "Marken mit klarer Positionierung",
         "Organisationen die AI-Chatbots einsetzen",
@@ -50,7 +50,7 @@
         "Performance-optimiert (Lighthouse >95)"
       ],
       "typical_duration": "1-3 Wochen",
-      "starting_price": "1500 EUR",
+      "pricing": "Auf Anfrage",
       "target_audience": [
         "Minimalisten",
         "Tech-affine Einzelpersonen",
@@ -63,7 +63,7 @@
       "id": "ai-readiness-audit",
       "name": "AI Readiness Audit",
       "description": "Kurzprüfung bestehender Websites: Struktur, Begriffe, Metadaten, Risiken. Ergebnis: 1-seitiger Maßnahmenplan mit Prioritäten.",
-      "price": "900 EUR",
+      "pricing": "Auf Anfrage",
       "duration": "3-5 Tage",
       "type": "Fixed-Price Assessment"
     },
@@ -71,7 +71,7 @@
       "id": "full-stack-transformation",
       "name": "Full-Stack AI Transformation",
       "description": "Kombination aller drei Services: Refactor + Brand Modeling + Human UI für umfassende AI-Readiness.",
-      "price": "ab 5500 EUR",
+      "pricing": "Auf Anfrage",
       "duration": "4-8 Wochen",
       "type": "Comprehensive Package"
     }
