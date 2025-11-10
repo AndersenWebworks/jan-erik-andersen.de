@@ -1,0 +1,47 @@
+{
+  "projects": [
+    {
+      "id": "privacypilot-refactor",
+      "name": "PrivacyPilot AI Refactor",
+      "client": "PrivacyPilot GmbH (fiktiv)",
+      "year": 2024,
+      "type": "AI Visibility Refactor",
+      "challenge": "Komplexe Datenschutz-Dienstleistungen wurden von KI-Systemen missverständlich oder gar nicht wiedergegeben. Potenzielle Kunden erhielten inkorrekte Informationen über Services.",
+      "solution": "Einführung strukturierter JSON-LD Daten für alle Services, Vereinheitlichung von Begriffen (z.B. 'DSGVO-Audit' statt gemischter Varianten), semantisches HTML-Markup.",
+      "results": {
+        "validation": "100% W3C & Schema.org konform",
+        "agent_accuracy": "Von 40% auf 95% korrekte Wiedergabe in Tests",
+        "maintenance": "Reduzierung der Content-Updates um 60% durch klare Struktur"
+      },
+      "technologies": ["JSON-LD", "Schema.org", "Semantic HTML5"],
+      "testimonial": null,
+      "public": false,
+      "note": "Beispielprojekt zur Demonstration der Methodik"
+    },
+    {
+      "id": "logistics-conversational",
+      "name": "Logistics Group Conversational Site",
+      "client": "Norddeutsche Logistik AG (fiktiv)",
+      "year": 2024,
+      "type": "Full-Stack (Refactor + Brand + UI)",
+      "challenge": "Traditionelle B2B-Website mit technischem Jargon. Keine Vorbereitung auf AI-gesteuerte Anfragen von Einkaufs-Agenten.",
+      "solution": "Komplette Neustrukturierung: Conversational Brand Modeling für klare Antwortmuster, JSON-LD für Services/Standorte, minimales Human Fallback UI.",
+      "results": {
+        "validation": "100% valide, Lighthouse Score 100/100/100/100",
+        "response_time": "Anfragen über AI-Assistenten stiegen um 200%",
+        "human_traffic": "Direkte Website-Besuche sanken um 40%, Konversionsrate stieg um 25%"
+      },
+      "technologies": ["JSON-LD", "Schema.org", "Semantic HTML5", "Markdown Content"],
+      "testimonial": null,
+      "public": false,
+      "note": "Beispielprojekt zur Demonstration der Methodik"
+    }
+  ],
+  "metrics_summary": {
+    "avg_validation_score": "100%",
+    "avg_agent_accuracy_improvement": "+60%",
+    "avg_lighthouse_performance": 98,
+    "projects_completed": 2,
+    "note": "Metriken basieren auf Beispielprojekten für MVP-Demonstration"
+  }
+}

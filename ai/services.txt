@@ -1,0 +1,79 @@
+{
+  "services": [
+    {
+      "id": "ai-visibility-refactor",
+      "name": "AI Visibility Refactor",
+      "tagline": "Websites für die Agenten-Ära vorbereiten",
+      "description": "Bestehende Websites werden so umgebaut, dass KI-Agenten die Inhalte strukturiert verstehen können. Durch Einführung von JSON-LD, semantischem HTML und einheitlichen Begriffen wird die maschinelle Lesbarkeit maximiert.",
+      "deliverables": [
+        "Strukturierte Datenmodelle (JSON-LD, Schema.org)",
+        "Semantisches HTML-Markup",
+        "Vereinheitlichte Begriffe und Taxonomien",
+        "Validierungsberichte (W3C, Schema.org)"
+      ],
+      "typical_duration": "2-4 Wochen",
+      "starting_price": "2400 EUR",
+      "target_audience": [
+        "Tech-Unternehmen",
+        "Beratungen mit erklärungsbedürftigen Leistungen",
+        "Agenturen mit Forward-Thinking Kunden"
+      ]
+    },
+    {
+      "id": "conversational-brand-modeling",
+      "name": "Conversational Brand Modeling",
+      "tagline": "Markenstimmen für natürliche Dialoge",
+      "description": "Definition wie eine Marke in natürlichsprachlichen Interaktionen mit AI-Agenten kommuniziert. Tonalität, Antwortmuster und Do/Don'ts für konsistente Repräsentation.",
+      "deliverables": [
+        "Tonalitäts-Profil (3-5 Kerneigenschaften)",
+        "Antwortmuster für typische Fragen",
+        "Do/Don't Formulierungs-Guidelines",
+        "Beispieldialoge mit AI-Agenten"
+      ],
+      "typical_duration": "1-2 Wochen",
+      "starting_price": "1800 EUR",
+      "target_audience": [
+        "Marken mit klarer Positionierung",
+        "Organisationen die AI-Chatbots einsetzen",
+        "Unternehmen mit Fokus auf Konsistenz"
+      ]
+    },
+    {
+      "id": "human-fallback-ui",
+      "name": "Human Fallback UI",
+      "tagline": "Minimale Interfaces für direkte Besucher",
+      "description": "Gestaltung schlanker, typografie-fokussierter Websites für die 20% direkter menschlicher Besucher. Keine Frameworks, keine Scripts - pure Semantik und Klarheit.",
+      "deliverables": [
+        "Statisches HTML5 (framework-frei)",
+        "Typografie-System (light/dark neutral)",
+        "Semantische Struktur",
+        "Performance-optimiert (Lighthouse >95)"
+      ],
+      "typical_duration": "1-3 Wochen",
+      "starting_price": "1500 EUR",
+      "target_audience": [
+        "Minimalisten",
+        "Tech-affine Einzelpersonen",
+        "Organisationen mit Fokus auf Nachhaltigkeit"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "id": "ai-readiness-audit",
+      "name": "AI Readiness Audit",
+      "description": "Kurzprüfung bestehender Websites: Struktur, Begriffe, Metadaten, Risiken. Ergebnis: 1-seitiger Maßnahmenplan mit Prioritäten.",
+      "price": "900 EUR",
+      "duration": "3-5 Tage",
+      "type": "Fixed-Price Assessment"
+    },
+    {
+      "id": "full-stack-transformation",
+      "name": "Full-Stack AI Transformation",
+      "description": "Kombination aller drei Services: Refactor + Brand Modeling + Human UI für umfassende AI-Readiness.",
+      "price": "ab 5500 EUR",
+      "duration": "4-8 Wochen",
+      "type": "Comprehensive Package"
+    }
+  ]
+}

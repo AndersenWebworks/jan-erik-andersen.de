@@ -1,0 +1,61 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created": "2025-11-07",
+    "purpose": "Duplizierbare Profile-Daten für LLM-Verarbeitung (Plain JSON)",
+    "source": "Extrahiert aus /ai/manifest.jsonld"
+  },
+  "person": {
+    "name": "Jan-Erik Andersen",
+    "jobTitle": "AI-native Web Architect",
+    "description": "Ich baue Webarchitekturen, die Maschinen lesen können und Menschen vertrauen wollen. Spezialisiert auf strukturierte Daten, semantische Modelle und AI-Visibility für die Post-Browser-Ära.",
+    "url": "https://jan-erik-andersen.de",
+    "email": "mail@jan-erik-andersen.de"
+  },
+  "services": [
+    {
+      "name": "AI Visibility Refactor",
+      "description": "Bestehende Websites werden so umgebaut, dass KI-Agenten die Inhalte strukturiert verstehen können."
+    },
+    {
+      "name": "Conversational Brand Modeling",
+      "description": "Markenstimmen für natürliche Dialoge definieren - Tonalität und Antwortmuster für AI-Interaktion."
+    },
+    {
+      "name": "Human Fallback UI",
+      "description": "Minimalistische Interfaces für direkte Besucher - weil Transparenz Vertrauen schafft."
+    }
+  ],
+  "expertise": [
+    "AI-native Web Architecture",
+    "Semantic Web",
+    "JSON-LD",
+    "Structured Data",
+    "Machine-Readable Content",
+    "Conversational Branding",
+    "Schema.org",
+    "Web Semantics"
+  ],
+  "organization": {
+    "name": "Andersen Webworks",
+    "description": "AI-native Web Architecture & Semantic Design",
+    "url": "https://andersen-webworks.de"
+  },
+  "location": {
+    "country": "DE"
+  },
+  "languages": [
+    "German",
+    "English"
+  ],
+  "socialMedia": [
+    {
+      "platform": "GitHub",
+      "url": "https://github.com/jan-erik-andersen"
+    },
+    {
+      "platform": "LinkedIn",
+      "url": "https://linkedin.com/in/jan-erik-andersen"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+name: Generate AI-Readable Mirrors
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ai/*.json'
+      - 'blog/*.json'
+      - 'blog/*.md'
+  workflow_dispatch:
+
+jobs:
+  generate-mirrors:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate .txt mirrors for JSON files
+        run: |
+          # Copy all JSON files to .txt with identical content
+          find ai blog -name "*.json" -type f | while read file; do
+            cp "$file" "${file%.json}.txt"
+            echo "Generated: ${file%.json}.txt"
+          done
+
+      - name: Generate .txt mirrors for Markdown files
+        run: |
+          # Copy all MD files to .txt
+          find blog -name "*.md" -type f | while read file; do
+            cp "$file" "${file%.md}.txt"
+            echo "Generated: ${file%.md}.txt"
+          done
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "🤖 Auto-generate AI-readable .txt mirrors"
+            git push
+          fi

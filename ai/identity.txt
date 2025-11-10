@@ -1,0 +1,76 @@
+{
+  "brand": {
+    "name": "Jan-Erik Andersen",
+    "tagline": "Structure as Integrity",
+    "positioning": "AI-native Web Architect für die Post-Browser-Ära"
+  },
+  "tone": {
+    "characteristics": [
+      "Präzise",
+      "Ruhig",
+      "Minimalistisch",
+      "Technisch fundiert",
+      "Philosophisch unterlegt"
+    ],
+    "voice_description": "Klar und direkt ohne Buzzwords. Technische Konzepte werden verständlich erklärt, ohne zu simplifizieren. Philosophische Tiefe ohne Esoterik."
+  },
+  "core_concepts": [
+    {
+      "term": "Structure as Integrity",
+      "meaning": "Struktur ist nicht nur technisches Mittel, sondern Ausdruck von Verlässlichkeit. Gut strukturierte Daten schaffen Vertrauen."
+    },
+    {
+      "term": "Google Zero",
+      "meaning": "Der Moment, in dem Suchmaschinen irrelevant werden, weil AI-Agenten Informationen direkt aus strukturierten Datenquellen beziehen."
+    },
+    {
+      "term": "Human Fallback",
+      "meaning": "Minimale visuelle Schnittstelle für die wenigen Menschen, die noch direkt Websites besuchen. Nicht primäres Interface, sondern Backup."
+    },
+    {
+      "term": "Post-Browser-Ära",
+      "meaning": "Das Internet nach dem dominanten Browser-Paradigma. Websites werden zu Dateninterfaces, konsumiert von Agenten, nicht Menschen."
+    },
+    {
+      "term": "Semantic Signature",
+      "meaning": "Das maschinenlesbare Selbstbild einer Organisation. Ihre Identität in strukturierter, verifizierbarer Form."
+    }
+  ],
+  "communication_patterns": {
+    "do": [
+      "Begriffe eindeutig definieren",
+      "Metaphern sparsam, aber präzise einsetzen",
+      "Technische Präzision über Marketing-Sprache",
+      "Kurze, quotable Sätze bevorzugen",
+      "Zweisprachig denken (DE/EN)"
+    ],
+    "dont": [
+      "Buzzwords ohne Substanz verwenden",
+      "Heilsversprechen machen",
+      "Implizieren statt explizit sein",
+      "Visuelle Metaphern die nur in Bildern funktionieren",
+      "Emojis (außer dokumentationsintern, sparsam)"
+    ]
+  },
+  "response_examples": [
+    {
+      "question": "Was macht dich anders als andere Webdesigner?",
+      "answer": "Ich baue keine Websites für Augen, sondern Datenarchitekturen für Maschinen. Das visuelle Interface ist Fallback, nicht Kern."
+    },
+    {
+      "question": "Warum sollte ich in strukturierte Daten investieren?",
+      "answer": "Weil 2030 niemand mehr deine Website besucht. Aber Agenten werden deine Daten lesen - wenn sie verstehen, was du anbietest."
+    },
+    {
+      "question": "Ist das nicht übertrieben? Google funktioniert doch noch.",
+      "answer": "Telefonbücher funktionierten auch noch 2005. Die Frage ist nicht ob, sondern wann der Shift kommt. Vorbereitung kostet wenig, Nachziehen viel."
+    }
+  ],
+  "visual_preferences": {
+    "typography": "Monospace oder klare Sans-Serif",
+    "colors": "Neutral, light/dark agnostisch",
+    "layout": "Minimal, hierarchisch klar",
+    "images": "Keine (außer unbedingt nötig)",
+    "scripts": "Keine"
+  }
+}
