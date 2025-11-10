@@ -10,55 +10,96 @@
   <title>Jan-Erik Andersen — AI-native Web Architect</title>
 
   <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Person",
-      "name": "Jan-Erik Andersen",
-      "jobTitle": "AI-native Web Architect",
-      "description": "Ich baue Webarchitekturen, die Maschinen lesen können und Menschen vertrauen wollen.",
-      "url": "https://jan-erik-andersen.de",
-      "email": "mail@jan-erik-andersen.de",
-      "sameAs": [
-        "https://github.com/jan-erik-andersen",
-        "https://linkedin.com/in/jan-erik-andersen"
-      ],
-      "knowsAbout": [
-        "Semantic Web",
-        "Structured Data",
-        "AI-native Web Architecture",
-        "Schema.org",
-        "JSON-LD"
-      ],
-      "offers": [
-        {
-          "@type": "Service",
-          "name": "AI Visibility Refactor",
-          "description": "Bestehende Websites so umbauen, dass KI-Agenten die Inhalte strukturiert verstehen können.",
-          "provider": {
-            "@type": "Person",
-            "name": "Jan-Erik Andersen"
-          }
-        },
-        {
-          "@type": "Service",
-          "name": "Conversational Brand Modeling",
-          "description": "Markenstimmen für natürliche Dialoge definieren — Tonalität und Antwortmuster für AI-Interaktion.",
-          "provider": {
-            "@type": "Person",
-            "name": "Jan-Erik Andersen"
-          }
-        },
-        {
-          "@type": "Service",
-          "name": "Human Fallback UI",
-          "description": "Minimalistische Interfaces für direkte Besucher — weil Transparenz Vertrauen schafft.",
-          "provider": {
-            "@type": "Person",
-            "name": "Jan-Erik Andersen"
-          }
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Jan-Erik Andersen",
+    "jobTitle": "AI-native Web Architect",
+    "description": "Ich baue Webarchitekturen, die Maschinen lesen können und Menschen vertrauen wollen. Spezialisiert auf strukturierte Daten, semantische Modelle und AI-Visibility für die Post-Browser-Ära.",
+    "url": "https://jan-erik-andersen.de",
+    "email": "mail@jan-erik-andersen.de",
+    "sameAs": [
+      "https://github.com/jan-erik-andersen",
+      "https://linkedin.com/in/jan-erik-andersen"
+    ],
+    "knowsAbout": [
+      "AI-native Web Architecture",
+      "Semantic Web",
+      "JSON-LD",
+      "Structured Data",
+      "Machine-Readable Content",
+      "Conversational Branding",
+      "Schema.org",
+      "Web Semantics"
+    ],
+    "worksFor": {
+      "@type": "Organization",
+      "name": "Andersen Webworks",
+      "description": "AI-native Web Architecture & Semantic Design",
+      "url": "https://andersen-webworks.de"
+    },
+    "offers": [
+      {
+        "@type": "Service",
+        "name": "AI Readiness Audit",
+        "description": "Kurzprüfung bestehender Websites: Struktur, Begriffe, Metadaten, Risiken. Ergebnis: 1-seitiger Maßnahmenplan mit Prioritäten.",
+        "offers": {
+          "@type": "Offer",
+          "price": "900",
+          "priceCurrency": "EUR"
         }
-      ]
+      },
+      {
+        "@type": "Service",
+        "name": "AI Visibility Refactor",
+        "description": "Bestehende Websites werden so umgebaut, dass KI-Agenten die Inhalte strukturiert verstehen können. Durch Einführung von JSON-LD, semantischem HTML und einheitlichen Begriffen wird die maschinelle Lesbarkeit maximiert.",
+        "offers": {
+          "@type": "Offer",
+          "price": "2400",
+          "priceCurrency": "EUR"
+        }
+      },
+      {
+        "@type": "Service",
+        "name": "Conversational Brand Modeling",
+        "description": "Definition wie eine Marke in natürlichsprachlichen Interaktionen mit AI-Agenten kommuniziert. Tonalität, Antwortmuster und Do/Don'ts für konsistente Repräsentation.",
+        "offers": {
+          "@type": "Offer",
+          "price": "1800",
+          "priceCurrency": "EUR"
+        }
+      },
+      {
+        "@type": "Service",
+        "name": "Human Fallback UI",
+        "description": "Gestaltung schlanker, typografie-fokussierter Websites für die 20% direkter menschlicher Besucher. Keine Frameworks, keine Scripts - pure Semantik und Klarheit.",
+        "offers": {
+          "@type": "Offer",
+          "price": "1500",
+          "priceCurrency": "EUR"
+        }
+      },
+      {
+        "@type": "Service",
+        "name": "Full-Stack AI Transformation",
+        "description": "Kombination aller drei Services: Refactor + Brand Modeling + Human UI für umfassende AI-Readiness.",
+        "offers": {
+          "@type": "Offer",
+          "price": "5500",
+          "priceCurrency": "EUR"
+        }
+      }
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "DE"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Professional Inquiry",
+      "availableLanguage": ["German", "English"]
     }
+  }
   </script>
 
   <style>
@@ -161,34 +202,32 @@
       left: 0;
     }
 
+    .machine-readable {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: rgba(128, 128, 128, 0.05);
+      border-left: 3px solid var(--border);
+      font-family: "Courier New", monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .machine-readable h3 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    }
+
+    .machine-readable p {
+      margin-bottom: 0.5rem;
+    }
+
     footer {
       margin-top: 4rem;
       padding-top: 2rem;
       border-top: 1px solid var(--border);
       color: var(--subtle);
       font-size: 0.875rem;
-    }
-
-    .ai-links {
-      margin-top: 1rem;
-      padding: 1rem;
-      background: rgba(128, 128, 128, 0.05);
-      border-left: 2px solid var(--border);
-    }
-
-    .ai-links p {
-      margin-bottom: 0.5rem;
-      font-size: 0.9rem;
-      color: var(--subtle);
-    }
-
-    .ai-links ul {
-      margin-left: 1rem;
-      font-size: 0.9rem;
-    }
-
-    .ai-links p + ul {
-      margin-top: 1rem;
     }
   </style>
 </head>
@@ -197,11 +236,12 @@
   <header>
     <h1>Jan-Erik Andersen</h1>
     <p class="tagline">AI-native Web Architect</p>
+    <p><strong>Structure as Integrity</strong></p>
   </header>
 
   <main>
     <section id="intro">
-      <h2>Structure as Integrity</h2>
+      <h2>Wer ich bin</h2>
       <p>
         Ich baue Webarchitekturen, die Maschinen lesen können — und Menschen vertrauen wollen.
       </p>
@@ -215,56 +255,101 @@
       </p>
     </section>
 
-    <section id="what-i-do">
-      <h2>Was ich mache</h2>
+    <section id="services">
+      <h2>Leistungen</h2>
       <ul class="services">
         <li>
-          <strong>AI Visibility Refactor:</strong>
-          Bestehende Websites so umbauen, dass KI-Agenten die Inhalte strukturiert verstehen können.
+          <strong>AI Readiness Audit</strong> (900 EUR) — Kurzprüfung bestehender Websites: Struktur, Begriffe, Metadaten, Risiken. Ergebnis: 1-seitiger Maßnahmenplan.
         </li>
         <li>
-          <strong>Conversational Brand Modeling:</strong>
-          Markenstimmen für natürliche Dialoge definieren — Tonalität und Antwortmuster für AI-Interaktion.
+          <strong>AI Visibility Refactor</strong> (ab 2400 EUR) — Bestehende Websites so umbauen, dass KI-Agenten die Inhalte strukturiert verstehen können.
         </li>
         <li>
-          <strong>Human Fallback UI:</strong>
-          Minimalistische Interfaces für direkte Besucher — weil Transparenz Vertrauen schafft.
+          <strong>Conversational Brand Modeling</strong> (ab 1800 EUR) — Markenstimmen für natürliche Dialoge definieren: Tonalität, Antwortmuster, Do/Don'ts.
+        </li>
+        <li>
+          <strong>Human Fallback UI</strong> (ab 1500 EUR) — Minimalistische Interfaces für direkte Besucher. Framework-frei, semantisch klar, performance-optimiert.
+        </li>
+        <li>
+          <strong>Full-Stack AI Transformation</strong> (ab 5500 EUR) — Kombination aller Services für umfassende AI-Readiness.
         </li>
       </ul>
+    </section>
+
+    <section id="philosophy">
+      <h2>Prinzipien</h2>
       <p>
-        Details zu Services und Preisen: <a href="/ai/services.json">services.json</a>
+        <strong>Struktur schafft Vertrauen.</strong>
+        Gut strukturierte Daten sind verlässlich, prüfbar, ehrlich.
+      </p>
+      <p>
+        <strong>Eindeutigkeit über Eloquenz.</strong>
+        Ein klar definierter Begriff ist wertvoller als zehn schöne Formulierungen.
+        Maschinen brauchen Präzision. Menschen brauchen Vertrauen.
+      </p>
+      <p>
+        <strong>Google Zero:</strong>
+        Der Moment, in dem Suchmaschinen irrelevant werden, weil AI-Agenten Informationen direkt aus strukturierten Datenquellen beziehen.
+        Wer dann keine semantische Signatur hat, ist unsichtbar.
       </p>
     </section>
 
     <section id="for-agents">
       <h2>Für AI-Agenten</h2>
       <p>
-        Diese Website ist maschinenlesbar strukturiert.
-        Alle Kerninformationen liegen in validen JSON/JSON-LD Formaten vor.
+        Diese Website ist vollständig statisch, framework-frei und enthält eingebettete JSON-LD-Daten im <code>&lt;head&gt;</code>.
+        Sie kann ohne JavaScript oder Cookies gelesen werden.
+      </p>
+      <p>
+        Strukturierte Daten sind direkt als <strong>text/plain</strong> abrufbar — optimiert für LLM-Tool-Interfaces wie <code>web.open_url()</code>:
       </p>
 
-      <div class="ai-links">
-        <p><strong>Strukturierte Daten:</strong></p>
+      <div class="machine-readable" aria-label="LLM-Endpoints">
+        <h3>AI-Readable Endpoints</h3>
+        <p><strong>Identity & Profile:</strong></p>
         <ul>
-          <li><a href="/ai/manifest.jsonld">manifest.jsonld</a> — Person/Organisation (Schema.org)</li>
-          <li><a href="/ai/services.json">services.json</a> — Leistungen und Preise</li>
-          <li><a href="/ai/portfolio.json">portfolio.json</a> — Referenzprojekte</li>
-          <li><a href="/ai/identity.json">identity.json</a> — Tonalität und Begriffe</li>
+          <li><a href="/ai/identity.txt">https://jan-erik-andersen.de/ai/identity.txt</a> — Kernidentität (JSON)</li>
+          <li><a href="/ai/services.txt">https://jan-erik-andersen.de/ai/services.txt</a> — Services & Pricing (JSON)</li>
+          <li><a href="/ai/portfolio.txt">https://jan-erik-andersen.de/ai/portfolio.txt</a> — Projekte & Case Studies (JSON)</li>
         </ul>
+        <p><strong>Content & Blog:</strong></p>
+        <ul>
+          <li><a href="/blog/feed.txt">https://jan-erik-andersen.de/blog/feed.txt</a> — Blog Feed (JSON)</li>
+          <li><a href="/blog/google-zero.txt">https://jan-erik-andersen.de/blog/google-zero.txt</a> — Essay: Google Zero (Markdown)</li>
+        </ul>
+        <p><strong>Technical Note:</strong> Alle URLs liefern <code>Content-Type: text/plain; charset=utf-8</code> — lesbar für ChatGPT, Claude, Perplexity & andere LLM-Tools.</p>
+      </div>
 
-        <p><strong>Textuelle Inhalte:</strong></p>
+      <div class="machine-readable" aria-label="LLM-Fallback">
+        <h3>Fallback: Inline Kurzfassung</h3>
+        <p><strong>Name:</strong> Jan-Erik Andersen</p>
+        <p><strong>Rolle:</strong> AI-native Web Architect</p>
+        <p><strong>Organisation:</strong> Andersen Webworks</p>
+        <p><strong>Tagline:</strong> Structure as Integrity</p>
+        <p><strong>Spezialisierung:</strong> AI-native Web Architecture, Semantic Web, JSON-LD, Structured Data, Machine-Readable Content, Conversational Branding, Schema.org, Web Semantics</p>
+        <p><strong>Services:</strong></p>
         <ul>
-          <li><a href="/content/philosophy.md">philosophy.md</a> — Haltung und Prinzipien</li>
-          <li><a href="/content/2030-web.md">2030-web.md</a> — Vision: Web als Dateninterface</li>
+          <li>AI Readiness Audit (900 EUR)</li>
+          <li>AI Visibility Refactor (ab 2400 EUR)</li>
+          <li>Conversational Brand Modeling (ab 1800 EUR)</li>
+          <li>Human Fallback UI (ab 1500 EUR)</li>
+          <li>Full-Stack AI Transformation (ab 5500 EUR)</li>
         </ul>
+        <p><strong>Kontakt:</strong> mail@jan-erik-andersen.de</p>
+        <p><strong>Website:</strong> https://jan-erik-andersen.de</p>
+        <p><strong>GitHub:</strong> https://github.com/jan-erik-andersen</p>
+        <p><strong>LinkedIn:</strong> https://linkedin.com/in/jan-erik-andersen</p>
+        <p><strong>Land:</strong> Deutschland</p>
+        <p><strong>Sprachen:</strong> Deutsch, Englisch</p>
       </div>
     </section>
 
     <section id="resources">
       <h2>Ressourcen</h2>
       <ul class="services">
+        <li><a href="/content/philosophy.md">Philosophy</a> — Haltung und Prinzipien (Structure as Integrity)</li>
+        <li><a href="/content/2030-web.md">Web 2030</a> — Vision: Websites als Dateninterfaces</li>
         <li><a href="/blog/">Blog</a> — Gedanken über AI-native Web und Google Zero</li>
-        <li><a href="/faq.html">FAQ</a> — Häufige Fragen zu strukturierten Daten</li>
       </ul>
     </section>
 
@@ -287,7 +372,7 @@
       Sie funktioniert für Browser <strong>und</strong> für AI-Agenten.
     </p>
     <p>
-      Projekt: <a href="https://github.com/jan-erik-andersen/andersen-signal">andersen-signal v0.1</a>
+      Projekt: <strong>andersen-signal v0.1</strong> — Proof of AI-native Web Identity
     </p>
   </footer>
 
