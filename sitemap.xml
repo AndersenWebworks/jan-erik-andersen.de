@@ -4,9 +4,65 @@
   <!-- Homepage (Person Schema) -->
   <url>
     <loc>https://jan-erik-andersen.de/</loc>
-    <lastmod>2025-11-06</lastmod>
+    <lastmod>2025-11-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
+  </url>
+
+  <!-- Impressum -->
+  <url>
+    <loc>https://jan-erik-andersen.de/impressum.html</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Datenschutz -->
+  <url>
+    <loc>https://jan-erik-andersen.de/datenschutz.html</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- Barrierefreiheit -->
+  <url>
+    <loc>https://jan-erik-andersen.de/barrierefreiheit.html</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- English Version: Homepage -->
+  <url>
+    <loc>https://jan-erik-andersen.de/en/</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- English Version: Imprint -->
+  <url>
+    <loc>https://jan-erik-andersen.de/en/imprint.html</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- English Version: Privacy -->
+  <url>
+    <loc>https://jan-erik-andersen.de/en/privacy.html</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- English Version: Accessibility -->
+  <url>
+    <loc>https://jan-erik-andersen.de/en/accessibility.html</loc>
+    <lastmod>2025-11-10</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 
   <!-- FAQ (FAQPage Schema) -->

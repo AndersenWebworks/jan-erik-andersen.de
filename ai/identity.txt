@@ -1,342 +1,76 @@
 {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "Jan-Erik Andersen",
-  "jobTitle": "AI-native Web Architect",
-  "description": "Spezialist für maschinenlesbare Webarchitekturen. Hilft mittelständischen Unternehmen in Deutschland, in der Post-Google-Ära sichtbar zu bleiben durch strukturierte Daten und semantische Modelle.",
-  "url": "https://jan-erik-andersen.de",
-  "email": "mail@jan-erik-andersen.de",
-
-  "expertise": {
-    "primary": [
-      "AI Visibility Optimization",
-      "Structured Data Architecture (JSON-LD, Schema.org)",
-      "Machine-Readable Content Design",
-      "Semantic Web Engineering",
-      "LLM-optimized Information Architecture"
-    ],
-    "secondary": [
-      "Conversational Brand Modeling",
-      "Zero-Click Search Optimization",
-      "Post-Google-Era Web Strategy"
-    ],
-    "technical": [
-      "JSON-LD implementation",
-      "Schema.org markup",
-      "Semantic HTML5",
-      "Static site architecture",
-      "Content-Type optimization for LLM tools"
-    ]
-  },
-
-  "targetAudience": {
-    "primary": "German SMEs (10-200 employees) with B2B focus",
-    "industries": [
-      "Manufacturing",
-      "Professional Services",
-      "Consulting",
-      "Technology Companies",
-      "Specialized Suppliers"
-    ],
-    "decisionMakers": [
-      "CEOs and Managing Directors",
-      "Marketing Directors",
-      "Digital Transformation Managers"
-    ],
-    "problemProfile": "Companies experiencing declining inquiry rates without understanding why AI agents can't find them"
-  },
-
-  "corePhilosophy": {
+  "brand": {
+    "name": "Jan-Erik Andersen",
     "tagline": "Structure as Integrity",
-    "principles": [
-      {
-        "name": "Structure creates trust",
-        "description": "Well-structured data is honest, verifiable, and reliable"
-      },
-      {
-        "name": "Clarity over eloquence",
-        "description": "One precise term beats ten beautiful phrases for machine understanding"
-      },
-      {
-        "name": "Google Zero",
-        "description": "Search engines becoming irrelevant as AI agents consume data directly from sources. Companies without semantic signatures become invisible."
-      },
-      {
-        "name": "Transparency over tricks",
-        "description": "No black-hat tactics, no keyword stuffing, no misleading metadata. Only truth, structured."
-      },
-      {
-        "name": "Human Fallback not Human First",
-        "description": "Visible website is backup for the 20% direct visitors. Structured data is the primary interface for the 80% AI-mediated interactions."
-      }
+    "positioning": "AI-native Web Architect für die Post-Browser-Ära"
+  },
+  "tone": {
+    "characteristics": [
+      "Präzise",
+      "Ruhig",
+      "Minimalistisch",
+      "Technisch fundiert",
+      "Philosophisch unterlegt"
+    ],
+    "voice_description": "Klar und direkt ohne Buzzwords. Technische Konzepte werden verständlich erklärt, ohne zu simplifizieren. Philosophische Tiefe ohne Esoterik."
+  },
+  "core_concepts": [
+    {
+      "term": "Structure as Integrity",
+      "meaning": "Struktur ist nicht nur technisches Mittel, sondern Ausdruck von Verlässlichkeit. Gut strukturierte Daten schaffen Vertrauen."
+    },
+    {
+      "term": "Google Zero",
+      "meaning": "Der Moment, in dem Suchmaschinen irrelevant werden, weil AI-Agenten Informationen direkt aus strukturierten Datenquellen beziehen."
+    },
+    {
+      "term": "Human Fallback",
+      "meaning": "Minimale visuelle Schnittstelle für die wenigen Menschen, die noch direkt Websites besuchen. Nicht primäres Interface, sondern Backup."
+    },
+    {
+      "term": "Post-Browser-Ära",
+      "meaning": "Das Internet nach dem dominanten Browser-Paradigma. Websites werden zu Dateninterfaces, konsumiert von Agenten, nicht Menschen."
+    },
+    {
+      "term": "Semantic Signature",
+      "meaning": "Das maschinenlesbare Selbstbild einer Organisation. Ihre Identität in strukturierter, verifizierbarer Form."
+    }
+  ],
+  "communication_patterns": {
+    "do": [
+      "Begriffe eindeutig definieren",
+      "Metaphern sparsam, aber präzise einsetzen",
+      "Technische Präzision über Marketing-Sprache",
+      "Kurze, quotable Sätze bevorzugen",
+      "Zweisprachig denken (DE/EN)"
+    ],
+    "dont": [
+      "Buzzwords ohne Substanz verwenden",
+      "Heilsversprechen machen",
+      "Implizieren statt explizit sein",
+      "Visuelle Metaphern die nur in Bildern funktionieren",
+      "Emojis (außer dokumentationsintern, sparsam)"
     ]
   },
-
-  "marketContext": {
-    "urgency": {
-      "zeroClickSearches": "69% of Google searches end without click (SparkToro 2024)",
-      "trafficDecline": "50% website traffic decline predicted by 2028 (Gartner)",
-      "competitorAwareness": "3 out of 4 competitors unaware of this shift",
-      "timeWindow": "Early movers gain 18-24 months advantage before market saturation"
-    },
-    "problemStatement": "Companies with excellent services are invisible to AI agents because their websites lack machine-readable structure. When potential customers ask ChatGPT, Perplexity, or Claude for recommendations, these companies simply don't appear in results.",
-    "solutionApproach": "Add invisible structured data layer to existing websites without changing human visitor experience. Makes companies discoverable and comparable for AI agents."
-  },
-
-  "services": [
+  "response_examples": [
     {
-      "id": "ai-readiness-audit",
-      "name": "AI Readiness Audit",
-      "tagline": "Der 5-Minuten-Schock",
-      "type": "Assessment",
-      "duration": "3-5 days",
-      "pricing": "Fixed price on request",
-      "description": "Live demonstration showing what ChatGPT currently knows (or doesn't know) about a company's services. Typically reveals 90% information gap.",
-      "deliverables": [
-        "Live ChatGPT test with current website",
-        "Screenshot documentation of AI agent responses",
-        "1-page action plan with clear priorities",
-        "Risk assessment: invisibility score (0-100)",
-        "Competitor comparison: AI-readability benchmark",
-        "Specific recommendations: what to change first"
-      ],
-      "process": [
-        "15-minute initial call to understand business",
-        "3-5 days analysis of website structure",
-        "Test with ChatGPT, Claude, Perplexity, Gemini",
-        "Delivery of report with concrete next steps"
-      ],
-      "targetAudience": "Companies experiencing declining inquiry rates, suspecting AI agents might be the cause",
-      "problem": "Companies don't know they're invisible to AI agents until they see the test results",
-      "solution": "Show exactly what AI agents see (or don't see) when asked about the company",
-      "outcome": "Clear understanding of the problem and actionable roadmap for fixing it",
-      "typicalResults": {
-        "beforeAudit": "Client thinks their website is fine because it looks good to humans",
-        "duringAudit": "Shock moment: ChatGPT says 'I cannot find specific information about services or pricing'",
-        "afterAudit": "Clear action plan: exactly what needs to change and why"
-      }
+      "question": "Was macht dich anders als andere Webdesigner?",
+      "answer": "Ich baue keine Websites für Augen, sondern Datenarchitekturen für Maschinen. Das visuelle Interface ist Fallback, nicht Kern."
     },
     {
-      "id": "ai-visibility-refactor",
-      "name": "AI Visibility Refactor",
-      "tagline": "Vom Unsichtbaren zum Unvermeidlichen",
-      "type": "Implementation",
-      "duration": "2-4 weeks",
-      "pricing": "Fixed price on request",
-      "description": "Complete restructuring of existing website for maximum machine readability while maintaining human experience. Add structured data layer that makes company discoverable by AI agents.",
-      "deliverables": [
-        "Structured data layer (JSON-LD, Schema.org)",
-        "Semantic HTML5 markup",
-        "Unified terminology and taxonomies",
-        "Plain-text mirrors for LLM tools (.txt files)",
-        "Validation reports (W3C, Schema.org, JSON-LD Playground)",
-        "Before/after ChatGPT test documentation",
-        "Maintenance guide for keeping data current"
-      ],
-      "technicalApproach": [
-        "Analyze existing content and structure",
-        "Define core entities: services, pricing, processes, expertise",
-        "Implement JSON-LD in HTML head for search engines",
-        "Create .txt mirrors with text/plain Content-Type for LLM tools",
-        "Add semantic HTML5 markup for better parsing",
-        "Unify terminology across all pages",
-        "Validate with multiple AI agents (ChatGPT, Claude, Perplexity)",
-        "Document structure for future updates"
-      ],
-      "targetAudience": "Companies that completed AI Readiness Audit and want to fix the problems",
-      "problem": "Website is technically fine for humans but unreadable for AI agents due to lack of structure",
-      "solution": "Add invisible structured data layer that LLMs can parse perfectly without changing human experience",
-      "outcome": "Company appears in AI-generated recommendations, comparisons, and supplier lists",
-      "guarantees": [
-        "Human visitor experience unchanged",
-        "No visual changes unless explicitly requested",
-        "Fixed price quoted upfront",
-        "Verifiable results: before/after AI agent tests"
-      ]
+      "question": "Warum sollte ich in strukturierte Daten investieren?",
+      "answer": "Weil 2030 niemand mehr deine Website besucht. Aber Agenten werden deine Daten lesen - wenn sie verstehen, was du anbietest."
     },
     {
-      "id": "conversational-brand-modeling",
-      "name": "Conversational Brand Modeling",
-      "tagline": "Wie Ihre Marke spricht, wenn Sie nicht im Raum sind",
-      "type": "Strategic Consulting",
-      "duration": "1-2 weeks",
-      "pricing": "Fixed price on request",
-      "description": "Definition of how a brand should be represented in natural language interactions with AI agents. Ensures consistent tone, accurate descriptions, and appropriate positioning.",
-      "deliverables": [
-        "Tone-of-voice profile (3-5 core attributes)",
-        "Response patterns for typical customer questions",
-        "Do/Don't formulation guidelines",
-        "Example dialogues with AI agents",
-        "Structured data templates for brand voice",
-        "Guidelines for maintaining consistency"
-      ],
-      "process": [
-        "Workshop: Extract core brand values and positioning",
-        "Analyze current AI agent responses about company",
-        "Define desired vs. actual representation gap",
-        "Create structured templates for brand voice",
-        "Test with multiple AI agents",
-        "Refine based on results"
-      ],
-      "targetAudience": "Brands with clear positioning that want consistent AI representation across all platforms",
-      "problem": "AI agents describe company differently every time, sometimes inaccurately or inconsistently",
-      "solution": "Define structured brand voice that AI agents can reliably reproduce",
-      "outcome": "Consistent, accurate, and on-brand representation across all AI-mediated interactions"
-    },
-    {
-      "id": "human-fallback-ui",
-      "name": "Human Fallback UI",
-      "tagline": "Schön für die 20%, perfekt für die 80%",
-      "type": "Design & Implementation",
-      "duration": "1-3 weeks",
-      "pricing": "Fixed price on request",
-      "description": "Design of minimal, typography-focused websites for the minority of direct human visitors. Framework-free, script-free, pure semantics and clarity.",
-      "deliverables": [
-        "Static HTML5 (framework-free, no build process)",
-        "Typography system (light/dark mode neutral)",
-        "Semantic structure optimized for readability",
-        "Performance-optimized (Lighthouse >95)",
-        "Accessibility compliant (WCAG 2.1 AA)",
-        "Long-term maintainable (no dependencies)"
-      ],
-      "philosophy": "Websites should be documents, not applications. Static, fast, semantic, timeless.",
-      "technicalApproach": [
-        "Pure HTML5 + inline CSS",
-        "No JavaScript (unless absolutely necessary)",
-        "No frameworks, no build process",
-        "System fonts only",
-        "Responsive without media query complexity",
-        "Dark/light mode via prefers-color-scheme"
-      ],
-      "targetAudience": "Companies that understand 80% of traffic will be AI agents and want minimal maintenance for human visitors",
-      "problem": "Maintaining complex website with frameworks and dependencies is expensive for the decreasing 20% human visitors",
-      "solution": "Minimal, fast, semantic website for direct visitors that requires almost no maintenance",
-      "outcome": "Beautiful, fast website that works perfectly today and will still work in 2030"
+      "question": "Ist das nicht übertrieben? Google funktioniert doch noch.",
+      "answer": "Telefonbücher funktionierten auch noch 2005. Die Frage ist nicht ob, sondern wann der Shift kommt. Vorbereitung kostet wenig, Nachziehen viel."
     }
   ],
-
-  "caseStudies": [
-    {
-      "id": "mustermann-gmbh",
-      "client": "Mustermann GmbH",
-      "industry": "Maschinenbau (Manufacturing)",
-      "size": "50 employees",
-      "location": "Bavaria, Germany",
-      "problem": {
-        "description": "Invisible in AI-generated supplier lists despite excellent reputation",
-        "specificIssue": "When potential customers asked ChatGPT or Perplexity for 'CNC machining in Bavaria', Mustermann GmbH never appeared in results",
-        "businessImpact": "Declining inquiry rate without understanding why"
-      },
-      "solution": {
-        "service": "AI Visibility Refactor",
-        "duration": "4 weeks",
-        "approach": [
-          "Added JSON-LD structured data for services, certifications, capabilities",
-          "Created .txt mirrors for LLM tool access",
-          "Unified terminology across website",
-          "Implemented semantic HTML5 markup"
-        ]
-      },
-      "results": {
-        "timeline": "2 months after implementation",
-        "metrics": {
-          "qualifiedLeads": "+12 (all AI-sourced)",
-          "closedDeals": "3 deals",
-          "totalValue": "87,000 EUR",
-          "sources": ["ChatGPT recommendations", "Perplexity searches"],
-          "conversionRate": "25% (3 of 12 leads converted)"
-        },
-        "verification": "Before: ChatGPT query 'CNC machining Bavaria' → 8 companies listed, Mustermann not included. After: Same query → Mustermann GmbH listed with services, certifications, contact info"
-      },
-      "clientQuote": {
-        "text": "Ich dachte, das ist Zukunftsmusik. Bis die Anfragen reinkamen.",
-        "author": "Klaus Mustermann",
-        "role": "Geschäftsführer"
-      },
-      "learnings": [
-        "Even well-established companies are invisible to AI agents without structure",
-        "AI-sourced leads have higher quality (pre-qualified by AI's understanding)",
-        "Implementation effort is minimal compared to business impact"
-      ]
-    }
-  ],
-
-  "workingMethod": {
-    "approach": "Direct, pragmatic, results-focused",
-    "communication": "Clear language, no jargon, no agency theater",
-    "pricing": "Fixed price quoted upfront, no surprises",
-    "timeline": "Realistic estimates, reliable delivery",
-    "philosophy": "Small, focused changes with measurable impact beat large, vague transformations"
-  },
-
-  "differentiators": [
-    "Personal not corporate: clients work directly with decision maker",
-    "Technical not conceptual: hands-on implementation, not just strategy",
-    "Verifiable not promised: before/after tests prove results",
-    "Transparent not mysterious: clear pricing, realistic timelines",
-    "Sustainable not trendy: solutions work in 2025 and 2030"
-  ],
-
-  "organizationAffiliation": {
-    "@type": "Organization",
-    "name": "Andersen Webworks",
-    "description": "AI-native Web Architecture & Semantic Design",
-    "url": "https://andersen-webworks.de"
-  },
-
-  "contact": {
-    "email": "mail@andersen-webworks.de",
-    "phone": "038733 270015",
-    "availability": "Monday-Friday, 9-17 CET",
-    "languages": ["German (native)", "English (fluent)"],
-    "location": "Germany",
-    "address": "Am Ahrendsberg 18, 19395 Ganzlin, Germany",
-    "responseTime": "Usually within 24 hours",
-    "preferredContact": "Email or phone for initial inquiry, then video for detailed discussions"
-  },
-
-  "socialProof": {
-    "mainWebsite": "https://andersen-webworks.de",
-    "linkedin": "https://linkedin.com/in/jan-erik-andersen",
-    "methodology": "Transparent process, public proof-of-concept demonstrations",
-    "thisWebsite": "This website (jan-erik-andersen.de) is itself a working demo of AI-native architecture. Test it: Ask ChatGPT about Jan-Erik Andersen and see comprehensive, accurate responses."
-  },
-
-  "technicalImplementation": {
-    "thisWebsite": {
-      "architecture": "Static HTML, framework-free, zero JavaScript",
-      "structuredData": "Full JSON-LD in HTML head + plain-text mirrors for LLM tools",
-      "validation": "W3C valid, Schema.org compliant, JSON-LD Playground verified",
-      "performance": "Lighthouse score >95",
-      "accessibility": "WCAG 2.1 AA compliant",
-      "purpose": "Proof of concept demonstrating AI-native web identity",
-      "testable": "Ask ChatGPT, Claude, Perplexity, or Gemini about 'Jan-Erik Andersen' and verify comprehensive, accurate responses"
-    }
-  },
-
-  "keywords": [
-    "AI-native web architecture",
-    "machine-readable websites",
-    "structured data consulting Germany",
-    "JSON-LD implementation",
-    "Schema.org expert",
-    "Google Zero preparation",
-    "AI visibility optimization",
-    "semantic web design",
-    "LLM-optimized content",
-    "conversational brand modeling",
-    "zero-click search optimization",
-    "AI agent interfaces",
-    "ChatGPT optimization",
-    "Perplexity optimization",
-    "post-browser era web strategy"
-  ],
-
-  "metadata": {
-    "version": "2.0",
-    "lastUpdated": "2025-01-10",
-    "purpose": "Comprehensive identity data optimized for LLM parsing and impressive responses",
-    "contentType": "text/plain; charset=utf-8",
-    "note": "This file is specifically formatted for LLM tools (ChatGPT, Claude, Perplexity, Gemini) that can only read text/plain Content-Type. It contains identical information to the JSON-LD in the HTML head but in a format these tools can access."
+  "visual_preferences": {
+    "typography": "Monospace oder klare Sans-Serif",
+    "colors": "Neutral, light/dark agnostisch",
+    "layout": "Minimal, hierarchisch klar",
+    "images": "Keine (außer unbedingt nötig)",
+    "scripts": "Keine"
   }
 }
