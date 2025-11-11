@@ -354,17 +354,19 @@ li {
 }
 
 .principles {
-  list-style: none;
-  margin-left: 0;
+  margin: 2rem 0;
 }
 
-.principles li {
-  margin-bottom: 2.5rem;
+.principles dt {
+  font-weight: 600;
+  font-size: 1.0625rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
   padding-left: 1.5rem;
   position: relative;
 }
 
-.principles li::before {
+.principles dt::before {
   content: "→";
   position: absolute;
   left: 0;
@@ -372,18 +374,89 @@ li {
   font-weight: 600;
 }
 
+.principles dt:first-of-type {
+  margin-top: 0;
+}
+
+.principles dd {
+  margin-left: 1.5rem;
+  margin-bottom: 0;
+  color: var(--text);
+  line-height: 1.7;
+}
+
 .faq {
-  list-style: none;
-  margin-left: 0;
+  margin: 2rem 0;
 }
 
-.faq li {
-  margin-bottom: 2rem;
-}
-
-.faq-question {
+.faq dt {
   font-weight: 600;
+  font-size: 1.0625rem;
+  margin-top: 2rem;
   margin-bottom: 0.75rem;
+}
+
+.faq dt:first-of-type {
+  margin-top: 0;
+}
+
+.faq dd {
+  margin-left: 0;
+  margin-bottom: 0;
+  line-height: 1.7;
+}
+
+.key-concepts {
+  margin: 2rem 0;
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--border);
+}
+
+.key-concepts dt {
+  font-weight: 600;
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+}
+
+.key-concepts dt:first-of-type {
+  margin-top: 0;
+}
+
+.key-concepts dd {
+  margin-left: 0;
+  margin-bottom: 0;
+  color: var(--subtle);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.comparison-details {
+  margin: 0;
+  line-height: 1.8;
+}
+
+.comparison-details dt {
+  display: inline;
+  font-weight: 600;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 0.875rem;
+}
+
+.comparison-details dd {
+  display: inline;
+  margin: 0;
+  color: var(--subtle);
+  font-family: "Courier New", monospace;
+  font-size: 0.875rem;
+}
+
+.comparison-details dd::after {
+  content: "";
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 footer {
@@ -407,6 +480,23 @@ footer a {
 
 footer a:hover {
   color: var(--text);
+}
+
+.endpoint-list {
+  list-style: none;
+  padding-left: 0;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.build-info {
+  color: #666;
+}
+
+@media (prefers-color-scheme: dark) {
+  .build-info {
+    color: #8a8a8a;
+  }
 }
 
 .divider {
