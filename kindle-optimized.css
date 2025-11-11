@@ -23,6 +23,34 @@
   }
 }
 
+/* Darkmode Toggle - CSS Only */
+.darkmode-checkbox {
+  display: none;
+}
+
+/* Manual Dark Mode: Checkbox affects all sibling elements */
+.darkmode-checkbox:checked ~ * {
+  --bg: #1c1c1c;
+  --text: #d4d4d4;
+  --subtle: #8a8a8a;
+  --border: #3a3a3a;
+  --accent: #e87461;
+  --highlight-bg: #252525;
+}
+
+/* Icon Toggle */
+.darkmode-checkbox:checked ~ .controls label .icon-light {
+  display: none;
+}
+
+.darkmode-checkbox:checked ~ .controls label .icon-dark {
+  display: inline;
+}
+
+.controls label .icon-dark {
+  display: none;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -662,6 +690,8 @@ nav {
   top: 1.5rem;
   right: 1.5rem;
   z-index: 200;
+  display: flex;
+  gap: 0.75rem;
 }
 
 .control-btn {
@@ -673,6 +703,8 @@ nav {
   padding: 0.5rem 0.75rem;
   border: 1px solid var(--border);
   background: var(--bg);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .control-btn:hover {
