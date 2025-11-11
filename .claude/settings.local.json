@@ -39,7 +39,8 @@
       "Bash(for url in \"https://jan-erik-andersen.de/ai/services.txt\" \"https://jan-erik-andersen.de/ai/identity.txt\" \"https://jan-erik-andersen.de/ai/portfolio.txt\" \"https://jan-erik-andersen.de/blog/google-zero.txt\")",
       "Bash(do echo \"Testing: $url\" curl -I \"$url\")",
       "Bash(grep -E \"HTTP|Content-Type\" echo \"---\" done)",
-      "Bash(git pull:*)"
+      "Bash(git pull:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []

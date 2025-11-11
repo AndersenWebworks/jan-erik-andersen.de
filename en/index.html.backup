@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI-native Web Architect: Ich mache Websites für ChatGPT & Co. sichtbar – mit Struktur, JSON-LD & klaren Angeboten. Festpreis. Kontakt in 24h.">
+  <meta name="author" content="Andersen Webworks">
+  <meta name="google-site-verification" content="k-ibfNBK86AcXyyb93t17GkLCgYZcbK6jSddJjlT0yc">
+  <link rel="canonical" href="https://jan-erik-andersen.de">
+  <link rel="alternate" hreflang="de" href="https://jan-erik-andersen.de/">
+  <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/">
+  <link rel="alternate" hreflang="x-default" href="https://jan-erik-andersen.de/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>Jan-Erik Andersen — AI-native Web Architect</title>
+
+  <!-- Structured Data for Search Engines -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Person",
+        "@id": "https://jan-erik-andersen.de/#person",
+        "name": "Jan-Erik Andersen",
+        "jobTitle": "AI-native Web Architect",
+        "description": "Spezialist für maschinenlesbare Webarchitekturen. Hilft mittelständischen Unternehmen, in der Post-Google-Ära sichtbar zu bleiben durch strukturierte Daten und semantische Modelle.",
+        "url": "https://jan-erik-andersen.de",
+        "email": "mail@andersen-webworks.de",
+        "sameAs": [
+          "https://linkedin.com/in/jan-erik-andersen",
+          "https://andersen-webworks.de"
+        ],
+        "knowsAbout": [
+          "AI-native Web Architecture",
+          "Semantic Web",
+          "JSON-LD",
+          "Structured Data",
+          "Machine-Readable Content",
+          "Conversational Branding",
+          "Schema.org",
+          "LLM Optimization"
+        ],
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Andersen Webworks",
+          "description": "AI-native Web Architecture & Semantic Design",
+          "url": "https://andersen-webworks.de"
+        },
+        "offers": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AI Readiness Audit",
+              "description": "Live-Test mit ChatGPT und 1-seitige Analyse der Website-Struktur. Zeigt genau, warum Ihre Website für AI-Agenten unsichtbar ist."
+            },
+            "provider": {
+              "@type": "Person",
+              "name": "Jan-Erik Andersen"
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "priceCurrency": "EUR",
+              "price": "auf Anfrage"
+            },
+            "availableDeliveryMethod": "OnlineOnly"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AI Visibility Refactor",
+              "description": "Umbau bestehender Websites für maximale Maschinenlesbarkeit. Strukturierte Daten, semantisches HTML, einheitliche Begriffe."
+            },
+            "provider": {
+              "@type": "Person",
+              "name": "Jan-Erik Andersen"
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "priceCurrency": "EUR",
+              "minPrice": "2400",
+              "maxPrice": "12000"
+            },
+            "availableDeliveryMethod": "OnlineOnly"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Conversational Brand Modeling",
+              "description": "Definition der Markenstimme für AI-Dialoge. Tonalität, Antwortmuster, konsistente Repräsentation."
+            },
+            "provider": {
+              "@type": "Person",
+              "name": "Jan-Erik Andersen"
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "priceCurrency": "EUR",
+              "price": "auf Anfrage"
+            },
+            "availableDeliveryMethod": "OnlineOnly"
+          }
+        ],
+        "address": {
+          "@type": "PostalAddress",
+          "addressCountry": "DE"
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "Professional Inquiry",
+          "availableLanguage": ["German", "English"]
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://jan-erik-andersen.de/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Brauche ich eine neue Website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Ich baue Ihre bestehende um. Für Besucher ändert sich nichts."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Wie lange dauert das?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Test: 15 Minuten. Analyse: 3-5 Tage. Umsetzung: 2-4 Wochen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was kostet das?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Festpreis, abhängig vom Umfang. Keine Agentur-Preise."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Ist das nicht nur ein Hype?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Circa 60% Zero-Click-Searches sind kein Hype. Das ist Realität. Seit 2024."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Was passiert mit meiner Website?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sie bleibt. Ich füge eine unsichtbare Schicht hinzu. Für Menschen: keine Änderung. Für Maschinen: perfekt lesbar."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Alternative formats for AI agents (hidden for humans) -->
+  <link rel="alternate" type="text/plain" href="/ai/identity.txt" title="AI-Readable Identity">
+  <link rel="alternate" type="text/plain" href="/ai/services.txt" title="AI-Readable Services">
+  <link rel="alternate" type="text/plain" href="/ai/case-study.txt" title="AI-Readable Case Study">
+
+  <link rel="stylesheet" href="kindle-optimized.css">
+</head>
+<body>
+
+  <div class="controls">
+    <a href="/en/" class="control-btn" aria-label="Switch to English">EN</a>
+  </div>
+
+  <header>
+    <h1>Jan-Erik Andersen</h1>
+    <p class="tagline">AI-native Web Architect</p>
+    <div class="hero-statement">
+      <p><strong>Ihre Website ist unsichtbar.</strong><br>
+      Nicht für Google. Für ChatGPT.</p>
+      <p>Das ist das Problem. Ich bin die Lösung.</p>
+    </div>
+    <nav aria-label="Hauptnavigation">
+      <a href="#wie-es-funktioniert" class="cta-primary">Wie das funktioniert</a>
+      <a href="#kontakt" class="cta-secondary">Termin vereinbaren</a>
+    </nav>
+  </header>
+
+  <main id="hauptinhalt">
+    <section id="problem">
+      <h2>Warum Sie weniger Anfragen bekommen</h2>
+
+      <p>Ihre Kunden suchen nicht mehr bei Google.<br>
+      Sie fragen ChatGPT: <em>"Finde mir einen Anbieter für X."</em></p>
+
+      <p>ChatGPT listet 5 Unternehmen.<br>
+      <strong>Ihres ist nicht dabei.</strong></p>
+
+      <p>Nicht weil Sie schlechter sind.<br>
+      Sondern weil ChatGPT Ihre Website nicht lesen kann.</p>
+
+      <p><strong>Das Problem:</strong> Ihre Website ist für Menschen gebaut.<br>
+      ChatGPT ist keine Person. Es ist eine Maschine.<br>
+      Und Maschinen brauchen Struktur.</p>
+
+      <p>Das ist mein Fachgebiet.</p>
+
+      <div class="stats">
+        <p><span class="stat-number">59,7%</span>
+        aller Google-Anfragen in der EU enden ohne Klick – <strong>Zero-Click-Suche</strong>.<br>
+        <small>(Quelle: <a href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-the-eu-its-360/" target="_blank" rel="noopener">SparkToro Zero-Click Study 2024</a>)</small></p>
+
+        <p><span class="stat-number">77,2%</span>
+        aller mobilen Google-Suchen enden ohne Klick – durch Featured Snippets.<br>
+        <small>(Quelle: <a href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-the-eu-its-360/" target="_blank" rel="noopener">SparkToro, 2024</a>)</small></p>
+
+        <p><span class="stat-number">61%</span>
+        Rückgang der organischen Klickrate durch <strong>AI Overviews</strong>.<br>
+        <small>(Quelle: <a href="https://searchengineland.com/google-ai-overviews-drive-drop-organic-paid-ctr-464212" target="_blank" rel="noopener">Search Engine Land, 2025</a>)</small></p>
+
+        <p><span class="stat-number">50%</span>
+        weniger organischer Traffic bis 2028 durch AI-Search.<br>
+        <small>(Prognose: <a href="https://www.gartner.com/en/newsroom/press-releases/2024-02-19-gartner-predicts-search-engine-volume-will-drop-25-percent-by-2026-due-to-ai-chatbots-and-other-virtual-agents" target="_blank" rel="noopener">Gartner Research, 2024</a>)</small></p>
+
+        <p><span class="stat-number">123%</span>
+        Anstieg des Traffics von AI-Agenten für KMU-Websites – das <strong>Agentic Web</strong>.<br>
+        <small>(Quelle: <a href="https://searchengineland.com/smb-websites-rising-traffic-chatgpt-ai-engines-453201" target="_blank" rel="noopener">Search Engine Land, 2025</a>)</small></p>
+
+        <p><strong>Websites brauchen jetzt Zitationsfähigkeit, nicht nur Sichtbarkeit.</strong></p>
+      </div>
+    </section>
+
+    <section id="vergleich">
+      <h2>Der Unterschied</h2>
+
+      <p>Zwei Unternehmen. Gleiche Branche. Gleiche Qualität.<br>
+      Ein Kunde fragt ChatGPT: <em>"Welche Firma bietet Service X?"</em></p>
+
+      <div class="comparison">
+        <div class="comparison-box">
+          <div class="comparison-title">Firma A (typische Website)</div>
+          <div class="comparison-content">
+            ChatGPT:<br>
+            "Ich habe keine konkreten<br>
+            Informationen gefunden."
+          </div>
+          <div class="comparison-result">❌ Ergebnis: Keine Anfrage.</div>
+        </div>
+
+        <div class="comparison-box success">
+          <div class="comparison-title">Firma B (mein Kunde)</div>
+          <div class="comparison-content">
+            ChatGPT:<br>
+            "Firma B bietet Service X.<br>
+            Preis: ab 15.000 EUR<br>
+            Dauer: 8-12 Wochen<br>
+            Kontakt: info@firma-b.de"
+          </div>
+          <div class="comparison-result">✅ Ergebnis: Anfrage.</div>
+        </div>
+      </div>
+
+      <p><strong>Das ist der Unterschied.</strong></p>
+
+      <p><a href="#kontakt" class="cta-primary">Kostenlosen Test vereinbaren</a></p>
+    </section>
+
+    <section id="wie-es-funktioniert">
+      <h2>So gehe ich vor</h2>
+
+      <h3>1. Test (15 Minuten, kostenlos)</h3>
+      <p>Ich zeige Ihnen live, was ChatGPT über Ihr Unternehmen weiß.<br>
+      In 90% der Fälle: nichts Konkretes.<br>
+      Das ist der Weckruf.</p>
+
+      <h3>2. Analyse (3-5 Tage)</h3>
+      <p>Ich prüfe Ihre Website.<br>
+      Sie bekommen eine 1-seitige Liste: Was sich ändern muss.<br>
+      Priorisiert, klar, ohne Fachgeschwurbel.</p>
+
+      <h3>3. Umsetzung (2-4 Wochen)</h3>
+      <p>Ich baue Ihre Website so um, dass Maschinen sie lesen können.<br>
+      Für Ihre Kunden ändert sich nichts.<br>
+      Für ChatGPT ändert sich alles.</p>
+
+      <p><strong>Festpreis. Keine Überraschungen.</strong></p>
+
+      <p><a href="#kontakt" class="cta-primary">Erstgespräch vereinbaren</a></p>
+    </section>
+
+    <section id="methodik">
+      <h2>Die Methodik</h2>
+
+      <p>Ich baue keine Websites.<br>
+      Ich baue <strong>maschinenlesbare Datenstrukturen</strong> in Ihre bestehende Website ein.</p>
+
+      <p>Das bedeutet:</p>
+
+      <ul>
+        <li><strong>Semantisches HTML:</strong> Jeder Begriff bekommt eine eindeutige Bedeutung.</li>
+        <li><strong>Strukturierte Daten:</strong> JSON-LD, Schema.org, Microdata – was AI-Agenten verstehen.</li>
+        <li><strong>Konsistente Begriffe:</strong> Keine Synonyme, keine Variationen.</li>
+        <li><strong>Klare Hierarchien:</strong> Was gehört wozu. Was ist wichtig.</li>
+      </ul>
+
+      <p>Für Menschen sieht Ihre Website aus wie vorher.<br>
+      Für AI-Agenten ist sie ein präzises Datenschema.</p>
+
+      <p>Das nennt man <strong>Agent Readability</strong>: Maschinenlesbarkeit.<br>
+      Und <strong>AI Readiness</strong>: Bereitschaft für die KI.</p>
+
+      <p><strong>Diese Seite ist selbst ein Beispiel.</strong></p>
+
+      <div class="stats">
+        <p><span class="stat-number">0 Bytes</span> JavaScript.<br>
+        <span class="stat-number">0</span> Frameworks.<br>
+        <span class="stat-number">100%</span> statisches HTML + CSS.</p>
+
+        <p><strong>Pure Struktur. Keine Tricks.</strong></p>
+      </div>
+    </section>
+
+    <section id="leistungen">
+      <h2>Leistungen</h2>
+
+      <ul class="services-list" role="list">
+        <li role="listitem">
+          <span class="service-name">AI Readiness Audit</span>
+          Live-Test mit ChatGPT + 1-seitige Analyse – zeigt Ihre <strong>AI Readiness</strong>
+          <div class="service-meta">Dauer: 3-5 Tage · Preis: Auf Anfrage</div>
+        </li>
+
+        <li role="listitem">
+          <span class="service-name">AI Visibility Refactor</span>
+          Umbau für <strong>Agent Readability</strong> – strukturierte Daten, semantisches HTML
+          <div class="service-meta">Dauer: 2-4 Wochen · Preis: Auf Anfrage</div>
+        </li>
+
+        <li role="listitem">
+          <span class="service-name">Conversational Brand Modeling</span>
+          Wie Ihr Unternehmen in AI-Dialogen auftritt – Tonalität, Antwortmuster
+          <div class="service-meta">Dauer: 1-2 Wochen · Preis: Auf Anfrage</div>
+        </li>
+      </ul>
+
+      <p><strong>Alle Preise als Festpreis.<br>
+      Keine versteckten Kosten.</strong></p>
+
+      <p><a href="mailto:mail@andersen-webworks.de" class="cta-primary">Angebot anfordern</a></p>
+    </section>
+
+    <section id="prinzipien">
+      <h2>Meine Prinzipien</h2>
+
+      <ul class="principles">
+        <li>
+          <strong>Struktur schafft Vertrauen.</strong><br>
+          Gut strukturierte Daten sind ehrlich, prüfbar, verlässlich.
+        </li>
+
+        <li>
+          <strong>Eindeutigkeit über Eloquenz.</strong><br>
+          Ein klarer Begriff ist wertvoller als zehn schöne Sätze.
+        </li>
+
+        <li>
+          <strong>Google Zero.</strong><br>
+          Suchmaschinen werden irrelevant. AI-Agenten ziehen Daten direkt aus der Quelle.<br>
+          Wer dann keine Struktur hat, ist unsichtbar.
+        </li>
+
+        <li>
+          <strong>Transparenz statt Tricks.</strong><br>
+          Keine Black-Hat-Taktiken. Keine Keyword-Spielchen.<br>
+          Nur die Wahrheit, strukturiert.
+        </li>
+      </ul>
+    </section>
+
+    <section id="faq">
+      <h2>Häufige Fragen</h2>
+
+      <ul class="faq">
+        <li>
+          <div class="faq-question">Brauche ich eine neue Website?</div>
+          Nein. Ich baue Ihre bestehende um.<br>
+          Für Besucher ändert sich nichts.
+        </li>
+
+        <li>
+          <div class="faq-question">Wie lange dauert das?</div>
+          Test: 15 Minuten.<br>
+          Analyse: 3-5 Tage.<br>
+          Umsetzung: 2-4 Wochen.
+        </li>
+
+        <li>
+          <div class="faq-question">Was kostet das?</div>
+          Festpreis, abhängig vom Umfang.<br>
+          Keine Agentur-Preise.
+        </li>
+
+        <li>
+          <div class="faq-question">Ist das nicht nur ein Hype?</div>
+          ~60% Zero-Click-Searches sind kein Hype.<br>
+          Das ist Realität. Seit 2024.
+        </li>
+
+        <li>
+          <div class="faq-question">Was passiert mit meiner Website?</div>
+          Sie bleibt. Ich füge eine unsichtbare Schicht hinzu.<br>
+          Für Menschen: keine Änderung.<br>
+          Für Maschinen: perfekt lesbar.
+        </li>
+      </ul>
+    </section>
+
+    <section id="kontakt">
+      <h2>Lassen Sie uns sprechen.</h2>
+
+      <p>
+        <strong>Jan-Erik Andersen</strong><br>
+        <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a><br>
+        Telefon: 038733 270015<br>
+        Mo-Fr, 9-17 Uhr
+      </p>
+
+      <p>
+        Ein Projekt von <a href="https://andersen-webworks.de">Andersen Webworks</a>
+      </p>
+
+      <p class="subtle">Ich antworte normalerweise innerhalb von 24 Stunden.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Diese Website ist selbst ein Beispiel.</p>
+    <p>Statisch. Framework-frei. Kein JavaScript.<br>
+    Funktioniert für Browser <strong>und</strong> für ChatGPT.</p>
+    <p><strong>andersen-signal v0.2</strong> — Proof of Concept: AI-native Web Identity</p>
+    <p>
+      <a href="/impressum.html">Impressum</a> ·
+      <a href="/datenschutz.html">Datenschutz</a> ·
+      <a href="/barrierefreiheit.html">Barrierefreiheit</a>
+    </p>
+  </footer>
+
+
+</body>
+</html>

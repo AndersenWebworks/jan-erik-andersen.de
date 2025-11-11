@@ -1,0 +1,146 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://jan-erik-andersen.de/#person",
+      "name": "Jan-Erik Andersen",
+      "jobTitle": "AI-native Web Architect",
+      "description": "Spezialist für maschinenlesbare Webarchitekturen. Hilft mittelständischen Unternehmen, in der Post-Google-Ära sichtbar zu bleiben durch strukturierte Daten und semantische Modelle.",
+      "url": "https://jan-erik-andersen.de",
+      "email": "mail@andersen-webworks.de",
+      "sameAs": [
+        "https://linkedin.com/in/jan-erik-andersen",
+        "https://andersen-webworks.de"
+      ],
+      "knowsAbout": [
+        "AI-native Web Architecture",
+        "Semantic Web",
+        "JSON-LD",
+        "Structured Data",
+        "Machine-Readable Content",
+        "Conversational Branding",
+        "Schema.org",
+        "LLM Optimization"
+      ],
+      "worksFor": {
+        "@type": "Organization",
+        "name": "Andersen Webworks",
+        "description": "AI-native Web Architecture & Semantic Design",
+        "url": "https://andersen-webworks.de"
+      },
+      "offers": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "AI Readiness Audit",
+            "description": "Live-Test mit ChatGPT und 1-seitige Analyse der Website-Struktur. Zeigt genau, warum Ihre Website für AI-Agenten unsichtbar ist."
+          },
+          "provider": {
+            "@type": "Person",
+            "name": "Jan-Erik Andersen"
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "priceCurrency": "EUR",
+            "price": "auf Anfrage"
+          },
+          "availableDeliveryMethod": "OnlineOnly"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "AI Visibility Refactor",
+            "description": "Umbau bestehender Websites für maximale Maschinenlesbarkeit. Strukturierte Daten, semantisches HTML, einheitliche Begriffe."
+          },
+          "provider": {
+            "@type": "Person",
+            "name": "Jan-Erik Andersen"
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "priceCurrency": "EUR",
+            "minPrice": "2400",
+            "maxPrice": "12000"
+          },
+          "availableDeliveryMethod": "OnlineOnly"
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Conversational Brand Modeling",
+            "description": "Definition der Markenstimme für AI-Dialoge. Tonalität, Antwortmuster, konsistente Repräsentation."
+          },
+          "provider": {
+            "@type": "Person",
+            "name": "Jan-Erik Andersen"
+          },
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "priceCurrency": "EUR",
+            "price": "auf Anfrage"
+          },
+          "availableDeliveryMethod": "OnlineOnly"
+        }
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "DE"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Professional Inquiry",
+        "availableLanguage": ["German", "English"]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://jan-erik-andersen.de/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Brauche ich eine neue Website?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nein. Ich baue Ihre bestehende um. Für Besucher ändert sich nichts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Wie lange dauert das?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Test: 15 Minuten. Analyse: 3-5 Tage. Umsetzung: 2-4 Wochen."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Was kostet das?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Festpreis, abhängig vom Umfang. Keine Agentur-Preise."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Ist das nicht nur ein Hype?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Circa 60% Zero-Click-Searches sind kein Hype. Das ist Realität. Seit 2024."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Was passiert mit meiner Website?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sie bleibt. Ich füge eine unsichtbare Schicht hinzu. Für Menschen: keine Änderung. Für Maschinen: perfekt lesbar."
+          }
+        }
+      ]
+    }
+  ]
+}
