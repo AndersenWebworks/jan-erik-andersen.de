@@ -44,7 +44,7 @@ Traditionelle Multi-Page-Websites mit `/services/`, `/contact/`, `/faq/` funktio
 - Sticky Navigation, smooth scrolling
 - Für Menschen: segmentiert. Für Maschinen: konsolidiert.
 
-### Service-Positionierung: AIO statt SEO
+### Service-Positionierung: GEO statt SEO
 
 **Was ich verkaufe:**
 
@@ -52,10 +52,10 @@ Traditionelle Multi-Page-Websites mit `/services/`, `/contact/`, `/faq/` funktio
 
 **Der Unterschied zu klassischem SEO:**
 
-| SEO                        | AIO (Agent Interaction Optimization) |
+| SEO                        | GEO (Generative Engine Optimization) |
 |----------------------------|--------------------------------------|
 | Keywords                   | Natürliche Sprache                   |
-| Ranking in Suchergebnissen | Referenzierung in AI-Antworten       |
+| Ranking in Suchergebnissen | Zitation in AI-Antworten             |
 | Click-Through-Rate         | Citation-Rate                        |
 | Multi-Page-Struktur        | AI-Onepager                          |
 | Hidden Keywords            | Sichtbare Struktur                   |
@@ -266,7 +266,7 @@ Externe JSON-Endpoints werden von Live-Query-Agents fast nie direkt gefetcht, au
 - Sichtbarer Content = neues API-Interface
 - Traffic sinkt, Bedeutung steigt
 
-### Agent Interaction Optimization (AIO)
+### Generative Engine Optimization (GEO)
 
 **Neue Erfolgsmessung:**
 - Wird deine Seite von AI-Agents korrekt referenziert?
@@ -451,7 +451,7 @@ AI-Agents fetchen nur die Hauptseite → der Rest bleibt unsichtbar.
 ### Differenzierung zu klassischem SEO
 
 **SEO:** Keyword-Optimierung für Suchergebnisse
-**AIO:** Dialog-Optimierung für AI-Antworten
+**GEO:** Optimierung für generative AI-Systeme
 
 **Technisch fast identisch, aber:**
 - Fokus auf natürliche Sprache statt Keywords
