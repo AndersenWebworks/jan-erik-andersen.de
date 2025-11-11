@@ -201,66 +201,77 @@
 
   <main id="hauptinhalt">
     <section id="problem">
-      <h2>Zero-Click = Zero Navigation</h2>
+      <h2>Das Unsichtbarkeits-Problem</h2>
 
       <p>Ihre Kunden fragen ChatGPT: <em>"Finde mir einen Anbieter für X."</em><br>
       ChatGPT listet 5 Unternehmen. Ihres fehlt.</p>
 
-      <p>AI-Agenten lesen <strong>eine Seite</strong> pro Antwort.<br>
-      Ein Request. Ein HTML-Snapshot. Keine Navigation.</p>
+      <p><strong>Warum?</strong></p>
 
-      <p>Websites mit <code>/services/</code>, <code>/contact/</code>, <code>/faq/</code> auf separaten Seiten:<br>
-      AI-Agent sieht nur die Startseite. Der Rest existiert nicht.</p>
+      <p>Nicht weil Ihr Content schlecht ist.<br>
+      Sondern weil AI-Agenten ihn nie sehen.</p>
+
+      <p><strong>Technische Realität:</strong><br>
+      AI-Agenten (ChatGPT, Claude, Perplexity, Gemini) lesen <strong>eine URL</strong> pro Antwort.<br>
+      Ein Request. Ein HTML-Snapshot. Keine Navigation zu Unterseiten.</p>
+
+      <p>Ihre brillanten Inhalte auf <code>/services/</code>, <code>/about/</code>, <code>/portfolio/</code>?<br>
+      Strukturell unsichtbar. Nicht indexiert. Nicht gelesen. Nicht zitiert.</p>
+
+      <p><strong>Das ist keine Theorie. Das ist WebFetch-Mechanik.</strong></p>
 
       <div class="stats">
+        <p><span class="stat-number">1 Request</span>
+        AI-Agenten holen genau eine URL. Keine Folge-Requests.<br>
+        <small>Single-Fetch-Prinzip</small></p>
+
         <p><span class="stat-number">59,7%</span>
         aller Google-Anfragen enden ohne Klick.<br>
         <small>(SparkToro, 2024)</small></p>
 
-        <p><span class="stat-number">61%</span>
-        Rückgang organischer Klicks durch AI Overviews.<br>
-        <small>(Search Engine Land, 2025)</small></p>
+        <p><span class="stat-number">0 Minuten</span>
+        Zeit für Navigation. Wenn Infos nicht auf der Startseite stehen: unsichtbar.<br>
+        <small>Zero Navigation</small></p>
 
-        <p><span class="stat-number">1 URL</span>
-        pro Antwort. Keine Folge-Requests.<br>
-        <small>Single-Fetch-Prinzip</small></p>
-
-        <p>Websites brauchen Zitationsfähigkeit, nicht Sichtbarkeit.</p>
+        <p>Ihre Unterseiten dürfen existieren.<br>
+        Aber AI-Agenten werden sie nie sehen.</p>
       </div>
     </section>
 
     <section id="vergleich">
-      <h2>AI-Onepager</h2>
+      <h2>Die Lösung</h2>
 
-      <p>Problem: Multi-Page-Struktur<br>
-      Lösung: Alle Inhalte auf einer Seite</p>
+      <p>Startseite = Executive Summary.<br>
+      Unterseiten = Deep Dive (für Menschen).</p>
 
       <div class="comparison">
         <div class="comparison-box">
-          <div class="comparison-title">❌ Multi-Page</div>
+          <div class="comparison-title">❌ Klassische Architektur</div>
           <div class="comparison-content">
-            <code>/ → Startseite</code><br>
-            <code>/services/ → nicht gelesen</code><br>
-            <code>/contact/ → nicht gelesen</code><br>
-            <code>/faq/ → nicht gelesen</code>
+            <code>/ → Willkommen + Teaser</code><br>
+            <code>/services/ → Details hier</code><br>
+            <code>/contact/ → Daten hier</code><br>
+            <code>/faq/ → Fragen hier</code>
           </div>
-          <div class="comparison-result">Agent sieht: Startseite.<br>Rest unsichtbar.</div>
+          <div class="comparison-result">AI-Agent sieht: Teaser.<br>Details unsichtbar.</div>
         </div>
 
         <div class="comparison-box success">
-          <div class="comparison-title">✅ Onepager</div>
+          <div class="comparison-title">✅ AI-Native Architektur</div>
           <div class="comparison-content">
-            <code>/ → Alles hier</code><br>
-            <code>#services → hier</code><br>
-            <code>#contact → hier</code><br>
-            <code>#faq → hier</code>
+            <code>/ → Alle Key Facts + Links</code><br>
+            <code>/services/ → Ausführlich (Human)</code><br>
+            <code>/contact/ → Optional (Human)</code><br>
+            <code>/faq/ → Details (Human)</code>
           </div>
-          <div class="comparison-result">Agent sieht: Alles.<br>Ein Request.</div>
+          <div class="comparison-result">AI-Agent sieht: Key Facts.<br>Mensch: Kann tiefer gehen.</div>
         </div>
       </div>
 
-      <p>Ein Request = Eine Antwort = Ein HTML-Snapshot.<br>
-      Struktur muss beim ersten Fetch komplett sein.</p>
+      <p><strong>Das Prinzip:</strong><br>
+      Startseite enthält alle kritischen Informationen strukturiert.<br>
+      Unterseiten existieren für Menschen, die Details wollen.<br>
+      AI-Agenten bekommen alles Wichtige beim ersten Fetch.</p>
 
       <p><a href="#kontakt" class="cta-primary">Kontakt</a></p>
     </section>
