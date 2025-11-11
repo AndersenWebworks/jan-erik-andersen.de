@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AI-native Web Architect: I make websites visible to ChatGPT & Co. – with structure, JSON-LD & clear offerings. Fixed price. Contact within 24h.">
+  <meta name="description" content="AI-native Web Architect: I make websites visible to ChatGPT & Co. — with structure, JSON-LD & clear offerings. Fixed price. Response within 24h.">
   <meta name="author" content="Andersen Webworks">
   <meta name="google-site-verification" content="k-ibfNBK86AcXyyb93t17GkLCgYZcbK6jSddJjlT0yc">
   <link rel="canonical" href="https://jan-erik-andersen.de/en/">
   <link rel="alternate" hreflang="de" href="https://jan-erik-andersen.de/">
   <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/">
   <link rel="alternate" hreflang="x-default" href="https://jan-erik-andersen.de/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <title>Jan-Erik Andersen — AI-native Web Architect</title>
 
   <!-- Structured Data for Search Engines -->
@@ -22,7 +23,7 @@
         "@id": "https://jan-erik-andersen.de/#person",
         "name": "Jan-Erik Andersen",
         "jobTitle": "AI-native Web Architect",
-        "description": "Specialist in machine-readable web architectures. Helps mid-sized companies remain visible in the post-Google era through structured data and semantic models.",
+        "description": "Specialist for machine-readable web architectures. Helps mid-sized companies stay visible in the post-Google era through structured data and semantic models.",
         "url": "https://jan-erik-andersen.de",
         "email": "mail@andersen-webworks.de",
         "sameAs": [
@@ -47,31 +48,59 @@
         },
         "offers": [
           {
-            "@type": "Service",
-            "name": "AI Readiness Audit",
-            "description": "Live test with ChatGPT and 1-page analysis of website structure. Shows exactly why your website is invisible to AI agents.",
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AI Readiness Audit",
+              "description": "Live test with ChatGPT and 1-page analysis of website structure. Shows exactly why your website is invisible to AI agents."
+            },
             "provider": {
               "@type": "Person",
               "name": "Jan-Erik Andersen"
-            }
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "priceCurrency": "EUR",
+              "price": "on request"
+            },
+            "availableDeliveryMethod": "OnlineOnly"
           },
           {
-            "@type": "Service",
-            "name": "AI Visibility Refactor",
-            "description": "Rebuilding existing websites for maximum machine readability. Structured data, semantic HTML, consistent terminology.",
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AI Visibility Refactor",
+              "description": "Rebuilding existing websites for maximum machine readability. Structured data, semantic HTML, consistent terminology."
+            },
             "provider": {
               "@type": "Person",
               "name": "Jan-Erik Andersen"
-            }
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "priceCurrency": "EUR",
+              "minPrice": "2400",
+              "maxPrice": "12000"
+            },
+            "availableDeliveryMethod": "OnlineOnly"
           },
           {
-            "@type": "Service",
-            "name": "Conversational Brand Modeling",
-            "description": "Defining brand voice for AI dialogues. Tonality, response patterns, consistent representation.",
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Conversational Brand Modeling",
+              "description": "Definition of brand voice for AI dialogues. Tonality, response patterns, consistent representation."
+            },
             "provider": {
               "@type": "Person",
               "name": "Jan-Erik Andersen"
-            }
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "priceCurrency": "EUR",
+              "price": "on request"
+            },
+            "availableDeliveryMethod": "OnlineOnly"
           }
         ],
         "address": {
@@ -114,10 +143,10 @@
           },
           {
             "@type": "Question",
-            "name": "Isn't this just a hype?",
+            "name": "Isn't this just hype?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Approximately 60% zero-click searches are not a hype. This is reality. Since 2024."
+              "text": "Approximately 60% Zero-Click Searches are not hype. This is reality. Since 2024."
             }
           },
           {
@@ -140,366 +169,11 @@
   <link rel="alternate" type="text/plain" href="/ai/case-study.txt" title="AI-Readable Case Study">
 
   <link rel="stylesheet" href="../kindle-optimized.css">
-
-  <style display="none">
-  /* Old inline styles - replaced by kindle-optimized.css */
-  /*
-    :root {
-      --bg: #ffffff;
-      --text: #1a1a1a;
-      --subtle: #666666;
-      --border: #e0e0e0;
-      --accent: #cc0000;
-      --highlight-bg: rgba(128, 128, 128, 0.03);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1a1a1a;
-        --text: #e0e0e0;
-        --subtle: #999999;
-        --border: #333333;
-        --accent: #ff3333;
-        --highlight-bg: rgba(255, 255, 255, 0.03);
-      }
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      line-height: 1.7;
-      color: var(--text);
-      background: var(--bg);
-      max-width: 42rem;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
-
-    header {
-      margin-bottom: 4rem;
-      padding-bottom: 2rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    h1 {
-      font-size: 1.75rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .tagline {
-      font-size: 1rem;
-      color: var(--subtle);
-      margin-bottom: 2rem;
-    }
-
-    .hero-statement {
-      font-size: 1.125rem;
-      line-height: 1.6;
-      margin-bottom: 2rem;
-    }
-
-    .hero-statement strong {
-      color: var(--accent);
-    }
-
-    .cta-primary {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      background: var(--text);
-      color: var(--bg);
-      text-decoration: none;
-      font-weight: 500;
-      margin-right: 1rem;
-      margin-bottom: 1rem;
-      transition: opacity 0.2s;
-    }
-
-    .cta-primary:hover {
-      opacity: 0.8;
-    }
-
-    .cta-secondary {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      border: 1px solid var(--border);
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 500;
-      margin-bottom: 1rem;
-      transition: border-color 0.2s;
-    }
-
-    .cta-secondary:hover {
-      border-color: var(--text);
-    }
-
-    section {
-      margin-bottom: 4rem;
-    }
-
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 1.5rem;
-      color: var(--text);
-    }
-
-    h3 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 1rem;
-      margin-top: 2rem;
-    }
-
-    p {
-      margin-bottom: 1rem;
-    }
-
-    strong {
-      font-weight: 600;
-    }
-
-    ul, ol {
-      margin-left: 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    li {
-      margin-bottom: 0.5rem;
-    }
-
-    a {
-      color: var(--text);
-      text-decoration: underline;
-    }
-
-    a:hover {
-      color: var(--accent);
-    }
-
-    a:focus {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-
-    .stats {
-      background: var(--highlight-bg);
-      padding: 2rem;
-      border-left: 3px solid var(--accent);
-      margin: 2rem 0;
-    }
-
-    .stats p {
-      margin-bottom: 1.5rem;
-    }
-
-    .stats p:last-child {
-      margin-bottom: 0;
-    }
-
-    .stat-number {
-      font-size: 2rem;
-      font-weight: 600;
-      color: var(--accent);
-      display: block;
-      margin-bottom: 0.25rem;
-    }
-
-    .comparison {
-      display: grid;
-      gap: 2rem;
-      margin: 2rem 0;
-    }
-
-    .comparison-box {
-      background: var(--highlight-bg);
-      padding: 1.5rem;
-      border-left: 3px solid var(--border);
-    }
-
-    .comparison-box.success {
-      border-left-color: var(--accent);
-    }
-
-    .comparison-title {
-      font-weight: 600;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-
-    .comparison-content {
-      font-family: "Courier New", monospace;
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: var(--subtle);
-    }
-
-    .comparison-result {
-      margin-top: 1rem;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-
-    .services-list {
-      list-style: none;
-      margin-left: 0;
-    }
-
-    .services-list li {
-      padding: 1.5rem;
-      background: var(--highlight-bg);
-      margin-bottom: 1rem;
-      border-left: 3px solid var(--border);
-    }
-
-    .service-name {
-      font-weight: 600;
-      font-size: 1.125rem;
-      margin-bottom: 0.5rem;
-      display: block;
-    }
-
-    .service-meta {
-      color: var(--subtle);
-      font-size: 0.9rem;
-      margin-top: 0.5rem;
-    }
-
-    .case-study {
-      background: var(--highlight-bg);
-      padding: 2rem;
-      border-left: 3px solid var(--accent);
-      margin: 2rem 0;
-    }
-
-    .case-study-title {
-      font-weight: 600;
-      font-size: 1.125rem;
-      margin-bottom: 1rem;
-    }
-
-    .case-study-quote {
-      font-style: italic;
-      color: var(--subtle);
-      margin-top: 1rem;
-      padding-left: 1rem;
-      border-left: 2px solid var(--border);
-    }
-
-    .principles {
-      list-style: none;
-      margin-left: 0;
-    }
-
-    .principles li {
-      margin-bottom: 2rem;
-      padding-left: 1.5rem;
-      position: relative;
-    }
-
-    .principles li::before {
-      content: "→";
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .faq {
-      list-style: none;
-      margin-left: 0;
-    }
-
-    .faq li {
-      margin-bottom: 2rem;
-    }
-
-    .faq-question {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    footer {
-      margin-top: 4rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
-      color: var(--subtle);
-      font-size: 0.875rem;
-    }
-
-    footer p {
-      margin-bottom: 0.5rem;
-    }
-
-    .divider {
-      text-align: center;
-      margin: 3rem 0;
-      color: var(--subtle);
-    }
-
-    .skip-link {
-      position: absolute;
-      top: -40px;
-      left: 0;
-      background: var(--text);
-      color: var(--bg);
-      padding: 0.5rem 1rem;
-      text-decoration: none;
-      z-index: 100;
-    }
-
-    .skip-link:focus {
-      top: 0;
-    }
-
-    nav {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .controls {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      display: flex;
-      gap: 0.5rem;
-      z-index: 200;
-    }
-
-    .control-btn {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 0.5rem 0.75rem;
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-family: inherit;
-      transition: border-color 0.2s;
-    }
-
-    .control-btn:hover {
-      border-color: var(--text);
-    }
-
-    .control-btn:focus {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
-    }
-  */
-  </style>
 </head>
 <body>
 
   <div class="controls">
-    <a href="/" class="control-btn" aria-label="Zur deutschen Version wechseln">DE</a>
+    <a href="/" class="control-btn" aria-label="Switch to German">DE</a>
   </div>
 
   <header>
@@ -511,41 +185,41 @@
       <p>That's the problem. I'm the solution.</p>
     </div>
     <nav aria-label="Main navigation">
-      <a href="#how-it-works" class="cta-primary">How this works</a>
-      <a href="#contact" class="cta-secondary">Schedule a call</a>
+      <a href="#how-it-works" class="cta-primary">How it works</a>
+      <a href="#contact" class="cta-secondary">Schedule appointment</a>
     </nav>
   </header>
 
   <main id="main-content">
     <section id="problem">
-      <h2>Why you're getting fewer inquiries</h2>
+      <h2>Why You're Getting Fewer Inquiries</h2>
 
       <p>Your customers no longer search on Google.<br>
       They ask ChatGPT: <em>"Find me a provider for X."</em></p>
 
       <p>ChatGPT lists 5 companies.<br>
-      <strong>Yours isn't on it.</strong></p>
+      <strong>Yours isn't among them.</strong></p>
 
-      <p>Not because you're worse.<br>
+      <p>Not because you're inferior.<br>
       But because ChatGPT can't read your website.</p>
 
       <p><strong>The problem:</strong> Your website is built for humans.<br>
       ChatGPT is not a person. It's a machine.<br>
       And machines need structure.</p>
 
-      <p>That's my specialty.</p>
+      <p>That's my expertise.</p>
 
       <div class="stats">
         <p><span class="stat-number">59.7%</span>
-        of all Google searches in the EU end without a click (US: 58.5%).<br>
+        of all Google queries in the EU end without a click – <strong>Zero-Click Search</strong>.<br>
         <small>(Source: <a href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-the-eu-its-360/" target="_blank" rel="noopener">SparkToro Zero-Click Study 2024</a>)</small></p>
 
         <p><span class="stat-number">77.2%</span>
-        of all mobile Google searches end without a click.<br>
+        of all mobile Google searches end without a click – through Featured Snippets.<br>
         <small>(Source: <a href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-the-eu-its-360/" target="_blank" rel="noopener">SparkToro, 2024</a>)</small></p>
 
         <p><span class="stat-number">61%</span>
-        decline in organic click-through rate due to Google AI Overviews.<br>
+        decline in organic click-through rate due to <strong>AI Overviews</strong>.<br>
         <small>(Source: <a href="https://searchengineland.com/google-ai-overviews-drive-drop-organic-paid-ctr-464212" target="_blank" rel="noopener">Search Engine Land, 2025</a>)</small></p>
 
         <p><span class="stat-number">50%</span>
@@ -553,15 +227,15 @@
         <small>(Forecast: <a href="https://www.gartner.com/en/newsroom/press-releases/2024-02-19-gartner-predicts-search-engine-volume-will-drop-25-percent-by-2026-due-to-ai-chatbots-and-other-virtual-agents" target="_blank" rel="noopener">Gartner Research, 2024</a>)</small></p>
 
         <p><span class="stat-number">123%</span>
-        increase in traffic from AI agents for SMB websites (Sept. 2024 – Feb. 2025).<br>
+        increase in traffic from AI agents for SMB websites – the <strong>Agentic Web</strong>.<br>
         <small>(Source: <a href="https://searchengineland.com/smb-websites-rising-traffic-chatgpt-ai-engines-453201" target="_blank" rel="noopener">Search Engine Land, 2025</a>)</small></p>
 
-        <p><strong>Those who don't act now will lose.</strong></p>
+        <p><strong>Websites now need citability, not just visibility.</strong></p>
       </div>
     </section>
 
     <section id="comparison">
-      <h2>The difference</h2>
+      <h2>The Difference</h2>
 
       <p>Two companies. Same industry. Same quality.<br>
       A customer asks ChatGPT: <em>"Which company offers service X?"</em></p>
@@ -571,7 +245,7 @@
           <div class="comparison-title">Company A (typical website)</div>
           <div class="comparison-content">
             ChatGPT:<br>
-            "I found no concrete<br>
+            "I found no specific<br>
             information."
           </div>
           <div class="comparison-result">❌ Result: No inquiry.</div>
@@ -596,17 +270,17 @@
     </section>
 
     <section id="how-it-works">
-      <h2>How I work</h2>
+      <h2>My Approach</h2>
 
       <h3>1. Test (15 minutes, free)</h3>
-      <p>I'll show you live what ChatGPT knows about your company.<br>
-      In 90% of cases: nothing concrete.<br>
+      <p>I show you live what ChatGPT knows about your company.<br>
+      In 90% of cases: nothing specific.<br>
       That's the wake-up call.</p>
 
       <h3>2. Analysis (3-5 days)</h3>
-      <p>I examine your website.<br>
+      <p>I review your website.<br>
       You get a 1-page list: What needs to change.<br>
-      Prioritized, clear, without jargon.</p>
+      Prioritized, clear, no jargon.</p>
 
       <h3>3. Implementation (2-4 weeks)</h3>
       <p>I rebuild your website so machines can read it.<br>
@@ -615,7 +289,7 @@
 
       <p><strong>Fixed price. No surprises.</strong></p>
 
-      <p><a href="#contact" class="cta-primary">Schedule initial call</a></p>
+      <p><a href="#contact" class="cta-primary">Schedule initial consultation</a></p>
     </section>
 
     <section id="methodology">
@@ -629,18 +303,21 @@
       <ul>
         <li><strong>Semantic HTML:</strong> Every term gets a unique meaning.</li>
         <li><strong>Structured Data:</strong> JSON-LD, Schema.org, Microdata – what AI agents understand.</li>
-        <li><strong>Consistent terminology:</strong> No synonyms, no variations.</li>
-        <li><strong>Clear hierarchies:</strong> What belongs where. What's important.</li>
+        <li><strong>Consistent Terminology:</strong> No synonyms, no variations.</li>
+        <li><strong>Clear Hierarchies:</strong> What belongs to what. What's important.</li>
       </ul>
 
       <p>For humans, your website looks the same as before.<br>
       For AI agents, it's a precise data schema.</p>
 
+      <p>This is called <strong>Agent Readability</strong>: machine readability.<br>
+      And <strong>AI Readiness</strong>: readiness for AI.</p>
+
       <p><strong>This page itself is an example.</strong></p>
 
       <div class="stats">
-        <p><span class="stat-number">0 Bytes</span> JavaScript.<br>
-        <span class="stat-number">0</span> Frameworks.<br>
+        <p><span class="stat-number">0 bytes</span> JavaScript.<br>
+        <span class="stat-number">0</span> frameworks.<br>
         <span class="stat-number">100%</span> static HTML + CSS.</p>
 
         <p><strong>Pure structure. No tricks.</strong></p>
@@ -653,31 +330,31 @@
       <ul class="services-list" role="list">
         <li role="listitem">
           <span class="service-name">AI Readiness Audit</span>
-          Live test with ChatGPT + 1-page analysis
+          Live test with ChatGPT + 1-page analysis – shows your <strong>AI Readiness</strong>
           <div class="service-meta">Duration: 3-5 days · Price: On request</div>
         </li>
 
         <li role="listitem">
           <span class="service-name">AI Visibility Refactor</span>
-          Your website becomes machine-readable
+          Rebuild for <strong>Agent Readability</strong> – structured data, semantic HTML
           <div class="service-meta">Duration: 2-4 weeks · Price: On request</div>
         </li>
 
         <li role="listitem">
           <span class="service-name">Conversational Brand Modeling</span>
-          How your company appears in AI dialogues
+          How your company appears in AI dialogues – tonality, response patterns
           <div class="service-meta">Duration: 1-2 weeks · Price: On request</div>
         </li>
       </ul>
 
-      <p><strong>All prices as fixed price.<br>
+      <p><strong>All prices as fixed prices.<br>
       No hidden costs.</strong></p>
 
       <p><a href="mailto:mail@andersen-webworks.de" class="cta-primary">Request quote</a></p>
     </section>
 
     <section id="principles">
-      <h2>My principles</h2>
+      <h2>My Principles</h2>
 
       <ul class="principles">
         <li>
@@ -692,20 +369,20 @@
 
         <li>
           <strong>Google Zero.</strong><br>
-          Search engines will become irrelevant. AI agents pull data directly from the source.<br>
-          Those without structure then will be invisible.
+          Search engines are becoming irrelevant. AI agents pull data directly from the source.<br>
+          Those without structure then become invisible.
         </li>
 
         <li>
           <strong>Transparency over tricks.</strong><br>
           No black-hat tactics. No keyword games.<br>
-          Just the truth, structured.
+          Only the truth, structured.
         </li>
       </ul>
     </section>
 
     <section id="faq">
-      <h2>Frequently asked questions</h2>
+      <h2>Frequently Asked Questions</h2>
 
       <ul class="faq">
         <li>
@@ -728,8 +405,8 @@
         </li>
 
         <li>
-          <div class="faq-question">Isn't this just a hype?</div>
-          ~60% zero-click searches are not a hype.<br>
+          <div class="faq-question">Isn't this just hype?</div>
+          ~60% Zero-Click Searches are not hype.<br>
           This is reality. Since 2024.
         </li>
 
@@ -748,8 +425,8 @@
       <p>
         <strong>Jan-Erik Andersen</strong><br>
         <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a><br>
-        Phone: 038733 270015<br>
-        Mon-Fri, 9am-5pm
+        Phone: +49 38733 270015<br>
+        Mon-Fri, 9am-5pm CET
       </p>
 
       <p>
@@ -761,14 +438,14 @@
   </main>
 
   <footer>
-    <p>This website is itself an example.</p>
+    <p>This website itself is an example.</p>
     <p>Static. Framework-free. No JavaScript.<br>
     Works for browsers <strong>and</strong> for ChatGPT.</p>
     <p><strong>andersen-signal v0.2</strong> — Proof of Concept: AI-native Web Identity</p>
     <p>
-      <a href="/en/imprint.html">Imprint</a> ·
-      <a href="/en/privacy.html">Privacy</a> ·
-      <a href="/en/accessibility.html">Accessibility</a>
+      <a href="/impressum.html">Legal Notice</a> ·
+      <a href="/datenschutz.html">Privacy Policy</a> ·
+      <a href="/barrierefreiheit.html">Accessibility</a>
     </p>
   </footer>
 
