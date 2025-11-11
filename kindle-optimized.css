@@ -28,14 +28,16 @@
   display: none;
 }
 
-/* Manual Dark Mode: Checkbox affects all sibling elements */
-.darkmode-checkbox:checked ~ * {
+/* Manual Dark Mode: Target body and all its children directly */
+body:has(.darkmode-checkbox:checked) {
   --bg: #1c1c1c;
   --text: #d4d4d4;
   --subtle: #8a8a8a;
   --border: #3a3a3a;
   --accent: #e87461;
   --highlight-bg: #252525;
+  background: #1c1c1c;
+  color: #d4d4d4;
 }
 
 /* Icon Toggle */
