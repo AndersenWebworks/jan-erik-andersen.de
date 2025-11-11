@@ -21,13 +21,32 @@ Letztes Update: 2025-11-11
 **Konsequenz:**
 Externe JSON-Endpoints werden von Live-Query-Agents fast nie direkt gefetcht, auch wenn sie korrekt verlinkt sind.
 
+### Das One-Page-Read-Prinzip
+
+**Zero-Click bedeutet auch "Zero Navigation":**
+- AI-Agents fetchen typischerweise nur **eine URL**
+- Keine Folge-Requests zu Unterseiten (`/services.html`, `/faq.html`)
+- Keine Navigation durch interne Links
+- **Ein Request = Eine Antwort**
+
+**Zahlen:**
+- 50-65% aller Google-Anfragen enden ohne Klick (Zero-Click)
+- Generative Search Experiences (SGE, ChatGPT Search) basieren auf **Single-Fetch**
+- Sprachassistenten lesen exakt **eine Quelle pro Antwortslot**
+
+**Warum:**
+1. Kosteneffizienz: 1 Fetch = 1 Antwort, weitere Requests erhöhen Compute-Kosten
+2. Antwortgarantie: Eine Quelle = konsistente Faktenlage, mehrere Quellen = Widerspruchsrisiko
+3. Sicherheit: Jeder zusätzliche Fetch ist ein Risiko (Tracking, Manipulation)
+
 ### Was funktioniert (garantiert)
 
-**Sichtbarer HTML-Text ist das einzige universelle Medium:**
+**Sichtbarer HTML-Text auf EINER Seite ist das einzige universelle Medium:**
 - Alles im DOM ist potenziell lesbar
 - Keine JavaScript-Nachladungen erforderlich
 - Semantische HTML-Strukturen werden erkannt
 - Natürlichsprachlicher Text wird extrahiert
+- **Alle relevanten Informationen müssen auf der Hauptseite stehen**
 
 ---
 
@@ -216,10 +235,113 @@ Startseiten = Agent-Entry-Points mit transparenter Wahl.
 
 ---
 
+## 📄 Der AI-Onepager
+
+### Konzept
+
+**Traditionelle Multi-Page-Websites funktionieren nicht für AI-Agents.**
+
+**Problem:**
+```
+/ → Startseite
+/services/ → Services (wird NICHT gelesen)
+/contact/ → Kontakt (wird NICHT gelesen)
+/faq/ → FAQ (wird NICHT gelesen)
+```
+
+AI-Agents fetchen nur die Hauptseite → der Rest bleibt unsichtbar.
+
+**Lösung: Der AI-Onepager**
+```
+/ → ALLES auf einer Seite
+  ├─ <header>
+  ├─ <section id="services">
+  ├─ <section id="contact">
+  ├─ <section id="faq">
+  └─ <footer>
+```
+
+### Implementierung
+
+**Struktur:**
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <!-- JSON-LD für Crawler -->
+  <script type="application/ld+json">...</script>
+</head>
+<body>
+  <header>
+    <h1>Unternehmensname</h1>
+    <nav>
+      <a href="#services">Leistungen</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Kontakt</a>
+    </nav>
+  </header>
+
+  <section id="services">
+    <h2>Leistungen</h2>
+    <dl class="service-details">
+      <dt>Service:</dt> <dd>AI Visibility Refactor</dd>
+      <dt>Dauer:</dt> <dd>2-4 Wochen</dd>
+      <dt>Preis:</dt> <dd>2.400-12.000 EUR</dd>
+    </dl>
+  </section>
+
+  <section id="faq">
+    <h2>Häufige Fragen</h2>
+    <dl>
+      <dt>Frage 1?</dt>
+      <dd>Antwort 1</dd>
+    </dl>
+  </section>
+
+  <section id="contact">
+    <h2>Kontakt</h2>
+    <dl>
+      <dt>Email:</dt> <dd>mail@example.com</dd>
+      <dt>Telefon:</dt> <dd>+49 123 456</dd>
+    </dl>
+  </section>
+</body>
+</html>
+```
+
+### UX-Optimierung
+
+**Für Menschen kann die Seite lang wirken – Lösung:**
+
+1. **Sprunganker-Navigation** (smooth scroll)
+2. **`<details>` / Accordions** für optionale Inhalte
+3. **CSS Grid/Flexbox** für visuelle Segmentierung
+4. **Sticky Header** mit Navigation
+
+**Für Maschinen bleibt alles linear lesbar.**
+
+### Vorteile
+
+✅ AI-Agents sehen ALLE Informationen bei einem Request
+✅ Keine verpassten Unterseiten
+✅ Konsistente Antworten (eine Quelle = keine Widersprüche)
+✅ Einfachere Wartung (eine Datei statt vieler)
+✅ Schnellere Ladezeiten (kein Multi-Page-Overhead)
+
+### Nachteile (und Lösungen)
+
+❌ **Lange Ladezeit?** → Lazy-Loading für Bilder, minifiziertes CSS
+❌ **Unübersichtlich?** → Klare visuelle Sektionen, Sticky Navigation
+❌ **Schlechte SEO?** → Im Gegenteil: Besser für Featured Snippets und Rich Results
+
+---
+
 ## 📋 Implementierungs-Checklist
 
 ### Basis (erforderlich)
 
+- [ ] **AI-Onepager:** Alle Inhalte auf einer Seite (`index.html`)
+- [ ] **Sprunganker-Navigation:** `<a href="#section">` für Sektionen
 - [ ] Semantisches HTML (`<dl>`, `<section>`, `<article>`)
 - [ ] Strukturierte Key-Value-Paare für Services/Preise/Kontakt
 - [ ] Natürlichsprachliche Formulierungen (keine Keywords)
