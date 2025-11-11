@@ -8,6 +8,78 @@ Letztes Update: 2025-11-11
 
 ---
 
+## Executive Summary
+
+### Die Kernaussage
+
+> **"AI-Agenten lesen keine APIs – nur HTML."**
+
+**Eine Seite. Ein DOM. Alle Informationen.**
+Menschen sehen Struktur. Maschinen sehen Bedeutung.
+Kein Framework. Kein JavaScript. Keine Tricks – nur Wahrheit, sauber markiert.
+
+### Die fundamentale Erkenntnis
+
+**Zero-Click bedeutet auch "Zero Navigation":**
+- AI-Agents (ChatGPT, Claude, Perplexity) fetchen nur **eine URL** pro Antwort
+- Keine Folge-Requests zu Unterseiten oder JSON-Endpoints
+- 50-65% aller Google-Anfragen enden ohne Klick
+- **Ein Request = Eine Antwort = Ein HTML-Snapshot**
+
+**Konsequenz:**
+Traditionelle Multi-Page-Websites mit `/services/`, `/contact/`, `/faq/` funktionieren nicht für AI-Agents. Der gesamte relevante Content muss auf der Hauptseite stehen.
+
+### Die Lösung: Der AI-Onepager
+
+**Architektur:**
+- Alle Inhalte auf einer Seite (`index.html`)
+- Semantisch strukturiertes HTML (`<dl>`, `<section>`, `<article>`)
+- Natürlichsprachlicher, dialog-tauglicher Text
+- Sprunganker-Navigation für Menschen
+- Linear lesbar für Maschinen
+
+**UX-Optimierung:**
+- CSS-basierte Interaktivität (0 JS erforderlich)
+- `<details>` / Accordions für optionale Inhalte
+- Sticky Navigation, smooth scrolling
+- Für Menschen: segmentiert. Für Maschinen: konsolidiert.
+
+### Service-Positionierung: AIO statt SEO
+
+**Was ich verkaufe:**
+
+> "Ich mache Websites AI-freundlich durch strukturierten, semantischen HTML-Content – ohne dass sich für menschliche Besucher etwas ändert."
+
+**Der Unterschied zu klassischem SEO:**
+
+| SEO                        | AIO (Agent Interaction Optimization) |
+|----------------------------|--------------------------------------|
+| Keywords                   | Natürliche Sprache                   |
+| Ranking in Suchergebnissen | Referenzierung in AI-Antworten       |
+| Click-Through-Rate         | Citation-Rate                        |
+| Multi-Page-Struktur        | AI-Onepager                          |
+| Hidden Keywords            | Sichtbare Struktur                   |
+
+**Deliverables:**
+1. AI-Onepager (alle Inhalte auf einer Seite)
+2. Definition Lists (Key-Value-Paare für Services, Preise, Kontakt)
+3. Natürliche Sprache (dialog-tauglich, keine Keywords)
+4. JSON-LD Metadaten (für Crawler-Indexierung)
+5. Optional: JSON-Endpoints (für erweiterte Integration)
+
+### Philosophische Grundlage
+
+**"Für Besucher ändert sich nichts. Für ChatGPT ändert sich alles."**
+
+- Struktur statt Tricks
+- Transparenz statt Cloaking
+- Semantik statt SEO-Hacks
+- Ehrlichkeit statt Manipulation
+
+**Das Ziel:** Readable by humans, parsable by machines, referenceable by agents.
+
+---
+
 ## 🧱 Technische Realität 2025
 
 ### Das Webfetch-Problem
