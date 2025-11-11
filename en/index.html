@@ -499,9 +499,6 @@
 <body>
 
   <div class="controls">
-    <button class="control-btn" id="theme-toggle" aria-label="Switch to dark mode">
-      <span class="theme-icon">🌙</span>
-    </button>
     <a href="/" class="control-btn" aria-label="Zur deutschen Version wechseln">DE</a>
   </div>
 
@@ -639,8 +636,15 @@
       <p>For humans, your website looks the same as before.<br>
       For AI agents, it's a precise data schema.</p>
 
-      <p><strong>This page itself is an example.</strong><br>
-      No JavaScript. No framework. Pure structure.</p>
+      <p><strong>This page itself is an example.</strong></p>
+
+      <div class="stats">
+        <p><span class="stat-number">0 Bytes</span> JavaScript.<br>
+        <span class="stat-number">0</span> Frameworks.<br>
+        <span class="stat-number">100%</span> static HTML + CSS.</p>
+
+        <p><strong>Pure structure. No tricks.</strong></p>
+      </div>
     </section>
 
     <section id="services">
@@ -768,49 +772,6 @@
     </p>
   </footer>
 
-  <script>
-    (function() {
-      const toggle = document.getElementById('theme-toggle');
-      const icon = toggle.querySelector('.theme-icon');
-      const root = document.documentElement;
-
-      // Check saved preference or system preference
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const currentTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-      // Apply theme
-      function setTheme(theme) {
-        if (theme === 'dark') {
-          root.style.setProperty('--bg', '#1a1a1a');
-          root.style.setProperty('--text', '#e0e0e0');
-          root.style.setProperty('--subtle', '#999999');
-          root.style.setProperty('--border', '#333333');
-          root.style.setProperty('--accent', '#ff3333');
-          root.style.setProperty('--highlight-bg', 'rgba(255, 255, 255, 0.03)');
-          icon.textContent = '☀️';
-          toggle.setAttribute('aria-label', 'Switch to light mode');
-        } else {
-          root.style.setProperty('--bg', '#ffffff');
-          root.style.setProperty('--text', '#1a1a1a');
-          root.style.setProperty('--subtle', '#666666');
-          root.style.setProperty('--border', '#e0e0e0');
-          root.style.setProperty('--accent', '#cc0000');
-          root.style.setProperty('--highlight-bg', 'rgba(128, 128, 128, 0.03)');
-          icon.textContent = '🌙';
-          toggle.setAttribute('aria-label', 'Switch to dark mode');
-        }
-        localStorage.setItem('theme', theme);
-      }
-
-      setTheme(currentTheme);
-
-      toggle.addEventListener('click', function() {
-        const newTheme = localStorage.getItem('theme') === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme);
-      });
-    })();
-  </script>
 
 </body>
 </html>

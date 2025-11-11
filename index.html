@@ -48,31 +48,59 @@
         },
         "offers": [
           {
-            "@type": "Service",
-            "name": "AI Readiness Audit",
-            "description": "Live-Test mit ChatGPT und 1-seitige Analyse der Website-Struktur. Zeigt genau, warum Ihre Website für AI-Agenten unsichtbar ist.",
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AI Readiness Audit",
+              "description": "Live-Test mit ChatGPT und 1-seitige Analyse der Website-Struktur. Zeigt genau, warum Ihre Website für AI-Agenten unsichtbar ist."
+            },
             "provider": {
               "@type": "Person",
               "name": "Jan-Erik Andersen"
-            }
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "priceCurrency": "EUR",
+              "price": "auf Anfrage"
+            },
+            "availableDeliveryMethod": "OnlineOnly"
           },
           {
-            "@type": "Service",
-            "name": "AI Visibility Refactor",
-            "description": "Umbau bestehender Websites für maximale Maschinenlesbarkeit. Strukturierte Daten, semantisches HTML, einheitliche Begriffe.",
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "AI Visibility Refactor",
+              "description": "Umbau bestehender Websites für maximale Maschinenlesbarkeit. Strukturierte Daten, semantisches HTML, einheitliche Begriffe."
+            },
             "provider": {
               "@type": "Person",
               "name": "Jan-Erik Andersen"
-            }
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "priceCurrency": "EUR",
+              "minPrice": "2400",
+              "maxPrice": "12000"
+            },
+            "availableDeliveryMethod": "OnlineOnly"
           },
           {
-            "@type": "Service",
-            "name": "Conversational Brand Modeling",
-            "description": "Definition der Markenstimme für AI-Dialoge. Tonalität, Antwortmuster, konsistente Repräsentation.",
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Conversational Brand Modeling",
+              "description": "Definition der Markenstimme für AI-Dialoge. Tonalität, Antwortmuster, konsistente Repräsentation."
+            },
             "provider": {
               "@type": "Person",
               "name": "Jan-Erik Andersen"
-            }
+            },
+            "priceSpecification": {
+              "@type": "PriceSpecification",
+              "priceCurrency": "EUR",
+              "price": "auf Anfrage"
+            },
+            "availableDeliveryMethod": "OnlineOnly"
           }
         ],
         "address": {
@@ -145,9 +173,6 @@
 <body>
 
   <div class="controls">
-    <button class="control-btn" id="theme-toggle" aria-label="Farbschema umschalten">
-      <span class="theme-icon">🌙</span>
-    </button>
     <a href="/en/" class="control-btn" aria-label="Switch to English">EN</a>
   </div>
 
@@ -285,8 +310,15 @@
       <p>Für Menschen sieht Ihre Website aus wie vorher.<br>
       Für AI-Agenten ist sie ein präzises Datenschema.</p>
 
-      <p><strong>Diese Seite ist selbst ein Beispiel.</strong><br>
-      Kein JavaScript. Kein Framework. Pure Struktur.</p>
+      <p><strong>Diese Seite ist selbst ein Beispiel.</strong></p>
+
+      <div class="stats">
+        <p><span class="stat-number">0 Bytes</span> JavaScript.<br>
+        <span class="stat-number">0</span> Frameworks.<br>
+        <span class="stat-number">100%</span> statisches HTML + CSS.</p>
+
+        <p><strong>Pure Struktur. Keine Tricks.</strong></p>
+      </div>
     </section>
 
     <section id="leistungen">
@@ -414,49 +446,6 @@
     </p>
   </footer>
 
-  <script>
-    (function() {
-      const toggle = document.getElementById('theme-toggle');
-      const icon = toggle.querySelector('.theme-icon');
-      const root = document.documentElement;
-
-      // Check saved preference or system preference
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const currentTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-      // Apply theme (Kindle-optimized colors)
-      function setTheme(theme) {
-        if (theme === 'dark') {
-          root.style.setProperty('--bg', '#1c1c1c');
-          root.style.setProperty('--text', '#d4d4d4');
-          root.style.setProperty('--subtle', '#8a8a8a');
-          root.style.setProperty('--border', '#3a3a3a');
-          root.style.setProperty('--accent', '#e87461');
-          root.style.setProperty('--highlight-bg', '#252525');
-          icon.textContent = '☀️';
-          toggle.setAttribute('aria-label', 'Zu hellem Modus wechseln');
-        } else {
-          root.style.setProperty('--bg', '#f9f8f5');
-          root.style.setProperty('--text', '#2a2a2a');
-          root.style.setProperty('--subtle', '#6b6b6b');
-          root.style.setProperty('--border', '#d4d0c8');
-          root.style.setProperty('--accent', '#b8503d');
-          root.style.setProperty('--highlight-bg', '#f0ede5');
-          icon.textContent = '🌙';
-          toggle.setAttribute('aria-label', 'Zu dunklem Modus wechseln');
-        }
-        localStorage.setItem('theme', theme);
-      }
-
-      setTheme(currentTheme);
-
-      toggle.addEventListener('click', function() {
-        const newTheme = localStorage.getItem('theme') === 'dark' ? 'light' : 'dark';
-        setTheme(newTheme);
-      });
-    })();
-  </script>
 
 </body>
 </html>

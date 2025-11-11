@@ -359,24 +359,24 @@ nav {
 
 .controls {
   position: fixed;
-  top: 1rem;
-  right: 1rem;
-  display: flex;
-  gap: 0.5rem;
+  top: 1.5rem;
+  right: 1.5rem;
   z-index: 200;
 }
 
 .control-btn {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 0.5rem 0.75rem;
-  cursor: pointer;
+  display: inline-block;
+  color: var(--subtle);
+  text-decoration: none;
   font-size: 0.875rem;
-  font-family: inherit;
+  font-weight: 500;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--bg);
 }
 
 .control-btn:hover {
+  color: var(--text);
   border-color: var(--text);
 }
 
@@ -437,8 +437,8 @@ nav {
   }
 
   .controls {
-    top: 0.75rem;
-    right: 0.75rem;
+    top: 1rem;
+    right: 1rem;
   }
 
   .control-btn {
