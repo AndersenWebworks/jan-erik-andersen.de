@@ -1,7 +1,31 @@
 {
-  "version": "1.1",
-  "dateModified": "2025-11-11T21:09:00Z",
+  "version": "2.0",
+  "dateModified": "2025-11-11T23:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z",
+  "architecture": {
+    "version": "1.0",
+    "layers": [
+      {
+        "name": "Visible Hybrid Layer",
+        "location": "https://jan-erik-andersen.de/",
+        "purpose": "Structured content for humans AND machines (live queries)",
+        "technologies": ["Semantic HTML", "Definition Lists", "Natural Language"]
+      },
+      {
+        "name": "Semantic Metadata Layer",
+        "location": "JSON-LD in <head>",
+        "purpose": "Crawler indexing, knowledge graphs",
+        "technologies": ["Schema.org", "JSON-LD"]
+      },
+      {
+        "name": "Optional Enhancement Layer",
+        "location": "https://jan-erik-andersen.de/ai/",
+        "purpose": "Advanced integration, future standards",
+        "technologies": ["JSON endpoints", "Mirror URLs", "Agent Instructions"]
+      }
+    ],
+    "documentation": "https://jan-erik-andersen.de/ai/architecture.md"
+  },
   "site": {
     "name": "Jan-Erik Andersen",
     "url": "https://jan-erik-andersen.de",
