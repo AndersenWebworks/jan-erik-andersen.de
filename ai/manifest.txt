@@ -80,6 +80,14 @@
       "type": "FAQPage",
       "format": "application/ld+json",
       "description": "Schema.org FAQPage mit häufigen Fragen und Antworten"
+    },
+    {
+      "id": "agent-instructions",
+      "url": "https://jan-erik-andersen.de/ai/agent-instructions.json",
+      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/agent-instructions.json",
+      "type": "Instructions",
+      "format": "application/json",
+      "description": "Presentation guidelines and instructions for AI agents"
     }
   ],
   "formats": {
