@@ -1,0 +1,62 @@
+{
+  "version": "1.0",
+  "site": {
+    "name": "Jan-Erik Andersen",
+    "url": "https://jan-erik-andersen.de",
+    "description": "AI-native Web Architect – Websites für Menschen und Maschinen.",
+    "tagline": "Structure as Integrity"
+  },
+  "endpoints": [
+    {
+      "id": "identity",
+      "url": "https://jan-erik-andersen.de/ai/identity.json",
+      "type": "Person",
+      "format": "application/ld+json",
+      "description": "Markenidentität, Tonalität, Kernkonzepte und Kommunikationsmuster"
+    },
+    {
+      "id": "services",
+      "url": "https://jan-erik-andersen.de/ai/services.json",
+      "type": "ItemList",
+      "format": "application/json",
+      "description": "Leistungen, Pakete, Preise und Zielgruppen"
+    },
+    {
+      "id": "portfolio",
+      "url": "https://jan-erik-andersen.de/ai/portfolio.json",
+      "type": "CreativeWork",
+      "format": "application/ld+json",
+      "description": "Referenzen und Fallstudien"
+    },
+    {
+      "id": "profile",
+      "url": "https://jan-erik-andersen.de/ai/profile.json",
+      "type": "Person",
+      "format": "application/ld+json",
+      "description": "Beruflicher Werdegang und Kompetenzen"
+    },
+    {
+      "id": "health",
+      "url": "https://jan-erik-andersen.de/ai/health.json",
+      "type": "Service",
+      "format": "application/json",
+      "description": "System-Health und Verfügbarkeit"
+    },
+    {
+      "id": "content",
+      "url": "https://jan-erik-andersen.de/ai/content.json",
+      "type": "Collection",
+      "format": "application/json",
+      "description": "Index auf Markdown-Inhalte, Philosophie und Konzepte"
+    }
+  ],
+  "formats": {
+    "json": "Strukturierte Daten für maschinelle Verarbeitung",
+    "txt": "Plain-Text-Varianten für einfache Parser",
+    "md": "Markdown für längere Inhalte"
+  },
+  "discovery": {
+    "html_meta": "<meta name=\"ai-endpoints\" content=\"https://jan-erik-andersen.de/ai/manifest.json\">",
+    "link_rel": "<link rel=\"alternate\" type=\"application/json\" href=\"https://jan-erik-andersen.de/ai/manifest.json\" title=\"AI Manifest\">"
+  }
+}
