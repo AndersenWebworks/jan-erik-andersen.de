@@ -2,6 +2,8 @@
   "version": "1.0",
   "type": "content-index",
   "description": "Index of long-form content, philosophy texts, and conceptual documents",
+  "dateModified": "2025-11-11T21:09:00Z",
+  "datePublished": "2025-11-06T00:00:00Z",
   "items": [
     {
       "id": "philosophy",

@@ -3,6 +3,8 @@
   "@type": "ItemList",
   "name": "Leistungen",
   "description": "AI-native Web Architecture Services für die Post-Google-Ära",
+  "dateModified": "2025-11-11T21:09:00Z",
+  "datePublished": "2025-11-06T00:00:00Z",
   "itemListElement": [
     {
       "@type": "Service",

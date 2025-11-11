@@ -1,5 +1,7 @@
 {
-  "version": "1.0",
+  "version": "1.1",
+  "dateModified": "2025-11-11T21:09:00Z",
+  "datePublished": "2025-11-06T00:00:00Z",
   "site": {
     "name": "Jan-Erik Andersen",
     "url": "https://jan-erik-andersen.de",
@@ -48,6 +50,20 @@
       "type": "Collection",
       "format": "application/json",
       "description": "Index auf Markdown-Inhalte, Philosophie und Konzepte"
+    },
+    {
+      "id": "publications",
+      "url": "https://jan-erik-andersen.de/ai/publications.json",
+      "type": "ItemList",
+      "format": "application/ld+json",
+      "description": "Artikel, Konzepte und externe Quellen (Knowledge Hooks für Zitierfähigkeit)"
+    },
+    {
+      "id": "identity-schema",
+      "url": "https://jan-erik-andersen.de/ai/identity-schema.json",
+      "type": "Person",
+      "format": "application/ld+json",
+      "description": "Schema.org Person mit sameAs-Verlinkungen und vollständigen Kontaktdaten"
     }
   ],
   "formats": {
