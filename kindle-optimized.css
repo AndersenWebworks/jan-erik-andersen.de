@@ -62,6 +62,8 @@ body {
 
 header {
   margin-bottom: 4rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
 }
 
 h1 {
@@ -75,23 +77,7 @@ h1 {
 .tagline {
   font-size: 1rem;
   color: var(--subtle);
-  margin-bottom: 0.5rem;
-}
-
-.ai-discovery {
-  font-size: 0.9rem;
-  color: var(--subtle);
-  margin: 0.5rem 0 2rem;
-  font-family: monospace;
-}
-
-.ai-discovery a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.ai-discovery a:hover {
-  text-decoration: underline;
+  margin-bottom: 2rem;
 }
 
 .hero-statement {
@@ -149,7 +135,6 @@ a {
   color: var(--accent);
   text-decoration: none;
   border-bottom: 1px solid var(--accent);
-  transition: border-color 0.2s ease;
 }
 
 a:hover {
@@ -284,54 +269,6 @@ li {
   margin-top: 0.5rem;
 }
 
-.service-details {
-  margin-top: 0.75rem;
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.service-details dt {
-  display: inline;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.service-details dd {
-  display: inline;
-  margin: 0;
-  color: var(--subtle);
-}
-
-.service-details dd::after {
-  content: "";
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
-.contact-details {
-  margin: 1.5rem 0;
-  font-size: 1rem;
-  line-height: 1.8;
-}
-
-.contact-details dt {
-  display: inline;
-  font-weight: 600;
-  color: var(--text);
-}
-
-.contact-details dd {
-  display: inline;
-  margin: 0;
-  color: var(--text);
-}
-
-.contact-details dd::after {
-  content: "";
-  display: block;
-  margin-bottom: 0.5rem;
-}
-
 .case-study {
   padding-left: 2rem;
   border-left: 3px solid var(--accent);
@@ -353,19 +290,17 @@ li {
 }
 
 .principles {
-  margin: 2rem 0;
+  list-style: none;
+  margin-left: 0;
 }
 
-.principles dt {
-  font-weight: 600;
-  font-size: 1.0625rem;
-  margin-top: 2rem;
-  margin-bottom: 0.5rem;
+.principles li {
+  margin-bottom: 2.5rem;
   padding-left: 1.5rem;
   position: relative;
 }
 
-.principles dt::before {
+.principles li::before {
   content: "→";
   position: absolute;
   left: 0;
@@ -373,89 +308,318 @@ li {
   font-weight: 600;
 }
 
-.principles dt:first-of-type {
-  margin-top: 0;
-}
-
-.principles dd {
-  margin-left: 1.5rem;
-  margin-bottom: 0;
-  color: var(--text);
-  line-height: 1.7;
-}
-
 .faq {
-  margin: 2rem 0;
+  list-style: none;
+  margin-left: 0;
 }
 
-.faq dt {
+.faq li {
+  margin-bottom: 2rem;
+}
+
+.faq-question {
   font-weight: 600;
-  font-size: 1.0625rem;
-  margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
 
-.faq dt:first-of-type {
-  margin-top: 0;
-}
-
-.faq dd {
-  margin-left: 0;
-  margin-bottom: 0;
+/* Definition Lists: Structured Key-Value Pairs */
+dl {
+  margin: 1.5rem 0;
   line-height: 1.7;
 }
 
-.key-concepts {
-  margin: 2rem 0;
+dt {
+  font-weight: 600;
+  color: var(--text);
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.01em;
+}
+
+dt:first-child {
+  margin-top: 0;
+}
+
+dd {
+  margin-left: 0;
+  margin-bottom: 0.5rem;
+  color: var(--subtle);
   padding-left: 1.5rem;
   border-left: 2px solid var(--border);
 }
 
-.key-concepts dt {
-  font-weight: 600;
-  font-size: 1rem;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: var(--accent);
+/* Service Details: Compact Layout */
+.service-details {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  background: var(--highlight-bg);
+  border-left: 3px solid var(--accent);
 }
 
-.key-concepts dt:first-of-type {
+.service-details dt {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--subtle);
+}
+
+.service-details dt:first-child {
   margin-top: 0;
 }
 
-.key-concepts dd {
-  margin-left: 0;
-  margin-bottom: 0;
-  color: var(--subtle);
-  font-size: 0.95rem;
-  line-height: 1.6;
-}
-
-.comparison-details {
-  margin: 0;
-  line-height: 1.8;
-}
-
-.comparison-details dt {
-  display: inline;
-  font-weight: 600;
+.service-details dd {
+  padding-left: 0;
+  border-left: none;
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
 }
 
-.comparison-details dd {
-  display: inline;
-  margin: 0;
+.service-details dd:last-child {
+  margin-bottom: 0;
+}
+
+/* Contact Details: Clear Information Hierarchy */
+.contact-details {
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: var(--highlight-bg);
+  border: 1px solid var(--border);
+}
+
+.contact-details dt {
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
   color: var(--subtle);
-  font-family: "Courier New", monospace;
-  font-size: 0.875rem;
 }
 
-.comparison-details dd::after {
-  content: "";
-  display: block;
-  margin-bottom: 0.5rem;
+.contact-details dt:first-child {
+  margin-top: 0;
+}
+
+.contact-details dd {
+  padding-left: 0;
+  border-left: none;
+  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 0.75rem;
+}
+
+.contact-details dd a {
+  font-weight: 600;
+}
+
+/* Glossary: Definition List Styling */
+.glossary {
+  margin: 2.5rem 0;
+  display: grid;
+  gap: 2rem;
+}
+
+.glossary dt {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--accent);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  letter-spacing: -0.01em;
+}
+
+.glossary dd {
+  margin: 0.75rem 0 0 0;
+  padding: 1.25rem;
+  background: var(--highlight-bg);
+  border-left: 3px solid var(--accent);
+  color: var(--text);
+  line-height: 1.7;
+}
+
+.glossary dd::before {
+  content: "→ ";
+  color: var(--accent);
+  font-weight: 600;
+  margin-right: 0.25rem;
+}
+
+/* Details/Summary: Interactive FAQ Styling */
+details {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  background: var(--highlight-bg);
+  border-left: 3px solid var(--border);
+  transition: border-left-color 0.2s ease;
+}
+
+details[open] {
+  border-left-color: var(--accent);
+}
+
+summary {
+  font-weight: 600;
+  font-size: 1.0625rem;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  padding-right: 1.5rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+summary::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 1.25rem;
+  line-height: 1.5;
+  transition: transform 0.2s ease;
+}
+
+details[open] summary::after {
+  content: "−";
+}
+
+summary:hover {
+  color: var(--accent);
+}
+
+summary:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+details > *:not(summary) {
+  margin-top: 1rem;
+}
+
+details p:last-child,
+details ul:last-child,
+details ol:last-child,
+details dl:last-child {
+  margin-bottom: 0;
+}
+
+/* Service Articles: Visual Differentiation */
+.service {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: var(--highlight-bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+}
+
+.service h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--accent);
+  font-size: 1.25rem;
+}
+
+.service > p {
+  margin-bottom: 1.5rem;
+  color: var(--text);
+}
+
+/* Outcome Cards: Grid Layout */
+.outcome-cards {
+  display: grid;
+  gap: 2rem;
+  margin: 2.5rem 0;
+}
+
+@media (min-width: 768px) {
+  .outcome-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.outcome-card {
+  padding: 1.75rem;
+  background: var(--highlight-bg);
+  border-left: 4px solid var(--accent);
+}
+
+.outcome-card h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--accent);
+  font-size: 1.1875rem;
+  letter-spacing: -0.01em;
+}
+
+.outcome-card p {
+  margin-bottom: 1rem;
+}
+
+.outcome-card p:last-child {
+  margin-bottom: 0;
+}
+
+.outcome-example {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  background: var(--bg);
+  border-left: 2px solid var(--border);
+  font-size: 0.9375rem;
+  font-style: italic;
+  color: var(--subtle);
+}
+
+/* CTA Box: Call-to-Action Styling */
+.cta-box {
+  margin: 2.5rem 0;
+  padding: 2rem;
+  background: var(--highlight-bg);
+  border: 2px solid var(--accent);
+}
+
+.cta-box p {
+  margin-bottom: 1.25rem;
+}
+
+.cta-box p:last-child {
+  margin-bottom: 0;
+}
+
+.cta-box ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.cta-box ul:last-child {
+  margin-bottom: 0;
+}
+
+/* FAQ Category Headings */
+.faq-category {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--accent);
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.faq-category:first-of-type {
+  margin-top: 0;
+}
+
+/* Subtle Text */
+.subtle {
+  color: var(--subtle);
+  font-size: 0.9375rem;
+  font-style: italic;
 }
 
 footer {
@@ -479,23 +643,6 @@ footer a {
 
 footer a:hover {
   color: var(--text);
-}
-
-.endpoint-list {
-  list-style: none;
-  padding-left: 0;
-  font-family: monospace;
-  font-size: 0.9em;
-}
-
-.build-info {
-  color: #666;
-}
-
-@media (prefers-color-scheme: dark) {
-  .build-info {
-    color: #8a8a8a;
-  }
 }
 
 .divider {
@@ -603,5 +750,72 @@ nav {
     margin-top: 4rem;
     padding-top: 2rem;
     font-size: 0.8125rem;
+  }
+
+  /* Mobile: Service Articles */
+  .service {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .service-details {
+    padding: 1rem;
+  }
+
+  /* Mobile: Outcome Cards */
+  .outcome-cards {
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .outcome-card {
+    padding: 1.5rem;
+  }
+
+  .outcome-card h3 {
+    font-size: 1.0625rem;
+  }
+
+  /* Mobile: Details/Summary */
+  details {
+    padding: 1rem;
+  }
+
+  summary {
+    font-size: 1rem;
+    padding-right: 1.25rem;
+  }
+
+  summary::after {
+    font-size: 1.125rem;
+  }
+
+  /* Mobile: Contact Details */
+  .contact-details {
+    padding: 1.25rem;
+  }
+
+  /* Mobile: CTA Box */
+  .cta-box {
+    padding: 1.5rem;
+  }
+
+  /* Mobile: FAQ Categories */
+  .faq-category {
+    font-size: 1.0625rem;
+    margin-top: 2.5rem;
+  }
+
+  /* Mobile: Glossary */
+  .glossary {
+    gap: 1.5rem;
+  }
+
+  .glossary dt {
+    font-size: 1rem;
+  }
+
+  .glossary dd {
+    padding: 1rem;
   }
 }

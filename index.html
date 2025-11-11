@@ -151,7 +151,13 @@
 </head>
 <body>
 
+  <input type="checkbox" id="darkmode-toggle" class="darkmode-checkbox" aria-hidden="true">
+
   <div class="controls">
+    <label for="darkmode-toggle" class="control-btn" aria-label="Toggle Dark Mode" title="Dark Mode umschalten">
+      <span class="icon-light">☀️</span>
+      <span class="icon-dark">🌙</span>
+    </label>
     <a href="/en/" class="control-btn" aria-label="Switch to English">EN</a>
   </div>
 
@@ -186,10 +192,10 @@
       AI-Agenten (ChatGPT, Claude, Perplexity, Gemini) lesen <strong>eine URL</strong> pro Antwort.<br>
       Ein Request. Ein HTML-Snapshot. Keine Navigation zu Unterseiten.</p>
 
-      <p>Ihre brillanten Inhalte auf <code>/services/</code>, <code>/about/</code>, <code>/portfolio/</code>?<br>
+      <p>Ihre Inhalte auf <code>/services/</code>, <code>/about/</code>, <code>/portfolio/</code>?<br>
       Strukturell unsichtbar. Nicht indexiert. Nicht gelesen. Nicht zitiert.</p>
 
-      <p><strong>Das ist keine Theorie. Das ist WebFetch-Mechanik.</strong></p>
+      <p><strong>Keine Theorie. WebFetch-Mechanik.</strong></p>
 
       <div class="stats">
         <p><span class="stat-number">1 Request</span>
@@ -217,7 +223,7 @@
 
       <div class="comparison">
         <div class="comparison-box">
-          <div class="comparison-title">❌ Klassische Architektur</div>
+          <div class="comparison-title">❌ Multi-Page-Architektur</div>
           <div class="comparison-content">
             <code>/ → Willkommen + Teaser</code><br>
             <code>/services/ → Details hier</code><br>
@@ -239,8 +245,8 @@
         </div>
       </div>
 
-      <p><strong>Das Prinzip:</strong><br>
-      Startseite enthält alle kritischen Informationen strukturiert.<br>
+      <p><strong>Das Prinzip:</strong></p>
+      <p>Startseite enthält alle kritischen Informationen strukturiert.<br>
       Unterseiten existieren für Menschen, die Details wollen.<br>
       AI-Agenten bekommen alles Wichtige beim ersten Fetch.</p>
 
@@ -273,10 +279,11 @@
 
       <p><strong>AI-Agenten sind zustandslos.</strong></p>
 
-      <p>Ein Query = Ein Kontext. Keine Session. Keine History.<br>
+      <p>Ein Query = Ein Kontext.<br>
+      Keine Session. Keine History.<br>
       Das ist kein Bug. Das ist Architektur.</p>
 
-      <p>Wenn ChatGPT Ihre Website abruft:<br>
+      <p>Wenn ChatGPT Ihre Systemarchitektur abruft:<br>
       1 HTTP-Request → HTML-Text wird verarbeitet → Antwort generiert.<br>
       Fertig. Keine zweite Chance.</p>
 
@@ -295,9 +302,9 @@
         <li>Andere URLs (keine Navigation, keine Folge-Requests)</li>
       </ul>
 
-      <p><strong>Konsequenz:</strong><br>
-      Ihre Website braucht keine visuelle Überarbeitung.<br>
-      Aber sie braucht eine strukturelle.</p>
+      <p><strong>Konsequenz:</strong></p>
+      <p>Ihre Systemarchitektur benötigt keine visuelle Überarbeitung.<br>
+      Aber sie benötigt eine strukturelle.</p>
 
       <p>Text. Struktur. Semantik.<br>
       Das ist alles, was zählt.</p>
