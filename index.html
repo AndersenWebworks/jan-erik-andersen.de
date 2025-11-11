@@ -162,13 +162,19 @@
   </script>
 
   <!-- AI Discovery: Central manifest for machine-readable endpoints -->
-  <meta name="ai-endpoints" content="https://jan-erik-andersen.de/ai/manifest.json">
-  <link rel="alternate" type="application/json" href="https://jan-erik-andersen.de/ai/manifest.json" title="AI Manifest">
+  <meta name="ai-data-manifest" content="https://jan-erik-andersen.de/ai/manifest.json">
+  <meta name="ai-data-manifest-mirror" content="https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/manifest.json">
 
-  <!-- Alternative formats for AI agents (hidden for humans) -->
+  <link rel="alternate" type="application/ld+json" href="/ai/manifest.json" title="AI Manifest - Machine-Readable Data">
+  <link rel="alternate" type="application/ld+json" href="https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/manifest.json" title="AI Manifest - Mirror">
+
+  <!-- Schema.org endpoints -->
+  <link rel="alternate" type="application/ld+json" href="/ai/identity-schema.json" title="Person (Schema.org)">
+  <link rel="alternate" type="application/ld+json" href="/ai/faq-schema.json" title="FAQPage (Schema.org)">
+
+  <!-- Alternative formats for AI agents -->
   <link rel="alternate" type="text/plain" href="/ai/identity.txt" title="AI-Readable Identity">
   <link rel="alternate" type="text/plain" href="/ai/services.txt" title="AI-Readable Services">
-  <link rel="alternate" type="text/plain" href="/ai/case-study.txt" title="AI-Readable Case Study">
 
   <link rel="stylesheet" href="kindle-optimized.css">
 </head>
@@ -181,6 +187,11 @@
   <header>
     <h1>Jan-Erik Andersen</h1>
     <p class="tagline">AI-native Web Architect</p>
+
+    <p class="ai-discovery">
+      Strukturierte Daten: <a href="/ai/manifest.json">/ai/manifest.json</a>
+    </p>
+
     <div class="hero-statement">
       <p><strong>Ihre Website ist unsichtbar.</strong><br>
       Nicht für Google. Für ChatGPT.</p>

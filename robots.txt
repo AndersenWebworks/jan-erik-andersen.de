@@ -8,6 +8,13 @@ Allow: /
 Sitemap: https://jan-erik-andersen.de/sitemap.xml
 
 # ============================================
+# AI AGENT DISCOVERY (Experimental)
+# ============================================
+# Discovery mechanism for AI agents and LLMs
+AI-Manifest: https://jan-erik-andersen.de/ai/manifest.json
+AI-Manifest-Mirror: https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/manifest.json
+
+# ============================================
 # AI-READABLE ENDPOINTS (Machine Discovery)
 # ============================================
 # For AI agents and LLMs: Start here for structured data
@@ -15,16 +22,17 @@ Sitemap: https://jan-erik-andersen.de/sitemap.xml
 # Central Manifest:
 # https://jan-erik-andersen.de/ai/manifest.json
 #
-# Available Endpoints:
-# https://jan-erik-andersen.de/ai/identity.json    - Brand identity & voice
-# https://jan-erik-andersen.de/ai/services.json    - Services (Schema.org)
-# https://jan-erik-andersen.de/ai/portfolio.json   - Portfolio & references
-# https://jan-erik-andersen.de/ai/content.json     - Content index (Markdown)
-# https://jan-erik-andersen.de/ai/health.json      - System status
-# https://jan-erik-andersen.de/ai/profile.json     - Professional profile
+# Mirror (always accessible):
+# https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/manifest.json
 #
-# Legacy index:
-# https://jan-erik-andersen.de/ai/index.json
+# Available Endpoints:
+# https://jan-erik-andersen.de/ai/identity-schema.json - Person (Schema.org) with Offers
+# https://jan-erik-andersen.de/ai/faq-schema.json      - FAQPage (Schema.org)
+# https://jan-erik-andersen.de/ai/services.json        - Services with pricing
+# https://jan-erik-andersen.de/ai/identity.json        - Brand identity & voice
+# https://jan-erik-andersen.de/ai/portfolio.json       - Portfolio & references
+# https://jan-erik-andersen.de/ai/content.json         - Content index
+# https://jan-erik-andersen.de/ai/health.json          - System status
 
 # Wichtige strukturierte Daten (explizit erlaubt)
 Allow: /ai/

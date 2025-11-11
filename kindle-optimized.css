@@ -77,7 +77,23 @@ h1 {
 .tagline {
   font-size: 1rem;
   color: var(--subtle);
-  margin-bottom: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.ai-discovery {
+  font-size: 0.9rem;
+  color: var(--subtle);
+  margin: 0.5rem 0 2rem;
+  font-family: monospace;
+}
+
+.ai-discovery a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.ai-discovery a:hover {
+  text-decoration: underline;
 }
 
 .hero-statement {
