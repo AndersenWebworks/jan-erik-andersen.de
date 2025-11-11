@@ -63,7 +63,14 @@
       "url": "https://jan-erik-andersen.de/ai/identity-schema.json",
       "type": "Person",
       "format": "application/ld+json",
-      "description": "Schema.org Person mit sameAs-Verlinkungen und vollständigen Kontaktdaten"
+      "description": "Schema.org Person mit sameAs-Verlinkungen, vollständigen Kontaktdaten und Offers"
+    },
+    {
+      "id": "faq-schema",
+      "url": "https://jan-erik-andersen.de/ai/faq-schema.json",
+      "type": "FAQPage",
+      "format": "application/ld+json",
+      "description": "Schema.org FAQPage mit häufigen Fragen und Antworten"
     }
   ],
   "formats": {
