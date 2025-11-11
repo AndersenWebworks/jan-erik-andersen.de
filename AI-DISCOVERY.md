@@ -1,8 +1,9 @@
 # AI Discovery Architecture
 
 **Status:** Implementiert
-**Version:** 1.0
+**Version:** 1.1 (v0.2.1)
 **Datum:** 2025-11-11
+**Build:** 2025-11-11 21:04 UTC
 
 ## Zielbild
 
@@ -42,7 +43,29 @@ Zentrale Discovery-Datei, die alle maschinenlesbaren Endpunkte indexiert.
 <link rel="alternate" type="application/json" href="https://jan-erik-andersen.de/ai/manifest.json" title="AI Manifest">
 ```
 
-### 3. Content-Index
+### 3. HTML Body Discovery (Footer)
+
+**In:** `index.html` und `en/index.html` (Footer)
+
+Sichtbarer `<details>`-Block mit allen 6 AI-Endpunkten:
+
+```html
+<details>
+  <summary><strong>AI-Readable Endpoints</strong> (maschinenlesbare Daten)</summary>
+  <ul>
+    <li>📄 <a href="/ai/manifest.json">ai/manifest.json</a> — Zentraler Index</li>
+    <li>👤 <a href="/ai/identity.json">ai/identity.json</a> — Markenidentität</li>
+    <li>🛠️ <a href="/ai/services.json">ai/services.json</a> — Leistungen (Schema.org)</li>
+    <li>💼 <a href="/ai/portfolio.json">ai/portfolio.json</a> — Referenzen</li>
+    <li>📝 <a href="/ai/content.json">ai/content.json</a> — Content-Index</li>
+    <li>💚 <a href="/ai/health.json">ai/health.json</a> — System-Status</li>
+  </ul>
+</details>
+```
+
+**Warum wichtig:** LLMs, die primär Body-Text parsen (z.B. ChatGPT Web Search), finden die URLs nur, wenn sie im Body-HTML verlinkt sind.
+
+### 4. Content-Index
 
 **Datei:** `/ai/content.json`
 
@@ -53,7 +76,7 @@ Index aller Markdown-Inhalte für LLMs:
 - `about.md` – Persönlicher Hintergrund
 - `services.md` – Ausführliche Leistungsbeschreibungen
 
-### 4. Schema.org-Harmonisierung
+### 5. Schema.org-Harmonisierung
 
 **Datei:** `/ai/services.json`
 
@@ -65,21 +88,42 @@ Alle Services wurden zu vollständigem Schema.org `@type: Service` transformiert
 - `offers` – Preise & Verfügbarkeit
 - `additionalProperty` – Strukturierte Metadaten (Dauer, Deliverables)
 
+### 6. .txt/.json-Synchronisation
+
+**Dateien:** `/ai/services.txt`, `/ai/identity.txt`
+
+Die `.txt`-Varianten wurden mit den aktuellen Schema.org-JSON-Strukturen synchronisiert, um Konsistenz für Text-Parser zu gewährleisten.
+
 ## Wie LLMs die Daten finden
 
-1. **HTML-Parser:** Liest `<meta name="ai-endpoints">` im Head
-2. **Manifest-Abruf:** Lädt `/ai/manifest.json`
-3. **Endpoint-Discovery:** Findet alle strukturierten Daten-URLs
-4. **Content-Parsing:** Greift auf JSON-LD und Markdown-Inhalte zu
+### Duale Discovery-Strategie
+
+1. **Head-Parser (für Meta-Tag-basierte Crawler):**
+   - Liest `<meta name="ai-endpoints">` im Head
+   - Folgt `<link rel="alternate">` zum Manifest
+   - Lädt `/ai/manifest.json`
+
+2. **Body-Parser (für Text-basierte Crawler wie ChatGPT):**
+   - Findet Footer-Links zu allen Endpunkten
+   - Kann direkt auf einzelne JSONs zugreifen
+   - Sieht Beschreibungen und Icons
+
+3. **Endpoint-Discovery:**
+   - Manifest listet alle 6 Endpunkte
+   - Content-Index verlinkt Markdown-Dateien
+   - Schema.org-konforme JSON-LD-Daten
 
 ## Vergleich vorher/nachher
 
 | Kriterium | Vorher | Nachher |
 |-----------|--------|---------|
 | **Discovery** | Manuell (LLM muss URLs raten) | Automatisch via Manifest |
+| **Head-Discovery** | Nur alternate links | Meta + Link mit Manifest |
+| **Body-Discovery** | Keine | Footer mit allen 6 Endpunkten |
 | **Indexierung** | Einzelne JSON-Dateien ohne Übersicht | Zentraler Index mit Typen |
 | **Schema.org** | Teilweise in HTML, nicht in JSON | Vollständig in allen Endpoints |
 | **Content-Verlinkung** | Markdown-Dateien nicht verlinkt | Content-Index mit Metadaten |
+| **.txt/.json-Sync** | Veraltete Daten | Synchronisiert |
 
 ## Test-Kommandos
 
