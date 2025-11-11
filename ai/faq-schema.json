@@ -1,0 +1,49 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://jan-erik-andersen.de/#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Brauche ich eine neue Website?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nein. Ich baue Ihre bestehende um. Für Besucher ändert sich nichts."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie lange dauert das?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Test: 15 Minuten. Analyse: 3-5 Tage. Umsetzung: 2-4 Wochen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was kostet das?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Festpreis, abhängig vom Umfang. Keine Agentur-Preise."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Ist das nicht nur ein Hype?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Circa 60% Zero-Click-Searches sind kein Hype. Das ist Realität. Seit 2024."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was passiert mit meiner Website?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sie bleibt. Ich füge eine unsichtbare Schicht hinzu. Für Menschen: keine Änderung. Für Maschinen: perfekt lesbar."
+      }
+    }
+  ],
+  "dateModified": "2025-11-11T21:25:00Z",
+  "datePublished": "2025-11-06T00:00:00Z"
+}

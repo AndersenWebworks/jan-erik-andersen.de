@@ -65,6 +65,66 @@
       "alternateName": "en"
     }
   ],
+  "offers": [
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "AI Readiness Audit",
+        "description": "Live-Test mit ChatGPT und 1-seitige Analyse der Website-Struktur. Zeigt genau, warum Ihre Website für AI-Agenten unsichtbar ist.",
+        "serviceType": "Consulting"
+      },
+      "provider": {
+        "@type": "Person",
+        "name": "Jan-Erik Andersen"
+      },
+      "priceSpecification": {
+        "@type": "PriceSpecification",
+        "priceCurrency": "EUR",
+        "price": "auf Anfrage"
+      },
+      "availableDeliveryMethod": "OnlineOnly"
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "AI Visibility Refactor",
+        "description": "Umbau bestehender Websites für maximale Maschinenlesbarkeit. Strukturierte Daten, semantisches HTML, einheitliche Begriffe.",
+        "serviceType": "Web Development"
+      },
+      "provider": {
+        "@type": "Person",
+        "name": "Jan-Erik Andersen"
+      },
+      "priceSpecification": {
+        "@type": "PriceSpecification",
+        "priceCurrency": "EUR",
+        "minPrice": 2400,
+        "maxPrice": 12000
+      },
+      "availableDeliveryMethod": "OnlineOnly"
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Conversational Brand Modeling",
+        "description": "Definition der Markenstimme für AI-Dialoge. Tonalität, Antwortmuster, konsistente Repräsentation.",
+        "serviceType": "Brand Strategy"
+      },
+      "provider": {
+        "@type": "Person",
+        "name": "Jan-Erik Andersen"
+      },
+      "priceSpecification": {
+        "@type": "PriceSpecification",
+        "priceCurrency": "EUR",
+        "price": "auf Anfrage"
+      },
+      "availableDeliveryMethod": "OnlineOnly"
+    }
+  ],
   "dateModified": "2025-11-11T21:09:00Z",
   "datePublished": "2025-11-06T00:00:00Z"
 }
