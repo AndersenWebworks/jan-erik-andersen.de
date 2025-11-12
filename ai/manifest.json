@@ -34,14 +34,6 @@
   },
   "endpoints": [
     {
-      "id": "identity",
-      "url": "https://jan-erik-andersen.de/ai/identity.json",
-      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/identity.json",
-      "type": "Person",
-      "format": "application/ld+json",
-      "description": "Markenidentität, Tonalität, Kernkonzepte und Kommunikationsmuster"
-    },
-    {
       "id": "services",
       "url": "https://jan-erik-andersen.de/ai/services.json",
       "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/services.json",
@@ -50,44 +42,12 @@
       "description": "Leistungen, Pakete, Preise und Zielgruppen"
     },
     {
-      "id": "portfolio",
-      "url": "https://jan-erik-andersen.de/ai/portfolio.json",
-      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/portfolio.json",
-      "type": "CreativeWork",
-      "format": "application/ld+json",
-      "description": "Referenzen und Fallstudien"
-    },
-    {
-      "id": "profile",
-      "url": "https://jan-erik-andersen.de/ai/profile.json",
-      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/profile.json",
-      "type": "Person",
-      "format": "application/ld+json",
-      "description": "Beruflicher Werdegang und Kompetenzen"
-    },
-    {
       "id": "health",
       "url": "https://jan-erik-andersen.de/ai/health.json",
       "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/health.json",
       "type": "Service",
       "format": "application/json",
       "description": "System-Health und Verfügbarkeit"
-    },
-    {
-      "id": "content",
-      "url": "https://jan-erik-andersen.de/ai/content.json",
-      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/content.json",
-      "type": "Collection",
-      "format": "application/json",
-      "description": "Index auf Markdown-Inhalte, Philosophie und Konzepte"
-    },
-    {
-      "id": "publications",
-      "url": "https://jan-erik-andersen.de/ai/publications.json",
-      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/publications.json",
-      "type": "ItemList",
-      "format": "application/ld+json",
-      "description": "Artikel, Konzepte und externe Quellen (Knowledge Hooks für Zitierfähigkeit)"
     },
     {
       "id": "identity-schema",
@@ -104,14 +64,6 @@
       "type": "FAQPage",
       "format": "application/ld+json",
       "description": "Schema.org FAQPage mit häufigen Fragen und Antworten"
-    },
-    {
-      "id": "agent-instructions",
-      "url": "https://jan-erik-andersen.de/ai/agent-instructions.json",
-      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/agent-instructions.json",
-      "type": "Instructions",
-      "format": "application/json",
-      "description": "Presentation guidelines and instructions for AI agents"
     }
   ],
   "formats": {

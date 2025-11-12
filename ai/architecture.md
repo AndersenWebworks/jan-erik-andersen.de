@@ -2,9 +2,9 @@
 
 **Erkenntnisse und Architektur-Prinzipien — Stand November 2025**
 
-Version: 1.0
+Version: 1.1
 Autor: Jan-Erik Andersen
-Letztes Update: 2025-11-11
+Letztes Update: 2025-11-12
 
 ---
 
@@ -42,7 +42,7 @@ Traditionelle Multi-Page-Websites mit `/services/`, `/contact/`, `/faq/` funktio
 - CSS-basierte Interaktivität (0 JS erforderlich)
 - `<details>` / Accordions für optionale Inhalte
 - Sticky Navigation, smooth scrolling
-- Für Menschen: segmentiert. Für Maschinen: konsolidiert.
+- Menschen: mehrere Views. Maschinen: ein DOM.
 
 ### Service-Positionierung: GEO statt SEO
 
@@ -256,6 +256,253 @@ Externe JSON-Endpoints werden von Live-Query-Agents fast nie direkt gefetcht, au
 
 ---
 
+## 🔒 Cloaking vs. Progressive Enhancement
+
+### Die Grenze verstehen
+
+**Was ist Cloaking (verboten)?**
+- User-Agent-basierte Auslieferung **unterschiedlicher Inhalte** für Menschen vs. Bots
+- Versteckte Texte **ohne Entsprechung** im sichtbaren HTML
+- Täuschungsabsicht: Bots sehen andere Fakten als Menschen
+
+**Was ist Progressive Enhancement (erlaubt)?**
+- **Gleicher Inhalt**, nur unterschiedliche Darstellung
+- Strukturelle Anreicherung via JSON-LD, Microdata
+- Offscreen-Divs oder `<details>`, deren Inhalt **im sichtbaren Text impliziert** ist
+
+### Beispiele
+
+#### ❌ Cloaking (verboten)
+```html
+<!-- Menschen sehen: -->
+<p>Preis auf Anfrage</p>
+
+<!-- Bots sehen: -->
+<meta name="price" content="5000 EUR"> <!-- WIDERSPRUCH -->
+```
+
+#### ✅ Progressive Enhancement (erlaubt)
+```html
+<!-- Menschen sehen: -->
+<dl>
+  <dt>Preis:</dt>
+  <dd>2.400–12.000 EUR</dd>
+</dl>
+
+<!-- Bots sehen ZUSÄTZLICH: -->
+<script type="application/ld+json">
+{
+  "@type": "Offer",
+  "priceSpecification": {
+    "minPrice": 2400,
+    "maxPrice": 12000,
+    "priceCurrency": "EUR"
+  }
+}
+</script>
+```
+
+**Regel:** JSON-LD und versteckte DOM-Elemente sind OK, solange sie **konsistent mit dem sichtbaren Text** sind.
+
+---
+
+## 📐 Semantische Markup-Formate
+
+### JSON-LD vs. Microdata vs. RDFa
+
+**Drei Standards, ein Ziel: Strukturierte Daten für Maschinen.**
+
+| Format      | Syntax                                    | Vorteil                          | Nachteil                  |
+|-------------|-------------------------------------------|----------------------------------|---------------------------|
+| **JSON-LD** | `<script type="application/ld+json">`     | Sauber getrennt vom HTML         | Redundanz mit DOM-Text    |
+| **Microdata** | `<div itemscope itemtype="...">`        | Direkt im HTML, keine Redundanz  | Verbose, schwer zu warten |
+| **RDFa**    | `<div vocab="..." typeof="...">`          | W3C-Standard, sehr ausdrucksstark | Noch komplexer als Microdata |
+
+### Empfehlung
+
+**Für AI-Native Web:**
+1. **JSON-LD im `<head>`** — für Crawler und Knowledge Graphs
+2. **Semantisches HTML** (`<dl>`, `<article>`, `<section>`) — für Live-Queries
+3. **Optional: Microdata** — wenn JSON-LD nicht ausreicht (z. B. für Breadcrumbs)
+
+**Regel:** JSON-LD ist Pflicht. Microdata ist optional. RDFa ist Overkill.
+
+### Microdata-Beispiel
+
+```html
+<div itemscope itemtype="https://schema.org/Service">
+  <h3 itemprop="name">AI Visibility Refactor</h3>
+  <dl>
+    <dt>Dauer:</dt>
+    <dd itemprop="duration">2-4 Wochen</dd>
+    <dt>Preis:</dt>
+    <dd itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+      <span itemprop="price">2400-12000</span>
+      <meta itemprop="priceCurrency" content="EUR">
+    </dd>
+  </dl>
+</div>
+```
+
+**Vorteil:** Keine Redundanz — Struktur und Inhalt in einem.
+**Nachteil:** Unleserlicher HTML-Code, schwierig zu pflegen.
+
+---
+
+## 🤖 robots.txt AI-Extensions
+
+### Standard vs. Experimental
+
+**Klassisches robots.txt:**
+```
+User-agent: *
+Disallow: /admin/
+Allow: /
+
+User-agent: GPTBot
+Disallow: /private/
+```
+
+**AI-Extensions (experimentell):**
+```
+# Standard Crawling Rules
+User-agent: GPTBot
+Allow: /
+
+# Experimental AI Manifest Discovery
+AI-Manifest: /ai/manifest.json
+AI-Identity: /ai/identity-schema.json
+AI-FAQ: /ai/faq-schema.json
+```
+
+### Status
+
+- **Standard:** `User-agent`, `Disallow`, `Allow` — funktionieren garantiert
+- **Experimentell:** `AI-Manifest`, `AI-Identity` — werden von GPTBot/Claude-Web **noch nicht** offiziell unterstützt
+- **Zukunft:** `.well-known/ai-manifest.json` könnte Standard werden (ähnlich wie `.well-known/security.txt`)
+
+**Empfehlung:** Nutze Standard-robots.txt + Link-Tags im HTML-Head.
+
+```html
+<link rel="alternate" type="application/json" href="/ai/manifest.json" title="AI Manifest">
+<link rel="alternate" type="application/ld+json" href="/ai/identity-schema.json" title="Identity Schema">
+```
+
+---
+
+## 🏷️ Meta-Description für AI-Agents
+
+### Die unterschätzte Meta-Tag
+
+**Fakt:** LLMs lesen `<meta name="description">` oft **zuerst**.
+
+**Beispiel:**
+```html
+<meta name="description" content="Jan-Erik Andersen ist GEO Expert für Deutschland. Spezialisiert auf AI-native Websites, strukturierte Daten und ChatGPT-Optimierung. Services: Struktur-Audit, GEO-Optimierung, Brand Voice Definition.">
+```
+
+### Optimierungsregeln
+
+1. **Länge:** 150–160 Zeichen (wie bei SEO)
+2. **Inhalt:** Kernaussage + Services + USP
+3. **Sprache:** Natürlich, dialog-tauglich, keine Keywords
+4. **Entitäten:** Nenne wichtige Begriffe (GEO, AI-native, ChatGPT)
+
+**Schlechtes Beispiel:**
+```html
+<meta name="description" content="Webdesign, SEO, Marketing — Ihre Agentur für digitale Lösungen.">
+```
+→ Nichtssagend, generisch, keine Entitäten.
+
+**Gutes Beispiel:**
+```html
+<meta name="description" content="GEO-Optimierung für Deutschland: Websites, die ChatGPT versteht. Struktur-Audits, AI-native HTML, JSON-LD. Spezialisiert auf Zero-Click-Sichtbarkeit.">
+```
+→ Konkret, spezifisch, entitätsreich.
+
+---
+
+## 🔗 Graph-Web: Testmethodik für @id-Verlinkungen
+
+### Das Zukunftsmodell
+
+**Heute:** Websites als Seitensammlung
+**Morgen:** Websites als Entitäts-Graph
+
+**Konzept:**
+Jede Entität (Person, Service, FAQ) bekommt eine eindeutige ID (`@id`) und wird verlinkt.
+
+### Beispiel
+
+**identity-schema.json:**
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "@id": "https://jan-erik-andersen.de/#person",
+  "name": "Jan-Erik Andersen",
+  "offers": [
+    { "@id": "https://jan-erik-andersen.de/#service-geo-audit" }
+  ]
+}
+```
+
+**services.json:**
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": "https://jan-erik-andersen.de/#service-geo-audit",
+  "name": "Struktur-Audit",
+  "provider": { "@id": "https://jan-erik-andersen.de/#person" }
+}
+```
+
+### Testmethodik
+
+**Ziel:** Validieren, dass `@id`-Verlinkungen korrekt sind.
+
+**Tools:**
+1. **JSON-LD Playground** — https://json-ld.org/playground/
+2. **Google Structured Data Testing Tool** — https://validator.schema.org/
+3. **Custom Test-Script:**
+
+```python
+import json
+import requests
+
+def validate_graph(manifest_url):
+    """Validate @id cross-references in a JSON-LD graph."""
+    manifest = requests.get(manifest_url).json()
+    ids = set()
+    refs = set()
+
+    for endpoint in manifest['endpoints']:
+        data = requests.get(endpoint['url']).json()
+
+        # Collect all @id definitions
+        if '@id' in data:
+            ids.add(data['@id'])
+
+        # Collect all @id references
+        for key, value in data.items():
+            if isinstance(value, dict) and '@id' in value:
+                refs.add(value['@id'])
+
+    # Validate: All references must exist as definitions
+    broken = refs - ids
+    if broken:
+        print(f"❌ Broken references: {broken}")
+    else:
+        print("✅ All @id references valid")
+
+validate_graph("https://jan-erik-andersen.de/ai/manifest.json")
+```
+
+**Erwartung:** Alle `@id`-Referenzen müssen als Entitäten definiert sein.
+
+---
+
 ## 🧠 Strategische Implikation: "Google Zero"
 
 ### Paradigmenwechsel
@@ -304,6 +551,26 @@ Externe JSON-Endpoints werden von Live-Query-Agents fast nie direkt gefetcht, au
 3. **Visual Layer (CSS/Design):** ästhetische Übersetzung
 
 Startseiten = Agent-Entry-Points mit transparenter Wahl.
+
+### Graph ergänzt Seiten, ersetzt sie nicht
+
+**Wichtige Klarstellung:**
+
+Der Entitäts-Graph wird die semantische Schicht von Websites, **nicht deren Ersatz**.
+
+**Zukunft = Hybrid:**
+- **Seiten bleiben die UI** (für Menschen navigierbar)
+- **Graph wird die Semantik** (für Maschinen verstehbar)
+
+**Konkret:**
+```
+/                    → Sichtbare Startseite (HTML)
+/#person             → Entität "Person" (JSON-LD @id)
+/#service-geo-audit  → Entität "Service" (JSON-LD @id)
+/ai/manifest.json    → Graph-Index (maschinenlesbar)
+```
+
+Menschen navigieren Seiten. Maschinen traversieren Graphen. Beides koexistiert.
 
 ---
 
@@ -406,6 +673,24 @@ AI-Agents fetchen nur die Hauptseite → der Rest bleibt unsichtbar.
 ❌ **Unübersichtlich?** → Klare visuelle Sektionen, Sticky Navigation
 ❌ **Schlechte SEO?** → Im Gegenteil: Besser für Featured Snippets und Rich Results
 
+### Wann AI-Onepager, wann Multi-Page?
+
+**AI-Onepager ist optimal für:**
+- Websites mit ≤ 5 Hauptthemen
+- Primäres Ziel: AI-Sichtbarkeit (GEO)
+- Portfolio-Sites, Freelancer, kleine Unternehmen
+- Zero-Click-Optimierung (FAQ, Services, Kontakt auf einer Seite)
+
+**Multi-Page bleibt sinnvoll für:**
+- Websites mit > 5 Hauptthemen (z. B. E-Commerce, Nachrichtenportale)
+- Primäres Ziel: Menschliche UX und Analytics
+- Komplexe Informationsarchitekturen (Blogs, Wikis)
+
+**Hybrid-Empfehlung:**
+- **Startseite = GEO-Hub** mit allen Key Facts (für Agenten)
+- **Unterseiten = fokussierte Views** mit detailliertem Content (für Menschen)
+- Konsistente Terminologie über alle Seiten hinweg
+
 ---
 
 ## 📋 Implementierungs-Checklist
@@ -425,8 +710,9 @@ AI-Agents fetchen nur die Hauptseite → der Rest bleibt unsichtbar.
 - [ ] Schema.org Offers mit Preisen
 - [ ] Kontakt mit Erreichbarkeit und Response-Zeit
 - [ ] Mirror-URLs für JSON-Endpoints
-- [ ] Meta-Tags für AI-Discovery
-- [ ] Robots.txt mit AI-Manifest-Hinweisen
+- [ ] `<meta name="description">` optimiert (150–160 Zeichen, entitätsreich)
+- [ ] Link-Tags für AI-Discovery (`<link rel="alternate" type="application/json">`)
+- [ ] robots.txt mit Standard-Regeln (AI-Extensions optional)
 
 ### Optional (experimentell)
 
@@ -434,6 +720,8 @@ AI-Agents fetchen nur die Hauptseite → der Rest bleibt unsichtbar.
 - [ ] Agent Instructions (JSON)
 - [ ] `.well-known/ai-manifest.json` (zukünftige Standards)
 - [ ] TXT-Mirrors für einfache Parser
+- [ ] Microdata-Markup zusätzlich zu JSON-LD (für komplexe Strukturen)
+- [ ] `@id`-Verlinkungen zwischen Entitäten (Graph-Web)
 
 ---
 
@@ -462,15 +750,36 @@ AI-Agents fetchen nur die Hauptseite → der Rest bleibt unsichtbar.
 
 ## 📚 Weiterführende Ressourcen
 
+### Strukturierte Daten & Semantik
 - [Schema.org](https://schema.org/) – Strukturierte Daten Vokabular
 - [JSON-LD Specification](https://json-ld.org/) – Linked Data Format
+- [JSON-LD Playground](https://json-ld.org/playground/) – Validator und Visualisierung
+- [Microdata Getting Started](https://schema.org/docs/gs.html) – Schema.org Microdata Guide
 - [Google Rich Results](https://developers.google.com/search/docs/appearance/structured-data) – Strukturierte Daten für Suchmaschinen
+- [Google Structured Data Testing Tool](https://validator.schema.org/) – Validator
+
+### AI-Crawler & Agents
 - [OpenAI GPTBot](https://platform.openai.com/docs/gptbot) – Crawler Documentation
 - [Anthropic Claude-Web](https://support.anthropic.com/en/articles/8896518) – Web Fetch Documentation
+- [Google AI Overviews](https://developers.google.com/search/docs/appearance/google-search-generative-experience) – SGE Documentation
+
+### Standards & Experimentelles
+- [robots.txt Specification](https://developers.google.com/search/docs/crawling-indexing/robots/robots_txt) – Standard-Syntax
+- [.well-known URIs](https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml) – IANA Registry für Well-Known-Endpoints
 
 ---
 
 ## 📝 Changelog
+
+**v1.1 (2025-11-12)**
+- Cloaking vs. Progressive Enhancement Sektion hinzugefügt
+- Semantische Markup-Formate (JSON-LD, Microdata, RDFa) dokumentiert
+- robots.txt AI-Extensions (experimentell) erklärt
+- Meta-Description Optimierung für AI-Agents
+- Graph-Web Testmethodik mit Python-Script
+- Präzisierung: Graph ergänzt Seiten, ersetzt sie nicht
+- Klarstellung: Wann AI-Onepager, wann Multi-Page?
+- Erweiterte Ressourcen-Links
 
 **v1.0 (2025-11-11)**
 - Initiale Dokumentation
