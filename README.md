@@ -1,18 +1,23 @@
 # jan-erik-andersen.de
 
 > **GEO Expert für Deutschland**
-> AI-native Website, die zeigt, wie Unternehmen in der Post-Google-Ära durch strukturierte Daten sichtbar bleiben.
+> AI-native Website: Struktur als Prinzip. ChatGPT-sichtbar. BFSG-konform. SEO-optimiert.
 
 ---
 
 ## Was ist das?
 
-Eine **GEO-optimierte Onepager-Website**, die zwei Zielgruppen perfekt bedient:
+Eine **GEO-optimierte Website**, die **ein Prinzip** demonstriert:
 
-1. **Menschen** — Sehen klare Nutzenversprechen, Leistungen, Preise
-2. **Maschinen** (ChatGPT, Claude, Perplexity, Gemini) — Bekommen strukturierte Daten für präzise Antworten
+**Semantisches HTML + Strukturierte Daten + Handkuratierte Texte**
 
-**Das Besondere:** Die Website ist selbst der Beweis für das Konzept.
+Das Ergebnis:
+- ✅ **AI-Agenten** zitieren die Website (GEO)
+- ✅ **Screenreader** lesen korrekt (BFSG-konform, WCAG 2.1 AA)
+- ✅ **Google** versteht den Kontext besser (SEO ohne Tricks)
+- ✅ **Featured Snippets** automatisch (Google Zero)
+
+**Nicht vier Projekte. Ein Prinzip.**
 
 ---
 
@@ -20,233 +25,161 @@ Eine **GEO-optimierte Onepager-Website**, die zwei Zielgruppen perfekt bedient:
 
 **59,7% aller Google-Anfragen** enden ohne Klick (SparkToro, 2024).
 **AI-Agents fetchen nur eine URL** pro Antwort (Single-Fetch-Prinzip).
+**BFSG gilt seit 28. Juni 2025** – Strafen bis 100.000 €.
 
 **Konkret:**
-Wenn ein Kunde ChatGPT fragt *"Finde mir einen GEO-Experten"*, erscheinen nur Unternehmen mit strukturierten Daten auf **einer** Seite. Multi-Page-Websites mit `/services/`, `/about/`, `/contact/` → **unsichtbar**.
+- Kunde fragt ChatGPT: *"Finde mir einen GEO-Experten"*
+- Erscheinen nur Websites mit **strukturierten Daten auf einer Seite**
+- Multi-Page-Websites mit `/services/`, `/about/` → **unsichtbar**
 
 **Unsere Lösung:**
-AI-Onepager mit allen Key Facts auf einer Seite. Strukturiert, semantisch, natürlichsprachlich.
+AI-Onepager mit allen Key Facts. Semantisch, strukturiert, handkuratiert.
 
 ---
 
-## Projektstruktur
-
-```
-jan-erik-andersen.de/
-├─ index.html                    # GEO-optimierter Onepager (DE)
-├─ en/index.html                 # GEO-optimierter Onepager (EN)
-├─ ai/
-│  ├─ architecture.md            # AI-Native Web Architecture Prinzipien
-│  ├─ services.json + .txt       # Leistungen mit Preisen
-│  ├─ identity-schema.json + .txt # Person Schema.org
-│  ├─ faq-schema.json + .txt     # FAQPage Schema.org
-│  ├─ content.json + .txt        # Content-Index
-│  ├─ health.json + .txt         # System-Health
-│  ├─ publications.json + .txt   # Publikationen
-│  └─ manifest.json + .txt       # Endpoint-Index
-├─ verify/
-│  ├─ proof-sequence.md          # Agent-Testanleitung
-│  ├─ metrics.json               # Testergebnisse
-│  └─ README.md                  # Test-Dokumentation
-├─ tools/
-│  └─ ai-visibility-test.py      # Python Test-Script
-├─ README.md                     # Diese Datei
-├─ VISION.md                     # Projekt-Vision
-├─ MARKETING.md                  # Akquise-Strategie
-├─ LEARNINGS.md                  # Erkenntnisse
-└─ kindle-optimized.css          # 0 JS CSS-Only Dark Mode
-
-```
-
----
-
-## AI-Native Onepager-Architektur
-
-### Layer 1: **Für Menschen** (index.html)
-
-- Direkte, klare Sprache (keine Buzzwords)
-- Schmerzpunkt → Lösung → Prozess
-- Konkrete Zahlen: 59,7% Zero-Click, Single-Fetch-Prinzip
-- Klare CTAs: "Kontakt", "Leistungen", "FAQ"
-- Typografie: Minimalistisch, Kindle-inspiriert
-- 0 Bytes JavaScript, 0 Frameworks
-
-### Layer 2: **Für LLMs** (JSON-LD im HTML + /ai/*.json)
-
-- **Onepager-Prinzip:** Alle Key Facts auf einer Seite
-- **JSON-LD im `<head>`:** Schema.org Person, FAQPage, Services
-- **Strukturierte Daten in /ai/:**
-  - `services.json + .txt`: Services mit Preisen, Dauer, Deliverables
-  - `identity-schema.json + .txt`: Person Schema.org
-  - `faq-schema.json + .txt`: FAQPage Schema.org
-  - `content.json + .txt`: Content-Index
-  - `manifest.json + .txt`: Endpoint-Übersicht
-- **Wow-Effekt:** LLMs lesen alle Infos beim ersten Fetch
-- **Test:** Frage ChatGPT *"Was bietet Jan-Erik Andersen an?"* → Präzise Antwort mit Preisen
-
----
-
-## Technische Spezifikation
+## Technische Specs
 
 ### Was drin ist:
 
 - ✅ **AI-Onepager** (alle Inhalte auf einer Seite)
 - ✅ **Semantisches HTML** (`<dl>`, `<section>`, `<article>`)
 - ✅ **JSON-LD** im `<head>` (Person, FAQPage, Offers)
-- ✅ **Plain-text Mirrors** (.txt) für alle JSON-Dateien
-- ✅ **CSS-Only Dark Mode** (kein JavaScript)
+- ✅ **WCAG 2.1 AA-konform** (Kontrast 17.40:1, Tastaturnavigation)
+- ✅ **CSS-Only Dark Mode** (0 JavaScript)
 - ✅ **Framework-frei**, kein Build-Prozess
-- ✅ **W3C-validiert, Schema.org-compliant**
 
 ### Was NICHT drin ist:
 
 - ❌ JavaScript
-- ❌ Build-Prozess
 - ❌ Frameworks (React, Vue, etc.)
 - ❌ Multi-Page-Struktur
-- ❌ Externe Fonts oder Libraries
+- ❌ Generische AI-Texte
 
 ---
 
-## Demo durchführen
+## Quick Start
 
-### 1. Für Menschen (Browser-Test)
+### Lokal testen
 
 ```bash
-# Lokal testen
 python -m http.server 8000
-
-# Oder direkt öffnen
 open http://localhost:8000
 ```
 
-**Erwartung:** Professionelle GEO-optimierte Landingpage mit allen Key Facts.
+### AI-Agent testen
 
-### 2. Für LLMs (ChatGPT-Test)
-
-**Öffne ChatGPT und frage:**
-
+**ChatGPT fragen:**
 ```
-"Was bietet Jan-Erik Andersen an? Nenne Services und Preise."
+"Was bietet Jan-Erik Andersen an? Nenne Services und Kontakt."
 ```
 
 **Erwartetes Ergebnis:**
-
-```
-Jan-Erik Andersen ist GEO Expert für Deutschland und bietet:
-
-1. Struktur-Audit
-   - Live-Test mit ChatGPT und Analyse der Website-Struktur
-   - Dauer: 3-5 Tage
-   - Ergebnis: 1-seitiger Maßnahmenplan
-
-2. GEO-Optimierung
-   - Website-Optimierung für ChatGPT, Perplexity, Gemini
-   - Strukturierte Daten, AI-lesbare Inhalte
-   - Dauer: 2-4 Wochen
-
-3. Brand Voice Definition
-   - Tonalität für AI-Dialoge
-   - Antwortmuster, konsistente Repräsentation
-   - Dauer: 1-2 Wochen
-
-Kontakt: mail@andersen-webworks.de
-Telefon: 038733 270015
-Erreichbarkeit: Mo-Fr, 9-17 Uhr
-```
-
-**Das ist der Wow-Effekt.**
+- Struktur-Audit (3-5 Tage, Maßnahmenplan)
+- GEO + BFSG-Compliance (2-4 Wochen)
+- Brand Voice Definition (1-2 Wochen)
+- Kontakt: mail@andersen-webworks.de
 
 ---
 
-## Philosophie
+## Projekt-Struktur
 
-### Structure as Integrity
+```
+jan-erik-andersen.de/
+├─ index.html                    # GEO-optimierter Onepager (DE)
+├─ en/index.html                 # EN-Version
+├─ barrierefreiheit.html         # BFSG-Erklärung (WCAG 2.1 AA)
+├─ ai/
+│  ├─ manifest.json              # Endpoint-Index
+│  ├─ identity-schema.json       # Person Schema.org
+│  ├─ faq-schema.json            # FAQPage Schema.org
+│  └─ services.json              # Leistungen
+├─ doc/
+│  ├─ README.md                  # 📚 HAUPTDOKUMENTATION
+│  ├─ LEARNINGS.md               # Erkenntnisse (GEO = BFSG = SEO)
+│  ├─ ARCHITECTURE.md            # Technische Architektur
+│  └─ PROJECT-CONTEXT.md         # Kontext für Claude
+├─ verify/                       # Tests & Validierung
+├─ tools/                        # Scripts
+└─ kindle-optimized.css          # 0 JS Dark Mode
+```
 
-Struktur ist nicht nur technisches Mittel, sondern Ausdruck von Verlässlichkeit.
-Gut strukturierte Daten schaffen Vertrauen.
+---
 
-### Google Zero
+## 📚 Dokumentation
 
-Der Moment, in dem Suchmaschinen irrelevant werden.
-AI-Agenten konsumieren Daten direkt aus strukturierten Quellen.
-Wer dann keine semantische Signatur hat, ist **unsichtbar**.
+**Alle Dokumentation ist in `/doc/` konsolidiert:**
 
-### Single-Fetch-Prinzip
+- **[doc/README.md](doc/README.md)** — Projektübersicht, Installation, Demo
+- **[doc/LEARNINGS.md](doc/LEARNINGS.md)** — Erkenntnisse: GEO = BFSG = SEO = ein Prinzip
+- **[doc/ARCHITECTURE.md](doc/ARCHITECTURE.md)** — AI-Native Web Architecture
+- **[doc/PROJECT-CONTEXT.md](doc/PROJECT-CONTEXT.md)** — Kontext für Claude-Instanzen
 
-AI-Agents fetchen **eine URL** pro Antwort.
-Multi-Page-Websites → unsichtbar.
-AI-Onepager → alle Infos beim ersten Request.
+**Spezial-Dokumentation:**
+- **[barrierefreiheit.html](barrierefreiheit.html)** — BFSG-Erklärung (WCAG 2.1 AA)
+- **[verify/README.md](verify/README.md)** — Test-Dokumentation
+- **[tools/README.md](tools/README.md)** — Python Test-Scripts
 
 ---
 
 ## Deployment
 
-**GitHub Pages:**
+**GitHub Pages (automatisch):**
 
 ```bash
+git add -A
+git commit -m "Update"
 git push origin main
-# Automatisch deployed via GitHub Pages
+# → Live nach 1-2 Minuten
 ```
 
-Kein Build-Prozess nötig. Die Dateien sind statisch.
+**Kein Build-Prozess. Statische Dateien.**
 
 ---
 
-## Validierung
+## Philosophie
 
-### 1. HTML/CSS
+### Struktur als Prinzip
 
-```bash
-# W3C Validator
-https://validator.w3.org/
+**AI-Agenten, Screenreader, Google, Snippet-Parser – alle brauchen dasselbe:**
 
-# Lighthouse
-lighthouse https://jan-erik-andersen.de
-```
+1. **Semantisches HTML** (Struktur)
+2. **Fehlerfreie Texte** (Vertrauen)
+3. **Präzise Sprache** (Klarheit)
+4. **Logischer Aufbau** (Hierarchie)
 
-**Ziel:** > 95 Score
+**Nicht vier Optimierungen. Ein Prinzip: Struktur.**
 
-### 2. Strukturierte Daten
+### GEO statt SEO
 
-```bash
-# Schema.org Validator
-https://validator.schema.org/
+| **SEO (alt)** | **GEO (neu)** |
+|---------------|---------------|
+| Keywords | Natürliche Sprache |
+| Ranking | Zitation in AI-Antworten |
+| Click-Through-Rate | Citation-Rate |
+| Multi-Page | AI-Onepager |
 
-# JSON-LD Playground
-https://json-ld.org/playground/
-```
+### Google Zero
 
-**Ziel:** Keine Fehler, keine Warnungen
-
-### 3. LLM-Lesbarkeit
-
-```bash
-# ChatGPT Test
-"Was bietet Jan-Erik Andersen an?"
-
-# Claude Test
-"Fasse die Services von Jan-Erik Andersen zusammen."
-
-# Perplexity Test
-"Wie kann ich Jan-Erik Andersen kontaktieren?"
-```
-
-**Ziel:** Umfassende, präzise Antworten mit konkreten Daten
+Der Moment, in dem Suchmaschinen irrelevant werden.
+AI-Agenten konsumieren Daten direkt.
+Wer keine semantische Signatur hat, ist **unsichtbar**.
 
 ---
 
 ## Success Metrics
 
 ✅ **Für Menschen:**
-- Landingpage überzeugt ohne technisches Vorwissen
-- Klare Schmerzpunkte, Lösungen
-- Direkte, selbstbewusste Sprache
+- Landingpage überzeugt ohne Vorkenntnisse
+- Klare Schmerzpunkte → Lösungen → CTAs
 
-✅ **Für LLMs:**
-- ChatGPT, Claude, Perplexity, Gemini geben präzise Antworten
-- Alle Services, Preise, Kontaktdaten korrekt wiedergegeben
-- Onepager-Prinzip: Alle Infos beim ersten Fetch
+✅ **Für AI-Agenten:**
+- ChatGPT, Claude, Perplexity geben präzise Antworten
+- Alle Services, Preise, Kontakt korrekt
+
+✅ **BFSG-Compliance:**
+- WCAG 2.1 AA-konform
+- Kontrast 17.40:1 (Text), 5.89:1 (Akzente)
+- Barrierefreiheits-Erklärung vorhanden
 
 ✅ **Technisch:**
 - W3C-validiert
@@ -256,29 +189,12 @@ https://json-ld.org/playground/
 
 ---
 
-## Roadmap
+## Status
 
-### Phase 1: GEO-Optimierung (✅ Completed)
-
-- [x] AI-Onepager (alle Inhalte auf einer Seite)
-- [x] Semantisches HTML mit `<dl>`, `<section>`
-- [x] JSON-LD Schema.org Markup
-- [x] CSS-Only Dark Mode
-- [x] EN-Version
-
-### Phase 2: Live & Testing
-
-- [x] Deploy auf jan-erik-andersen.de
-- [x] GitHub Pages Setup
-- [ ] Monitoring für AI-Citations
-- [ ] A/B-Testing für CTAs
-
-### Phase 3: Akquise
-
-- [ ] LinkedIn-Kampagne starten
-- [ ] Erste 10 kostenlose Struktur-Audits
-- [ ] Case Studies von echten Kunden
-- [ ] Testimonials sammeln
+**Version:** 1.1
+**Status:** 🚀 Live — GEO + BFSG optimiert
+**URL:** [jan-erik-andersen.de](https://jan-erik-andersen.de)
+**Letztes Update:** 13. November 2025
 
 ---
 
@@ -290,17 +206,8 @@ GEO Expert | AI Search Optimization
 - Website: [jan-erik-andersen.de](https://jan-erik-andersen.de)
 - E-Mail: mail@andersen-webworks.de
 - Telefon: 038733 270015
-- LinkedIn: [linkedin.com/in/jan-erik-andersen](https://linkedin.com/in/jan-erik-andersen)
 
 ---
 
-## Lizenz
-
-Dieses Projekt ist ein Proof of Concept für GEO (Generative Engine Optimization).
-Der Code ist frei verwendbar. Attribution erwünscht.
-
----
-
-**Projekt:** jan-erik-andersen.de
-**Status:** Live — GEO-Optimiert
-**Datum:** 2025-11-12
+**Lizenz:** Proof of Concept für GEO (Generative Engine Optimization).
+Code frei verwendbar. Attribution erwünscht.

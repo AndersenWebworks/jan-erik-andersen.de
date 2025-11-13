@@ -18,12 +18,12 @@ Dieses Verzeichnis enthält alle Tests, Validierungen und Messungen für den MVP
 
 | Test | Status | Datei | Zweck |
 |------|--------|-------|-------|
-| **AI Agent Test** | ✅ Bestanden (6/6) | [agent-test.md](agent-test.md) | Beweis: AI kann Website korrekt lesen |
+| **AI Agent Access Test** | ✅ Bestanden | [agent-access-test.md](agent-access-test.md) | Beweis: AI kann Website korrekt lesen |
 | **Validation Checklists** | ✅ Bestanden | [checklists.md](checklists.md) | HTML/JSON/Performance validiert |
-| **Rich Results Test** | ⏳ Dokumentiert | [rich-results-test.md](rich-results-test.md) | Beweis: Google erkennt Schema.org |
-| **Google Search Console** | ⏳ Setup-Anleitung | [google-search-console.md](google-search-console.md) | Indexierung + Monitoring |
-| **Comparison Test** | ⏳ Dokumentiert | [comparison-test.md](comparison-test.md) | Beweis: AI-native > normale Website |
-| **Metrics** | ✅ Initial | [metrics.json](metrics.json) | Aktuelle Test-Scores |
+| **Google Search Console** | ✅ Setup abgeschlossen | [google-search-console.md](google-search-console.md) | Indexierung + Monitoring |
+| **Proof Sequence** | ✅ Durchgeführt | [proof-sequence.md](proof-sequence.md) | LLM Read Test Anleitung |
+| **Comparison Test** | ⏳ Zukünftig | [comparison-test.md](comparison-test.md) | Idee: AI-native vs. normale Website |
+| **Archiv** | 📦 Historisch | [archive/](archive/) | Obsolete Debug-Dateien (ChatGPT 400, etc.)
 
 **Legende:**
 - ✅ Bestanden / Abgeschlossen
@@ -135,12 +135,15 @@ Websites mit strukturierten Daten (JSON-LD, Schema.org) ermöglichen AI-Agenten 
 
 ## Dateien in diesem Verzeichnis
 
-### Test-Definitionen
-- **[agent-test.md](agent-test.md)** — 6 Testfragen für AI-Modelle
+### Test-Definitionen (aktiv)
+- **[agent-access-test.md](agent-access-test.md)** — AI-Agent Zugriffstest
 - **[checklists.md](checklists.md)** — Validierungs-Checklisten (HTML, JSON, Performance)
-- **[rich-results-test.md](rich-results-test.md)** — Anleitung für Google Rich Results Test
 - **[google-search-console.md](google-search-console.md)** — Setup-Anleitung für GSC
-- **[comparison-test.md](comparison-test.md)** — Vergleichstest AI-native vs. normal
+- **[proof-sequence.md](proof-sequence.md)** — LLM Read Test Sequenz
+- **[comparison-test.md](comparison-test.md)** — Vergleichstest AI-native vs. normal (zukünftig)
+
+### Archiv (historisch)
+- **[archive/](archive/)** — Obsolete Debug-Dateien (ChatGPT 400, Rich Results, etc.)
 
 ### Ergebnisse
 - **[metrics.json](metrics.json)** — Aktuelle Test-Scores (maschinenlesbar)
