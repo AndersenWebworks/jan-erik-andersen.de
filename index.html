@@ -186,7 +186,7 @@
 
       <p class="hero-urgency">
         <strong>Und ab Juni 2025:</strong> BFSG-Pflicht zur Barrierefreiheit.<br>
-        Strafen bis 100.000 €. Abmahnfähig.
+        Rechtlich relevant. WCAG 2.1 Level AA erforderlich.
       </p>
 
       <p class="hero-solution">
@@ -196,7 +196,8 @@
     </div>
     <nav aria-label="Hauptnavigation">
       <a href="#problem" class="cta-secondary">Das Problem</a>
-      <a href="#bfsg" class="cta-secondary">GEO + BFSG</a>
+      <a href="#hosting" class="cta-secondary">Hosting</a>
+      <a href="#prozess" class="cta-secondary">Prozess</a>
       <a href="#kontakt" class="cta-primary">15-Min-Test</a>
     </nav>
   </header>
@@ -338,11 +339,40 @@
       Das ist alles, was zählt.</p>
     </section>
 
+    <section id="hosting">
+      <h2>Hosting ist Voraussetzung, nicht „nice to have"</h2>
+
+      <p>Viele klassische Shared-Hoster setzen Sicherheitsfilter (WAF, ModSecurity), die <strong>KI-Zugriffe blockieren</strong>.<br>
+      Ergebnis: KI-Assistenten erhalten Fehlercodes (HTTP 400, 403) und sehen Ihre Inhalte <strong>gar nicht</strong>.</p>
+
+      <p><strong>Was zuverlässig funktioniert:</strong><br>
+      JAMstack-Hosting (GitHub Pages, Netlify, Cloudflare Pages):</p>
+
+      <ul>
+        <li>Keine WAF-Blockierung für statische Inhalte</li>
+        <li>HTTPS + globales CDN inklusive</li>
+        <li>Deployment per <code>git push</code></li>
+        <li><strong>Kosten: 0 € für Hosting</strong></li>
+      </ul>
+
+      <p><strong>Praxis:</strong><br>
+      Wir migrieren die Startseite (und auf Wunsch mehr) auf KI-freundliches Hosting.<br>
+      Danach <strong>können</strong> Assistenten Ihre Inhalte überhaupt erst lesen.</p>
+
+      <p class="legal-note">
+        <small><strong>Hinweis zu neuen Domains:</strong>
+        Neu registrierte oder umgezogene Domains brauchen <strong>7–14 Tage</strong>, bis KI-Assistenten sie vertrauen (SSL-Historie, Indexierung).
+        Für Sofort-Tests nutzen wir GitHub-Raw-URLs oder Ihre etablierte Domain.</small>
+      </p>
+
+      <p><a href="#leistungen" class="cta-secondary">Leistungen ansehen</a></p>
+    </section>
+
     <section id="bfsg">
       <h2>GEO + BFSG: Doppelte Sicherheit</h2>
 
       <p><strong>Ab 28. Juni 2025 gilt das Barrierefreiheitsstärkungsgesetz (BFSG).</strong><br>
-      Websites müssen WCAG 2.1 Level AA erfüllen. Strafen bis 100.000 €. Abmahnfähig.</p>
+      Websites müssen WCAG 2.1 Level AA erfüllen. Das ist rechtlich relevant und sollte dokumentiert sein.</p>
 
       <p><strong>GEO-Optimierung erfüllt automatisch 80% der BFSG-Anforderungen.</strong></p>
 
@@ -601,6 +631,32 @@
       <p><a href="#kontakt" class="cta-primary">15-Minuten-Test buchen</a></p>
     </section>
 
+    <section id="prozess">
+      <h2>Prozess (klar und zügig)</h2>
+
+      <dl class="key-concepts">
+        <dt>1. Kickoff (30 min)</dt>
+        <dd>Ziele, Region, Leistungen, Beispiele klären</dd>
+
+        <dt>2. Audit (1 Tag)</dt>
+        <dd>Real-Fetch-Test mit ChatGPT: Was sieht der Agent heute?<br>
+        Kurzbericht: Wo verlieren Sie Sichtbarkeit?</dd>
+
+        <dt>3. Refactor (3–5 Tage)</dt>
+        <dd>Text & Struktur, Hosting-Setup (JAMstack), JSON-LD, semantisches HTML</dd>
+
+        <dt>4. BFSG-Bausteine (1–2 Tage)</dt>
+        <dd>Kontrast-/Tastatur-Checks, Alt-Texte, ARIA-Labels, Barrierefreiheits-Erklärung</dd>
+
+        <dt>5. Übergabe (1 h)</dt>
+        <dd>Ergebnisse, Pflegeleitfaden, nächste Schritte</dd>
+      </dl>
+
+      <p><small><em>Zeitfenster je nach Umfang. Startseite zuerst = schnellste Wirkung.</em></small></p>
+
+      <p><a href="#kontakt" class="cta-primary">Jetzt anfragen</a></p>
+    </section>
+
     <section id="prinzipien">
       <h2>Prinzipien</h2>
 
@@ -720,8 +776,8 @@
       </dl>
 
       <p><strong>Warum jetzt?</strong><br>
-      BFSG gilt seit Juni 2025. Abmahnwelle läuft bereits. Strafen bis 100.000 €.<br>
-      Ihre Konkurrenz optimiert schon. Warten Sie nicht, bis Sie unsichtbar sind.</p>
+      BFSG gilt seit Juni 2025. Barrierefreiheit ist Pflicht.<br>
+      KI-Sichtbarkeit wird zum Standard. Strukturierte Inhalte setzen sich durch.</p>
 
       <p>
         Ein Projekt von <a href="https://andersen-webworks.de">Andersen Webworks</a>
