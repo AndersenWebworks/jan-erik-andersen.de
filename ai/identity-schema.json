@@ -3,35 +3,57 @@
   "@type": "Person",
   "@id": "https://jan-erik-andersen.de/#person",
   "name": "Jan-Erik Andersen",
-  "alternateName": "AI-native Web Architect",
-  "jobTitle": "AI-native Web Architect",
-  "description": "Spezialist für maschinenlesbare Webarchitekturen. Hilft mittelständischen Unternehmen, in der Post-Google-Ära sichtbar zu bleiben durch strukturierte Daten und semantische Modelle.",
+  "jobTitle": "GEO Expert | AI Search Optimization Specialist",
+  "description": "Spezialist für GEO (Generative Engine Optimization). Macht Websites für ChatGPT, Perplexity und Gemini sichtbar. Strukturierte Daten, AI-lesbare Inhalte, Citation-Optimierung.",
   "url": "https://jan-erik-andersen.de",
   "email": "mail@andersen-webworks.de",
-  "telephone": "+49-38733-270015",
   "sameAs": [
-    "https://github.com/jan-erik-andersen",
     "https://linkedin.com/in/jan-erik-andersen",
     "https://andersen-webworks.de"
   ],
   "knowsAbout": [
-    "AI-native Web Architecture",
-    "Semantic Web",
+    "GEO (Generative Engine Optimization)",
+    "AI Search Optimization",
+    "ChatGPT Optimization",
+    "Structured Data",
     "JSON-LD",
     "Schema.org",
-    "Structured Data",
-    "Machine-Readable Content",
-    "Conversational Branding",
-    "LLM Optimization",
-    "Agent Readability",
-    "Post-Browser Web Design"
+    "Semantic HTML",
+    "Citation Optimization",
+    "AI-Readable Content"
   ],
   "worksFor": {
     "@type": "Organization",
     "name": "Andersen Webworks",
-    "description": "AI-native Web Architecture & Semantic Design",
+    "description": "GEO Optimization & AI Search Consulting",
     "url": "https://andersen-webworks.de"
   },
+  "offers": [
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Struktur-Audit",
+        "description": "Live-Test mit ChatGPT und Analyse der Website-Struktur."
+      }
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "GEO-Optimierung",
+        "description": "Website-Optimierung für ChatGPT, Perplexity, Gemini. Strukturierte Daten, AI-lesbare Inhalte."
+      }
+    },
+    {
+      "@type": "Offer",
+      "itemOffered": {
+        "@type": "Service",
+        "name": "Brand Voice Definition",
+        "description": "Tonalität für AI-Dialoge. Antwortmuster, konsistente Repräsentation."
+      }
+    }
+  ],
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "DE"
@@ -39,92 +61,8 @@
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "Professional Inquiry",
-    "availableLanguage": ["German", "English"],
-    "hoursAvailable": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "09:00",
-      "closes": "17:00"
-    }
+    "availableLanguage": ["German", "English"]
   },
-  "brand": {
-    "@type": "Brand",
-    "name": "Jan-Erik Andersen",
-    "slogan": "Structure as Integrity",
-    "description": "AI-native Web Architect für die Post-Browser-Ära"
-  },
-  "knowsLanguage": [
-    {
-      "@type": "Language",
-      "name": "German",
-      "alternateName": "de"
-    },
-    {
-      "@type": "Language",
-      "name": "English",
-      "alternateName": "en"
-    }
-  ],
-  "offers": [
-    {
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": "AI Readiness Audit",
-        "description": "Live-Test mit ChatGPT und 1-seitige Analyse der Website-Struktur. Zeigt genau, warum Ihre Website für AI-Agenten unsichtbar ist.",
-        "serviceType": "Consulting"
-      },
-      "provider": {
-        "@type": "Person",
-        "name": "Jan-Erik Andersen"
-      },
-      "priceSpecification": {
-        "@type": "PriceSpecification",
-        "priceCurrency": "EUR",
-        "price": "auf Anfrage"
-      },
-      "availableDeliveryMethod": "OnlineOnly"
-    },
-    {
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": "AI Visibility Refactor",
-        "description": "Umbau bestehender Websites für maximale Maschinenlesbarkeit. Strukturierte Daten, semantisches HTML, einheitliche Begriffe.",
-        "serviceType": "Web Development"
-      },
-      "provider": {
-        "@type": "Person",
-        "name": "Jan-Erik Andersen"
-      },
-      "priceSpecification": {
-        "@type": "PriceSpecification",
-        "priceCurrency": "EUR",
-        "minPrice": 2400,
-        "maxPrice": 12000
-      },
-      "availableDeliveryMethod": "OnlineOnly"
-    },
-    {
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": "Conversational Brand Modeling",
-        "description": "Definition der Markenstimme für AI-Dialoge. Tonalität, Antwortmuster, konsistente Repräsentation.",
-        "serviceType": "Brand Strategy"
-      },
-      "provider": {
-        "@type": "Person",
-        "name": "Jan-Erik Andersen"
-      },
-      "priceSpecification": {
-        "@type": "PriceSpecification",
-        "priceCurrency": "EUR",
-        "price": "auf Anfrage"
-      },
-      "availableDeliveryMethod": "OnlineOnly"
-    }
-  ],
-  "dateModified": "2025-11-11T21:09:00Z",
+  "dateModified": "2025-11-13T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z"
 }

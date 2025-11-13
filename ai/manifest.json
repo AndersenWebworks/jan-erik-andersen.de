@@ -1,12 +1,14 @@
 {
   "site": "jan-erik-andersen.de",
-  "version": "v1.1",
-  "build": 11,
+  "version": "v1.3",
+  "build": 13,
   "changelog": [
+    "v1.3 feat: AI-Layer JSON-Files mit HTML synchronisiert (FAQ, Services, Identity)",
+    "v1.2 feat: .txt-Redundanz entfernt, SSOT-konform (nur .json)",
     "v1.1 fix: Accordion-Layout-Korrektur + alle geschlossen",
     "v1.1 feat: FAQ + Leistungen als <details> Accordions mit Schema.org"
   ],
-  "dateModified": "2025-11-11T23:00:00Z",
+  "dateModified": "2025-11-13T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z",
   "architecture": {
     "version": "1.0",
