@@ -140,6 +140,62 @@
               "@type": "Answer",
               "text": "60% Zero-Click-Searches. Single-Fetch-Prinzip. Technische Realität, kein Trend."
             }
+          },
+          {
+            "@type": "Question",
+            "name": "Warum bevorzugen AI-Agenten handkuratierte Texte?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Fehlerfreiheit = Trust Signal. AI-Agenten interpretieren Fehler als Qualitätsproblem. Präzision > Generik. \"GEO-Optimierung\" schlägt \"innovative Lösungen\". Konsistenz = Credibility. Widersprüche werden erkannt und senken die Citation-Rate. Struktur > Prosa. Strukturierte Daten sind parse-bar, Prosa interpretationsbedürftig."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Verbessert GEO auch SEO?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ja. Google nutzt dieselben Transformer-Modelle wie ChatGPT (MUM, BERT). Semantisches HTML, strukturierte Daten, präzise Sprache → Google versteht Kontext besser → besseres Ranking. Ohne SEO-Tricks. Durch Struktur."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Erfüllt eine GEO-optimierte Website das BFSG?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Großteils ja. Semantisches HTML, strukturierte Daten und logische Content-Struktur sind identisch mit BFSG-Anforderungen (80% Overlap). Zusätzlich nötig: Kontrast-Prüfung, Tastaturnavigation, Skip-Links, Barrierefreiheits-Erklärung. Wird im Audit geprüft."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Müssen wir CMS oder Hosting wechseln?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Nein. Der Startseiten-Layer kann parallel laufen. Bestehendes CMS/Hosting bleibt unverändert."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Wie lange dauert es, bis wir Effekte sehen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "KI-Agenten sehen Änderungen teils sofort. Neue Domains brauchen 7–14 Tage Vertrauensaufbau (SSL-Historie, Indexierung)."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Wie viel interner Aufwand entsteht?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "1–2 kurze Abstimmungen (30–60 Min). Inhalte kuratiere ich. Keine IT-Ressourcen nötig."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Warum sollte ich Ihnen vertrauen?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Ich mache den Test live mit Ihnen. Sie sehen sofort, was ChatGPT über Ihre Website sieht. Erst danach entscheiden Sie. Keine Verpflichtung. Diese Website ist selbst der Beweis: WCAG 2.1 AA-konform, AI-lesbar, Featured-Snippet-ready."
+            }
           }
         ]
       }
@@ -585,55 +641,59 @@
     <section id="leistungen">
       <h2>Leistungen</h2>
 
-      <ul class="services-list">
-        <li>
-          <span class="service-name">Struktur-Audit + BFSG-Check</span>
-          Live-Test mit ChatGPT + WCAG 2.1 AA-Prüfung
-          <dl class="service-details">
-            <dt>Dauer:</dt> <dd>3-5 Tage</dd>
-            <dt>Inhalt:</dt>
-            <dd>
-              • ChatGPT-Test (Was sieht der Agent?)<br>
-              • Kontrast-Prüfung (4.5:1 für Text)<br>
-              • Semantik-Check (HTML-Struktur)<br>
-              • Tastaturnavigation-Test
-            </dd>
-            <dt>Ergebnis:</dt> <dd>1-seitiger Maßnahmenplan + BFSG-Compliance-Report</dd>
-          </dl>
-        </li>
+      <details itemscope itemtype="https://schema.org/Service" open>
+        <summary>
+          <span class="service-name" itemprop="name">Struktur-Audit + BFSG-Check</span>
+          <span itemprop="description">Live-Test mit ChatGPT + WCAG 2.1 AA-Prüfung</span>
+        </summary>
+        <dl class="service-details">
+          <dt>Dauer:</dt> <dd>3-5 Tage</dd>
+          <dt>Inhalt:</dt>
+          <dd>
+            • ChatGPT-Test (Was sieht der Agent?)<br>
+            • Kontrast-Prüfung (4.5:1 für Text)<br>
+            • Semantik-Check (HTML-Struktur)<br>
+            • Tastaturnavigation-Test
+          </dd>
+          <dt>Ergebnis:</dt> <dd>1-seitiger Maßnahmenplan + BFSG-Compliance-Report</dd>
+        </dl>
+      </details>
 
-        <li>
-          <span class="service-name">GEO + BFSG-Compliance-Paket</span>
-          Vollständige Optimierung für AI-Sichtbarkeit + Barrierefreiheit
-          <dl class="service-details">
-            <dt>Dauer:</dt> <dd>2-4 Wochen</dd>
-            <dt>Leistung:</dt>
-            <dd>
-              • Semantisches HTML + JSON-LD<br>
-              • WCAG 2.1 AA-Konformität<br>
-              • Barrierefreiheits-Erklärung<br>
-              • Feedback-Prozess (BFSG-Pflicht)<br>
-              • Dokumentation + Schulung
-            </dd>
-            <dt>Ergebnis:</dt> <dd>AI-sichtbar + BFSG-konform + SEO-optimiert</dd>
-          </dl>
-        </li>
+      <details itemscope itemtype="https://schema.org/Service" open>
+        <summary>
+          <span class="service-name" itemprop="name">GEO + BFSG-Compliance-Paket</span>
+          <span itemprop="description">Vollständige Optimierung für AI-Sichtbarkeit + Barrierefreiheit</span>
+        </summary>
+        <dl class="service-details">
+          <dt>Dauer:</dt> <dd>2-4 Wochen</dd>
+          <dt>Leistung:</dt>
+          <dd>
+            • Semantisches HTML + JSON-LD<br>
+            • WCAG 2.1 AA-Konformität<br>
+            • Barrierefreiheits-Erklärung<br>
+            • Feedback-Prozess (BFSG-Pflicht)<br>
+            • Dokumentation + Schulung
+          </dd>
+          <dt>Ergebnis:</dt> <dd>AI-sichtbar + BFSG-konform + SEO-optimiert</dd>
+        </dl>
+      </details>
 
-        <li>
-          <span class="service-name">Brand Voice Definition</span>
-          Tonalität für AI-Dialoge – konsistente Repräsentation
-          <dl class="service-details">
-            <dt>Dauer:</dt> <dd>1-2 Wochen</dd>
-            <dt>Leistung:</dt>
-            <dd>
-              • Tonalitäts-Profil für AI-Antworten<br>
-              • Antwortmuster, FAQ-Struktur<br>
-              • Handkuratierte Key Facts
-            </dd>
-            <dt>Ergebnis:</dt> <dd>Konsistente AI-Repräsentation Ihrer Marke</dd>
-          </dl>
-        </li>
-      </ul>
+      <details itemscope itemtype="https://schema.org/Service">
+        <summary>
+          <span class="service-name" itemprop="name">Brand Voice Definition</span>
+          <span itemprop="description">Tonalität für AI-Dialoge – konsistente Repräsentation</span>
+        </summary>
+        <dl class="service-details">
+          <dt>Dauer:</dt> <dd>1-2 Wochen</dd>
+          <dt>Leistung:</dt>
+          <dd>
+            • Tonalitäts-Profil für AI-Antworten<br>
+            • Antwortmuster, FAQ-Struktur<br>
+            • Handkuratierte Key Facts
+          </dd>
+          <dt>Ergebnis:</dt> <dd>Konsistente AI-Repräsentation Ihrer Marke</dd>
+        </dl>
+      </details>
 
       <p><a href="#kontakt" class="cta-primary">15-Minuten-Test buchen</a></p>
     </section>
@@ -691,87 +751,133 @@
     <section id="faq">
       <h2>Häufige Fragen</h2>
 
-      <dl class="faq">
-        <dt>Brauche ich eine neue Website?</dt>
-        <dd>
-          Nein. Ihre Unterseiten bleiben.<br>
-          Die Startseite wird zur Executive Summary.
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question" open>
+        <summary itemprop="name">Brauche ich eine neue Website?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>Nein. Ihre Unterseiten bleiben.<br>
+            Die Startseite wird zur Executive Summary.</p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Was passiert mit meinen Unterseiten?</dt>
-        <dd>
-          Sie bleiben. Für Menschen zugänglich.<br>
-          Aber AI-Agenten sehen sie nie.
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question" open>
+        <summary itemprop="name">Was passiert mit meinen Unterseiten?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>Sie bleiben. Für Menschen zugänglich.<br>
+            Aber AI-Agenten sehen sie nie.</p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Wie lange dauert das?</dt>
-        <dd>
-          Test: 15 Minuten.<br>
-          Analyse: 3-5 Tage.<br>
-          Umsetzung: 2-4 Wochen.
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question" open>
+        <summary itemprop="name">Wie lange dauert das?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>Test: 15 Minuten.<br>
+            Analyse: 3-5 Tage.<br>
+            Umsetzung: 2-4 Wochen.</p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Was kostet das?</dt>
-        <dd>
-          Abhängig vom Umfang.<br>
-          Angebot auf Anfrage.
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question" open>
+        <summary itemprop="name">Was kostet das?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>Abhängig vom Umfang.<br>
+            Angebot auf Anfrage.</p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Ist das nicht nur ein Hype?</dt>
-        <dd>
-          60% Zero-Click-Searches. Single-Fetch-Prinzip.<br>
-          Technische Realität, kein Trend.
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question">
+        <summary itemprop="name">Ist das nicht nur ein Hype?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>60% Zero-Click-Searches. Single-Fetch-Prinzip.<br>
+            Technische Realität, kein Trend.</p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Warum bevorzugen AI-Agenten handkuratierte Texte?</dt>
-        <dd>
-          <strong>Fehlerfreiheit = Trust Signal.</strong> AI-Agenten interpretieren Fehler als Qualitätsproblem.<br>
-          <strong>Präzision > Generik.</strong> "GEO-Optimierung" schlägt "innovative Lösungen".<br>
-          <strong>Konsistenz = Credibility.</strong> Widersprüche werden erkannt und senken die Citation-Rate.<br>
-          <strong>Struktur > Prosa.</strong> Strukturierte Daten sind parse-bar, Prosa interpretationsbedürftig.
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question">
+        <summary itemprop="name">Warum bevorzugen AI-Agenten handkuratierte Texte?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p><strong>Fehlerfreiheit = Trust Signal.</strong> AI-Agenten interpretieren Fehler als Qualitätsproblem.<br>
+            <strong>Präzision > Generik.</strong> "GEO-Optimierung" schlägt "innovative Lösungen".<br>
+            <strong>Konsistenz = Credibility.</strong> Widersprüche werden erkannt und senken die Citation-Rate.<br>
+            <strong>Struktur > Prosa.</strong> Strukturierte Daten sind parse-bar, Prosa interpretationsbedürftig.</p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Verbessert GEO auch SEO?</dt>
-        <dd>
-          Ja. Google nutzt dieselben Transformer-Modelle wie ChatGPT (MUM, BERT).<br>
-          Semantisches HTML, strukturierte Daten, präzise Sprache → Google versteht Kontext besser → besseres Ranking.<br>
-          <strong>Ohne SEO-Tricks. Durch Struktur.</strong>
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question">
+        <summary itemprop="name">Verbessert GEO auch SEO?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>Ja. Google nutzt dieselben Transformer-Modelle wie ChatGPT (MUM, BERT).<br>
+            Semantisches HTML, strukturierte Daten, präzise Sprache → Google versteht Kontext besser → besseres Ranking.<br>
+            <strong>Ohne SEO-Tricks. Durch Struktur.</strong></p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Erfüllt eine GEO-optimierte Website das BFSG?</dt>
-        <dd>
-          Großteils ja. Semantisches HTML, strukturierte Daten und logische Content-Struktur
-          sind identisch mit BFSG-Anforderungen (80% Overlap).<br>
-          Zusätzlich nötig: Kontrast-Prüfung, Tastaturnavigation, Skip-Links, Barrierefreiheits-Erklärung.<br>
-          <strong>Wird im Audit geprüft.</strong>
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question">
+        <summary itemprop="name">Erfüllt eine GEO-optimierte Website das BFSG?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>Großteils ja. Semantisches HTML, strukturierte Daten und logische Content-Struktur
+            sind identisch mit BFSG-Anforderungen (80% Overlap).<br>
+            Zusätzlich nötig: Kontrast-Prüfung, Tastaturnavigation, Skip-Links, Barrierefreiheits-Erklärung.<br>
+            <strong>Wird im Audit geprüft.</strong></p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Müssen wir CMS oder Hosting wechseln?</dt>
-        <dd>
-          Nein. Der Startseiten-Layer kann parallel laufen.<br>
-          Bestehendes CMS/Hosting bleibt unverändert.
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question">
+        <summary itemprop="name">Müssen wir CMS oder Hosting wechseln?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>Nein. Der Startseiten-Layer kann parallel laufen.<br>
+            Bestehendes CMS/Hosting bleibt unverändert.</p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Wie lange dauert es, bis wir Effekte sehen?</dt>
-        <dd>
-          KI-Agenten sehen Änderungen teils sofort.<br>
-          Neue Domains brauchen 7–14 Tage Vertrauensaufbau (SSL-Historie, Indexierung).
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question">
+        <summary itemprop="name">Wie lange dauert es, bis wir Effekte sehen?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>KI-Agenten sehen Änderungen teils sofort.<br>
+            Neue Domains brauchen 7–14 Tage Vertrauensaufbau (SSL-Historie, Indexierung).</p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Wie viel interner Aufwand entsteht?</dt>
-        <dd>
-          1–2 kurze Abstimmungen (30–60 Min).<br>
-          Inhalte kuratiere ich. Keine IT-Ressourcen nötig.
-        </dd>
+      <details itemscope itemtype="https://schema.org/Question">
+        <summary itemprop="name">Wie viel interner Aufwand entsteht?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>1–2 kurze Abstimmungen (30–60 Min).<br>
+            Inhalte kuratiere ich. Keine IT-Ressourcen nötig.</p>
+          </div>
+        </div>
+      </details>
 
-        <dt>Warum sollte ich Ihnen vertrauen?</dt>
-        <dd>
-          Ich mache den Test live mit Ihnen. Sie sehen sofort, was ChatGPT über Ihre Website sieht.<br>
-          Erst danach entscheiden Sie. Keine Verpflichtung.<br>
-          <strong>Diese Website ist selbst der Beweis:</strong>
-          <a href="/barrierefreiheit.html">WCAG 2.1 AA-konform</a>, AI-lesbar, Featured-Snippet-ready.
-        </dd>
-      </dl>
+      <details itemscope itemtype="https://schema.org/Question">
+        <summary itemprop="name">Warum sollte ich Ihnen vertrauen?</summary>
+        <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+          <div itemprop="text">
+            <p>Ich mache den Test live mit Ihnen. Sie sehen sofort, was ChatGPT über Ihre Website sieht.<br>
+            Erst danach entscheiden Sie. Keine Verpflichtung.<br>
+            <strong>Diese Website ist selbst der Beweis:</strong>
+            <a href="/barrierefreiheit.html">WCAG 2.1 AA-konform</a>, AI-lesbar, Featured-Snippet-ready.</p>
+          </div>
+        </div>
+      </details>
     </section>
 
     <section id="kontakt">
@@ -833,7 +939,7 @@
       <p>0 Bytes JavaScript. 1 HTML-Datei. Pure Struktur.</p>
     </details>
 
-    <p><strong>jan-erik-andersen.de v1.0.0</strong> — GEO-Optimiert 2025<br>
+    <p><strong>jan-erik-andersen.de v1.1.0</strong> — GEO-Optimiert 2025<br>
     <small class="build-info">AI Search Ready | Citation-First Design</small></p>
     <p>
       <a href="/impressum.html">Impressum</a> ·
