@@ -1,5 +1,11 @@
 {
-  "version": "2.0",
+  "site": "jan-erik-andersen.de",
+  "version": "v1.1",
+  "build": 11,
+  "changelog": [
+    "v1.1 fix: Accordion-Layout-Korrektur + alle geschlossen",
+    "v1.1 feat: FAQ + Leistungen als <details> Accordions mit Schema.org"
+  ],
   "dateModified": "2025-11-11T23:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z",
   "architecture": {
