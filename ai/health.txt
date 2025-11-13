@@ -1,0 +1,24 @@
+{
+  "status": "ok",
+  "message": "AI data endpoints are accessible",
+  "timestamp": "2025-11-11T21:09:00Z",
+  "dateModified": "2025-11-11T21:09:00Z",
+  "endpoints": {
+    "manifest": "https://jan-erik-andersen.de/ai/manifest.json",
+    "services": "https://jan-erik-andersen.de/ai/services.json",
+    "portfolio": "https://jan-erik-andersen.de/ai/portfolio.json",
+    "identity": "https://jan-erik-andersen.de/ai/identity-schema.json",
+    "identity_brand": "https://jan-erik-andersen.de/ai/identity.json",
+    "content": "https://jan-erik-andersen.de/ai/content.json",
+    "publications": "https://jan-erik-andersen.de/ai/publications.json",
+    "profile": "https://jan-erik-andersen.de/ai/profile.json",
+    "health": "https://jan-erik-andersen.de/ai/health.json",
+    "blog_feed": "https://jan-erik-andersen.de/blog/feed.json",
+    "faq": "https://jan-erik-andersen.de/faq.json"
+  },
+  "test": {
+    "instructions": "If you can read this, all JSON endpoints should be accessible.",
+    "expected_http_status": 200,
+    "expected_content_type": "application/json"
+  }
+}
