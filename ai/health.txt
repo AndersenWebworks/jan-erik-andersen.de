@@ -11,7 +11,7 @@
     "identity_txt": "https://jan-erik-andersen.de/ai/identity.txt",
     "faq_schema": "https://jan-erik-andersen.de/ai/faq-schema.json",
     "health": "https://jan-erik-andersen.de/ai/health.json",
-    "barrierefreiheit": "https://jan-erik-andersen.de/barrierefreiheit.html"
+    "barrierefreiheit": "https://jan-erik-andersen.de/de/barrierefreiheit.html"
   },
   "test": {
     "instructions": "Fetch each endpoint with Accept: application/json (or text/plain for *.txt).",

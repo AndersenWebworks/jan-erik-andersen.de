@@ -2,16 +2,16 @@
   "@context": "https://schema.org",
   "@type": "ItemList",
   "name": "Leistungen",
-  "description": "GEO-Optimierung + BFSG-Konformität für Deutschland",
-  "dateModified": "2025-11-13T00:00:00Z",
+  "description": "GEO-Optimierung individuell nach Projekt",
+  "dateModified": "2025-11-15T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z",
   "itemListElement": [
     {
       "@type": "Service",
-      "@id": "https://jan-erik-andersen.de/#service-struktur-audit-bfsg",
+      "@id": "https://jan-erik-andersen.de/#service-bestand",
       "serviceType": "Consulting",
-      "name": "Struktur-Audit + BFSG-Check",
-      "description": "Live-Test mit ChatGPT + WCAG 2.1 AA-Prüfung. ChatGPT-Test (Was sieht der Agent?), Kontrast-Prüfung (4.5:1 für Text), Semantik-Check (HTML-Struktur), Tastaturnavigation-Test. Ergebnis: 1-seitiger Maßnahmenplan + BFSG-Compliance-Report.",
+      "name": "Bestands-Website optimieren",
+      "description": "Startseite wird AI-lesbar. Rest bleibt. Audit: Live-Test mit ChatGPT. Struktur: Semantisches HTML, JSON-LD, Definition Lists. BFSG: Kontrast-Prüfung, Tastaturnavigation. Ergebnis: AI-sichtbar + WCAG 2.1 AA-konform.",
       "provider": {
         "@type": "Person",
         "name": "Jan-Erik Andersen"
@@ -20,30 +20,14 @@
         "@type": "Country",
         "name": "Deutschland"
       },
-      "availableLanguage": ["German", "English"],
-      "offers": {
-        "@type": "Offer",
-        "availability": "https://schema.org/InStock",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "EUR",
-          "price": "auf Anfrage"
-        }
-      },
-      "additionalProperty": [
-        {
-          "@type": "PropertyValue",
-          "name": "Dauer",
-          "value": "3-5 Tage"
-        }
-      ]
+      "availableLanguage": ["German", "English"]
     },
     {
       "@type": "Service",
-      "@id": "https://jan-erik-andersen.de/#service-geo-bfsg-compliance",
+      "@id": "https://jan-erik-andersen.de/#service-neubau",
       "serviceType": "Web Development",
-      "name": "GEO + BFSG-Compliance-Paket",
-      "description": "Vollständige Optimierung für AI-Sichtbarkeit + Barrierefreiheit. Semantisches HTML + JSON-LD, WCAG 2.1 AA-Konformität, Barrierefreiheits-Erklärung, Feedback-Prozess (BFSG-Pflicht), Dokumentation + Schulung. Ergebnis: AI-sichtbar + BFSG-konform + SEO-optimiert.",
+      "name": "Neue Website AI-native aufbauen",
+      "description": "Website wird von Grund auf AI-optimiert. Architektur: Onepager mit allen Key Facts. Technologie: JAMstack (GitHub Pages, Netlify). Struktur: Semantisches HTML, strukturierte Daten, 0 JavaScript. Ergebnis: Vollständig AI-lesbar, BFSG-konform, wartbar.",
       "provider": {
         "@type": "Person",
         "name": "Jan-Erik Andersen"
@@ -52,30 +36,14 @@
         "@type": "Country",
         "name": "Deutschland"
       },
-      "availableLanguage": ["German", "English"],
-      "offers": {
-        "@type": "Offer",
-        "availability": "https://schema.org/InStock",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "EUR",
-          "price": "auf Anfrage"
-        }
-      },
-      "additionalProperty": [
-        {
-          "@type": "PropertyValue",
-          "name": "Dauer",
-          "value": "2-4 Wochen"
-        }
-      ]
+      "availableLanguage": ["German", "English"]
     },
     {
       "@type": "Service",
-      "@id": "https://jan-erik-andersen.de/#service-brand-voice",
-      "serviceType": "Brand Strategy",
-      "name": "Brand Voice Definition",
-      "description": "Tonalität für AI-Dialoge – konsistente Repräsentation. Tonalitäts-Profil für AI-Antworten, Antwortmuster, FAQ-Struktur, Handkuratierte Key Facts. Ergebnis: Konsistente AI-Repräsentation Ihrer Marke.",
+      "@id": "https://jan-erik-andersen.de/#service-fullservice",
+      "serviceType": "Web Development",
+      "name": "Full-Service (Design + Entwicklung)",
+      "description": "GEO + vollständige Website-Entwicklung. Umfang: Beratung, Design, Entwicklung, Hosting-Setup, Content-Kuration. Technologie: Nach Projektanforderung. GEO-Integration: Von Anfang an AI-optimiert. Ergebnis: Vollständige Website, AI-lesbar, BFSG-konform.",
       "provider": {
         "@type": "Person",
         "name": "Jan-Erik Andersen"
@@ -84,23 +52,7 @@
         "@type": "Country",
         "name": "Deutschland"
       },
-      "availableLanguage": ["German", "English"],
-      "offers": {
-        "@type": "Offer",
-        "availability": "https://schema.org/InStock",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "EUR",
-          "price": "auf Anfrage"
-        }
-      },
-      "additionalProperty": [
-        {
-          "@type": "PropertyValue",
-          "name": "Dauer",
-          "value": "1-2 Wochen"
-        }
-      ]
+      "availableLanguage": ["German", "English"]
     }
   ]
 }

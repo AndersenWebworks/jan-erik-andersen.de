@@ -3,57 +3,28 @@
   "@type": "Person",
   "@id": "https://jan-erik-andersen.de/#person",
   "name": "Jan-Erik Andersen",
-  "jobTitle": "GEO Expert | AI Search Optimization Specialist",
-  "description": "Spezialist für GEO (Generative Engine Optimization). Macht Websites für ChatGPT, Perplexity und Gemini sichtbar. Strukturierte Daten, AI-lesbare Inhalte, Citation-Optimierung.",
+  "jobTitle": "GEO-Spezialist",
+  "description": "Ich mache Websites für ChatGPT, Perplexity und Gemini sichtbar. Strukturierte Daten, semantisches HTML, AI-lesbare Inhalte.",
   "url": "https://jan-erik-andersen.de",
   "email": "mail@andersen-webworks.de",
+  "telephone": "+4938733270015",
   "sameAs": [
     "https://linkedin.com/in/jan-erik-andersen",
     "https://andersen-webworks.de"
   ],
   "knowsAbout": [
     "GEO (Generative Engine Optimization)",
-    "AI Search Optimization",
-    "ChatGPT Optimization",
-    "Structured Data",
+    "Strukturierte Daten",
+    "Semantisches HTML",
+    "WCAG 2.1",
     "JSON-LD",
-    "Schema.org",
-    "Semantic HTML",
-    "Citation Optimization",
-    "AI-Readable Content"
+    "Schema.org"
   ],
   "worksFor": {
     "@type": "Organization",
     "name": "Andersen Webworks",
-    "description": "GEO Optimization & AI Search Consulting",
     "url": "https://andersen-webworks.de"
   },
-  "offers": [
-    {
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": "Struktur-Audit",
-        "description": "Live-Test mit ChatGPT und Analyse der Website-Struktur."
-      }
-    },
-    {
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": "GEO-Optimierung",
-        "description": "Website-Optimierung für ChatGPT, Perplexity, Gemini. Strukturierte Daten, AI-lesbare Inhalte."
-      }
-    },
-    {
-      "@type": "Offer",
-      "itemOffered": {
-        "@type": "Service",
-        "name": "Brand Voice Definition",
-        "description": "Tonalität für AI-Dialoge. Antwortmuster, konsistente Repräsentation."
-      }
-    }
-  ],
   "address": {
     "@type": "PostalAddress",
     "addressCountry": "DE"
@@ -63,6 +34,6 @@
     "contactType": "Professional Inquiry",
     "availableLanguage": ["German", "English"]
   },
-  "dateModified": "2025-11-13T00:00:00Z",
+  "dateModified": "2025-11-15T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z"
 }
