@@ -22,18 +22,27 @@ jobs:
       - name: Generate .txt mirrors for JSON files
         run: |
           # Copy all JSON files to .txt with identical content
-          find ai blog -name "*.json" -type f | while read file; do
-            cp "$file" "${file%.json}.txt"
-            echo "Generated: ${file%.json}.txt"
+          for dir in ai blog; do
+            if [ -d "$dir" ]; then
+              find "$dir" -name "*.json" -type f | while read file; do
+                cp "$file" "${file%.json}.txt"
+                echo "Generated: ${file%.json}.txt"
+              done
+            else
+              echo "Skipping missing directory: $dir"
+            fi
           done
 
       - name: Generate .txt mirrors for Markdown files
         run: |
-          # Copy all MD files to .txt
-          find blog -name "*.md" -type f | while read file; do
-            cp "$file" "${file%.md}.txt"
-            echo "Generated: ${file%.md}.txt"
-          done
+          if [ -d blog ]; then
+            find blog -name "*.md" -type f | while read file; do
+              cp "$file" "${file%.md}.txt"
+              echo "Generated: ${file%.md}.txt"
+            done
+          else
+            echo "Skipping Markdown mirrors (blog/ fehlt)"
+          fi
 
       - name: Commit and push if changed
         run: |

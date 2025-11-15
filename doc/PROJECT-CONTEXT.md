@@ -20,10 +20,12 @@
 
 ## Wichtigste Dateien (ZUERST LESEN)
 
-1. **[README.md](../README.md)** — Projekt-Übersicht, Status, Struktur
-2. **[LEARNINGS.md](../LEARNINGS.md)** — KRITISCH: Alle Erkenntnisse aus dem Projekt
-3. **[GITHUB-PAGES-SETUP.md](../GITHUB-PAGES-SETUP.md)** — Hosting-Setup
-4. **[verify/README.md](../verify/README.md)** — Test-Dokumentation
+1. **[doc/README.md](README.md)** — Dokumentations-Übersicht (Start hier!)
+2. **[doc/LEARNINGS.md](LEARNINGS.md)** — KRITISCH: Alle Erkenntnisse (3 Phasen)
+3. **[doc/ARCHITECTURE.md](ARCHITECTURE.md)** — AI-Native Web Prinzipien
+4. **[doc/SSOT-PIPELINE.md](SSOT-PIPELINE.md)** — Datenfluss & Synchronisation
+5. **[doc/MEASUREMENT.md](MEASUREMENT.md)** — Semantic Survival Rate & Tests
+6. **[doc/FETCH-TEMPLATES.md](FETCH-TEMPLATES.md)** — Developer-Integration
 
 ---
 
@@ -70,21 +72,19 @@ git push origin main
 
 ```
 jan-erik-andersen.de/
-├── index.html              # Homepage (Person Schema eingebettet)
-├── faq.html + faq.json     # FAQ (FAQPage Schema)
-├── blog/                   # Blog (feed.json + BlogPosting Schema)
-├── ai/                     # Strukturierte Daten (JSON-LD, JSON)
-│   ├── manifest.jsonld     # Person/Organization
-│   ├── services.json       # Services + Pricing
-│   ├── portfolio.json      # Projects
-│   ├── identity.json       # Brand voice
-│   ├── index.json          # Data catalog
-│   └── health.json         # Health check
-├── content/                # Markdown content
-│   ├── philosophy.md
-│   └── 2030-web.md
-├── verify/                 # Test-Dokumentation
-└── robots.txt, sitemap.xml # SEO
+├── index.html / en/index.html  # Onepager (de/en)
+├── barrierefreiheit.html       # BFSG-Erklärung
+├── datenschutz.html / impressum.html
+├── en/accessibility.html / en/privacy.html / en/imprint.html
+├── ai/                         # Strukturierte Daten (JSON-LD + Plain-Text)
+│   ├── manifest.json           # Endpoint-Index
+│   ├── services.json / services.txt
+│   ├── identity-schema.json / identity.txt
+│   ├── faq-schema.json
+│   └── health.json
+├── doc/                        # Dokumentation
+├── verify/                     # Test-Dokumentation
+└── robots.txt, sitemap.xml     # SEO
 ```
 
 ---
@@ -105,15 +105,13 @@ git push origin main
 # 3. Warte 1-2 Min → Live
 ```
 
-### Neuen Blog-Post hinzufügen
+### AI-Daten & Plain-Text spiegeln
 
-1. Erstelle `blog/new-post.md` (Markdown)
-2. Erstelle `blog/new-post.json` (BlogPosting Schema)
-3. Erstelle `blog/new-post.html` (HTML Fallback)
-4. Update `blog/feed.json` (füge neuen Post hinzu)
-5. Commit & Push
+1. JSON-Datei anpassen (`ai/services.json`, `ai/identity-schema.json`, `ai/faq-schema.json`, …)
+2. Passende `.txt`-Spiegel manuell synchron halten (`ai/services.txt`, `ai/identity.txt`)
+3. Commit & Push — GitHub Action generiert nur zusätzliche Spiegel, wenn Verzeichnisse existieren (keine Blog-Abhängigkeit mehr)
 
-**Muster:** Siehe `blog/google-zero.*`
+**WICHTIG:** Siehe [SSOT-PIPELINE.md](SSOT-PIPELINE.md) für Synchronisations-Regeln und Konsistenz-Checks
 
 ### AI-Agent testen
 
@@ -284,5 +282,17 @@ git push origin main
 
 ---
 
+---
+
+## 🔗 Weiterführende Dokumentation
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** — Voice Loss → Structure Persistence, Drei-Layer-Architektur
+- **[LEARNINGS.md](LEARNINGS.md)** — Chronologische Erkenntnisse (3 Phasen)
+- **[SSOT-PIPELINE.md](SSOT-PIPELINE.md)** — Single Source of Truth & Synchronisation
+- **[MEASUREMENT.md](MEASUREMENT.md)** — Semantic Survival Rate, AI-Native Checkliste
+- **[FETCH-TEMPLATES.md](FETCH-TEMPLATES.md)** — Endpoint-Discovery, Developer-Integration
+
+---
+
 **Projekt-Status:** ✅ Abgeschlossen, dokumentiert, production-ready
-**Zuletzt aktualisiert:** 7. November 2025
+**Zuletzt aktualisiert:** 15. November 2025

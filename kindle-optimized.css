@@ -33,16 +33,50 @@
 }
 
 /* ==========================================================================
+   Accessibility Helpers
+   ========================================================================== */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  background: var(--text);
+  color: var(--bg);
+  padding: var(--space-xs) var(--space-sm);
+  text-decoration: none;
+  transform: translateY(-200%);
+  transition: transform 0.2s ease;
+  z-index: 100;
+  font-weight: 600;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
    Dark Mode Toggle (CSS-Only)
    ========================================================================== */
 
 .darkmode-checkbox {
   position: absolute;
+  width: 1px;
+  height: 1px;
   opacity: 0;
-  pointer-events: none;
 }
 
-/* Manual Dark Mode Override */
 body:has(.darkmode-checkbox:checked) {
   --bg: #1c1c1c;
   --text: #d4d4d4;
@@ -55,16 +89,21 @@ body:has(.darkmode-checkbox:checked) {
 }
 
 /* Toggle Icon Visibility */
-.darkmode-checkbox:checked ~ .controls label .icon-light {
+.theme-toggle .icon-dark {
   display: none;
 }
 
-.darkmode-checkbox:checked ~ .controls label .icon-dark {
+.theme-toggle:has(.darkmode-checkbox:checked) .icon-light {
+  display: none;
+}
+
+.theme-toggle:has(.darkmode-checkbox:checked) .icon-dark {
   display: inline;
 }
 
-.controls label .icon-dark {
-  display: none;
+.theme-toggle:has(.darkmode-checkbox:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 /* ==========================================================================

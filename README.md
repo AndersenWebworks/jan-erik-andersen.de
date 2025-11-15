@@ -44,7 +44,8 @@ AI-Onepager mit allen Key Facts. Semantisch, strukturiert, handkuratiert.
 - ✅ **AI-Onepager** (alle Inhalte auf einer Seite)
 - ✅ **Semantisches HTML** (`<dl>`, `<section>`, `<article>`)
 - ✅ **JSON-LD** im `<head>` (Person, FAQPage, Offers)
-- ✅ **WCAG 2.1 AA-konform** (Kontrast 17.40:1, Tastaturnavigation)
+- ✅ **Plain-Text-Mirrors** (Identity & Services als .txt)
+- ✅ **WCAG 2.1 AA-baseline** (Skip-Link, Tastaturnavigation, Dark-Mode-Toggle)
 - ✅ **CSS-Only Dark Mode** (0 JavaScript)
 - ✅ **Framework-frei**, kein Build-Prozess
 
@@ -91,8 +92,10 @@ jan-erik-andersen.de/
 ├─ ai/
 │  ├─ manifest.json              # Endpoint-Index
 │  ├─ identity-schema.json       # Person Schema.org
+│  ├─ identity.txt               # Plain-Text Identity
 │  ├─ faq-schema.json            # FAQPage Schema.org
-│  └─ services.json              # Leistungen
+│  ├─ services.json              # Leistungen
+│  └─ services.txt               # Plain-Text Leistungen
 ├─ doc/
 │  ├─ README.md                  # 📚 HAUPTDOKUMENTATION
 │  ├─ LEARNINGS.md               # Erkenntnisse (GEO = BFSG = SEO)
@@ -177,9 +180,9 @@ Wer keine semantische Signatur hat, ist **unsichtbar**.
 - Alle Services, Preise, Kontakt korrekt
 
 ✅ **BFSG-Compliance:**
-- WCAG 2.1 AA-konform
+- WCAG 2.1 AA-Basis (Skip-Link, Fokus-Stile, Dark-Mode-Toggle per Checkbox)
 - Kontrast 17.40:1 (Text), 5.89:1 (Akzente)
-- Barrierefreiheits-Erklärung vorhanden
+- Barrierefreiheits-Erklärung + Feedback-Prozess vorhanden
 
 ✅ **Technisch:**
 - W3C-validiert
@@ -191,10 +194,10 @@ Wer keine semantische Signatur hat, ist **unsichtbar**.
 
 ## Status
 
-**Version:** 1.1
-**Status:** 🚀 Live — GEO + BFSG optimiert
+**Version:** 1.4
+**Status:** 🚀 Live — GEO + BFSG optimiert (Skip-Link + Plain-Text-Mirrors)
 **URL:** [jan-erik-andersen.de](https://jan-erik-andersen.de)
-**Letztes Update:** 13. November 2025
+**Letztes Update:** 15. November 2025
 
 ---
 

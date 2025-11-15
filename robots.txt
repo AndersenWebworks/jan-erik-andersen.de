@@ -17,32 +17,26 @@ AI-Manifest-Mirror: https://raw.githubusercontent.com/AndersenWebworks/jan-erik-
 # ============================================
 # AI-READABLE ENDPOINTS (Machine Discovery)
 # ============================================
-# For AI agents and LLMs: Start here for structured data
-#
-# Central Manifest:
+# Startpunkt für strukturierte Daten:
 # https://jan-erik-andersen.de/ai/manifest.json
-#
-# Mirror (always accessible):
+# Mirror:
 # https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/manifest.json
 #
-# Available Endpoints:
-# https://jan-erik-andersen.de/ai/identity-schema.json - Person (Schema.org) with Offers
-# https://jan-erik-andersen.de/ai/faq-schema.json      - FAQPage (Schema.org)
-# https://jan-erik-andersen.de/ai/services.json        - Services with pricing
-# https://jan-erik-andersen.de/ai/identity.json        - Brand identity & voice
-# https://jan-erik-andersen.de/ai/portfolio.json       - Portfolio & references
-# https://jan-erik-andersen.de/ai/content.json         - Content index
-# https://jan-erik-andersen.de/ai/health.json          - System status
+# Primäre Endpoints:
+# https://jan-erik-andersen.de/ai/identity-schema.json  (Schema.org Person)
+# https://jan-erik-andersen.de/ai/services.json         (Services als ItemList)
+# https://jan-erik-andersen.de/ai/services.txt          (Plain-Text Services)
+# https://jan-erik-andersen.de/ai/health.json           (Status)
+# https://jan-erik-andersen.de/ai/faq-schema.json       (FAQPage)
+# https://jan-erik-andersen.de/ai/identity.txt          (Plain-Text Identity)
 
-# Wichtige strukturierte Daten (explizit erlaubt)
+# Wichtige strukturierte Daten explizit erlauben
 Allow: /ai/
-Allow: /content/
-Allow: /blog/
 
-# JSON/JSON-LD Dateien explizit crawlbar
+# JSON/JSON-LD/Text Dateien
 Allow: /*.json
 Allow: /*.jsonld
-Allow: /*.md
+Allow: /*.txt
 
 # Unwichtige Dateien blockieren
 Disallow: /verify/
@@ -58,8 +52,6 @@ User-agent: Bingbot
 User-agent: Googlebot
 Crawl-delay: 1
 Allow: /ai/
-Allow: /content/
-Allow: /blog/
 Allow: /*.json
 Allow: /*.jsonld
-Allow: /*.md
+Allow: /*.txt

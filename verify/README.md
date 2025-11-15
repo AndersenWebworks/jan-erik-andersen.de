@@ -38,7 +38,7 @@ Dieses Verzeichnis enthält alle Tests, Validierungen und Messungen für den MVP
 
 1. ✅ HTML validiert (W3C Validator via html-validate)
 2. ✅ JSON-LD validiert (Schema.org Validator)
-3. ✅ Strukturierte Daten getestet (ai/manifest.jsonld, faq.json, etc.)
+3. ✅ Strukturierte Daten getestet (ai/manifest.json, ai/faq-schema.json, etc.)
 4. ✅ AI Agent Test durchgeführt (6/6 korrekt)
 
 **Ergebnis:** Technisch sound, bereit für Indexierung.

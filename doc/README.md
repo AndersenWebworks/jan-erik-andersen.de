@@ -1,342 +1,138 @@
 # Projekt-Dokumentation
 
 **jan-erik-andersen.de**
-GEO-optimierter AI-Onepager | BFSG-konform | Stand: 2025-11-13
+GEO-optimierter AI-Onepager | BFSG-konform | Stand: 2025-11-15
 
+---
+Version: 1.3
+Letztes Update: 2025-11-15
+Autor: Jan-Erik Andersen
 ---
 
 ## 📚 Dokumentations-Übersicht
 
 | Datei | Zweck | Für wen? |
 |-------|-------|----------|
-| **[LEARNINGS.md](LEARNINGS.md)** | Erkenntnisse aus dem Projekt (GEO = BFSG = SEO = ein Prinzip) | Alle |
-| **[ARCHITECTURE.md](ARCHITECTURE.md)** | AI-Native Web Architecture, technische Prinzipien | Entwickler |
-| **[PROJECT-CONTEXT.md](PROJECT-CONTEXT.md)** | Kontext für Claude-Instanzen, Troubleshooting | Claude/AI |
+| **[LEARNINGS.md](LEARNINGS.md)** | Chronologische Erkenntnisse (3 Phasen) | Alle |
+| **[ARCHITECTURE.md](ARCHITECTURE.md)** | AI-Native Web Prinzipien + Voice Loss | Entwickler |
+| **[SSOT-PIPELINE.md](SSOT-PIPELINE.md)** | Datenfluss & Synchronisation | Entwickler |
+| **[MEASUREMENT.md](MEASUREMENT.md)** | Semantic Survival Rate & Tests | Marketing/QA |
+| **[FETCH-TEMPLATES.md](FETCH-TEMPLATES.md)** | Developer-Integration | Entwickler |
+| **[PROJECT-CONTEXT.md](PROJECT-CONTEXT.md)** | Claude-Kontext & Troubleshooting | AI/Claude |
 
 ---
 
-## 🎯 Kern-Erkenntnisse
+## 🎯 Kern-Erkenntnis
 
-### Ein Prinzip löst alles
-
-**GEO, BFSG, SEO, Google Zero = nicht vier Optimierungen, sondern EIN Prinzip:**
-
+**Ein Prinzip löst alles:**
 ```
-Handkuratierter Text
-  ├─ Semantisches HTML
-  ├─ Fehlerfreiheit
-  ├─ Präzision
-  ├─ Konsistenz
-  └─ Struktur
-      ├─ GEO (AI-Agenten lesen)
-      ├─ BFSG (Screenreader lesen)
-      ├─ SEO (Google versteht besser)
-      ├─ Google Zero (Snippets extrahierbar)
-      └─ Citation-Rate (Agenten zitieren)
+Handkuratierter Text + Semantisches HTML + Struktur
+→ GEO (AI-Agents) + BFSG (Screenreader) + SEO (Google) + Citation-Rate
 ```
 
-**Basis:**
-- Alle Systeme (AI-Agenten, Screenreader, Google, Snippet-Parser) brauchen:
-  1. **Semantisches HTML** (`<dl>`, `<section>`, `<article>`)
-  2. **Klare Sprache** (Präzision > Generik)
-  3. **Logischer Aufbau** (Hierarchie: `<h1>` → `<h2>` → `<h3>`)
-  4. **Fehlerfreiheit** (Trust Signal)
-
-**Details:** Siehe [LEARNINGS.md](LEARNINGS.md)
+**Details:** [LEARNINGS.md](LEARNINGS.md) — Phase 2, Erkenntnis #6
 
 ---
 
 ## 🧱 Technische Architektur
 
-### AI-Onepager-Prinzip
+### Drei-Layer-Prinzip
 
-**Problem:** AI-Agents fetchen nur **eine URL** pro Antwort (Single-Fetch-Prinzip)
+1. **HTML** (Visible Hybrid Layer) — Für Menschen UND Maschinen
+2. **JSON-LD** (Semantic Metadata im `<head>`) — Für Crawler & Knowledge Graphs
+3. **JSON + .txt** (Optional Enhancement `/ai/*.json + .txt`) — Für Parser & CLI-Bots
 
-**Lösung:** Alle Inhalte auf einer Seite
-
-**Traditionelle Multi-Page-Website:**
-```
-/ → Startseite (Teaser)
-/services/ → Details
-/contact/ → Kontakt
-/faq/ → FAQ
-```
-→ **AI-Agent sieht nur Teaser**
-
-**GEO-optimierte Architektur:**
-```
-/ → Alle Key Facts auf einer Seite
-    ├─ Services (mit Preisen)
-    ├─ Kontakt
-    ├─ FAQ
-    └─ Prozess
-```
-→ **AI-Agent sieht alles beim ersten Fetch**
-
-### Drei-Layer-Architektur
-
-**Layer 1: Visible Hybrid Layer (HTML)**
-- Semantisches HTML für Menschen UND Maschinen
-- Alle Inhalte auf einer Seite
-- Natürlichsprachliche Formulierungen
-
-**Layer 2: Semantic Metadata Layer (JSON-LD im `<head>`)**
-- Schema.org Person, FAQPage, Offers
-- Für Crawler-Indexierung, Knowledge Graphs
-
-**Layer 3: Optional Enhancement Layer (/ai/*.json)**
-- Services, Content, Health, Publications
-- Für erweiterte Integration
-- Experimentell
-
-**Details:** Siehe [ARCHITECTURE.md](ARCHITECTURE.md)
-
----
-
-## 💡 Barrierefreiheitsstärkungsgesetz (BFSG)
-
-### GEO erfüllt automatisch 80% der BFSG-Anforderungen
-
-**Gesetz gilt ab:** 28. Juni 2025
-**Anforderungen:** WCAG 2.1 Level AA
-**Strafen:** Bis 100.000 €
-
-| **GEO-Maßnahme** | **BFSG-Anforderung** | **Match?** |
-|------------------|---------------------|------------|
-| Semantisches HTML | WCAG 1.3.1 (Info & Relationships) | ✅ 100% |
-| Strukturierte Daten | WCAG 4.1.2 (Name, Role, Value) | ✅ 100% |
-| Keine JavaScript-Abhängigkeit | WCAG 4.1.2 (Robust) | ✅ 100% |
-| Klare Überschriften | WCAG 2.4.6 (Headings & Labels) | ✅ 100% |
-| Logische Struktur | WCAG 1.3.2 (Meaningful Sequence) | ✅ 100% |
-
-**Zusätzlich nötig:**
-- Kontrast-Prüfung (min. 4.5:1)
-- Tastaturnavigation + Fokus-Indikatoren
-- ARIA-Labels
-- Alt-Texte
-- Barrierefreiheits-Erklärung
-
-**Praktisches Beispiel:** [/barrierefreiheit.html](../barrierefreiheit.html)
+**Details:** [ARCHITECTURE.md](ARCHITECTURE.md) — Drei-Layer-Architektur
 
 ---
 
 ## 🔧 Technische Specs
 
-### Stack
+**Stack:**
+- HTML5 (semantisch, 0 JavaScript)
+- CSS (Dark Mode via `prefers-color-scheme`)
+- JSON-LD (Schema.org compliant)
+- Plain-Text Fallbacks (`.txt` für Screenreader/CLI)
+- Hosting: GitHub Pages (AI-friendly, keine ModSecurity)
 
-- **HTML5** (semantisch, W3C-validiert)
-- **CSS** (0 JavaScript, Dark Mode via prefers-color-scheme)
-- **JSON-LD** (Schema.org compliant)
-- **Hosting:** GitHub Pages (AI-friendly, keine ModSecurity-Blockierung)
+**Dateienstruktur:** Siehe [PROJECT-CONTEXT.md](PROJECT-CONTEXT.md) — Projekt-Struktur
 
-### Dateien-Struktur
+---
 
-```
-jan-erik-andersen.de/
-├─ index.html                    # DE Onepager
-├─ en/index.html                 # EN Onepager
-├─ barrierefreiheit.html         # BFSG-Erklärung (WCAG 2.1 AA)
-├─ kindle-optimized.css          # 0 JS Dark Mode
-├─ ai/
-│  ├─ manifest.json + .txt       # Endpoint-Index
-│  ├─ identity-schema.json + .txt # Person Schema.org
-│  ├─ faq-schema.json + .txt     # FAQPage Schema.org
-│  └─ services.json + .txt       # Services + Pricing
-├─ doc/
-│  ├─ README.md                  # Diese Datei
-│  ├─ LEARNINGS.md               # Erkenntnisse
-│  ├─ ARCHITECTURE.md            # Architektur
-│  └─ PROJECT-CONTEXT.md         # Claude-Kontext
-├─ verify/                       # Tests
-└─ tools/                        # Scripts
-```
+## 📊 Success Metrics
+
+- ✅ **Semantic Survival Rate > 95%** → [MEASUREMENT.md](MEASUREMENT.md)
+- ✅ **WCAG 2.1 AA konform** → [/barrierefreiheit.html](../barrierefreiheit.html)
+- ✅ **Lighthouse Score > 95**
+- ✅ **Citation-Rate Tracking** → [MEASUREMENT.md](MEASUREMENT.md)
 
 ---
 
 ## 🧪 Tests & Validierung
 
-### Lokal testen
-
+**AI-Agent Test:**
 ```bash
-python -m http.server 8000
-open http://localhost:8000
-```
-
-### AI-Agent Test
-
-**ChatGPT fragen:**
-```
-"Was bietet Jan-Erik Andersen an? Nenne Services und Preise."
+# Frage an ChatGPT/Claude:
+"Sieh dir jan-erik-andersen.de an – was erfährst du über Jan-Erik Andersen?"
 ```
 
 **Erwartete Antwort:**
-- Struktur-Audit (3-5 Tage, Maßnahmenplan)
-- GEO + BFSG-Compliance (2-4 Wochen)
-- Brand Voice Definition (1-2 Wochen)
+- Beruf: GEO Expert, Webdesigner
+- Ort: Deutschland
+- Services: Struktur-Audit, GEO-Optimierung, BFSG-Compliance
+- Preise: 400-600 EUR, 2.400-12.000 EUR, 1.800-4.800 EUR
 - Kontakt: mail@andersen-webworks.de
 
-### Validierung
-
-```bash
-# W3C Validator
-https://validator.w3.org/
-
-# Schema.org Validator
-https://validator.schema.org/
-
-# Lighthouse
-lighthouse https://jan-erik-andersen.de
-
-# WCAG Checker
-https://wave.webaim.org/
-```
-
-**Ziele:**
-- Lighthouse > 95
-- 0 HTML-Fehler
-- 0 Schema.org-Warnungen
-- WCAG 2.1 AA-konform
+**Checkliste:** [MEASUREMENT.md](MEASUREMENT.md) — AI-Native Site Checkliste
 
 ---
 
-## 📊 Deployment
-
-### GitHub Pages (automatisch)
+## 🚀 Deployment
 
 ```bash
+# Änderungen machen
 git add -A
 git commit -m "Update"
 git push origin main
-# → Live nach 1-2 Minuten
+
+# → Live nach 1-2 Minuten auf https://jan-erik-andersen.de
 ```
 
-**Kein Build-Prozess. Statische Dateien.**
-
-### Wichtige Links
-
-- **Live Site:** https://jan-erik-andersen.de
-- **GitHub Repo:** https://github.com/AndersenWebworks/jan-erik-andersen.de
-- **Google Search Console:** https://search.google.com/search-console
+**Details:** [PROJECT-CONTEXT.md](PROJECT-CONTEXT.md) — Deployment-Workflow
 
 ---
 
-## 📈 Success Metrics
+## 📦 Wichtigste Learnings
 
-### Für Menschen
+### Phase 1: Infrastruktur (6.-7. Nov)
+- Traditional Hosting blockiert AI-Agents → JAMstack nutzen
+- GitHub Pages ist AI-friendly
+- git push = Deployment
 
-✅ Landingpage überzeugt ohne Vorkenntnisse
-✅ Klare Schmerzpunkte → Lösungen → CTAs
-✅ Dark Mode funktioniert ohne JavaScript
+### Phase 2: Empirische Tests (13. Nov)
+- GEO = BFSG = SEO = ein Prinzip (Struktur + Wahrheit)
+- Handkuratierte Texte > AI-Texte
+- Accessibility braucht sichtbare Patterns (Skip-Link, Dark-Mode-Toggle)
 
-### Für AI-Agenten
+### Phase 3: Systemische Konsequenzen (15. Nov)
+- Voice Loss → Structure Persistence (Content ist Datenträger)
+- Semantic Survival Rate als Metrik (Ziel: > 95%)
+- SSOT-Pipeline erforderlich (JSON ↔ .txt synchronisiert)
 
-✅ ChatGPT, Claude, Perplexity geben präzise Antworten
-✅ Alle Services, Preise, Kontakt korrekt
-✅ Single-Fetch: alle Infos auf einer Seite
-
-### BFSG-Compliance
-
-✅ WCAG 2.1 AA-konform
-✅ Kontrast 17.40:1 (Text), 5.89:1 (Akzente)
-✅ Tastaturnavigation 100%
-✅ Barrierefreiheits-Erklärung vorhanden
-
-### Technisch
-
-✅ W3C-validiert
-✅ Schema.org-compliant
-✅ Lighthouse > 95
-✅ 0 Bytes JavaScript
+**Vollständige Details:** [LEARNINGS.md](LEARNINGS.md)
 
 ---
 
-## 🎓 Wichtigste Learnings
+## 🔗 Wichtige Links
 
-### 1. Traditional Hosting blockiert AI-Agents
+**Live Site:** https://jan-erik-andersen.de
+**GitHub Repo:** https://github.com/AndersenWebworks/jan-erik-andersen.de
+**Google Search Console:** https://search.google.com/search-console
 
-**Problem:** ModSecurity/WAF auf Shared Hosting blockiert AI-Fetcher (HTTP 400)
-
-**Lösung:** JAMstack (GitHub Pages, Netlify, Cloudflare Pages)
-
-### 2. GEO = BFSG = SEO = Ein Prinzip
-
-**Nicht vier Services. Eine Optimierung mit mehreren Effekten.**
-
-**Basis:** Semantisches HTML + Strukturierte Daten + Handkuratierte Texte
-
-**Ergebnis:**
-- AI-Agenten zitieren (GEO)
-- Screenreader lesen (BFSG)
-- Google versteht besser (SEO)
-- Featured Snippets automatisch (Google Zero)
-
-### 3. Handkuratierte Texte > AI-Texte > Fehlerhafte Texte
-
-**Warum Agenten handkuratierte Texte bevorzugen:**
-1. Fehlerfreiheit = Trust Signal
-2. Präzision schlägt Generik
-3. Konsistenz = Credibility
-4. Struktur schlägt Prosa
-
-### 4. Barrierefreiheit ist nicht nur Compliance
-
-**AI-Agenten lesen wie Screenreader:**
-- Beide ignorieren CSS/Design
-- Beide brauchen semantische Struktur
-- Beide folgen linearem Inhalt
-
-**GEO-Optimierung = 80% BFSG-Compliance automatisch**
-
----
-
-## 💰 Kosten & ROI
-
-### Hosting-Vergleich
-
-| Aspekt | Traditional Hosting | GitHub Pages |
-|--------|---------------------|--------------|
-| Kosten | 5€/Monat | ✅ Kostenlos |
-| AI-Access | ❌ Blockiert (ModSecurity) | ✅ Funktioniert |
-| CDN | ❌ Nein | ✅ Global CDN |
-| SSL | 0€ (inklusive) | ✅ Let's Encrypt |
-| **Total/Jahr** | **60€** | **0€** |
-
-### Service-Positionierung
-
-**Alt:** "Wir machen Ihre Website AI-ready" (vage)
-
-**Neu:** "Wir optimieren Ihre Website für Struktur. Das Ergebnis: AI-sichtbar, BFSG-konform, SEO-optimiert, Snippet-ready."
-
-**Preis:** 2.400 EUR (GEO + BFSG-Compliance-Paket)
-
-**Deliverables:**
-- GEO-Optimierung (Semantisches HTML, JSON-LD)
-- WCAG 2.1 AA-Audit (Kontrast, Tastatur, Semantik)
-- Barrierefreiheits-Erklärung
-- Feedback-Prozess
-- Dokumentation
-
----
-
-## 🚀 Nächste Schritte
-
-### Kurzfristig
-
-- [ ] Google Search Console: Request Indexing
-- [ ] Monitoring für AI-Citations
-- [ ] A/B-Testing für CTAs
-
-### Mittelfristig
-
-- [ ] Google Rich Results testen (nach Crawling)
-- [ ] ChatGPT Custom Domain (nach Domain-Trust, 7-14 Tage)
-- [ ] Featured Snippets tracken
-
-### Langfristig
-
-- [ ] Case Studies von echten Kunden
-- [ ] Blogpost: "GEO + BFSG: Ein Prinzip"
-- [ ] LinkedIn-Kampagne
+**Validierung:**
+- W3C Validator: https://validator.w3.org/
+- Schema.org Validator: https://validator.schema.org/
+- WCAG Checker: https://wave.webaim.org/
 
 ---
 
@@ -345,6 +141,7 @@ git push origin main
 **Technische Fragen:** Siehe [ARCHITECTURE.md](ARCHITECTURE.md)
 **Erkenntnisse:** Siehe [LEARNINGS.md](LEARNINGS.md)
 **Claude-Kontext:** Siehe [PROJECT-CONTEXT.md](PROJECT-CONTEXT.md)
+**Developer-Integration:** Siehe [FETCH-TEMPLATES.md](FETCH-TEMPLATES.md)
 
 **Owner:** Jan-Erik Andersen
 **Email:** mail@andersen-webworks.de
@@ -352,6 +149,6 @@ git push origin main
 
 ---
 
-**Version:** 1.1
-**Status:** 🚀 Live — GEO + BFSG optimiert
-**Letztes Update:** 13. November 2025
+**Version:** 1.3
+**Status:** 🚀 Live — GEO + BFSG + SSOT optimiert
+**Letztes Update:** 15. November 2025

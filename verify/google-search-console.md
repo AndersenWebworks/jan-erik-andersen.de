@@ -89,7 +89,7 @@
 1. `https://jan-erik-andersen.de/`
 2. `https://jan-erik-andersen.de/faq.html`
 3. `https://jan-erik-andersen.de/blog/google-zero.html`
-4. `https://jan-erik-andersen.de/ai/manifest.jsonld`
+4. `https://jan-erik-andersen.de/ai/manifest.json`
 
 **Für jede URL:**
 1. Klicke "URL Inspection" (oben)

@@ -165,13 +165,14 @@
   <link rel="stylesheet" href="../kindle-optimized.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <input type="checkbox" id="darkmode-toggle" class="darkmode-checkbox" aria-hidden="true">
-
-  <div class="controls">
-    <label for="darkmode-toggle" class="control-btn" aria-label="Toggle Dark Mode" title="Toggle Dark Mode">
-      <span class="icon-light">☀️</span>
-      <span class="icon-dark">🌙</span>
+  <div class="controls" role="navigation" aria-label="Utility navigation">
+    <label class="control-btn theme-toggle" title="Toggle dark mode">
+      <input type="checkbox" id="darkmode-toggle" class="darkmode-checkbox" aria-label="Toggle dark mode">
+      <span class="sr-only">Toggle dark mode</span>
+      <span class="icon-light" aria-hidden="true">☀️</span>
+      <span class="icon-dark" aria-hidden="true">🌙</span>
     </label>
     <a href="/" class="control-btn" aria-label="Switch to German">DE</a>
   </div>

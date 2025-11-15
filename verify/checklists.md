@@ -16,7 +16,7 @@
 
 ## 2) JSON-LD Validierung
 
-- [ ] manifest.jsonld durch Schema.org Validator geprüft
+- [ ] manifest.json durch Schema.org Validator geprüft
 - [ ] Typ "Person" korrekt verwendet
 - [ ] Pflichtfelder vorhanden (name, description)
 - [ ] Keine Schema-Fehler

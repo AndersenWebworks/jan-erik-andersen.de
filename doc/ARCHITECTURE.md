@@ -2,9 +2,9 @@
 
 **Erkenntnisse und Architektur-Prinzipien — Stand November 2025**
 
-Version: 1.1
+Version: 1.3
 Autor: Jan-Erik Andersen
-Letztes Update: 2025-11-12
+Letztes Update: 2025-11-15
 
 ---
 
@@ -41,7 +41,7 @@ Traditionelle Multi-Page-Websites mit `/services/`, `/contact/`, `/faq/` funktio
 **UX-Optimierung:**
 - CSS-basierte Interaktivität (0 JS erforderlich)
 - `<details>` / Accordions für optionale Inhalte
-- Sticky Navigation, smooth scrolling
+- Skip-Link & Utility Controls (Dark-Mode-Toggle, Sprachwechsel) vor dem Header
 - Menschen: mehrere Views. Maschinen: ein DOM.
 
 ### Service-Positionierung: GEO statt SEO
@@ -148,6 +148,7 @@ Externe JSON-Endpoints werden von Live-Query-Agents fast nie direkt gefetcht, au
 **Prinzipien:**
 - Semantische Elemente: `<dl>`, `<section>`, `<article>`, `<nav>`
 - Key-Value-Paare für strukturierte Daten
+- Skip-Link + Utility Controls vor dem Header (WCAG 2.4.1 / 2.4.4)
 - Natürlichsprachliche Formulierungen (dialog-tauglich)
 - FAQ-Format für direkte Antworten
 - Keine versteckten Daten, keine Cloaking-Tricks
@@ -201,24 +202,27 @@ Externe JSON-Endpoints werden von Live-Query-Agents fast nie direkt gefetcht, au
 
 ---
 
-### Layer 3: Optional Enhancement Layer (JSON-Endpoints)
+### Layer 3: Optional Enhancement Layer (JSON + Plain-Text)
 
-**Zweck:** Zukunftssicherheit und erweiterte Integration
+**Zweck:** Strukturierte Rohdaten und Fallbacks für Agenten, die HTML nicht vollständig parsen (oder JSON bevorzugen).
 
 **Implementierung:**
 ```
-/ai/manifest.json          → Zentraler Index
-/ai/identity-schema.json   → Person (Schema.org) mit Offers
-/ai/faq-schema.json        → FAQPage (Schema.org)
-/ai/services.json          → Detaillierte Service-Beschreibungen
-/ai/agent-instructions.json → Presentation Guidelines (experimentell)
+ai/
+├── manifest.json         → Discovery (mit GitHub Raw Mirror)
+├── services.json / .txt  → Leistungen als ItemList + Plain-Text
+├── identity-schema.json  → Person Schema.org
+├── identity.txt          → Plain-Text Profile
+├── faq-schema.json       → FAQPage Schema.org
+└── health.json           → Status & Linkübersicht
 ```
 
 **Prinzipien:**
-- Mirror-URLs zu GitHub Raw für bessere Erreichbarkeit
-- Meta-Tags und Link-Tags für Discovery
-- Robots.txt Extensions (experimentell)
+- Mirror-URLs zu GitHub Raw für bessere Erreichbarkeit (Whitelist-Domains)
+- Plain-Text-Spiegel für einfache Parser / CLI-Bots
+- Robots.txt + `<link rel="alternate">` deklarieren die Endpoints
 - Versionierung und Timestamps
+- SSOT-Synchronisation (siehe [SSOT-PIPELINE.md](SSOT-PIPELINE.md))
 
 **Zielgruppe:**
 - Fortgeschrittene AI-Integration
@@ -226,7 +230,7 @@ Externe JSON-Endpoints werden von Live-Query-Agents fast nie direkt gefetcht, au
 - Zukünftige Standards
 - Developer-Tools
 
-**Status:** Experimentell, nicht für Production kritisch
+**Status:** ✅ Live seit 13. November 2025 (siehe [FETCH-TEMPLATES.md](FETCH-TEMPLATES.md))
 
 ---
 
@@ -503,6 +507,241 @@ validate_graph("https://jan-erik-andersen.de/ai/manifest.json")
 
 ---
 
+## 🔬 LLM-Fetch-Behavior: Empirische Erkenntnisse
+
+### Was LLMs beim Website-Fetch wirklich tun
+
+**Wenn du sagst „sieh dir die Website an", ruft ein LLM:**
+1. **Nur die Startseite** (`/`) — **keine Unterseiten**
+2. **Vollständigen HTML-Body** — **ohne Rendering:**
+   - Keine Bilder, kein CSS, keine Layout-Informationen
+   - Keine interaktive Navigation
+   - Keine nachgeladenen Inhalte (JS)
+3. **Nur den reinen Text + Meta-Tags**
+
+**Interne Verarbeitung:**
+- Der Text wird automatisch **komprimiert** („lossy compression")
+- LLM **liest 1:1**, aber **zeigt nie 1:1** (nur zusammengefasste Reproduktion)
+- Kompression entfernt Redundanz, Menütexte, Buttons
+- Was ein LLM „verstanden" hat, **stimmt nicht 1:1 mit dem Originaltext überein**
+
+**Bedeutung für das AI-native Web:**
+- LLMs interpretieren Websites, sie „beschreiben Struktur", nicht Realität
+- Sie folgen **keinen Links** und **keinen Unterseiten**
+- **Eine Website muss alles Wichtige auf einer einzigen Seite enthalten** → Fetch = Verständnis
+- Bestätigt die Grundidee: **„Eine Seite, ein Fetch, vollständiges Wissen"**
+
+### Unterschied der drei Testseiten
+
+| Website | Struktur | Lesbarkeit für LLMs | Effizienz |
+|---------|----------|---------------------|-----------|
+| **andersenwebworks.github.io/annemarie-andersen.de** | Single Page, statisch, textlastig | Sehr hoch | 🥇 Ideal |
+| **annemarie-andersen.de** | Mehrseitig, designorientiert | Mittel | 🥈 Gut |
+| **wbg-pooling.eu** | Klassische Unternehmensseite mit Unterseiten | Niedrig | 🥉 Schwach |
+
+**Schlussfolgerung:**
+- Die GitHub-Version ist am besten fetchbar, am wenigsten interpretierbar, am klarsten maschinenlesbar
+- Sie erfüllt perfekt die *AI-native-Web-Philosophie* (Single-Source-of-Truth, semantisch dicht, redundant-arm)
+
+### GEO-Optimierung für LLM-Lesbarkeit
+
+**Weil LLMs keine strukturierte Crawl-Datenbank aufbauen, sondern Text verstehen müssen:**
+
+1. **Orte müssen im Text vorkommen**, nicht nur in Metadaten
+2. **Funktionsbezug:** Städte und Regionen sollen logisch zur Handlung gehören („unsere Anlage in Damme verarbeitet …")
+3. **Früh im DOM platzieren** → oberhalb des Folds
+4. **Natürlich redundante Wiederholung**, nicht Keyword-Stuffing
+5. **Structured Data als ergänzender Layer**, nicht Ersatz
+6. **Messmethode:** Frage ein LLM nach der Region — wenn es die Antwort kennt, funktioniert die GEO-Optimierung
+
+### Designprinzipien für AI-native Seiten
+
+1. **Alles Relevante in einer Seite** (z.B. `/all`)
+2. **Hohe Informationsdichte** — jeder Satz trägt Fakten, keine Füllwörter
+3. **Strukturierte Layer (JSON-LD)** als maschinenlesbare Redundanz
+4. **Top-Down-Priorität:** Wichtiges oben im HTML
+5. **Verlustarme Sprache:** Keine Doppeldeutigkeit, keine Platzhalter
+6. **Fetch Behavior Awareness:** Seite muss so geschrieben sein, dass ein LLM-Agent sie ohne Interpretation korrekt versteht
+
+### Metaphysische Erkenntnis
+
+**These „Stop Teaching Your AI Agents – Make Them Unable to Fail" wird empirisch bestätigt:**
+- Die Schwäche liegt **nicht im Agenten**, sondern **im Systemdesign**
+- Wer die Website so strukturiert, dass sie **nicht falsch verstanden werden kann**, eliminiert Fehlinterpretation durch Architektur
+
+**Kurz gesagt:**
+> ✅ LLMs sehen nur Text der Startseite
+> ✅ Sie fassen ihn automatisch zusammen
+> ✅ Nur hochstrukturierte, flache, textdominante Seiten überstehen diese Kompression ohne Sinnverlust
+> ✅ GEO-Information, Preise, Leistungen, Identität müssen im Fließtext stehen
+> ✅ Die GitHub-Architektur ist aktuell das effektivste Format für maschinelles Verstehen
+
+---
+
+## 🧬 Voice Loss → Structure Persistence
+
+### Das Paradigma
+
+**Problem: Lossy Compression vernichtet Tonalität**
+
+LLMs komprimieren automatisch beim Fetch (siehe [LLM-Fetch-Behavior](#-llm-fetch-behavior-empirische-erkenntnisse)):
+- Stilistische Merkmale (Tonalität, Voice, Markensprache) gehen verloren
+- Redundanz wird entfernt
+- Nur **Struktur + Fakten** überleben
+
+**Beispiel:**
+```html
+<!-- Original (200 Zeichen) -->
+<p>Wir sind ein innovatives Unternehmen mit langjähriger Erfahrung,
+das kundenorientierte Lösungen anbietet und höchste Qualität garantiert.</p>
+
+<!-- Was LLM extrahiert (20 Zeichen) -->
+"Unternehmen, Lösungen"
+```
+
+**→ 90% Informationsverlust**
+
+---
+
+### Die Lösung: Struktur als Träger von Bedeutung
+
+**Content ist kein Kommunikationsmedium mehr, sondern Datenträger.**
+
+Traditionell:
+- Text = Überzeugung durch Stil
+- Differenzierung = Tonalität
+
+**AI-native:**
+- Text = Fakten-Container
+- Differenzierung = **deterministische DOM-Ordnung**
+
+**Praktisch:**
+```html
+<!-- ❌ Traditionell: Tonalität wird komprimiert -->
+<p>Mit unserer einzigartigen Expertise helfen wir Ihnen...</p>
+
+<!-- ✅ AI-native: Struktur überlebt -->
+<dl>
+  <dt>Expertise:</dt>
+  <dd>20 Jahre Webdesign</dd>
+  <dt>Spezialisierung:</dt>
+  <dd>GEO-Optimierung, BFSG-Compliance</dd>
+</dl>
+```
+
+**Ergebnis:**
+- Traditionell: "hilft mit Expertise" (vage)
+- AI-native: "20 Jahre Webdesign, GEO-Optimierung, BFSG-Compliance" (konkret)
+
+---
+
+### Architektur-Konsequenzen
+
+#### 1. Texte müssen verlustfrei semantisierbar sein
+
+**Regel:** Jede kritische Information muss strukturiert UND textuell vorhanden sein.
+
+```html
+<!-- Struktur (überlebt Compression) -->
+<dl>
+  <dt>Preis:</dt>
+  <dd>2.400-12.000 EUR</dd>
+</dl>
+
+<!-- Textuell (für Menschen lesbar) -->
+<p>Die GEO-Optimierung kostet zwischen 2.400 und 12.000 EUR, abhängig vom Projektumfang.</p>
+```
+
+**Beide Formen sind redundant, aber nicht widersprüchlich.**
+
+#### 2. Keine CSS-abhängigen Informationen
+
+```html
+<!-- ❌ Schlecht: Info nur im CSS -->
+<div class="price"></div>
+<style>
+.price::after { content: "2.400 EUR"; }
+</style>
+
+<!-- ✅ Gut: Info im HTML -->
+<div class="price">2.400 EUR</div>
+```
+
+#### 3. Keine Bilder als Text-Alternative
+
+```html
+<!-- ❌ Schlecht: Preis nur im Bild -->
+<img src="pricing.jpg" alt="Preise">
+
+<!-- ✅ Gut: Preis im Text + Bild optional -->
+<dl>
+  <dt>Preis:</dt>
+  <dd>2.400 EUR</dd>
+</dl>
+<img src="pricing.jpg" alt="Visualisierung der Preise" aria-hidden="true">
+```
+
+#### 4. Redundanz ist Sicherheit
+
+**Klassisches Webdesign:** "DRY" (Don't Repeat Yourself)
+
+**AI-native Web:** "Redundant but Consistent"
+
+**Begründung:**
+- Preis im Fließtext UND in JSON-LD = **Bestätigung**
+- Nicht widersprüchlich, sondern **validierend**
+- LLMs **prüfen** Informationen gegen mehrere Quellen
+- Konsistente Redundanz = **Vertrauenssignal**
+
+**Siehe:** [SSOT-PIPELINE.md](SSOT-PIPELINE.md) für Synchronisations-Regeln
+
+---
+
+### AI-Branding: Struktur als Stimme
+
+**Traditionelles Branding:**
+- Tonalität (z.B. "Du"-Form vs. "Sie"-Form)
+- Sprachmelodie
+- Stilistische Eigenheiten
+
+**AI-Branding:**
+- Wiederkehrende semantische Muster
+- Konsistente DOM-Struktur
+- Deterministische Datenorganisation
+
+**Beispiel:**
+
+Andersen Webworks wird erkannt an:
+- `<dl>` für Services, Preise, Kontakt (konsistent)
+- Reihenfolge: Name → Leistung → Preis → Dauer → Kontakt
+- Plain-Text-Mirrors für alle kritischen Daten
+
+**LLM lernt:**
+"Diese Struktur = Andersen Webworks" (nicht die Tonalität)
+
+---
+
+### Praktische Umsetzung
+
+#### Checkliste für Voice-Loss-Resistenz
+
+- [ ] Alle kritischen Informationen in strukturierten HTML-Elementen (`<dl>`, `<table>`, `<ul>`)
+- [ ] Preise, Orte, Kontakte **früh im DOM** (oberhalb Fold)
+- [ ] JSON-LD **bestätigt** HTML-Text (nicht ersetzt)
+- [ ] Plain-Text-Mirrors für Services, Identity (siehe [SSOT-PIPELINE.md](SSOT-PIPELINE.md))
+- [ ] Keine JavaScript-Abhängigkeit für kritische Inhalte
+- [ ] Keine CSS-generated-content für Fakten
+
+#### Messung der Überlebensrate
+
+**Semantic Survival Rate (SSR):** Prozentsatz der Informationen, die nach LLM-Fetch korrekt bleiben.
+
+**Test:** Siehe [MEASUREMENT.md](MEASUREMENT.md)
+
+**Zielwert:** SSR > 95%
+
+---
+
 ## 🧠 Strategische Implikation: "Google Zero"
 
 ### Paradigmenwechsel
@@ -770,6 +1009,24 @@ AI-Agents fetchen nur die Hauptseite → der Rest bleibt unsichtbar.
 ---
 
 ## 📝 Changelog
+
+**v1.3 (2025-11-15)**
+- Voice Loss → Structure Persistence Konzept dokumentiert
+- AI-Branding: Struktur als Stimme (statt Tonalität)
+- Architektur-Konsequenzen: 4 zentrale Regeln
+- Checkliste für Voice-Loss-Resistenz
+- Semantic Survival Rate Integration (siehe MEASUREMENT.md)
+- Querverweise zu neuen Dokumenten (SSOT-PIPELINE, MEASUREMENT, FETCH-TEMPLATES)
+- Layer 3 Status aktualisiert: "Experimentell" → "Live seit 13. Nov 2025"
+
+**v1.2 (2025-11-15)**
+- LLM-Fetch-Behavior: Empirische Erkenntnisse dokumentiert
+- Single-Fetch-Prinzip: Eine Seite = vollständiges Wissen
+- Lossy Compression: LLMs fassen Text automatisch zusammen
+- GEO-Optimierung für LLM-Lesbarkeit (Orte, Struktur, Messmethode)
+- Designprinzipien für AI-native Seiten erweitert
+- Testseiten-Vergleich (GitHub vs. Multi-Page vs. Corporate)
+- Metaphysische Bestätigung: "Unable to Fail" durch strukturelles Design
 
 **v1.1 (2025-11-12)**
 - Cloaking vs. Progressive Enhancement Sektion hinzugefügt

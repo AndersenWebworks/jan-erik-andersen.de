@@ -1,0 +1,21 @@
+Name: Jan-Erik Andersen
+Role: GEO Expert | AI Search Optimization Specialist
+Company: Andersen Webworks
+Location: Germany (remote)
+Email: mail@andersen-webworks.de
+Phone: +49 38733 270015
+Languages: German, English
+
+Summary:
+- Spezialisiert auf Generative Engine Optimization (GEO) für ChatGPT, Claude, Perplexity, Gemini.
+- Baut AI-Onepager auf semantischem HTML + JSON-LD Basis.
+- Fokus: Strukturierte Daten, BFSG/WCAG 2.1 AA, Citation-Rate.
+
+Core Services:
+1) Struktur-Audit + BFSG-Check
+2) GEO + BFSG-Compliance-Paket
+3) Brand Voice Definition
+
+Contact Promise:
+- Antwort innerhalb von 24h.
+- Live-Demo (15 Minuten) ohne Verpflichtung.

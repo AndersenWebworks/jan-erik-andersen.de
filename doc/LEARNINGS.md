@@ -1,12 +1,24 @@
 # Learnings: AI-native Web Architecture MVP
 
 **Projekt:** jan-erik-andersen.de
-**Zeitraum:** 6. November 2025
+**Zeitraum:** 6.-15. November 2025
 **Status:** Live auf GitHub Pages
 
 ---
 
-## 🎯 Kern-Erkenntnisse
+## 📚 Übersicht
+
+Dieses Dokument fasst alle empirischen Erkenntnisse aus drei Entwicklungsphasen zusammen:
+
+1. **Phase 1 (6.-7. Nov):** Infrastruktur & Hosting-Learnings
+2. **Phase 2 (13. Nov):** Empirische Fetch-Behavior-Tests & BFSG-Integration
+3. **Phase 3 (15. Nov):** Systemische Konsequenzen & Architektur-Formalisierung
+
+---
+
+## Phase 1: Infrastruktur-Learnings (6.-7. November 2025)
+
+### Kern-Erkenntnisse
 
 ### 1. Traditional Hosting blockiert AI-Agents
 
@@ -75,9 +87,8 @@
 
 **Was funktioniert:**
 - ✅ Person Schema in index.html (eingebettet)
-- ✅ FAQPage Schema in faq.html (eingebettet)
-- ✅ BlogPosting Schema in blog/google-zero.html (eingebettet)
-- ✅ Separate JSON-Dateien für AI-Agents
+- ✅ FAQPage Schema direkt im Onepager (Accordion + JSON-LD)
+- ✅ Separate JSON-Dateien + Plain-Text-Spiegel für AI-Agents
 
 **Was nicht getestet werden konnte:**
 - ⏳ Google Rich Results (braucht Indexierung)
@@ -111,6 +122,17 @@ git push
 ```
 
 **Vorteil:** Einfacher, schneller, sicherer.
+
+### 6. Accessibility braucht sichtbare Patterns
+
+**Problem:** Aussagen wie "WCAG-konform" werden unglaubwürdig, wenn Skip-Link, Fokus-Stile oder manuelle Toggles fehlen.
+
+**Lösung:**
+- Skip-Link vor dem Header (sichtbar bei Fokus)
+- Dark-Mode-Toggle als native Checkbox (kein JS, tastaturfähig)
+- Plain-Text-Mirror für Identity & Services (für Screenreader/CLI)
+
+**Ergebnis:** Aussagen im README/auf der Startseite stimmen mit der tatsächlichen Umsetzung überein.
 
 ---
 
@@ -248,9 +270,9 @@ git push
 **Deployment:** git push origin main
 
 **Dateien:**
-- 4 HTML (index, faq, blog/index, blog/google-zero)
-- 12 JSON/JSONLD (ai/*, blog/*, faq.json)
-- 2 MD (content/*)
+- HTML: Onepager (de/en) + Rechtstexte (Impressum, Datenschutz, Barrierefreiheit)
+- JSON/JSON-LD: ai/manifest, ai/services, ai/identity, ai/faq, ai/health
+- Plain-Text: ai/identity.txt, ai/services.txt (Fallback)
 - sitemap.xml, robots.txt
 - Dokumentation (verify/*, README.md, etc.)
 
@@ -311,7 +333,7 @@ git push
 
 ---
 
-## 🔄 Neue Erkenntnisse (13. November 2025)
+## Phase 2: Empirische Fetch-Behavior-Tests (13. November 2025)
 
 ### 6. GEO = BFSG = SEO = Google Zero (Ein Prinzip)
 
@@ -673,5 +695,71 @@ Hauptseite (index.html) um BFSG-Section + FAQ erweitern.
 
 ---
 
+## Phase 3: Systemische Konsequenzen (15. November 2025)
+
+### 10. Voice Loss → Structure Persistence
+
+**Konzept:** Content ist kein Kommunikationsmedium mehr, sondern **Datenträger**.
+
+**Empirische Basis:**
+- LLMs komprimieren Text automatisch (Lossy Compression)
+- Tonalität, Stil, Markensprache gehen verloren
+- Nur **Struktur + Fakten** überleben
+
+**Architektur-Konsequenz:**
+→ Differenzierung erfolgt durch **deterministische DOM-Ordnung**, nicht Sprachstil
+
+**Siehe:** [ARCHITECTURE.md](ARCHITECTURE.md) — Voice Loss → Structure Persistence
+
+---
+
+### 11. Semantic Survival Rate als zentrale Metrik
+
+**Definition:**
+```
+SSR = (korrekt extrahierte Informationen / total relevante Informationen) × 100%
+```
+
+**Zielwert:** > 95% für AI-native Websites
+
+**Messmethode:**
+1. LLM fetcht Seite
+2. Standardisierte Fragen (Services, Preise, Kontakt, Geo)
+3. Validierung gegen Expected-Output
+
+**Siehe:** [MEASUREMENT.md](MEASUREMENT.md)
+
+---
+
+### 12. SSOT-Pipeline erforderlich
+
+**Problem:** Inkonsistente Daten zwischen HTML, JSON-LD, Plain-Text führen zur Abwertung.
+
+**Lösung:** Single Source of Truth mit synchronisierten Mirrors
+
+**Architektur:**
+```
+manifest.json (SSOT)
+    ↓
+services.json ↔ services.txt (synchron halten)
+identity-schema.json ↔ identity.txt
+```
+
+**Siehe:** [SSOT-PIPELINE.md](SSOT-PIPELINE.md)
+
+---
+
+### 13. Fetch-Templates für Developer-Integration
+
+**Standard-Endpoint-Discovery:**
+- `/ai/manifest.json` als zentrale Quelle
+- `<link rel="alternate">` im HTML-Header
+- GitHub Raw URLs als Fallback
+
+**Siehe:** [FETCH-TEMPLATES.md](FETCH-TEMPLATES.md)
+
+---
+
 **Datum:** 6. November 2025
-**Update:** 13. November 2025 — BFSG-Compliance & Struktur-Prinzip
+**Update 1:** 13. November 2025 — BFSG-Compliance & Struktur-Prinzip
+**Update 2:** 15. November 2025 — Systemische Konsequenzen & Architektur-Formalisierung

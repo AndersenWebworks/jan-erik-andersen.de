@@ -65,7 +65,7 @@ Eine Website mit strukturierten Daten (JSON-LD, Schema.org) ermöglicht AI-Agent
 ### A) AI-native Website (jan-erik-andersen.de)
 
 **Eigenschaften:**
-- ✅ Schema.org Person in `ai/manifest.jsonld`
+- ✅ Schema.org Person in `ai/manifest.json`
 - ✅ Strukturierte Services in `ai/services.json`
 - ✅ FAQPage Schema in `faq.json`
 - ✅ BlogPosting Schema in `blog/google-zero.json`

@@ -98,18 +98,13 @@ curl -I https://jan-erik-andersen.de/ai/services.json \
 ```bash
 #!/bin/bash
 endpoints=(
-  "https://jan-erik-andersen.de/ai/manifest.jsonld"
+  "https://jan-erik-andersen.de/ai/manifest.json"
   "https://jan-erik-andersen.de/ai/services.json"
-  "https://jan-erik-andersen.de/ai/portfolio.json"
-  "https://jan-erik-andersen.de/ai/identity.json"
-  "https://jan-erik-andersen.de/ai/index.json"
+  "https://jan-erik-andersen.de/ai/services.txt"
+  "https://jan-erik-andersen.de/ai/identity-schema.json"
+  "https://jan-erik-andersen.de/ai/identity.txt"
+  "https://jan-erik-andersen.de/ai/faq-schema.json"
   "https://jan-erik-andersen.de/ai/health.json"
-  "https://jan-erik-andersen.de/blog/feed.json"
-  "https://jan-erik-andersen.de/blog/google-zero.json"
-  "https://jan-erik-andersen.de/blog/google-zero.md"
-  "https://jan-erik-andersen.de/faq.json"
-  "https://jan-erik-andersen.de/content/philosophy.md"
-  "https://jan-erik-andersen.de/content/2030-web.md"
 )
 
 echo "Testing all endpoints..."
@@ -150,16 +145,16 @@ AI-Agenten können Daten von jedem Origin aus aufrufen.
 
 **Test:**
 ```bash
-curl -I https://jan-erik-andersen.de/ai/manifest.jsonld | grep "Content-Type"
+curl -I https://jan-erik-andersen.de/ai/manifest.json | grep "Content-Type"
 curl -I https://jan-erik-andersen.de/ai/services.json | grep "Content-Type"
-curl -I https://jan-erik-andersen.de/blog/google-zero.md | grep "Content-Type"
+curl -I https://jan-erik-andersen.de/ai/services.txt | grep "Content-Type"
 ```
 
 **Erwartung:**
 ```
-Content-Type: application/ld+json; charset=utf-8
 Content-Type: application/json; charset=utf-8
-Content-Type: text/markdown; charset=utf-8
+Content-Type: application/json; charset=utf-8
+Content-Type: text/plain; charset=utf-8
 ```
 
 ---
@@ -252,18 +247,13 @@ curl -I https://jan-erik-andersen.de/ai/services.json
 
 | Endpoint | Status | Content-Type |
 |----------|--------|--------------|
-| ai/manifest.jsonld | 200 OK | application/ld+json |
+| ai/manifest.json | 200 OK | application/json |
 | ai/services.json | 200 OK | application/json |
-| ai/portfolio.json | 200 OK | application/json |
-| ai/identity.json | 200 OK | application/json |
-| ai/index.json | 200 OK | application/json |
+| ai/services.txt | 200 OK | text/plain |
+| ai/identity-schema.json | 200 OK | application/ld+json |
+| ai/identity.txt | 200 OK | text/plain |
+| ai/faq-schema.json | 200 OK | application/ld+json |
 | ai/health.json | 200 OK | application/json |
-| blog/feed.json | 200 OK | application/json |
-| blog/google-zero.json | 200 OK | application/json |
-| blog/google-zero.md | 200 OK | text/markdown |
-| faq.json | 200 OK | application/json |
-| content/philosophy.md | 200 OK | text/markdown |
-| content/2030-web.md | 200 OK | text/markdown |
 
 **CORS:** ✅ Aktiviert (Access-Control-Allow-Origin: *)
 
