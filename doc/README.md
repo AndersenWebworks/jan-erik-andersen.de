@@ -4,9 +4,23 @@
 GEO-optimierter AI-Onepager | BFSG-konform | Stand: 2025-11-15
 
 ---
-Version: 1.3
+Version: 1.3 (aus [/ai/manifest.json](../ai/manifest.json))
 Letztes Update: 2025-11-15
 Autor: Jan-Erik Andersen
+Sprache: Deutsch (DE) – alle `/doc` Dateien
+---
+
+## 📖 Empfohlene Lesereihenfolge
+
+Für neue Entwickler oder AI-Agents:
+1. **[README.md](README.md)** ← Du bist hier – Vision & Überblick
+2. **[ARCHITECTURE.md](ARCHITECTURE.md)** – Systemdesign & Prinzipien
+3. **[SSOT-PIPELINE.md](SSOT-PIPELINE.md)** – Technische Implementierung
+4. **[FETCH-TEMPLATES.md](FETCH-TEMPLATES.md)** – Praktische Code-Beispiele
+5. **[MEASUREMENT.md](MEASUREMENT.md)** – Validierung & Metriken
+6. **[LEARNINGS.md](LEARNINGS.md)** – Philosophie & Erkenntnisse
+7. **[PROJECT-CONTEXT.md](PROJECT-CONTEXT.md)** – Meta-Kontext & Troubleshooting
+
 ---
 
 ## 📚 Dokumentations-Übersicht

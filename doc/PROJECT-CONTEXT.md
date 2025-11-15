@@ -77,7 +77,7 @@ jan-erik-andersen.de/
 ├── datenschutz.html / impressum.html
 ├── en/accessibility.html / en/privacy.html / en/imprint.html
 ├── ai/                         # Strukturierte Daten (JSON-LD + Plain-Text)
-│   ├── manifest.json           # Endpoint-Index
+│   ├── /ai/manifest.json       # Endpoint-Index (SSOT)
 │   ├── services.json / services.txt
 │   ├── identity-schema.json / identity.txt
 │   ├── faq-schema.json

@@ -739,7 +739,7 @@ SSR = (korrekt extrahierte Informationen / total relevante Informationen) × 100
 
 **Architektur:**
 ```
-manifest.json (SSOT)
+/ai/manifest.json (SSOT)
     ↓
 services.json ↔ services.txt (synchron halten)
 identity-schema.json ↔ identity.txt

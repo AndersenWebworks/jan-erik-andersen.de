@@ -7,7 +7,15 @@
       "Bash(git push:*)",
       "Bash(git pull:*)",
       "Bash(curl:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(git cherry-pick:*)",
+      "Bash(mkdir:*)",
+      "Bash(git mv:*)",
+      "Bash(rmdir:*)",
+      "Bash(node scripts/sync-json-to-txt.js:*)",
+      "Bash(git rebase:*)",
+      "Bash(cat:*)",
+      "Bash(git diff:*)"
     ],
     "deny": [],
     "ask": []

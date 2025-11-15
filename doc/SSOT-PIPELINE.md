@@ -24,7 +24,7 @@ services.txt sagt: "Preis: 2.500-12.000 EUR"
 
 **Lösung: SSOT-Pipeline**
 ```
-manifest.json (SSOT — zentrale Wahrheit)
+/ai/manifest.json (SSOT — zentrale Wahrheit)
     ↓
 services.json ↔ services.txt (synchron halten)
 identity-schema.json ↔ identity.txt
@@ -181,7 +181,7 @@ Das Validierungsscript liegt in `tools/validate-ssot.py`. Vor jedem Commit/Push:
 
 ### Vor jedem Commit prüfen:
 
-- [ ] **manifest.json** enthält alle Endpoints
+- [ ] **/ai/manifest.json** enthält alle Endpoints
 - [ ] **services.json** ↔ **services.txt** identisch (Preise, Namen, Dauer)
 - [ ] **identity-schema.json** ↔ **identity.txt** identisch (Name, Email, Ort)
 - [ ] **faq-schema.json** ↔ HTML-Accordion identisch (Fragen, Antworten)
