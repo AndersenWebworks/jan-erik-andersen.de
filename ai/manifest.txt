@@ -1,14 +1,22 @@
 {
-  "site": "jan-erik-andersen.de",
-  "version": "v1.3",
-  "build": 13,
+  "site": {
+    "domain": "jan-erik-andersen.de",
+    "name": "Jan-Erik Andersen",
+    "url": "https://jan-erik-andersen.de",
+    "description": "AI-native Web Architect – Websites für Menschen und Maschinen.",
+    "tagline": "Structure as Integrity",
+    "contact": "mail@andersen-webworks.de"
+  },
+  "version": "v1.4",
+  "build": 14,
   "changelog": [
+    "v1.4 fix: Accessibility improvements + .txt Mirrors online",
     "v1.3 feat: AI-Layer JSON-Files mit HTML synchronisiert (FAQ, Services, Identity)",
     "v1.2 feat: .txt-Redundanz entfernt, SSOT-konform (nur .json)",
     "v1.1 fix: Accordion-Layout-Korrektur + alle geschlossen",
     "v1.1 feat: FAQ + Leistungen als <details> Accordions mit Schema.org"
   ],
-  "dateModified": "2025-11-13T00:00:00Z",
+  "dateModified": "2025-11-15T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z",
   "architecture": {
     "version": "1.0",
@@ -32,13 +40,7 @@
         "technologies": ["JSON endpoints", "Mirror URLs", "Agent Instructions"]
       }
     ],
-    "documentation": "https://jan-erik-andersen.de/ai/architecture.md"
-  },
-  "site": {
-    "name": "Jan-Erik Andersen",
-    "url": "https://jan-erik-andersen.de",
-    "description": "AI-native Web Architect – Websites für Menschen und Maschinen.",
-    "tagline": "Structure as Integrity"
+    "documentation": "https://jan-erik-andersen.de/doc/ARCHITECTURE.md"
   },
   "endpoints": [
     {
@@ -72,15 +74,32 @@
       "type": "FAQPage",
       "format": "application/ld+json",
       "description": "Schema.org FAQPage mit häufigen Fragen und Antworten"
+    },
+    {
+      "id": "identity-text",
+      "url": "https://jan-erik-andersen.de/ai/identity.txt",
+      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/identity.txt",
+      "type": "PlainText",
+      "format": "text/plain",
+      "description": "Plain-Text Zusammenfassung für einfache Parser"
+    },
+    {
+      "id": "services-text",
+      "url": "https://jan-erik-andersen.de/ai/services.txt",
+      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/services.txt",
+      "type": "PlainText",
+      "format": "text/plain",
+      "description": "Plain-Text Auflistung der Services"
     }
   ],
   "formats": {
-    "json": "Strukturierte Daten für maschinelle Verarbeitung",
-    "txt": "Plain-Text-Varianten für einfache Parser",
-    "md": "Markdown für längere Inhalte"
+    "json": "Strukturierte Daten für Parser (application/json, application/ld+json)",
+    "txt": "Fallback für einfache Agenten ohne JSON-Support"
   },
   "discovery": {
     "html_meta": "<meta name=\"ai-endpoints\" content=\"https://jan-erik-andersen.de/ai/manifest.json\">",
-    "link_rel": "<link rel=\"alternate\" type=\"application/json\" href=\"https://jan-erik-andersen.de/ai/manifest.json\" title=\"AI Manifest\">"
+    "link_rel": "<link rel=\"alternate\" type=\"application/json\" href=\"https://jan-erik-andersen.de/ai/manifest.json\" title=\"AI Manifest\">",
+    "robots": "AI-Manifest Hinweis in /robots.txt",
+    "sitemap": "https://jan-erik-andersen.de/sitemap.xml"
   }
 }

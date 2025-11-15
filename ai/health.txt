@@ -1,24 +1,21 @@
 {
   "status": "ok",
   "message": "AI data endpoints are accessible",
-  "timestamp": "2025-11-11T21:09:00Z",
-  "dateModified": "2025-11-11T21:09:00Z",
+  "timestamp": "2025-11-15T09:00:00Z",
+  "dateModified": "2025-11-15T00:00:00Z",
   "endpoints": {
     "manifest": "https://jan-erik-andersen.de/ai/manifest.json",
     "services": "https://jan-erik-andersen.de/ai/services.json",
-    "portfolio": "https://jan-erik-andersen.de/ai/portfolio.json",
-    "identity": "https://jan-erik-andersen.de/ai/identity-schema.json",
-    "identity_brand": "https://jan-erik-andersen.de/ai/identity.json",
-    "content": "https://jan-erik-andersen.de/ai/content.json",
-    "publications": "https://jan-erik-andersen.de/ai/publications.json",
-    "profile": "https://jan-erik-andersen.de/ai/profile.json",
+    "services_txt": "https://jan-erik-andersen.de/ai/services.txt",
+    "identity_schema": "https://jan-erik-andersen.de/ai/identity-schema.json",
+    "identity_txt": "https://jan-erik-andersen.de/ai/identity.txt",
+    "faq_schema": "https://jan-erik-andersen.de/ai/faq-schema.json",
     "health": "https://jan-erik-andersen.de/ai/health.json",
-    "blog_feed": "https://jan-erik-andersen.de/blog/feed.json",
-    "faq": "https://jan-erik-andersen.de/faq.json"
+    "barrierefreiheit": "https://jan-erik-andersen.de/barrierefreiheit.html"
   },
   "test": {
-    "instructions": "If you can read this, all JSON endpoints should be accessible.",
+    "instructions": "Fetch each endpoint with Accept: application/json (or text/plain for *.txt).",
     "expected_http_status": 200,
-    "expected_content_type": "application/json"
+    "expected_content_type": "application/json or text/plain"
   }
 }
