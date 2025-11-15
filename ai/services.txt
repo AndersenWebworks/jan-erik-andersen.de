@@ -1,106 +1,29 @@
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "Leistungen",
-  "description": "GEO-Optimierung + BFSG-Konformität für Deutschland",
-  "dateModified": "2025-11-13T00:00:00Z",
-  "datePublished": "2025-11-06T00:00:00Z",
-  "itemListElement": [
-    {
-      "@type": "Service",
-      "@id": "https://jan-erik-andersen.de/#service-struktur-audit-bfsg",
-      "serviceType": "Consulting",
-      "name": "Struktur-Audit + BFSG-Check",
-      "description": "Live-Test mit ChatGPT + WCAG 2.1 AA-Prüfung. ChatGPT-Test (Was sieht der Agent?), Kontrast-Prüfung (4.5:1 für Text), Semantik-Check (HTML-Struktur), Tastaturnavigation-Test. Ergebnis: 1-seitiger Maßnahmenplan + BFSG-Compliance-Report.",
-      "provider": {
-        "@type": "Person",
-        "name": "Jan-Erik Andersen"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Deutschland"
-      },
-      "availableLanguage": ["German", "English"],
-      "offers": {
-        "@type": "Offer",
-        "availability": "https://schema.org/InStock",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "EUR",
-          "price": "auf Anfrage"
-        }
-      },
-      "additionalProperty": [
-        {
-          "@type": "PropertyValue",
-          "name": "Dauer",
-          "value": "3-5 Tage"
-        }
-      ]
-    },
-    {
-      "@type": "Service",
-      "@id": "https://jan-erik-andersen.de/#service-geo-bfsg-compliance",
-      "serviceType": "Web Development",
-      "name": "GEO + BFSG-Compliance-Paket",
-      "description": "Vollständige Optimierung für AI-Sichtbarkeit + Barrierefreiheit. Semantisches HTML + JSON-LD, WCAG 2.1 AA-Konformität, Barrierefreiheits-Erklärung, Feedback-Prozess (BFSG-Pflicht), Dokumentation + Schulung. Ergebnis: AI-sichtbar + BFSG-konform + SEO-optimiert.",
-      "provider": {
-        "@type": "Person",
-        "name": "Jan-Erik Andersen"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Deutschland"
-      },
-      "availableLanguage": ["German", "English"],
-      "offers": {
-        "@type": "Offer",
-        "availability": "https://schema.org/InStock",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "EUR",
-          "price": "auf Anfrage"
-        }
-      },
-      "additionalProperty": [
-        {
-          "@type": "PropertyValue",
-          "name": "Dauer",
-          "value": "2-4 Wochen"
-        }
-      ]
-    },
-    {
-      "@type": "Service",
-      "@id": "https://jan-erik-andersen.de/#service-brand-voice",
-      "serviceType": "Brand Strategy",
-      "name": "Brand Voice Definition",
-      "description": "Tonalität für AI-Dialoge – konsistente Repräsentation. Tonalitäts-Profil für AI-Antworten, Antwortmuster, FAQ-Struktur, Handkuratierte Key Facts. Ergebnis: Konsistente AI-Repräsentation Ihrer Marke.",
-      "provider": {
-        "@type": "Person",
-        "name": "Jan-Erik Andersen"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Deutschland"
-      },
-      "availableLanguage": ["German", "English"],
-      "offers": {
-        "@type": "Offer",
-        "availability": "https://schema.org/InStock",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "priceCurrency": "EUR",
-          "price": "auf Anfrage"
-        }
-      },
-      "additionalProperty": [
-        {
-          "@type": "PropertyValue",
-          "name": "Dauer",
-          "value": "1-2 Wochen"
-        }
-      ]
-    }
-  ]
-}
+Service: Struktur-Audit + BFSG-Check
+Type: Consulting
+Duration: 3-5 Tage
+Deliverables:
+- Live-Test mit ChatGPT (zeigt aktuelle Sichtbarkeit)
+- WCAG 2.1 AA / BFSG Check (Kontrast, Tastatur, Skip-Link, Fokus)
+- Semantik-Analyse der Startseite (HTML, JSON-LD)
+- Tastaturnavigation & Screenreader Smoke-Test
+- Ergebnis: Maßnahmenplan + BFSG-Compliance-Report
+Notes: Keine IT-Ressourcen nötig, 1-2 Abstimmungen reichen.
+
+Service: GEO + BFSG-Compliance-Paket
+Type: Web Development
+Duration: 2-4 Wochen
+Deliverables:
+- Kompletter AI-Onepager (de + optional en)
+- JSON-LD (Person, FAQPage, Offers)
+- Barrierefreiheits-Erklärung + Prozessbeschreibung
+- Feedback-Prozess & Dokumentation für BFSG
+- Ergebnis: AI-sichtbar + rechtssicher + SEO-stabil
+
+Service: Brand Voice Definition
+Type: Brand Strategy
+Duration: 1-2 Wochen
+Deliverables:
+- Tonalitätsprofil für AI-Antworten
+- Antwortmuster + FAQ-Rahmen
+- Handkuratierte Key Facts
+- Styleguide für Konsistenz in AI-Kanälen
