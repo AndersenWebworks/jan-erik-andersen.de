@@ -15,7 +15,9 @@
       "Bash(node scripts/sync-json-to-txt.js:*)",
       "Bash(git rebase:*)",
       "Bash(cat:*)",
-      "Bash(git diff:*)"
+      "Bash(git diff:*)",
+      "Bash(git stash push:*)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []
