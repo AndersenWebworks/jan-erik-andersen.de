@@ -147,10 +147,16 @@
     <h1>Jan-Erik Andersen</h1>
     <p class="tagline">AI-native Web Architect · Senior Consultant · 25+ Jahre Digital</p>
 
+    <div class="hero-statement">
+      <p>Ihre Website rankt bei Google.<br>
+      Aber ChatGPT empfiehlt Ihre Konkurrenten.</p>
+    </div>
+
     <nav aria-label="Hauptnavigation">
       <a href="#shift" class="cta-secondary">Der Shift</a>
       <a href="#google-zero" class="cta-secondary">Google Zero</a>
       <a href="#ai-native" class="cta-secondary">AI-native</a>
+      <a href="#prinzipien" class="cta-secondary">Prinzipien</a>
       <a href="#bfsg" class="cta-secondary">BFSG</a>
       <a href="#wer" class="cta-secondary">Wer</a>
       <a href="#kontakt" class="cta-primary">Kontakt</a>
@@ -223,6 +229,37 @@
 
       <p>Die Richtung ist klar: <strong>Der Klick ist nicht mehr das Zentrum. Die Antwort ist es.</strong></p>
 
+      <h3>Die Lösung</h3>
+
+      <p>Homepage = Executive Summary. Unterseiten = Deep Dive (für Menschen).</p>
+
+      <div class="comparison">
+        <div class="comparison-box">
+          <div class="comparison-title">❌ Multi-Page-Architektur</div>
+          <div class="comparison-content">
+            <code>/ → Willkommen + Teaser</code><br>
+            <code>/services/ → Details hier</code><br>
+            <code>/contact/ → Daten hier</code>
+          </div>
+          <div class="comparison-result">AI-Agent sieht: Teaser.<br>Details unsichtbar.</div>
+        </div>
+
+        <div class="comparison-box success">
+          <div class="comparison-title">✅ AI-native Architektur</div>
+          <div class="comparison-content">
+            <code>/ → Alle Key Facts</code><br>
+            <code>/services/ → Ausführlich (Mensch)</code><br>
+            <code>/contact/ → Optional (Mensch)</code>
+          </div>
+          <div class="comparison-result">AI-Agent sieht: Key Facts.<br>Mensch: Kann tiefer gehen.</div>
+        </div>
+      </div>
+
+      <p><strong>Das Prinzip:</strong></p>
+      <p>Homepage enthält alle kritischen Informationen strukturiert.<br>
+      Unterseiten für Menschen, die Details wollen.<br>
+      AI-Agenten bekommen alles beim ersten Fetch.</p>
+
       <h3>Warum das gut sein kann</h3>
 
       <p>Das alte Web war oft ein Wettrüsten aus SEO-Tricks, Pop-ups, Cookie-Overlays und Textwüsten. Das funktioniert in Antworten nicht mehr.</p>
@@ -259,6 +296,27 @@
         <dd>schnelle Ladezeiten, keine unnötigen Blocker, maschinenlesbare Daten (Schema.org / JSON-LD).</dd>
       </dl>
 
+      <h3>Was AI-Agenten sehen – und was nicht</h3>
+
+      <p><strong>Was AI-Agenten sehen:</strong></p>
+      <ul>
+        <li>Text in HTML (alles zwischen <code>&lt;body&gt;</code> und <code>&lt;/body&gt;</code>)</li>
+        <li>Strukturierte Daten in <code>&lt;head&gt;</code> (JSON-LD, Meta-Tags)</li>
+        <li>Semantisches Markup (<code>&lt;dl&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>)</li>
+      </ul>
+
+      <p><strong>Was AI-Agenten NICHT sehen:</strong></p>
+      <ul>
+        <li>Bilder, Videos, Grafiken (nur Alt-Text, falls vorhanden)</li>
+        <li>CSS-Design, Farben, Layouts</li>
+        <li>JavaScript-generierte Inhalte</li>
+        <li>Andere URLs (keine Navigation, keine Folge-Requests)</li>
+      </ul>
+
+      <p><strong>Konsequenz:</strong> Ihre Website braucht kein visuelles Redesign. Aber sie braucht ein strukturelles.</p>
+
+      <p>Text. Struktur. Semantik. Das ist alles, was zählt.</p>
+
       <h3>Begriffe, die das sauber beschreiben</h3>
 
       <details>
@@ -273,6 +331,27 @@
         <p>= praktische Zielgröße: Wie gut eine Website für Agenten auffindbar, zitierbar und verwendbar ist.</p>
         <p>Kurz: <strong>GEO ist Methode. AVO ist Ergebnis.</strong></p>
       </details>
+    </section>
+
+    <section id="prinzipien">
+      <h2>Prinzipien</h2>
+
+      <dl class="principles">
+        <dt>Struktur schafft Vertrauen</dt>
+        <dd>Strukturierte Daten sind verifizierbar. Struktur als Integrität.</dd>
+
+        <dt>Klarheit vor Eloquenz</dt>
+        <dd>Klare Begriffe statt Prosa. Agenten brauchen Präzision.</dd>
+
+        <dt>Google Zero</dt>
+        <dd>Suchmaschinen werden irrelevant. Agenten lesen direkt. Ohne Struktur: unsichtbar.</dd>
+
+        <dt>Transparenz vor Tricks</dt>
+        <dd>Keine Keyword-Spiele. Wahrheit, strukturiert.</dd>
+
+        <dt>Für Besucher ändert sich nichts</dt>
+        <dd>Menschen sehen Design. Agenten sehen Struktur.</dd>
+      </dl>
     </section>
 
     <section id="bfsg">
