@@ -1036,3 +1036,301 @@ nav {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
 }
+
+/* ==========================================================================
+   NEUE CSS-VERBESSERUNGEN v2.2
+   ========================================================================== */
+
+/* 1. Glassmorphism für Stats/Comparison-Boxen */
+.stats .stat,
+.comparison-box {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.stats .stat:hover,
+.comparison-box:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .stats .stat,
+  .comparison-box {
+    background: rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .stats .stat:hover,
+  .comparison-box:hover {
+    background: rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* 2. Hero-Statement: Gradient-Underline */
+.hero-statement {
+  position: relative;
+  padding: 2rem 0;
+}
+
+.hero-statement p {
+  font-size: 1.5rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.hero-statement::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  margin: 1rem auto 0;
+  border-radius: 2px;
+}
+
+/* 3. Accordions (<details>) mit Animation */
+details {
+  border-left: 3px solid transparent;
+  padding-left: 1rem;
+  margin: 1rem 0;
+  transition: border-color 0.3s ease;
+}
+
+details[open] {
+  border-left-color: #667eea;
+}
+
+details summary {
+  cursor: pointer;
+  padding: 0.75rem 0;
+  list-style: none;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+details summary::-webkit-details-marker {
+  display: none;
+}
+
+details summary::before {
+  content: '▶';
+  position: absolute;
+  left: -1.5rem;
+  transition: transform 0.3s ease;
+  color: #667eea;
+}
+
+details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+details summary:hover {
+  color: #667eea;
+}
+
+details > *:not(summary) {
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 4. Prinzipien-DL: Timeline-Style */
+.principles {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.principles::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(180deg, #667eea, #764ba2);
+  border-radius: 1px;
+}
+
+.principles dt {
+  position: relative;
+  font-weight: 600;
+  margin: 1.5rem 0 0.5rem;
+  padding-left: 1.5rem;
+}
+
+.principles dt::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  top: 0.25rem;
+  width: 10px;
+  height: 10px;
+  background: #667eea;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+}
+
+.principles dd {
+  margin-left: 1.5rem;
+  color: var(--subtle);
+}
+
+/* 5. Navigation: Active State mit Indicator */
+nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+nav a {
+  position: relative;
+  padding: 0.75rem 1.25rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transform: translateX(-50%);
+  transition: width 0.3s ease;
+}
+
+nav a:hover::after,
+nav a:focus::after {
+  width: 80%;
+}
+
+/* 6. Comparison-Boxen: Side-by-Side mit Border */
+.comparison {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin: 2rem 0;
+}
+
+.comparison-box {
+  position: relative;
+  overflow: hidden;
+}
+
+.comparison-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #f44336;
+}
+
+.comparison-box.success::before {
+  background: linear-gradient(90deg, #4caf50, #8bc34a);
+}
+
+.comparison-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-top: 0.5rem;
+}
+
+/* 7. Code-Blocks: Subtle Highlight */
+code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 0.9em;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.comparison-content code {
+  display: block;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.03);
+  border-left: 3px solid currentColor;
+}
+
+@media (prefers-color-scheme: dark) {
+  code {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  .comparison-content code {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* 8. Dark Mode: CSS Custom Properties (bereits vorhanden, erweitert) */
+body {
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* 9. Scroll-Snap für Sections */
+main {
+  scroll-snap-type: y proximity;
+}
+
+section {
+  scroll-snap-align: start;
+  scroll-margin-top: 2rem;
+}
+
+/* 10. Contact-Details: Card-Style (erweitert) */
+.contact-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem 2rem;
+  background: rgba(102, 126, 234, 0.05);
+  padding: 2rem;
+  border-radius: 12px;
+  border-left: 4px solid var(--accent);
+}
+
+.contact-details dt {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.contact-details dd {
+  margin: 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .contact-details {
+    background: rgba(102, 126, 234, 0.1);
+  }
+}
