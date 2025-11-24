@@ -573,6 +573,41 @@ dd {
   border-left: 2px solid var(--border);
 }
 
+/* Key Concepts: Definition List for Main Concepts */
+.key-concepts {
+  margin: var(--space-lg) 0;
+}
+
+.key-concepts dt {
+  font-weight: 600;
+  color: var(--text);
+  margin-top: var(--space-md);
+  font-size: 1rem;
+}
+
+.key-concepts dt:first-child {
+  margin-top: 0;
+}
+
+.key-concepts dd {
+  margin-top: var(--space-xs);
+  padding-left: var(--space-md);
+  border-left: 2px solid var(--border);
+  color: var(--text);
+}
+
+/* Endpoint List: Technical Resource Links */
+.endpoint-list {
+  list-style: none;
+  margin-left: 0;
+}
+
+.endpoint-list li {
+  padding-left: var(--space-md);
+  margin-bottom: var(--space-sm);
+  border-left: 2px solid var(--border);
+}
+
 /* Service Details: Compact Layout */
 .service-details {
   margin-top: var(--space-md);
