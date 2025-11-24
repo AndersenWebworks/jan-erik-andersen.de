@@ -1101,60 +1101,7 @@ nav {
   border-radius: 2px;
 }
 
-/* 3. Accordions (<details>) mit Animation */
-details {
-  border-left: 3px solid transparent;
-  padding-left: 1rem;
-  margin: 1rem 0;
-  transition: border-color 0.3s ease;
-}
-
-details[open] {
-  border-left-color: #667eea;
-}
-
-details summary {
-  cursor: pointer;
-  padding: 0.75rem 0;
-  list-style: none;
-  position: relative;
-  transition: color 0.3s ease;
-}
-
-details summary::-webkit-details-marker {
-  display: none;
-}
-
-details summary::before {
-  content: '▶';
-  position: absolute;
-  left: -1.5rem;
-  transition: transform 0.3s ease;
-  color: #667eea;
-}
-
-details[open] summary::before {
-  transform: rotate(90deg);
-}
-
-details summary:hover {
-  color: #667eea;
-}
-
-details > *:not(summary) {
-  animation: slideDown 0.3s ease;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* 3. Accordions (<details>) mit Animation - überschreibt Basis-Styles */
 
 /* 4. Prinzipien-DL: Timeline-Style */
 .principles {
