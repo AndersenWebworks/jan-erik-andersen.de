@@ -707,6 +707,61 @@ details ul:last-child {
 }
 
 /* ==========================================================================
+   Evidence Group (Data/Studies)
+   ========================================================================== */
+
+.evidence-group {
+  border: 1px solid var(--border);
+  margin: var(--space-lg) 0;
+}
+
+.evidence-item {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--border);
+}
+
+.evidence-item:last-child {
+  border-bottom: none;
+}
+
+.evidence-stat {
+  font-family: var(--font-serif);
+  font-size: 1.375rem;
+  line-height: 1.3;
+  margin-bottom: var(--space-xs);
+  color: var(--text);
+}
+
+.evidence-context {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-sm);
+}
+
+.evidence-item details {
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.evidence-item summary {
+  font-size: 0.8125rem;
+  color: var(--subtle);
+  padding: var(--space-xs) 0;
+  padding-left: var(--space-sm);
+  min-height: auto;
+}
+
+.evidence-item summary::before {
+  font-size: 0.625rem;
+}
+
+.evidence-item details > *:not(summary) {
+  font-size: 0.875rem;
+  padding-left: var(--space-sm);
+  padding-bottom: var(--space-sm);
+}
+
+/* ==========================================================================
    Definition Lists
    ========================================================================== */
 
