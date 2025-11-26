@@ -12,17 +12,8 @@
   <!-- Subtle Border -->
   <rect x="2" y="2" width="124" height="124" rx="14" fill="none" stroke="#D4D0C8" stroke-width="2"/>
 
-  <!-- Structured "A" - Architecture Symbol -->
-  <g fill="#8B0000">
-    <!-- Main A shape - bold serif style -->
-    <path d="M 64 22 L 100 106 L 86 106 L 78 86 L 50 86 L 42 106 L 28 106 Z M 54 72 L 74 72 L 64 44 Z"/>
-  </g>
-
-  <!-- Structure lines - representing semantic layers -->
-  <g stroke="#1A1A1A" stroke-width="2" stroke-linecap="round">
-    <line x1="20" y1="18" x2="44" y2="18"/>
-    <line x1="84" y1="18" x2="108" y2="18"/>
-  </g>
+  <!-- {A} Symbol -->
+  <text x="64" y="82" font-family="Georgia, serif" font-size="56" font-weight="bold" fill="#8B0000" text-anchor="middle">{A}</text>
 
   <!-- Bottom accent line - editorial style -->
   <rect x="20" y="110" width="88" height="3" fill="#8B0000"/>
