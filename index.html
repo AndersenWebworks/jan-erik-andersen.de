@@ -133,18 +133,17 @@
 <body>
   <a class="skip-link" href="#hauptinhalt">Zum Inhalt springen</a>
 
-  <div class="controls" role="navigation" aria-label="Seiteneinstellungen">
-    <label class="control-btn theme-toggle" title="Dark Mode umschalten">
-      <input type="checkbox" id="darkmode-toggle" class="darkmode-checkbox" aria-label="Dark Mode umschalten">
-      <span class="sr-only">Darstellung wechseln</span>
-      <span class="icon-light" aria-hidden="true">☀️</span>
-      <span class="icon-dark" aria-hidden="true">🌙</span>
-    </label>
-    <a href="/en/" class="control-btn" aria-label="Switch to English">EN</a>
-  </div>
-
   <header>
     <h1>Jan-Erik Andersen</h1>
+    <div class="controls" role="navigation" aria-label="Seiteneinstellungen">
+      <label class="control-btn theme-toggle" title="Dark Mode umschalten">
+        <input type="checkbox" id="darkmode-toggle" class="darkmode-checkbox" aria-label="Dark Mode umschalten">
+        <span class="sr-only">Darstellung wechseln</span>
+        <span class="icon-light" aria-hidden="true">☀️</span>
+        <span class="icon-dark" aria-hidden="true">🌙</span>
+      </label>
+      <a href="/en/" class="control-btn" aria-label="Switch to English">EN</a>
+    </div>
     <p class="tagline">AI-native Web Architecture · Senior Consulting · Andersen Webworks</p>
 
     <div class="hero-statement">
@@ -335,25 +334,25 @@
     <!-- Sidebar Column -->
     <aside class="content-sidebar">
       <div class="stats">
-        <div class="stat">
+        <div class="stat" role="group" aria-label="59,7 % Zero-Click in der EU">
           <p><strong>59,7 %</strong></p>
           <p>Zero-Click in der EU</p>
           <p><small><a href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-the-eu-its-360/" target="_blank" rel="noopener">SparkToro 2024</a></small></p>
         </div>
 
-        <div class="stat">
+        <div class="stat" role="group" aria-label="374 Klicks von 1.000 Suchen">
           <p><strong>374</strong></p>
           <p>Klicks von 1.000 Suchen</p>
           <p><small><a href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-the-eu-its-360/" target="_blank" rel="noopener">SparkToro 2024</a></small></p>
         </div>
 
-        <div class="stat">
+        <div class="stat" role="group" aria-label="BFSG Pflicht seit 28.06.2025">
           <p><strong>BFSG</strong></p>
           <p>Pflicht seit 28.06.2025</p>
           <p><small><a href="https://www.bundesfachstelle-barrierefreiheit.de/DE/Fachwissen/Produkte-und-Dienstleistungen/Barrierefreiheitsstaerkungsgesetz/barrierefreiheitsstaerkungsgesetz_node.html" target="_blank" rel="noopener">Bundesfachstelle</a></small></p>
         </div>
 
-        <div class="stat">
+        <div class="stat" role="group" aria-label="96 % Websites mit Barrierefreiheitsfehlern">
           <p><strong>96 %</strong></p>
           <p>Websites mit Barrierefreiheitsfehlern</p>
           <p><small><a href="https://webaim.org/projects/million/" target="_blank" rel="noopener">WebAIM 2024</a></small></p>
