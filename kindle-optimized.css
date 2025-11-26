@@ -750,7 +750,6 @@ dd {
   font-weight: 600;
   color: var(--accent);
   text-decoration: none;
-  margin-top: var(--space-sm);
 }
 
 .cta-primary::after {
@@ -918,6 +917,82 @@ footer .endpoint-list li:last-child {
   }
 
   details[open] summary {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   ToTop Button (CSS-Only)
+   ========================================================================== */
+
+.totop {
+  position: fixed;
+  bottom: var(--space-lg);
+  right: var(--space-lg);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  font-size: 1.25rem;
+  line-height: 1;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.totop:hover {
+  color: var(--accent);
+  border-color: var(--border-dark);
+}
+
+.totop:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Show button when scrolled past first viewport */
+@supports (animation-timeline: scroll()) {
+  .totop {
+    animation: totop-show linear both;
+    animation-timeline: scroll();
+    animation-range: 100vh 101vh;
+  }
+
+  @keyframes totop-show {
+    from {
+      opacity: 0;
+      pointer-events: none;
+    }
+    to {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+/* Fallback: always visible if scroll-timeline not supported */
+@supports not (animation-timeline: scroll()) {
+  .totop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (max-width: 767px) {
+  .totop {
+    bottom: var(--space-md);
+    right: var(--space-md);
+  }
+}
+
+@media print {
+  .totop {
     display: none;
   }
 }
