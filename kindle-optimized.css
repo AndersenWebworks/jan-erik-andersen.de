@@ -40,9 +40,9 @@
   --gutter: 3rem;
 }
 
-/* Dark Mode */
+/* Dark Mode - System preference, nur wenn Toggle NICHT aktiv */
 @media (prefers-color-scheme: dark) {
-  :root {
+  body:not(:has(.darkmode-checkbox:checked)) {
     --bg: #1A1A1A;
     --bg-alt: #242424;
     --text: #E8E4E0;
@@ -52,6 +52,21 @@
     --border-dark: #5A5A5A;
     --accent: #E07060;
     --accent-hover: #F08070;
+  }
+}
+
+/* Light Mode Override - wenn System Dark aber Toggle aktiv */
+@media (prefers-color-scheme: dark) {
+  body:has(.darkmode-checkbox:checked) {
+    --bg: #F9F5F0;
+    --bg-alt: #F0EBE3;
+    --text: #1A1A1A;
+    --text-secondary: #4A4A4A;
+    --subtle: #6B6B6B;
+    --border: #D4D0C8;
+    --border-dark: #8B8B8B;
+    --accent: #8B0000;
+    --accent-hover: #A52A2A;
   }
 }
 
@@ -101,28 +116,56 @@
   opacity: 0;
 }
 
-body:has(.darkmode-checkbox:checked) {
-  --bg: #1A1A1A;
-  --bg-alt: #242424;
-  --text: #E8E4E0;
-  --text-secondary: #C0BCB8;
-  --subtle: #8A8A8A;
-  --border: #3A3A3A;
-  --border-dark: #5A5A5A;
-  --accent: #E07060;
-  --accent-hover: #F08070;
+/* Dark Mode Override - wenn System Light aber Toggle aktiv */
+@media (prefers-color-scheme: light) {
+  body:has(.darkmode-checkbox:checked) {
+    --bg: #1A1A1A;
+    --bg-alt: #242424;
+    --text: #E8E4E0;
+    --text-secondary: #C0BCB8;
+    --subtle: #8A8A8A;
+    --border: #3A3A3A;
+    --border-dark: #5A5A5A;
+    --accent: #E07060;
+    --accent-hover: #F08070;
+  }
 }
 
+/* Icon-Logik: Zeige das Icon des AKTUELLEN Modes */
+
+/* Default: Light Mode - Sonnen-Icon zeigen, Mond verbergen */
 .theme-toggle .icon-dark {
   display: none;
 }
 
-.theme-toggle:has(.darkmode-checkbox:checked) .icon-light {
-  display: none;
+/* System Light + Toggle aktiv = Dark Mode - Mond zeigen */
+@media (prefers-color-scheme: light) {
+  .theme-toggle:has(.darkmode-checkbox:checked) .icon-light {
+    display: none;
+  }
+  .theme-toggle:has(.darkmode-checkbox:checked) .icon-dark {
+    display: inline;
+  }
 }
 
-.theme-toggle:has(.darkmode-checkbox:checked) .icon-dark {
-  display: inline;
+/* System Dark + Toggle NICHT aktiv = Dark Mode - Mond zeigen */
+@media (prefers-color-scheme: dark) {
+  .theme-toggle:not(:has(.darkmode-checkbox:checked)) .icon-light {
+    display: none;
+  }
+  .theme-toggle:not(:has(.darkmode-checkbox:checked)) .icon-dark {
+    display: inline;
+  }
+}
+
+/* System Dark + Toggle aktiv = Light Mode - Sonne zeigen (default) */
+@media (prefers-color-scheme: dark) {
+  .theme-toggle:has(.darkmode-checkbox:checked) .icon-light {
+    display: inline;
+  }
+  .theme-toggle:has(.darkmode-checkbox:checked) .icon-dark {
+    display: none;
+  }
 }
 
 /* ==========================================================================
@@ -186,6 +229,7 @@ h1 {
   text-transform: uppercase;
   margin-bottom: var(--space-xs);
   line-height: 1.2;
+  margin-top: 40px;
 }
 
 @media (min-width: 768px) {
@@ -202,6 +246,7 @@ h1 {
   color: var(--subtle);
   margin-bottom: var(--space-lg);
   letter-spacing: 0.02em;
+  text-align: center;
 }
 
 /* Hero Statement */
