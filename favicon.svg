@@ -1,31 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0066ff;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#00ccff;stop-opacity:1" />
+    <linearGradient id="paper" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FDFAF5"/>
+      <stop offset="100%" style="stop-color:#F5F0E8"/>
     </linearGradient>
-    <filter id="shadow">
-      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.3"/>
-    </filter>
   </defs>
 
-  <!-- Hintergrund: Auffälliger Blau-Gradient -->
-  <rect width="128" height="128" rx="24" fill="url(#bg)"/>
+  <!-- Editorial Paper Background -->
+  <rect width="128" height="128" rx="16" fill="url(#paper)"/>
 
-  <!-- Großes, klares "A" - optimal sichtbar auch bei 16x16 -->
-  <g filter="url(#shadow)">
-    <!-- Äußerer Rahmen des A -->
-    <path d="M 64 25 L 95 95 L 82 95 L 76 80 L 52 80 L 46 95 L 33 95 Z M 58 68 L 70 68 L 64 48 Z"
-          fill="white"
-          stroke="white"
-          stroke-width="2"/>
+  <!-- Subtle Border -->
+  <rect x="2" y="2" width="124" height="124" rx="14" fill="none" stroke="#D4D0C8" stroke-width="2"/>
 
-    <!-- Innerer Akzent für mehr Tiefe -->
-    <circle cx="64" cy="35" r="4" fill="#00ccff" opacity="0.8"/>
+  <!-- Structured "A" - Architecture Symbol -->
+  <g fill="#8B0000">
+    <!-- Main A shape - bold serif style -->
+    <path d="M 64 22 L 100 106 L 86 106 L 78 86 L 50 86 L 42 106 L 28 106 Z M 54 72 L 74 72 L 64 44 Z"/>
   </g>
 
-  <!-- Subtiler Tech-Akzent unten rechts -->
-  <rect x="95" y="105" width="3" height="12" rx="1.5" fill="white" opacity="0.5"/>
-  <rect x="100" y="110" width="3" height="7" rx="1.5" fill="white" opacity="0.5"/>
-  <rect x="105" y="108" width="3" height="9" rx="1.5" fill="white" opacity="0.5"/>
+  <!-- Structure lines - representing semantic layers -->
+  <g stroke="#1A1A1A" stroke-width="2" stroke-linecap="round">
+    <line x1="20" y1="18" x2="44" y2="18"/>
+    <line x1="84" y1="18" x2="108" y2="18"/>
+  </g>
+
+  <!-- Bottom accent line - editorial style -->
+  <rect x="20" y="110" width="88" height="3" fill="#8B0000"/>
 </svg>

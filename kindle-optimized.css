@@ -396,14 +396,6 @@ main {
   gap: var(--space-lg);
 }
 
-@media (min-width: 900px) {
-  .content-sidebar {
-    position: sticky;
-    top: var(--space-lg);
-    bottom: var(--space-lg);
-    align-self: start;
-  }
-}
 
 @media (max-width: 899px) {
   .content-sidebar {
