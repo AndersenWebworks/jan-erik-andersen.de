@@ -247,11 +247,12 @@ h1 {
   margin-bottom: var(--space-lg);
   letter-spacing: 0.02em;
   text-align: center;
+  display: inline;
 }
 
 /* Hero Statement */
 .hero-statement {
-  max-width: 38rem;
+  max-width: 55rem;
   margin: var(--space-lg) auto;
   padding: var(--space-md) 0;
   border-top: 1px solid var(--border);
@@ -393,6 +394,14 @@ main {
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
+}
+
+@media (min-width: 900px) {
+  .content-sidebar {
+    position: sticky;
+    top: var(--space-lg);
+    align-self: start;
+  }
 }
 
 @media (max-width: 899px) {
