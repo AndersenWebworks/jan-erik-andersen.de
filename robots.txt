@@ -8,13 +8,6 @@ Allow: /
 Sitemap: https://jan-erik-andersen.de/sitemap.xml
 
 # ============================================
-# AI AGENT DISCOVERY (Experimental)
-# ============================================
-# Discovery mechanism for AI agents and LLMs
-AI-Manifest: https://jan-erik-andersen.de/ai/manifest.json
-AI-Manifest-Mirror: https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/manifest.json
-
-# ============================================
 # AI-READABLE ENDPOINTS (Machine Discovery)
 # ============================================
 # Startpunkt für strukturierte Daten:
