@@ -744,21 +744,41 @@ details ul:last-child {
 }
 
 .evidence-item summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-size: 0.8125rem;
   color: var(--subtle);
-  padding: var(--space-xs) 0;
-  padding-left: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
   min-height: auto;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.evidence-item summary:hover {
+  background: var(--border);
+  color: var(--text);
 }
 
 .evidence-item summary::before {
-  font-size: 0.625rem;
+  content: '+';
+  font-size: 0.875rem;
+  font-weight: 600;
+  position: static;
+  transition: transform 0.15s ease;
+}
+
+.evidence-item details[open] summary::before {
+  content: '−';
+  transform: none;
 }
 
 .evidence-item details > *:not(summary) {
   font-size: 0.875rem;
   padding-left: var(--space-sm);
   padding-bottom: var(--space-sm);
+  margin-top: var(--space-sm);
 }
 
 /* ==========================================================================
