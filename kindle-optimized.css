@@ -219,6 +219,12 @@ header {
   margin-bottom: var(--space-lg);
   border-bottom: 3px double var(--border-dark);
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+header .controls {
+  order: -1;
 }
 
 h1 {
