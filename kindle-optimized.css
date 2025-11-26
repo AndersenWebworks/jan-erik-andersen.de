@@ -401,6 +401,8 @@ main {
     position: sticky;
     top: var(--space-lg);
     align-self: start;
+    max-height: calc(100vh - 2 * var(--space-lg));
+    overflow-y: auto;
   }
 }
 
