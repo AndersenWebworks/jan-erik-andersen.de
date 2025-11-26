@@ -286,8 +286,8 @@ nav a {
 
 nav a:not(:last-child)::after {
   content: '·';
-  position: absolute;
-  right: -2px;
+  position: relative;
+  margin-left: 0.5rem;
   color: var(--border-dark);
 }
 
@@ -550,8 +550,13 @@ li:last-child {
   display: block;
   background: transparent;
   border: none;
-  padding: 0;
-  margin: 0.25rem 0;
+  padding: 0.25rem 0;
+  margin: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.comparison-content code:last-child {
+  border-bottom: none;
 }
 
 .comparison-result {
@@ -561,7 +566,7 @@ li:last-child {
   color: var(--text-secondary);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .comparison {
     grid-template-columns: 1fr;
   }
@@ -699,6 +704,9 @@ dd {
 
 /* Contact Details */
 .contact-details {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.25rem 1rem;
   margin: var(--space-lg) 0;
   padding: var(--space-md);
   border: 1px solid var(--border);
@@ -711,11 +719,8 @@ dd {
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--subtle);
-  margin-top: var(--space-sm);
-}
-
-.contact-details dt:first-child {
-  margin-top: 0;
+  margin: 0;
+  padding-top: 0.25rem;
 }
 
 .contact-details dd {
@@ -723,6 +728,7 @@ dd {
   border-left: none;
   color: var(--text);
   font-weight: 500;
+  margin: 0;
 }
 
 .contact-details dd a {
