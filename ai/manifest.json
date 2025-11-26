@@ -7,16 +7,25 @@
     "tagline": "Structure as Integrity",
     "contact": "mail@andersen-webworks.de"
   },
-  "version": "v1.4",
-  "build": 14,
+  "version": "v2.3",
+  "build": 23,
   "changelog": [
+    "v2.3 feat: Newspaper Editorial Design - 2-Spalten-Layout, FT-Style Typography",
+    "v2.2 fix: SSOT-Sync manifest.json mit Footer-Version",
+    "v2.1 style: Design-Anpassungen - Gradient-Farben & CTA-Arrow entfernt",
+    "v2.0 feat: Review-Optimierungen umgesetzt",
+    "v1.9 fix: Glassmorphism und Hover-Effekte entfernt",
+    "v1.8 fix: Doppelte Accordion-Styles entfernt",
+    "v1.7 feat: 10 neue Design-Verbesserungen",
+    "v1.6 feat: Content-Überarbeitung",
+    "v1.5 fix: Minor Adjustments",
     "v1.4 fix: Accessibility improvements + .txt Mirrors online",
     "v1.3 feat: AI-Layer JSON-Files mit HTML synchronisiert (FAQ, Services, Identity)",
     "v1.2 feat: .txt-Redundanz entfernt, SSOT-konform (nur .json)",
     "v1.1 fix: Accordion-Layout-Korrektur + alle geschlossen",
     "v1.1 feat: FAQ + Leistungen als <details> Accordions mit Schema.org"
   ],
-  "dateModified": "2025-11-15T00:00:00Z",
+  "dateModified": "2025-11-26T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z",
   "architecture": {
     "version": "1.0",
