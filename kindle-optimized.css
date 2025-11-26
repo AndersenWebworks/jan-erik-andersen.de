@@ -253,7 +253,7 @@ h1 {
   margin-bottom: var(--space-lg);
   letter-spacing: 0.02em;
   text-align: center;
-  display: inline;
+  width: 100%;
 }
 
 /* Hero Statement */

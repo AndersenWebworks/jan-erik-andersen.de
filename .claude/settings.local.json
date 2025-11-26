@@ -17,7 +17,11 @@
       "Bash(cat:*)",
       "Bash(git diff:*)",
       "Bash(git stash push:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(\"c:/Andersen/Webworks/GitHub/Webworks/jan-erik-andersen.de/index.html.tmp\")",
+      "Bash(npx playwright:*)",
+      "Bash(node screenshot-test.js:*)",
+      "Bash(node:*)"
     ],
     "deny": [],
     "ask": []
