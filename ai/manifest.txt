@@ -7,9 +7,10 @@
     "tagline": "Structure as Integrity",
     "contact": "mail@andersen-webworks.de"
   },
-  "version": "v2.3",
-  "build": 23,
+  "version": "v2.4",
+  "build": 24,
   "changelog": [
+    "v2.4 feat: GEO Best Practices - llms.txt, Generative UI, Evidence-Group, Inline Citations",
     "v2.3 feat: Newspaper Editorial Design - 2-Spalten-Layout, FT-Style Typography",
     "v2.2 fix: SSOT-Sync manifest.json mit Footer-Version",
     "v2.1 style: Design-Anpassungen - Gradient-Farben & CTA-Arrow entfernt",
@@ -25,7 +26,7 @@
     "v1.1 fix: Accordion-Layout-Korrektur + alle geschlossen",
     "v1.1 feat: FAQ + Leistungen als <details> Accordions mit Schema.org"
   ],
-  "dateModified": "2025-11-26T00:00:00Z",
+  "dateModified": "2025-11-27T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z",
   "architecture": {
     "version": "1.0",
