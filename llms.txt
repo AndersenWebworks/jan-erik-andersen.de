@@ -1,0 +1,22 @@
+# Jan-Erik Andersen – AI-native Web Architect
+
+> Senior Consultant für AI-native Web Architecture. Spezialisiert auf Agent Visibility Optimization (AVO), Generative Engine Optimization (GEO) und BFSG-Compliance. 25+ Jahre Erfahrung.
+
+## Leistungen
+
+- AI-native Web Architecture: Strukturierung von Websites für KI-Systeme
+- Agent Visibility Optimization (AVO): Optimierung für KI-Zitierbarkeit
+- BFSG-Compliance: Barrierefreie Websites nach WCAG 2.1 AA
+- Strukturierte Daten: Schema.org, JSON-LD Implementation
+
+## Kontakt
+
+- Email: mail@andersen-webworks.de
+- Telefon: +49 38733 270015
+- Website: https://jan-erik-andersen.de
+
+## Relevante Dateien
+
+- [AI Manifest](/ai/manifest.json) – Maschinenlesbare Endpoints
+- [Services](/ai/services.json) – Strukturierte Leistungsdaten
+- [Identity](/ai/identity-schema.json) – Person Schema.org
