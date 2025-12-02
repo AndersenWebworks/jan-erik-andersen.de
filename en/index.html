@@ -237,27 +237,66 @@
 
       <p>Many websites are built traditionally: Homepage shows overview and teasers, subpages deliver details. Makes sense for humans – often not optimal for answer systems.</p>
 
-      <div class="comparison">
-        <div class="comparison-box">
-          <div class="comparison-title">Classic</div>
-          <div class="comparison-content">
-            <code>/ → Welcome + Teaser</code>
-            <code>/services/ → Details here</code>
-            <code>/contact/ → Data here</code>
-          </div>
-          <div class="comparison-result">AI system sees: Teaser. Details hidden.</div>
-        </div>
+      <figure class="concept-diagram">
+        <svg viewBox="0 0 560 280" role="img" aria-labelledby="diagram-title-en diagram-desc-en">
+          <title id="diagram-title-en">Classic vs. AI-native Architecture</title>
+          <desc id="diagram-desc-en">Comparison: Classic websites distribute info across subpages, AI-native websites show key facts on the homepage.</desc>
 
-        <div class="comparison-box success">
-          <div class="comparison-title">AI-native</div>
-          <div class="comparison-content">
-            <code>/ → All key facts</code>
-            <code>/services/ → Detailed</code>
-            <code>/contact/ → Optional</code>
-          </div>
-          <div class="comparison-result">AI system sees: Key facts. Human: Can go deeper.</div>
-        </div>
-      </div>
+          <!-- Left: Classic -->
+          <rect class="frame" x="10" y="10" width="250" height="260" rx="4"/>
+          <text class="diagram-title" x="135" y="32" text-anchor="middle">Classic</text>
+          <line class="divider" x1="20" y1="42" x2="250" y2="42"/>
+
+          <!-- Classic: Homepage -->
+          <text class="diagram-path" x="25" y="62">/</text>
+          <rect class="box" x="25" y="68" width="220" height="40" rx="3"/>
+          <text class="diagram-content" x="135" y="85" text-anchor="middle">Welcome + Teaser</text>
+          <text class="diagram-content" x="135" y="100" text-anchor="middle">(no details)</text>
+
+          <!-- Arrow down -->
+          <path class="arrow" d="M135 112 L135 125 M130 120 L135 125 L140 120"/>
+
+          <!-- Classic: Services -->
+          <text class="diagram-path" x="25" y="140">/services/</text>
+          <rect class="box" x="25" y="146" width="220" height="32" rx="3"/>
+          <text class="diagram-content" x="135" y="166" text-anchor="middle">Details hidden here</text>
+
+          <!-- Arrow down -->
+          <path class="arrow" d="M135 182 L135 195 M130 190 L135 195 L140 190"/>
+
+          <!-- Classic: Contact -->
+          <text class="diagram-path" x="25" y="210">/contact/</text>
+          <rect class="box" x="25" y="216" width="220" height="28" rx="3"/>
+          <text class="diagram-content" x="135" y="234" text-anchor="middle">Contact data here</text>
+
+          <!-- Result Classic -->
+          <text class="diagram-result result-neutral" x="135" y="262" text-anchor="middle">→ AI sees: teaser only</text>
+
+          <!-- Right: AI-native -->
+          <rect class="frame frame-accent" x="300" y="10" width="250" height="260" rx="4"/>
+          <text class="diagram-title diagram-title-accent" x="425" y="32" text-anchor="middle">AI-native</text>
+          <line class="divider" x1="310" y1="42" x2="540" y2="42"/>
+
+          <!-- AI-native: Homepage (larger, highlighted) -->
+          <text class="diagram-path" x="315" y="62">/</text>
+          <rect class="box box-accent" x="315" y="68" width="220" height="90" rx="3"/>
+          <text class="diagram-content" x="425" y="92" text-anchor="middle">Key Facts: Who / What / How</text>
+          <text class="diagram-content" x="425" y="108" text-anchor="middle">Services + Contact</text>
+          <text class="diagram-content" x="425" y="124" text-anchor="middle">All essentials upfront</text>
+          <text class="diagram-content" x="425" y="146" text-anchor="middle" style="font-weight:500">= Executive Summary</text>
+
+          <!-- Arrow down -->
+          <path class="arrow" d="M425 162 L425 175 M420 170 L425 175 L430 170"/>
+
+          <!-- AI-native: Details -->
+          <text class="diagram-path" x="315" y="190">/services/</text>
+          <rect class="box" x="315" y="196" width="220" height="32" rx="3"/>
+          <text class="diagram-content" x="425" y="216" text-anchor="middle">Deep dive (optional)</text>
+
+          <!-- Result AI-native -->
+          <text class="diagram-result result-good" x="425" y="262" text-anchor="middle">→ AI sees: all essentials</text>
+        </svg>
+      </figure>
 
       <p>That's why I work with this principle:</p>
 
@@ -310,10 +349,10 @@
       <h3>Terms that cleanly separate this</h3>
 
       <dl class="key-concepts">
-        <dt>GEO (Generative Engine Optimization)</dt>
+        <dt><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>GEO (Generative Engine Optimization)</dt>
         <dd>Optimization of content and structure so that answer systems correctly understand and cite content. <small>(<a href="https://arxiv.org/abs/2311.09735" target="_blank" rel="noopener">Aggarwal et al., 2024</a>)</small></dd>
 
-        <dt>AVO (Agent Visibility Optimization)</dt>
+        <dt><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>AVO (Agent Visibility Optimization)</dt>
         <dd>The practical target metric: How well your website is discoverable, citable, and usable for AI agents.</dd>
       </dl>
 
@@ -412,7 +451,7 @@
 
     <p>A project by <a href="https://andersen-webworks.de">Andersen Webworks</a> — Web design since 2010, AI-native Web Architecture since 2024</p>
 
-    <p><strong>jan-erik-andersen.de v2.5</strong></p>
+    <p><strong>jan-erik-andersen.de v2.6</strong></p>
     <p>
       <a href="/en/imprint.html">Imprint</a> ·
       <a href="/en/privacy.html">Privacy</a> ·

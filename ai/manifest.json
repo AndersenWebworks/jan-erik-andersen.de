@@ -7,9 +7,10 @@
     "tagline": "Structure as Integrity",
     "contact": "mail@andersen-webworks.de"
   },
-  "version": "v2.5",
-  "build": 25,
+  "version": "v2.6",
+  "build": 26,
   "changelog": [
+    "v2.6 feat: Konzept-Grafik Klassisch vs. AI-native + GEO/AVO Icons",
     "v2.5 feat: SVG-Piktogramme für Drei Hebel + Kontakt",
     "v2.4 feat: GEO Best Practices - llms.txt, Generative UI, Evidence-Group, Inline Citations",
     "v2.3 feat: Newspaper Editorial Design - 2-Spalten-Layout, FT-Style Typography",
