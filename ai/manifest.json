@@ -7,9 +7,10 @@
     "tagline": "Structure as Integrity",
     "contact": "mail@andersen-webworks.de"
   },
-  "version": "v2.4",
-  "build": 24,
+  "version": "v2.5",
+  "build": 25,
   "changelog": [
+    "v2.5 feat: SVG-Piktogramme für Drei Hebel + Kontakt",
     "v2.4 feat: GEO Best Practices - llms.txt, Generative UI, Evidence-Group, Inline Citations",
     "v2.3 feat: Newspaper Editorial Design - 2-Spalten-Layout, FT-Style Typography",
     "v2.2 fix: SSOT-Sync manifest.json mit Footer-Version",
