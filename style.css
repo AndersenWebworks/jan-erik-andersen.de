@@ -285,6 +285,12 @@ h1 {
   }
 }
 
+@media (max-width: 600px) {
+  .hero-statement {
+    margin: 0;
+  }
+}
+
 /* Controls (Theme Toggle, Language) */
 .controls {
   display: flex;
@@ -419,7 +425,7 @@ main {
 
 @media (max-width: 899px) {
   .content-sidebar {
-    order: -1;
+    order: 0;
   }
 }
 
@@ -567,6 +573,16 @@ li:last-child {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-sm);
     margin: var(--space-lg) 0;
+  }
+
+  .stat {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 540px) {
+  .stats {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1032,6 +1048,12 @@ footer .endpoint-list li:last-child {
   }
 }
 
+@media (max-width: 480px) {
+  body {
+    padding: var(--space-sm);
+  }
+}
+
 /* ==========================================================================
    Print Styles
    ========================================================================== */
@@ -1262,7 +1284,7 @@ footer .endpoint-list li:last-child {
 
 .hero-diagram {
   margin: var(--space-md) auto var(--space-lg);
-  width: min(50%, 100%);
+  width: clamp(260px, 70vw, 560px);
 }
 
 .hero-diagram svg {
