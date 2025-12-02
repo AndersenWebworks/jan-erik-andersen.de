@@ -1250,3 +1250,61 @@ footer .endpoint-list li:last-child {
   stroke: var(--border);
   stroke-width: 1;
 }
+
+/* ==========================================================================
+   Hero Diagram
+   ========================================================================== */
+
+.hero-diagram {
+  margin: var(--space-md) auto var(--space-lg);
+  max-width: 400px;
+}
+
+.hero-diagram svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hero-diagram .hd-box {
+  fill: var(--bg-alt);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.hero-diagram .hd-box-accent {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.hero-diagram .hd-arrow {
+  fill: none;
+  stroke: var(--border-dark);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.hero-diagram .hd-label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+}
+
+.hero-diagram .hd-label-accent {
+  fill: var(--accent);
+  font-weight: 500;
+}
+
+.hero-diagram .hd-icon {
+  stroke: var(--text-secondary);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.hero-diagram .hd-icon-accent {
+  stroke: var(--accent);
+}
