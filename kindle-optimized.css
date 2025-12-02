@@ -1443,7 +1443,7 @@ footer .endpoint-list li:last-child {
 
 .journey-chart .jc-label {
   font-size: 9px;
-  fill: var(--bg);
+  fill: var(--text);
   text-anchor: middle;
   font-weight: 500;
 }
