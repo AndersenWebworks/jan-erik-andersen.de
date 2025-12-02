@@ -1390,7 +1390,7 @@ footer .endpoint-list li:last-child {
   left: 2px;
   width: calc(50% - 3px);
   height: calc(100% - 4px);
-  background: var(--text);
+  background: var(--text-secondary);
   border-radius: 10px;
   transition: transform 0.2s ease;
   z-index: 1;
@@ -1402,16 +1402,16 @@ footer .endpoint-list li:last-child {
 }
 
 .darkmode-checkbox:checked ~ .pill-track .pill-option:last-child {
-  color: var(--bg);
+  color: var(--text);
 }
 
 .darkmode-checkbox:not(:checked) ~ .pill-track .pill-option:first-child {
-  color: var(--bg);
+  color: var(--text);
 }
 
 /* Language Pill */
 .pill-option.active {
-  color: var(--bg);
+  color: var(--text);
 }
 
 .pill-option.active ~ .pill-indicator {
