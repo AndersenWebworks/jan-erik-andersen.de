@@ -1333,8 +1333,9 @@ footer .endpoint-list li:last-child {
 
 .logo-link img {
   display: block;
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
+  opacity: 0.7;
+  filter: grayscale(100%);
+  transition: opacity 0.2s ease, filter 0.2s ease;
 }
 
 .logo-link:hover {
@@ -1343,6 +1344,7 @@ footer .endpoint-list li:last-child {
 
 .logo-link:hover img {
   opacity: 1;
+  filter: grayscale(0%);
 }
 
 /* Pill Toggle Component */
