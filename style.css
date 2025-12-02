@@ -832,6 +832,11 @@ dd {
 /* Key Concepts */
 .key-concepts dt {
   font-size: 1rem;
+  margin-top: var(--space-lg);
+}
+
+.key-concepts dt:first-child {
+  margin-top: 0;
 }
 
 .key-concepts dd {
@@ -1165,6 +1170,22 @@ footer .endpoint-list li:last-child {
    Icons
    ========================================================================== */
 
+.diagram svg {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.diagram [class*='-icon'] {
+  stroke: var(--text-secondary);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.diagram [class*='-icon-accent'] {
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
 .icon {
   width: 1.25em;
   height: 1.25em;
@@ -1284,7 +1305,8 @@ footer .endpoint-list li:last-child {
 
 .hero-diagram {
   margin: var(--space-md) auto var(--space-lg);
-  width: clamp(260px, 70vw, 560px);
+  width: clamp(280px, 90vw, 560px);
+  max-width: 100%;
 }
 
 .hero-diagram svg {
@@ -1293,21 +1315,28 @@ footer .endpoint-list li:last-child {
   display: block;
 }
 
+@media (max-width: 480px) {
+  .hero-diagram {
+    width: 100%;
+  }
+}
+
 .hero-diagram .hd-box {
-  fill: var(--bg-alt);
-  stroke: var(--border);
-  stroke-width: 1;
+  fill: none;
+  stroke: var(--border-dark);
+  stroke-width: 1.6;
 }
 
 .hero-diagram .hd-box-accent {
   stroke: var(--accent);
-  stroke-width: 1.5;
+  stroke-width: 1.8;
+  fill: none;
 }
 
 .hero-diagram .hd-arrow {
   fill: none;
   stroke: var(--border-dark);
-  stroke-width: 1.5;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -1327,13 +1356,12 @@ footer .endpoint-list li:last-child {
 .hero-diagram .hd-icon {
   stroke: var(--text-secondary);
   stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
   fill: none;
 }
 
 .hero-diagram .hd-icon-accent {
   stroke: var(--accent);
+  stroke-width: 1.5;
 }
 
 /* ==========================================================================
@@ -1365,15 +1393,16 @@ footer .endpoint-list li:last-child {
 }
 
 .process-timeline .pt-dot-active {
-  fill: var(--accent);
+  fill: var(--bg);
   stroke: var(--accent);
+  stroke-width: 2;
 }
 
 .process-timeline .pt-number {
   font-family: var(--font-serif);
   font-size: var(--diagram-font-md);
   font-weight: 600;
-  fill: var(--bg);
+  fill: var(--text);
   text-anchor: middle;
 }
 
@@ -1444,6 +1473,12 @@ footer .endpoint-list li:last-child {
   width: 100%;
   height: auto;
   display: block;
+}
+
+@media (max-width: 640px) {
+  .journey-chart {
+    max-width: 100%;
+  }
 }
 
 .journey-chart text {
@@ -1559,21 +1594,21 @@ footer .endpoint-list li:last-child {
 }
 
 .shift-timeline .st-box {
-  fill: var(--bg-alt);
-  stroke: var(--border);
-  stroke-width: 1;
+  fill: none;
+  stroke: var(--border-dark);
+  stroke-width: 1.6;
 }
 
 .shift-timeline .st-box-accent {
-  fill: var(--bg-alt);
   stroke: var(--accent);
-  stroke-width: 1.5;
+  stroke-width: 1.8;
+  fill: none;
 }
 
 .shift-timeline .st-arrow {
   fill: none;
   stroke: var(--border-dark);
-  stroke-width: 1.5;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -1585,13 +1620,12 @@ footer .endpoint-list li:last-child {
 .shift-timeline .st-icon {
   stroke: var(--text-secondary);
   stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
   fill: none;
 }
 
 .shift-timeline .st-icon-accent {
   stroke: var(--accent);
+  stroke-width: 1.5;
 }
 
 /* ==========================================================================
@@ -1627,21 +1661,21 @@ footer .endpoint-list li:last-child {
 }
 
 .genui-flow .gf-box {
-  fill: var(--bg-alt);
-  stroke: var(--border);
-  stroke-width: 1;
+  fill: none;
+  stroke: var(--border-dark);
+  stroke-width: 1.6;
 }
 
 .genui-flow .gf-box-accent {
-  fill: var(--bg-alt);
   stroke: var(--accent);
-  stroke-width: 1.5;
+  stroke-width: 1.8;
+  fill: none;
 }
 
 .genui-flow .gf-arrow {
   fill: none;
   stroke: var(--border-dark);
-  stroke-width: 1.5;
+  stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -1649,11 +1683,10 @@ footer .endpoint-list li:last-child {
 .genui-flow .gf-icon {
   stroke: var(--text-secondary);
   stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
   fill: none;
 }
 
 .genui-flow .gf-icon-accent {
   stroke: var(--accent);
+  stroke-width: 1.5;
 }
