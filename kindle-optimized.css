@@ -1173,7 +1173,7 @@ footer .endpoint-list li:last-child {
 
 .concept-diagram svg {
   width: 100%;
-  max-width: 560px;
+  max-width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -1257,7 +1257,7 @@ footer .endpoint-list li:last-child {
 
 .hero-diagram {
   margin: var(--space-md) auto var(--space-lg);
-  max-width: 400px;
+  max-width: 480px;
 }
 
 .hero-diagram svg {
@@ -1320,7 +1320,7 @@ footer .endpoint-list li:last-child {
 
 .process-timeline svg {
   width: 100%;
-  max-width: 500px;
+  max-width: 100%;
   height: auto;
   display: block;
   margin: 0 auto;
@@ -1368,7 +1368,7 @@ footer .endpoint-list li:last-child {
 
 .mini-chart {
   margin: var(--space-sm) 0;
-  max-width: 200px;
+  max-width: 280px;
 }
 
 .mini-chart svg {

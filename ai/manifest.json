@@ -7,9 +7,10 @@
     "tagline": "Structure as Integrity",
     "contact": "mail@andersen-webworks.de"
   },
-  "version": "v2.9",
-  "build": 29,
+  "version": "v2.10",
+  "build": 210,
   "changelog": [
+    "v2.10 fix: SVG-Diagramme vergrößert (bessere Lesbarkeit)",
     "v2.9 feat: Mini-Balkendiagramm für -61% CTR Evidence",
     "v2.8 feat: Process-Timeline für Zusammenarbeit (4 Schritte)",
     "v2.7 feat: Hero-Diagramm Website → KI-Agent → Antwort",
