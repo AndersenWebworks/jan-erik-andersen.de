@@ -3,8 +3,8 @@
   "@type": "Person",
   "@id": "https://jan-erik-andersen.de/#person",
   "name": "Jan-Erik Andersen",
-  "jobTitle": "GEO-Spezialist",
-  "description": "Ich mache Websites für ChatGPT, Perplexity und Gemini sichtbar. Strukturierte Daten, semantisches HTML, AI-lesbare Inhalte.",
+  "jobTitle": "AI-native Web Architect",
+  "description": "AI-native Web Architect und Gründer von Andersen Webworks. Websites strukturieren für Menschen und KI-Systeme. Generative Engine Optimization (GEO). 25+ Jahre Erfahrung. Deutschlandweit remote.",
   "url": "https://jan-erik-andersen.de",
   "email": "mail@andersen-webworks.de",
   "telephone": "+4938733270015",
@@ -20,20 +20,21 @@
     "JSON-LD",
     "Schema.org"
   ],
-  "worksFor": {
+  "founder": {
     "@type": "Organization",
     "name": "Andersen Webworks",
     "url": "https://andersen-webworks.de"
   },
   "address": {
     "@type": "PostalAddress",
-    "addressCountry": "DE"
+    "addressCountry": "DE",
+    "addressRegion": "Deutschlandweit"
   },
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "Professional Inquiry",
     "availableLanguage": ["German", "English"]
   },
-  "dateModified": "2025-11-15T00:00:00Z",
+  "dateModified": "2025-12-02T22:42:53Z",
   "datePublished": "2025-11-06T00:00:00Z"
 }
