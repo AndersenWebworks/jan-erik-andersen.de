@@ -1390,7 +1390,7 @@ footer .endpoint-list li:last-child {
   left: 2px;
   width: calc(50% - 3px);
   height: calc(100% - 4px);
-  background: var(--text-secondary);
+  background: #4A4A4A;
   border-radius: 10px;
   transition: transform 0.2s ease;
   z-index: 1;
@@ -1406,11 +1406,11 @@ footer .endpoint-list li:last-child {
 }
 
 .darkmode-checkbox:checked ~ .pill-track .pill-option:last-child {
-  color: var(--bg);
+  color: #F9F5F0;
 }
 
 .darkmode-checkbox:not(:checked) ~ .pill-track .pill-option:first-child {
-  color: var(--bg);
+  color: #F9F5F0;
 }
 
 .darkmode-checkbox:not(:checked) ~ .pill-track .pill-option:last-child {
@@ -1419,7 +1419,7 @@ footer .endpoint-list li:last-child {
 
 /* Language Pill */
 .pill-option.active {
-  color: var(--bg);
+  color: #F9F5F0;
 }
 
 .pill-option:not(.active) {
