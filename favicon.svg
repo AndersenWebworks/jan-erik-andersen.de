@@ -1,20 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <defs>
-    <linearGradient id="paper" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" style="stop-color:#FDFAF5"/>
-      <stop offset="100%" style="stop-color:#F5F0E8"/>
-    </linearGradient>
-  </defs>
+  <!-- JEA Monogram Favicon for Jan-Erik Andersen -->
 
-  <!-- Editorial Paper Background -->
-  <rect width="128" height="128" rx="16" fill="url(#paper)"/>
+  <!-- Background -->
+  <rect width="128" height="128" fill="#1a1a1a" rx="16"/>
 
-  <!-- Subtle Border -->
-  <rect x="2" y="2" width="124" height="124" rx="14" fill="none" stroke="#D4D0C8" stroke-width="2"/>
+  <!-- Monogram: JEA stacked, highly optimized for small sizes -->
+  <text
+    x="64"
+    y="78"
+    font-family="Georgia, Times New Roman, serif"
+    font-size="58"
+    font-weight="700"
+    fill="#F9F5F0"
+    text-anchor="middle"
+    letter-spacing="-2">JEA</text>
 
-  <!-- {A} Symbol -->
-  <text x="64" y="82" font-family="Georgia, serif" font-size="56" font-weight="bold" fill="#8B0000" text-anchor="middle">{A}</text>
-
-  <!-- Bottom accent line - editorial style -->
-  <rect x="20" y="110" width="88" height="3" fill="#8B0000"/>
+  <!-- Subtle accent line (optional, for brand distinction) -->
+  <line x1="28" y1="96" x2="100" y2="96" stroke="#8B0000" stroke-width="4" stroke-linecap="round"/>
 </svg>
