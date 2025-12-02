@@ -1410,7 +1410,7 @@ footer .endpoint-list li:last-child {
 
 .journey-chart {
   margin: var(--space-lg) 0;
-  max-width: 560px;
+  max-width: 90%;
 }
 
 .journey-chart svg {
@@ -1426,23 +1426,23 @@ footer .endpoint-list li:last-child {
 
 .journey-chart .jc-title {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 16px;
   fill: var(--text);
 }
 
 .journey-chart .jc-subtitle {
-  font-size: 10px;
+  font-size: 13px;
   fill: var(--text-secondary);
 }
 
 .journey-chart .jc-column-title {
   font-weight: 600;
-  font-size: 11px;
+  font-size: 14px;
   text-anchor: middle;
 }
 
 .journey-chart .jc-label {
-  font-size: 9px;
+  font-size: 12px;
   fill: var(--text);
   text-anchor: middle;
   font-weight: 500;
@@ -1450,13 +1450,13 @@ footer .endpoint-list li:last-child {
 
 .journey-chart .jc-stat {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   text-anchor: middle;
   font-weight: 600;
 }
 
 .journey-chart .jc-caption {
-  font-size: 9px;
+  font-size: 11px;
   fill: var(--text-secondary);
   text-anchor: middle;
 }
@@ -1497,7 +1497,7 @@ footer .endpoint-list li:last-child {
 
 .shift-timeline {
   margin: var(--space-lg) 0;
-  max-width: 560px;
+  max-width: 90%;
 }
 
 .shift-timeline svg {
@@ -1573,7 +1573,7 @@ footer .endpoint-list li:last-child {
 
 .genui-flow {
   margin: var(--space-lg) 0;
-  max-width: 560px;
+  max-width: 90%;
 }
 
 .genui-flow svg {
