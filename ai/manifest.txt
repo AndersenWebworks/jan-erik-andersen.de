@@ -7,9 +7,11 @@
     "tagline": "Structure as Integrity",
     "contact": "mail@andersen-webworks.de"
   },
-  "version": "v2.10",
-  "build": 210,
+  "version": "v2.12",
+  "build": 212,
   "changelog": [
+    "v2.12 feat: Shift-Timeline + Generative-UI Flow Diagramme",
+    "v2.11 feat: Journey Chart für Zero-Click-Story (statistisch ehrlich, +GEO-Lösung)",
     "v2.10 fix: SVG-Diagramme vergrößert (bessere Lesbarkeit)",
     "v2.9 feat: Mini-Balkendiagramm für -61% CTR Evidence",
     "v2.8 feat: Process-Timeline für Zusammenarbeit (4 Schritte)",
