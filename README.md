@@ -103,7 +103,7 @@ jan-erik-andersen.de/
 │  └─ PROJECT-CONTEXT.md         # Kontext für Claude
 ├─ verify/                       # Tests & Validierung
 ├─ tools/                        # Scripts
-└─ kindle-optimized.css          # 0 JS Dark Mode
+└─ style.css                     # CSS (0 JS Dark Mode)
 ```
 
 ---
