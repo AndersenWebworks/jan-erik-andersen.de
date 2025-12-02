@@ -154,86 +154,39 @@
     </div>
     <p class="tagline">AI-native Web Architecture · Senior Consulting · Andersen Webworks</p>
 
-    <figure class="hero-diagram diagram" aria-hidden="true">
-      <svg class="hero-diagram-desktop" viewBox="0 0 360 90">
-        <!-- Website Box -->
-        <rect class="hd-box" x="10" y="24" width="80" height="40" rx="4"/>
-        <g class="hd-icon" transform="translate(50 44)">
-          <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-          <line x1="-9" y1="-2" x2="9" y2="-2"/>
-          <line x1="-2" y1="6" x2="2" y2="9"/>
-          <line x1="-4" y1="9" x2="4" y2="9"/>
-        </g>
-        <text class="hd-label" x="50" y="78">Website</text>
-
-        <!-- Arrow 1 -->
-        <path class="hd-arrow" d="M95 44 L125 44 M120 39 L125 44 L120 49"/>
-
-        <!-- AI Agent Box -->
-        <rect class="hd-box hd-box-accent" x="130" y="24" width="80" height="40" rx="4"/>
-        <g class="hd-icon hd-icon-accent" transform="translate(170 44)">
-          <rect x="-9" y="-9" width="18" height="18" rx="2"/>
-          <circle cx="0" cy="0" r="3.5"/>
-          <line x1="0" y1="-11" x2="0" y2="-9"/>
-          <line x1="0" y1="9" x2="0" y2="11"/>
-          <line x1="-11" y1="0" x2="-9" y2="0"/>
-          <line x1="9" y1="0" x2="11" y2="0"/>
-        </g>
-        <text class="hd-label hd-label-accent" x="170" y="78">KI-Agent</text>
-
-        <!-- Arrow 2 -->
-        <path class="hd-arrow" d="M215 44 L245 44 M240 39 L245 44 L240 49"/>
-
-        <!-- Answer Box -->
-        <rect class="hd-box" x="250" y="24" width="100" height="40" rx="4"/>
-        <g class="hd-icon" transform="translate(300 44)">
-          <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-          <line x1="-6" y1="-2.5" x2="6" y2="-2.5"/>
-          <line x1="-6" y1="0" x2="4" y2="0"/>
-          <line x1="-6" y1="2.5" x2="2" y2="2.5"/>
-        </g>
-        <text class="hd-label" x="300" y="78">Antwort</text>
-      </svg>
-      <svg class="hero-diagram-mobile" viewBox="0 0 280 280">
-        <!-- Website Box -->
-        <rect class="hd-box" x="40" y="20" width="200" height="50" rx="4"/>
-        <g class="hd-icon" transform="translate(140 45)">
-          <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-          <line x1="-9" y1="-2" x2="9" y2="-2"/>
-          <line x1="-2" y1="6" x2="2" y2="9"/>
-          <line x1="-4" y1="9" x2="4" y2="9"/>
-        </g>
-        <text class="hd-label" x="140" y="88">Website</text>
-
-        <!-- Arrow 1 -->
-        <path class="hd-arrow" d="M140 75 L140 95 M135 90 L140 95 L145 90"/>
-
-        <!-- AI Agent Box -->
-        <rect class="hd-box hd-box-accent" x="40" y="100" width="200" height="50" rx="4"/>
-        <g class="hd-icon hd-icon-accent" transform="translate(140 125)">
-          <rect x="-9" y="-9" width="18" height="18" rx="2"/>
-          <circle cx="0" cy="0" r="3.5"/>
-          <line x1="0" y1="-11" x2="0" y2="-9"/>
-          <line x1="0" y1="9" x2="0" y2="11"/>
-          <line x1="-11" y1="0" x2="-9" y2="0"/>
-          <line x1="9" y1="0" x2="11" y2="0"/>
-        </g>
-        <text class="hd-label hd-label-accent" x="140" y="168">KI-Agent</text>
-
-        <!-- Arrow 2 -->
-        <path class="hd-arrow" d="M140 155 L140 175 M135 170 L140 175 L145 170"/>
-
-        <!-- Answer Box -->
-        <rect class="hd-box" x="40" y="180" width="200" height="50" rx="4"/>
-        <g class="hd-icon" transform="translate(140 205)">
-          <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-          <line x1="-6" y1="-2.5" x2="6" y2="-2.5"/>
-          <line x1="-6" y1="0" x2="4" y2="0"/>
-          <line x1="-6" y1="2.5" x2="2" y2="2.5"/>
-        </g>
-        <text class="hd-label" x="140" y="248">Antwort</text>
-      </svg>
-    </figure>
+    <div class="hero-diagram-flex" aria-hidden="true">
+      <div class="diagram-step">
+        <svg class="step-icon" viewBox="0 0 24 24" width="32" height="32">
+          <rect x="3" y="6" width="18" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="10" y1="18" x2="14" y2="21" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span class="step-label">Website</span>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-step diagram-step-accent">
+        <svg class="step-icon" viewBox="0 0 24 24" width="32" height="32">
+          <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span class="step-label step-label-accent">KI-Agent</span>
+      </div>
+      <div class="diagram-arrow">→</div>
+      <div class="diagram-step">
+        <svg class="step-icon" viewBox="0 0 24 24" width="32" height="32">
+          <rect x="3" y="6" width="18" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <line x1="6" y1="9.5" x2="18" y2="9.5" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="6" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.5"/>
+          <line x1="6" y1="14.5" x2="14" y2="14.5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span class="step-label">Antwort</span>
+      </div>
+    </div>
 
     <div class="hero-statement">
       <p>Immer mehr Suchen enden nicht mit einem Klick auf eine Website, sondern mit einer Antwort direkt in Google oder im KI-Assistenten.</p>
@@ -260,168 +213,78 @@
 
         <p>Suchmaschinen entwickeln sich zu Antwortsystemen. Nutzer bekommen Zusammenfassungen, Listen, Vergleiche – häufig ohne den Umweg über mehrere Websites.</p>
 
-        <figure class="shift-timeline diagram">
-          <svg class="shift-timeline-desktop" viewBox="0 0 560 200" role="img" aria-labelledby="shift-title-de shift-desc-de">
-            <title id="shift-title-de">Die Entwicklung der Suche</title>
-            <desc id="shift-desc-de">Von Traditional Search (Suche → Links → Websites) zu AI Search (Frage → KI-Antwort direkt).</desc>
+        <div class="shift-timeline-flex" role="img" aria-labelledby="shift-title-de shift-desc-de">
+          <span id="shift-title-de" class="visually-hidden">Die Entwicklung der Suche</span>
+          <span id="shift-desc-de" class="visually-hidden">Von Traditional Search (Suche → Links → Websites) zu AI Search (Frage → KI-Antwort direkt).</span>
 
-            <!-- Left: Traditional Search -->
-            <text class="st-title st-title-old" x="140" y="20">Traditional Search</text>
+          <div class="shift-row">
+            <h3 class="shift-row-title">Traditional Search</h3>
+            <div class="shift-flow">
+              <div class="diagram-step diagram-step-small">
+                <svg class="step-icon" viewBox="0 0 24 24" width="28" height="28">
+                  <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <line x1="17" y1="17" x2="23" y2="23" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <span class="step-label-small">Suche</span>
+              </div>
+              <div class="diagram-arrow-small">→</div>
+              <div class="diagram-step diagram-step-small">
+                <svg class="step-icon" viewBox="0 0 24 24" width="28" height="28">
+                  <line x1="3" y1="7" x2="21" y2="7" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="3" y1="17" x2="21" y2="17" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <span class="step-label-small">10 Links</span>
+              </div>
+              <div class="diagram-arrow-small">→</div>
+              <div class="diagram-step diagram-step-small">
+                <svg class="step-icon" viewBox="0 0 24 24" width="28" height="28">
+                  <rect x="3" y="6" width="18" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="10" y1="18" x2="14" y2="21" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <span class="step-label-small">Website</span>
+              </div>
+            </div>
+          </div>
 
-            <!-- Search icon -->
-          <rect class="st-box" x="50" y="35" width="80" height="35" rx="3"/>
-          <g class="st-icon" transform="translate(90 52.5)">
-            <circle cx="0" cy="0" r="7"/>
-            <line x1="5" y1="5" x2="11" y2="11"/>
-          </g>
-          <text class="st-label" x="90" y="85">Suche</text>
-
-            <!-- Arrow -->
-            <path class="st-arrow" d="M135 52.5 L165 52.5 M160 47.5 L165 52.5 L160 57.5"/>
-
-            <!-- Links icon -->
-          <rect class="st-box" x="170" y="35" width="80" height="35" rx="3"/>
-          <g class="st-icon" transform="translate(210 52.5)">
-            <line x1="-9" y1="-5" x2="9" y2="-5"/>
-            <line x1="-9" y1="0" x2="9" y2="0"/>
-            <line x1="-9" y1="5" x2="9" y2="5"/>
-          </g>
-          <text class="st-label" x="210" y="85">10 Links</text>
-
-            <!-- Arrow -->
-            <path class="st-arrow" d="M255 52.5 L285 52.5 M280 47.5 L285 52.5 L280 57.5"/>
-
-            <!-- Website icon -->
-          <rect class="st-box" x="290" y="35" width="80" height="35" rx="3"/>
-          <g class="st-icon" transform="translate(330 52.5)">
-            <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-            <line x1="-9" y1="-2" x2="9" y2="-2"/>
-            <line x1="-2" y1="6" x2="2" y2="9"/>
-            <line x1="-4" y1="9" x2="4" y2="9"/>
-          </g>
-          <text class="st-label" x="330" y="85">Website</text>
-
-            <!-- Right: AI Search -->
-            <text class="st-title st-title-new" x="140" y="115">AI Search</text>
-
-            <!-- Question icon -->
-          <rect class="st-box-accent" x="50" y="130" width="80" height="35" rx="3"/>
-          <g class="st-icon st-icon-accent" transform="translate(90 147.5)">
-            <circle cx="0" cy="0" r="8"/>
-            <path d="M0 -4c1.2 0 2.2 0.9 2.2 2 0 0.8-0.5 1.4-1.6 1.9-0.8 0.3-1.1 0.8-1.1 1.4V3.5"/>
-            <line x1="0" y1="5.5" x2="0" y2="7"/>
-          </g>
-          <text class="st-label" x="90" y="180">Frage</text>
-
-            <!-- Arrow -->
-            <path class="st-arrow st-arrow-accent" d="M135 147.5 L165 147.5 M160 142.5 L165 147.5 L160 152.5"/>
-
-            <!-- AI icon -->
-          <rect class="st-box-accent" x="170" y="130" width="80" height="35" rx="3"/>
-          <g class="st-icon st-icon-accent" transform="translate(210 147.5)">
-            <rect x="-9" y="-9" width="18" height="18" rx="2"/>
-            <circle cx="0" cy="0" r="3.5"/>
-            <line x1="0" y1="-11" x2="0" y2="-9"/>
-            <line x1="0" y1="9" x2="0" y2="11"/>
-            <line x1="-11" y1="0" x2="-9" y2="0"/>
-            <line x1="9" y1="0" x2="11" y2="0"/>
-          </g>
-          <text class="st-label" x="210" y="180">KI-System</text>
-
-            <!-- Arrow -->
-            <path class="st-arrow st-arrow-accent" d="M255 147.5 L285 147.5 M280 142.5 L285 147.5 L280 152.5"/>
-
-            <!-- Answer icon -->
-          <rect class="st-box-accent" x="290" y="130" width="80" height="35" rx="3"/>
-          <g class="st-icon st-icon-accent" transform="translate(330 147.5)">
-            <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-            <line x1="-6" y1="-2.5" x2="6" y2="-2.5"/>
-            <line x1="-6" y1="0" x2="4" y2="0"/>
-            <line x1="-6" y1="2.5" x2="2" y2="2.5"/>
-          </g>
-          <text class="st-label" x="330" y="180">Antwort direkt</text>
-          </svg>
-          <svg class="shift-timeline-mobile" viewBox="0 0 280 520" role="img" aria-labelledby="shift-title-de-mobile shift-desc-de-mobile">
-            <title id="shift-title-de-mobile">Die Entwicklung der Suche</title>
-            <desc id="shift-desc-de-mobile">Von Traditional Search (Suche → Links → Websites) zu AI Search (Frage → KI-Antwort direkt).</desc>
-
-            <!-- Traditional Search -->
-            <text class="st-title st-title-old" x="140" y="20">Traditional Search</text>
-
-            <!-- Search Box -->
-            <rect class="st-box" x="40" y="40" width="200" height="45" rx="3"/>
-            <g class="st-icon" transform="translate(140 62.5)">
-              <circle cx="0" cy="0" r="7"/>
-              <line x1="5" y1="5" x2="11" y2="11"/>
-            </g>
-            <text class="st-label" x="140" y="102">Suche</text>
-
-            <!-- Arrow down -->
-            <path class="st-arrow" d="M140 90 L140 115 M135 110 L140 115 L145 110"/>
-
-            <!-- Links Box -->
-            <rect class="st-box" x="40" y="120" width="200" height="45" rx="3"/>
-            <g class="st-icon" transform="translate(140 142.5)">
-              <line x1="-9" y1="-5" x2="9" y2="-5"/>
-              <line x1="-9" y1="0" x2="9" y2="0"/>
-              <line x1="-9" y1="5" x2="9" y2="5"/>
-            </g>
-            <text class="st-label" x="140" y="182">10 Links</text>
-
-            <!-- Arrow down -->
-            <path class="st-arrow" d="M140 170 L140 195 M135 190 L140 195 L145 190"/>
-
-            <!-- Website Box -->
-            <rect class="st-box" x="40" y="200" width="200" height="45" rx="3"/>
-            <g class="st-icon" transform="translate(140 222.5)">
-              <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-              <line x1="-9" y1="-2" x2="9" y2="-2"/>
-              <line x1="-2" y1="6" x2="2" y2="9"/>
-              <line x1="-4" y1="9" x2="4" y2="9"/>
-            </g>
-            <text class="st-label" x="140" y="262">Website</text>
-
-            <!-- AI Search -->
-            <text class="st-title st-title-new" x="140" y="300">AI Search</text>
-
-            <!-- Question Box -->
-            <rect class="st-box-accent" x="40" y="320" width="200" height="45" rx="3"/>
-            <g class="st-icon st-icon-accent" transform="translate(140 342.5)">
-              <circle cx="0" cy="0" r="8"/>
-              <path d="M0 -4c1.2 0 2.2 0.9 2.2 2 0 0.8-0.5 1.4-1.6 1.9-0.8 0.3-1.1 0.8-1.1 1.4V3.5"/>
-              <line x1="0" y1="5.5" x2="0" y2="7"/>
-            </g>
-            <text class="st-label" x="140" y="382">Frage</text>
-
-            <!-- Arrow down -->
-            <path class="st-arrow st-arrow-accent" d="M140 370 L140 395 M135 390 L140 395 L145 390"/>
-
-            <!-- AI System Box -->
-            <rect class="st-box-accent" x="40" y="400" width="200" height="45" rx="3"/>
-            <g class="st-icon st-icon-accent" transform="translate(140 422.5)">
-              <rect x="-9" y="-9" width="18" height="18" rx="2"/>
-              <circle cx="0" cy="0" r="3.5"/>
-              <line x1="0" y1="-11" x2="0" y2="-9"/>
-              <line x1="0" y1="9" x2="0" y2="11"/>
-              <line x1="-11" y1="0" x2="-9" y2="0"/>
-              <line x1="9" y1="0" x2="11" y2="0"/>
-            </g>
-            <text class="st-label" x="140" y="462">KI-System</text>
-
-            <!-- Arrow down -->
-            <path class="st-arrow st-arrow-accent" d="M140 450 L140 475 M135 470 L140 475 L145 470"/>
-
-            <!-- Answer Box -->
-            <rect class="st-box-accent" x="40" y="480" width="200" height="45" rx="3"/>
-            <g class="st-icon st-icon-accent" transform="translate(140 502.5)">
-              <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-              <line x1="-6" y1="-2.5" x2="6" y2="-2.5"/>
-              <line x1="-6" y1="0" x2="4" y2="0"/>
-              <line x1="-6" y1="2.5" x2="2" y2="2.5"/>
-            </g>
-            <text class="st-label" x="140" y="542">Antwort direkt</text>
-          </svg>
-        </figure>
+          <div class="shift-row shift-row-accent">
+            <h3 class="shift-row-title shift-row-title-accent">AI Search</h3>
+            <div class="shift-flow">
+              <div class="diagram-step diagram-step-small diagram-step-accent">
+                <svg class="step-icon" viewBox="0 0 24 24" width="28" height="28">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <path d="M12 8c1.2 0 2.2 0.9 2.2 2 0 0.8-0.5 1.4-1.6 1.9-0.8 0.3-1.1 0.8-1.1 1.4V15" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <line x1="12" y1="17" x2="12" y2="18" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <span class="step-label-small step-label-accent">Frage</span>
+              </div>
+              <div class="diagram-arrow-small diagram-arrow-accent">→</div>
+              <div class="diagram-step diagram-step-small diagram-step-accent">
+                <svg class="step-icon" viewBox="0 0 24 24" width="28" height="28">
+                  <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <span class="step-label-small step-label-accent">KI-System</span>
+              </div>
+              <div class="diagram-arrow-small diagram-arrow-accent">→</div>
+              <div class="diagram-step diagram-step-small diagram-step-accent">
+                <svg class="step-icon" viewBox="0 0 24 24" width="28" height="28">
+                  <rect x="3" y="6" width="18" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                  <line x1="6" y1="9.5" x2="18" y2="9.5" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="6" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.5"/>
+                  <line x1="6" y1="14.5" x2="14" y2="14.5" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <span class="step-label-small step-label-accent">Antwort direkt</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <p>Das verändert die Praxis:</p>
         <ul>
@@ -600,54 +463,50 @@
 
         <p>Das ist die nächste Stufe nach Zero-Click: Nicht nur Antworten statt Links, sondern <strong>Interfaces statt Websites</strong>.</p>
 
-        <figure class="genui-flow diagram">
-          <svg viewBox="0 0 560 145" role="img" aria-labelledby="genui-title-de genui-desc-de">
-            <title id="genui-title-de">Generative UI Flow</title>
-            <desc id="genui-desc-de">Von strukturierten Daten über KI-Verarbeitung zum generierten Interface.</desc>
+        <div class="genui-flow-flex" role="img" aria-labelledby="genui-title-de genui-desc-de">
+          <span id="genui-title-de" class="visually-hidden">Generative UI Flow</span>
+          <span id="genui-desc-de" class="visually-hidden">Von strukturierten Daten über KI-Verarbeitung zum generierten Interface.</span>
 
-            <!-- Step 1: Structured Data -->
-            <rect class="gf-box" x="30" y="30" width="120" height="48" rx="3"/>
-            <g class="gf-icon" transform="translate(90 54)">
-              <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-              <line x1="-9" y1="-2" x2="9" y2="-2"/>
-              <line x1="-6" y1="1" x2="6" y2="1"/>
-              <line x1="-6" y1="4" x2="3" y2="4"/>
-            </g>
-            <text class="gf-title" x="90" y="96">Strukturierte Daten</text>
-            <text class="gf-label" x="90" y="113">Schema.org, JSON-LD</text>
+          <div class="diagram-step">
+            <svg class="step-icon" viewBox="0 0 24 24" width="32" height="32">
+              <rect x="3" y="6" width="18" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="6" y1="13" x2="18" y2="13" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="6" y1="16" x2="15" y2="16" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span class="step-label-main">Strukturierte Daten</span>
+            <span class="step-label-sub">Schema.org, JSON-LD</span>
+          </div>
 
-            <!-- Arrow 1 -->
-            <path class="gf-arrow" d="M155 54 L195 54 M190 49 L195 54 L190 59"/>
+          <div class="diagram-arrow">→</div>
 
-            <!-- Step 2: AI Processing -->
-            <rect class="gf-box-accent" x="200" y="30" width="120" height="48" rx="3"/>
-            <g class="gf-icon gf-icon-accent" transform="translate(260 54)">
-              <rect x="-9" y="-9" width="18" height="18" rx="2"/>
-              <circle cx="0" cy="0" r="3.5"/>
-              <line x1="0" y1="-11" x2="0" y2="-9"/>
-              <line x1="0" y1="9" x2="0" y2="11"/>
-              <line x1="-11" y1="0" x2="-9" y2="0"/>
-              <line x1="9" y1="0" x2="11" y2="0"/>
-            </g>
-            <text class="gf-title" x="260" y="96">KI verarbeitet</text>
-            <text class="gf-label" x="260" y="113">Gemini, GPT</text>
+          <div class="diagram-step diagram-step-accent">
+            <svg class="step-icon" viewBox="0 0 24 24" width="32" height="32">
+              <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <circle cx="12" cy="12" r="3.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="12" y1="21" x2="12" y2="23" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="1" y1="12" x2="3" y2="12" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="21" y1="12" x2="23" y2="12" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span class="step-label-main step-label-accent">KI verarbeitet</span>
+            <span class="step-label-sub">Gemini, GPT</span>
+          </div>
 
-            <!-- Arrow 2 -->
-            <path class="gf-arrow" d="M325 54 L365 54 M360 49 L365 54 L360 59"/>
+          <div class="diagram-arrow">→</div>
 
-            <!-- Step 3: Generated UI -->
-            <rect class="gf-box-accent" x="370" y="30" width="120" height="48" rx="3"/>
-            <g class="gf-icon gf-icon-accent" transform="translate(430 54)">
-              <rect x="-9" y="-6" width="18" height="12" rx="1.5"/>
-              <line x1="-6" y1="-2.5" x2="6" y2="-2.5"/>
-              <line x1="-6" y1="0" x2="4" y2="0"/>
-              <line x1="-6" y1="2.5" x2="2" y2="2.5"/>
-              <line x1="-6" y1="5" x2="0" y2="5"/>
-            </g>
-            <text class="gf-title" x="430" y="96">Generiertes UI</text>
-            <text class="gf-label" x="430" y="113">Rechner, Karte, etc.</text>
-          </svg>
-        </figure>
+          <div class="diagram-step diagram-step-accent">
+            <svg class="step-icon" viewBox="0 0 24 24" width="32" height="32">
+              <rect x="3" y="6" width="18" height="12" rx="1.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <line x1="6" y1="9.5" x2="18" y2="9.5" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="6" y1="12" x2="16" y2="12" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="6" y1="14.5" x2="14" y2="14.5" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="6" y1="17" x2="12" y2="17" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            <span class="step-label-main step-label-accent">Generiertes UI</span>
+            <span class="step-label-sub">Rechner, Karte, etc.</span>
+          </div>
+        </div>
 
         <p>Was das für Ihre Website bedeutet:</p>
 
@@ -720,34 +579,34 @@
       <section id="zusammenarbeit">
         <h2>Zusammenarbeit (ein klarer Ablauf)</h2>
 
-        <figure class="process-timeline diagram" aria-hidden="true">
-          <svg viewBox="0 0 440 90">
-            <!-- Connecting line -->
-            <line class="pt-line" x1="55" y1="24" x2="385" y2="24"/>
-
-            <!-- Step 1 -->
-            <circle class="pt-dot pt-dot-active" cx="55" cy="24" r="16"/>
-            <text class="pt-number" x="55" y="29">1</text>
-            <text class="pt-label pt-label-main" x="55" y="54">Standort</text>
-            <text class="pt-label" x="55" y="66">bestimmung</text>
-
-            <!-- Step 2 -->
-            <circle class="pt-dot pt-dot-active" cx="165" cy="24" r="16"/>
-            <text class="pt-number" x="165" y="29">2</text>
-            <text class="pt-label pt-label-main" x="165" y="54">Architektur</text>
-            <text class="pt-label" x="165" y="66">Entwurf</text>
-
-            <!-- Step 3 -->
-            <circle class="pt-dot pt-dot-active" cx="275" cy="24" r="16"/>
-            <text class="pt-number" x="275" y="29">3</text>
-            <text class="pt-label pt-label-main" x="275" y="54">Umsetzung</text>
-
-            <!-- Step 4 -->
-            <circle class="pt-dot pt-dot-active" cx="385" cy="24" r="16"/>
-            <text class="pt-number" x="385" y="29">4</text>
-            <text class="pt-label pt-label-main" x="385" y="54">Validierung</text>
-          </svg>
-        </figure>
+        <div class="process-timeline-flex" aria-hidden="true">
+          <div class="timeline-step">
+            <div class="timeline-dot">1</div>
+            <div class="timeline-labels">
+              <span class="timeline-label-main">Standort</span>
+              <span class="timeline-label-sub">bestimmung</span>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <div class="timeline-dot">2</div>
+            <div class="timeline-labels">
+              <span class="timeline-label-main">Architektur</span>
+              <span class="timeline-label-sub">Entwurf</span>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <div class="timeline-dot">3</div>
+            <div class="timeline-labels">
+              <span class="timeline-label-main">Umsetzung</span>
+            </div>
+          </div>
+          <div class="timeline-step">
+            <div class="timeline-dot">4</div>
+            <div class="timeline-labels">
+              <span class="timeline-label-main">Validierung</span>
+            </div>
+          </div>
+        </div>
 
         <ol>
           <li><strong>Standortbestimmung:</strong> Was lässt sich aus Ihrer Website aktuell zuverlässig extrahieren?</li>

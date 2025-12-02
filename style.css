@@ -1300,122 +1300,151 @@ footer .endpoint-list li:last-child {
 }
 
 /* ==========================================================================
-   Hero Diagram
+   Hero Diagram (Flex)
    ========================================================================== */
 
-.hero-diagram {
+.hero-diagram-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
   margin: var(--space-md) auto var(--space-lg);
-  width: clamp(280px, 90vw, 560px);
-  max-width: 100%;
+  max-width: 640px;
 }
 
-.hero-diagram svg {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-@media (max-width: 480px) {
-  .hero-diagram {
-    width: 100%;
+@media (max-width: 640px) {
+  .hero-diagram-flex {
+    flex-direction: column;
+    gap: var(--space-sm);
   }
 }
 
-.hero-diagram .hd-box {
-  fill: none;
-  stroke: var(--border-dark);
-  stroke-width: 1.6;
+.diagram-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border: 2px solid var(--border-dark);
+  border-radius: 8px;
+  min-width: 120px;
+  background: var(--bg);
 }
 
-.hero-diagram .hd-box-accent {
-  stroke: var(--accent);
-  stroke-width: 1.8;
-  fill: none;
+.diagram-step-accent {
+  border-color: var(--accent);
+  border-width: 2.5px;
 }
 
-.hero-diagram .hd-arrow {
-  fill: none;
-  stroke: var(--border-dark);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.step-icon {
+  color: var(--text-secondary);
 }
 
-.hero-diagram .hd-label {
-  font-family: var(--font-sans);
+.diagram-step-accent .step-icon {
+  color: var(--accent);
+}
+
+.step-label {
   font-size: var(--diagram-font-sm);
-  fill: var(--text-secondary);
-  text-anchor: middle;
-}
-
-.hero-diagram .hd-label-accent {
-  fill: var(--accent);
+  color: var(--text-secondary);
   font-weight: 500;
+  text-align: center;
 }
 
-.hero-diagram .hd-icon {
-  stroke: var(--text-secondary);
-  stroke-width: 1.5;
-  fill: none;
+.step-label-accent {
+  color: var(--accent);
 }
 
-.hero-diagram .hd-icon-accent {
-  stroke: var(--accent);
-  stroke-width: 1.5;
+.diagram-arrow {
+  font-size: 1.5rem;
+  color: var(--border-dark);
+  font-weight: 300;
+}
+
+@media (max-width: 640px) {
+  .diagram-arrow {
+    transform: rotate(90deg);
+  }
 }
 
 /* ==========================================================================
-   Process Timeline
+   Process Timeline (Flex)
    ========================================================================== */
 
-.process-timeline {
+.process-timeline-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin: var(--space-lg) 0;
-  padding: 0;
+  padding: 0 var(--space-sm);
+  max-width: 700px;
+  position: relative;
 }
 
-.process-timeline svg {
-  width: 100%;
-  max-width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
+.process-timeline-flex::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: var(--border);
+  z-index: 0;
 }
 
-.process-timeline .pt-line {
-  stroke: var(--border);
-  stroke-width: 2;
+@media (max-width: 640px) {
+  .process-timeline-flex {
+    flex-direction: column;
+    gap: var(--space-lg);
+    align-items: center;
+  }
+
+  .process-timeline-flex::before {
+    display: none;
+  }
 }
 
-.process-timeline .pt-dot {
-  fill: var(--bg);
-  stroke: var(--border-dark);
-  stroke-width: 2;
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  position: relative;
+  z-index: 1;
 }
 
-.process-timeline .pt-dot-active {
-  fill: var(--bg);
-  stroke: var(--accent);
-  stroke-width: 2;
-}
-
-.process-timeline .pt-number {
+.timeline-dot {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: var(--font-serif);
   font-size: var(--diagram-font-md);
   font-weight: 600;
-  fill: var(--text);
-  text-anchor: middle;
+  color: var(--text);
 }
 
-.process-timeline .pt-label {
-  font-family: var(--font-sans);
+.timeline-labels {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  text-align: center;
+}
+
+.timeline-label-main {
   font-size: var(--diagram-font-xs);
-  fill: var(--text-secondary);
-  text-anchor: middle;
+  font-weight: 500;
+  color: var(--text);
 }
 
-.process-timeline .pt-label-main {
-  font-weight: 500;
-  fill: var(--text);
+.timeline-label-sub {
+  font-size: var(--diagram-font-xs);
+  color: var(--text-secondary);
 }
 
 /* ==========================================================================
@@ -1629,64 +1658,130 @@ footer .endpoint-list li:last-child {
 }
 
 /* ==========================================================================
-   Generative UI Flow
+   Generative UI Flow (Flex)
    ========================================================================== */
 
-.genui-flow {
-  margin: var(--space-lg) 0;
-  max-width: min(900px, 100%);
+.genui-flow-flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin: var(--space-lg) auto;
+  max-width: 900px;
 }
 
-.genui-flow svg {
-  width: 100%;
-  height: auto;
-  display: block;
+@media (max-width: 640px) {
+  .genui-flow-flex {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
 }
 
-.genui-flow text {
-  font-family: var(--font-sans);
-  fill: var(--text);
+.step-label-main {
+  font-size: var(--diagram-font);
+  color: var(--text);
+  font-weight: 500;
+  text-align: center;
 }
 
-.genui-flow .gf-title {
-  font-weight: 600;
-  font-size: var(--diagram-font-xs);
-  text-anchor: middle;
-}
-
-.genui-flow .gf-label {
+.step-label-sub {
   font-size: var(--diagram-font-sm);
-  fill: var(--text-secondary);
-  text-anchor: middle;
+  color: var(--text-secondary);
+  text-align: center;
 }
 
-.genui-flow .gf-box {
-  fill: none;
-  stroke: var(--border-dark);
-  stroke-width: 1.6;
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
-.genui-flow .gf-box-accent {
-  stroke: var(--accent);
-  stroke-width: 1.8;
-  fill: none;
+/* ==========================================================================
+   Shift Timeline (Flex)
+   ========================================================================== */
+
+.shift-timeline-flex {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  margin: var(--space-lg) 0;
 }
 
-.genui-flow .gf-arrow {
-  fill: none;
-  stroke: var(--border-dark);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.shift-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
 }
 
-.genui-flow .gf-icon {
-  stroke: var(--text-secondary);
-  stroke-width: 1.5;
-  fill: none;
+.shift-row-title {
+  font-size: var(--diagram-font);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0;
 }
 
-.genui-flow .gf-icon-accent {
-  stroke: var(--accent);
-  stroke-width: 1.5;
+.shift-row-title-accent {
+  color: var(--accent);
+}
+
+.shift-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .shift-flow {
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+}
+
+.diagram-step-small {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-sm);
+  border: 1.5px solid var(--border-dark);
+  border-radius: 6px;
+  min-width: 100px;
+  background: var(--bg);
+}
+
+.diagram-step-small.diagram-step-accent {
+  border-color: var(--accent);
+  border-width: 2px;
+}
+
+.step-label-small {
+  font-size: var(--diagram-font-xs);
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: center;
+}
+
+.diagram-arrow-small {
+  font-size: 1.2rem;
+  color: var(--border-dark);
+  font-weight: 300;
+}
+
+.diagram-arrow-accent {
+  color: var(--accent);
+}
+
+@media (max-width: 640px) {
+  .diagram-arrow-small {
+    transform: rotate(90deg);
+  }
 }
