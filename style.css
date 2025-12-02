@@ -40,9 +40,9 @@
   --gutter: 3rem;
 
   /* Diagram scaling */
-  --diagram-font-xs: clamp(11px, 0.35vw + 9px, 14px);
-  --diagram-font-sm: clamp(12px, 0.4vw + 10px, 15px);
-  --diagram-font-md: clamp(13px, 0.45vw + 11px, 17px);
+  --diagram-font-xs: clamp(10px, 0.35vw + 9px, 14px);
+  --diagram-font-sm: clamp(11px, 0.4vw + 10px, 15px);
+  --diagram-font-md: clamp(12px, 0.45vw + 11px, 17px);
 }
 
 /* Dark Mode - System preference, nur wenn Toggle NICHT aktiv */
@@ -1262,7 +1262,7 @@ footer .endpoint-list li:last-child {
 
 .hero-diagram {
   margin: var(--space-md) auto var(--space-lg);
-  width: min(780px, 100%);
+  width: min(50%, 100%);
 }
 
 .hero-diagram svg {
@@ -1357,7 +1357,7 @@ footer .endpoint-list li:last-child {
 
 .process-timeline .pt-label {
   font-family: var(--font-sans);
-  font-size: var(--diagram-font-sm);
+  font-size: var(--diagram-font-xs);
   fill: var(--text-secondary);
   text-anchor: middle;
 }
@@ -1448,7 +1448,7 @@ footer .endpoint-list li:last-child {
 
 .journey-chart .jc-label {
   font-size: 12px;
-  fill: var(--text);
+  fill: white;
   text-anchor: middle;
   font-weight: 500;
 }
@@ -1594,7 +1594,7 @@ footer .endpoint-list li:last-child {
 
 .genui-flow .gf-title {
   font-weight: 600;
-  font-size: var(--diagram-font-md);
+  font-size: var(--diagram-font-xs);
   text-anchor: middle;
 }
 
