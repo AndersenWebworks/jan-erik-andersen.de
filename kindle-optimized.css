@@ -1308,3 +1308,98 @@ footer .endpoint-list li:last-child {
 .hero-diagram .hd-icon-accent {
   stroke: var(--accent);
 }
+
+/* ==========================================================================
+   Process Timeline
+   ========================================================================== */
+
+.process-timeline {
+  margin: var(--space-lg) 0;
+  padding: 0;
+}
+
+.process-timeline svg {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.process-timeline .pt-line {
+  stroke: var(--border);
+  stroke-width: 2;
+}
+
+.process-timeline .pt-dot {
+  fill: var(--bg);
+  stroke: var(--border-dark);
+  stroke-width: 2;
+}
+
+.process-timeline .pt-dot-active {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.process-timeline .pt-number {
+  font-family: var(--font-serif);
+  font-size: 12px;
+  font-weight: 600;
+  fill: var(--bg);
+  text-anchor: middle;
+}
+
+.process-timeline .pt-label {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+}
+
+.process-timeline .pt-label-main {
+  font-weight: 500;
+  fill: var(--text);
+}
+
+/* ==========================================================================
+   Mini Bar Chart (Evidence)
+   ========================================================================== */
+
+.mini-chart {
+  margin: var(--space-sm) 0;
+  max-width: 200px;
+}
+
+.mini-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.mini-chart .mc-bar-bg {
+  fill: var(--bg-alt);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.mini-chart .mc-bar-before {
+  fill: var(--border-dark);
+}
+
+.mini-chart .mc-bar-after {
+  fill: var(--accent);
+}
+
+.mini-chart .mc-label {
+  font-family: var(--font-sans);
+  font-size: 9px;
+  fill: var(--text-secondary);
+}
+
+.mini-chart .mc-value {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  fill: var(--text);
+  text-anchor: end;
+}
