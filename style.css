@@ -1378,10 +1378,14 @@ footer .endpoint-list li:last-child {
   font-size: 0.6875rem;
   font-weight: 500;
   color: var(--text-secondary);
-  text-decoration: none;
+  text-decoration: none !important;
   white-space: nowrap;
   z-index: 2;
   transition: color 0.2s ease;
+}
+
+.pill-option:hover {
+  text-decoration: none !important;
 }
 
 .pill-indicator {
@@ -1418,20 +1422,24 @@ footer .endpoint-list li:last-child {
 }
 
 /* Language Pill */
-.pill-track .pill-option:first-child.active {
-  color: #F9F5F0;
+.pill-track .pill-option:first-child.active,
+a.pill-option:first-child.active {
+  color: #F9F5F0 !important;
 }
 
-.pill-track .pill-option:first-child:not(.active) {
-  color: var(--text-secondary);
+.pill-track .pill-option:first-child:not(.active),
+a.pill-option:first-child:not(.active) {
+  color: var(--text-secondary) !important;
 }
 
-.pill-track .pill-option:last-child.active {
-  color: #F9F5F0;
+.pill-track .pill-option:last-child.active,
+a.pill-option:last-child.active {
+  color: #F9F5F0 !important;
 }
 
-.pill-track .pill-option:last-child:not(.active) {
-  color: var(--text-secondary);
+.pill-track .pill-option:last-child:not(.active),
+a.pill-option:last-child:not(.active) {
+  color: var(--text-secondary) !important;
 }
 
 .pill-option:first-child.active ~ .pill-indicator {
