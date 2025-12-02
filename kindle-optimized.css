@@ -260,7 +260,7 @@ h1 {
 /* Hero Statement */
 .hero-statement {
   max-width: 55rem;
-  margin: var(--space-lg) auto;
+  margin: 0 var(--space-lg);
   padding: var(--space-md) 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -1257,7 +1257,7 @@ footer .endpoint-list li:last-child {
 
 .hero-diagram {
   margin: var(--space-md) auto var(--space-lg);
-  max-width: 480px;
+  width: 50%;
 }
 
 .hero-diagram svg {
@@ -1402,4 +1402,231 @@ footer .endpoint-list li:last-child {
   font-size: 9px;
   fill: var(--text);
   text-anchor: end;
+}
+
+/* ==========================================================================
+   Journey Chart (Zero-Click Story)
+   ========================================================================== */
+
+.journey-chart {
+  margin: var(--space-lg) 0;
+  max-width: 560px;
+}
+
+.journey-chart svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.journey-chart text {
+  font-family: var(--font-sans);
+  fill: var(--text);
+}
+
+.journey-chart .jc-title {
+  font-weight: 600;
+  font-size: 13px;
+  fill: var(--text);
+}
+
+.journey-chart .jc-subtitle {
+  font-size: 10px;
+  fill: var(--text-secondary);
+}
+
+.journey-chart .jc-column-title {
+  font-weight: 600;
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.journey-chart .jc-label {
+  font-size: 9px;
+  fill: var(--bg);
+  text-anchor: middle;
+  font-weight: 500;
+}
+
+.journey-chart .jc-stat {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-anchor: middle;
+  font-weight: 600;
+}
+
+.journey-chart .jc-caption {
+  font-size: 9px;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+}
+
+.journey-chart .jc-bar-click {
+  fill: var(--border-dark);
+  stroke: var(--border);
+  stroke-width: 0.5;
+}
+
+.journey-chart .jc-bar-noclick {
+  fill: var(--subtle);
+  stroke: var(--border);
+  stroke-width: 0.5;
+}
+
+.journey-chart .jc-bar-noclick-bad {
+  fill: rgba(139, 0, 0, 0.2);
+  stroke: rgba(139, 0, 0, 0.4);
+  stroke-width: 0.5;
+}
+
+.journey-chart .jc-bar-cited {
+  fill: var(--accent);
+  stroke: var(--accent);
+  stroke-width: 0.5;
+}
+
+.journey-chart .jc-bar-rest {
+  fill: var(--bg-alt);
+  stroke: var(--border);
+  stroke-width: 0.5;
+}
+
+/* ==========================================================================
+   Shift Timeline (Search Evolution)
+   ========================================================================== */
+
+.shift-timeline {
+  margin: var(--space-lg) 0;
+  max-width: 560px;
+}
+
+.shift-timeline svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.shift-timeline text {
+  font-family: var(--font-sans);
+  fill: var(--text);
+}
+
+.shift-timeline .st-title {
+  font-weight: 600;
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.shift-timeline .st-title-old {
+  fill: var(--text-secondary);
+}
+
+.shift-timeline .st-title-new {
+  fill: var(--accent);
+}
+
+.shift-timeline .st-label {
+  font-size: 9px;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+}
+
+.shift-timeline .st-box {
+  fill: var(--bg-alt);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.shift-timeline .st-box-accent {
+  fill: var(--bg-alt);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.shift-timeline .st-arrow {
+  fill: none;
+  stroke: var(--border-dark);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.shift-timeline .st-arrow-accent {
+  stroke: var(--accent);
+}
+
+.shift-timeline .st-icon {
+  stroke: var(--text-secondary);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.shift-timeline .st-icon-accent {
+  stroke: var(--accent);
+}
+
+/* ==========================================================================
+   Generative UI Flow
+   ========================================================================== */
+
+.genui-flow {
+  margin: var(--space-lg) 0;
+  max-width: 560px;
+}
+
+.genui-flow svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.genui-flow text {
+  font-family: var(--font-sans);
+  fill: var(--text);
+}
+
+.genui-flow .gf-title {
+  font-weight: 600;
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.genui-flow .gf-label {
+  font-size: 9px;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+}
+
+.genui-flow .gf-box {
+  fill: var(--bg-alt);
+  stroke: var(--border);
+  stroke-width: 1;
+}
+
+.genui-flow .gf-box-accent {
+  fill: var(--bg-alt);
+  stroke: var(--accent);
+  stroke-width: 1.5;
+}
+
+.genui-flow .gf-arrow {
+  fill: none;
+  stroke: var(--border-dark);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.genui-flow .gf-icon {
+  stroke: var(--text-secondary);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.genui-flow .gf-icon-accent {
+  stroke: var(--accent);
 }

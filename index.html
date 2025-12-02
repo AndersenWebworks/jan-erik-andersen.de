@@ -213,6 +213,79 @@
 
         <p>Suchmaschinen entwickeln sich zu Antwortsystemen. Nutzer bekommen Zusammenfassungen, Listen, Vergleiche – häufig ohne den Umweg über mehrere Websites.</p>
 
+        <figure class="shift-timeline">
+          <svg viewBox="0 0 560 140" role="img" aria-labelledby="shift-title-de shift-desc-de">
+            <title id="shift-title-de">Die Entwicklung der Suche</title>
+            <desc id="shift-desc-de">Von Traditional Search (Suche → Links → Websites) zu AI Search (Frage → KI-Antwort direkt).</desc>
+
+            <!-- Left: Traditional Search -->
+            <text class="st-title st-title-old" x="140" y="20">Traditional Search</text>
+
+            <!-- Search icon -->
+            <rect class="st-box" x="50" y="35" width="80" height="35" rx="3"/>
+            <g class="st-icon" transform="translate(75, 45)">
+              <circle cx="10" cy="10" r="8"/>
+              <line x1="16" y1="16" x2="22" y2="22"/>
+            </g>
+            <text class="st-label" x="90" y="85">Suche</text>
+
+            <!-- Arrow -->
+            <path class="st-arrow" d="M135 52 L165 52 M160 47 L165 52 L160 57"/>
+
+            <!-- Links icon -->
+            <rect class="st-box" x="170" y="35" width="80" height="35" rx="3"/>
+            <g class="st-icon" transform="translate(195, 45)">
+              <line x1="4" y1="8" x2="16" y2="8"/>
+              <line x1="4" y1="12" x2="16" y2="12"/>
+              <line x1="4" y1="16" x2="16" y2="16"/>
+            </g>
+            <text class="st-label" x="210" y="85">10 Links</text>
+
+            <!-- Arrow -->
+            <path class="st-arrow" d="M255 52 L285 52 M280 47 L285 52 L280 57"/>
+
+            <!-- Website icon -->
+            <rect class="st-box" x="290" y="35" width="80" height="35" rx="3"/>
+            <g class="st-icon" transform="translate(315, 45)">
+              <rect x="0" y="0" width="18" height="14" rx="1"/>
+              <line x1="0" y1="4" x2="18" y2="4"/>
+            </g>
+            <text class="st-label" x="330" y="85">Website</text>
+
+            <!-- Right: AI Search -->
+            <text class="st-title st-title-new" x="140" y="115">AI Search</text>
+
+            <!-- Question icon -->
+            <rect class="st-box-accent" x="50" y="130" width="80" height="35" rx="3"/>
+            <g class="st-icon st-icon-accent" transform="translate(75, 140)">
+              <circle cx="10" cy="10" r="8"/>
+              <path d="M8 8 Q10 6 12 8"/>
+            </g>
+            <text class="st-label" x="90" y="180">Frage</text>
+
+            <!-- Arrow -->
+            <path class="st-arrow st-arrow-accent" d="M135 147 L165 147 M160 142 L165 147 L160 152"/>
+
+            <!-- AI icon -->
+            <rect class="st-box-accent" x="170" y="130" width="80" height="35" rx="3"/>
+            <g class="st-icon st-icon-accent" transform="translate(195, 140)">
+              <circle cx="10" cy="10" r="8"/>
+              <path d="M10 16 L10 20 M6 18 L14 18"/>
+            </g>
+            <text class="st-label" x="210" y="180">KI-System</text>
+
+            <!-- Arrow -->
+            <path class="st-arrow st-arrow-accent" d="M255 147 L285 147 M280 142 L285 147 L280 152"/>
+
+            <!-- Answer icon -->
+            <rect class="st-box-accent" x="290" y="130" width="80" height="35" rx="3"/>
+            <g class="st-icon st-icon-accent" transform="translate(315, 140)">
+              <path d="M0 4 L20 4 M0 8 L16 8 M0 12 L12 12"/>
+            </g>
+            <text class="st-label" x="330" y="180">Antwort direkt</text>
+          </svg>
+        </figure>
+
         <p>Das verändert die Praxis:</p>
         <ul>
           <li>Klassische SEO bleibt wichtig.</li>
@@ -229,24 +302,51 @@
 
         <h3>Was die Daten zeigen</h3>
 
-        <p>AI Overviews verändern das Klickverhalten:</p>
+        <p>Die Entwicklung der letzten Jahre:</p>
+
+        <figure class="journey-chart">
+          <svg viewBox="0 0 560 220" role="img" aria-labelledby="journey-title-de journey-desc-de">
+            <title id="journey-title-de">Die Zero-Click-Entwicklung</title>
+            <desc id="journey-desc-de">Entwicklung von Klicks vs. No-Click-Suchen: 2024 mit 56% No-Click, 2025 mit 69% No-Click, aber mit GEO-Optimierung 40% Citation-Visibility.</desc>
+
+            <!-- Title -->
+            <text class="jc-title" x="10" y="20">Die Zero-Click-Entwicklung</text>
+            <text class="jc-subtitle" x="10" y="35">Von 1.000 Google-Suchen</text>
+
+            <!-- Column 1: 2024 Baseline -->
+            <rect class="jc-bar-noclick" x="80" y="55" width="100" height="67" rx="2"/>
+            <text class="jc-label" x="130" y="92">560 No-Click</text>
+            <rect class="jc-bar-click" x="80" y="122" width="100" height="53" rx="2"/>
+            <text class="jc-label" x="130" y="152">440 Clicks</text>
+            <text class="jc-column-title" x="130" y="195">2024</text>
+            <text class="jc-caption" x="130" y="210">Schon ein Gamble</text>
+
+            <!-- Column 2: 2025 with AI Overviews -->
+            <rect class="jc-bar-noclick-bad" x="240" y="55" width="100" height="83" rx="2"/>
+            <text class="jc-label" x="290" y="100">690 No-Click</text>
+            <rect class="jc-bar-click" x="240" y="138" width="100" height="37" rx="2"/>
+            <text class="jc-label" x="290" y="160">310 Clicks</text>
+            <text class="jc-column-title" x="290" y="195">2025</text>
+            <text class="jc-caption" x="290" y="210">Noch schlimmer</text>
+
+            <!-- Column 3: 2025 + GEO -->
+            <rect class="jc-bar-rest" x="400" y="55" width="100" height="35" rx="2"/>
+            <text class="jc-stat" x="450" y="75" style="font-size:8px;fill:var(--text-secondary)">290 Rest</text>
+            <rect class="jc-bar-cited" x="400" y="90" width="100" height="48" rx="2"/>
+            <text class="jc-label" x="450" y="118">400 Cited</text>
+            <rect class="jc-bar-click" x="400" y="138" width="100" height="37" rx="2"/>
+            <text class="jc-label" x="450" y="160">310 Clicks</text>
+            <text class="jc-column-title" x="450" y="195">2025 + GEO</text>
+            <text class="jc-caption" x="450" y="210">Die Lösung</text>
+          </svg>
+        </figure>
+
+        <p>Die Entwicklung zeigt: SEO war schon 2024 ein Gamble (56% No-Click). Mit AI Overviews wird es noch schwieriger (69% No-Click). <strong>Aber:</strong> Mit GEO-Optimierung bleiben Sie trotzdem sichtbar – nicht durch Klicks, sondern durch <strong>Citations in AI-Antworten</strong>. Und die konvertieren <strong>25x besser</strong> als traditionelle Klicks.</p>
 
         <div class="evidence-group">
           <div class="evidence-item">
             <p class="evidence-stat"><strong>-61 %</strong> organische Klickrate</p>
             <p class="evidence-context">bei Suchergebnissen mit AI Overviews</p>
-            <figure class="mini-chart" aria-hidden="true">
-              <svg viewBox="0 0 180 36">
-                <text class="mc-label" x="0" y="10">Vorher</text>
-                <rect class="mc-bar-bg" x="45" y="2" width="100" height="12" rx="2"/>
-                <rect class="mc-bar-before" x="45" y="2" width="88" height="12" rx="2"/>
-                <text class="mc-value" x="178" y="11">1.76%</text>
-                <text class="mc-label" x="0" y="32">Nachher</text>
-                <rect class="mc-bar-bg" x="45" y="24" width="100" height="12" rx="2"/>
-                <rect class="mc-bar-after" x="45" y="24" width="35" height="12" rx="2"/>
-                <text class="mc-value" x="178" y="33">0.61%</text>
-              </svg>
-            </figure>
             <details>
               <summary>Studie & Methodik</summary>
               <p>Seer Interactive (September 2024): Analyse von Keywords mit aktiven AI Overviews.</p>
@@ -363,6 +463,50 @@
 
         <p>Das ist die nächste Stufe nach Zero-Click: Nicht nur Antworten statt Links, sondern <strong>Interfaces statt Websites</strong>.</p>
 
+        <figure class="genui-flow">
+          <svg viewBox="0 0 560 120" role="img" aria-labelledby="genui-title-de genui-desc-de">
+            <title id="genui-title-de">Generative UI Flow</title>
+            <desc id="genui-desc-de">Von strukturierten Daten über KI-Verarbeitung zum generierten Interface.</desc>
+
+            <!-- Step 1: Structured Data -->
+            <rect class="gf-box" x="30" y="30" width="120" height="50" rx="3"/>
+            <g class="gf-icon" transform="translate(70, 42)">
+              <rect x="0" y="0" width="16" height="12" rx="1"/>
+              <line x1="0" y1="4" x2="16" y2="4"/>
+              <line x1="4" y1="8" x2="12" y2="8"/>
+            </g>
+            <text class="gf-title" x="90" y="72">Strukturierte Daten</text>
+            <text class="gf-label" x="90" y="95">Schema.org, JSON-LD</text>
+
+            <!-- Arrow 1 -->
+            <path class="gf-arrow" d="M155 55 L195 55 M190 50 L195 55 L190 60"/>
+
+            <!-- Step 2: AI Processing -->
+            <rect class="gf-box-accent" x="200" y="30" width="120" height="50" rx="3"/>
+            <g class="gf-icon gf-icon-accent" transform="translate(240, 42)">
+              <circle cx="10" cy="10" r="8"/>
+              <path d="M10 18 L10 22 M6 20 L14 20"/>
+            </g>
+            <text class="gf-title" x="260" y="72">KI verarbeitet</text>
+            <text class="gf-label" x="260" y="95">Gemini, GPT</text>
+
+            <!-- Arrow 2 -->
+            <path class="gf-arrow" d="M325 55 L365 55 M360 50 L365 55 L360 60"/>
+
+            <!-- Step 3: Generated UI -->
+            <rect class="gf-box-accent" x="370" y="30" width="120" height="50" rx="3"/>
+            <g class="gf-icon gf-icon-accent" transform="translate(410, 42)">
+              <rect x="0" y="0" width="16" height="12" rx="1"/>
+              <line x1="4" y1="4" x2="12" y2="4"/>
+              <circle cx="5" cy="8" r="1" fill="var(--accent)"/>
+              <circle cx="8" cy="8" r="1" fill="var(--accent)"/>
+              <circle cx="11" cy="8" r="1" fill="var(--accent)"/>
+            </g>
+            <text class="gf-title" x="430" y="72">Generiertes UI</text>
+            <text class="gf-label" x="430" y="95">Rechner, Karte, etc.</text>
+          </svg>
+        </figure>
+
         <p>Was das für Ihre Website bedeutet:</p>
 
         <ul>
@@ -396,7 +540,7 @@
 
         <dl class="key-concepts">
           <dt><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>GEO (Generative Engine Optimization)</dt>
-          <dd>Optimierung von Inhalten und Struktur, damit Antwortsysteme Inhalte korrekt verstehen und zitieren. <small>(<a href="https://arxiv.org/abs/2311.09735" target="_blank" rel="noopener">Aggarwal et al., 2024</a>)</small></dd>
+          <dd>Optimierung von Inhalten und Struktur, damit Antwortsysteme Inhalte korrekt verstehen und zitieren. Wissenschaftlich belegt: <strong>+37-40% Visibility</strong>. <small>(<a href="https://arxiv.org/abs/2311.09735" target="_blank" rel="noopener">Aggarwal et al., 2024</a>)</small></dd>
 
           <dt><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>AVO (Agent Visibility Optimization)</dt>
           <dd>Die praktische Zielgröße: Wie gut Ihre Website für KI-Agenten auffindbar, zitierbar und nutzbar ist.</dd>
@@ -527,7 +671,7 @@
 
     <p>Ein Projekt von <a href="https://andersen-webworks.de">Andersen Webworks</a> — Webdesign seit 2010, AI-native Web Architecture seit 2024</p>
 
-    <p><strong>jan-erik-andersen.de v2.10</strong></p>
+    <p><strong>jan-erik-andersen.de v2.12</strong></p>
     <p>
       <a href="/de/impressum.html">Impressum</a> ·
       <a href="/de/datenschutz.html">Datenschutz</a> ·
