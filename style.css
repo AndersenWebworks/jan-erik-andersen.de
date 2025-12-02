@@ -1401,17 +1401,29 @@ footer .endpoint-list li:last-child {
   transform: translateX(calc(100% + 2px));
 }
 
+.darkmode-checkbox:checked ~ .pill-track .pill-option:first-child {
+  color: var(--text-secondary);
+}
+
 .darkmode-checkbox:checked ~ .pill-track .pill-option:last-child {
-  color: var(--text);
+  color: var(--bg);
 }
 
 .darkmode-checkbox:not(:checked) ~ .pill-track .pill-option:first-child {
-  color: var(--text);
+  color: var(--bg);
+}
+
+.darkmode-checkbox:not(:checked) ~ .pill-track .pill-option:last-child {
+  color: var(--text-secondary);
 }
 
 /* Language Pill */
 .pill-option.active {
-  color: var(--text);
+  color: var(--bg);
+}
+
+.pill-option:not(.active) {
+  color: var(--text-secondary);
 }
 
 .pill-option.active ~ .pill-indicator {
