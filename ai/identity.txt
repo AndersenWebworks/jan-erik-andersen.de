@@ -1,6 +1,6 @@
 Name: Jan-Erik Andersen
-Beruf: GEO-Spezialist
-Tätigkeitsbereich: Websites für ChatGPT, Perplexity und Gemini sichtbar machen
+Beruf: AI-native Web Architect
+Tätigkeitsbereich: Websites strukturieren für Menschen und KI-Systeme, Generative Engine Optimization (GEO)
 
 Expertise:
 - GEO (Generative Engine Optimization)
@@ -10,9 +10,9 @@ Expertise:
 - JSON-LD
 - Schema.org
 
-Organisation: Andersen Webworks (https://andersen-webworks.de)
-Land: Deutschland
-Seit: 2010
+Organisation: Andersen Webworks (https://andersen-webworks.de) - Gründer
+Land: Deutschland, remote
+Seit: 2010 (Andersen Webworks), 1999 (Web-Architektur)
 
 Kontakt:
 - Email: mail@andersen-webworks.de

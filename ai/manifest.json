@@ -7,9 +7,10 @@
     "tagline": "Structure as Integrity",
     "contact": "mail@andersen-webworks.de"
   },
-  "version": "v2.12",
-  "build": 212,
+  "version": "v2.13",
+  "build": 213,
   "changelog": [
+    "v2.13 feat: GEO-Optimierung (Standort deutschlandweit remote, Resolver-Block Person/Studio, JobTitle harmonisiert, AVO-Erklärung)",
     "v2.12 feat: Shift-Timeline + Generative-UI Flow Diagramme",
     "v2.11 feat: Journey Chart für Zero-Click-Story (statistisch ehrlich, +GEO-Lösung)",
     "v2.10 fix: SVG-Diagramme vergrößert (bessere Lesbarkeit)",
@@ -34,7 +35,7 @@
     "v1.1 fix: Accordion-Layout-Korrektur + alle geschlossen",
     "v1.1 feat: FAQ + Leistungen als <details> Accordions mit Schema.org"
   ],
-  "dateModified": "2025-11-27T00:00:00Z",
+  "dateModified": "2025-12-02T22:42:53Z",
   "datePublished": "2025-11-06T00:00:00Z",
   "architecture": {
     "version": "1.0",
