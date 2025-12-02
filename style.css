@@ -38,6 +38,11 @@
   --content-width: 65%;
   --sidebar-width: 35%;
   --gutter: 3rem;
+
+  /* Diagram scaling */
+  --diagram-font-xs: clamp(11px, 0.35vw + 9px, 14px);
+  --diagram-font-sm: clamp(12px, 0.4vw + 10px, 15px);
+  --diagram-font-md: clamp(13px, 0.45vw + 11px, 17px);
 }
 
 /* Dark Mode - System preference, nur wenn Toggle NICHT aktiv */
@@ -1186,7 +1191,7 @@ footer .endpoint-list li:last-child {
 
 .concept-diagram .diagram-title {
   font-weight: 600;
-  font-size: 13px;
+  font-size: var(--diagram-font-md);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1196,23 +1201,23 @@ footer .endpoint-list li:last-child {
 }
 
 .concept-diagram .diagram-label {
-  font-size: 11px;
+  font-size: var(--diagram-font-xs);
   fill: var(--text-secondary);
 }
 
 .concept-diagram .diagram-path {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--diagram-font-xs);
   fill: var(--subtle);
 }
 
 .concept-diagram .diagram-content {
-  font-size: 10px;
+  font-size: var(--diagram-font-sm);
   fill: var(--text-secondary);
 }
 
 .concept-diagram .diagram-result {
-  font-size: 11px;
+  font-size: var(--diagram-font-md);
   font-weight: 500;
 }
 
@@ -1257,7 +1262,7 @@ footer .endpoint-list li:last-child {
 
 .hero-diagram {
   margin: var(--space-md) auto var(--space-lg);
-  width: 50%;
+  width: min(780px, 100%);
 }
 
 .hero-diagram svg {
@@ -1287,7 +1292,7 @@ footer .endpoint-list li:last-child {
 
 .hero-diagram .hd-label {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--diagram-font-sm);
   fill: var(--text-secondary);
   text-anchor: middle;
 }
@@ -1344,7 +1349,7 @@ footer .endpoint-list li:last-child {
 
 .process-timeline .pt-number {
   font-family: var(--font-serif);
-  font-size: 12px;
+  font-size: var(--diagram-font-md);
   font-weight: 600;
   fill: var(--bg);
   text-anchor: middle;
@@ -1352,7 +1357,7 @@ footer .endpoint-list li:last-child {
 
 .process-timeline .pt-label {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: var(--diagram-font-sm);
   fill: var(--text-secondary);
   text-anchor: middle;
 }
@@ -1497,7 +1502,7 @@ footer .endpoint-list li:last-child {
 
 .shift-timeline {
   margin: var(--space-lg) 0;
-  max-width: 90%;
+  max-width: min(900px, 100%);
 }
 
 .shift-timeline svg {
@@ -1513,7 +1518,7 @@ footer .endpoint-list li:last-child {
 
 .shift-timeline .st-title {
   font-weight: 600;
-  font-size: 11px;
+  font-size: var(--diagram-font-md);
   text-anchor: middle;
 }
 
@@ -1526,7 +1531,7 @@ footer .endpoint-list li:last-child {
 }
 
 .shift-timeline .st-label {
-  font-size: 9px;
+  font-size: var(--diagram-font-sm);
   fill: var(--text-secondary);
   text-anchor: middle;
 }
@@ -1573,7 +1578,7 @@ footer .endpoint-list li:last-child {
 
 .genui-flow {
   margin: var(--space-lg) 0;
-  max-width: 90%;
+  max-width: min(900px, 100%);
 }
 
 .genui-flow svg {
@@ -1589,12 +1594,12 @@ footer .endpoint-list li:last-child {
 
 .genui-flow .gf-title {
   font-weight: 600;
-  font-size: 11px;
+  font-size: var(--diagram-font-md);
   text-anchor: middle;
 }
 
 .genui-flow .gf-label {
-  font-size: 9px;
+  font-size: var(--diagram-font-sm);
   fill: var(--text-secondary);
   text-anchor: middle;
 }
