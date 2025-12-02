@@ -1418,15 +1418,23 @@ footer .endpoint-list li:last-child {
 }
 
 /* Language Pill */
-.pill-option.active {
+.pill-track .pill-option:first-child.active {
   color: #F9F5F0;
 }
 
-.pill-option:not(.active) {
+.pill-track .pill-option:first-child:not(.active) {
   color: var(--text-secondary);
 }
 
-.pill-option.active ~ .pill-indicator {
+.pill-track .pill-option:last-child.active {
+  color: #F9F5F0;
+}
+
+.pill-track .pill-option:last-child:not(.active) {
+  color: var(--text-secondary);
+}
+
+.pill-option:first-child.active ~ .pill-indicator {
   transform: translateX(0);
 }
 
