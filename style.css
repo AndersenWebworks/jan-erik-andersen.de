@@ -1225,20 +1225,21 @@ footer .endpoint-list li:last-child {
    ========================================================================== */
 
 .architecture-comparison-flex {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--space-lg);
   margin: var(--space-lg) 0;
+  align-items: stretch;
 }
 
 @media (max-width: 768px) {
   .architecture-comparison-flex {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: var(--space-xl);
   }
 }
 
 .arch-column {
-  flex: 1;
   border: 1px solid var(--border-dark);
   padding: var(--space-md);
   display: flex;
