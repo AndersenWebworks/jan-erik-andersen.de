@@ -45,9 +45,9 @@
   --diagram-font-md: clamp(12px, 0.45vw + 11px, 17px);
 }
 
-/* Dark Mode - System preference, nur wenn Toggle NICHT aktiv */
-@media (prefers-color-scheme: dark) {
-  body:not(:has(.darkmode-checkbox:checked)) {
+/* Dark Mode Override - wenn System Light aber Toggle aktiv */
+@media (prefers-color-scheme: light) {
+  body:has(.darkmode-checkbox:checked) {
     --bg: #1A1A1A;
     --bg-alt: #242424;
     --text: #E8E4E0;
@@ -60,9 +60,24 @@
   }
 }
 
-/* Light Mode Override - wenn System Dark aber Toggle aktiv */
+/* Dark Mode - wenn System Dark und Toggle aktiv */
 @media (prefers-color-scheme: dark) {
   body:has(.darkmode-checkbox:checked) {
+    --bg: #1A1A1A;
+    --bg-alt: #242424;
+    --text: #E8E4E0;
+    --text-secondary: #C0BCB8;
+    --subtle: #A0A0A0;
+    --border: #3A3A3A;
+    --border-dark: #5A5A5A;
+    --accent: #E07060;
+    --accent-hover: #F08070;
+  }
+}
+
+/* Light Mode Override - wenn System Dark aber Toggle NICHT aktiv */
+@media (prefers-color-scheme: dark) {
+  body:not(:has(.darkmode-checkbox:checked)) {
     --bg: #F9F5F0;
     --bg-alt: #F0EBE3;
     --text: #1A1A1A;
@@ -119,58 +134,6 @@
   width: 1px;
   height: 1px;
   opacity: 0;
-}
-
-/* Dark Mode Override - wenn System Light aber Toggle aktiv */
-@media (prefers-color-scheme: light) {
-  body:has(.darkmode-checkbox:checked) {
-    --bg: #1A1A1A;
-    --bg-alt: #242424;
-    --text: #E8E4E0;
-    --text-secondary: #C0BCB8;
-    --subtle: #A0A0A0;
-    --border: #3A3A3A;
-    --border-dark: #5A5A5A;
-    --accent: #E07060;
-    --accent-hover: #F08070;
-  }
-}
-
-/* Icon-Logik: Zeige das Icon des AKTUELLEN Modes */
-
-/* Default: Light Mode - Sonnen-Icon zeigen, Mond verbergen */
-.theme-toggle .icon-dark {
-  display: none;
-}
-
-/* System Light + Toggle aktiv = Dark Mode - Mond zeigen */
-@media (prefers-color-scheme: light) {
-  .theme-toggle:has(.darkmode-checkbox:checked) .icon-light {
-    display: none;
-  }
-  .theme-toggle:has(.darkmode-checkbox:checked) .icon-dark {
-    display: inline;
-  }
-}
-
-/* System Dark + Toggle NICHT aktiv = Dark Mode - Mond zeigen */
-@media (prefers-color-scheme: dark) {
-  .theme-toggle:not(:has(.darkmode-checkbox:checked)) .icon-light {
-    display: none;
-  }
-  .theme-toggle:not(:has(.darkmode-checkbox:checked)) .icon-dark {
-    display: inline;
-  }
-}
-
-/* System Dark + Toggle aktiv = Light Mode - Sonne zeigen (default) */
-@media (prefers-color-scheme: dark) {
-  .theme-toggle:has(.darkmode-checkbox:checked) .icon-light {
-    display: inline;
-  }
-  .theme-toggle:has(.darkmode-checkbox:checked) .icon-dark {
-    display: none;
-  }
 }
 
 /* ==========================================================================
@@ -1394,7 +1357,7 @@ footer .endpoint-list li:last-child {
   left: 2px;
   width: calc(50% - 3px);
   height: calc(100% - 4px);
-  background: #4A4A4A;
+  background: #2A2A2A;
   border-radius: 10px;
   transition: transform 0.2s ease;
   z-index: 1;
@@ -1405,48 +1368,44 @@ footer .endpoint-list li:last-child {
   transform: translateX(calc(100% + 2px));
 }
 
-.darkmode-checkbox:checked ~ .pill-track .pill-option:first-child {
-  color: var(--text-secondary);
+.darkmode-checkbox:checked ~ .pill-track .pill-option:nth-child(1) {
+  color: var(--text-secondary) !important;
 }
 
-.darkmode-checkbox:checked ~ .pill-track .pill-option:last-child {
-  color: #F9F5F0;
+.darkmode-checkbox:checked ~ .pill-track .pill-option:nth-child(2) {
+  color: #FFFFFF !important;
 }
 
-.darkmode-checkbox:not(:checked) ~ .pill-track .pill-option:first-child {
-  color: #F9F5F0;
+.darkmode-checkbox:not(:checked) ~ .pill-track .pill-option:nth-child(1) {
+  color: #FFFFFF !important;
 }
 
-.darkmode-checkbox:not(:checked) ~ .pill-track .pill-option:last-child {
-  color: var(--text-secondary);
+.darkmode-checkbox:not(:checked) ~ .pill-track .pill-option:nth-child(2) {
+  color: var(--text-secondary) !important;
 }
 
 /* Language Pill */
-.pill-track .pill-option:first-child.active,
-a.pill-option:first-child.active {
-  color: #F9F5F0 !important;
+.pill-toggle:not(:has(.darkmode-checkbox)) .pill-option:nth-child(1).active {
+  color: #FFFFFF !important;
 }
 
-.pill-track .pill-option:first-child:not(.active),
-a.pill-option:first-child:not(.active) {
+.pill-toggle:not(:has(.darkmode-checkbox)) .pill-option:nth-child(1):not(.active) {
   color: var(--text-secondary) !important;
 }
 
-.pill-track .pill-option:last-child.active,
-a.pill-option:last-child.active {
-  color: #F9F5F0 !important;
+.pill-toggle:not(:has(.darkmode-checkbox)) .pill-option:nth-child(2).active {
+  color: #FFFFFF !important;
 }
 
-.pill-track .pill-option:last-child:not(.active),
-a.pill-option:last-child:not(.active) {
+.pill-toggle:not(:has(.darkmode-checkbox)) .pill-option:nth-child(2):not(.active) {
   color: var(--text-secondary) !important;
 }
 
-.pill-option:first-child.active ~ .pill-indicator {
+.pill-option:nth-child(1).active ~ .pill-indicator {
   transform: translateX(0);
 }
 
-.pill-option:last-child.active ~ .pill-indicator {
+.pill-option:nth-child(2).active ~ .pill-indicator {
   transform: translateX(calc(100% + 2px));
 }
 
