@@ -320,42 +320,57 @@
 
         <p>Die Entwicklung der letzten Jahre:</p>
 
-        <figure class="journey-chart diagram">
-          <svg viewBox="0 0 560 220" role="img" aria-labelledby="journey-title-de journey-desc-de">
-            <title id="journey-title-de">Die Zero-Click-Entwicklung</title>
-            <desc id="journey-desc-de">Entwicklung von Klicks vs. No-Click-Suchen: 2024 mit 56% No-Click, 2025 mit 69% No-Click, aber mit GEO-Optimierung 40% Citation-Visibility.</desc>
+        <div class="zero-click-chart" role="img" aria-labelledby="zc-title zc-desc">
+          <span id="zc-title" class="visually-hidden">Die Zero-Click-Entwicklung</span>
+          <span id="zc-desc" class="visually-hidden">Entwicklung von Klicks vs. No-Click-Suchen: 2024 mit 56% No-Click, 2025 mit 69% No-Click, aber mit GEO-Optimierung 40% Citation-Visibility.</span>
 
-            <!-- Title -->
-            <text class="jc-title" x="10" y="20">Die Zero-Click-Entwicklung</text>
-            <text class="jc-subtitle" x="10" y="35">Von 1.000 Google-Suchen</text>
+          <h3 class="zc-main-title">Die Zero-Click-Entwicklung</h3>
+          <p class="zc-subtitle">Von 1.000 Google-Suchen</p>
 
-            <!-- Column 1: 2024 Baseline -->
-            <rect class="jc-bar-noclick" x="80" y="55" width="100" height="67" rx="2"/>
-            <text class="jc-label" x="130" y="92">560 No-Click</text>
-            <rect class="jc-bar-click" x="80" y="122" width="100" height="53" rx="2"/>
-            <text class="jc-label" x="130" y="152">440 Clicks</text>
-            <text class="jc-column-title" x="130" y="195">2024</text>
-            <text class="jc-caption" x="130" y="210">Schon ein Gamble</text>
+          <div class="zc-columns">
+            <div class="zc-column">
+              <div class="zc-bars">
+                <div class="zc-bar zc-bar-noclick" style="height: 56%;">
+                  <span class="zc-bar-label">560 No-Click</span>
+                </div>
+                <div class="zc-bar zc-bar-click" style="height: 44%;">
+                  <span class="zc-bar-label">440 Clicks</span>
+                </div>
+              </div>
+              <p class="zc-column-title">2024</p>
+              <p class="zc-caption">Schon ein Gamble</p>
+            </div>
 
-            <!-- Column 2: 2025 with AI Overviews -->
-            <rect class="jc-bar-noclick-bad" x="240" y="55" width="100" height="83" rx="2"/>
-            <text class="jc-label" x="290" y="100">690 No-Click</text>
-            <rect class="jc-bar-click" x="240" y="138" width="100" height="37" rx="2"/>
-            <text class="jc-label" x="290" y="160">310 Clicks</text>
-            <text class="jc-column-title" x="290" y="195">2025</text>
-            <text class="jc-caption" x="290" y="210">Noch schlimmer</text>
+            <div class="zc-column">
+              <div class="zc-bars">
+                <div class="zc-bar zc-bar-noclick-bad" style="height: 69%;">
+                  <span class="zc-bar-label">690 No-Click</span>
+                </div>
+                <div class="zc-bar zc-bar-click" style="height: 31%;">
+                  <span class="zc-bar-label">310 Clicks</span>
+                </div>
+              </div>
+              <p class="zc-column-title">2025</p>
+              <p class="zc-caption">Noch schlimmer</p>
+            </div>
 
-            <!-- Column 3: 2025 + GEO -->
-            <rect class="jc-bar-rest" x="400" y="55" width="100" height="35" rx="2"/>
-            <text class="jc-stat" x="450" y="75" style="fill:var(--text-secondary)">290 Rest</text>
-            <rect class="jc-bar-cited" x="400" y="90" width="100" height="48" rx="2"/>
-            <text class="jc-label" x="450" y="118">400 Cited</text>
-            <rect class="jc-bar-click" x="400" y="138" width="100" height="37" rx="2"/>
-            <text class="jc-label" x="450" y="160">310 Clicks</text>
-            <text class="jc-column-title" x="450" y="195">2025 + GEO</text>
-            <text class="jc-caption" x="450" y="210">Die Lösung</text>
-          </svg>
-        </figure>
+            <div class="zc-column zc-column-accent">
+              <div class="zc-bars">
+                <div class="zc-bar zc-bar-rest" style="height: 29%;">
+                  <span class="zc-bar-label">290 Rest</span>
+                </div>
+                <div class="zc-bar zc-bar-cited" style="height: 40%;">
+                  <span class="zc-bar-label">400 Cited</span>
+                </div>
+                <div class="zc-bar zc-bar-click" style="height: 31%;">
+                  <span class="zc-bar-label">310 Clicks</span>
+                </div>
+              </div>
+              <p class="zc-column-title zc-column-title-accent">2025 + GEO</p>
+              <p class="zc-caption zc-caption-accent">Die Lösung</p>
+            </div>
+          </div>
+        </div>
 
         <p>Die Entwicklung zeigt: SEO war schon 2024 ein Gamble (56% No-Click). Mit AI Overviews wird es noch schwieriger (69% No-Click). <strong>Aber:</strong> Mit GEO-Optimierung bleiben Sie trotzdem sichtbar – nicht durch Klicks, sondern durch <strong>Citations in AI-Antworten</strong>. Und die konvertieren <strong>25x besser</strong> als traditionelle Klicks.</p>
 
@@ -399,66 +414,57 @@
 
         <p>Viele Websites sind klassisch aufgebaut: Startseite zeigt Überblick und Teaser, Unterseiten liefern Details. Für Menschen sinnvoll – für Antwortsysteme oft nicht optimal.</p>
 
-        <figure class="concept-diagram diagram">
-          <svg viewBox="0 0 560 280" role="img" aria-labelledby="diagram-title-de diagram-desc-de">
-            <title id="diagram-title-de">Klassisch vs. AI-native Architektur</title>
-            <desc id="diagram-desc-de">Vergleich: Klassische Websites verteilen Infos auf Unterseiten, AI-native Websites zeigen Key Facts auf der Startseite.</desc>
+        <div class="architecture-comparison-flex" role="img" aria-labelledby="arch-title arch-desc">
+          <span id="arch-title" class="visually-hidden">Klassisch vs. AI-native Architektur</span>
+          <span id="arch-desc" class="visually-hidden">Vergleich: Klassische Websites verteilen Infos auf Unterseiten, AI-native Websites zeigen Key Facts auf der Startseite.</span>
 
-            <!-- Left: Classic -->
-            <rect class="frame" x="10" y="10" width="250" height="260" rx="4"/>
-            <text class="diagram-title" x="135" y="32" text-anchor="middle">Klassisch</text>
-            <line class="divider" x1="20" y1="42" x2="250" y2="42"/>
+          <div class="arch-column">
+            <h3 class="arch-title">Klassisch</h3>
+            <div class="arch-step">
+              <span class="arch-path">/</span>
+              <div class="arch-box">
+                <p>Willkommen + Teaser</p>
+                <p>(keine Details)</p>
+              </div>
+            </div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-step">
+              <span class="arch-path">/services/</span>
+              <div class="arch-box">
+                <p>Details hier versteckt</p>
+              </div>
+            </div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-step">
+              <span class="arch-path">/contact/</span>
+              <div class="arch-box">
+                <p>Kontaktdaten hier</p>
+              </div>
+            </div>
+            <p class="arch-result">→ KI sieht: nur Teaser</p>
+          </div>
 
-            <!-- Classic: Homepage -->
-            <text class="diagram-path" x="25" y="62">/</text>
-            <rect class="box" x="25" y="68" width="220" height="40" rx="3"/>
-            <text class="diagram-content" x="135" y="85" text-anchor="middle">Willkommen + Teaser</text>
-            <text class="diagram-content" x="135" y="100" text-anchor="middle">(keine Details)</text>
-
-            <!-- Arrow down -->
-            <path class="arrow" d="M135 112 L135 125 M130 120 L135 125 L140 120"/>
-
-            <!-- Classic: Services -->
-            <text class="diagram-path" x="25" y="140">/services/</text>
-            <rect class="box" x="25" y="146" width="220" height="32" rx="3"/>
-            <text class="diagram-content" x="135" y="166" text-anchor="middle">Details hier versteckt</text>
-
-            <!-- Arrow down -->
-            <path class="arrow" d="M135 182 L135 195 M130 190 L135 195 L140 190"/>
-
-            <!-- Classic: Contact -->
-            <text class="diagram-path" x="25" y="210">/contact/</text>
-            <rect class="box" x="25" y="216" width="220" height="28" rx="3"/>
-            <text class="diagram-content" x="135" y="234" text-anchor="middle">Kontaktdaten hier</text>
-
-            <!-- Result Classic -->
-            <text class="diagram-result result-neutral" x="135" y="262" text-anchor="middle">→ KI sieht: nur Teaser</text>
-
-            <!-- Right: AI-native -->
-            <rect class="frame frame-accent" x="300" y="10" width="250" height="260" rx="4"/>
-            <text class="diagram-title diagram-title-accent" x="425" y="32" text-anchor="middle">AI-native</text>
-            <line class="divider" x1="310" y1="42" x2="540" y2="42"/>
-
-            <!-- AI-native: Homepage (larger, highlighted) -->
-            <text class="diagram-path" x="315" y="62">/</text>
-            <rect class="box box-accent" x="315" y="68" width="220" height="90" rx="3"/>
-            <text class="diagram-content" x="425" y="92" text-anchor="middle">Key Facts: Wer / Was / Wie</text>
-            <text class="diagram-content" x="425" y="108" text-anchor="middle">Leistungen + Kontakt</text>
-            <text class="diagram-content" x="425" y="124" text-anchor="middle">Alles Wichtige sofort</text>
-            <text class="diagram-content" x="425" y="146" text-anchor="middle" style="font-weight:500">= Executive Summary</text>
-
-            <!-- Arrow down -->
-            <path class="arrow" d="M425 162 L425 175 M420 170 L425 175 L430 170"/>
-
-            <!-- AI-native: Details -->
-            <text class="diagram-path" x="315" y="190">/services/</text>
-            <rect class="box" x="315" y="196" width="220" height="32" rx="3"/>
-            <text class="diagram-content" x="425" y="216" text-anchor="middle">Vertiefung (optional)</text>
-
-            <!-- Result AI-native -->
-            <text class="diagram-result result-good" x="425" y="262" text-anchor="middle">→ KI sieht: alles Wichtige</text>
-          </svg>
-        </figure>
+          <div class="arch-column arch-column-accent">
+            <h3 class="arch-title arch-title-accent">AI-native</h3>
+            <div class="arch-step">
+              <span class="arch-path">/</span>
+              <div class="arch-box arch-box-accent">
+                <p>Key Facts: Wer / Was / Wie</p>
+                <p>Leistungen + Kontakt</p>
+                <p>Alles Wichtige sofort</p>
+                <p><strong>= Executive Summary</strong></p>
+              </div>
+            </div>
+            <div class="arch-arrow">↓</div>
+            <div class="arch-step">
+              <span class="arch-path">/services/</span>
+              <div class="arch-box">
+                <p>Vertiefung (optional)</p>
+              </div>
+            </div>
+            <p class="arch-result arch-result-accent">→ KI sieht: alles Wichtige</p>
+          </div>
+        </div>
 
         <p>Darum arbeite ich mit diesem Prinzip:</p>
 
