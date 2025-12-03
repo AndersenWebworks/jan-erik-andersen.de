@@ -43,6 +43,7 @@
   --diagram-font-xs: clamp(10px, 0.35vw + 9px, 14px);
   --diagram-font-sm: clamp(11px, 0.4vw + 10px, 15px);
   --diagram-font-md: clamp(12px, 0.45vw + 11px, 17px);
+  --diagram-font: var(--diagram-font-md);
 }
 
 /* Dark Mode Override - wenn System Light aber Toggle aktiv */
@@ -207,7 +208,7 @@ h1 {
 
 @media (min-width: 768px) {
   h1 {
-    margin-top: 40px;
+    margin-top: var(--space-xl);
     font-size: 2.5rem;
     letter-spacing: 0.08em;
   }
@@ -218,17 +219,16 @@ h1 {
   font-size: 1rem;
   font-style: italic;
   color: var(--subtle);
-  margin-bottom: var(--space-lg);
+  margin: var(--space-lg) auto;
   letter-spacing: 0.02em;
   text-align: center;
-  width: 100%;
-  margin: auto;
+  width: 65%;
 }
 
 /* Hero Statement */
 .hero-statement {
-  max-width: 55rem;
-  margin: 0 var(--space-lg);
+  max-width: 100%;
+  margin: var(--space-lg) 0;
   padding: var(--space-md) 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -279,7 +279,7 @@ h1 {
   text-decoration: none;
   font-size: 0.8125rem;
   font-family: var(--font-sans);
-  padding: 0.5rem 0.75rem;
+  padding: var(--space-xs) var(--space-sm);
   min-height: 44px;
   min-width: 44px;
   border: 1px solid var(--border);
@@ -313,8 +313,6 @@ nav {
   padding: var(--space-sm);
   background: transparent;
   border: none;
-  border-top: 2px solid var(--border-dark);
-  border-bottom: 2px solid var(--border-dark);
 }
 
 nav a {
@@ -1223,7 +1221,7 @@ footer .endpoint-list li:last-child {
    Architecture Comparison (Flex)
    ========================================================================== */
 
-.architecture-comparison-flex {
+.architecture-comparison-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-lg);
@@ -1232,7 +1230,7 @@ footer .endpoint-list li:last-child {
 }
 
 @media (max-width: 768px) {
-  .architecture-comparison-flex {
+  .architecture-comparison-grid {
     grid-template-columns: 1fr;
     gap: var(--space-xl);
   }
@@ -1271,7 +1269,7 @@ footer .endpoint-list li:last-child {
 .arch-step {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-xs);
 }
 
 .arch-path {
@@ -1379,13 +1377,6 @@ footer .endpoint-list li:last-child {
   align-items: center;
   margin-left: auto;
   cursor: pointer;
-}
-
-.darkmode-checkbox {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
 }
 
 .pill-track {
@@ -1525,10 +1516,10 @@ footer .endpoint-list li:last-child {
 }
 
 /* ==========================================================================
-   Hero Diagram (Flex)
+   Hero Diagram (Grid)
    ========================================================================== */
 
-.hero-diagram-flex {
+.hero-diagram-grid {
   display: grid;
   grid-template-columns: 1fr auto 1fr auto 1fr;
   align-items: stretch;
@@ -1537,22 +1528,22 @@ footer .endpoint-list li:last-child {
   max-width: 640px;
 }
 
-.hero-diagram-flex .diagram-arrow {
+.hero-diagram-grid .diagram-arrow {
   align-self: center;
 }
 
 @media (max-width: 640px) {
-  .hero-diagram-flex {
+  .hero-diagram-grid {
     gap: var(--space-xs);
   }
 
-  .hero-diagram-flex .diagram-step {
+  .hero-diagram-grid .diagram-step {
     padding: var(--space-xs);
   }
 }
 
 @media (max-width: 375px) {
-  .hero-diagram-flex {
+  .hero-diagram-grid {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto auto auto;
     gap: var(--space-sm);
@@ -1570,7 +1561,8 @@ footer .endpoint-list li:last-child {
   background: var(--bg);
   text-align: center;
   flex: 1;
-  min-width: 0;
+  min-width: 200px;
+  min-height: 120px;
 }
 
 .diagram-step-accent {
@@ -1948,10 +1940,10 @@ footer .endpoint-list li:last-child {
 }
 
 /* ==========================================================================
-   Generative UI Flow (Flex)
+   Generative UI Flow (Grid)
    ========================================================================== */
 
-.genui-flow-flex {
+.genui-flow-grid {
   display: grid;
   grid-template-columns: 1fr auto 1fr auto 1fr;
   align-items: stretch;
@@ -1960,18 +1952,18 @@ footer .endpoint-list li:last-child {
   max-width: 900px;
 }
 
-.genui-flow-flex .diagram-arrow {
+.genui-flow-grid .diagram-arrow {
   align-self: center;
 }
 
 @media (max-width: 768px) {
-  .genui-flow-flex {
+  .genui-flow-grid {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto auto auto;
     gap: var(--space-sm);
   }
 
-  .genui-flow-flex .diagram-arrow {
+  .genui-flow-grid .diagram-arrow {
     transform: rotate(90deg);
   }
 }
@@ -1987,18 +1979,6 @@ footer .endpoint-list li:last-child {
   font-size: var(--diagram-font-sm);
   color: var(--text-secondary);
   text-align: center;
-}
-
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
 }
 
 /* ==========================================================================
@@ -2056,6 +2036,11 @@ footer .endpoint-list li:last-child {
   }
 }
 
+.hero-flow {
+  max-width: 75%;
+  margin: auto;
+}
+
 .diagram-step-small {
   display: flex;
   flex-direction: column;
@@ -2063,7 +2048,7 @@ footer .endpoint-list li:last-child {
   gap: 4px;
   padding: var(--space-sm);
   border: 1.5px solid var(--border-dark);
-  min-width: 100px;
+  min-width: 170px;
   background: var(--bg);
 }
 
