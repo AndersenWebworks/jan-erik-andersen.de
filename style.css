@@ -1239,21 +1239,16 @@ footer .endpoint-list li:last-child {
 
 .arch-column {
   flex: 1;
-  border: none;
-  border-left: 2px solid var(--border-dark);
-  padding: var(--space-md) 0;
+  border: 1px solid var(--border-dark);
+  padding: var(--space-md);
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
 }
 
-.arch-column:first-child {
-  border-left: none;
-}
-
 .arch-column-accent {
-  border-left-color: var(--accent);
-  border-left-width: 2px;
+  border-color: var(--accent);
+  border-width: 2px;
 }
 
 .arch-title {
