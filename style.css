@@ -311,25 +311,23 @@ nav {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: var(--space-sm);
-  background: var(--bg-alt);
-  border: 1px solid var(--border);
-  border-radius: 4px;
+  background: transparent;
+  border: none;
+  border-top: 2px solid var(--border-dark);
+  border-bottom: 2px solid var(--border-dark);
 }
 
 nav a {
   color: var(--text-secondary);
   text-decoration: none;
   padding: var(--space-xs) var(--space-sm);
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 3px;
-  transition: all 0.15s ease;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--border);
 }
 
 nav a:hover {
-  color: var(--text);
-  background: var(--bg-alt);
-  border-color: var(--border-dark);
+  color: var(--accent);
 }
 
 nav a:focus-visible {
@@ -337,17 +335,19 @@ nav a:focus-visible {
   outline-offset: 2px;
 }
 
+nav a:last-child {
+  border-right: none;
+}
+
 nav a.cta-primary {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
+  background: transparent;
+  color: var(--accent);
+  border-right: 2px solid var(--accent);
   font-weight: 600;
 }
 
 nav a.cta-primary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  color: white;
+  color: var(--accent-hover);
 }
 
 nav a.cta-secondary {
@@ -358,11 +358,12 @@ nav a.cta-secondary {
   nav {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-xs);
-    padding: var(--space-sm);
-    background: var(--bg-alt);
-    border: 1px solid var(--border);
-    border-radius: 4px;
+    gap: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-top: 2px solid var(--border-dark);
+    border-bottom: 2px solid var(--border-dark);
   }
 
   nav a:not(:last-child)::after {
@@ -371,29 +372,35 @@ nav a.cta-secondary {
 
   nav a {
     padding: var(--space-sm);
-    background: var(--bg);
+    background: transparent;
     border: 1px solid var(--border);
-    border-radius: 3px;
+    border-right: 0;
+    border-bottom: 0;
     text-align: center;
-    transition: all 0.15s ease;
+  }
+
+  nav a:nth-child(2n) {
+    border-right: 1px solid var(--border);
+  }
+
+  nav a:nth-last-child(-n+2) {
+    border-bottom: 1px solid var(--border);
   }
 
   nav a:hover {
-    background: var(--bg-alt);
-    border-color: var(--border-dark);
+    color: var(--accent);
   }
 
   nav a.cta-primary {
     grid-column: 1 / -1;
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
+    background: transparent;
+    color: var(--accent);
+    border: 2px solid var(--accent);
+    border-top: 2px solid var(--accent);
   }
 
   nav a.cta-primary:hover {
-    background: var(--accent-hover);
-    border-color: var(--accent-hover);
-    color: white;
+    color: var(--accent-hover);
   }
 }
 
@@ -778,7 +785,6 @@ details ul:last-child {
   min-height: auto;
   background: var(--bg-alt);
   border: 1px solid var(--border);
-  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .evidence-item summary:hover {
@@ -1233,17 +1239,21 @@ footer .endpoint-list li:last-child {
 
 .arch-column {
   flex: 1;
-  border: 1px solid var(--border-dark);
-  border-radius: 4px;
-  padding: var(--space-md);
+  border: none;
+  border-left: 2px solid var(--border-dark);
+  padding: var(--space-md) 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-sm);
 }
 
+.arch-column:first-child {
+  border-left: none;
+}
+
 .arch-column-accent {
-  border-color: var(--accent);
-  border-width: 2px;
+  border-left-color: var(--accent);
+  border-left-width: 2px;
 }
 
 .arch-title {
@@ -1276,9 +1286,8 @@ footer .endpoint-list li:last-child {
 }
 
 .arch-box {
-  background: var(--bg-alt);
+  background: transparent;
   border: 1px solid var(--border);
-  border-radius: 3px;
   padding: var(--space-sm);
 }
 
@@ -1358,7 +1367,6 @@ footer .endpoint-list li:last-child {
   display: block;
   opacity: 0.7;
   filter: grayscale(100%);
-  transition: opacity 0.2s ease, filter 0.2s ease;
 }
 
 .logo-link:hover {
@@ -1559,7 +1567,6 @@ footer .endpoint-list li:last-child {
   gap: var(--space-xs);
   padding: var(--space-md);
   border: 2px solid var(--border-dark);
-  border-radius: 8px;
   min-width: 120px;
   background: var(--bg);
 }
@@ -1739,9 +1746,10 @@ footer .endpoint-list li:last-child {
 
 .zero-click-chart {
   margin: var(--space-lg) 0;
-  padding: var(--space-md);
-  border: 1px solid var(--border);
-  border-radius: 4px;
+  padding: 0;
+  border: none;
+  border-top: 2px solid var(--border-dark);
+  border-bottom: 2px solid var(--border-dark);
 }
 
 .zc-main-title {
@@ -1796,7 +1804,6 @@ footer .endpoint-list li:last-child {
   max-width: 120px;
   height: 200px;
   border: 1px solid var(--border);
-  border-radius: 3px;
   overflow: hidden;
 }
 
@@ -2048,7 +2055,6 @@ footer .endpoint-list li:last-child {
   gap: 4px;
   padding: var(--space-sm);
   border: 1.5px solid var(--border-dark);
-  border-radius: 6px;
   min-width: 100px;
   background: var(--bg);
 }
