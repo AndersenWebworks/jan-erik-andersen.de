@@ -1,18 +1,21 @@
-Status: OK
-Message: AI data endpoints are accessible
-Timestamp: 2025-11-15T09:00:00Z
-
-Endpoints:
-- manifest: https://jan-erik-andersen.de/ai/manifest.json
-- services: https://jan-erik-andersen.de/ai/services.json
-- services_txt: https://jan-erik-andersen.de/ai/services.txt
-- identity_schema: https://jan-erik-andersen.de/ai/identity-schema.json
-- identity_txt: https://jan-erik-andersen.de/ai/identity.txt
-- faq_schema: https://jan-erik-andersen.de/ai/faq-schema.json
-- health: https://jan-erik-andersen.de/ai/health.json
-- barrierefreiheit: https://jan-erik-andersen.de/de/barrierefreiheit.html
-
-Test Instructions:
-Fetch each endpoint with Accept: application/json (or text/plain for *.txt)
-Expected HTTP status: 200
-Expected content type: application/json or text/plain
+{
+  "status": "ok",
+  "message": "AI data endpoints are accessible",
+  "timestamp": "2025-11-15T09:00:00Z",
+  "dateModified": "2025-11-15T00:00:00Z",
+  "endpoints": {
+    "manifest": "https://jan-erik-andersen.de/ai/manifest.json",
+    "services": "https://jan-erik-andersen.de/ai/services.json",
+    "services_txt": "https://jan-erik-andersen.de/ai/services.txt",
+    "identity_schema": "https://jan-erik-andersen.de/ai/identity-schema.json",
+    "identity_txt": "https://jan-erik-andersen.de/ai/identity.txt",
+    "faq_schema": "https://jan-erik-andersen.de/ai/faq-schema.json",
+    "health": "https://jan-erik-andersen.de/ai/health.json",
+    "barrierefreiheit": "https://jan-erik-andersen.de/de/barrierefreiheit.html"
+  },
+  "test": {
+    "instructions": "Fetch each endpoint with Accept: application/json (or text/plain for *.txt).",
+    "expected_http_status": 200,
+    "expected_content_type": "application/json or text/plain"
+  }
+}

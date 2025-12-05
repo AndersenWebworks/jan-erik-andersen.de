@@ -1,37 +1,105 @@
-Häufig gestellte Fragen (FAQ)
-
-F: Brauche ich eine neue Website?
-A: Nein. Ihre Unterseiten bleiben. Die Startseite wird zur Executive Summary.
-
-F: Was passiert mit meinen Unterseiten?
-A: Sie bleiben. Für Menschen zugänglich. Aber AI-Agenten sehen sie nie.
-
-F: Wie lange dauert das?
-A: Test: 15 Minuten. Analyse: 3-5 Tage. Umsetzung: 2-4 Wochen.
-
-F: Was kostet das?
-A: Abhängig vom Umfang. Angebot auf Anfrage.
-
-F: Ist das nicht nur ein Hype?
-A: 60% Zero-Click-Searches. Single-Fetch-Prinzip. Technische Realität, kein Trend.
-
-F: Warum bevorzugen AI-Agenten handkuratierte Texte?
-A: Fehlerfreiheit = Trust Signal. AI-Agenten interpretieren Fehler als Qualitätsproblem. Präzision > Generik. "GEO-Optimierung" schlägt "innovative Lösungen". Konsistenz = Credibility. Widersprüche werden erkannt und senken die Citation-Rate. Struktur > Prosa. Strukturierte Daten sind parse-bar, Prosa interpretationsbedürftig.
-
-F: Verbessert GEO auch SEO?
-A: Ja. Google nutzt dieselben Transformer-Modelle wie ChatGPT (MUM, BERT). Semantisches HTML, strukturierte Daten, präzise Sprache → Google versteht Kontext besser → besseres Ranking. Ohne SEO-Tricks. Durch Struktur.
-
-F: Erfüllt eine GEO-optimierte Website das BFSG?
-A: Großteils ja. Semantisches HTML, strukturierte Daten und logische Content-Struktur sind identisch mit BFSG-Anforderungen (80% Overlap). Zusätzlich nötig: Kontrast-Prüfung, Tastaturnavigation, Skip-Links, Barrierefreiheits-Erklärung. Wird im Audit geprüft.
-
-F: Müssen wir CMS oder Hosting wechseln?
-A: Nein. Der Startseiten-Layer kann parallel laufen. Bestehendes CMS/Hosting bleibt unverändert.
-
-F: Wie lange dauert es, bis wir Effekte sehen?
-A: KI-Agenten sehen Änderungen teils sofort. Neue Domains brauchen 7–14 Tage Vertrauensaufbau (SSL-Historie, Indexierung).
-
-F: Wie viel interner Aufwand entsteht?
-A: 1–2 kurze Abstimmungen (30–60 Min). Inhalte kuratiere ich. Keine IT-Ressourcen nötig.
-
-F: Warum sollte ich Ihnen vertrauen?
-A: Ich mache den Test live mit Ihnen. Sie sehen sofort, was ChatGPT über Ihre Website sieht. Erst danach entscheiden Sie. Keine Verpflichtung. Diese Website ist selbst der Beweis: WCAG 2.1 AA-konform, AI-lesbar, Featured-Snippet-ready.
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "https://jan-erik-andersen.de/#faq",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Brauche ich eine neue Website?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nein. Ihre Unterseiten bleiben. Die Startseite wird zur Executive Summary."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was passiert mit meinen Unterseiten?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sie bleiben. Für Menschen zugänglich. Aber AI-Agenten sehen sie nie."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie lange dauert das?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Test: 15 Minuten. Analyse: 3-5 Tage. Umsetzung: 2-4 Wochen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was kostet das?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Abhängig vom Umfang. Angebot auf Anfrage."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Ist das nicht nur ein Hype?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "60% Zero-Click-Searches. Single-Fetch-Prinzip. Technische Realität, kein Trend."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Warum bevorzugen AI-Agenten handkuratierte Texte?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Fehlerfreiheit = Trust Signal. AI-Agenten interpretieren Fehler als Qualitätsproblem. Präzision > Generik. \"GEO-Optimierung\" schlägt \"innovative Lösungen\". Konsistenz = Credibility. Widersprüche werden erkannt und senken die Citation-Rate. Struktur > Prosa. Strukturierte Daten sind parse-bar, Prosa interpretationsbedürftig."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Verbessert GEO auch SEO?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja. Google nutzt dieselben Transformer-Modelle wie ChatGPT (MUM, BERT). Semantisches HTML, strukturierte Daten, präzise Sprache → Google versteht Kontext besser → besseres Ranking. Ohne SEO-Tricks. Durch Struktur."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Erfüllt eine GEO-optimierte Website das BFSG?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Großteils ja. Semantisches HTML, strukturierte Daten und logische Content-Struktur sind identisch mit BFSG-Anforderungen (80% Overlap). Zusätzlich nötig: Kontrast-Prüfung, Tastaturnavigation, Skip-Links, Barrierefreiheits-Erklärung. Wird im Audit geprüft."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Müssen wir CMS oder Hosting wechseln?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Nein. Der Startseiten-Layer kann parallel laufen. Bestehendes CMS/Hosting bleibt unverändert."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie lange dauert es, bis wir Effekte sehen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "KI-Agenten sehen Änderungen teils sofort. Neue Domains brauchen 7–14 Tage Vertrauensaufbau (SSL-Historie, Indexierung)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Wie viel interner Aufwand entsteht?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "1–2 kurze Abstimmungen (30–60 Min). Inhalte kuratiere ich. Keine IT-Ressourcen nötig."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Warum sollte ich Ihnen vertrauen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ich mache den Test live mit Ihnen. Sie sehen sofort, was ChatGPT über Ihre Website sieht. Erst danach entscheiden Sie. Keine Verpflichtung. Diese Website ist selbst der Beweis: WCAG 2.1 AA-konform, AI-lesbar, Featured-Snippet-ready."
+      }
+    }
+  ],
+  "dateModified": "2025-11-13T00:00:00Z",
+  "datePublished": "2025-11-06T00:00:00Z"
+}
