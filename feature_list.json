@@ -1,0 +1,29 @@
+{
+  "project_title": "jan-erik-andersen.de",
+  "features": [
+    {
+      "id": "F001",
+      "title": "Uncommitted Changes committen",
+      "description": "Git-Status zeigt modifizierte Dateien: ai/*.txt, ai/identity-schema.json, en/index.html, index.html. Prüfen und committen.",
+      "status": "todo",
+      "depends_on": [],
+      "notes": "Änderungen bereits vorhanden, müssen nur reviewed und committed werden."
+    },
+    {
+      "id": "F002",
+      "title": "JSON/TXT Sync prüfen",
+      "description": "Sicherstellen, dass alle .json-Dateien korrekt in .txt gespiegelt sind.",
+      "status": "todo",
+      "depends_on": ["F001"],
+      "notes": ""
+    },
+    {
+      "id": "F003",
+      "title": "manifest.json Version-Sync",
+      "description": "Footer-Version in HTML mit manifest.json abgleichen.",
+      "status": "todo",
+      "depends_on": ["F001"],
+      "notes": ""
+    }
+  ]
+}
