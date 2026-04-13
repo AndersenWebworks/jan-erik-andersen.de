@@ -3,27 +3,35 @@
   "features": [
     {
       "id": "F001",
-      "title": "Uncommitted Changes committen",
-      "description": "Git-Status zeigt modifizierte Dateien: ai/*.txt, ai/identity-schema.json, en/index.html, index.html. Prüfen und committen.",
+      "title": "Content-Qualitaetsdurchgang",
+      "description": "Writing Style (WRITING_STYLE.md), Sprachstandard (SPRACHSTANDARD.md), Umlaute, Satzrhythmus, keine AI-Tells, keine em-dashes.",
       "status": "todo",
       "depends_on": [],
-      "notes": "Änderungen bereits vorhanden, müssen nur reviewed und committed werden."
+      "notes": "Annemarie-Lektorat erst danach."
     },
     {
       "id": "F002",
-      "title": "JSON/TXT Sync prüfen",
-      "description": "Sicherstellen, dass alle .json-Dateien korrekt in .txt gespiegelt sind.",
+      "title": "EN-Version aktualisieren",
+      "description": "/en/ auf neue Multi-Page-Struktur und Expertenton bringen. Aktuell noch alter Onepager-Content.",
       "status": "todo",
       "depends_on": ["F001"],
-      "notes": ""
+      "notes": "hreflang-Tags pruefen."
     },
     {
       "id": "F003",
-      "title": "manifest.json Version-Sync",
-      "description": "Footer-Version in HTML mit manifest.json abgleichen.",
+      "title": "/ai/-Endpoints aktualisieren",
+      "description": "services.json, manifest.json, identity.txt auf neue Service-Cluster (Sichtbar/Arbeiten/Absichern) pruefen und aktualisieren.",
       "status": "todo",
-      "depends_on": ["F001"],
-      "notes": ""
+      "depends_on": [],
+      "notes": "llms.txt ebenfalls pruefen."
+    },
+    {
+      "id": "F004",
+      "title": "301-Redirect andersen-webworks.de",
+      "description": "andersen-webworks.de auf jan-erik-andersen.de umleiten. Google Search Console. LinkedIn aktualisieren.",
+      "status": "todo",
+      "depends_on": ["F001", "F002"],
+      "notes": "Erst nach Lektorat und EN-Version."
     }
   ]
 }
