@@ -460,6 +460,18 @@ section {
   color: #a0a0a5;
 }
 
+a.tech-tag {
+  text-decoration: none;
+  color: var(--color-accent);
+  background: var(--color-accent-light);
+  transition: all var(--transition-fast);
+}
+
+a.tech-tag:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
 /* --- Projects / Case Studies --- */
 .project-grid {
   display: grid;
