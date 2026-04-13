@@ -597,6 +597,21 @@ section {
   margin-bottom: 2px;
 }
 
+/* --- Homepage Intro --- */
+.homepage-intro {
+  display: flex;
+  gap: var(--space-2xl);
+  align-items: center;
+}
+
+.homepage-intro-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
 /* --- Definition Lists --- */
 dl {
   margin: var(--space-xl) 0;
@@ -1092,6 +1107,7 @@ dd {
   .project-grid { grid-template-columns: 1fr; }
   .process-grid { grid-template-columns: repeat(2, 1fr); }
   .about-grid { grid-template-columns: 1fr; }
+  .homepage-intro { flex-direction: column; text-align: center; }
   .contact-methods { grid-template-columns: 1fr; }
   .nav-links { display: none; }
   section { padding: var(--space-3xl) 0; }
