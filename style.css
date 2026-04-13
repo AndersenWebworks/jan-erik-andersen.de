@@ -305,10 +305,10 @@ section {
 
 /* --- Hero --- */
 .hero {
-  padding: var(--space-4xl) 0 var(--space-3xl);
+  padding: var(--space-2xl) 0 var(--space-lg);
 }
 
-.hero h1 { margin-bottom: var(--space-lg); }
+.hero h1 { margin-bottom: var(--space-md); }
 
 .hero-accent { color: var(--color-accent); }
 
