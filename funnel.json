@@ -103,7 +103,7 @@
 
     "info-shop-einfach": {
       "type": "info",
-      "text": "Bei unter 50 Produkten: pruefen Sie, ob Shopify reicht. Fertige Themes, schnell online, wenig Wartung. Kostet ~30 EUR/Monat plus 2 % pro Transaktion. WooCommerce gehoert Ihnen (kein Abo), braucht aber Hosting und mehr Setup.",
+      "text": "Bei unter 50 Produkten: pruefen Sie, ob Shopify reicht. Fertige Themes, schnell online, wenig Wartung. Dafuer: monatliche Gebuehren plus Transaktionskosten. WooCommerce gehoert Ihnen (kein Abo), braucht aber Hosting und mehr Setup.",
       "detail": "WooCommerce lohnt sich ab dem Punkt, wo Sie eigene Prozesse abbilden wollen – Sonderpreise, Schnittstellen, individueller Bestellprozess.",
       "options": [
         { "label": "Ich will WooCommerce", "next": "result-shop" },
@@ -257,41 +257,41 @@
 
     "kosten-art": {
       "type": "question",
-      "text": "Wofuer brauchen Sie eine Preisvorstellung?",
-      "subtitle": "Ehrliche Zahlen. Keine Ab-Preise, die sich verdreifachen.",
+      "text": "Was fuer ein Projekt?",
+      "subtitle": "Webprojekte haben grosse Preisspannen. Hier erfahren Sie, wovon es abhaengt.",
       "options": [
         { "label": "Website", "next": "info-kosten-website" },
         { "label": "Online-Shop", "next": "info-kosten-shop" },
         { "label": "Laufende Betreuung", "next": "info-kosten-betreuung" },
-        { "label": "Einzelne Aufgabe / Stundensatz", "next": "info-kosten-stunde" }
+        { "label": "Einzelne Aufgabe", "next": "info-kosten-stunde" }
       ]
     },
 
     "info-kosten-website": {
       "type": "info",
-      "text": "Realistische Preise 2026 fuer Unternehmenswebsites: 5-8 Seiten, responsiv, barrierefrei: 3.000 bis 6.000 EUR. Mittelgross mit Bereichen, Mehrsprachigkeit: 6.000 bis 15.000 EUR. Firmengruppe, komplex: 15.000 bis 40.000 EUR. Dazu kommen Hosting (5-30 EUR/Monat) und optional Betreuung.",
-      "detail": "Mein Stundensatz: 80 EUR netto. Ich rechne nach Aufwand ab, nicht nach Bauchgefuehl. Vor Projektstart gibt es eine Schaetzung, an die ich mich halte.",
+      "text": "Was den Preis einer Website bestimmt: Seitenanzahl, Funktionsumfang, ob Content schon existiert, ob Mehrsprachigkeit noetig ist, und ob Sie Inhalte selbst pflegen wollen (CMS) oder nicht (statisch). Eine einfache Firmenwebsite ist ein anderes Projekt als ein Firmengruppen-Auftritt mit 10 Gesellschaften.",
+      "detail": "Zwei Hebel, die den Preis am staerksten senken: weniger Seiten und eigene Inhalte liefern statt Content-Entwicklung beauftragen. Was den Preis treibt: Mehrsprachigkeit, individuelle Funktionen, Schnittstellen.",
       "options": [
-        { "label": "Passt – ich brauche eine Website", "next": "neue-art" },
-        { "label": "Zu teuer – gibt es guenstigere Wege?", "next": "info-kosten-guenstig" },
+        { "label": "Ich brauche eine Website", "next": "neue-art" },
+        { "label": "Was ist mit Baukastensystemen?", "next": "info-kosten-baukasten" },
         { "label": "Zurueck zum Anfang", "next": "start" }
       ]
     },
 
-    "info-kosten-guenstig": {
+    "info-kosten-baukasten": {
       "type": "info",
-      "text": "Guenstigere Wege gibt es. Statisches HTML statt WordPress spart Hosting und Wartung. Weniger Seiten heisst weniger Aufwand. Und wenn Sie selbst Texte und Bilder liefern statt dass ich Content entwickle, sinkt der Preis deutlich.",
-      "detail": "Was ich nicht empfehle: Baukasten-Systeme wie Wix oder Jimdo. Die kosten langfristig mehr, weil Sie nie wirklich Eigentuemer sind und irgendwann doch umziehen muessen. Und Barrierefreiheit koennen die nicht.",
+      "text": "Wix, Jimdo, Squarespace: schnell online, guenstig am Anfang. Aber: Sie mieten, Sie besitzen nichts. Wenn Sie wechseln wollen, fangen Sie bei null an. Barrierefreiheit (BFSG-Pflicht seit 2025) koennen die meisten Baukaesten nicht richtig. Und individuelle Anpassungen stossen schnell an Grenzen.",
+      "detail": "Baukaesten funktionieren fuer: persoenliche Portfolios, Hobbyprojekte, erste Tests. Fuer Unternehmenswebsites, die Kunden gewinnen und rechtskonform sein sollen, sind sie meistens die teurere Loesung auf Dauer.",
       "options": [
-        { "label": "Verstanden – ich will eine Website", "next": "neue-art" },
+        { "label": "Verstanden – ich will eine richtige Website", "next": "neue-art" },
         { "label": "Zurueck zum Anfang", "next": "start" }
       ]
     },
 
     "info-kosten-shop": {
       "type": "info",
-      "text": "WooCommerce-Shop, funktionsfaehig: ab 5.000 EUR. Mit individuellen Prozessen (B2B, Schnittstellen): 10.000 bis 25.000 EUR. Dazu: Hosting (10-50 EUR/Monat), ggf. Payment-Gebuehren.",
-      "detail": "Shopify ist guenstiger im Setup (fertige Themes), aber teurer im Betrieb: 29+ EUR/Monat plus 2 % Transaktionsgebuehr. Ab ~300 Bestellungen/Monat wird WooCommerce wirtschaftlicher.",
+      "text": "Shop-Kosten haengen von drei Dingen ab: Produktanzahl, Individualisierungsgrad und ob B2B-Funktionen noetig sind (Staffelpreise, Haendlerportal, Freigabeprozesse). Ein Standardshop mit fertigem Theme ist ein anderes Projekt als ein B2B-Portal mit Schnittstellen.",
+      "detail": "Dazu kommen laufende Kosten: Hosting, Payment-Gebuehren, SSL. Bei Shopify zahlen Sie monatlich plus Transaktionsgebuehren. Bei WooCommerce zahlen Sie einmal Entwicklung plus Hosting – dafuer gehoert Ihnen der Shop.",
       "options": [
         { "label": "Ich will einen Shop bauen", "next": "neue-shop" },
         { "label": "Zurueck zum Anfang", "next": "start" }
@@ -300,8 +300,8 @@
 
     "info-kosten-betreuung": {
       "type": "info",
-      "text": "Basis (Updates, Backups, Monitoring): ab 15 EUR/Monat. Standard (plus Aenderungen, Content): ab 80 EUR/Monat. Premium (eigener Entwickler, Priority): 400-800 EUR/Monat.",
-      "detail": "Alle Pakete monatlich kuendbar. Kein 12-Monats-Vertrag. Die meisten kleinen Websites brauchen nur Basis.",
+      "text": "Betreuungskosten haengen vom System und vom Aufwand ab. Eine statische Website braucht fast keine Betreuung. WordPress braucht regelmaessige Updates, sonst wird es unsicher. WooCommerce braucht noch mehr Aufmerksamkeit, weil Zahlungsanbieter und Plugins staendig aktualisiert werden.",
+      "detail": "Fragen Sie jeden Anbieter: Was genau ist im Paket drin? Wie schnell reagieren Sie bei Problemen? Was kostet eine Stunde ausserhalb des Pakets? Und: Bin ich vertraglich gebunden oder monatlich kuendbar?",
       "options": [
         { "label": "Ich brauche Betreuung", "next": "betreuung-umfang" },
         { "label": "Zurueck zum Anfang", "next": "start" }
@@ -310,8 +310,8 @@
 
     "info-kosten-stunde": {
       "type": "info",
-      "text": "Mein Stundensatz: 80 EUR netto. Kleine Aufgaben (Text aendern, Bild tauschen): 15-30 Minuten. Plugin-Problem debuggen: 1-3 Stunden. Neue Unterseite bauen: 3-8 Stunden.",
-      "detail": "Ich schaetze vorher den Aufwand und halte mich dran. Wenn es laenger dauert als geschaetzt, geht das auf meine Kappe.",
+      "text": "Bei Einzelaufgaben zaehlt vor allem eins: eine klare Aufwandschaetzung vorher. Lassen Sie sich nicht auf offene Stundenabrechnungen ein, ohne zu wissen, was das Ergebnis sein soll. Gute Entwickler schaetzen vorher und halten sich dran.",
+      "detail": "Typische Groessenordnungen: Einen Text aendern dauert Minuten. Ein Plugin-Problem debuggen kann Stunden dauern. Eine neue Unterseite bauen ist ein halber bis ganzer Tag. Fragen Sie nach einer Schaetzung, bevor Arbeit beginnt.",
       "options": [
         { "label": "Ich habe eine konkrete Aufgabe", "next": "result-technik" },
         { "label": "Zurueck zum Anfang", "next": "start" }
@@ -390,7 +390,7 @@
     "result-website-statisch": {
       "type": "result",
       "title": "Statisches HTML – weniger ist mehr.",
-      "text": "Wenn ein Entwickler die Inhalte pflegt, brauchen Sie kein CMS. Statische Websites laden schneller, sind sicherer (kein Login, keine Datenbank, keine Updates) und kosten fast nichts im Betrieb. GitHub Pages oder Netlify: 0 EUR Hosting. Diese Website hier ist statisch. Lighthouse 100, kein Framework, kein Build-Tool. Push aufs Repository, sofort live. Der Nachteil: fuer jede Textaenderung brauchen Sie mich oder einen Entwickler. Bei weniger als 2 Aenderungen pro Monat ist das kein Problem.",
+      "text": "Wenn ein Entwickler die Inhalte pflegt, brauchen Sie kein CMS. Statische Websites laden schneller, sind sicherer (kein Login, keine Datenbank, keine Updates) und kosten fast nichts im Betrieb. GitHub Pages oder Netlify: kostenloses Hosting. Diese Website hier ist statisch. Lighthouse 100, kein Framework, kein Build-Tool. Push aufs Repository, sofort live. Der Nachteil: fuer jede Textaenderung brauchen Sie mich oder einen Entwickler. Bei weniger als 2 Aenderungen pro Monat ist das kein Problem.",
       "proof": [
         { "name": "Diese Website", "desc": "Statisch, Lighthouse 100, GitHub Pages" },
         { "name": "Wirkungsbericht SiS", "desc": "Statischer Bericht mit SVG-Karte", "href": "https://wirkungsbericht.seniorpartnerinschool.de" }
@@ -423,7 +423,7 @@
     "result-shop-gross": {
       "type": "result",
       "title": "Grosser Katalog – da wird Infrastruktur wichtig.",
-      "text": "Ab 500 Produkten brauchen Sie mehr als ein gutes Theme. Shared Hosting stirbt bei dieser Groesse. Sie brauchen Managed Hosting (ab 30 EUR/Monat), eine Staging-Umgebung zum Testen und saubere Bildkomprimierung (sonst werden Produktseiten zur Qual). Dazu: vernuenftiger Import/Export fuer Produktdaten, Filterfunktionen die auch bei 1000 Produkten schnell bleiben, und ein Plan fuer SEO bei grossen Katalogen. Das ist machbar, aber kein Wochenendprojekt.",
+      "text": "Ab 500 Produkten brauchen Sie mehr als ein gutes Theme. Shared Hosting stirbt bei dieser Groesse. Sie brauchen Managed Hosting, eine Staging-Umgebung zum Testen und saubere Bildkomprimierung (sonst werden Produktseiten zur Qual). Dazu: vernuenftiger Import/Export fuer Produktdaten, Filterfunktionen die auch bei 1000 Produkten schnell bleiben, und ein Plan fuer SEO bei grossen Katalogen. Das ist machbar, aber kein Wochenendprojekt.",
       "proof": [
         { "name": "Gerwing Steinwerke", "desc": "Grosser Katalog, B2B-Prozesse", "href": "https://gerwing.de" }
       ],
@@ -443,7 +443,7 @@
     "result-portal-karriere": {
       "type": "result",
       "title": "Karriereportal – fertig kaufen oder selbst bauen?",
-      "text": "Wenn Sie nur Stellen ausschreiben wollen: JOIN, Personio oder Recruitee koennen das. 50-300 EUR/Monat, schnell live, Bewerbermanagement inklusive. Custom lohnt sich, wenn Ihr Portal mehr koennen soll: eigenes Design, Integration in Ihre Website, Onboarding-Prozesse, Standort-Filter, Mehrsprachigkeit. Ich habe fuer die Runden Group ein Karriere-Portal plus internes Onboarding-Tool gebaut. Das haette kein Standardtool abgebildet, weil die Prozesse zu spezifisch waren.",
+      "text": "Wenn Sie nur Stellen ausschreiben wollen: JOIN, Personio oder Recruitee koennen das. Monatliche Gebuehr, schnell live, Bewerbermanagement inklusive. Custom lohnt sich, wenn Ihr Portal mehr koennen soll: eigenes Design, Integration in Ihre Website, Onboarding-Prozesse, Standort-Filter, Mehrsprachigkeit. Ich habe fuer die Runden Group ein Karriere-Portal plus internes Onboarding-Tool gebaut. Das haette kein Standardtool abgebildet, weil die Prozesse zu spezifisch waren.",
       "proof": [
         { "name": "Runden Group", "desc": "Karriere-Portal, Onboarding-Tool", "href": "https://runden-group.eu" }
       ],
@@ -536,7 +536,7 @@
     "result-performance": {
       "type": "result",
       "title": "Die drei haeufigsten Bremsen – und was Sie selbst tun koennen.",
-      "text": "Erstens: Bilder. Unkomprimierte PNGs sind der haeufigste Grund fuer langsame Seiten. WebP nutzen, maximale Breite auf 1920px begrenzen. Zweitens: zu viel JavaScript. Slider-Plugins, Chat-Widgets, Analytics-Scripts – jedes kostet Ladezeit. Pruefen Sie, was Sie wirklich brauchen. Drittens: schlechtes Hosting. Shared Hosting bei 3 EUR im Monat ist langsam, Punkt. Selbst pruefen: pagespeed.web.dev. Alles ueber 90 ist gut, unter 50 ist ein Problem.",
+      "text": "Erstens: Bilder. Unkomprimierte PNGs sind der haeufigste Grund fuer langsame Seiten. WebP nutzen, maximale Breite auf 1920px begrenzen. Zweitens: zu viel JavaScript. Slider-Plugins, Chat-Widgets, Analytics-Scripts – jedes kostet Ladezeit. Pruefen Sie, was Sie wirklich brauchen. Drittens: schlechtes Hosting. Billiges Shared Hosting ist langsam, Punkt. Selbst pruefen: pagespeed.web.dev. Alles ueber 90 ist gut, unter 50 ist ein Problem.",
       "proof": [
         { "name": "Diese Website", "desc": "Lighthouse 100, statisches HTML" },
         { "name": "Gerwing Steinwerke", "desc": "Performance-Optimierung im laufenden Betrieb", "href": "https://gerwing.de" }
@@ -652,7 +652,7 @@
     "result-betreuung-wp": {
       "type": "result",
       "title": "WordPress-Betreuung – was wirklich noetig ist.",
-      "text": "WordPress-Updates ohne Kontrolle koennen Ihre Seite zerschiessen. Ein Plugin-Update bricht ein anderes, ein Theme-Update aendert das Layout. Deshalb update ich manuell, pruefe danach und rolle zurueck, wenn noetig. Basis (ab 15 EUR/Monat): Updates, Backups, Sicherheits-Monitoring. Sie merken nichts, und genau das ist der Punkt. Standard (ab 80 EUR/Monat): zusaetzlich kleine Aenderungen, neue Inhalte. Sie schicken eine Mail, ich setze es um. Was Sie wirklich brauchen, haengt davon ab, wie oft sich Ihre Seite aendert.",
+      "text": "WordPress-Updates ohne Kontrolle koennen Ihre Seite zerschiessen. Ein Plugin-Update bricht ein anderes, ein Theme-Update aendert das Layout. Deshalb update ich manuell, pruefe danach und rolle zurueck, wenn noetig. Basis-Betreuung: Updates, Backups, Sicherheits-Monitoring. Sie merken nichts, und genau das ist der Punkt. Standard-Betreuung: zusaetzlich kleine Aenderungen, neue Inhalte. Sie schicken eine Mail, ich setze es um. Was Sie wirklich brauchen, haengt davon ab, wie oft sich Ihre Seite aendert.",
       "proof": [
         { "name": "Dark Fortress", "desc": "Betreuung seit 2018", "href": "https://darkfortress.org" },
         { "name": "Woodshed Studio", "desc": "Betreuung seit 2018", "href": "https://woodshedstudio.de" }
@@ -663,7 +663,7 @@
     "result-betreuung-woo": {
       "type": "result",
       "title": "WooCommerce-Betreuung – mehr Aufwand als WordPress allein.",
-      "text": "Ein Shop braucht mehr Aufmerksamkeit als eine Firmenwebsite. Zahlungsanbieter aendern ihre APIs, WooCommerce-Updates koennen den Checkout brechen, Steuerregeln aendern sich. Dazu kommen: Bestellmonitoring, Plugin-Kompatibilitaet, Performance-Ueberwachung bei wachsendem Katalog. Ich empfehle mindestens Standard-Betreuung (ab 80 EUR/Monat) fuer laufende Shops. Basis reicht nur, wenn der Shop kaum Bestellungen hat. Bei geschaeftskritischen Shops: Premium, damit Probleme am selben Tag geloest werden.",
+      "text": "Ein Shop braucht mehr Aufmerksamkeit als eine Firmenwebsite. Zahlungsanbieter aendern ihre APIs, WooCommerce-Updates koennen den Checkout brechen, Steuerregeln aendern sich. Dazu kommen: Bestellmonitoring, Plugin-Kompatibilitaet, Performance-Ueberwachung bei wachsendem Katalog. Fuer laufende Shops empfehle ich mindestens Standard-Betreuung. Basis reicht nur, wenn der Shop kaum Bestellungen hat. Bei geschaeftskritischen Shops: Premium, damit Probleme am selben Tag geloest werden.",
       "proof": [
         { "name": "Gerwing Steinwerke", "desc": "WooCommerce-Retainer seit 2023", "href": "https://gerwing.de" }
       ],
@@ -673,9 +673,9 @@
     "result-betreuung-statisch": {
       "type": "result",
       "title": "Statische Website – ehrlich: da brauchen Sie fast nichts.",
-      "text": "Kein CMS, keine Datenbank, keine Plugins, keine Updates. Statische Websites sind wartungsarm per Definition. SSL-Zertifikat, Domain-Verlaengerung, fertig. Wenn Sie auf GitHub Pages oder Netlify hosten, kostet das 0 EUR. Was Sie trotzdem brauchen koennten: jemanden, der Aenderungen am Code macht, wenn sich Inhalte aendern. Und jemanden, der das Hosting im Auge behaelt. Dafuer reicht Basis-Betreuung (ab 15 EUR/Monat) oder einfach Stundenbasis.",
+      "text": "Kein CMS, keine Datenbank, keine Plugins, keine Updates. Statische Websites sind wartungsarm per Definition. SSL-Zertifikat, Domain-Verlaengerung, fertig. Wenn Sie auf GitHub Pages oder Netlify hosten, ist das kostenlos. Was Sie trotzdem brauchen koennten: jemanden, der Aenderungen am Code macht, wenn sich Inhalte aendern. Und jemanden, der das Hosting im Auge behaelt. Dafuer reicht Basis-Betreuung oder einfach Stundenbasis.",
       "proof": [
-        { "name": "Diese Website", "desc": "Statisch, GitHub Pages, 0 EUR Hosting" }
+        { "name": "Diese Website", "desc": "Statisch, GitHub Pages, kostenloses Hosting" }
       ],
       "cta": { "label": "Lassen Sie uns reden", "href": "kontakt/" }
     },
@@ -712,7 +712,7 @@
     "result-vergleich-kontakt": {
       "type": "result",
       "title": "Sie haben die richtigen Fragen gestellt.",
-      "text": "Die meisten Leute fragen nur nach dem Preis. Sie haben nach dem Wie gefragt. Das spricht fuer gute Entscheidungen. Meine Antworten auf die fuenf Freelancer-Fragen: 1. Live-Websites: 20+ Stueck, schauen Sie sich die Referenzen unten an. 2. Uebergabe: Alles dokumentiert, Standard-Technologien, kein proprietaerer Code. 3. BFSG: in jedem Projekt enthalten. 4. Reaktionszeit: 24 Stunden, bei Premium am selben Tag. 5. Nacharbeit: 80 EUR/Stunde, Aufwand vorher geschaetzt. Wenn das passt – reden wir.",
+      "text": "Die meisten Leute fragen nur nach dem Preis. Sie haben nach dem Wie gefragt. Das spricht fuer gute Entscheidungen. Meine Antworten auf die fuenf Freelancer-Fragen: 1. Live-Websites: 20+ Stueck, schauen Sie sich die Referenzen unten an. 2. Uebergabe: Alles dokumentiert, Standard-Technologien, kein proprietaerer Code. 3. BFSG: in jedem Projekt enthalten. 4. Reaktionszeit: 24 Stunden, bei Premium am selben Tag. 5. Nacharbeit: Aufwand vorher geschaetzt, ich halte mich dran. Wenn das passt – reden wir.",
       "proof": [
         { "name": "Gerwing Steinwerke", "desc": "Retainer seit 2023", "href": "https://gerwing.de" },
         { "name": "Runden Group", "desc": "10+ Websites, 2 Jahre", "href": "https://runden-group.eu" },
