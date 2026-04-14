@@ -1,26 +1,89 @@
-# Leistungen - Jan-Erik Andersen
-
-## 1. Sichtbar werden
-Website-Neubau und Redesign. KI-Sichtbarkeit (GEO/AVO). SEO klassisch und technisch.
-BFSG-Barrierefreiheit. WordPress, WooCommerce oder statisches HTML.
-Jedes Projekt wird automatisch fuer KI-Suchsysteme optimiert.
-Preisrahmen: 2.500-8.000 EUR pro Projekt.
-
-## 2. Besser arbeiten
-Backend-Tools und Portale. Produktkataloge und Bestellsysteme.
-WooCommerce B2B und B2C. CRM-Integration und digitale Roadmaps.
-Individuelle Entwicklung fuer konkrete Geschaeftsprobleme.
-Preisrahmen: ab 5.000 EUR.
-
-## 3. Abgesichert bleiben
-Monatliche Betreuung und Retainer. Updates, Backups, Sicherheit.
-DSGVO-Compliance. BFSG-Barrierefreiheit. E-Rechnung. Technische Wartung und QA.
-Preisrahmen: 15-800 EUR/Monat.
-
-## Stundensatz
-80 EUR/h netto.
-
-## Kontakt
-E-Mail: mail@andersen-webworks.de
-Telefon: +49 38733 270015
-Website: https://jan-erik-andersen.de
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Leistungen - Jan-Erik Andersen",
+  "description": "Drei Leistungsbereiche: Sichtbar werden, Besser arbeiten, Abgesichert bleiben.",
+  "dateModified": "2026-04-13T00:00:00Z",
+  "datePublished": "2025-11-06T00:00:00Z",
+  "itemListElement": [
+    {
+      "@type": "Service",
+      "@id": "https://jan-erik-andersen.de/#service-sichtbar",
+      "position": 1,
+      "serviceType": "Web Development & GEO",
+      "name": "Sichtbar werden",
+      "description": "Website-Neubau und Redesign, KI-Sichtbarkeit (GEO/AVO), SEO klassisch und technisch, BFSG-Barrierefreiheit. WordPress, WooCommerce oder statisches HTML - je nach Anforderung. Jedes Projekt wird automatisch fuer KI-Suchsysteme optimiert.",
+      "provider": {
+        "@type": "Person",
+        "name": "Jan-Erik Andersen"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Deutschland"
+      },
+      "availableLanguage": ["German", "English"],
+      "offers": {
+        "@type": "Offer",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": "2500-8000",
+          "priceCurrency": "EUR",
+          "description": "Website-Projekte typischerweise 2.500-8.000 EUR"
+        }
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://jan-erik-andersen.de/#service-arbeiten",
+      "position": 2,
+      "serviceType": "Custom Development & Digital Strategy",
+      "name": "Besser arbeiten",
+      "description": "Backend-Tools und Portale, Produktkataloge und Bestellsysteme, WooCommerce B2B und B2C, CRM-Integration und digitale Roadmaps. Individuelle Entwicklung fuer konkrete Geschaeftsprobleme.",
+      "provider": {
+        "@type": "Person",
+        "name": "Jan-Erik Andersen"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Deutschland"
+      },
+      "availableLanguage": ["German", "English"],
+      "offers": {
+        "@type": "Offer",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": "5000",
+          "priceCurrency": "EUR",
+          "description": "Backend-Tools und Portale ab 5.000 EUR"
+        }
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://jan-erik-andersen.de/#service-absichern",
+      "position": 3,
+      "serviceType": "Website Maintenance & Compliance",
+      "name": "Abgesichert bleiben",
+      "description": "Monatliche Betreuung und Retainer. Updates, Backups, Sicherheit. DSGVO-Compliance, BFSG-Barrierefreiheit, E-Rechnung. Technische Wartung und QA.",
+      "provider": {
+        "@type": "Person",
+        "name": "Jan-Erik Andersen"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Deutschland"
+      },
+      "availableLanguage": ["German", "English"],
+      "offers": {
+        "@type": "Offer",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "price": "15-800",
+          "priceCurrency": "EUR",
+          "unitText": "Monat",
+          "description": "Monatliche Betreuung von 15 EUR (Basis) bis 800 EUR (Premium)"
+        }
+      }
+    }
+  ]
+}
