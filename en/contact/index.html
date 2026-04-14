@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contact Jan-Erik Andersen: Email, phone, LinkedIn. Initial consultation free of charge.">
+  <link rel="canonical" href="https://jan-erik-andersen.de/en/contact/">
+  <link rel="alternate" hreflang="de" href="https://jan-erik-andersen.de/kontakt/">
+  <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/contact/">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <title>Contact – Jan-Erik Andersen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../style.css?v=4.0">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container">
+      <a href="../" class="site-logo">Jan-Erik <span class="logo-accent">Andersen</span></a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="../services/">Services</a>
+        <a href="../projects/">Projects</a>
+        <a href="../about/">About</a>
+        <a href="../contact/" class="nav-cta">Contact</a>
+      </nav>
+      <div class="header-controls">
+        <a href="../../kontakt/" class="lang-link" title="Deutsche Version">DE</a>
+        <button class="toggle-btn" id="theme-toggle" aria-label="Toggle color scheme">Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <h1>Contact</h1>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="contact-methods">
+          <div class="contact-method">
+            <span class="label">Email</span>
+            <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
+          </div>
+          <div class="contact-method">
+            <span class="label">Phone</span>
+            <a href="tel:+4938733270015">+49 38733 270015</a>
+          </div>
+          <div class="contact-method">
+            <span class="label">LinkedIn</span>
+            <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">linkedin.com/in/andersen-erik</a>
+          </div>
+        </div>
+
+        <p style="margin-top: var(--space-2xl);">Initial consultation free of charge. I typically respond to emails within one business day.</p>
+
+        <div style="margin-top: var(--space-3xl);">
+          <h2>Business Address</h2>
+          <p>
+            Jan-Erik Andersen<br>
+            Andersen Webworks<br>
+            Plau am See, Mecklenburg-Vorpommern<br>
+            Germany
+          </p>
+          <p style="color: var(--color-text-secondary); font-size: var(--text-sm);">100% remote, Germany-wide.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <span>&copy; 2026 Jan-Erik Andersen / Andersen Webworks</span>
+        <ul class="footer-links">
+          <li><a href="../imprint.html">Imprint</a></li>
+          <li><a href="../privacy.html">Privacy</a></li>
+          <li><a href="../accessibility.html">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var btn = document.getElementById('theme-toggle');
+      var html = document.documentElement;
+      var stored = localStorage.getItem('theme');
+      if (stored) { html.setAttribute('data-theme', stored); btn.textContent = stored === 'dark' ? 'Light' : 'Dark'; }
+      btn.addEventListener('click', function() {
+        var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next); localStorage.setItem('theme', next);
+        btn.textContent = next === 'dark' ? 'Light' : 'Dark';
+      });
+    })();
+  </script>
+  <script>
+  (function() {
+    var m = document.getElementById('menu-toggle');
+    var n = document.querySelector('.nav-links');
+    if (!m) return;
+    m.addEventListener('click', function() {
+      var open = n.classList.toggle('is-open');
+      m.setAttribute('aria-expanded', open);
+      m.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    });
+  })();
+  </script>
+</body>
+</html>
