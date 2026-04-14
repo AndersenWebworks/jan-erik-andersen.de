@@ -1,5 +1,5 @@
 /* ============================================
-   jan-erik-andersen.de – Editorial Design v4.0
+   jan-erik-andersen.de – Editorial Design v5.0
    Newspaper aesthetic meets modern layout.
    Georgia headings, Inter body, warm cream palette.
    ============================================ */
@@ -18,6 +18,8 @@
   --color-accent: #d40235;
   --color-accent-hover: #b0012a;
   --color-accent-light: rgba(212, 2, 53, 0.06);
+  --color-accent-glow: rgba(212, 2, 53, 0.15);
+  --color-accent-shadow: rgba(212, 2, 53, 0.08);
   --color-border: #D4D0C8;
   --color-border-dark: #8B8B8B;
   --color-white: #F9F5F0;
@@ -188,16 +190,27 @@ section {
   left: 0;
   right: 0;
   z-index: 100;
-  background: transparent;
+  background: var(--color-bg);
   border-bottom: 1px solid var(--color-border);
   padding: var(--space-sm) var(--space-xl);
   transition: background 500ms ease, border-color 500ms ease;
+}
+
+/* During funnel: transparent header, no border */
+html.funnel-active .site-header {
+  background: transparent;
+  border-bottom-color: transparent;
 }
 
 /* After funnel exit: solid background, sticky */
 .site-header.has-nav {
   position: fixed;
   background: var(--color-bg);
+}
+
+/* Offset main content below fixed header */
+.site-header.has-nav ~ main {
+  padding-top: 3.5rem;
 }
 
 .site-header-inner {
@@ -411,6 +424,8 @@ body:has(.darkmode-checkbox:checked) {
   --color-accent: #E07060;
   --color-accent-hover: #F08070;
   --color-accent-light: rgba(224, 112, 96, 0.1);
+  --color-accent-glow: rgba(224, 112, 96, 0.2);
+  --color-accent-shadow: rgba(224, 112, 96, 0.12);
   --color-border: #3A3028;
   --color-border-dark: #5A5040;
   --color-white: #E8E3D8;
@@ -1319,14 +1334,16 @@ dd {
 }
 
 /* ============================================
-   FUNNEL — Fixed Overlay, Viewport-Fit, Animated
+   FUNNEL — Fixed Overlay, Premium Design v3
+   SVG icons, progress dots, decorative elements,
+   refined animations, subtle textures.
    ============================================ */
 
 /* Scroll lock while funnel is active */
 html.funnel-active { overflow: hidden; height: 100%; }
 html.funnel-active body { overflow: hidden; height: 100%; }
 
-/* Funnel overlay */
+/* Funnel overlay with subtle grain texture */
 .funnel {
   position: fixed;
   inset: 0;
@@ -1334,14 +1351,30 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 56px var(--space-xl) var(--space-2xl);
+  justify-content: flex-start;
+  padding: 72px var(--space-xl) var(--space-2xl);
   background: var(--color-bg);
-  transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1),
+              filter 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Subtle noise texture overlay */
+.funnel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.funnel > * { position: relative; z-index: 1; }
 
 .funnel-exiting {
   opacity: 0;
+  filter: blur(4px);
 }
 
 .funnel-hidden {
@@ -1351,12 +1384,11 @@ html.funnel-active body { overflow: hidden; height: 100%; }
 .funnel-container {
   max-width: 560px;
   width: 100%;
-  flex: 0 1 auto;
-  max-height: calc(100dvh - 100px);
+  flex: 1 1 auto;
   overflow-y: auto;
   overflow-x: visible;
   scrollbar-width: none;
-  padding: 0 8px;
+  padding: var(--space-xl) 8px var(--space-2xl);
 }
 
 .funnel-container::-webkit-scrollbar { display: none; }
@@ -1366,6 +1398,17 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   flex-direction: column;
   justify-content: center;
   position: relative;
+}
+
+/* ── Step Label (editorial italic) ────────── */
+
+.funnel-step-label {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: var(--text-xs);
+  font-style: italic;
+  color: var(--color-text-light);
+  margin-bottom: var(--space-sm);
 }
 
 /* ── Directional Slide Animations ──────────── */
@@ -1387,33 +1430,33 @@ html.funnel-active body { overflow: hidden; height: 100%; }
 }
 
 @keyframes slideOutLeft {
-  from { opacity: 1; transform: translateX(0) scale(1); }
-  to   { opacity: 0; transform: translateX(-120px) scale(0.96); }
+  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+  to   { opacity: 0; transform: translateX(-100px) scale(0.97); filter: blur(2px); }
 }
 
 @keyframes slideOutRight {
-  from { opacity: 1; transform: translateX(0) scale(1); }
-  to   { opacity: 0; transform: translateX(120px) scale(0.96); }
+  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+  to   { opacity: 0; transform: translateX(100px) scale(0.97); filter: blur(2px); }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(80px) scale(0.98); }
-  to   { opacity: 1; transform: translateX(0) scale(1); }
+  from { opacity: 0; transform: translateX(60px) scale(0.98); filter: blur(2px); }
+  to   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-80px) scale(0.98); }
-  to   { opacity: 1; transform: translateX(0) scale(1); }
+  from { opacity: 0; transform: translateX(-60px) scale(0.98); filter: blur(2px); }
+  to   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
 }
 
-/* ── Staggered Reveal (transition-based, keeps transform free for hover) ── */
+/* ── Staggered Reveal ──────────────────────── */
 
 .funnel-stagger {
   opacity: 0;
-  translate: 0 16px;
+  translate: 0 14px;
   transition: opacity 450ms cubic-bezier(0, 0, 0.15, 1),
               translate 450ms cubic-bezier(0, 0, 0.15, 1);
-  transition-delay: calc(var(--i, 0) * 80ms);
+  transition-delay: calc(var(--i, 0) * 70ms);
 }
 
 .funnel-stagger.funnel-reveal {
@@ -1426,29 +1469,36 @@ html.funnel-active body { overflow: hidden; height: 100%; }
 .funnel-back {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-xs);
+  gap: 6px;
   background: none;
   border: none;
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--color-text-light);
   cursor: pointer;
   padding: 0;
   margin-bottom: var(--space-lg);
-  transition: color var(--transition-fast), transform var(--transition-fast);
+  transition: color 200ms ease;
 }
 
 .funnel-back:hover {
   color: var(--color-text);
-  transform: translateX(-2px);
 }
 
 .funnel-back-arrow {
-  transition: transform var(--transition-fast);
+  display: flex;
+  align-items: center;
+  transition: transform 200ms cubic-bezier(0, 0, 0.15, 1);
 }
 
 .funnel-back:hover .funnel-back-arrow {
   transform: translateX(-3px);
+}
+
+.funnel-back-arrow svg {
+  display: block;
 }
 
 /* ── Question ──────────────────────────────── */
@@ -1460,13 +1510,17 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   line-height: 1.2;
   margin-bottom: var(--space-xs);
   outline: none;
+  letter-spacing: 0.01em;
 }
 
 .funnel-subtitle {
-  font-size: var(--text-xs);
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  font-style: italic;
   color: var(--color-text-light);
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-sm);
   max-width: none;
+  line-height: 1.5;
 }
 
 /* ── Options ───────────────────────────────── */
@@ -1474,36 +1528,61 @@ html.funnel-active body { overflow: hidden; height: 100%; }
 .funnel-options {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 0 4px;
+  gap: 8px;
+  padding: 0;
 }
 
 .funnel-option {
   display: flex;
   width: 100%;
   align-items: center;
-  justify-content: space-between;
   text-align: left;
   background: var(--color-bg);
   border: 1.5px solid var(--color-border);
-  border-radius: 8px;
-  padding: 0.625rem 1rem;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
   font-family: var(--font-sans);
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-text);
   cursor: pointer;
   line-height: 1.4;
-  transition: all 180ms cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 0.75rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 200ms ease,
+              background 200ms ease,
+              box-shadow 200ms ease,
+              transform 200ms cubic-bezier(0, 0, 0.15, 1);
   transform: translateZ(0);
   will-change: transform;
+}
+
+/* Animated left accent border */
+.funnel-option::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 3px;
+  height: 0;
+  background: var(--color-accent);
+  border-radius: 0 2px 2px 0;
+  transition: height 200ms cubic-bezier(0, 0, 0.15, 1),
+              top 200ms cubic-bezier(0, 0, 0.15, 1);
+}
+
+.funnel-option:hover::before {
+  height: 60%;
+  top: 20%;
 }
 
 .funnel-option:hover {
   border-color: var(--color-accent);
   background: var(--color-accent-light);
   transform: translateX(4px);
-  box-shadow: 0 2px 12px rgba(212, 2, 53, 0.08);
+  box-shadow: 0 2px 16px var(--color-accent-shadow),
+              0 0 0 1px rgba(212, 2, 53, 0.04);
 }
 
 .funnel-option:active,
@@ -1519,12 +1598,41 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   outline-offset: 2px;
 }
 
-.funnel-option-arrow {
-  font-size: var(--text-lg);
-  color: var(--color-border);
-  transition: all 180ms ease;
+/* Option icon — monochrome, editorial */
+.funnel-option-icon {
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
-  margin-left: var(--space-md);
+  color: var(--color-text-light);
+  transition: color 200ms ease;
+}
+
+.funnel-option-icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.funnel-option:hover .funnel-option-icon {
+  color: var(--color-accent);
+}
+
+/* Option label grows to fill */
+.funnel-option-label {
+  flex: 1;
+}
+
+/* Option arrow */
+.funnel-option-arrow {
+  display: flex;
+  align-items: center;
+  color: var(--color-border);
+  transition: all 200ms ease;
+  flex-shrink: 0;
+}
+
+.funnel-option-arrow svg {
+  display: block;
 }
 
 .funnel-option:hover .funnel-option-arrow {
@@ -1536,7 +1644,11 @@ html.funnel-active body { overflow: hidden; height: 100%; }
 
 .funnel-info-block {
   margin-bottom: var(--space-xl);
+  position: relative;
+  padding-left: var(--space-lg);
+  border-left: 2px solid var(--color-accent);
 }
+
 
 .funnel-info-text {
   font-family: var(--font-serif);
@@ -1573,36 +1685,85 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   max-width: none;
 }
 
-/* ── Proof / References ────────────────────── */
+/* ── Proof / References (redesigned) ─────── */
 
 .funnel-proof {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs) var(--space-sm);
-  align-items: baseline;
   margin-bottom: var(--space-lg);
-  padding: var(--space-sm) 0;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-md);
+  background: var(--color-bg-alt);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
 }
 
 .funnel-proof-label {
-  font-size: var(--text-xs);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   color: var(--color-text-light);
-  font-weight: 600;
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-xs);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.funnel-proof-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
 }
 
 .funnel-proof-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
   font-size: var(--text-xs);
+  line-height: 1.5;
+}
+
+.funnel-proof-name {
   font-weight: 600;
   color: var(--color-text);
+  white-space: nowrap;
+}
+
+.funnel-proof-name::before {
+  content: '\2014';
+  margin-right: 0;
+  color: var(--color-accent);
+  opacity: 0.5;
+  display: none;
 }
 
 .funnel-proof-desc {
   font-weight: 400;
   color: var(--color-text-secondary);
+}
+
+.funnel-proof-desc::before {
+  content: '\2014 ';
+  color: var(--color-border-dark);
+}
+
+a.funnel-proof-link {
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  margin: calc(-1 * var(--space-xs)) calc(-1 * var(--space-sm));
+  transition: background 0.15s ease;
+}
+
+a.funnel-proof-link:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+body:has(.darkmode-checkbox:checked) a.funnel-proof-link:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+a.funnel-proof-link .funnel-proof-name {
+  color: var(--color-accent);
 }
 
 /* ── CTAs ──────────────────────────────────── */
@@ -1611,109 +1772,217 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   display: flex;
   gap: var(--space-md);
   flex-wrap: wrap;
+  align-items: center;
   margin-bottom: var(--space-lg);
 }
 
 .funnel-cta {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: var(--color-accent);
   color: #fff !important;
-  padding: 0.625rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 99px;
   font-weight: 600;
   font-size: var(--text-sm);
   text-decoration: none !important;
-  transition: all 200ms ease;
+  transition: all 200ms cubic-bezier(0, 0, 0.15, 1);
   transform: translateZ(0);
+  box-shadow: 0 2px 8px var(--color-accent-glow);
 }
 
 .funnel-cta:hover {
   background: var(--color-accent-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(212, 2, 53, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px var(--color-accent-glow);
 }
 
 .funnel-cta:active {
   transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 8px var(--color-accent-glow);
+}
+
+.funnel-cta-arrow {
+  display: flex;
+  align-items: center;
+  transition: transform 200ms ease;
+}
+
+.funnel-cta-arrow svg { display: block; }
+
+.funnel-cta:hover .funnel-cta-arrow {
+  transform: translateX(2px);
 }
 
 .funnel-cta-secondary {
   display: inline-block;
-  padding: 0.625rem 1.5rem;
+  padding: 0.75rem 1.5rem;
   border-radius: 99px;
-  border: 1px solid var(--color-border-dark);
+  border: 1.5px solid var(--color-border-dark);
   font-weight: 500;
   font-size: var(--text-sm);
   text-decoration: none !important;
   color: var(--color-text) !important;
-  transition: all var(--transition-fast);
+  transition: all 200ms ease;
 }
 
 .funnel-cta-secondary:hover {
   border-color: var(--color-text);
   background: var(--color-bg-alt);
+  transform: translateY(-1px);
+}
+
+/* ── Contact (inline in funnel) ────────────── */
+
+.funnel-contact {
+  margin-bottom: var(--space-xl);
+}
+
+.funnel-contact-preview {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  font-family: var(--font-sans);
+}
+
+.funnel-contact-preview-label {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: var(--text-xs);
+  font-style: italic;
+  color: var(--color-text-light);
+  margin-bottom: var(--space-sm);
+}
+
+.funnel-contact-preview-to {
+  font-size: var(--text-xs);
+  color: var(--color-text-light);
+  margin-bottom: var(--space-xs);
+}
+
+.funnel-contact-preview-subject {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--space-md);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.funnel-contact-preview-body {
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  white-space: pre-line;
+}
+
+.funnel-contact-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.funnel-contact-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) 0;
+  border-bottom: 1px solid var(--color-border);
+  text-decoration: none !important;
+  color: var(--color-text) !important;
+  transition: padding-left 200ms ease;
+}
+
+.funnel-contact-item:hover {
+  padding-left: var(--space-sm);
+}
+
+.funnel-contact-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--color-text-light);
+  transition: color 200ms ease;
+}
+
+.funnel-contact-icon svg { display: block; }
+
+.funnel-contact-item:hover .funnel-contact-icon {
+  color: var(--color-accent);
+}
+
+.funnel-contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.funnel-contact-label {
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-light);
+}
+
+.funnel-contact-value {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text);
 }
 
 /* ── Result Actions ────────────────────────── */
 
 .funnel-result-actions {
   display: flex;
-  gap: var(--space-lg);
+  flex-wrap: wrap;
+  gap: var(--space-sm) var(--space-lg);
 }
 
 .funnel-restart,
-.funnel-exit-btn {
+.funnel-exit-btn,
+.funnel-result-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: none;
   border: none;
   font-family: var(--font-sans);
   font-size: var(--text-xs);
+  font-weight: 500;
   color: var(--color-text-light);
   cursor: pointer;
   padding: 0;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: color var(--transition-fast);
+  text-decoration: none;
+  transition: color 200ms ease;
 }
 
 .funnel-restart:hover,
-.funnel-exit-btn:hover { color: var(--color-text); }
+.funnel-exit-btn:hover,
+.funnel-result-link:hover { color: var(--color-text); }
 
-/* ── Scroll Hint ───────────────────────────── */
-
-/* Skip button — minimal, fades in late, doesn't compete with funnel */
-.funnel-skip {
-  position: absolute;
-  bottom: var(--space-xl);
-  left: 50%;
-  transform: translateX(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--space-xs) var(--space-md);
-  opacity: 0;
-  animation: skipFadeIn 600ms 1.2s ease forwards;
+.funnel-action-icon {
+  display: flex;
+  align-items: center;
+  color: inherit;
+  opacity: 0.6;
+  transition: opacity 200ms ease, transform 200ms ease;
 }
 
-.funnel-skip-text {
-  font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-border-dark);
-  border-bottom: 1px solid transparent;
-  padding-bottom: 1px;
-  transition: color 300ms ease, border-color 300ms ease;
+.funnel-action-icon svg { display: block; width: 14px; height: 14px; }
+
+.funnel-restart:hover .funnel-action-icon {
+  opacity: 1;
+  transform: rotate(-180deg);
 }
 
-.funnel-skip:hover .funnel-skip-text {
-  color: var(--color-text-secondary);
-  border-bottom-color: var(--color-border);
-}
-
-@keyframes skipFadeIn {
-  from { opacity: 0; transform: translateX(-50%) translateY(6px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+.funnel-exit-btn:hover .funnel-action-icon {
+  opacity: 1;
+  transform: translate(1px, -1px);
 }
 
 .funnel-error {
@@ -1721,19 +1990,19 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   color: var(--color-text-light);
 }
 
-/* ── Height Breakpoints (small laptops, landscape phones) ── */
+/* ── Height Breakpoints ───────────────────── */
 
 @media (max-height: 700px) {
   .funnel { padding-top: 44px; padding-bottom: var(--space-lg); }
   .funnel-question { font-size: 1.375rem; margin-bottom: 0.25rem; }
-  .funnel-subtitle { margin-bottom: var(--space-md); }
+  .funnel-subtitle { margin-bottom: var(--space-xs); }
   .funnel-options { gap: 6px; }
   .funnel-option { padding: 0.5rem 0.875rem; font-size: var(--text-xs); }
-  .funnel-back { margin-bottom: var(--space-md); font-size: var(--text-xs); }
-  .funnel-skip { bottom: var(--space-sm); }
+  .funnel-option-icon svg { width: 14px; height: 14px; }
+  .funnel-back { margin-bottom: var(--space-md); }
   .funnel-result-title { font-size: var(--text-lg); }
   .funnel-result-text { font-size: var(--text-xs); margin-bottom: var(--space-md); }
-  .funnel-proof { padding: var(--space-xs) 0; margin-bottom: var(--space-md); }
+  .funnel-proof { padding: var(--space-sm); margin-bottom: var(--space-md); }
   .funnel-cta { padding: 0.5rem 1.25rem; }
   .funnel-cta-group { margin-bottom: var(--space-md); }
 }
@@ -1742,19 +2011,35 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   .funnel { padding-top: 36px; }
   .funnel-question { font-size: 1.125rem; }
   .funnel-option { padding: 0.375rem 0.75rem; }
-  .funnel-skip { display: none; }
+  .funnel-option-icon { display: none; }
 }
 
 /* ── Reduced Motion ────────────────────────── */
 
-/* Reduced motion: gentler but still animated */
 @media (prefers-reduced-motion: reduce) {
   .funnel-stagger { transition-duration: 200ms; translate: 0 6px; }
   .funnel-slide-out-left,
   .funnel-slide-out-right { animation-duration: 150ms; }
   .funnel-slide-in-right,
   .funnel-slide-in-left { animation-duration: 200ms; }
-  .funnel-exiting { transition-duration: 300ms; }
+  @keyframes slideOutLeft {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(-40px); }
+  }
+  @keyframes slideOutRight {
+    from { opacity: 1; transform: translateX(0); }
+    to   { opacity: 0; transform: translateX(40px); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .funnel-exiting { transition-duration: 300ms; filter: none !important; }
+  @keyframes resultIconPulse { 0%, 100% { box-shadow: none; } }
 }
 
 /* ============================================
@@ -1968,35 +2253,36 @@ html.funnel-active body { overflow: hidden; height: 100%; }
     padding: 48px var(--space-md) var(--space-xl);
   }
 
+
   .funnel-question {
     font-size: var(--text-xl);
     margin-bottom: var(--space-xs);
   }
 
   .funnel-subtitle {
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-xs);
   }
 
+
   .funnel-options {
-    gap: 8px;
+    gap: 6px;
   }
 
   .funnel-option {
     padding: 0.625rem var(--space-md);
     font-size: var(--text-sm);
-    border-radius: 6px;
+    border-radius: 8px;
+    gap: 0.5rem;
   }
+
+  .funnel-option-icon svg { width: 16px; height: 16px; }
 
   .funnel-result-text {
     font-size: var(--text-xs);
   }
 
   .funnel-proof {
-    padding: var(--space-xs) 0;
-  }
-
-  .funnel-scroll-hint {
-    bottom: var(--space-sm);
+    padding: var(--space-sm);
   }
 
   .editorial-sidebar {
