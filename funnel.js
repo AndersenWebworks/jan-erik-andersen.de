@@ -282,14 +282,17 @@
     if (node.subtitle) {
       h += '<p class="funnel-subtitle funnel-stagger" style="--i:1">' + esc(node.subtitle) + '</p>';
     }
+    h += '<div class="funnel-accent-line funnel-stagger" style="--i:1.5"></div>';
 
     h += '<div class="funnel-options">';
     for (var i = 0; i < node.options.length; i++) {
       var opt = node.options[i];
+      var num = String(i + 1).length < 2 ? '0' + (i + 1) : String(i + 1);
       var si = 'style="--i:' + (i + 2) + '"';
       var data = opt.action ? 'data-action="' + esc(opt.action) + '"' : 'data-next="' + esc(opt.next) + '"';
       var icon = getOptionIcon(opt.label);
       h += '<button class="funnel-option funnel-stagger" ' + si + ' ' + data + '>';
+      h += '<span class="funnel-option-num">' + num + '</span>';
       if (icon) h += '<span class="funnel-option-icon">' + icon + '</span>';
       h += '<span class="funnel-option-label">' + esc(opt.label) + '</span>';
       h += '<span class="funnel-option-arrow" aria-hidden="true">' + ICONS['chevron-right'] + '</span>';
@@ -371,85 +374,211 @@
   /* ── Email Builder from Funnel Path ─────────────────── */
 
   var RESULT_EMAILS = {
+    /* ── Neue Website ── */
     'result-website': {
-      subject: 'Neue Unternehmenswebsite',
-      body: 'wir brauchen eine neue Website f\u00fcr unser Unternehmen. Bisher haben wir noch nichts, oder das Bestehende ist nicht mehr vorzeigbar.',
+      subject: 'Neue Firmenwebsite',
+      body: 'wir brauchen eine neue Website fuer unser Unternehmen. Ich habe Ihren Berater-Funnel durchgeklickt und die Tipps zu Seitenstruktur und CMS-Wahl waren hilfreich.',
+      url: true
+    },
+    'result-website-wp': {
+      subject: 'Neue WordPress-Website',
+      body: 'wir brauchen eine neue Website und WordPress passt zu uns, weil unser Team Inhalte selbst pflegen will. Ihr Hinweis zu Elementor/Divi vs. YOOtheme Pro war interessant.',
+      url: true
+    },
+    'result-website-statisch': {
+      subject: 'Neue statische Website',
+      body: 'wir brauchen eine neue Website. Statisches HTML klingt nach der richtigen Wahl fuer uns, weil sich unsere Inhalte selten aendern.',
       url: true
     },
     'result-website-gross': {
-      subject: 'Website f\u00fcr Firmengruppe',
-      body: 'wir sind eine Unternehmensgruppe mit mehreren Gesellschaften und brauchen einen einheitlichen Web-Auftritt \u2013 wahrscheinlich mehrsprachig.',
+      subject: 'Web-Auftritt Firmengruppe',
+      body: 'wir sind eine Unternehmensgruppe mit mehreren Gesellschaften und brauchen einen einheitlichen Web-Auftritt. Ihr Punkt zur Koordination als Hauptproblem trifft bei uns zu.',
       url: true
     },
+    /* ── Shop ── */
     'result-shop': {
-      subject: 'Online-Shop',
-      body: 'wir m\u00f6chten einen Online-Shop aufbauen. Es geht um den Verkauf an Endkunden.',
+      subject: 'WooCommerce-Shop',
+      body: 'wir brauchen einen Online-Shop mit individuellen Anforderungen. Shopify reicht nicht, weil wir eigene Prozesse abbilden muessen.',
+      url: true
+    },
+    'result-shop-standard': {
+      subject: 'Online-Shop (Beratung)',
+      body: 'ich habe Ihren Funnel durchgeklickt und Sie haben ehrlich gesagt, dass Shopify fuer unseren Fall reichen koennte. Trotzdem wuerde ich gern kurz mit Ihnen sprechen, ob WooCommerce sich langfristig lohnt.',
+      url: true
+    },
+    'result-shop-gross': {
+      subject: 'Grosser Online-Shop (500+ Produkte)',
+      body: 'wir brauchen einen Shop mit grossem Produktkatalog. Ihre Hinweise zu Hosting und Infrastruktur bei 500+ Produkten waren hilfreich.',
       url: true
     },
     'result-shop-b2b': {
-      subject: 'B2B-Shop mit H\u00e4ndlerbereich',
-      body: 'wir brauchen einen B2B-Shop mit Händlerbereich \u2013 also Preislisten, Kundenzug\u00e4nge, das ganze Programm.',
+      subject: 'B2B-Shop mit Haendlerportal',
+      body: 'wir brauchen einen B2B-Shop – Staffelpreise, Haendlerzugaenge, Freigabeprozesse. Kein Standard-Theme, sondern ein Werkzeug fuer unseren Vertrieb.',
       url: true
     },
-    'result-portal': {
-      subject: 'Web-App / Portal',
-      body: 'wir brauchen eine Web-App oder ein Portal \u2013 kein klassischer Internetauftritt, sondern etwas Interaktives, in dem Nutzer arbeiten k\u00f6nnen.',
+    /* ── Portal ── */
+    'result-portal-karriere': {
+      subject: 'Karriereportal (Custom)',
+      body: 'wir brauchen ein Karriereportal, das ueber das hinausgeht, was JOIN oder Personio koennen – eigenes Design, Integration in unsere Website.',
+      url: true
+    },
+    'result-portal-karriere-standard': {
+      subject: 'Karriereportal (Beratung)',
+      body: 'Sie haben ehrlich gesagt, dass ein Standardtool fuer unseren Bedarf reichen koennte. Trotzdem ein paar Fragen dazu.',
+      url: false
+    },
+    'result-portal-kunden': {
+      subject: 'Kundenportal mit Login',
+      body: 'wir brauchen einen Login-Bereich fuer unsere Kunden – Daten einsehen, Dokumente, vielleicht Bestellhistorie. Ihr Hinweis zu DSGVO-Anforderungen war wichtig.',
+      url: true
+    },
+    'result-portal-intern': {
+      subject: 'Custom-Tool / Web-App',
+      body: 'wir brauchen ein internes Tool, das kein fertiges Produkt abbilden kann. Ich habe geprueft: Standardtools reichen nicht.',
+      url: false
+    },
+    'result-portal-tool': {
+      subject: 'Beratung Toolauswahl',
+      body: 'Sie haben mich darauf gebracht, dass ein fertiges Tool fuer uns reichen koennte. Koennen Sie uns bei der Auswahl beraten?',
+      url: false
+    },
+    'result-portal-bericht': {
+      subject: 'Interaktiver Bericht',
+      body: 'wir moechten einen Bericht (Jahresbericht / Wirkungsbericht) als interaktive Website statt als PDF erstellen.',
       url: false
     },
     'result-landingpage': {
       subject: 'Landingpage',
-      body: 'wir brauchen eine einzelne, gute Seite \u2013 eine Landingpage f\u00fcr ein konkretes Angebot oder Thema.',
+      body: 'wir brauchen eine fokussierte Landingpage fuer ein konkretes Angebot. Eine Seite, ein Ziel.',
       url: false
     },
+    /* ── Problem: Redesign ── */
     'result-redesign': {
-      subject: 'Redesign unserer Website',
-      body: 'unsere Website sieht nicht mehr zeitgem\u00e4\u00df aus. Wir brauchen ein Redesign \u2013 Technik, Design, oder beides.',
+      subject: 'Design-Update unserer Website',
+      body: 'das Design unserer Website ist veraltet, aber Technik und Inhalte stimmen noch. Wir brauchen ein visuelles Update, keinen Komplett-Relaunch.',
+      url: true
+    },
+    'result-redesign-technik': {
+      subject: 'Technisches Update unserer Website',
+      body: 'unsere Website hat ein Technik-Problem: nicht responsive, veraltetes PHP oder kein HTTPS. Wir brauchen Hilfe beim technischen Fundament.',
+      url: true
+    },
+    'result-redesign-content': {
+      subject: 'Content-Update unserer Website',
+      body: 'unsere Website-Inhalte sind veraltet (falsche Leistungen, alte Fotos). Wir brauchen ein Content-Update, kein Redesign.',
+      url: true
+    },
+    'result-redesign-komplett': {
+      subject: 'Komplett-Redesign',
+      body: 'bei unserer Website ist alles veraltet: Design, Technik und Inhalte. Wir brauchen einen Neuanfang, aber sinnvoll geplant.',
+      url: true
+    },
+    /* ── Problem: Performance ── */
+    'result-performance-wp': {
+      subject: 'WordPress-Performance',
+      body: 'unsere WordPress-Website ist zu langsam. Ich habe pagespeed.web.dev geprueft und der Score ist nicht gut. Koennen Sie sich das anschauen?',
       url: true
     },
     'result-performance': {
       subject: 'Website zu langsam',
-      body: 'unsere Website ist zu langsam und wir wissen nicht genau woran es liegt. K\u00f6nnen Sie sich das mal anschauen?',
+      body: 'unsere Website ist zu langsam. Ich habe pagespeed.web.dev getestet. Koennen Sie sich das anschauen?',
       url: true
     },
+    /* ── Problem: BFSG ── */
     'result-bfsg': {
       subject: 'Barrierefreiheit / BFSG',
-      body: 'wir m\u00fcssen unsere Website barrierefrei machen (BFSG). K\u00f6nnen Sie einsch\u00e4tzen, was daf\u00fcr n\u00f6tig ist?',
+      body: 'wir muessen unsere Website barrierefrei machen (BFSG). Ich habe den Schnelltest aus Ihrem Funnel gemacht und mindestens ein Problem gefunden.',
+      url: true
+    },
+    'result-bfsg-fix': {
+      subject: 'BFSG-Fehler beheben',
+      body: 'wir haben unsere Website pruefen lassen und wissen, welche BFSG-Fehler existieren. Koennen Sie die beheben und dokumentieren?',
+      url: true
+    },
+    /* ── Problem: SEO / GEO ── */
+    'result-seo-google': {
+      subject: 'Google-Sichtbarkeit',
+      body: 'unsere Website wird bei Google schlecht gefunden. Koennen Sie sich das anschauen?',
+      url: true
+    },
+    'result-seo-ki': {
+      subject: 'KI-Sichtbarkeit',
+      body: 'ich habe ChatGPT nach unserem Unternehmen gefragt und die Antwort war duenn oder falsch. Koennen Sie helfen, unsere Website fuer KI-Systeme sichtbar zu machen?',
       url: true
     },
     'result-seo': {
       subject: 'Website wird nicht gefunden',
-      body: 'unsere Website wird schlecht gefunden \u2013 weder bei Google noch bei KI-Assistenten. Wir brauchen Hilfe bei der Sichtbarkeit.',
+      body: 'unsere Website wird schlecht gefunden – weder bei Google noch bei KI-Systemen. Koennen Sie sich das anschauen?',
+      url: true
+    },
+    /* ── Problem: Technik ── */
+    'result-technik-wp': {
+      subject: 'WordPress-Problem',
+      body: 'unsere WordPress-Website hat ein technisches Problem. Ich habe Plugins deaktiviert und den Health Check geprueft, komme aber nicht weiter.',
+      url: true
+    },
+    'result-technik-woo': {
+      subject: 'WooCommerce-Problem',
+      body: 'unser WooCommerce-Shop hat ein Problem – Bestellungen, Zahlungen oder Darstellung. Koennen Sie sich das zeitnah anschauen?',
       url: true
     },
     'result-technik': {
       subject: 'Technisches Problem',
-      body: 'auf unserer Website ist etwas kaputt und wir kommen nicht weiter. K\u00f6nnen Sie sich das zeitnah anschauen?',
+      body: 'auf unserer Website ist etwas kaputt und wir kommen nicht weiter. Koennen Sie sich das anschauen?',
       url: true
     },
-    'result-betreuung-basis': {
-      subject: 'Website-Betreuung (Basis)',
-      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer Website k\u00fcmmert \u2013 zuverl\u00e4ssig und im Hintergrund.',
+    'result-technik-sicherheit': {
+      subject: 'DRINGEND: Website gehackt',
+      body: 'unsere Website wurde vermutlich gehackt oder enthaelt Malware. Wir brauchen schnell Hilfe.',
       url: true
     },
-    'result-betreuung-standard': {
-      subject: 'Website-Betreuung',
-      body: 'wir suchen jemanden f\u00fcr die laufende Betreuung unserer Website \u2013 nicht nur Technik, sondern auch regelm\u00e4\u00dfige inhaltliche \u00c4nderungen.',
+    /* ── Betreuung ── */
+    'result-betreuung-wp-basis': {
+      subject: 'WordPress-Betreuung (Basis)',
+      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer WordPress-Website kuemmert.',
+      url: true
+    },
+    'result-betreuung-wp-standard': {
+      subject: 'WordPress-Betreuung (Standard)',
+      body: 'wir suchen jemanden fuer die laufende Betreuung unserer WordPress-Website – Updates plus regelmaessige inhaltliche Aenderungen.',
+      url: true
+    },
+    'result-betreuung-woo-basis': {
+      subject: 'WooCommerce-Betreuung (Basis)',
+      body: 'wir suchen jemanden, der sich um Updates und Monitoring unseres WooCommerce-Shops kuemmert.',
+      url: true
+    },
+    'result-betreuung-woo-standard': {
+      subject: 'WooCommerce-Betreuung (Standard)',
+      body: 'wir suchen jemanden fuer die laufende Betreuung unseres WooCommerce-Shops – Updates plus regelmaessige Aenderungen und Support.',
+      url: true
+    },
+    'result-betreuung-statisch': {
+      subject: 'Betreuung statische Website',
+      body: 'wir haben eine statische Website und brauchen gelegentlich jemanden fuer Aenderungen.',
       url: true
     },
     'result-betreuung-premium': {
       subject: 'Komplett-Betreuung',
-      body: 'wir suchen im Grunde einen eigenen Webentwickler \u2013 jemanden, der unsere Website komplett betreut und sich um alles k\u00fcmmert.',
+      body: 'wir suchen im Grunde einen eigenen Webentwickler – jemanden, der unsere Website komplett betreut und sich um alles kuemmert. Retainer-Modell.',
       url: true
     },
+    /* ── GEO ── */
     'result-geo': {
       subject: 'KI-Sichtbarkeit',
-      body: 'ich habe auf Ihrer Website gelesen, wie Sie Websites f\u00fcr KI-Systeme sichtbar machen. Das interessiert mich \u2013 k\u00f6nnen Sie mir mehr dazu erz\u00e4hlen?',
+      body: 'ich habe auf Ihrer Website gelesen, wie Sie Websites fuer KI-Systeme sichtbar machen. Das interessiert mich.',
       url: true
     },
     'result-geo-audit': {
       subject: 'KI-Sichtbarkeits-Audit',
-      body: 'mich w\u00fcrde interessieren, wie sichtbar unsere Website f\u00fcr KI-Systeme ist. K\u00f6nnen Sie das pr\u00fcfen?',
+      body: 'mich wuerde interessieren, wie sichtbar unsere Website fuer KI-Systeme ist. Koennen Sie das pruefen?',
       url: true
+    },
+    /* ── Vergleich ── */
+    'result-vergleich-kontakt': {
+      subject: 'Anfrage nach Anbietervergleich',
+      body: 'ich habe Ihren Berater-Funnel durchgeklickt und die Tipps zur Freelancer-Auswahl waren hilfreich. Ich wuerde gern Ihre Antworten auf die fuenf Fragen hoeren.',
+      url: false
     }
   };
 
@@ -645,6 +774,22 @@
     var d = document.createElement('div');
     d.textContent = str;
     return d.innerHTML;
+  }
+
+  /* ── Mouse Spotlight ──────────────────────────────── */
+
+  if (funnel && window.matchMedia('(pointer: fine)').matches) {
+    var spot = document.createElement('div');
+    spot.className = 'funnel-spotlight';
+    funnel.appendChild(spot);
+
+    funnel.addEventListener('mousemove', function (e) {
+      spot.style.left = e.clientX + 'px';
+      spot.style.top = e.clientY + 'px';
+    });
+
+    funnel.addEventListener('mouseenter', function () { spot.style.opacity = '1'; });
+    funnel.addEventListener('mouseleave', function () { spot.style.opacity = '0'; });
   }
 
   /* ── Start ────────────────────────────────────────── */
