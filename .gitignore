@@ -1,4 +1,6 @@
-# Windows temp files
+# OS files
+Thumbs.db
+.DS_Store
 nul
 
 # Credentials & Secrets
@@ -15,3 +17,13 @@ deploy.py
 # IDE
 .vscode/
 .idea/
+*.code-workspace
+
+# Local tools (nicht im Repo, nur lokal)
+tools/
+
+# Test images
+portrait-test.*
+
+# Claude local context (private, nicht public)
+.claude/

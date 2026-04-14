@@ -1,43 +1,51 @@
-# Jan-Erik Andersen – Webentwicklung & Digitale Beratung
+# Jan-Erik Andersen - Webentwicklung & Digitale Beratung
 
-> Freiberuflicher Webentwickler und digitaler Berater mit 25+ Jahren Erfahrung. Konzept, Design, Entwicklung, KI-Sichtbarkeit und laufende Betreuung aus einer Hand. Ein Ansprechpartner statt fünf Dienstleister.
+> Freiberuflicher Webentwickler und digitaler Berater mit 25+ Jahren Erfahrung. Konzept, Design, Entwicklung, KI-Sichtbarkeit und laufende Betreuung aus einer Hand. Ein Ansprechpartner statt fuenf Dienstleister. 50+ Projekte, 14+ Branchen, 20+ live Websites.
 
 ## Leistungen
 
 ### 1. Sichtbar werden
 - Website-Neubau und Redesign (WordPress, WooCommerce, YOOtheme Pro, statisches HTML)
-- KI-Sichtbarkeit (GEO/AVO) – in jedes Projekt eingebaut, kein Aufpreis
-- SEO klassisch und technisch
-- BFSG-Barrierefreiheit
-- Preisrahmen: 2.500–8.000 EUR
+- KI-Sichtbarkeit (GEO/AVO) - in jedes Projekt eingebaut, kein Aufpreis
+- BFSG-Barrierefreiheit (WCAG 2.1 AA)
+- Preisrahmen: 2.500-8.000 EUR
 
 ### 2. Besser arbeiten
 - Backend-Tools und B2B-Portale
 - Produktkataloge und Bestellsysteme
 - WooCommerce B2B und B2C
-- CRM-Integration und digitale Roadmaps
+- Digitale Roadmaps
 - Preisrahmen: ab 5.000 EUR
 
 ### 3. Abgesichert bleiben
-- Monatliche Betreuung und Retainer (15–800 EUR/Monat)
+- Monatliche Betreuung und Retainer (15-800 EUR/Monat)
 - DSGVO-Compliance, BFSG, E-Rechnung
 - Updates, Backups, Sicherheit, QA
+- Manche Kunden seit 2018
 
-## Laufende Projekte
+## Referenzen (Auswahl)
 
-- Gerwing Steinwerke: WooCommerce-Shop, B2B-Händlerportal, Retainer seit 2023
-- CASARO Textil / Casarotex: 3 Websites, Stundenbasis seit 2021
-- Seniorpartner in School e.V.: WordPress-Redesign, Barrierefreiheit, Retainer
-- The New Insider: YOOtheme Pro, SEO/GEO, Supportpaket
-- Victor Bullok / Dark Fortress / Woodshed Studio: Betreuung seit 2018
-- Triptykon / Prowling Death Records: Betreuung (UK)
+- **Gerwing Steinwerke** - WooCommerce-Shop, B2B-Haendlerportal, Steinmuster-Tracking. Alleinige technische Verantwortung seit 2023. Retainer.
+- **Runden Group** - Gesamter Web-Auftritt einer Firmengruppe (10+ Gesellschaften). Custom Plugins, Kundenportal, zweisprachig. Zwei Jahre einziger Entwickler.
+- **Scheja & Partners** - Datenschutzkanzlei Bonn, 30+ Anwaelte. Software-Produktseiten, NIS2-Check, DSGVO-Tools, mehrsprachig.
+- **Seniorpartner in School e.V.** - Digitaler Wirkungsbericht 2025. Interaktive SVG-Deutschlandkarte, Infografiken. Statisches HTML. Pro Bono.
+- **Streunerhilfe Plau** - Tierschutzverein. Spenden-Infrastruktur, WooCommerce-Shop, Adoptions-Listings. Pro Bono.
+- **The New Insider** - Stadtmagazin Osnabrueck. YOOtheme Pro, langjaerige Betreuung.
+- **Dark Fortress / Woodshed Studio / Triptykon** - Band-Websites und Tonstudio. Internationale Abrechnung. Betreuung seit 2018.
+- **CASARO / Casarotex** - B2B-Textilien mit Sansibar-Lizenz.
+- **Onkologische Praxis Laatzen** - Haematologie/Onkologie.
+- **Soundhealing Hamburg** - Klangschalenpraxis mit Shop und Buchung.
 
 ## Beruflicher Hintergrund
 
-- Games-Industrie: Goodgame Studios, Deep Silver FISHLABS, InnoGames (QA)
-- YOOtheme GmbH (Support Management)
-- Tangram Werbeagentur (Frontend-Entwicklung)
-- Selbstständig seit 2010 (Andersen Webworks)
+- Webentwicklung seit 1999 (erste Selbststaendigkeit mit 14)
+- Multimedia Design, Hamburger Technische Kunstschule (2007-2010)
+- Games-QA: Goodgame Studios, Deep Silver FISHLABS, InnoGames
+- YOOtheme GmbH: Support Management (hat beim Framework-Hersteller gearbeitet)
+- Tangram Werbeagentur: Frontend-Entwicklung (2017-2023)
+- Andersen Webworks: Selbststaendig seit 2010
+- KI-augmentiert seit 2025 (Code-Generierung, Testing, Recherche)
+- Lektorat: Annemarie Andersen (annemarie-andersen.de) - eingebaut in alle Projekte
 
 ## Kontakt
 
@@ -52,7 +60,7 @@
 - [Leistungen](/leistungen/)
 - [KI-Sichtbarkeit](/leistungen/ki-sichtbarkeit.html)
 - [Projekte](/projekte/)
-- [Über mich](/ueber/)
+- [Ueber mich](/ueber/)
 - [Kontakt](/kontakt/)
 
 ## Maschinenlesbare Daten

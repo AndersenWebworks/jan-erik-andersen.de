@@ -3,21 +3,21 @@
     "domain": "jan-erik-andersen.de",
     "name": "Jan-Erik Andersen",
     "url": "https://jan-erik-andersen.de",
-    "description": "Freiberuflicher Webentwickler und digitaler Berater. Konzept, Design, Entwicklung, KI-Sichtbarkeit und Betreuung aus einer Hand.",
-    "tagline": "Konzept. Code. Ergebnis.",
+    "description": "Freiberuflicher Webentwickler und digitaler Berater. Konzept, Design, Entwicklung, KI-Sichtbarkeit und Betreuung aus einer Hand. Seit 1999.",
+    "tagline": "Alles aus einer Hand. Seit 1999.",
     "contact": "mail@andersen-webworks.de"
   },
-  "version": "v3.0",
-  "build": 300,
+  "version": "v4.0",
+  "build": 400,
   "changelog": [
+    "v4.0 feat: Komplettes Content- und Doku-Update. Portrait, Projekttabelle (50+), Positionierungsstrategie 2026, Marktanalyse. AI-Endpoints aktualisiert.",
     "v3.0 feat: Komplette Neupositionierung - von GEO-Spezialist zu Full-Service Webentwickler + digitaler Berater. Drei Service-Cluster, Case Studies, neues Design-System.",
     "v2.15 feat: GoatCounter Tracking (Zero JavaScript, DSGVO-konform, Pixel-basiert)",
     "v2.14 fix: Pill-Toggle Farb-Logik (Dark/Light Mode Semantik korrigiert)",
-    "v2.13 feat: GEO-Optimierung (Standort deutschlandweit remote)",
     "v2.0 feat: Review-Optimierungen umgesetzt",
     "v1.0 feat: Initial AI-native Website Launch"
   ],
-  "dateModified": "2026-04-13T00:00:00Z",
+  "dateModified": "2026-04-14T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z",
   "architecture": {
     "version": "2.0",
@@ -57,7 +57,7 @@
       "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/identity-schema.json",
       "type": "Person",
       "format": "application/ld+json",
-      "description": "Schema.org Person mit Kontaktdaten, Expertise und Referenzen"
+      "description": "Schema.org Person mit Kontaktdaten, Expertise, Referenzen und beruflichem Hintergrund"
     },
     {
       "id": "faq-schema",
@@ -81,7 +81,7 @@
       "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/identity.txt",
       "type": "PlainText",
       "format": "text/plain",
-      "description": "Plain-Text Zusammenfassung fuer einfache Parser"
+      "description": "Plain-Text Zusammenfassung: Person, Expertise, Referenzen, Hintergrund"
     },
     {
       "id": "services-text",

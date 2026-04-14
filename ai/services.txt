@@ -1,89 +1,52 @@
-{
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  "name": "Leistungen - Jan-Erik Andersen",
-  "description": "Drei Leistungsbereiche: Sichtbar werden, Besser arbeiten, Abgesichert bleiben.",
-  "dateModified": "2026-04-13T00:00:00Z",
-  "datePublished": "2025-11-06T00:00:00Z",
-  "itemListElement": [
-    {
-      "@type": "Service",
-      "@id": "https://jan-erik-andersen.de/#service-sichtbar",
-      "position": 1,
-      "serviceType": "Web Development & GEO",
-      "name": "Sichtbar werden",
-      "description": "Website-Neubau und Redesign, KI-Sichtbarkeit (GEO/AVO), SEO klassisch und technisch, BFSG-Barrierefreiheit. WordPress, WooCommerce oder statisches HTML - je nach Anforderung. Jedes Projekt wird automatisch fuer KI-Suchsysteme optimiert.",
-      "provider": {
-        "@type": "Person",
-        "name": "Jan-Erik Andersen"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Deutschland"
-      },
-      "availableLanguage": ["German", "English"],
-      "offers": {
-        "@type": "Offer",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "price": "2500-8000",
-          "priceCurrency": "EUR",
-          "description": "Website-Projekte typischerweise 2.500-8.000 EUR"
-        }
-      }
-    },
-    {
-      "@type": "Service",
-      "@id": "https://jan-erik-andersen.de/#service-arbeiten",
-      "position": 2,
-      "serviceType": "Custom Development & Digital Strategy",
-      "name": "Besser arbeiten",
-      "description": "Backend-Tools und Portale, Produktkataloge und Bestellsysteme, WooCommerce B2B und B2C, CRM-Integration und digitale Roadmaps. Individuelle Entwicklung fuer konkrete Geschaeftsprobleme.",
-      "provider": {
-        "@type": "Person",
-        "name": "Jan-Erik Andersen"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Deutschland"
-      },
-      "availableLanguage": ["German", "English"],
-      "offers": {
-        "@type": "Offer",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "price": "5000",
-          "priceCurrency": "EUR",
-          "description": "Backend-Tools und Portale ab 5.000 EUR"
-        }
-      }
-    },
-    {
-      "@type": "Service",
-      "@id": "https://jan-erik-andersen.de/#service-absichern",
-      "position": 3,
-      "serviceType": "Website Maintenance & Compliance",
-      "name": "Abgesichert bleiben",
-      "description": "Monatliche Betreuung und Retainer. Updates, Backups, Sicherheit. DSGVO-Compliance, BFSG-Barrierefreiheit, E-Rechnung. Technische Wartung und QA.",
-      "provider": {
-        "@type": "Person",
-        "name": "Jan-Erik Andersen"
-      },
-      "areaServed": {
-        "@type": "Country",
-        "name": "Deutschland"
-      },
-      "availableLanguage": ["German", "English"],
-      "offers": {
-        "@type": "Offer",
-        "priceSpecification": {
-          "@type": "PriceSpecification",
-          "price": "15-800",
-          "priceCurrency": "EUR",
-          "unitText": "Monat",
-          "description": "Monatliche Betreuung von 15 EUR (Basis) bis 800 EUR (Premium)"
-        }
-      }
-    }
-  ]
-}
+Leistungen - Jan-Erik Andersen
+Drei Leistungsbereiche. Alles aus einer Hand, seit 1999.
+
+---
+
+1. SICHTBAR WERDEN (Web Development & GEO)
+
+Website-Neubau und Redesign. Die Technologie richtet sich nach dem Fall:
+- WordPress + WooCommerce: Shop, Redaktionssystem, mehrere Redakteure
+- YOOtheme Pro: Schnelle Designaenderungen, visueller Builder
+- Statisches HTML: Geschwindigkeit, Sicherheit, Wartungsfreiheit
+
+In jedem Fall enthalten:
+- KI-Sichtbarkeit (GEO/AVO) - kein Aufpreis
+- Strukturierte Daten (Schema.org, JSON-LD)
+- BFSG-Barrierefreiheit (WCAG 2.1 AA)
+- DSGVO-konforme Umsetzung
+
+Preisrahmen: 2.500-8.000 EUR
+
+---
+
+2. BESSER ARBEITEN (Custom Development & Digital Strategy)
+
+Nicht jedes digitale Problem ist eine Website:
+- Backend-Tools und B2B-Portale (Login, Dateiablage, Statusverfolgung)
+- Produktkataloge und Bestellsysteme
+- WooCommerce B2B und B2C (Preisgruppen, Haendlerkonditionen, Custom Checkout)
+- Digitale Roadmaps (Analyse, Konzept, Plan)
+
+Beispiel: Gerwing Steinwerke - B2B-Haendlerportal mit Dokumentenverwaltung und Steinmuster-Tracking.
+
+Preisrahmen: ab 5.000 EUR
+
+---
+
+3. ABGESICHERT BLEIBEN (Website Maintenance & Compliance)
+
+Laufende Betreuung und Retainer:
+- Basis (15-40 EUR/Monat): Updates, Backups, Monitoring
+- Standard (80-200 EUR/Monat): Updates + kleine Aenderungen + Compliance-Pruefungen
+- Premium (400-800 EUR/Monat): Full-Service, Entwicklung, Priority, Compliance
+
+Enthalten: DSGVO-Compliance, BFSG-Barrierefreiheit, E-Rechnung, Sicherheits-Monitoring.
+Manche Kunden seit 2018.
+
+---
+
+Sprachliche Qualitaet: Lektorat durch Annemarie Andersen (annemarie-andersen.de) in allen Projekten eingebaut.
+
+Kontakt: mail@andersen-webworks.de | +49 38733 270015
+Website: https://jan-erik-andersen.de

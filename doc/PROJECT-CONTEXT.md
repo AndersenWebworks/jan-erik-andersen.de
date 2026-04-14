@@ -1,8 +1,8 @@
-# Project Context für Claude-Instanzen
+# Project Context fuer Claude-Instanzen
 
-**Projekt:** andersen-signal v0.1 — AI-native Web Architecture MVP
+**Projekt:** jan-erik-andersen.de - Personal Brand Website
 **Owner:** Jan-Erik Andersen
-**Status:** ✅ Live und abgeschlossen
+**Status:** Live, aktive Weiterentwicklung
 **URL:** https://jan-erik-andersen.de
 **Repository:** https://github.com/AndersenWebworks/jan-erik-andersen.de
 
@@ -10,151 +10,43 @@
 
 ## Was ist dieses Projekt?
 
-**Ziel:** Beweis, dass strukturierte Websites von AI-Agenten besser gelesen werden können als traditionelle Websites.
+Personal-Brand-Website fuer Erik Andersen (Andersen Webworks). Statisches HTML auf GitHub Pages. Kein CMS, kein Build, kein Framework. Push = live.
 
-**Ergebnis:** ✅ Erfolgreich bewiesen
-
-**Kern-Prinzip:** "Websites als Dateninterfaces für AI-Agenten"
+**Positionierung:** "Ihr Web-Betreuer" - alles aus einer Hand. KI-Sichtbarkeit (GEO/AVO) als eingebautes Feature. Expertenton, nicht Bewerbungston.
 
 ---
 
 ## Wichtigste Dateien (ZUERST LESEN)
 
-1. **[doc/README.md](README.md)** — Dokumentations-Übersicht (Start hier!)
-2. **[doc/LEARNINGS.md](LEARNINGS.md)** — KRITISCH: Alle Erkenntnisse (3 Phasen)
-3. **[doc/ARCHITECTURE.md](ARCHITECTURE.md)** — AI-Native Web Prinzipien
-4. **[doc/SSOT-PIPELINE.md](SSOT-PIPELINE.md)** — Datenfluss & Synchronisation
-5. **[doc/MEASUREMENT.md](MEASUREMENT.md)** — Semantic Survival Rate & Tests
-6. **[doc/FETCH-TEMPLATES.md](FETCH-TEMPLATES.md)** — Developer-Integration
+### Public (im Repo)
+1. **PROJECT_OVERVIEW.md** - Seitenstruktur, Design-System, Constraints
+2. **doc/ARCHITECTURE.md** - AI-Native Web Prinzipien
+3. **doc/LEARNINGS.md** - Chronologische Erkenntnisse
+
+### Privat (.claude/context/ - gitignored, nur lokal)
+4. **.claude/context/ERIK-PORTRAIT.md** - Wer Erik ist (Biografie, Karriere, Arbeitsweise, Haltung)
+5. **.claude/context/PROJEKT-HISTORY.md** - Alle 50+ Projekte (vollstaendige Tabelle)
+6. **.claude/context/POSITIONIERUNG-2026.md** - Strategieplan und Revenue-Modell
+7. **.claude/context/MARKT-ANALYSE-2026.md** - Marktdaten Freelancer/WordPress/AI 2026
 
 ---
 
-## Kritische Erkenntnisse (MUST READ)
+## Kritische Regeln
 
-### 1. Traditional Hosting blockiert AI-Agents
+### Tonregeln (IMMER beachten)
+1. Feststellen, nicht verkaufen
+2. Daten mit Quellen, nicht Behauptungen
+3. Arbeit beschreiben, nicht sich selbst
+4. Kontaktdaten sind Information, nicht Einladung
+5. Keine Vergleiche nach unten
+6. Keine Verteidigungen
+7. Die Seite IST der Beweis
 
-**Problem:** ModSecurity/WAF auf Shared Hosting (KAS, All-Inkl) blockiert AI-Fetcher mit HTTP 400.
-
-**Lösung:** JAMstack (GitHub Pages, Netlify, Cloudflare Pages)
-
-**Details:** [verify/chatgpt-400-findings.md](../verify/chatgpt-400-findings.md)
-
-### 2. ChatGPT hat Domain-Whitelist
-
-**Problem:** Neu migrierte Domains sind nicht sofort für ChatGPT erreichbar.
-
-**Workaround:** GitHub Raw URLs nutzen:
-```
-https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/health.json
-```
-
-**Timeline:** 7-14 Tage bis Custom Domain funktioniert
-
-### 3. Deployment-Workflow
-
-**Aktuell:** GitHub Pages (automatisch)
-
-```bash
-# Änderungen machen
-git add -A
-git commit -m "Update"
-git push origin main
-
-# → Automatisches Deployment nach 1-2 Min
-# → Live auf https://jan-erik-andersen.de
-```
-
-**NICHT MEHR:** FTP/deploy.py (deprecated, entfernt)
-
----
-
-## Projekt-Struktur
-
-```
-jan-erik-andersen.de/
-├── index.html / en/index.html  # Onepager (de/en)
-├── barrierefreiheit.html       # BFSG-Erklärung
-├── datenschutz.html / impressum.html
-├── en/accessibility.html / en/privacy.html / en/imprint.html
-├── ai/                         # Strukturierte Daten (JSON-LD + Plain-Text)
-│   ├── /ai/manifest.json       # Endpoint-Index (SSOT)
-│   ├── services.json / services.txt
-│   ├── identity-schema.json / identity.txt
-│   ├── faq-schema.json
-│   └── health.json
-├── doc/                        # Dokumentation
-├── verify/                     # Test-Dokumentation
-└── robots.txt, sitemap.xml     # SEO
-```
-
----
-
-## Häufige Aufgaben
-
-### Content-Update
-
-```bash
-# 1. Datei ändern (z.B. ai/services.json)
-vim ai/services.json
-
-# 2. Commit & Push
-git add ai/services.json
-git commit -m "Update services pricing"
-git push origin main
-
-# 3. Warte 1-2 Min → Live
-```
-
-### AI-Daten & Plain-Text spiegeln
-
-1. JSON-Datei anpassen (`ai/services.json`, `ai/identity-schema.json`, `ai/faq-schema.json`, …)
-2. Passende `.txt`-Spiegel manuell synchron halten (`ai/services.txt`, `ai/identity.txt`)
-3. Commit & Push — GitHub Action generiert nur zusätzliche Spiegel, wenn Verzeichnisse existieren (keine Blog-Abhängigkeit mehr)
-
-**WICHTIG:** Siehe [SSOT-PIPELINE.md](SSOT-PIPELINE.md) für Synchronisations-Regeln und Konsistenz-Checks
-
-### AI-Agent testen
-
-**Sofort verfügbar (Raw URL):**
-```
-"Lies https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/services.json und nenne alle Services"
-```
-
-**Nach Domain-Trust (7-14 Tage):**
-```
-"Lies https://jan-erik-andersen.de/ai/services.json und nenne alle Services"
-```
-
----
-
-## Test-Status
-
-### ✅ Abgeschlossen
-
-- HTML/JSON-LD Validierung
-- AI-Agent-Test (6/6 Fragen korrekt)
-- GitHub Pages Deployment
-- ChatGPT via Raw URLs
-- Alle Endpoints HTTP 200 OK
-
-### ⏳ Pending
-
-- Google Rich Results (braucht Crawling, 7-14 Tage)
-- ChatGPT via Custom Domain (braucht Domain-Trust, 7-14 Tage)
-- Google AI Snippets (30-60 Tage)
-
-### 📊 Monitoring
-
-**Google Search Console:**
-- URL: https://search.google.com/search-console
-- Property: jan-erik-andersen.de
-- Verifiziert: ✅ (Meta-Tag in index.html)
-- Sitemap eingereicht: ✅
-
-**Zu prüfen (alle 2 Wochen):**
-- Indexierte Seiten (Coverage)
-- Rich Results (Enhancements)
-- Performance (Search Performance)
+### Erik ist Vibe Coder
+- Er coded nicht selbst, er dirigiert Claude/AI-Tools
+- Code muss selbsterklaerend sein
+- Keine Over-Engineering, keine abstrakten Patterns
+- Wenn er fragt "Ideen?" - erst antworten, nicht sofort umsetzen
 
 ---
 
@@ -163,136 +55,84 @@ git push origin main
 **Hosting:** GitHub Pages
 **Domain:** jan-erik-andersen.de (DNS: KAS A-Records)
 **HTTPS:** Let's Encrypt (automatisch)
-**CDN:** GitHub Global CDN
-**Deployment:** git push origin main
+**Deployment:** git push origin main (1-2 Min bis live)
 
-**Keine Dependencies:**
-- Kein JavaScript
-- Kein CSS-Framework
-- Kein Build-Prozess
-- Nur statische HTML/JSON/MD
+**Kein JavaScript** ausser:
+- Dark Mode Toggle
+- Hamburger Menu (ab 900px)
+- GoatCounter Pixel (Tracking)
 
-**Vorteile:**
-- Lädt extrem schnell
-- Funktioniert überall
-- Kein Maintenance
-- Kostenlos
+**Design v4.0:**
+- Georgia Serif (H1-H4) + Inter Sans (Body)
+- Cream #F9F5F0 / Warm Dark #1A1714
+- CI-Rot #d40235 / Coral #E07060 (Dark)
+- Max-Width 900px, Line-Height 1.75
 
 ---
 
-## Troubleshooting
+## Projekt-Struktur
 
-### "ChatGPT bekommt HTTP 400"
-
-**Ursache:** Domain zu neu / nicht whitelisted
-
-**Lösung:** Nutze GitHub Raw URLs (siehe oben)
-
-**Timeline:** Nach 7-14 Tagen sollte Custom Domain funktionieren
-
-### "Google Rich Results zeigt nichts"
-
-**Ursache:** Noch nicht gecrawlt
-
-**Lösung:**
-1. Google Search Console → URL Inspection
-2. Request Indexing
-3. Warte 48h
-4. Test erneut
-
-### "Deployment funktioniert nicht"
-
-**Check:**
-```bash
-# 1. GitHub Pages aktiviert?
-# Settings → Pages → Source: main branch
-
-# 2. CNAME-Datei vorhanden?
-cat CNAME
-# Sollte zeigen: jan-erik-andersen.de
-
-# 3. DNS korrekt?
-nslookup jan-erik-andersen.de
-# Sollte zeigen: 185.199.10x.153
+```
+jan-erik-andersen.de/
+├── index.html                    # Startseite (DE)
+├── style.css                     # CSS v4.0
+├── leistungen/index.html         # Leistungen
+├── leistungen/ki-sichtbarkeit.html # GEO-Vertiefung
+├── projekte/index.html           # Projekte + Mini-Cards
+├── ueber/index.html              # Ueber mich
+├── kontakt/index.html            # Kontakt
+├── en/                           # Englische Version (6 Seiten)
+├── de/                           # Impressum, Datenschutz, Barrierefreiheit
+├── ai/                           # Maschinenlesbare Endpoints
+│   ├── manifest.json             # Endpoint-Index (SSOT)
+│   ├── services.json             # Services (Schema.org)
+│   ├── services.txt              # Plain-Text-Spiegel
+│   ├── identity-schema.json      # Person (Schema.org)
+│   ├── identity.txt              # Plain-Text-Spiegel
+│   ├── faq-schema.json           # FAQ
+│   └── health.json               # System-Health
+├── doc/                          # Dokumentation und Kontext
+├── portrait.webp                 # Portrait-Foto
+├── favicon.svg                   # Favicon
+├── robots.txt, sitemap.xml       # SEO
+├── llms.txt                      # LLM-Kontext
+└── PROJECT_OVERVIEW.md           # Projektueberblick
 ```
 
 ---
 
-## Wichtige Links
+## Deployment
 
-**Live Site:** https://jan-erik-andersen.de
-**GitHub Repo:** https://github.com/AndersenWebworks/jan-erik-andersen.de
-**GitHub Pages Settings:** https://github.com/AndersenWebworks/jan-erik-andersen.de/settings/pages
-**Google Search Console:** https://search.google.com/search-console
-
-**Tests:**
-- Rich Results: https://search.google.com/test/rich-results
-- Schema Validator: https://validator.schema.org/
-- DNS Check: https://www.whatsmydns.net/
-
----
-
-## Kontakt & Ownership
-
-**Owner:** Jan-Erik Andersen
-**Email:** mail@jan-erik-andersen.de
-**GitHub:** AndersenWebworks
-
----
-
-## Version History
-
-**v0.1** (7. Nov 2025)
-- Initial MVP
-- GitHub Pages Migration
-- Alle Tests bestanden
-- Dokumentation komplett
-
-**Status:** ✅ Production-ready
-
----
-
-## Für neue Claude-Instanzen
-
-**Wenn User sagt "arbeite am jan-erik-andersen.de Projekt":**
-
-1. ✅ Lies zuerst [LEARNINGS.md](../LEARNINGS.md) (WICHTIG!)
-2. ✅ Lies [README.md](../README.md) für Struktur
-3. ✅ Verstehe: GitHub Pages = Deployment (nicht FTP!)
-4. ✅ Verstehe: Raw URLs für ChatGPT (Custom Domain braucht Zeit)
-5. ✅ Check git status / git log für neueste Änderungen
-
-**Wichtigste Regel:**
-> Strukturierte Daten (JSON/MD) sind PRIMARY.
-> HTML ist FALLBACK.
-> AI-Agents lesen JSON, nicht HTML.
-
-**Deployment:**
 ```bash
 git add -A
 git commit -m "Description"
 git push origin main
-# → Automatisch live nach 1-2 Min
+# Automatisch live nach 1-2 Min
 ```
 
-**NICHT verwenden:**
-- ❌ deploy.py (entfernt, deprecated)
-- ❌ FTP (nicht mehr nötig)
-- ❌ KAS-Server für Hosting (nur noch DNS)
+NICHT verwenden: deploy.py (entfernt), FTP (nicht mehr noetig)
 
 ---
 
+## Fuer neue Claude-Instanzen
+
+Wenn du an jan-erik-andersen.de arbeitest:
+
+1. Lies PROJECT_OVERVIEW.md (Struktur, Design, Constraints)
+2. Lies doc/ERIK-PORTRAIT.md (wer Erik ist)
+3. Lies doc/POSITIONIERUNG-2026.md (strategischer Kontext)
+4. Verstehe: Push = live, kein Build
+5. Beachte: Expertenton, nicht Bewerbungston
+6. Erik coded nicht selbst - erklaere Aenderungen verstaendlich
+
 ---
 
-## 🔗 Weiterführende Dokumentation
+## Kontakt und Ownership
 
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** — Voice Loss → Structure Persistence, Drei-Layer-Architektur
-- **[LEARNINGS.md](LEARNINGS.md)** — Chronologische Erkenntnisse (3 Phasen)
-- **[SSOT-PIPELINE.md](SSOT-PIPELINE.md)** — Single Source of Truth & Synchronisation
-- **[MEASUREMENT.md](MEASUREMENT.md)** — Semantic Survival Rate, AI-Native Checkliste
-- **[FETCH-TEMPLATES.md](FETCH-TEMPLATES.md)** — Endpoint-Discovery, Developer-Integration
+**Owner:** Jan-Erik Andersen
+**Email:** mail@andersen-webworks.de
+**GitHub:** AndersenWebworks
 
 ---
 
-**Projekt-Status:** ✅ Abgeschlossen, dokumentiert, production-ready
-**Zuletzt aktualisiert:** 15. November 2025
+Zuletzt aktualisiert: 14. April 2026

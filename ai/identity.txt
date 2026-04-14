@@ -2,29 +2,53 @@ Name: Jan-Erik Andersen
 Beruf: Freiberuflicher Webentwickler und digitaler Berater
 Taetigkeitsbereich: Konzept, Design, Entwicklung, KI-Sichtbarkeit und laufende Betreuung aus einer Hand
 
+Kernversprechen: Ein Ansprechpartner statt fuenf Dienstleister. Alles aus einer Hand, seit 1999.
+
 Expertise:
 - Webentwicklung (WordPress, WooCommerce, YOOtheme Pro, statisches HTML)
-- Generative Engine Optimization (GEO)
-- Agent Visibility Optimization (AVO)
-- Backend-Tools (Portale, Kataloge, Bestellsysteme, CRM)
-- Digitale Strategie und Konzeptentwicklung
+- E-Commerce (B2B und B2C, Haendlerportale, Bestellsysteme)
+- KI-Sichtbarkeit: Generative Engine Optimization (GEO), Agent Visibility Optimization (AVO)
+- Strukturierte Daten (Schema.org, JSON-LD)
 - BFSG-Barrierefreiheit (WCAG 2.1 AA)
 - DSGVO-Compliance und E-Rechnung
-- Strukturierte Daten (Schema.org, JSON-LD)
-- QA (Hintergrund: Games-Industrie)
+- Backend-Tools (Portale, Kataloge, Bestellsysteme)
+- Digitale Strategie und Konzeptentwicklung
+- QA (Hintergrund: Games-Industrie, Goodgame Studios, Deep Silver FISHLABS)
+- Lektorat und Uebersetzung (Annemarie Andersen, eingebaut in alle Projekte)
 
-Referenzen:
-- Gerwing Steinwerke (B2B WooCommerce, Haendlerportal, Retainer)
-- Maincontor GmbH (CRM-Modernisierung, Digitale Roadmap)
-- Baeckerei Behrens (Website, Bestellsystem, Digitalisierung)
-- Seniorpartner in School e.V. (Redesign, Barrierefreiheit)
-- Daedalic Entertainment, InnoGames, Deep Silver FISHLABS (Games-Industrie)
+Referenzen (Auswahl, 20+ Websites live):
+- Gerwing Steinwerke (B2B WooCommerce, Haendlerportal, Retainer seit 2023)
+- Runden Group (10+ Websites einer Firmengruppe, 2 Jahre alleiniger Entwickler)
+- Scheja & Partners (Datenschutzkanzlei Bonn, 30+ Anwaelte, mehrsprachig)
+- Seniorpartner in School e.V. (Digitaler Wirkungsbericht, Pro Bono)
+- Streunerhilfe Plau (Tierschutzverein, Spenden-System, Pro Bono)
+- The New Insider (Stadtmagazin Osnabrueck)
+- Dark Fortress / Woodshed Studio / Triptykon (Musik, Langzeitbetreuung seit 2018)
+- CASARO / Casarotex (B2B Textilien)
+- Onkologische Praxis Laatzen (Medizin)
+- Soundhealing Hamburg (Wellness)
+
+Branchen: Industrie, Logistik, Textil, Recht, Medien, Musik, Medizin, Tierschutz, Nonprofit, Ferienvermietung, Wellness, E-Commerce
+
+Beruflicher Hintergrund:
+- Webentwicklung seit 1999 (erste Selbststaendigkeit mit 14)
+- Multimedia Design, Hamburger Technische Kunstschule (2007-2010)
+- Games-QA: Goodgame Studios, Deep Silver FISHLABS, InnoGames
+- YOOtheme GmbH: Support Management (hat beim Framework-Hersteller gearbeitet)
+- Tangram Werbeagentur: Frontend-Entwicklung (2017-2023)
+- Andersen Webworks: Selbststaendig seit 2010
+
+Auszeichnungen:
+- NOVUM Magazin Cover (2008)
+- "100 Jahre Audi" Ausstellungsmotiv (2009)
+
+KI-augmentiert: Arbeitet intensiv mit KI-Werkzeugen (Code-Generierung, Testing, Recherche). Was die KI nicht uebernimmt: Strategie, Konzept, Designentscheidungen, Qualitaetssicherung.
 
 Organisation: Andersen Webworks (seit 2010)
-Erfahrung: 25+ Jahre Webentwicklung (seit 1999)
+Erfahrung: 25+ Jahre Webentwicklung (seit 1999), 50+ Projekte, 14+ Branchen
 Standort: Plau am See, Mecklenburg-Vorpommern, Deutschland
 Arbeitsmodell: 100% remote, deutschlandweit
-Stundensatz: 80 EUR/h netto
+Erstgespraech: kostenlos
 
 Kontakt:
 - E-Mail: mail@andersen-webworks.de
