@@ -1,22 +1,62 @@
-# Jan-Erik Andersen – AI-native Web Architect
+# Jan-Erik Andersen – Webentwicklung & Digitale Beratung
 
-> Senior Consultant für AI-native Web Architecture. Spezialisiert auf Agent Visibility Optimization (AVO), Generative Engine Optimization (GEO) und BFSG-Compliance. 25+ Jahre Erfahrung.
+> Freiberuflicher Webentwickler und digitaler Berater mit 25+ Jahren Erfahrung. Konzept, Design, Entwicklung, KI-Sichtbarkeit und laufende Betreuung aus einer Hand. Ein Ansprechpartner statt fünf Dienstleister.
 
 ## Leistungen
 
-- AI-native Web Architecture: Strukturierung von Websites für KI-Systeme
-- Agent Visibility Optimization (AVO): Optimierung für KI-Zitierbarkeit
-- BFSG-Compliance: Barrierefreie Websites nach WCAG 2.1 AA
-- Strukturierte Daten: Schema.org, JSON-LD Implementation
+### 1. Sichtbar werden
+- Website-Neubau und Redesign (WordPress, WooCommerce, YOOtheme Pro, statisches HTML)
+- KI-Sichtbarkeit (GEO/AVO) – in jedes Projekt eingebaut, kein Aufpreis
+- SEO klassisch und technisch
+- BFSG-Barrierefreiheit
+- Preisrahmen: 2.500–8.000 EUR
+
+### 2. Besser arbeiten
+- Backend-Tools und B2B-Portale
+- Produktkataloge und Bestellsysteme
+- WooCommerce B2B und B2C
+- CRM-Integration und digitale Roadmaps
+- Preisrahmen: ab 5.000 EUR
+
+### 3. Abgesichert bleiben
+- Monatliche Betreuung und Retainer (15–800 EUR/Monat)
+- DSGVO-Compliance, BFSG, E-Rechnung
+- Updates, Backups, Sicherheit, QA
+
+## Laufende Projekte
+
+- Gerwing Steinwerke: WooCommerce-Shop, B2B-Händlerportal, Retainer seit 2023
+- CASARO Textil / Casarotex: 3 Websites, Stundenbasis seit 2021
+- Seniorpartner in School e.V.: WordPress-Redesign, Barrierefreiheit, Retainer
+- The New Insider: YOOtheme Pro, SEO/GEO, Supportpaket
+- Victor Bullok / Dark Fortress / Woodshed Studio: Betreuung seit 2018
+- Triptykon / Prowling Death Records: Betreuung (UK)
+
+## Beruflicher Hintergrund
+
+- Games-Industrie: Goodgame Studios, Deep Silver FISHLABS, InnoGames (QA)
+- YOOtheme GmbH (Support Management)
+- Tangram Werbeagentur (Frontend-Entwicklung)
+- Selbstständig seit 2010 (Andersen Webworks)
 
 ## Kontakt
 
-- Email: mail@andersen-webworks.de
+- E-Mail: mail@andersen-webworks.de
 - Telefon: +49 38733 270015
 - Website: https://jan-erik-andersen.de
+- LinkedIn: https://www.linkedin.com/in/andersen-erik
 
-## Relevante Dateien
+## Seiten
 
-- [AI Manifest](/ai/manifest.json) – Maschinenlesbare Endpoints
-- [Services](/ai/services.json) – Strukturierte Leistungsdaten
-- [Identity](/ai/identity-schema.json) – Person Schema.org
+- [Startseite](/)
+- [Leistungen](/leistungen/)
+- [KI-Sichtbarkeit](/leistungen/ki-sichtbarkeit.html)
+- [Projekte](/projekte/)
+- [Über mich](/ueber/)
+- [Kontakt](/kontakt/)
+
+## Maschinenlesbare Daten
+
+- [AI Manifest](/ai/manifest.json)
+- [Services](/ai/services.json)
+- [Identity](/ai/identity-schema.json)

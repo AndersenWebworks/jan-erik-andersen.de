@@ -1,21 +1,33 @@
 Name: Jan-Erik Andersen
-Beruf: AI-native Web Architect
-Tätigkeitsbereich: Websites strukturieren für Menschen und KI-Systeme, Generative Engine Optimization (GEO)
+Beruf: Freiberuflicher Webentwickler und digitaler Berater
+Taetigkeitsbereich: Konzept, Design, Entwicklung, KI-Sichtbarkeit und laufende Betreuung aus einer Hand
 
 Expertise:
-- GEO (Generative Engine Optimization)
-- Strukturierte Daten
-- Semantisches HTML
-- WCAG 2.1
-- JSON-LD
-- Schema.org
+- Webentwicklung (WordPress, WooCommerce, YOOtheme Pro, statisches HTML)
+- Generative Engine Optimization (GEO)
+- Agent Visibility Optimization (AVO)
+- Backend-Tools (Portale, Kataloge, Bestellsysteme, CRM)
+- Digitale Strategie und Konzeptentwicklung
+- BFSG-Barrierefreiheit (WCAG 2.1 AA)
+- DSGVO-Compliance und E-Rechnung
+- Strukturierte Daten (Schema.org, JSON-LD)
+- QA (Hintergrund: Games-Industrie)
 
-Organisation: Andersen Webworks (https://andersen-webworks.de) - Gründer
-Land: Deutschland, remote
-Seit: 2010 (Andersen Webworks), 1999 (Web-Architektur)
+Referenzen:
+- Gerwing Steinwerke (B2B WooCommerce, Haendlerportal, Retainer)
+- Maincontor GmbH (CRM-Modernisierung, Digitale Roadmap)
+- Baeckerei Behrens (Website, Bestellsystem, Digitalisierung)
+- Seniorpartner in School e.V. (Redesign, Barrierefreiheit)
+- Daedalic Entertainment, InnoGames, Deep Silver FISHLABS (Games-Industrie)
+
+Organisation: Andersen Webworks (seit 2010)
+Erfahrung: 25+ Jahre Webentwicklung (seit 1999)
+Standort: Plau am See, Mecklenburg-Vorpommern, Deutschland
+Arbeitsmodell: 100% remote, deutschlandweit
+Stundensatz: 80 EUR/h netto
 
 Kontakt:
-- Email: mail@andersen-webworks.de
+- E-Mail: mail@andersen-webworks.de
 - Telefon: +49 38733 270015
 - Website: https://jan-erik-andersen.de
 - LinkedIn: https://www.linkedin.com/in/andersen-erik

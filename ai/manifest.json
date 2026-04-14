@@ -3,65 +3,44 @@
     "domain": "jan-erik-andersen.de",
     "name": "Jan-Erik Andersen",
     "url": "https://jan-erik-andersen.de",
-    "description": "AI-native Web Architect – Websites für Menschen und Maschinen.",
-    "tagline": "Structure as Integrity",
+    "description": "Freiberuflicher Webentwickler und digitaler Berater. Konzept, Design, Entwicklung, KI-Sichtbarkeit und Betreuung aus einer Hand.",
+    "tagline": "Konzept. Code. Ergebnis.",
     "contact": "mail@andersen-webworks.de"
   },
-  "version": "v2.15",
-  "build": 215,
+  "version": "v3.0",
+  "build": 300,
   "changelog": [
+    "v3.0 feat: Komplette Neupositionierung - von GEO-Spezialist zu Full-Service Webentwickler + digitaler Berater. Drei Service-Cluster, Case Studies, neues Design-System.",
     "v2.15 feat: GoatCounter Tracking (Zero JavaScript, DSGVO-konform, Pixel-basiert)",
-    "v2.14 fix: Pill-Toggle Farb-Logik (Dark/Light Mode Semantik korrigiert, feste Kontraste)",
-    "v2.13 feat: GEO-Optimierung (Standort deutschlandweit remote, Resolver-Block Person/Studio, JobTitle harmonisiert, AVO-Erklärung)",
-    "v2.12 feat: Shift-Timeline + Generative-UI Flow Diagramme",
-    "v2.11 feat: Journey Chart für Zero-Click-Story (statistisch ehrlich, +GEO-Lösung)",
-    "v2.10 fix: SVG-Diagramme vergrößert (bessere Lesbarkeit)",
-    "v2.9 feat: Mini-Balkendiagramm für -61% CTR Evidence",
-    "v2.8 feat: Process-Timeline für Zusammenarbeit (4 Schritte)",
-    "v2.7 feat: Hero-Diagramm Website → KI-Agent → Antwort",
-    "v2.6 feat: Konzept-Grafik Klassisch vs. AI-native + GEO/AVO Icons",
-    "v2.5 feat: SVG-Piktogramme für Drei Hebel + Kontakt",
-    "v2.4 feat: GEO Best Practices - llms.txt, Generative UI, Evidence-Group, Inline Citations",
-    "v2.3 feat: Newspaper Editorial Design - 2-Spalten-Layout, FT-Style Typography",
-    "v2.2 fix: SSOT-Sync manifest.json mit Footer-Version",
-    "v2.1 style: Design-Anpassungen - Gradient-Farben & CTA-Arrow entfernt",
+    "v2.14 fix: Pill-Toggle Farb-Logik (Dark/Light Mode Semantik korrigiert)",
+    "v2.13 feat: GEO-Optimierung (Standort deutschlandweit remote)",
     "v2.0 feat: Review-Optimierungen umgesetzt",
-    "v1.9 fix: Glassmorphism und Hover-Effekte entfernt",
-    "v1.8 fix: Doppelte Accordion-Styles entfernt",
-    "v1.7 feat: 10 neue Design-Verbesserungen",
-    "v1.6 feat: Content-Überarbeitung",
-    "v1.5 fix: Minor Adjustments",
-    "v1.4 fix: Accessibility improvements + .txt Mirrors online",
-    "v1.3 feat: AI-Layer JSON-Files mit HTML synchronisiert (FAQ, Services, Identity)",
-    "v1.2 feat: .txt-Redundanz entfernt, SSOT-konform (nur .json)",
-    "v1.1 fix: Accordion-Layout-Korrektur + alle geschlossen",
-    "v1.1 feat: FAQ + Leistungen als <details> Accordions mit Schema.org"
+    "v1.0 feat: Initial AI-native Website Launch"
   ],
-  "dateModified": "2025-12-02T22:42:53Z",
+  "dateModified": "2026-04-13T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z",
   "architecture": {
-    "version": "1.0",
+    "version": "2.0",
     "layers": [
       {
         "name": "Visible Hybrid Layer",
         "location": "https://jan-erik-andersen.de/",
         "purpose": "Structured content for humans AND machines (live queries)",
-        "technologies": ["Semantic HTML", "Definition Lists", "Natural Language"]
+        "technologies": ["Semantic HTML", "Schema.org JSON-LD", "Natural Language"]
       },
       {
         "name": "Semantic Metadata Layer",
         "location": "JSON-LD in <head>",
         "purpose": "Crawler indexing, knowledge graphs",
-        "technologies": ["Schema.org", "JSON-LD"]
+        "technologies": ["Schema.org", "JSON-LD", "Person", "ProfessionalService", "FAQPage"]
       },
       {
-        "name": "Optional Enhancement Layer",
+        "name": "Machine-Readable Endpoints",
         "location": "https://jan-erik-andersen.de/ai/",
-        "purpose": "Advanced integration, future standards",
-        "technologies": ["JSON endpoints", "Mirror URLs", "Agent Instructions"]
+        "purpose": "Structured data for AI agents and automated systems",
+        "technologies": ["JSON endpoints", "Plain-text mirrors", "Agent Discovery"]
       }
-    ],
-    "documentation": "https://jan-erik-andersen.de/doc/ARCHITECTURE.md"
+    ]
   },
   "endpoints": [
     {
@@ -70,15 +49,7 @@
       "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/services.json",
       "type": "ItemList",
       "format": "application/json",
-      "description": "Leistungen, Pakete, Preise und Zielgruppen"
-    },
-    {
-      "id": "health",
-      "url": "https://jan-erik-andersen.de/ai/health.json",
-      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/health.json",
-      "type": "Service",
-      "format": "application/json",
-      "description": "System-Health und Verfügbarkeit"
+      "description": "Drei Leistungsbereiche: Sichtbar werden, Besser arbeiten, Abgesichert bleiben."
     },
     {
       "id": "identity-schema",
@@ -86,7 +57,7 @@
       "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/identity-schema.json",
       "type": "Person",
       "format": "application/ld+json",
-      "description": "Schema.org Person mit sameAs-Verlinkungen, vollständigen Kontaktdaten und Offers"
+      "description": "Schema.org Person mit Kontaktdaten, Expertise und Referenzen"
     },
     {
       "id": "faq-schema",
@@ -94,7 +65,15 @@
       "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/faq-schema.json",
       "type": "FAQPage",
       "format": "application/ld+json",
-      "description": "Schema.org FAQPage mit häufigen Fragen und Antworten"
+      "description": "Haeufige Fragen zu Jan-Erik Andersen und seinen Leistungen"
+    },
+    {
+      "id": "health",
+      "url": "https://jan-erik-andersen.de/ai/health.json",
+      "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/health.json",
+      "type": "Service",
+      "format": "application/json",
+      "description": "System-Health und Verfuegbarkeit"
     },
     {
       "id": "identity-text",
@@ -102,7 +81,7 @@
       "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/identity.txt",
       "type": "PlainText",
       "format": "text/plain",
-      "description": "Plain-Text Zusammenfassung für einfache Parser"
+      "description": "Plain-Text Zusammenfassung fuer einfache Parser"
     },
     {
       "id": "services-text",
@@ -113,14 +92,11 @@
       "description": "Plain-Text Auflistung der Services"
     }
   ],
-  "formats": {
-    "json": "Strukturierte Daten für Parser (application/json, application/ld+json)",
-    "txt": "Fallback für einfache Agenten ohne JSON-Support"
-  },
   "discovery": {
-    "html_meta": "<meta name=\"ai-endpoints\" content=\"https://jan-erik-andersen.de/ai/manifest.json\">",
+    "html_meta": "<meta name=\"ai-data-manifest\" content=\"https://jan-erik-andersen.de/ai/manifest.json\">",
     "link_rel": "<link rel=\"alternate\" type=\"application/json\" href=\"https://jan-erik-andersen.de/ai/manifest.json\" title=\"AI Manifest\">",
     "robots": "AI-Manifest Hinweis in /robots.txt",
-    "sitemap": "https://jan-erik-andersen.de/sitemap.xml"
+    "sitemap": "https://jan-erik-andersen.de/sitemap.xml",
+    "llms_txt": "https://jan-erik-andersen.de/llms.txt"
   }
 }
