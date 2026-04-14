@@ -1,0 +1,264 @@
+{
+  "meta": {
+    "version": "1.0",
+    "language": "de",
+    "updated": "2026-04-14"
+  },
+  "nodes": {
+
+    "start": {
+      "type": "question",
+      "text": "Was führt Sie hierher?",
+      "subtitle": "Kein Chatbot, kein Popup. Nur ein paar ehrliche Fragen.",
+      "options": [
+        { "label": "Ich brauche eine neue Website", "next": "neue-art" },
+        { "label": "Meine Website hat ein Problem", "next": "problem-art" },
+        { "label": "Ich suche laufende Betreuung", "next": "betreuung-umfang" },
+        { "label": "Mich interessiert KI-Sichtbarkeit", "next": "geo-wissen" },
+        { "label": "Ich will erstmal selbst lesen", "action": "scroll" }
+      ]
+    },
+
+    "neue-art": {
+      "type": "question",
+      "text": "Was für ein Projekt schwebt Ihnen vor?",
+      "options": [
+        { "label": "Unternehmenswebsite", "next": "neue-umfang" },
+        { "label": "Online-Shop", "next": "neue-shop" },
+        { "label": "Web-App oder Kundenportal", "next": "result-portal" },
+        { "label": "Landingpage oder Onepager", "next": "result-landingpage" }
+      ]
+    },
+
+    "neue-umfang": {
+      "type": "question",
+      "text": "Wie groß wird das?",
+      "options": [
+        { "label": "Überschaubar — ein paar Seiten", "next": "result-website" },
+        { "label": "Mittelgroß — mit verschiedenen Bereichen", "next": "result-website" },
+        { "label": "Groß — Firmengruppe, mehrsprachig", "next": "result-website-gross" }
+      ]
+    },
+
+    "neue-shop": {
+      "type": "question",
+      "text": "Was für ein Shop?",
+      "options": [
+        { "label": "Klassischer Onlineshop", "next": "result-shop" },
+        { "label": "B2B mit Händlerbereich", "next": "result-shop-b2b" }
+      ]
+    },
+
+    "problem-art": {
+      "type": "question",
+      "text": "Was stört am meisten?",
+      "options": [
+        { "label": "Sieht veraltet aus", "next": "result-redesign" },
+        { "label": "Viel zu langsam", "next": "result-performance" },
+        { "label": "Nicht barrierefrei (BFSG)", "next": "result-bfsg" },
+        { "label": "Wird nicht gefunden", "next": "result-seo" },
+        { "label": "Irgendwas ist kaputt", "next": "result-technik" }
+      ]
+    },
+
+    "betreuung-umfang": {
+      "type": "question",
+      "text": "Was brauchen Sie?",
+      "options": [
+        { "label": "Updates, Sicherheit, Backups", "next": "result-betreuung-basis" },
+        { "label": "Das plus regelmäßige Änderungen", "next": "result-betreuung-standard" },
+        { "label": "Komplett-Service: alles aus einer Hand", "next": "result-betreuung-premium" }
+      ]
+    },
+
+    "geo-wissen": {
+      "type": "question",
+      "text": "Wie viel wissen Sie über KI-Sichtbarkeit?",
+      "options": [
+        { "label": "Nichts — erklären Sie mal", "next": "geo-info" },
+        { "label": "Grundidee klar — wie machen Sie das?", "next": "result-geo" },
+        { "label": "Ich will einen Audit meiner Website", "next": "result-geo-audit" }
+      ]
+    },
+
+    "geo-info": {
+      "type": "info",
+      "text": "73 % der B2B-Einkäufer recherchieren mit ChatGPT. 61 % weniger Klicks auf organische Ergebnisse seit AI Overviews. Wenn KI-Systeme Ihre Website nicht verstehen, existieren Sie für diese Nutzer nicht.",
+      "detail": "Ich strukturiere Websites so, dass sie von KI-Systemen korrekt erfasst und zitiert werden. Das ist in jedem meiner Projekte Standard — kein Aufpreis, kein Zusatzprodukt.",
+      "options": [
+        { "label": "Klingt relevant — erzählen Sie mehr", "next": "result-geo" },
+        { "label": "Zurück zum Anfang", "next": "start" }
+      ]
+    },
+
+
+    "result-website": {
+      "type": "result",
+      "title": "Website-Projekt? Kann ich.",
+      "text": "Von der Firmenwebsite bis zum Branchenportal — ich mache Konzept, Design, Entwicklung und gehe erst live, wenn alles stimmt. Keine Agenturkette, eine Person, die Ihr Projekt kennt. Texte werden von meiner Frau Annemarie lektoriert. KI-Sichtbarkeit und Barrierefreiheit sind Standard, kein Upsell.",
+      "proof": [
+        { "name": "Scheja & Partner", "desc": "Kanzlei, 30+ Anwälte, mehrsprachig" },
+        { "name": "The New Insider", "desc": "Stadtmagazin Osnabrück" },
+        { "name": "Streunerhilfe Plau", "desc": "Verein mit Spenden-Shop" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-website-gross": {
+      "type": "result",
+      "title": "Firmengruppe, mehrere Websites — kenn ich.",
+      "text": "Ich habe zwei Jahre lang den kompletten Web-Auftritt einer Unternehmensgruppe mit 10+ Gesellschaften allein gebaut und betreut. Aus Figma-Designs, mit Custom Plugins, mehrsprachig. Wenn Sie jemanden suchen, der das Ganze überblickt und nicht nur seine Ecke — das ist mein Ding.",
+      "proof": [
+        { "name": "Runden Group", "desc": "10+ Websites, 2 Jahre einziger Entwickler" },
+        { "name": "Scheja & Partner", "desc": "Kanzlei, Software-Produkte, mehrsprachig" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-shop": {
+      "type": "result",
+      "title": "Onlineshop — WooCommerce ist mein Terrain.",
+      "text": "Ich baue WooCommerce-Shops, die funktionieren. Produktkataloge, Bestellprozesse, Zahlungsanbindung. Kein Baukasten-Ergebnis, sondern was zu Ihrem Geschäft passt. Und ja: Barrierefreiheit und KI-Sichtbarkeit sind auch hier drin.",
+      "proof": [
+        { "name": "Gerwing Steinwerke", "desc": "B2B-Shop mit Händlerportal" },
+        { "name": "Commodule-Ära", "desc": "12+ Shops in verschiedenen Branchen" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-shop-b2b": {
+      "type": "result",
+      "title": "B2B-Shop mit Händlerportal — genau mein Bereich.",
+      "text": "Mein größter laufender Kunde ist ein B2B-Industrieunternehmen mit WooCommerce-Shop, Händlerportal und Steinmuster-Tracking. Alleinige technische Verantwortung seit 2023. B2B heißt bei mir: nicht nur ein Shop, sondern ein Werkzeug für Ihre Vertriebspartner.",
+      "proof": [
+        { "name": "Gerwing Steinwerke", "desc": "WooCommerce, Händlerportal, Retainer" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-portal": {
+      "type": "result",
+      "title": "Web-App oder Portal — auch das mache ich.",
+      "text": "Karriere-Portale, Kundenportale, interne Tools, interaktive Berichte. Nicht nur Websites, sondern digitale Werkzeuge. Dieser Berater-Funnel hier? Rein client-side, Vanilla JS, kein Backend. Das ist die Art, wie ich denke.",
+      "proof": [
+        { "name": "Seniorpartner in School", "desc": "Interaktiver Wirkungsbericht mit SVG-Karte" },
+        { "name": "Runden Group", "desc": "Karriere-Portal, Onboarding-Tool" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-landingpage": {
+      "type": "result",
+      "title": "Landingpage — schnell, fokussiert, fertig.",
+      "text": "Eine Seite, ein Ziel, sauber gebaut. Statisches HTML oder WordPress, je nach Fall. Schnell, barrierefrei, KI-sichtbar. Wenn eine Seite reicht, brauchen Sie keine zehn.",
+      "proof": [
+        { "name": "Mehrweg-Heroes", "desc": "Podcast-Landingpage" },
+        { "name": "Wirkungsbericht SiS", "desc": "Statischer Bericht mit Infografiken" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-redesign": {
+      "type": "result",
+      "title": "Redesign — wenn die alte Seite nicht mehr funktioniert.",
+      "text": "Ich schaue mir an, was Sie haben, was funktioniert und was weg kann. Kein Relaunch um des Relaunchs willen — sondern weil sich Ihre Anforderungen verändert haben. Responsive, schnell, barrierefrei, KI-sichtbar. Diese Website hier ist übrigens mein eigenes Redesign.",
+      "proof": [
+        { "name": "Diese Website", "desc": "Eigenes Redesign, das Beispiel" },
+        { "name": "Casarotex", "desc": "Textil-Unternehmen, Neugestaltung" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-performance": {
+      "type": "result",
+      "title": "Langsame Website? Lässt sich lösen.",
+      "text": "Lighthouse-Score, Core Web Vitals, Ladezeiten — ich finde die Bremsen und baue sie aus. Meine eigene Website hat Lighthouse 100 auf allen Metriken. Das ist kein Zufall, das ist Handwerk.",
+      "proof": [
+        { "name": "Diese Website", "desc": "Lighthouse 100, statisches HTML" },
+        { "name": "Gerwing Steinwerke", "desc": "Performance-Optimierung im laufenden Betrieb" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-bfsg": {
+      "type": "result",
+      "title": "BFSG — Pflicht seit Juni 2025.",
+      "text": "Das Barrierefreiheitsstärkungsgesetz ist keine Option mehr. Bußgelder bis 100.000 EUR. 96 % aller Websites haben noch Barrierefreiheitsfehler. Ich mache Ihren Auftritt WCAG 2.1 AA konform und dokumentiere das. Barrierefreiheit ist bei mir in jedem Projekt Standard.",
+      "proof": [
+        { "name": "Diese Website", "desc": "WCAG 2.1 AA, BFSG-konform" },
+        { "name": "Seniorpartner in School", "desc": "Barrierefreier Wirkungsbericht" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-seo": {
+      "type": "result",
+      "title": "Gefunden werden — SEO und darüber hinaus.",
+      "text": "Klassisches SEO mache ich mit. Aber das reicht nicht mehr. 73 % der B2B-Einkäufer nutzen ChatGPT zur Recherche. Ihre Website muss nicht nur für Google funktionieren, sondern für jedes KI-System. Strukturierte Daten, maschinenlesbare Endpoints, Schema.org — das baue ich ein.",
+      "proof": [
+        { "name": "Diese Website", "desc": "GEO-optimiert, maschinenlesbar" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" },
+      "ctaSecondary": { "label": "Mehr zu KI-Sichtbarkeit", "href": "leistungen/ki-sichtbarkeit.html" }
+    },
+
+    "result-technik": {
+      "type": "result",
+      "title": "Technisches Problem? Schicken Sie mir die URL.",
+      "text": "Bugs, kaputte Seiten, Sicherheitsprobleme, Plugin-Konflikte — ich finde das Problem und löse es. WordPress, WooCommerce, YOOtheme Pro kenne ich von innen. Ich habe beim Hersteller gearbeitet. Erste Einschätzung kostenlos.",
+      "proof": [
+        { "name": "YOOtheme", "desc": "Ehemaliger Support Manager" },
+        { "name": "20+ Websites", "desc": "Laufende Betreuung seit Jahren" }
+      ],
+      "cta": { "label": "Problem schildern", "href": "kontakt/" }
+    },
+
+    "result-betreuung-basis": {
+      "type": "result",
+      "title": "Basis-Betreuung — Ihre Website bleibt sicher.",
+      "text": "Updates, Backups, Sicherheits-Monitoring. Ich kümmere mich darum, dass nichts kaputtgeht. Ab 15 EUR im Monat. Sie merken nichts davon — und genau das ist der Punkt.",
+      "proof": [],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-betreuung-standard": {
+      "type": "result",
+      "title": "Standard-Betreuung — sicher und aktuell.",
+      "text": "Alles aus der Basis, plus regelmäßige Änderungen, neue Inhalte, Anpassungen. Ich kenne Ihre Website und reagiere schnell. Manche Kunden betreue ich seit 2018. Ab 80 EUR im Monat.",
+      "proof": [
+        { "name": "Dark Fortress", "desc": "Band-Website, Betreuung seit 2018" },
+        { "name": "Woodshed Studio", "desc": "Tonstudio, Betreuung seit 2018" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-betreuung-premium": {
+      "type": "result",
+      "title": "Premium — alles aus einer Hand.",
+      "text": "Entwicklung, Design, Strategie, Compliance, Priority-Support. Wie ein eigener Webentwickler, ohne den Overhead einer Anstellung. So arbeite ich mit Gerwing Steinwerke — alleinige technische Verantwortung, Retainer, kurze Wege.",
+      "proof": [
+        { "name": "Gerwing Steinwerke", "desc": "Retainer, alleinige Verantwortung seit 2023" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" }
+    },
+
+    "result-geo": {
+      "type": "result",
+      "title": "KI-Sichtbarkeit — mein eingebauter Standard.",
+      "text": "Strukturierte Daten, Schema.org, JSON-LD, maschinenlesbare Endpoints, KI-Crawler-Konfiguration. Das ist bei mir in jedem Projekt drin. Kein Zusatzmodul, kein Aufpreis. Diese Website hier ist das Beispiel: fragen Sie ChatGPT nach mir.",
+      "proof": [
+        { "name": "Diese Website", "desc": "Vollständig GEO-optimiert" }
+      ],
+      "cta": { "label": "Erstgespräch vereinbaren", "href": "kontakt/" },
+      "ctaSecondary": { "label": "Daten und Quellen", "href": "leistungen/ki-sichtbarkeit.html" }
+    },
+
+    "result-geo-audit": {
+      "type": "result",
+      "title": "KI-Audit — wie sichtbar ist Ihre Website?",
+      "text": "Ich prüfe, wie gut KI-Systeme Ihre Website verstehen und zitieren können. Strukturierte Daten vorhanden? Schema.org korrekt? Inhalte maschinenlesbar? Sie bekommen einen konkreten Bericht mit Handlungsempfehlungen. Erstgespräch kostenlos.",
+      "proof": [],
+      "cta": { "label": "Audit anfragen", "href": "kontakt/" }
+    }
+  }
+}

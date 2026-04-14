@@ -25,5 +25,18 @@ tools/
 # Test images
 portrait-test.*
 
+# Node / Playwright
+node_modules/
+package.json
+package-lock.json
+test-results/
+test-*.png
+test-*.spec.js
+
+# Temporary / test files
+v215-*.html
+v215-*.css
+*.webm
+
 # Claude local context (private, nicht public)
 .claude/
