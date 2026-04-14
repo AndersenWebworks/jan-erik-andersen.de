@@ -303,6 +303,11 @@ html.funnel-active .site-header {
   font-weight: 600;
 }
 
+.header-nav-active {
+  color: var(--color-accent) !important;
+  font-weight: 600;
+}
+
 /* Right: toggles + LinkedIn */
 .header-right {
   display: flex;
@@ -476,7 +481,6 @@ body:has(.darkmode-checkbox-mobile:checked) {
 /* Header responsive — mobile: hamburger menu */
 @media (max-width: 480px) {
   .header-brand { font-size: 0.8125rem; }
-  .header-brand-name { display: none; }
 
   /* Hide nav in header — moves to hamburger panel */
   .header-nav {
@@ -488,26 +492,26 @@ body:has(.darkmode-checkbox-mobile:checked) {
     display: none;
   }
 
-  /* Hamburger button */
+  /* Hamburger button — right side, larger */
   .header-hamburger {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     padding: 0;
     background: none;
     border: 1px solid var(--color-border);
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    order: -1;
-    margin-right: auto;
+    order: 10;
+    margin-left: auto;
     flex-shrink: 0;
   }
 
   .header-hamburger svg {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
     stroke: var(--color-text);
   }
 
@@ -516,16 +520,17 @@ body:has(.darkmode-checkbox-mobile:checked) {
   .header-hamburger[aria-expanded="false"] .hamburger-open { display: block; }
   .header-hamburger[aria-expanded="false"] .hamburger-close { display: none; }
 
-  /* Brand moves to center */
+  /* Brand stays left */
   .header-brand {
-    order: 0;
-    margin-right: auto;
+    order: -1;
   }
 
-  /* Right controls stay compact */
+  /* Controls move left, between brand and hamburger */
   .header-right {
     order: 1;
     gap: var(--space-xs);
+    margin-left: auto;
+    margin-right: var(--space-xs);
   }
 
   /* Mobile menu panel */
@@ -565,8 +570,10 @@ body:has(.darkmode-checkbox-mobile:checked) {
   }
 
   .header-mobile-menu nav a:hover,
-  .header-mobile-menu nav a.header-nav-cta {
+  .header-mobile-menu nav a.header-nav-cta,
+  .header-mobile-menu nav a.header-nav-active {
     color: var(--color-accent);
+    font-weight: 600;
   }
 
   .header-mobile-menu .mobile-menu-footer {

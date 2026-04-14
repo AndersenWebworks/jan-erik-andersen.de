@@ -1,8 +1,7 @@
 /**
- * Mobile Header — Hamburger Menu
- * Dynamically creates hamburger button + mobile menu panel.
- * Clones nav links and dark mode toggle from the existing header.
- * Active at ≤480px via CSS, hidden on larger screens.
+ * Header Enhancements
+ * 1. Active nav link highlighting (desktop + mobile)
+ * 2. Mobile hamburger menu (≤480px via CSS)
  * jan-erik-andersen.de — 2026
  */
 (function () {
@@ -14,6 +13,27 @@
   if (!inner || !nav) return;
 
   var isDE = document.documentElement.lang === 'de';
+
+  /* ── Active Nav Link ──────────────────────────────── */
+
+  var path = location.pathname.replace(/\/$/, '') || '/';
+  var navLinks = nav.querySelectorAll('a');
+  for (var n = 0; n < navLinks.length; n++) {
+    var link = navLinks[n];
+    var href = link.getAttribute('href');
+    // Resolve relative href to absolute path
+    var a = document.createElement('a');
+    a.href = href;
+    var linkPath = a.pathname.replace(/\/$/, '') || '/';
+    // Match: current path starts with link path (but not root)
+    if (linkPath !== '/' && path.indexOf(linkPath) === 0) {
+      link.classList.add('header-nav-active');
+    }
+    // Remove the always-on CTA style if not actually active
+    if (link.classList.contains('header-nav-cta') && !link.classList.contains('header-nav-active')) {
+      link.classList.remove('header-nav-cta');
+    }
+  }
 
   /* ── Hamburger Button ─────────────────────────────── */
 
@@ -31,7 +51,7 @@
       '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>' +
     '</svg>';
 
-  inner.insertBefore(btn, inner.firstChild);
+  inner.appendChild(btn);
 
   /* ── Mobile Menu Panel ────────────────────────────── */
 
@@ -40,7 +60,7 @@
   panel.id = 'header-mobile-menu';
   panel.setAttribute('aria-hidden', 'true');
 
-  // Clone nav links
+  // Clone nav links (including active state)
   var mobileNav = document.createElement('nav');
   var links = nav.querySelectorAll('a');
   for (var i = 0; i < links.length; i++) {
@@ -72,7 +92,6 @@
     footer.appendChild(toggle);
 
     var mobileCb = toggle.querySelector('.darkmode-checkbox-mobile');
-    // Sync both toggles
     mobileCb.addEventListener('change', function () {
       dmCheckbox.checked = mobileCb.checked;
       dmCheckbox.dispatchEvent(new Event('change'));
@@ -94,7 +113,6 @@
     panel.setAttribute('aria-hidden', open ? 'true' : 'false');
   });
 
-  // Close on nav link click
   mobileNav.addEventListener('click', function (e) {
     if (e.target.tagName === 'A') {
       btn.setAttribute('aria-expanded', 'false');
