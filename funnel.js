@@ -640,7 +640,7 @@
     h += '<a href="' + esc(mailtoHref) + '" class="funnel-contact-send funnel-stagger" style="--i:2">';
     h += '<span class="funnel-contact-send-icon">' + ICONS.mail + '</span>';
     h += '<span class="funnel-contact-send-text">';
-    h += '<strong>E-Mail absenden</strong>';
+    h += '<strong>Mail-Entwurf \u00f6ffnen</strong>';
     h += '<span>Erstgespr\u00e4ch kostenlos</span>';
     h += '</span>';
     h += '<span class="funnel-cta-arrow">' + ICONS['chevron-right'] + '</span>';
