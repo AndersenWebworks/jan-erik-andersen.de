@@ -47,7 +47,7 @@
 
     "info-cms-vergleich": {
       "type": "info",
-      "text": "WordPress: Ihr Team pflegt Inhalte selbst. Login, Text aendern, Bild tauschen, fertig. Wichtig: nicht mit Elementor oder Divi – die erzeugen aufgeblaehten Code und machen die Seite langsam. YOOtheme Pro oder der native Block-Editor: sauber, schnell, kein Lock-in.",
+      "text": "WordPress: Ihr Team pflegt Inhalte selbst. Login, Text aendern, Bild tauschen, fertig. Wichtig ist, dass das Theme sauber gebaut ist – viele beliebte Loesungen sehen gut aus, machen die Seite aber langsam. Darauf achte ich.",
       "detail": "Statisches HTML: schneller, sicherer, billiger im Betrieb. Aber jede Aenderung braucht einen Entwickler. Fuer Firmen, deren Seite einmal steht und sich selten aendert, die bessere Wahl.",
       "options": [
         { "label": "WordPress passt zu uns", "next": "result-website-wp" },
@@ -144,7 +144,7 @@
 
     "info-redesign-diagnose": {
       "type": "info",
-      "text": "Nicht alles, was alt aussieht, braucht einen Relaunch. Drei Fragen: 1. Ist die Technik veraltet (kein HTTPS, nicht responsive)? 2. Passen die Inhalte nicht mehr (falsche Leistungen, alte Fotos)? 3. Hat sich Ihre Zielgruppe veraendert?",
+      "text": "Nicht alles, was alt aussieht, braucht einen Relaunch. Drei Fragen: 1. Funktioniert die Seite auf dem Handy vernuenftig? 2. Passen die Inhalte noch (Leistungen, Team, Fotos)? 3. Hat sich Ihre Zielgruppe veraendert?",
       "detail": "Wenn nur eins davon zutrifft, reicht oft ein gezieltes Update statt eines Komplettumbaus.",
       "options": [
         { "label": "Eher das Design", "next": "result-redesign" },
@@ -156,8 +156,8 @@
 
     "info-performance-diagnose": {
       "type": "info",
-      "text": "Die drei haeufigsten Bremsen: 1. Unkomprimierte Bilder (WebP nutzen, max. 1920px breit). 2. Zu viele Plugins und Scripts – jedes kostet Ladezeit. 3. Billiges Shared Hosting.",
-      "detail": "Selbst pruefen: pagespeed.web.dev – ueber 90 ist gut, unter 50 ist ein Problem. Meine eigene Seite hat 100 auf allen Metriken.",
+      "text": "Langsame Websites verlieren Besucher und werden von Google schlechter platziert. Meistens liegt es an zu grossen Bildern, zu vielen Erweiterungen die ueber die Jahre dazugekommen sind, oder an billigem Hosting.",
+      "detail": "Das sind keine grossen Probleme. Ein Entwickler findet die Ursache und loest das meistens in wenigen Stunden.",
       "options": [
         { "label": "Ich nutze WordPress", "next": "result-performance-wp" },
         { "label": "Anderes System / weiss nicht", "next": "result-performance" }
@@ -166,8 +166,8 @@
 
     "info-bfsg-diagnose": {
       "type": "info",
-      "text": "Drei Schnelltests, jetzt sofort: 1. Tab-Taste: Koennen Sie Ihre Website nur mit Tastatur bedienen? 2. Kontrast: Ist Text auf dem Hintergrund gut lesbar? (WAVE Extension installieren) 3. Bilder: Haben alle Alt-Texte? (Rechtsklick, Untersuchen, nach alt= suchen)",
-      "detail": "Einer fehlgeschlagen = BFSG-Handlungsbedarf. Die gute Nachricht: Die meisten Fehler lassen sich schnell beheben.",
+      "text": "Seit Juni 2025 Pflicht. Bussgelder bis 100.000 EUR. 96 % aller Websites haben noch Fehler. Die haeufigsten Probleme: Text ist schlecht lesbar, die Seite laesst sich nicht ohne Maus bedienen, Bilder haben keine Beschreibungen fuer sehbehinderte Nutzer.",
+      "detail": "Ein Profi prueft das in wenigen Stunden und sagt Ihnen genau, was zu tun ist. Die meisten Fehler lassen sich schnell beheben.",
       "options": [
         { "label": "Ja, da ist was", "next": "result-bfsg" },
         { "label": "Ich brauche Hilfe beim Fixen", "next": "result-bfsg-fix" },
@@ -177,8 +177,8 @@
 
     "info-seo-diagnose": {
       "type": "info",
-      "text": "Google und KI-Systeme sind zwei verschiedene Probleme. Schnelltest: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht: GEO-Problem, nicht SEO-Problem.",
-      "detail": "Google: Search Console registrieren (kostenlos), zeigt genau wo Klicks verloren gehen. KI-Sichtbarkeit: braucht strukturierte Daten (Schema.org, JSON-LD).",
+      "text": "Google und KI-Systeme sind zwei verschiedene Probleme. Einfacher Test: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein KI-Sichtbarkeits-Problem – und das loest kein klassisches SEO.",
+      "detail": "Fuer Google gibt es kostenlose Analyse-Tools, die zeigen wo Klicks verloren gehen. Fuer KI-Sichtbarkeit braucht Ihre Website eine technische Struktur, die KI-Systeme lesen koennen. Beides laesst sich machen.",
       "options": [
         { "label": "Problem ist eher Google", "next": "result-seo-google" },
         { "label": "Problem ist eher KI", "next": "result-seo-ki" },
@@ -188,8 +188,8 @@
 
     "info-technik-erste-hilfe": {
       "type": "info",
-      "text": "Drei Dinge selbst pruefen: 1. Anderen Browser testen – wenn es dort geht, Cache leeren (Strg+Shift+Entf). 2. WordPress: alle Plugins deaktivieren, Problem weg? Einzeln wieder aktivieren. 3. F12 druecken, Konsole: rote Fehler? 403 oder 500 = Server-Problem.",
-      "detail": "Wenn keins davon hilft oder es um Sicherheit geht: dann brauchen Sie jemanden.",
+      "text": "Wenn auf Ihrer Website etwas kaputt ist: Testen Sie erstmal in einem anderen Browser. Wenn das Problem dort auch auftritt, liegt es nicht an Ihrem Computer.",
+      "detail": "Dann brauchen Sie jemanden, der sich das anschaut. Je genauer Sie das Problem beschreiben koennen (was geht nicht, seit wann, auf welcher Seite), desto schneller ist es geloest.",
       "options": [
         { "label": "WordPress-Problem", "next": "result-technik-wp" },
         { "label": "WooCommerce-Problem", "next": "result-technik-woo" },
@@ -316,7 +316,7 @@
     "result-website-wp": {
       "type": "result",
       "title": "WordPress – aber richtig.",
-      "text": "WordPress ist die richtige Wahl, wenn Ihr Team selbst Inhalte pflegen will. Aber: nicht jedes Theme und nicht jeder Page Builder taugt. Elementor und Divi sind beliebt, erzeugen aber aufgeblaehten Code und machen Ihre Seite langsam. Ich arbeite mit YOOtheme Pro oder dem nativen Block-Editor – sauberer Code, schnellere Ladezeiten, kein Plugin-Lock-in. KI-Sichtbarkeit und Barrierefreiheit baue ich in jedes Projekt ein. Texte lektoriert meine Frau Annemarie.",
+      "text": "WordPress ist die richtige Wahl, wenn Ihr Team selbst Inhalte pflegen will. Wichtig ist, dass die technische Basis sauber ist – davon haengt ab, wie schnell die Seite laeuft und wie gut sie in Suchmaschinen und KI-Systemen gefunden wird. KI-Sichtbarkeit und Barrierefreiheit baue ich in jedes Projekt ein. Texte lektoriert meine Frau Annemarie.",
       "proof": [
         { "name": "Scheja & Partner", "desc": "Kanzlei, 30+ Anwaelte, YOOtheme Pro", "href": "https://scheja-partners.de" },
         { "name": "The New Insider", "desc": "Stadtmagazin, YOOtheme Pro", "href": "https://thenewinsider.de" }
@@ -327,7 +327,7 @@
     "result-website-statisch": {
       "type": "result",
       "title": "Statisches HTML – weniger ist mehr.",
-      "text": "Wenn sich Ihre Website selten aendert, brauchen Sie kein CMS. Statische Websites laden schneller, sind sicherer (kein Login, keine Datenbank, keine Updates) und kosten fast nichts im Betrieb. Diese Website hier ist statisch. Lighthouse 100, kein Framework, kein Build-Tool. Push aufs Repository, sofort live. Aenderungen brauchen einen Entwickler, aber bei weniger als 2 pro Monat ist das kein Problem.",
+      "text": "Wenn sich Ihre Website selten aendert, brauchen Sie kein CMS. Statische Websites laden schneller, sind sicherer und kosten fast nichts im Betrieb. Diese Website hier ist statisch – maximale Geschwindigkeit, minimaler Aufwand. Aenderungen brauchen einen Entwickler, aber bei weniger als 2 pro Monat ist das kein Problem.",
       "proof": [
         { "name": "Diese Website", "desc": "Statisch, Lighthouse 100, GitHub Pages" },
         { "name": "Wirkungsbericht SiS", "desc": "Statischer Bericht mit SVG-Karte", "href": "https://wirkungsbericht.seniorpartnerinschool.de" }
@@ -406,7 +406,7 @@
     "result-portal-kunden": {
       "type": "result",
       "title": "Kundenportal – darauf muessen Sie achten.",
-      "text": "Login-Bereich heisst: Nutzerverwaltung, Passwoerter, Sessions, Datenschutz. Das ist nicht trivial. Fuer WordPress gibt es Loesungen (MemberPress, WooCommerce Memberships), fuer statische Sites brauchen Sie ein Backend. Wichtig: DSGVO. Personenbezogene Daten hinter einem Login erfordern ein Verarbeitungsverzeichnis und eine Datenschutzerklaerung die das abdeckt. Klingt aufwendig, ist aber Routine wenn man es von Anfang an einplant.",
+      "text": "Ein Login-Bereich fuer Kunden ist technisch anspruchsvoller als eine normale Website, weil Datenschutz (DSGVO) von Anfang an mitgedacht werden muss. Das ist machbar und Routine, wenn man es von Beginn an einplant. Wichtig ist, dass Sie vorab klaeren: Was sollen Kunden sehen und tun koennen? Wer verwaltet die Zugaenge? Dann kann ich Ihnen sagen, wie der beste Weg aussieht.",
       "proof": [
         { "name": "Gerwing Steinwerke", "desc": "B2B-Haendlerportal mit Login", "href": "https://gerwing.de" }
       ],
@@ -416,7 +416,7 @@
     "result-portal-intern": {
       "type": "result",
       "title": "Custom-Tool – wenn es sein muss, dann richtig.",
-      "text": "Sie haben geprüueft ob ein fertiges Tool reicht, und die Antwort ist nein. Dann bauen wir was. Karriere-Portale, Kundenportale, interne Tools, interaktive Berichte – das ist die Art Projekte, die mich am meisten interessieren. Dieser Berater-Funnel hier ist so ein Fall: reines JavaScript, kein Backend, laeuft auf einer statischen Seite. Kein Tool haette das so gemacht.",
+      "text": "Sie haben geprueft ob ein fertiges Tool reicht, und die Antwort ist nein. Dann bauen wir was. Karriere-Portale, Kundenportale, interne Tools, interaktive Berichte – das ist die Art Projekte, die mich am meisten interessieren. Dieser Berater-Funnel hier ist so ein Fall: massgeschneidert, kein fertiges Produkt haette das so gemacht.",
       "proof": [
         { "name": "Seniorpartner in School", "desc": "Interaktiver Wirkungsbericht mit SVG-Karte", "href": "https://wirkungsbericht.seniorpartnerinschool.de" },
         { "name": "Runden Group", "desc": "Karriere-Portal, Onboarding-Tool", "href": "https://runden-group.eu" }
@@ -467,7 +467,7 @@
     "result-redesign-technik": {
       "type": "result",
       "title": "Technik veraltet – das Fundament muss stimmen.",
-      "text": "Wenn die Seite nicht responsive ist oder auf altem PHP laeuft, hilft kein neues Design. Erst die Basis: aktuelles PHP, HTTPS, responsive Layout, Performance. Pruefen Sie: Laeuft PHP 8.1+? Ist SSL aktiv? Sieht die Seite auf dem Handy brauchbar aus? Wenn eins davon nein ist, starten Sie dort. Manchmal reicht ein Theme-Wechsel, manchmal muss mehr passieren.",
+      "text": "Wenn die Seite auf dem Handy nicht richtig funktioniert oder keine sichere Verbindung hat (kein Schloss-Symbol im Browser), hilft kein neues Design. Erst muss das technische Fundament stimmen. Manchmal reicht ein ueberschaubarer Eingriff, manchmal muss mehr passieren. Ich schaue mir das an und sage Ihnen ehrlich, was noetig ist.",
       "proof": [
         { "name": "Diese Website", "desc": "Lighthouse 100, statisches HTML" }
       ],
@@ -497,8 +497,8 @@
 
     "result-performance-wp": {
       "type": "result",
-      "title": "WordPress langsam – die fuenf ueblichen Verdaechtigen.",
-      "text": "1. Zu viele Plugins. Ab 20 wird es kritisch. Deaktivieren Sie alles, was Sie nicht taeglich brauchen. 2. Page Builder (Elementor, Divi). Erzeugen aufgeblaehtes HTML. 3. Kein Caching-Plugin. WP Super Cache oder W3 Total Cache sind kostenlos und bringen sofort 30-50 % Verbesserung. 4. Bilder nicht komprimiert. ShortPixel oder Imagify loesen das automatisch. 5. PHP-Version zu alt. Alles unter 8.1 ist langsamer und unsicher. Im Hosting-Panel umstellbar.",
+      "title": "WordPress langsam – das ist loesbar.",
+      "text": "WordPress wird meistens langsam, weil ueber die Jahre zu viele Erweiterungen dazugekommen sind. Jede laedt eigenen Code, und irgendwann merkt man das. Dazu kommt oft ein Theme, das mehr kann als noetig – und dafuer alles ausbremst. Das laesst sich aufraeumen, ohne die Website neu zu bauen. Schicken Sie mir die Adresse, ich schaue mir das an und sage Ihnen, was sich machen laesst.",
       "proof": [
         { "name": "20+ WordPress-Sites", "desc": "Laufende Betreuung und Optimierung" }
       ],
@@ -507,8 +507,8 @@
 
     "result-performance": {
       "type": "result",
-      "title": "Die drei haeufigsten Bremsen – und was Sie selbst tun koennen.",
-      "text": "Erstens: Bilder. Unkomprimierte PNGs sind der haeufigste Grund fuer langsame Seiten. WebP nutzen, maximale Breite auf 1920px begrenzen. Zweitens: zu viel JavaScript. Slider-Plugins, Chat-Widgets, Analytics-Scripts – jedes kostet Ladezeit. Drittens: billiges Shared Hosting. Selbst pruefen: pagespeed.web.dev – ueber 90 ist gut, unter 50 ist ein Problem. Meine eigene Seite hat 100 auf allen Metriken.",
+      "title": "Langsame Website – meistens schnell geloest.",
+      "text": "Die haeufigsten Ursachen: zu grosse Bilder, zu viele Erweiterungen die ueber die Jahre dazugekommen sind, oder ein Hosting-Anbieter der zu wenig Leistung liefert. Nichts davon ist ein grosses Problem. Ein Entwickler findet die Ursache und loest das meistens in wenigen Stunden. Schicken Sie mir die Adresse Ihrer Website, ich schaue mir das an.",
       "proof": [
         { "name": "Diese Website", "desc": "Lighthouse 100, statisches HTML" },
         { "name": "Gerwing Steinwerke", "desc": "Performance-Optimierung im laufenden Betrieb", "href": "https://gerwing.de" }
@@ -518,8 +518,8 @@
 
     "result-bfsg": {
       "type": "result",
-      "title": "BFSG – was das konkret fuer Ihre Website heisst.",
-      "text": "Seit Juni 2025 Pflicht, Bussgelder bis 100.000 EUR. Der Standard heisst WCAG 2.1 AA. Die drei haeufigsten Fehler: zu wenig Kontrast, keine Tastatur-Navigation, fehlende Alt-Texte bei Bildern. Installieren Sie die WAVE Browser Extension – die zeigt Fehler direkt auf der Seite. Oder testen Sie, ob Sie Ihre Website nur mit der Tastatur bedienen koennen. Wenn Sie an einer Stelle haengenbleiben, haben Ihre Nutzer das gleiche Problem.",
+      "title": "BFSG – was das fuer Sie heisst.",
+      "text": "Seit Juni 2025 Pflicht, Bussgelder bis 100.000 EUR. Die haeufigsten Probleme: Text ist schlecht lesbar, die Seite laesst sich nicht ohne Maus bedienen, Bilder haben keine Beschreibungen fuer sehbehinderte Nutzer. 96 % aller Websites haben noch Fehler. Ich pruefe Ihre Seite, sage Ihnen genau was zu tun ist und setze es um.",
       "proof": [
         { "name": "Diese Website", "desc": "WCAG 2.1 AA, BFSG-konform" },
         { "name": "Seniorpartner in School", "desc": "Barrierefreier Wirkungsbericht", "href": "https://wirkungsbericht.seniorpartnerinschool.de" }
@@ -530,7 +530,7 @@
     "result-bfsg-fix": {
       "type": "result",
       "title": "BFSG-Fehler beheben – das ist machbar.",
-      "text": "Die haeufigsten Fixes: Kontraste anpassen, Alt-Texte ergaenzen, Tastatur-Navigation fixen, Formulare barrierefrei machen. Bei einer typischen WordPress-Seite mit 10-20 Seiten ist das ueberschaubar. Ich dokumentiere die Aenderungen, damit Sie bei einer Pruefung nachweisen koennen, was gemacht wurde. Ersteinschaetzung kostenlos.",
+      "text": "Sie wissen schon, welche Fehler existieren? Dann koennen wir direkt loslegen. Bei einer typischen Website ist das ueberschaubar. Ich behebe die Probleme und dokumentiere alles, damit Sie bei einer Pruefung nachweisen koennen, was gemacht wurde. Ersteinschaetzung kostenlos.",
       "proof": [
         { "name": "Diese Website", "desc": "WCAG 2.1 AA, BFSG-konform" }
       ],
@@ -539,8 +539,8 @@
 
     "result-seo-google": {
       "type": "result",
-      "title": "Google-SEO – was 2026 noch funktioniert.",
-      "text": "Die Basics aendern sich nicht: saubere Titel und Descriptions, schnelle Ladezeit (Core Web Vitals), mobile Optimierung, interne Verlinkung. Was viele vergessen: die Google Search Console. Kostenlos, zeigt genau fuer welche Begriffe Sie gefunden werden und wo Klicks verloren gehen. Was sich geaendert hat: AI Overviews druecken organische Ergebnisse nach unten. Strukturierte Daten helfen, in den verbleibenden Ergebnissen sichtbar zu bleiben.",
+      "title": "Google-Sichtbarkeit – was 2026 noch funktioniert.",
+      "text": "Die Grundlagen aendern sich nicht: klare Seitentitel, schnelle Ladezeit, funktioniert auf dem Handy. Was sich geaendert hat: Googles KI-Zusammenfassungen druecken klassische Ergebnisse nach unten. Wer dort noch sichtbar sein will, braucht eine technisch saubere Website. Es gibt kostenlose Tools von Google selbst, die zeigen, fuer welche Begriffe Sie gefunden werden und wo Klicks verloren gehen. Ich richte das ein und erklaere Ihnen, was die Zahlen bedeuten.",
       "proof": [
         { "name": "Diese Website", "desc": "SEO + GEO optimiert" }
       ],
@@ -549,8 +549,8 @@
 
     "result-seo-ki": {
       "type": "result",
-      "title": "KI-Sichtbarkeit – so pruefen Sie es selbst.",
-      "text": "Oeffnen Sie ChatGPT und fragen Sie nach Ihrem Unternehmen. Ist die Antwort korrekt? Vollstaendig? Wenn nicht, haben Sie ein Problem, das kein klassisches SEO loest. Was hilft: klare, faktische Texte auf Ihrer Website. Konkrete Aussagen statt Marketing-Phrasen. Strukturierte Daten (Schema.org, JSON-LD), damit KI-Systeme Ihre Inhalte zuordnen koennen. Maschinenlesbare Endpoints. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.",
+      "title": "KI-Sichtbarkeit – darum kuemmern sich noch wenige.",
+      "text": "Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein Problem, das kein klassisches SEO loest. KI-Systeme brauchen eine andere Art von Struktur auf Ihrer Website, damit sie Ihr Unternehmen korrekt erfassen und zitieren. Das ist technische Arbeit, die ich in jedes Projekt einbaue. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.",
       "proof": [
         { "name": "Diese Website", "desc": "GEO-optimiert, maschinenlesbar" }
       ],
@@ -571,8 +571,8 @@
 
     "result-technik-wp": {
       "type": "result",
-      "title": "WordPress-Probleme – systematisch loesen.",
-      "text": "Schritt 1: WordPress Health Check (unter Werkzeuge, Website-Zustand). Zeigt bekannte Probleme. Schritt 2: Alle Plugins deaktivieren, auf Standard-Theme wechseln (Twenty Twenty-Four). Problem weg? Dann liegt es an einem Plugin oder Theme. Einzeln wieder aktivieren. Schritt 3: PHP-Version pruefen (Hosting-Panel). Alles unter 8.1 ist veraltet. Schritt 4: Recovery Mode. WordPress schickt einen Link per Mail, wenn die Seite abstuerzt. Damit koennen Sie sich trotzdem einloggen.",
+      "title": "WordPress-Problem – ich kenne das System von innen.",
+      "text": "WordPress-Probleme haben meistens mit Erweiterungen zu tun, die sich gegenseitig in die Quere kommen. Oder mit einem Update, das etwas kaputt gemacht hat. Das laesst sich systematisch eingrenzen und loesen. Ich habe beim Hersteller von YOOtheme gearbeitet und betreue ueber 20 WordPress-Websites. Schicken Sie mir eine Beschreibung des Problems, ich gebe Ihnen eine erste Einschaetzung.",
       "proof": [
         { "name": "YOOtheme", "desc": "Ehemaliger Support Manager", "href": "https://yootheme.com" },
         { "name": "20+ WordPress-Sites", "desc": "Laufende Betreuung" }
@@ -582,8 +582,8 @@
 
     "result-technik-woo": {
       "type": "result",
-      "title": "WooCommerce-Probleme – andere Liga.",
-      "text": "WooCommerce-Bugs betreffen oft Geld: Bestellungen gehen nicht durch, Preise stimmen nicht, Zahlungsanbieter meldet Fehler. Hier nicht selbst experimentieren, wenn der Shop live ist. Was Sie pruefen koennen: Sind alle Plugins aktuell? Laeuft ein Caching-Plugin, das den Warenkorb cached (haeufiger Fehler)? Funktioniert die Testbestellung im Sandbox-Modus? Bei Zahlungsproblemen: immer zuerst beim Zahlungsanbieter pruefen, ob dort Fehler geloggt werden.",
+      "title": "WooCommerce-Problem – da geht es oft um Geld.",
+      "text": "Wenn der Shop Probleme hat, betrifft das meistens direkt Ihren Umsatz: Bestellungen gehen nicht durch, Preise stimmen nicht, der Zahlungsanbieter meldet Fehler. Das ist nichts, womit man experimentieren sollte, solange der Shop live ist. Schicken Sie mir eine Beschreibung, was passiert. Ich kenne WooCommerce von innen und finde das Problem.",
       "proof": [
         { "name": "Gerwing Steinwerke", "desc": "WooCommerce, laufender Betrieb", "href": "https://gerwing.de" }
       ],
@@ -592,8 +592,8 @@
 
     "result-technik": {
       "type": "result",
-      "title": "Erste Hilfe, bevor Sie jemanden anrufen.",
-      "text": "Anderer Browser getestet? Cache geleert? Plugins deaktiviert? Konsole geprueft? Wenn nichts davon hilft, brauchen Sie jemanden der sich das anschaut. WordPress, WooCommerce, YOOtheme Pro kenne ich von innen – ich habe beim Hersteller gearbeitet. Erste Einschaetzung kostenlos.",
+      "title": "Irgendwas ist kaputt – das klaeren wir.",
+      "text": "Wenn Sie nicht genau wissen, was los ist: kein Problem. Beschreiben Sie mir, was passiert (oder nicht passiert), seit wann, und auf welcher Seite. Je genauer, desto schneller bin ich. WordPress und WooCommerce kenne ich von innen, ich habe beim Hersteller gearbeitet. Erste Einschaetzung kostenlos.",
       "proof": [
         { "name": "YOOtheme", "desc": "Ehemaliger Support Manager", "href": "https://yootheme.com" },
         { "name": "20+ Websites", "desc": "Laufende Betreuung seit Jahren" }
@@ -604,7 +604,7 @@
     "result-technik-sicherheit": {
       "type": "result",
       "title": "Gehackt – jetzt schnell handeln.",
-      "text": "Wenn Ihre Website gehackt wurde oder Malware enthaelt: nicht selbst reparieren, bevor Sie wissen was passiert ist. Schritt 1: Website offline nehmen oder Passwort-Schutz aktivieren. Schritt 2: Hosting-Anbieter informieren (die koennen oft helfen). Schritt 3: Keine Passwoerter ueber die gehackte Seite aendern – nutzen Sie das Hosting-Panel direkt. WordPress und WooCommerce kenne ich von innen. Ich finde die Luecke, raeume auf und sichere ab.",
+      "text": "Wenn Ihre Website gehackt wurde oder Malware enthaelt: nicht selbst daran herumreparieren. Informieren Sie Ihren Hosting-Anbieter und melden Sie sich bei mir. Ich finde die Sicherheitsluecke, raeume auf und sichere die Seite ab, damit das nicht nochmal passiert.",
       "proof": [
         { "name": "YOOtheme", "desc": "Ehemaliger Support Manager", "href": "https://yootheme.com" },
         { "name": "20+ Websites", "desc": "Laufende Betreuung und Sicherheit" }
@@ -677,7 +677,7 @@
     "result-geo": {
       "type": "result",
       "title": "So pruefen Sie Ihre KI-Sichtbarkeit selbst.",
-      "text": "Schnelltest: Oeffnen Sie ChatGPT und fragen Sie nach Ihrem Unternehmen. Ist die Antwort korrekt und vollstaendig? Wenn nicht, haben Sie ein Problem. Was Sie ohne Entwickler tun koennen: klare, faktische Texte schreiben. Keine Marketing-Phrasen, sondern konkrete Aussagen. Was technische Arbeit braucht: Schema.org, JSON-LD, maschinenlesbare Endpoints, KI-Crawler-Konfiguration. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.",
+      "text": "Einfacher Test: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein Problem. Was Sie selbst tun koennen: klare, faktische Texte auf Ihrer Website. Konkrete Aussagen statt Marketing-Phrasen. Was technische Arbeit braucht: eine Struktur auf Ihrer Website, die KI-Systeme lesen und zuordnen koennen. Das baue ich in jedes Projekt ein. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.",
       "proof": [
         { "name": "Diese Website", "desc": "GEO-optimiert, maschinenlesbar" }
       ],
@@ -688,7 +688,7 @@
     "result-geo-audit": {
       "type": "result",
       "title": "Audit – was ich konkret pruefe.",
-      "text": "Erstens: Findet ChatGPT Ihr Unternehmen, und stimmt das, was es sagt? Zweitens: Sind strukturierte Daten vorhanden (Schema.org, JSON-LD)? Drittens: Sind Ihre Inhalte maschinenlesbar oder hinter JavaScript versteckt? Viertens: Haben Sie eine robots.txt, die KI-Crawler nicht aussperrt? Sie bekommen einen konkreten Bericht mit Prioritaeten. Erstgespraech kostenlos.",
+      "text": "Ich pruefe, wie gut KI-Systeme Ihre Website verstehen. Findet ChatGPT Ihr Unternehmen, und stimmt das, was es sagt? Hat Ihre Website die technische Struktur, die KI-Systeme brauchen? Werden KI-Crawler ausgesperrt? Sie bekommen einen konkreten Bericht mit Prioritaeten – was sofort gemacht werden sollte und was warten kann. Erstgespraech kostenlos.",
       "proof": [],
       "cta": { "label": "Audit anfragen", "href": "kontakt/" }
     },
