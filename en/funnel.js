@@ -166,9 +166,35 @@
     return '<span class="funnel-step-label funnel-stagger" style="--i:0">Step ' + depth + '</span>';
   }
 
+  /* ── Session Memory ────────────────────────────────── */
+
+  var STORAGE_KEY = 'funnel-done';
+
+  function showReopenButton() {
+    var btn = document.getElementById('funnel-reopen');
+    if (btn) {
+      btn.hidden = false;
+      btn.addEventListener('click', function () {
+        localStorage.removeItem(STORAGE_KEY);
+        location.reload();
+      });
+    }
+  }
+
+  function skipFunnel() {
+    funnel.classList.add('funnel-hidden');
+    funnel.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('funnel-active');
+    showReopenButton();
+  }
+
   /* ── Init ─────────────────────────────────────────── */
 
   function init() {
+    if (localStorage.getItem(STORAGE_KEY)) {
+      skipFunnel();
+      return;
+    }
     document.documentElement.classList.add('funnel-active');
     fetch('funnel.json')
       .then(function (r) { return r.json(); })
@@ -587,12 +613,14 @@
   /* ── Exit Funnel ──────────────────────────────────── */
 
   function exitFunnel() {
+    localStorage.setItem(STORAGE_KEY, '1');
     funnel.classList.add('funnel-exiting');
     setTimeout(function () {
       funnel.classList.add('funnel-hidden');
       funnel.setAttribute('aria-hidden', 'true');
       document.documentElement.classList.remove('funnel-active');
       window.scrollTo(0, 0);
+      showReopenButton();
     }, 650);
   }
 

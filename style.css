@@ -2138,6 +2138,32 @@ a.funnel-proof-link .funnel-proof-name {
    EDITORIAL — Newspaper Summary Layout
    ============================================ */
 
+.funnel-reopen {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-bottom: var(--space-xl);
+  padding: 0.5em 1em;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: var(--color-surface-alt, var(--color-bg));
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.funnel-reopen:hover {
+  color: var(--color-text);
+  border-color: var(--color-text-secondary);
+}
+
+.funnel-reopen svg {
+  width: 14px;
+  height: 14px;
+}
+
 .editorial {
   padding: var(--space-4xl) 0;
   border-top: none;
