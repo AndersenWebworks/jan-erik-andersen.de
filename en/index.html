@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr" id="top">
+<html lang="en" dir="ltr" id="top" class="funnel-active">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,13 +15,13 @@
   <meta property="og:description" content="Web development, digital tools and AI visibility. WordPress, WooCommerce, static HTML. Since 1999, Germany-wide remote.">
   <meta property="og:locale" content="en_US">
   <meta property="og:locale:alternate" content="de_DE">
-  <meta property="og:image" content="https://jan-erik-andersen.de/screenshot-hero.png">
+  <meta property="og:image" content="https://jan-erik-andersen.de/portrait.webp">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://jan-erik-andersen.de/en/">
   <meta name="twitter:title" content="Jan-Erik Andersen – Web Development, Digital Tools, AI Visibility">
   <meta name="twitter:description" content="Web development, digital tools and AI visibility. Since 1999, Germany-wide remote.">
-  <meta name="twitter:image" content="https://jan-erik-andersen.de/screenshot-hero.png">
+  <meta name="twitter:image" content="https://jan-erik-andersen.de/portrait.webp">
 
   <link rel="alternate" hreflang="de" href="https://jan-erik-andersen.de/">
   <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/">
@@ -135,7 +135,8 @@
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header has-nav" id="site-header">
+  <!-- One header — always present, nav fades in after funnel exit -->
+  <header class="site-header" id="site-header">
     <div class="site-header-inner">
       <a href="./" class="header-brand">
         <img src="../andersen-webworks-logo.png" alt="" class="header-brand-icon" width="24" height="24">
@@ -173,142 +174,123 @@
 
   <main id="main">
 
-    <!-- ===== HERO ===== -->
-    <section class="hero">
-      <div class="container">
-        <h1>Jan-Erik Andersen</h1>
-        <p class="hero-subtitle">Web development, digital tools and AI visibility. Concept, design, development and maintenance from a single source. Since 1999.</p>
-      </div>
-    </section>
-
-    <!-- ===== INTRO ===== -->
-    <section>
-      <div class="container">
-        <div class="homepage-intro">
-          <img src="../portrait.webp" alt="Jan-Erik Andersen" class="homepage-intro-photo" width="140" height="140" loading="lazy">
-          <div>
-            <p>Web developer with a background in design, games QA and agency frontend. Self-employed since 2010. 20+ live websites, from B2B industry to animal welfare. Copy edited by <a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie Andersen</a>.</p>
-            <p><a href="about/">More about me →</a></p>
-          </div>
+    <!-- ===== FUNNEL (Fullscreen above the fold) ===== -->
+    <section class="funnel" id="funnel" aria-label="Interactive advisor funnel">
+      <div class="funnel-container">
+        <div class="funnel-app" id="funnel-app" role="region" aria-live="polite" aria-label="Consultation">
+          <noscript>
+            <p>JavaScript is required for the interactive advisor funnel.</p>
+            <p><a href="#summary">Skip to overview</a></p>
+          </noscript>
         </div>
       </div>
     </section>
 
-    <!-- ===== SERVICES ===== -->
-    <section class="section--alt">
-      <div class="container">
-        <h2>Services</h2>
-        <div class="cluster-grid">
+    <!-- ===== EDITORIAL SUMMARY (Below the fold, crawlable) ===== -->
+    <section class="editorial" id="summary">
+      <div class="editorial-layout container">
 
-          <div class="cluster-card">
-            <span class="cluster-number">01</span>
-            <h3>Get Visible</h3>
-            <p class="cluster-desc">Websites, shops, redesigns. WordPress, WooCommerce or static HTML – whatever fits. AI visibility (GEO) and BFSG accessibility in every project.</p>
-            <a href="services/#visible">Details →</a>
-          </div>
+        <!-- MAIN COLUMN -->
+        <div class="editorial-main">
 
-          <div class="cluster-card">
-            <span class="cluster-number">02</span>
-            <h3>Work Better</h3>
-            <p class="cluster-desc">B2B portals, order systems, product catalogues, internal tools. From dealer platforms with document management to interactive customer portals.</p>
-            <a href="services/#tools">Details →</a>
-          </div>
+          <h1 class="editorial-headline">Web Development. Digital&nbsp;Tools. AI&nbsp;Visibility.</h1>
 
-          <div class="cluster-card">
-            <span class="cluster-number">03</span>
-            <h3>Stay Secure</h3>
-            <p class="cluster-desc">Ongoing maintenance: updates, security, compliance, further development. Some clients since 2018.</p>
-            <a href="services/#secure">Details →</a>
-          </div>
+          <p class="editorial-lead">Jan-Erik Andersen, freelance web developer. In the web since 1999, self-employed since 2010. Concept, design, development and maintenance from a single source. Germany-wide remote, Plau&nbsp;am&nbsp;See.</p>
 
-        </div>
-      </div>
-    </section>
+          <h2>What I do</h2>
 
-    <!-- ===== PROJECTS ===== -->
-    <section>
-      <div class="container">
-        <h2>Selected Projects</h2>
-        <div class="project-grid">
+          <p>Company websites, online shops, redesigns, web apps, ongoing maintenance. WordPress, WooCommerce or static HTML – whatever fits the case. No agency chain: one person who knows your project from start to finish. Copy edited by <a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie Andersen</a>.</p>
 
-          <div class="project-card">
-            <span class="project-tag">B2B / Industry</span>
-            <h3>Gerwing Steinwerke</h3>
-            <p class="project-desc">WooCommerce shop, B2B dealer portal, sample tracking. Sole technical responsibility since 2023.</p>
-            <div class="tech-tags">
-              <span class="tech-tag">WooCommerce</span>
-              <span class="tech-tag">Custom Tools</span>
-              <span class="tech-tag">Retainer</span>
+          <p>Every project is automatically optimised for AI systems (structured data, machine-readable endpoints) and accessible per WCAG&nbsp;2.1&nbsp;AA. No extra charge, no add-on.</p>
+
+          <h2>Selected Projects</h2>
+
+          <div class="editorial-projects">
+            <div class="editorial-project">
+              <span class="editorial-project-tag">B2B / Industry</span>
+              <strong>Gerwing Steinwerke</strong> — WooCommerce shop, B2B dealer portal, sample tracking. Sole technical responsibility since 2023.
+            </div>
+            <div class="editorial-project">
+              <span class="editorial-project-tag">Corporate Group</span>
+              <strong>Runden Group</strong> — Complete web presence with 10+ subsidiaries. Career portal, custom plugins, bilingual. Two years as sole developer.
+            </div>
+            <div class="editorial-project">
+              <span class="editorial-project-tag">Law / Data Protection</span>
+              <strong>Scheja &amp; Partner</strong> — Data protection law firm, 30+ lawyers. Software product pages, NIS2 check, multilingual.
+            </div>
+            <div class="editorial-project">
+              <span class="editorial-project-tag">Pro Bono</span>
+              <strong>Seniorpartner in School e.V.</strong> — Digital impact report 2025. Interactive SVG map of Germany, infographics. Static HTML.
             </div>
           </div>
+          <p><a href="projects/">All projects →</a></p>
 
-          <div class="project-card">
-            <span class="project-tag">Corporate Group / 10+ Websites</span>
-            <h3>Runden Group</h3>
-            <p class="project-desc">Complete web presence of a corporate group. Career portal, customer portal, custom plugins. Two years as sole developer.</p>
-            <div class="tech-tags">
-              <span class="tech-tag">Custom Plugins</span>
-              <span class="tech-tag">Customer Portal</span>
-              <span class="tech-tag">Bilingual</span>
-            </div>
-          </div>
+          <h2>AI Visibility</h2>
 
-          <div class="project-card">
-            <span class="project-tag">Law / Data Protection</span>
-            <h3>Scheja &amp; Partner</h3>
-            <p class="project-desc">Data protection law firm, Bonn. Website with software product pages, NIS2 check, GDPR tools, career portal. Multilingual.</p>
-            <div class="tech-tags">
-              <span class="tech-tag">Software Products</span>
-              <span class="tech-tag">Compliance Tools</span>
-              <span class="tech-tag">Multilingual</span>
-            </div>
-          </div>
+          <p>73&nbsp;% of B2B buyers research with ChatGPT. 61&nbsp;% fewer clicks on organic results since AI Overviews. If you're invisible to AI systems, you don't exist for these customers.</p>
 
-          <div class="project-card">
-            <span class="project-tag">Pro Bono / Federal Association</span>
-            <h3>Seniorpartner in School e.V.</h3>
-            <p class="project-desc">Digital impact report 2025. Interactive SVG map of Germany, infographics. Static HTML – fast, accessible, maintenance-free.</p>
-            <div class="tech-tags">
-              <span class="tech-tag">Static HTML</span>
-              <span class="tech-tag">Interactive Map</span>
-              <span class="tech-tag">Infographics</span>
-            </div>
-          </div>
+          <p>I structure websites so that AI systems can correctly capture and cite them — structured data, Schema.org, JSON-LD, machine-readable endpoints. This is standard in every project. <a href="services/ai-visibility.html">Data, sources and details →</a></p>
 
-        </div>
-        <p style="margin-top: var(--space-xl);"><a href="projects/">All projects →</a></p>
-      </div>
-    </section>
-
-    <!-- ===== AI VISIBILITY (COMPACT) ===== -->
-    <section class="section--alt">
-      <div class="container">
-        <h2>AI Visibility</h2>
-        <p>73% of B2B buyers research with ChatGPT. 61% fewer clicks on organic results since AI Overviews. If you're invisible to AI systems, you don't exist for these customers.</p>
-        <p>Every project here is automatically optimized for AI systems: structured data, machine-readable endpoints, AI crawler configuration. Not an add-on.</p>
-        <p><a href="services/ai-visibility.html">Data, sources and details →</a></p>
-      </div>
-    </section>
-
-    <!-- ===== CONTACT ===== -->
-    <section id="contact">
-      <div class="container">
-        <h2>Contact</h2>
-        <p>Initial consultation free of charge.</p>
-        <div class="contact-methods">
-          <div class="contact-method">
-            <span class="label">Email</span>
+          <h2>Contact</h2>
+          <p>Initial consultation free of charge.</p>
+          <div class="editorial-contact">
             <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
+            <a href="tel:+4938733270015">038733 270015</a>
+            <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">LinkedIn</a>
           </div>
-          <div class="contact-method">
-            <span class="label">Phone</span>
-            <a href="tel:+4938733270015">+49 38733 270015</a>
-          </div>
-          <div class="contact-method">
-            <span class="label">LinkedIn</span>
-            <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">linkedin.com/in/andersen-erik</a>
-          </div>
+
         </div>
+
+        <!-- SIDEBAR -->
+        <aside class="editorial-sidebar">
+
+          <img src="../portrait.webp" alt="Jan-Erik Andersen" class="editorial-portrait" width="200" height="200" loading="lazy">
+
+          <div class="editorial-stats">
+            <div class="editorial-stat">
+              <span class="editorial-stat-number">26</span>
+              <span class="editorial-stat-label">Years in the web</span>
+            </div>
+            <div class="editorial-stat">
+              <span class="editorial-stat-number">50+</span>
+              <span class="editorial-stat-label">Projects</span>
+            </div>
+            <div class="editorial-stat">
+              <span class="editorial-stat-number">14+</span>
+              <span class="editorial-stat-label">Industries</span>
+            </div>
+            <div class="editorial-stat">
+              <span class="editorial-stat-number">100</span>
+              <span class="editorial-stat-label">Lighthouse Score</span>
+            </div>
+          </div>
+
+          <div class="editorial-sidebar-section">
+            <h3>Technologies</h3>
+            <p>WordPress, WooCommerce, YOOtheme&nbsp;Pro, static HTML, Vanilla&nbsp;JS, Schema.org, JSON-LD</p>
+          </div>
+
+          <div class="editorial-sidebar-section">
+            <h3>Services</h3>
+            <ul>
+              <li><a href="services/#visible">Get visible</a> — Websites, shops, redesigns</li>
+              <li><a href="services/#tools">Work better</a> — Portals, tools, systems</li>
+              <li><a href="services/#secure">Stay secure</a> — Maintenance, compliance</li>
+            </ul>
+          </div>
+
+          <div class="editorial-sidebar-section">
+            <h3>Quality Standards</h3>
+            <ul>
+              <li>AI visibility in every project</li>
+              <li>EAA/WCAG 2.1 AA standard</li>
+              <li>Professional copy editing included</li>
+              <li>Some clients since 2018</li>
+            </ul>
+          </div>
+
+        </aside>
+
       </div>
     </section>
 
@@ -329,14 +311,27 @@
 
   <script>
   (function() {
+    /* Dark mode */
     var cb = document.getElementById('darkmode-toggle');
     var stored = localStorage.getItem('darkmode');
     if (stored === '1') cb.checked = true;
     cb.addEventListener('change', function() {
       localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
+
+    /* Header — transitions from funnel mode to page mode */
+    var siteHeader = document.getElementById('site-header');
+    if (siteHeader) {
+      function updateHeader() {
+        var funnelGone = !document.documentElement.classList.contains('funnel-active');
+        siteHeader.classList.toggle('has-nav', funnelGone);
+      }
+      new MutationObserver(updateHeader).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      updateHeader();
+    }
   })();
   </script>
+  <script src="funnel.js"></script>
   <img src="https://jan-erik-andersen.goatcounter.com/count?p=/en/" alt="" style="position:absolute;left:-9999px" aria-hidden="true">
 </body>
 </html>
