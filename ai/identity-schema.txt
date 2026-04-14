@@ -3,38 +3,68 @@
   "@type": "Person",
   "@id": "https://jan-erik-andersen.de/#person",
   "name": "Jan-Erik Andersen",
-  "jobTitle": "AI-native Web Architect",
-  "description": "AI-native Web Architect und Gründer von Andersen Webworks. Websites strukturieren für Menschen und KI-Systeme. Generative Engine Optimization (GEO). 25+ Jahre Erfahrung. Deutschlandweit remote.",
+  "jobTitle": "Freiberuflicher Webentwickler und digitaler Berater",
+  "description": "Konzept, Design, Entwicklung und Betreuung aus einer Hand. WordPress, WooCommerce, statisches HTML. KI-Sichtbarkeit (GEO/AVO) in jedem Projekt. 25+ Jahre Erfahrung. Deutschlandweit remote.",
   "url": "https://jan-erik-andersen.de",
   "email": "mail@andersen-webworks.de",
   "telephone": "+4938733270015",
   "sameAs": [
     "https://www.linkedin.com/in/andersen-erik",
-    "https://andersen-webworks.de"
+    "https://andersen-webworks.de",
+    "https://github.com/AndersenWebworks"
   ],
   "knowsAbout": [
-    "GEO (Generative Engine Optimization)",
-    "Strukturierte Daten",
-    "Semantisches HTML",
-    "WCAG 2.1",
-    "JSON-LD",
-    "Schema.org"
+    "WordPress",
+    "WooCommerce",
+    "YOOtheme Pro",
+    "Statisches HTML",
+    "Webentwicklung",
+    "E-Commerce",
+    "BFSG-Barrierefreiheit (WCAG 2.1 AA)",
+    "DSGVO-Compliance",
+    "Generative Engine Optimization (GEO)",
+    "Agent Visibility Optimization (AVO)",
+    "Strukturierte Daten (Schema.org, JSON-LD)",
+    "Backend-Tools und B2B-Portale",
+    "QA (Hintergrund: Games-Industrie)"
   ],
-  "founder": {
+  "hasOccupation": {
+    "@type": "Occupation",
+    "name": "Webentwickler und Web-Betreuer",
+    "description": "Konzept, Design, Entwicklung, QA, Compliance und laufende Betreuung. Alles aus einer Hand, seit 1999.",
+    "skills": "WordPress, WooCommerce, YOOtheme Pro, statisches HTML, GEO/AVO, BFSG, DSGVO, Schema.org"
+  },
+  "alumniOf": [
+    {
+      "@type": "EducationalOrganization",
+      "name": "Hamburger Technische Kunstschule",
+      "description": "Multimedia Design (2007-2010)"
+    }
+  ],
+  "worksFor": {
     "@type": "Organization",
     "name": "Andersen Webworks",
-    "url": "https://andersen-webworks.de"
+    "url": "https://andersen-webworks.de",
+    "foundingDate": "2010"
+  },
+  "spouse": {
+    "@type": "Person",
+    "name": "Annemarie Andersen",
+    "jobTitle": "Freiberufliche Lektorin und Uebersetzerin",
+    "url": "https://annemarie-andersen.de",
+    "description": "Lektorat und Uebersetzung. Sprachliche Qualitaetssicherung in allen Webprojekten von Andersen Webworks."
   },
   "address": {
     "@type": "PostalAddress",
-    "addressCountry": "DE",
-    "addressRegion": "Deutschlandweit"
+    "addressLocality": "Plau am See",
+    "addressRegion": "Mecklenburg-Vorpommern",
+    "addressCountry": "DE"
   },
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "Professional Inquiry",
     "availableLanguage": ["German", "English"]
   },
-  "dateModified": "2025-12-02T22:42:53Z",
+  "dateModified": "2026-04-14T00:00:00Z",
   "datePublished": "2025-11-06T00:00:00Z"
 }
