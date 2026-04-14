@@ -47,34 +47,101 @@
 
   /* ── Icon Mapping by Option Label ────────────────────────── */
   var OPTION_ICON_MAP = [
+    /* Start */
     { match: 'neue Website',          icon: 'monitor' },
     { match: 'Problem',               icon: 'alert-triangle' },
     { match: 'Betreuung',             icon: 'shield' },
     { match: 'KI-Sichtbarkeit',      icon: 'eye' },
     { match: 'selbst lesen',          icon: 'book-open' },
+    { match: 'Was kostet',            icon: 'file-text' },
+    { match: 'vergleiche Anbieter',   icon: 'search' },
+    /* Neue Website */
     { match: 'Unternehmenswebsite',   icon: 'monitor' },
     { match: 'Online-Shop',           icon: 'shopping-bag' },
     { match: 'Web-App',               icon: 'code' },
     { match: 'Landingpage',           icon: 'file-text' },
     { match: 'Onepager',              icon: 'file-text' },
+    /* Branche */
+    { match: 'Industrie',             icon: 'tool' },
+    { match: 'Recht',                 icon: 'shield' },
+    { match: 'Verein',                icon: 'shield' },
+    { match: 'Gastro',                icon: 'monitor' },
+    { match: 'Andere Branche',        icon: 'layers' },
+    /* Umfang */
     { match: 'berschaubar',           icon: 'file-text' },
     { match: 'Mittelgro',             icon: 'layers' },
     { match: 'Gro',                   icon: 'maximize' },
+    /* CMS */
+    { match: 'pflegen selbst',        icon: 'layers' },
+    { match: 'Entwickler',            icon: 'code' },
+    { match: 'eiss noch nicht',       icon: 'search' },
+    { match: 'eiss ich nicht',        icon: 'search' },
+    /* Shop */
     { match: 'Klassischer',           icon: 'shopping-bag' },
     { match: 'B2B',                   icon: 'shopping-bag' },
+    { match: 'Unter 50',              icon: 'file-text' },
+    { match: '50 bis 500',            icon: 'layers' },
+    { match: 'ber 500',               icon: 'maximize' },
+    { match: 'WooCommerce',           icon: 'shopping-bag' },
+    /* Portal */
+    { match: 'Karriere',              icon: 'layers' },
+    { match: 'Kundenportal',          icon: 'shield' },
+    { match: 'Internes Tool',         icon: 'code' },
+    { match: 'Bericht',               icon: 'file-text' },
+    /* Problem */
+    { match: 'Design',                icon: 'monitor' },
+    { match: 'Inhalte',               icon: 'file-text' },
     { match: 'veraltet',              icon: 'alert-triangle' },
     { match: 'langsam',               icon: 'zap' },
     { match: 'barrierefrei',          icon: 'shield' },
     { match: 'gefunden',              icon: 'search' },
     { match: 'kaputt',                icon: 'tool' },
+    { match: 'Alles zusammen',        icon: 'maximize' },
+    /* Problem CMS */
+    { match: 'WordPress',             icon: 'code' },
+    { match: 'Shopify',               icon: 'shopping-bag' },
+    /* BFSG */
+    { match: 'Nein, noch',            icon: 'search' },
+    { match: 'Fehler sind unklar',    icon: 'alert-triangle' },
+    { match: 'Hilfe beim Fix',        icon: 'tool' },
+    { match: 'einer hat gefehlt',     icon: 'alert-triangle' },
+    { match: 'pruefen lassen',        icon: 'search' },
+    /* SEO */
+    { match: 'Bei Google',            icon: 'search' },
+    { match: 'ChatGPT',               icon: 'eye' },
+    { match: 'Beides',                icon: 'search' },
+    /* Betreuung */
     { match: 'Updates',               icon: 'shield' },
     { match: 'nderungen',             icon: 'layers' },
     { match: 'Komplett',              icon: 'maximize' },
+    { match: 'Statisch',              icon: 'code' },
+    /* GEO */
     { match: 'Nichts',                icon: 'book-open' },
     { match: 'Grundidee',             icon: 'eye' },
     { match: 'Audit',                 icon: 'search' },
     { match: 'Klingt relevant',       icon: 'eye' },
-    { match: 'ck zum Anfang',         icon: 'refresh-cw' }
+    /* Kosten */
+    { match: 'Website',               icon: 'monitor' },
+    { match: 'Shop',                  icon: 'shopping-bag' },
+    { match: 'Einzelne Aufgabe',      icon: 'tool' },
+    { match: 'Zu teuer',              icon: 'search' },
+    /* Vergleich */
+    { match: 'Freelancer vs',         icon: 'layers' },
+    { match: 'Verschiedene Freelancer', icon: 'search' },
+    { match: 'Selber machen',         icon: 'code' },
+    /* Info actions */
+    { match: 'Verstanden',            icon: 'chevron-right' },
+    { match: 'Passt',                 icon: 'chevron-right' },
+    { match: 'ich will',              icon: 'chevron-right' },
+    { match: 'Ich will',              icon: 'chevron-right' },
+    { match: 'Ich brauche',           icon: 'chevron-right' },
+    { match: 'Ich habe eine',         icon: 'tool' },
+    { match: 'Antworten',             icon: 'eye' },
+    { match: 'Noch Fragen',           icon: 'mail' },
+    { match: 'unsicher',              icon: 'search' },
+    /* Navigation */
+    { match: 'ck zum Anfang',         icon: 'refresh-cw' },
+    { match: 'Anderes',               icon: 'layers' }
   ];
 
   function getOptionIcon(label) {
@@ -88,7 +155,7 @@
 
   /* ── Depth Calculation for Progress ────────────────────── */
 
-  var MAX_DEPTH = 3; // start → question → result (max 3 steps)
+  var MAX_DEPTH = 5; // start → branche → umfang → cms → result
 
   function getDepth() {
     return Math.min(history.length + 1, MAX_DEPTH);
@@ -277,33 +344,116 @@
 
   /* ── Email Builder from Funnel Path ─────────────────── */
 
-  function buildEmailFromPath() {
+  var RESULT_EMAILS = {
+    'result-website': {
+      subject: 'Neue Unternehmenswebsite',
+      body: 'wir brauchen eine neue Website f\u00fcr unser Unternehmen. Bisher haben wir noch nichts, oder das Bestehende ist nicht mehr vorzeigbar.',
+      url: true
+    },
+    'result-website-gross': {
+      subject: 'Website f\u00fcr Firmengruppe',
+      body: 'wir sind eine Unternehmensgruppe mit mehreren Gesellschaften und brauchen einen einheitlichen Web-Auftritt \u2013 wahrscheinlich mehrsprachig.',
+      url: true
+    },
+    'result-shop': {
+      subject: 'Online-Shop',
+      body: 'wir m\u00f6chten einen Online-Shop aufbauen. Es geht um den Verkauf an Endkunden.',
+      url: true
+    },
+    'result-shop-b2b': {
+      subject: 'B2B-Shop mit H\u00e4ndlerbereich',
+      body: 'wir brauchen einen B2B-Shop mit Händlerbereich \u2013 also Preislisten, Kundenzug\u00e4nge, das ganze Programm.',
+      url: true
+    },
+    'result-portal': {
+      subject: 'Web-App / Portal',
+      body: 'wir brauchen eine Web-App oder ein Portal \u2013 kein klassischer Internetauftritt, sondern etwas Interaktives, in dem Nutzer arbeiten k\u00f6nnen.',
+      url: false
+    },
+    'result-landingpage': {
+      subject: 'Landingpage',
+      body: 'wir brauchen eine einzelne, gute Seite \u2013 eine Landingpage f\u00fcr ein konkretes Angebot oder Thema.',
+      url: false
+    },
+    'result-redesign': {
+      subject: 'Redesign unserer Website',
+      body: 'unsere Website sieht nicht mehr zeitgem\u00e4\u00df aus. Wir brauchen ein Redesign \u2013 Technik, Design, oder beides.',
+      url: true
+    },
+    'result-performance': {
+      subject: 'Website zu langsam',
+      body: 'unsere Website ist zu langsam und wir wissen nicht genau woran es liegt. K\u00f6nnen Sie sich das mal anschauen?',
+      url: true
+    },
+    'result-bfsg': {
+      subject: 'Barrierefreiheit / BFSG',
+      body: 'wir m\u00fcssen unsere Website barrierefrei machen (BFSG). K\u00f6nnen Sie einsch\u00e4tzen, was daf\u00fcr n\u00f6tig ist?',
+      url: true
+    },
+    'result-seo': {
+      subject: 'Website wird nicht gefunden',
+      body: 'unsere Website wird schlecht gefunden \u2013 weder bei Google noch bei KI-Assistenten. Wir brauchen Hilfe bei der Sichtbarkeit.',
+      url: true
+    },
+    'result-technik': {
+      subject: 'Technisches Problem',
+      body: 'auf unserer Website ist etwas kaputt und wir kommen nicht weiter. K\u00f6nnen Sie sich das zeitnah anschauen?',
+      url: true
+    },
+    'result-betreuung-basis': {
+      subject: 'Website-Betreuung (Basis)',
+      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer Website k\u00fcmmert \u2013 zuverl\u00e4ssig und im Hintergrund.',
+      url: true
+    },
+    'result-betreuung-standard': {
+      subject: 'Website-Betreuung',
+      body: 'wir suchen jemanden f\u00fcr die laufende Betreuung unserer Website \u2013 nicht nur Technik, sondern auch regelm\u00e4\u00dfige inhaltliche \u00c4nderungen.',
+      url: true
+    },
+    'result-betreuung-premium': {
+      subject: 'Komplett-Betreuung',
+      body: 'wir suchen im Grunde einen eigenen Webentwickler \u2013 jemanden, der unsere Website komplett betreut und sich um alles k\u00fcmmert.',
+      url: true
+    },
+    'result-geo': {
+      subject: 'KI-Sichtbarkeit',
+      body: 'ich habe auf Ihrer Website gelesen, wie Sie Websites f\u00fcr KI-Systeme sichtbar machen. Das interessiert mich \u2013 k\u00f6nnen Sie mir mehr dazu erz\u00e4hlen?',
+      url: true
+    },
+    'result-geo-audit': {
+      subject: 'KI-Sichtbarkeits-Audit',
+      body: 'mich w\u00fcrde interessieren, wie sichtbar unsere Website f\u00fcr KI-Systeme ist. K\u00f6nnen Sie das pr\u00fcfen?',
+      url: true
+    }
+  };
+
+  function getLastResultId() {
     var path = history.concat([currentNodeId]);
-    var choices = [];
-    for (var i = 0; i < path.length; i++) {
-      var n = tree[path[i]];
-      if (!n) continue;
-      if (n.type === 'question' && i + 1 < path.length) {
-        var nextId = path[i + 1];
-        if (n.options) {
-          for (var j = 0; j < n.options.length; j++) {
-            if (n.options[j].next === nextId) {
-              choices.push(n.options[j].label);
-              break;
-            }
-          }
-        }
-      }
+    for (var i = path.length - 1; i >= 0; i--) {
+      if (path[i].indexOf('result-') === 0) return path[i];
     }
+    return '';
+  }
 
-    var subject = 'Anfrage \u00fcber jan-erik-andersen.de';
-    var body = 'Hallo Herr Andersen,\n\nich habe Ihre Website besucht und mich durch den Berater-Funnel geklickt.\n\nMein Weg:\n';
-    for (var k = 0; k < choices.length; k++) {
-      body += '\u2192 ' + choices[k] + '\n';
+  function buildEmailFromPath() {
+    var resultId = getLastResultId();
+    var fb = { subject: 'Anfrage', body: 'ich habe mir Ihre Website angeschaut und w\u00fcrde gern mit Ihnen sprechen.', url: false };
+    var data = RESULT_EMAILS[resultId] || fb;
+
+    var subject = data.subject;
+    var body = 'Hallo Herr Andersen,\n\n' + data.body;
+    if (data.url) {
+      body += '\n\nUnsere Website: [URL]';
     }
-    body += '\n[Hier Ihr Anliegen in ein paar S\u00e4tzen beschreiben]\n\nMit freundlichen Gr\u00fc\u00dfen\n[Ihr Name]';
+    body += '\n\nK\u00f6nnen wir kurz telefonieren?\n\nViele Gr\u00fc\u00dfe\n[Ihr Name]';
 
-    return { subject: subject, body: body, choices: choices };
+    var previewHtml = 'Hallo Herr Andersen,\n\n' + esc(data.body);
+    if (data.url) {
+      previewHtml += '\n\nUnsere Website: <span class="funnel-contact-placeholder">[URL]</span>';
+    }
+    previewHtml += '\n\nK\u00f6nnen wir kurz telefonieren?\n\nViele Gr\u00fc\u00dfe\n<span class="funnel-contact-placeholder">[Ihr Name]</span>';
+
+    return { subject: subject, body: body, previewHtml: previewHtml };
   }
 
   function buildContact() {
@@ -313,54 +463,44 @@
 
     var h = backBtn();
 
-    h += '<h3 class="funnel-result-title funnel-stagger" tabindex="-1">Erstgespr\u00e4ch kostenlos.</h3>';
-    h += '<p class="funnel-result-text funnel-stagger" style="--i:1">Klicken Sie auf die E-Mail \u2014 das Wichtigste ist schon drin.</p>';
-
-    h += '<div class="funnel-contact funnel-stagger" style="--i:2">';
+    /* Personal intro with portrait */
+    h += '<div class="funnel-contact-intro funnel-stagger">';
+    h += '<img src="portrait.webp" alt="Jan-Erik Andersen" class="funnel-contact-portrait" width="56" height="56" loading="lazy">';
+    h += '<div class="funnel-contact-intro-text">';
+    h += '<h3 class="funnel-result-title" tabindex="-1">Freut mich.</h3>';
+    h += '<p class="funnel-contact-intro-sub">Ich hab schon mal was vorbereitet \u2013 Sie m\u00fcssen nur noch absenden.</p>';
+    h += '</div>';
+    h += '</div>';
 
     /* Email preview */
-    h += '<div class="funnel-contact-preview">';
-    h += '<span class="funnel-contact-preview-label">Ihre E-Mail \u2014 vorgef\u00fcllt aus Ihrem Weg durch den Funnel</span>';
-    h += '<div class="funnel-contact-preview-to">An: mail@andersen-webworks.de</div>';
-    h += '<div class="funnel-contact-preview-subject">Betreff: ' + esc(email.subject) + '</div>';
-    h += '<div class="funnel-contact-preview-body">';
-    h += 'Hallo Herr Andersen,\n\n';
-    h += 'ich habe Ihre Website besucht.\n\nMein Weg:\n';
-    for (var i = 0; i < email.choices.length; i++) {
-      h += '<span style="color:var(--color-accent)">\u2192</span> ' + esc(email.choices[i]) + '\n';
-    }
-    h += '\n<span style="color:var(--color-text-light)">[Hier Ihr Anliegen beschreiben]</span>';
+    h += '<div class="funnel-contact-preview funnel-stagger" style="--i:1">';
+    h += '<div class="funnel-contact-preview-header">';
+    h += '<span class="funnel-contact-preview-to">An: mail@andersen-webworks.de</span>';
+    h += '<span class="funnel-contact-preview-subject">' + esc(email.subject) + '</span>';
     h += '</div>';
+    h += '<div class="funnel-contact-preview-body">' + email.previewHtml + '</div>';
     h += '</div>';
 
-    /* Contact methods */
-    h += '<div class="funnel-contact-actions">';
+    /* Primary CTA: send email */
+    h += '<a href="' + esc(mailtoHref) + '" class="funnel-contact-send funnel-stagger" style="--i:2">';
+    h += '<span class="funnel-contact-send-icon">' + ICONS.mail + '</span>';
+    h += '<span class="funnel-contact-send-text">';
+    h += '<strong>E-Mail absenden</strong>';
+    h += '<span>Erstgespr\u00e4ch kostenlos</span>';
+    h += '</span>';
+    h += '<span class="funnel-cta-arrow">' + ICONS['chevron-right'] + '</span>';
+    h += '</a>';
 
-    h += '<a href="' + esc(mailtoHref) + '" class="funnel-contact-item">';
-    h += '<span class="funnel-contact-icon">' + ICONS.mail + '</span>';
-    h += '<span class="funnel-contact-details">';
-    h += '<span class="funnel-contact-label">E-Mail senden</span>';
-    h += '<span class="funnel-contact-value">mail@andersen-webworks.de</span>';
-    h += '</span></a>';
-
-    h += '<a href="tel:+4938733270015" class="funnel-contact-item">';
-    h += '<span class="funnel-contact-icon">' + ICONS.phone + '</span>';
-    h += '<span class="funnel-contact-details">';
-    h += '<span class="funnel-contact-label">Anrufen</span>';
-    h += '<span class="funnel-contact-value">038733 270015</span>';
-    h += '</span></a>';
-
-    h += '<a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="funnel-contact-item">';
-    h += '<span class="funnel-contact-icon">' + ICONS.linkedin + '</span>';
-    h += '<span class="funnel-contact-details">';
-    h += '<span class="funnel-contact-label">LinkedIn</span>';
-    h += '<span class="funnel-contact-value">andersen-erik</span>';
-    h += '</span></a>';
-
-    h += '</div>';
+    /* Alternative contact */
+    h += '<div class="funnel-contact-alt funnel-stagger" style="--i:3">';
+    h += '<span class="funnel-contact-alt-label">Oder direkt:</span>';
+    h += '<a href="tel:+4938733270015" class="funnel-result-link">';
+    h += '<span class="funnel-action-icon">' + ICONS.phone + '</span> 038733 270015</a>';
+    h += '<a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="funnel-result-link">';
+    h += '<span class="funnel-action-icon">' + ICONS.linkedin + '</span> LinkedIn</a>';
     h += '</div>';
 
-    h += '<div class="funnel-result-actions funnel-stagger" style="--i:3">';
+    h += '<div class="funnel-result-actions funnel-stagger" style="--i:4">';
     h += '<button class="funnel-restart" data-action="restart">';
     h += '<span class="funnel-action-icon">' + ICONS['refresh-cw'] + '</span> Nochmal von vorn</button>';
     h += '<button class="funnel-exit-btn" data-action="exit">';

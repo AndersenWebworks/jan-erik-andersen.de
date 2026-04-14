@@ -12,24 +12,43 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../style.css?v=4.0">
+  <link rel="stylesheet" href="../../style.css?v=6.5">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header">
-    <div class="container">
-      <a href="../" class="site-logo">Jan-Erik <span class="logo-accent">Andersen</span></a>
-      <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-      <nav class="nav-links" aria-label="Main navigation">
+  <header class="site-header has-nav" id="site-header">
+    <div class="site-header-inner">
+      <a href="../" class="header-brand">
+        <img src="../../andersen-webworks-logo.png" alt="" class="header-brand-icon" width="24" height="24">
+        <span class="header-brand-name">Jan-Erik</span>
+        <span class="header-brand-surname">Andersen</span>
+      </a>
+      <nav class="header-nav" id="header-nav">
         <a href="../services/">Services</a>
         <a href="../projects/">Projects</a>
         <a href="../about/">About</a>
-        <a href="../contact/" class="nav-cta">Contact</a>
+        <a href="../contact/" class="header-nav-cta">Contact</a>
       </nav>
-      <div class="header-controls">
-        <a href="../../leistungen/ki-sichtbarkeit.html" class="lang-link" title="Deutsche Version">DE</a>
-        <button class="toggle-btn" id="theme-toggle" aria-label="Toggle color scheme">Dark</button>
+      <div class="header-right">
+        <label class="pill-toggle">
+          <input type="checkbox" id="darkmode-toggle" class="darkmode-checkbox">
+          <span class="pill-track">
+            <span class="pill-option">Light</span>
+            <span class="pill-option">Dark</span>
+            <span class="pill-indicator"></span>
+          </span>
+        </label>
+        <div class="pill-toggle">
+          <div class="pill-track">
+            <a href="../../" class="pill-option">DE</a>
+            <a href="../" class="pill-option active">EN</a>
+            <span class="pill-indicator"></span>
+          </div>
+        </div>
+        <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="logo-link">
+          <img src="../../linkedin-logo.png" alt="LinkedIn" width="24" height="24">
+        </a>
       </div>
     </div>
   </header>
@@ -373,27 +392,12 @@
     </div>
   </footer>
   <script>
-    (function() {
-      var btn = document.getElementById('theme-toggle');
-      var html = document.documentElement;
-      var stored = localStorage.getItem('theme');
-      if (stored) { html.setAttribute('data-theme', stored); btn.textContent = stored === 'dark' ? 'Light' : 'Dark'; }
-      btn.addEventListener('click', function() {
-        var next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        html.setAttribute('data-theme', next); localStorage.setItem('theme', next);
-        btn.textContent = next === 'dark' ? 'Light' : 'Dark';
-      });
-    })();
-  </script>
-  <script>
   (function() {
-    var m = document.getElementById('menu-toggle');
-    var n = document.querySelector('.nav-links');
-    if (!m) return;
-    m.addEventListener('click', function() {
-      var open = n.classList.toggle('is-open');
-      m.setAttribute('aria-expanded', open);
-      m.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    var cb = document.getElementById('darkmode-toggle');
+    var stored = localStorage.getItem('darkmode');
+    if (stored === '1') cb.checked = true;
+    cb.addEventListener('change', function() {
+      localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
   })();
   </script>
