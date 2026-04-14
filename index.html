@@ -138,6 +138,7 @@
   <header class="site-header">
     <div class="container">
       <a href="./" class="site-logo">Jan-Erik <span class="logo-accent">Andersen</span></a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen" aria-expanded="false"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
       <nav class="nav-links" aria-label="Hauptnavigation">
         <a href="leistungen/">Leistungen</a>
         <a href="projekte/">Projekte</a>
@@ -324,6 +325,18 @@
         btn.textContent = next === 'dark' ? 'Light' : 'Dark';
       });
     })();
+  </script>
+  <script>
+  (function() {
+    var m = document.getElementById('menu-toggle');
+    var n = document.querySelector('.nav-links');
+    if (!m) return;
+    m.addEventListener('click', function() {
+      var open = n.classList.toggle('is-open');
+      m.setAttribute('aria-expanded', open);
+      m.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+    });
+  })();
   </script>
   <img src="https://jan-erik-andersen.goatcounter.com/count?p=/" alt="" style="position:absolute;left:-9999px" aria-hidden="true">
 </body>

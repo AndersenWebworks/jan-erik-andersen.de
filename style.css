@@ -251,6 +251,17 @@ section {
 
 .nav-links a:hover { color: var(--color-text); }
 
+/* Mobile Menu Toggle */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs);
+  color: var(--color-text);
+  line-height: 0;
+}
+
 .nav-cta {
   background: var(--color-accent);
   color: #fff !important;
@@ -1109,7 +1120,28 @@ dd {
   .about-grid { grid-template-columns: 1fr; }
   .homepage-intro { flex-direction: column; text-align: center; }
   .contact-methods { grid-template-columns: 1fr; }
-  .nav-links { display: none; }
+  .menu-toggle { display: block; order: 3; }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    flex-direction: column;
+    padding: var(--space-lg) var(--space-xl);
+    gap: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .nav-links.is-open { display: flex; }
+  .nav-links a {
+    font-size: var(--text-base);
+    padding: var(--space-sm) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .nav-links a:last-child { border-bottom: none; }
+  .nav-cta { text-align: center; margin-top: var(--space-sm); }
   section { padding: var(--space-3xl) 0; }
   .hero { padding: var(--space-3xl) 0 var(--space-2xl); }
 }
