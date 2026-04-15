@@ -6,10 +6,7 @@
   <title>Erklärung zur Barrierefreiheit — Jan-Erik Andersen</title>
   <link rel="canonical" href="https://jan-erik-andersen.de/de/barrierefreiheit.html">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css?v=6.5">
+  <link rel="stylesheet" href="../style.css?v=7.0">
 </head>
 <body>
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
@@ -82,15 +79,15 @@
           <li>CSS3 mit Dark-Mode-Support (prefers-color-scheme)</li>
           <li>JSON-LD für strukturierte Daten</li>
           <li>ARIA-Attribute für erweiterte Semantik</li>
-          <li>Kein JavaScript erforderlich</li>
+          <li>JavaScript optional (Kerninhalt funktioniert ohne JS, interaktive Features wie der Berater-Funnel benötigen JS)</li>
         </ul>
 
         <h2>Bekannte Einschränkungen</h2>
         <p>Aus den internen Audits ergeben sich aktuell keine blockernden Einschränkungen. Hinweise:</p>
         <ul>
-          <li>Keine Bilder oder Videos → keine Alt-Text-/Untertitel-Anforderungen</li>
+          <li>Bilder haben Alt-Texte, keine Videos vorhanden</li>
           <li>Keine Formulare → keine zusätzlichen ARIA-Anreicherungen erforderlich</li>
-          <li>Dark-Mode-Umschaltung erfolgt per nativem Checkbox-Element ohne JavaScript</li>
+          <li>Dark-Mode-Umschaltung erfolgt per nativem Checkbox-Element, JavaScript wird nur für die Persistenz (localStorage) verwendet</li>
         </ul>
 
         <h2>Feedback und Kontakt</h2>

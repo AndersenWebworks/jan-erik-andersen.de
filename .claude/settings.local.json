@@ -21,7 +21,10 @@
       "Bash(\"c:/Andersen/Webworks/GitHub/Webworks/jan-erik-andersen.de/index.html.tmp\")",
       "Bash(npx playwright:*)",
       "Bash(node screenshot-test.js:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(claude /plugin marketplace add anthropics/claude-code)",
+      "Skill(frontend-design:frontend-design)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []
