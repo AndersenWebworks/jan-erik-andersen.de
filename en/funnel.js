@@ -295,12 +295,15 @@
     setTimeout(function () {
       app.classList.remove(outClass);
 
+      if (direction === 'forward') {
+        updateConstellationDepth();
+      }
+
       currentNodeId = nodeId;
       app.setAttribute('data-node', nodeId);
       app.innerHTML = buildHTML(nodeId);
       bindEvents();
 
-      // D3: Update URL hash for result nodes
       var node = tree[nodeId];
       if (node && node.type === 'result') {
         window.history.replaceState(null, '', '#' + nodeId);
@@ -309,22 +312,25 @@
         trackEvent('contact');
       }
 
-      app.classList.add(inClass);
-
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          revealStaggered();
-          focusHeading();
-          applyTypewriter();
-          initMagneticButtons();
-          updateConstellationDepth();
-        });
-      });
+      var synapseDelay = direction === 'forward' ? 500 : 0;
 
       setTimeout(function () {
-        app.classList.remove(inClass);
-        isAnimating = false;
-      }, SLIDE_IN_MS);
+        app.classList.add(inClass);
+
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            revealStaggered();
+            focusHeading();
+            applyTypewriter();
+            initMagneticButtons();
+          });
+        });
+
+        setTimeout(function () {
+          app.classList.remove(inClass);
+          isAnimating = false;
+        }, SLIDE_IN_MS);
+      }, synapseDelay);
     }, SLIDE_OUT_MS);
   }
 
@@ -1078,25 +1084,40 @@
     }
   }
 
+  var lastConnectedNode = -1;
+  var connectedNodes = {};
+  var connectionOrder = 0;
+
   function addSynapse() {
     if (nodes.length < 2) return;
-    var attempts = 0;
-    var a, b;
-    do {
-      a = Math.floor(Math.random() * nodes.length);
-      b = Math.floor(Math.random() * nodes.length);
-      attempts++;
-    } while ((a === b || synapseExists(a, b)) && attempts < 50);
 
-    if (a === b || synapseExists(a, b)) {
-      for (var i = 0; i < nodes.length && a === b; i++) {
-        for (var j = i + 1; j < nodes.length; j++) {
-          if (!synapseExists(i, j)) { a = i; b = j; break; }
+    var a, b;
+
+    if (lastConnectedNode === -1) {
+      a = Math.floor(Math.random() * nodes.length);
+      do { b = Math.floor(Math.random() * nodes.length); } while (b === a);
+    } else {
+      a = lastConnectedNode;
+      b = -1;
+      var bestDist = Infinity;
+      for (var i = 0; i < nodes.length; i++) {
+        if (i === a || connectedNodes[i]) continue;
+        var dx = nodes[a].x - nodes[i].x;
+        var dy = nodes[a].y - nodes[i].y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < bestDist) { bestDist = d; b = i; }
+      }
+      if (b === -1) {
+        for (var j = 0; j < nodes.length; j++) {
+          for (var k = j + 1; k < nodes.length; k++) {
+            if (!synapseExists(j, k)) { a = j; b = k; break; }
+          }
+          if (b !== -1) break;
         }
-        if (a !== b) break;
       }
     }
-    if (a === b) return;
+
+    if (b === -1 || a === b) return;
 
     synapses.push({
       a: a, b: b,
@@ -1105,6 +1126,9 @@
     });
     nodes[a].flash = 1;
     nodes[b].flash = 1;
+    if (!connectedNodes[a]) { connectionOrder++; nodes[a].label = connectionOrder; connectedNodes[a] = true; }
+    if (!connectedNodes[b]) { connectionOrder++; nodes[b].label = connectionOrder; connectedNodes[b] = true; }
+    lastConnectedNode = b;
   }
 
   function synapseExists(a, b) {
@@ -1145,6 +1169,14 @@
       constellationCtx.arc(n.x, n.y, nodeR, 0, Math.PI * 2);
       constellationCtx.fillStyle = nodeColor;
       constellationCtx.fill();
+
+      if (n.label) {
+        var labelNum = n.label < 10 ? '0' + n.label : '' + n.label;
+        constellationCtx.font = '500 9px ui-monospace, SF Mono, Monaco, Consolas, monospace';
+        constellationCtx.textAlign = 'center';
+        constellationCtx.fillStyle = 'rgba(' + dotColor + ',' + (0.25 + n.flash * 0.5) + ')';
+        constellationCtx.fillText(labelNum, n.x, n.y - nodeR - 5);
+      }
 
       if (n.flash > 0.1) {
         constellationCtx.beginPath();
@@ -1201,6 +1233,9 @@
     nodes = [];
     synapses = [];
     constellationRAF = null;
+    lastConnectedNode = -1;
+    connectedNodes = {};
+    connectionOrder = 0;
   }
 
   /* ── Start ────────────────────────────────────────── */

@@ -298,6 +298,11 @@
     setTimeout(function () {
       app.classList.remove(outClass);
 
+      // Fire synapse BEFORE new content appears
+      if (direction === 'forward') {
+        updateConstellationDepth();
+      }
+
       currentNodeId = nodeId;
       app.setAttribute('data-node', nodeId);
       app.innerHTML = buildHTML(nodeId);
@@ -312,22 +317,26 @@
         trackEvent('contact');
       }
 
-      app.classList.add(inClass);
-
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          revealStaggered();
-          focusHeading();
-          applyTypewriter();
-          initMagneticButtons();
-          updateConstellationDepth();
-        });
-      });
+      // Delay slide-in so the synapse line is visible first
+      var synapseDelay = direction === 'forward' ? 500 : 0;
 
       setTimeout(function () {
-        app.classList.remove(inClass);
-        isAnimating = false;
-      }, SLIDE_IN_MS);
+        app.classList.add(inClass);
+
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            revealStaggered();
+            focusHeading();
+            applyTypewriter();
+            initMagneticButtons();
+          });
+        });
+
+        setTimeout(function () {
+          app.classList.remove(inClass);
+          isAnimating = false;
+        }, SLIDE_IN_MS);
+      }, synapseDelay);
     }, SLIDE_OUT_MS);
   }
 
@@ -1250,40 +1259,57 @@
 
   /* ── Knuepfe eine neue Synapse ── */
 
+  var lastConnectedNode = -1;
+  var connectedNodes = {};
+  var connectionOrder = 0; // counter for numbering connected nodes
+
   function addSynapse() {
     if (nodes.length < 2) return;
 
-    // Find two nodes that aren't already connected
-    var attempts = 0;
     var a, b;
-    do {
-      a = Math.floor(Math.random() * nodes.length);
-      b = Math.floor(Math.random() * nodes.length);
-      attempts++;
-    } while ((a === b || synapseExists(a, b)) && attempts < 50);
 
-    if (a === b || synapseExists(a, b)) {
-      // All pairs connected or bad luck - pick any unconnected pair
-      for (var i = 0; i < nodes.length && a === b; i++) {
-        for (var j = i + 1; j < nodes.length; j++) {
-          if (!synapseExists(i, j)) { a = i; b = j; break; }
+    if (lastConnectedNode === -1) {
+      // First synapse: pick two random nodes
+      a = Math.floor(Math.random() * nodes.length);
+      do { b = Math.floor(Math.random() * nodes.length); } while (b === a);
+    } else {
+      // Continue from last endpoint: find nearest unconnected node
+      a = lastConnectedNode;
+      b = -1;
+      var bestDist = Infinity;
+      for (var i = 0; i < nodes.length; i++) {
+        if (i === a || connectedNodes[i]) continue;
+        var dx = nodes[a].x - nodes[i].x;
+        var dy = nodes[a].y - nodes[i].y;
+        var d = Math.sqrt(dx * dx + dy * dy);
+        if (d < bestDist) { bestDist = d; b = i; }
+      }
+      // If all nodes connected, pick any unconnected pair
+      if (b === -1) {
+        for (var j = 0; j < nodes.length; j++) {
+          for (var k = j + 1; k < nodes.length; k++) {
+            if (!synapseExists(j, k)) { a = j; b = k; break; }
+          }
+          if (b !== -1) break;
         }
-        if (a !== b) break;
       }
     }
-    if (a === b) return; // fully connected
+
+    if (b === -1 || a === b) return; // fully connected
 
     synapses.push({
       a: a,
       b: b,
       startTime: performance.now(),
-      progress: 0, // 0..1, line drawing progress
-      flash: 1      // 1..0, red flash intensity
+      progress: 0,
+      flash: 1
     });
 
-    // Flash the two endpoint nodes
     nodes[a].flash = 1;
     nodes[b].flash = 1;
+    if (!connectedNodes[a]) { connectionOrder++; nodes[a].label = connectionOrder; connectedNodes[a] = true; }
+    if (!connectedNodes[b]) { connectionOrder++; nodes[b].label = connectionOrder; connectedNodes[b] = true; }
+    lastConnectedNode = b;
   }
 
   function synapseExists(a, b) {
@@ -1334,6 +1360,15 @@
       constellationCtx.arc(n.x, n.y, nodeR, 0, Math.PI * 2);
       constellationCtx.fillStyle = nodeColor;
       constellationCtx.fill();
+
+      // Label: 01, 02, ... for connected nodes
+      if (n.label) {
+        var labelNum = n.label < 10 ? '0' + n.label : '' + n.label;
+        constellationCtx.font = '500 9px ui-monospace, SF Mono, Monaco, Consolas, monospace';
+        constellationCtx.textAlign = 'center';
+        constellationCtx.fillStyle = 'rgba(' + dotColor + ',' + (0.25 + n.flash * 0.5) + ')';
+        constellationCtx.fillText(labelNum, n.x, n.y - nodeR - 5);
+      }
 
       // Glow ring when flashing
       if (n.flash > 0.1) {
@@ -1398,6 +1433,9 @@
     nodes = [];
     synapses = [];
     constellationRAF = null;
+    lastConnectedNode = -1;
+    connectedNodes = {};
+    connectionOrder = 0;
   }
 
   /* ── Start ────────────────────────────────────────── */
