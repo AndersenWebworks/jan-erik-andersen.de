@@ -153,22 +153,58 @@
 
   /* ── Depth Calculation for Progress ────────────────────── */
 
-  var MAX_DEPTH = 5;
+  var nodeDepths = {};
 
-  function getDepth() {
-    return Math.min(history.length + 1, MAX_DEPTH);
+  function computeDepths() {
+    function minToResult(nodeId, seen) {
+      if (seen[nodeId]) return 99;
+      seen[nodeId] = true;
+      var node = tree[nodeId];
+      if (!node) return 99;
+      if (node.type === 'result') return 0;
+      var min = 99;
+      if (node.options) {
+        for (var i = 0; i < node.options.length; i++) {
+          var next = node.options[i].next;
+          if (next) {
+            var copy = {};
+            for (var k in seen) copy[k] = true;
+            var d = minToResult(next, copy);
+            if (d < min) min = d;
+          }
+        }
+      }
+      return min + 1;
+    }
+    for (var id in tree) {
+      nodeDepths[id] = minToResult(id, {});
+    }
   }
 
   function buildStepLabel(nodeType) {
     if (nodeType === 'result') return '';
-    var depth = getDepth();
-    if (depth <= 1) return '';
-    return '<span class="funnel-step-label funnel-stagger" style="--i:0">Step ' + depth + '</span>';
+    var step = history.length + 1;
+    if (step <= 1) return '';
+    var total = history.length + (nodeDepths[currentNodeId] || 1);
+    return '<span class="funnel-step-label funnel-stagger" style="--i:0">Step ' + step + ' of ' + total + '</span>';
   }
 
   /* ── Session Memory ────────────────────────────────── */
 
   var STORAGE_KEY = 'funnel-done';
+  var STORAGE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+  function isFunnelDone() {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    var ts = parseInt(raw, 10);
+    if (isNaN(ts)) return true; // legacy '1' value
+    return (Date.now() - ts) < STORAGE_TTL;
+  }
+
+  function markFunnelDone() {
+    localStorage.setItem(STORAGE_KEY, String(Date.now()));
+  }
 
   function showReopenButton() {
     var btn = document.getElementById('funnel-reopen');
@@ -188,10 +224,24 @@
     showReopenButton();
   }
 
+  /* ── GoatCounter Tracking ────────────────────────── */
+
+  function trackEvent(event, detail) {
+    if (window.goatcounter && window.goatcounter.count) {
+      window.goatcounter.count({
+        path: 'funnel/' + event + (detail ? '/' + detail : ''),
+        title: 'Funnel: ' + event,
+        event: true
+      });
+    }
+  }
+
   /* ── Init ─────────────────────────────────────────── */
 
   function init() {
-    if (localStorage.getItem(STORAGE_KEY)) {
+    var hash = window.location.hash.replace('#', '');
+
+    if (isFunnelDone() && !hash) {
       skipFunnel();
       return;
     }
@@ -200,7 +250,13 @@
       .then(function (r) { return r.json(); })
       .then(function (data) {
         tree = data.nodes;
-        show('start');
+        computeDepths();
+        trackEvent('start');
+        if (hash && tree[hash] && tree[hash].type === 'result') {
+          show(hash);
+        } else {
+          show('start');
+        }
       })
       .catch(function () {
         app.innerHTML = '<p class="funnel-error">Could not load funnel.</p>';
@@ -240,6 +296,15 @@
       app.setAttribute('data-node', nodeId);
       app.innerHTML = buildHTML(nodeId);
       bindEvents();
+
+      // D3: Update URL hash for result nodes
+      var node = tree[nodeId];
+      if (node && node.type === 'result') {
+        window.history.replaceState(null, '', '#' + nodeId);
+        trackEvent('result', nodeId);
+      } else if (nodeId === '_contact') {
+        trackEvent('contact');
+      }
 
       app.classList.add(inClass);
 
@@ -302,9 +367,9 @@
     h += backBtn();
 
     h += '<div class="funnel-info-block funnel-stagger">';
-    h += '<p class="funnel-info-text" tabindex="-1">' + esc(node.text) + '</p>';
+    h += '<div class="funnel-info-text" tabindex="-1">' + formatText(node.text) + '</div>';
     if (node.detail) {
-      h += '<p class="funnel-info-detail">' + esc(node.detail) + '</p>';
+      h += '<div class="funnel-info-detail">' + formatText(node.detail) + '</div>';
     }
     h += '</div>';
     h += '<div class="funnel-options">';
@@ -326,7 +391,7 @@
     var h = backBtn();
 
     h += '<h3 class="funnel-result-title funnel-stagger" tabindex="-1">' + esc(node.title) + '</h3>';
-    h += '<p class="funnel-result-text funnel-stagger" style="--i:1">' + esc(node.text) + '</p>';
+    h += '<div class="funnel-result-text funnel-stagger" style="--i:1">' + formatText(node.text) + '</div>';
 
     if (node.proof && node.proof.length > 0) {
       h += '<div class="funnel-proof funnel-stagger" style="--i:2">';
@@ -506,14 +571,17 @@
     h += '</div>';
 
     /* Primary CTA: send email */
-    h += '<a href="' + esc(mailtoHref) + '" class="funnel-contact-send funnel-stagger" style="--i:2">';
+    h += '<a href="' + esc(mailtoHref) + '" class="funnel-contact-send funnel-stagger" style="--i:2" data-action="mailto">';
     h += '<span class="funnel-contact-send-icon">' + ICONS.mail + '</span>';
     h += '<span class="funnel-contact-send-text">';
-    h += '<strong>Send email</strong>';
+    h += '<strong>Open email draft</strong>';
     h += '<span>Initial consultation free</span>';
     h += '</span>';
     h += '<span class="funnel-cta-arrow">' + ICONS['chevron-right'] + '</span>';
     h += '</a>';
+
+    /* D2: Trust badge */
+    h += '<p class="funnel-trust-badge funnel-stagger" style="--i:2.5">I reply to emails within one business day. 26 years in web \u00b7 50+ projects \u00b7 14+ industries.</p>';
 
     /* Alternative contact */
     h += '<div class="funnel-contact-alt funnel-stagger" style="--i:3">';
@@ -564,6 +632,7 @@
     for (var j = 0; j < btns.length; j++) {
       btns[j].addEventListener('click', function () {
         history = [];
+        trackEvent('restart');
         navigate('start', 'back');
       });
     }
@@ -580,6 +649,14 @@
     for (var k = 0; k < exits.length; k++) {
       exits[k].addEventListener('click', exitFunnel);
     }
+
+    /* D1: Track mailto clicks */
+    var mailtos = app.querySelectorAll('[data-action="mailto"]');
+    for (var ml = 0; ml < mailtos.length; ml++) {
+      mailtos[ml].addEventListener('click', function () {
+        trackEvent('mailto', getLastResultId());
+      });
+    }
   }
 
   /* ── Option Click with Feedback ───────────────────── */
@@ -593,11 +670,20 @@
     btn.classList.add('funnel-option-pressed');
 
     setTimeout(function () {
-      if (action === 'scroll' || action === 'exit') {
+      if (action === 'scroll') {
+        trackEvent('self-read');
+        exitFunnel();
+        return;
+      }
+      if (action === 'exit') {
+        trackEvent('exit');
         exitFunnel();
         return;
       }
       if (next) {
+        if (currentNodeId === 'start') {
+          trackEvent('path', next);
+        }
         history.push(currentNodeId);
         navigate(next, 'forward');
       }
@@ -613,7 +699,10 @@
   /* ── Exit Funnel ──────────────────────────────────── */
 
   function exitFunnel() {
-    localStorage.setItem(STORAGE_KEY, '1');
+    markFunnelDone();
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
     funnel.classList.add('funnel-exiting');
     setTimeout(function () {
       funnel.classList.add('funnel-hidden');
@@ -630,6 +719,29 @@
     if (e.key === 'Escape' && history.length > 0) goBack();
   });
 
+  /* ── C3: Mobile Swipe Navigation ─────────────────── */
+
+  (function () {
+    var touchStartX = 0;
+    var touchStartY = 0;
+    var SWIPE_THRESHOLD = 80;
+
+    funnel.addEventListener('touchstart', function (e) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    funnel.addEventListener('touchend', function (e) {
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      var dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        if (dx > 0 && history.length > 0) {
+          goBack();
+        }
+      }
+    }, { passive: true });
+  })();
+
   /* ── Focus ────────────────────────────────────────── */
 
   function focusHeading() {
@@ -643,6 +755,51 @@
     var d = document.createElement('div');
     d.textContent = str;
     return d.innerHTML;
+  }
+
+  function formatText(str) {
+    var html = esc(str);
+
+    if (/\b1\.\s/.test(html) && /\b2\.\s/.test(html)) {
+      var idx = html.search(/\b1\.\s/);
+      var intro = html.slice(0, idx);
+      var rest = html.slice(idx);
+
+      var parts = rest.split(/\b\d+\.\s/);
+      var items = [];
+      for (var i = 1; i < parts.length; i++) {
+        var item = parts[i].trim();
+        if (item) items.push(item);
+      }
+
+      if (items.length >= 2) {
+        var outro = '';
+        var last = items[items.length - 1];
+        var nl = last.indexOf('\n\n');
+        if (nl > -1) {
+          outro = last.slice(nl + 2).trim();
+          items[items.length - 1] = last.slice(0, nl).trim();
+        }
+
+        html = intro + '<ol class="funnel-list">';
+        for (var j = 0; j < items.length; j++) {
+          html += '<li>' + items[j] + '</li>';
+        }
+        html += '</ol>';
+        if (outro) html += '<p class="funnel-text-after">' + outro + '</p>';
+        return html;
+      }
+    }
+
+    if (html.indexOf('\n\n') > -1) {
+      var segs = html.split('\n\n');
+      html = segs[0];
+      for (var s = 1; s < segs.length; s++) {
+        if (segs[s].trim()) html += '<p class="funnel-text-after">' + segs[s].trim() + '</p>';
+      }
+    }
+
+    return html;
   }
 
   /* ── Start ────────────────────────────────────────── */

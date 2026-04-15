@@ -5,704 +5,1239 @@
     "updated": "2026-04-15"
   },
   "nodes": {
-
     "start": {
       "type": "question",
-      "text": "Was fuehrt Sie hierher?",
+      "text": "Was führt Sie hierher?",
       "subtitle": "Kein Chatbot, kein Popup. Nur ein paar ehrliche Fragen.",
       "options": [
-        { "label": "Ich brauche eine neue Website", "next": "neue-art" },
-        { "label": "Meine Website hat ein Problem", "next": "problem-art" },
-        { "label": "Ich suche laufende Betreuung", "next": "betreuung-was" },
-        { "label": "Mich interessiert KI-Sichtbarkeit", "next": "geo-wissen" },
-        { "label": "Ich vergleiche Anbieter", "next": "vergleich-was" },
-        { "label": "Lieber selbst lesen", "action": "scroll" }
+        {
+          "label": "Ich brauche eine neue Website",
+          "next": "neue-art"
+        },
+        {
+          "label": "Meine Website hat ein Problem",
+          "next": "problem-art"
+        },
+        {
+          "label": "Ich suche laufende Betreuung",
+          "next": "betreuung-was"
+        },
+        {
+          "label": "Mich interessiert KI-Sichtbarkeit",
+          "next": "geo-wissen"
+        },
+        {
+          "label": "Ich vergleiche Anbieter",
+          "next": "vergleich-was"
+        },
+        {
+          "label": "Lieber selbst lesen",
+          "action": "scroll"
+        }
       ]
     },
-
-
-
     "neue-art": {
       "type": "question",
-      "text": "Was fuer ein Projekt?",
+      "text": "Was für ein Projekt?",
       "subtitle": "Neue Website – da gibt es verschiedene Richtungen.",
       "options": [
-        { "label": "Firmenwebsite", "next": "info-website-was-zaehlt" },
-        { "label": "Online-Shop", "next": "shop-typ" },
-        { "label": "Web-App, Portal oder Tool", "next": "portal-was" },
-        { "label": "Landingpage oder Onepager", "next": "result-landingpage" }
+        {
+          "label": "Firmenwebsite",
+          "next": "info-website-was-zaehlt"
+        },
+        {
+          "label": "Online-Shop",
+          "next": "shop-typ"
+        },
+        {
+          "label": "Web-App, Portal oder Tool",
+          "next": "portal-was"
+        },
+        {
+          "label": "Landingpage oder Onepager",
+          "next": "result-landingpage"
+        }
       ]
     },
-
     "info-website-was-zaehlt": {
       "type": "info",
-      "text": "Die meisten Firmenwebsites brauchen 5 bis 8 Seiten, nicht 40. Was zaehlt: klare Struktur, schnelle Ladezeit, Barrierefreiheit (BFSG-Pflicht seit 2025) und KI-Sichtbarkeit – 73 % der B2B-Einkaeufer recherchieren mit ChatGPT.",
-      "detail": "Ob WordPress oder statisches HTML passt, haengt davon ab, wie oft sich Inhalte aendern. Mehr als 2x pro Monat: WordPress. Weniger: statisch reicht und ist guenstiger im Betrieb.",
+      "text": "Die meisten Firmenwebsites brauchen 5 bis 8 Seiten, nicht 40. Was zählt: klare Struktur, schnelle Ladezeit, Barrierefreiheit (BFSG-Pflicht seit 2025) und KI-Sichtbarkeit – 73 % der B2B-Einkäufer recherchieren mit ChatGPT.",
+      "detail": "Ob WordPress oder statisches HTML passt, hängt davon ab, wie oft sich Inhalte ändern. Mehr als 2x pro Monat: WordPress. Weniger: statisch reicht und ist günstiger im Betrieb.",
       "options": [
-        { "label": "Ich will mehr ueber CMS wissen", "next": "info-cms-vergleich" },
-        { "label": "Das reicht mir – reden wir", "next": "result-website" },
-        { "label": "Bei uns ist das groesser (Firmengruppe, mehrsprachig)", "next": "info-firmengruppe" }
+        {
+          "label": "Ich will mehr über CMS wissen",
+          "next": "info-cms-vergleich"
+        },
+        {
+          "label": "Das reicht mir – reden wir",
+          "next": "result-website"
+        },
+        {
+          "label": "Bei uns ist das größer (Firmengruppe, mehrsprachig)",
+          "next": "info-firmengruppe"
+        }
       ]
     },
-
     "info-cms-vergleich": {
       "type": "info",
-      "text": "WordPress: Ihr Team pflegt Inhalte selbst. Login, Text aendern, Bild tauschen, fertig. Wichtig ist, dass das Theme sauber gebaut ist – viele beliebte Loesungen sehen gut aus, machen die Seite aber langsam. Darauf achte ich.",
-      "detail": "Statisches HTML: schneller, sicherer, billiger im Betrieb. Aber jede Aenderung braucht einen Entwickler. Fuer Firmen, deren Seite einmal steht und sich selten aendert, die bessere Wahl.",
+      "text": "WordPress: Ihr Team pflegt Inhalte selbst. Login, Text ändern, Bild tauschen, fertig. Wichtig ist, dass das Theme sauber gebaut ist – viele beliebte Lösungen sehen gut aus, machen die Seite aber langsam. Darauf achte ich.",
+      "detail": "Statisches HTML: schneller, sicherer, billiger im Betrieb. Aber jede Änderung braucht einen Entwickler. Für Firmen, deren Seite einmal steht und sich selten ändert, die bessere Wahl.",
       "options": [
-        { "label": "WordPress passt zu uns", "next": "result-website-wp" },
-        { "label": "Statisch klingt besser", "next": "result-website-statisch" },
-        { "label": "Bin mir nicht sicher", "next": "result-website" }
+        {
+          "label": "WordPress passt zu uns",
+          "next": "result-website-wp"
+        },
+        {
+          "label": "Statisch klingt besser",
+          "next": "result-website-statisch"
+        },
+        {
+          "label": "Bin mir nicht sicher",
+          "next": "result-website"
+        }
       ]
     },
-
     "info-firmengruppe": {
       "type": "info",
-      "text": "Bei 10+ Gesellschaften scheitern Projekte selten an der Technik. Sie scheitern an der Koordination. Jede Abteilung will was anderes, niemand hat den Ueberblick.",
-      "detail": "Was hilft: eine Person, die alle Websites kennt. Kein Agentur-Team mit Personalrotation, wo Sie sich jedes Mal neu erklaeren muessen.",
+      "text": "Bei 10+ Gesellschaften scheitern Projekte selten an der Technik. Sie scheitern an der Koordination. Jede Abteilung will was anderes, niemand hat den Überblick.",
+      "detail": "Was hilft: eine Person, die alle Websites kennt. Kein Agentur-Team mit Personalrotation, wo Sie sich jedes Mal neu erklären müssen.",
       "options": [
-        { "label": "Genau mein Problem – reden wir", "next": "result-website-gross" }
+        {
+          "label": "Genau mein Problem – reden wir",
+          "next": "result-website-gross"
+        },
+        {
+          "label": "Zurück zur Projektauswahl",
+          "next": "neue-art"
+        }
       ]
     },
-
     "shop-typ": {
       "type": "question",
-      "text": "Was fuer Kunden hat der Shop?",
-      "subtitle": "Bestimmt, was der Shop koennen muss.",
+      "text": "Was für Kunden hat der Shop?",
+      "subtitle": "Bestimmt, was der Shop können muss.",
       "options": [
-        { "label": "Endkunden (B2C)", "next": "info-shop-entscheidung" },
-        { "label": "Haendler / Gewerbe (B2B)", "next": "info-b2b-was-anders" }
+        {
+          "label": "Endkunden (B2C)",
+          "next": "info-shop-entscheidung"
+        },
+        {
+          "label": "Händler / Gewerbe (B2B)",
+          "next": "info-b2b-was-anders"
+        }
       ]
     },
-
     "info-shop-entscheidung": {
       "type": "info",
-      "text": "Die erste Frage ist nicht WooCommerce oder Shopify. Die Frage ist: Wie individuell muss der Shop sein? Standardprodukte, fertiger Checkout, keine Sonderwuensche? Dann kann Shopify reichen.",
-      "detail": "Eigene Prozesse, Sonderpreise, Schnittstellen zur Warenwirtschaft? Dann WooCommerce – gehoert Ihnen, kein Abo, volle Kontrolle. Haeufigster Fehler: zu frueh zu komplex. Starten Sie mit dem, was Sie wirklich brauchen.",
+      "text": "Die erste Frage ist nicht WooCommerce oder Shopify. Die Frage ist: Wie individuell muss der Shop sein? Standardprodukte, fertiger Checkout, keine Sonderwünsche? Dann kann Shopify reichen.",
+      "detail": "Eigene Prozesse, Sonderpreise, Schnittstellen zur Warenwirtschaft? Dann WooCommerce – gehört Ihnen, kein Abo, volle Kontrolle. Häufigster Fehler: zu früh zu komplex. Starten Sie mit dem, was Sie wirklich brauchen.",
       "options": [
-        { "label": "Ich brauche was Individuelles", "next": "result-shop" },
-        { "label": "Standard reicht wahrscheinlich", "next": "result-shop-standard" },
-        { "label": "Grosser Katalog, 500+ Produkte", "next": "result-shop-gross" }
+        {
+          "label": "Ich brauche was Individuelles",
+          "next": "result-shop"
+        },
+        {
+          "label": "Standard reicht wahrscheinlich",
+          "next": "result-shop-standard"
+        },
+        {
+          "label": "Großer Katalog, 500+ Produkte",
+          "next": "result-shop-gross"
+        }
       ]
     },
-
     "info-b2b-was-anders": {
       "type": "info",
-      "text": "Im B2C kauft ein Mensch ein Produkt. Im B2B kauft ein Einkaeufer 500 Stueck, braucht Staffelpreise, ein Haendlerportal, manchmal eine Freigabe durch den Vorgesetzten. Kein Standard-Theme bildet das ab.",
-      "detail": "Ein B2B-Shop muss ein Werkzeug fuer Ihren Vertrieb sein, kein huebscher Katalog. Der Shop wird auf Ihre Vertriebsprozesse gebaut, nicht umgekehrt.",
+      "text": "Im B2C kauft ein Mensch ein Produkt. Im B2B kauft ein Einkäufer 500 Stück, braucht Staffelpreise, ein Händlerportal, manchmal eine Freigabe durch den Vorgesetzten. Kein Standard-Theme bildet das ab.",
+      "detail": "Ein B2B-Shop muss ein Werkzeug für Ihren Vertrieb sein, kein hübscher Katalog. Der Shop wird auf Ihre Vertriebsprozesse gebaut, nicht umgekehrt.",
       "options": [
-        { "label": "Das brauche ich", "next": "result-shop-b2b" }
+        {
+          "label": "Das brauche ich",
+          "next": "result-shop-b2b"
+        },
+        {
+          "label": "Erstmal den Standard-Weg prüfen",
+          "next": "info-shop-entscheidung"
+        }
       ]
     },
-
     "portal-was": {
       "type": "question",
-      "text": "Was soll das Portal koennen?",
+      "text": "Was soll das Portal können?",
       "subtitle": "Portale und Tools – mein Lieblingsterrain.",
       "options": [
-        { "label": "Stellen ausschreiben / Bewerbungen", "next": "info-portal-kaufen-oder-bauen" },
-        { "label": "Kunden einloggen / Daten einsehen", "next": "result-portal-kunden" },
-        { "label": "Internes Tool fuers eigene Team", "next": "info-portal-wirklich-custom" },
-        { "label": "Interaktiver Bericht / Report", "next": "result-portal-bericht" }
+        {
+          "label": "Stellen ausschreiben / Bewerbungen",
+          "next": "info-portal-kaufen-oder-bauen"
+        },
+        {
+          "label": "Kunden einloggen / Daten einsehen",
+          "next": "result-portal-kunden"
+        },
+        {
+          "label": "Internes Tool fürs eigene Team",
+          "next": "info-portal-wirklich-custom"
+        },
+        {
+          "label": "Interaktiver Bericht / Report",
+          "next": "result-portal-bericht"
+        }
       ]
     },
-
     "info-portal-kaufen-oder-bauen": {
       "type": "info",
-      "text": "JOIN, Personio, Recruitee koennen Stellen ausschreiben. Monatliche Gebuehr, schnell live, Bewerbermanagement inklusive.",
+      "text": "JOIN, Personio, Recruitee können Stellen ausschreiben. Monatliche Gebühr, schnell live, Bewerbermanagement inklusive.",
       "detail": "Custom lohnt sich bei: eigenem Design, Integration in Ihre Website, Standort-Filter, Mehrsprachigkeit, Onboarding-Prozesse. Wenn keins davon zutrifft, reicht Standard.",
       "options": [
-        { "label": "Ich brauche mehr als Standard", "next": "result-portal-karriere" },
-        { "label": "Standard reicht wohl", "next": "result-portal-karriere-standard" }
+        {
+          "label": "Ich brauche mehr als Standard",
+          "next": "result-portal-karriere"
+        },
+        {
+          "label": "Standard reicht wohl",
+          "next": "result-portal-karriere-standard"
+        }
       ]
     },
-
     "info-portal-wirklich-custom": {
       "type": "info",
       "text": "Ehrliche Frage vorweg: Projektmanagement? Asana, Notion. CRM? HubSpot, Pipedrive. Zeiterfassung? Clockify. Wenn ein fertiges Tool 80 % abdeckt, nehmen Sie das Tool.",
-      "detail": "Custom lohnt sich erst, wenn Ihre Daten zwischen Systemen fliessen muessen oder Ihre Nutzer Kunden sind, nicht Ihr Team.",
+      "detail": "Custom lohnt sich erst, wenn Ihre Daten zwischen Systemen fließen müssen oder Ihre Nutzer Kunden sind, nicht Ihr Team.",
       "options": [
-        { "label": "Ich brauche wirklich Custom", "next": "result-portal-intern" },
-        { "label": "Vielleicht reicht ein Tool", "next": "result-portal-tool" }
+        {
+          "label": "Ich brauche wirklich Custom",
+          "next": "result-portal-intern"
+        },
+        {
+          "label": "Vielleicht reicht ein Tool",
+          "next": "result-portal-tool"
+        }
       ]
     },
-
-
-
     "problem-art": {
       "type": "question",
-      "text": "Was stoert am meisten?",
+      "text": "Was stört am meisten?",
       "subtitle": "Schauen wir uns das an.",
       "options": [
-        { "label": "Sieht veraltet aus", "next": "info-redesign-diagnose" },
-        { "label": "Viel zu langsam", "next": "info-performance-diagnose" },
-        { "label": "Nicht barrierefrei (BFSG)", "next": "info-bfsg-diagnose" },
-        { "label": "Wird nicht gefunden", "next": "info-seo-diagnose" },
-        { "label": "Irgendwas ist kaputt", "next": "info-technik-erste-hilfe" }
+        {
+          "label": "Sieht veraltet aus",
+          "next": "info-redesign-diagnose"
+        },
+        {
+          "label": "Viel zu langsam",
+          "next": "info-performance-diagnose"
+        },
+        {
+          "label": "Nicht barrierefrei (BFSG)",
+          "next": "info-bfsg-diagnose"
+        },
+        {
+          "label": "Wird nicht gefunden",
+          "next": "info-seo-diagnose"
+        },
+        {
+          "label": "Irgendwas ist kaputt",
+          "next": "info-technik-erste-hilfe"
+        }
       ]
     },
-
     "info-redesign-diagnose": {
       "type": "info",
-      "text": "Nicht alles, was alt aussieht, braucht einen Relaunch. Drei Fragen: 1. Funktioniert die Seite auf dem Handy vernuenftig? 2. Passen die Inhalte noch (Leistungen, Team, Fotos)? 3. Hat sich Ihre Zielgruppe veraendert?",
+      "text": "Nicht alles, was alt aussieht, braucht einen Relaunch. Drei Fragen: 1. Funktioniert die Seite auf dem Handy vernünftig? 2. Passen die Inhalte noch (Leistungen, Team, Fotos)? 3. Hat sich Ihre Zielgruppe verändert?",
       "detail": "Wenn nur eins davon zutrifft, reicht oft ein gezieltes Update statt eines Komplettumbaus.",
       "options": [
-        { "label": "Eher das Design", "next": "result-redesign" },
-        { "label": "Eher die Technik", "next": "result-redesign-technik" },
-        { "label": "Eher die Inhalte", "next": "result-redesign-content" },
-        { "label": "Eigentlich alles", "next": "result-redesign-komplett" }
+        {
+          "label": "Eher das Design",
+          "next": "result-redesign"
+        },
+        {
+          "label": "Eher die Technik",
+          "next": "result-redesign-technik"
+        },
+        {
+          "label": "Eher die Inhalte",
+          "next": "result-redesign-content"
+        },
+        {
+          "label": "Eigentlich alles",
+          "next": "result-redesign-komplett"
+        }
       ]
     },
-
     "info-performance-diagnose": {
       "type": "info",
-      "text": "Langsame Websites verlieren Besucher und werden von Google schlechter platziert. Meistens liegt es an zu grossen Bildern, zu vielen Erweiterungen die ueber die Jahre dazugekommen sind, oder an billigem Hosting.",
-      "detail": "Das sind keine grossen Probleme. Ein Entwickler findet die Ursache und loest das meistens in wenigen Stunden.",
+      "text": "Langsame Websites verlieren Besucher und werden von Google schlechter platziert. Meistens liegt es an zu großen Bildern, zu vielen Erweiterungen die über die Jahre dazugekommen sind, oder an billigem Hosting.",
+      "detail": "Das sind keine großen Probleme. Ein Entwickler findet die Ursache und löst das meistens in wenigen Stunden.",
       "options": [
-        { "label": "Ich nutze WordPress", "next": "result-performance-wp" },
-        { "label": "Anderes System / weiss nicht", "next": "result-performance" }
+        {
+          "label": "Ich nutze WordPress",
+          "next": "result-performance-wp"
+        },
+        {
+          "label": "Anderes System / weiß nicht",
+          "next": "result-performance"
+        }
       ]
     },
-
     "info-bfsg-diagnose": {
       "type": "info",
-      "text": "Seit Juni 2025 Pflicht. Bussgelder bis 100.000 EUR. 96 % aller Websites haben noch Fehler. Die haeufigsten Probleme: Text ist schlecht lesbar, die Seite laesst sich nicht ohne Maus bedienen, Bilder haben keine Beschreibungen fuer sehbehinderte Nutzer.",
-      "detail": "Ein Profi prueft das in wenigen Stunden und sagt Ihnen genau, was zu tun ist. Die meisten Fehler lassen sich schnell beheben.",
+      "text": "Seit Juni 2025 Pflicht. Bußgelder bis 100.000 EUR. 96 % aller Websites haben noch Fehler. Die häufigsten Probleme: Text ist schlecht lesbar, die Seite lässt sich nicht ohne Maus bedienen, Bilder haben keine Beschreibungen für sehbehinderte Nutzer.",
+      "detail": "Ein Profi prüft das in wenigen Stunden und sagt Ihnen genau, was zu tun ist. Die meisten Fehler lassen sich schnell beheben.",
       "options": [
-        { "label": "Ja, da ist was", "next": "result-bfsg" },
-        { "label": "Ich brauche Hilfe beim Fixen", "next": "result-bfsg-fix" },
-        { "label": "Ich will professionell pruefen lassen", "next": "result-bfsg" }
+        {
+          "label": "Ja, da ist was",
+          "next": "result-bfsg"
+        },
+        {
+          "label": "Ich brauche Hilfe beim Fixen",
+          "next": "result-bfsg-fix"
+        },
+        {
+          "label": "Ich will professionell prüfen lassen",
+          "next": "result-bfsg"
+        }
       ]
     },
-
     "info-seo-diagnose": {
       "type": "info",
-      "text": "Google und KI-Systeme sind zwei verschiedene Probleme. Einfacher Test: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein KI-Sichtbarkeits-Problem – und das loest kein klassisches SEO.",
-      "detail": "Fuer Google gibt es kostenlose Analyse-Tools, die zeigen wo Klicks verloren gehen. Fuer KI-Sichtbarkeit braucht Ihre Website eine technische Struktur, die KI-Systeme lesen koennen. Beides laesst sich machen.",
+      "text": "Google und KI-Systeme sind zwei verschiedene Probleme. Einfacher Test: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein KI-Sichtbarkeits-Problem – und das löst kein klassisches SEO.",
+      "detail": "Für Google gibt es kostenlose Analyse-Tools, die zeigen wo Klicks verloren gehen. Für KI-Sichtbarkeit braucht Ihre Website eine technische Struktur, die KI-Systeme lesen können. Beides lässt sich machen.",
       "options": [
-        { "label": "Problem ist eher Google", "next": "result-seo-google" },
-        { "label": "Problem ist eher KI", "next": "result-seo-ki" },
-        { "label": "Beides oder unklar", "next": "result-seo" }
+        {
+          "label": "Problem ist eher Google",
+          "next": "result-seo-google"
+        },
+        {
+          "label": "Problem ist eher KI",
+          "next": "result-seo-ki"
+        },
+        {
+          "label": "Beides oder unklar",
+          "next": "result-seo"
+        }
       ]
     },
-
     "info-technik-erste-hilfe": {
       "type": "info",
       "text": "Wenn auf Ihrer Website etwas kaputt ist: Testen Sie erstmal in einem anderen Browser. Wenn das Problem dort auch auftritt, liegt es nicht an Ihrem Computer.",
-      "detail": "Dann brauchen Sie jemanden, der sich das anschaut. Je genauer Sie das Problem beschreiben koennen (was geht nicht, seit wann, auf welcher Seite), desto schneller ist es geloest.",
+      "detail": "Dann brauchen Sie jemanden, der sich das anschaut. Je genauer Sie das Problem beschreiben können (was geht nicht, seit wann, auf welcher Seite), desto schneller ist es gelöst.",
       "options": [
-        { "label": "WordPress-Problem", "next": "result-technik-wp" },
-        { "label": "WooCommerce-Problem", "next": "result-technik-woo" },
-        { "label": "Anderes oder weiss nicht", "next": "result-technik" },
-        { "label": "Gehackt / Sicherheit", "next": "result-technik-sicherheit" }
+        {
+          "label": "WordPress-Problem",
+          "next": "result-technik-wp"
+        },
+        {
+          "label": "WooCommerce-Problem",
+          "next": "result-technik-woo"
+        },
+        {
+          "label": "Anderes oder weiß nicht",
+          "next": "result-technik"
+        },
+        {
+          "label": "Gehackt / Sicherheit",
+          "next": "result-technik-sicherheit"
+        }
       ]
     },
-
-
-
     "betreuung-was": {
       "type": "question",
-      "text": "Was laeuft bei Ihnen?",
-      "subtitle": "Davon haengt ab, wie viel Betreuung Sinn macht.",
+      "text": "Was läuft bei Ihnen?",
+      "subtitle": "Davon hängt ab, wie viel Betreuung Sinn macht.",
       "options": [
-        { "label": "WordPress-Website", "next": "info-betreuung-wp" },
-        { "label": "WooCommerce-Shop", "next": "info-betreuung-woo" },
-        { "label": "Statische Website", "next": "result-betreuung-statisch" },
-        { "label": "Weiss ich nicht", "next": "info-betreuung-wp" }
+        {
+          "label": "WordPress-Website",
+          "next": "info-betreuung-wp"
+        },
+        {
+          "label": "WooCommerce-Shop",
+          "next": "info-betreuung-woo"
+        },
+        {
+          "label": "Statische Website",
+          "next": "result-betreuung-statisch"
+        },
+        {
+          "label": "Weiß ich nicht",
+          "next": "info-betreuung-unsicher"
+        }
       ]
     },
-
+    "info-betreuung-unsicher": {
+      "type": "info",
+      "text": "Kein Problem. Schneller Test: Können Sie sich irgendwo auf Ihrer Website einloggen? Gibt es ein Login unter /wp-admin oder /wp-login.php? Dann ist es WordPress. Sehen Sie im Footer oder Quelltext 'Shopify', 'Wix' oder 'Jimdo'? Dann ist es ein Baukastensystem. Wenn Sie gar nichts finden: wahrscheinlich statisch oder ein älteres CMS.",
+      "detail": "Wenn Sie mir die URL schicken, sage ich Ihnen in 30 Sekunden, was bei Ihnen läuft.",
+      "options": [
+        {
+          "label": "Ja, wir haben ein Login – wahrscheinlich WordPress",
+          "next": "info-betreuung-wp"
+        },
+        {
+          "label": "Kein Login gefunden",
+          "next": "result-betreuung-statisch"
+        },
+        {
+          "label": "Schicke ich Ihnen lieber – reden wir",
+          "next": "result-betreuung-wp-standard"
+        }
+      ]
+    },
     "info-betreuung-wp": {
       "type": "info",
-      "text": "WordPress braucht regelmaessige Updates – Core, Themes, Plugins. Ohne Kontrolle kann ein Update die Seite zerschiessen. Deshalb: manuell updaten, danach pruefen, bei Problemen zurueckrollen.",
-      "detail": "Wenn sich Inhalte regelmaessig aendern, brauchen Sie zusaetzlich jemanden, der schnell reagiert und die Seite kennt. Nicht jedes Mal erklaeren, wo was ist.",
+      "text": "WordPress braucht regelmäßige Updates – Core, Themes, Plugins. Ohne Kontrolle kann ein Update die Seite zerschießen. Deshalb: manuell updaten, danach prüfen, bei Problemen zurückrollen.",
+      "detail": "Wenn sich Inhalte regelmäßig ändern, brauchen Sie zusätzlich jemanden, der schnell reagiert und die Seite kennt. Nicht jedes Mal erklären, wo was ist.",
       "options": [
-        { "label": "Nur Sicherheit und Updates", "next": "result-betreuung-wp-basis" },
-        { "label": "Auch regelmaessige Aenderungen", "next": "result-betreuung-wp-standard" },
-        { "label": "Fester Entwickler fuer alles", "next": "result-betreuung-premium" }
+        {
+          "label": "Nur Sicherheit und Updates",
+          "next": "result-betreuung-wp-basis"
+        },
+        {
+          "label": "Auch regelmäßige Änderungen",
+          "next": "result-betreuung-wp-standard"
+        },
+        {
+          "label": "Fester Entwickler für alles",
+          "next": "result-betreuung-premium"
+        }
       ]
     },
-
     "info-betreuung-woo": {
       "type": "info",
-      "text": "Shops brauchen mehr Aufmerksamkeit als normale Websites. Zahlungsanbieter aendern APIs, WooCommerce-Updates koennen den Checkout brechen, Steuerregeln aendern sich.",
-      "detail": "Dazu: Bestellmonitoring, Plugin-Kompatibilitaet, Performance bei wachsendem Katalog. Ein Shop, der Geld verdient, braucht jemanden, der aufpasst.",
+      "text": "Shops brauchen mehr Aufmerksamkeit als normale Websites. Zahlungsanbieter ändern APIs, WooCommerce-Updates können den Checkout brechen, Steuerregeln ändern sich.",
+      "detail": "Dazu: Bestellmonitoring, Plugin-Kompatibilität, Performance bei wachsendem Katalog. Ein Shop, der Geld verdient, braucht jemanden, der aufpasst.",
       "options": [
-        { "label": "Updates und Monitoring", "next": "result-betreuung-woo-basis" },
-        { "label": "Laufende Hilfe und Aenderungen", "next": "result-betreuung-woo-standard" },
-        { "label": "Der Shop ist geschaeftskritisch", "next": "result-betreuung-premium" }
+        {
+          "label": "Updates und Monitoring",
+          "next": "result-betreuung-woo-basis"
+        },
+        {
+          "label": "Laufende Hilfe und Änderungen",
+          "next": "result-betreuung-woo-standard"
+        },
+        {
+          "label": "Der Shop ist geschäftskritisch",
+          "next": "result-betreuung-premium"
+        }
       ]
     },
-
-
-
     "geo-wissen": {
       "type": "question",
-      "text": "Wie viel wissen Sie ueber KI-Sichtbarkeit?",
-      "subtitle": "Gutes Thema. Wenige kuemmern sich bisher darum.",
+      "text": "Wie viel wissen Sie über KI-Sichtbarkeit?",
+      "subtitle": "Gutes Thema. Wenige kümmern sich bisher darum.",
       "options": [
-        { "label": "Nichts – erklaeren Sie mal", "next": "geo-info" },
-        { "label": "Grundidee klar – wie machen Sie das?", "next": "result-geo" },
-        { "label": "Ich will einen Audit meiner Website", "next": "result-geo-audit" }
+        {
+          "label": "Nichts – erklären Sie mal",
+          "next": "geo-info"
+        },
+        {
+          "label": "Grundidee klar – wie machen Sie das?",
+          "next": "result-geo"
+        },
+        {
+          "label": "Ich will einen Audit meiner Website",
+          "next": "result-geo-audit"
+        }
       ]
     },
-
     "geo-info": {
       "type": "info",
-      "text": "Kurze Version: 73 % der B2B-Einkaeufer recherchieren mit ChatGPT. 61 % weniger Klicks auf klassische Google-Ergebnisse seit AI Overviews. Wenn KI-Systeme Ihre Website nicht verstehen, existieren Sie fuer diese Nutzer nicht.",
+      "text": "Kurze Version: 73 % der B2B-Einkäufer recherchieren mit ChatGPT. 61 % weniger Klicks auf klassische Google-Ergebnisse seit AI Overviews. Wenn KI-Systeme Ihre Website nicht verstehen, existieren Sie für diese Nutzer nicht.",
       "detail": "Ich strukturiere Websites so, dass KI-Systeme sie korrekt erfassen und zitieren. Das mache ich in jedem Projekt, ohne Aufpreis.",
       "options": [
-        { "label": "Klingt relevant – erzaehlen Sie mehr", "next": "result-geo" },
-        { "label": "Zurueck zum Anfang", "next": "start" }
+        {
+          "label": "Klingt relevant – erzählen Sie mehr",
+          "next": "result-geo"
+        },
+        {
+          "label": "Zurück zum Anfang",
+          "next": "start"
+        }
       ]
     },
-
-
-
     "vergleich-was": {
       "type": "question",
       "text": "Was vergleichen Sie?",
       "subtitle": "Gut, dass Sie vergleichen.",
       "options": [
-        { "label": "Freelancer vs. Agentur", "next": "info-freelancer-vs-agentur" },
-        { "label": "Worauf bei Freelancern achten", "next": "info-freelancer-auswaehlen" },
-        { "label": "Selber machen vs. machen lassen", "next": "info-selber-vs-profi" }
+        {
+          "label": "Freelancer vs. Agentur",
+          "next": "info-freelancer-vs-agentur"
+        },
+        {
+          "label": "Worauf bei Freelancern achten",
+          "next": "info-freelancer-auswaehlen"
+        },
+        {
+          "label": "Selber machen vs. machen lassen",
+          "next": "info-selber-vs-profi"
+        }
       ]
     },
-
     "info-freelancer-vs-agentur": {
       "type": "info",
-      "text": "Agentur: mehrere Spezialisten, Projektmanager. Gut fuer grosse Budgets. Nachteil: Leute rotieren, Sie erklaeren sich jedes Mal neu. Freelancer: eine Person, die Ihr Projekt kennt. Schnellere Wege, niedrigerer Overhead.",
-      "detail": "Haeufigster Einwand gegen Freelancer: Was wenn der krank wird? Meine Loesung: alles dokumentiert, Standard-Technologien, jeder Entwickler kann uebernehmen. Und ich bin seit 26 Jahren nicht ausgefallen.",
+      "text": "Agentur: mehrere Spezialisten, Projektmanager. Gut für große Budgets. Nachteil: Leute rotieren, Sie erklären sich jedes Mal neu. Freelancer: eine Person, die Ihr Projekt kennt. Schnellere Wege, niedrigerer Overhead.",
+      "detail": "Häufigster Einwand gegen Freelancer: Was wenn der krank wird? Meine Lösung: alles dokumentiert, Standard-Technologien, jeder Entwickler kann übernehmen. Und ich bin seit 26 Jahren nicht ausgefallen.",
       "options": [
-        { "label": "Ich will einen Freelancer", "next": "neue-art" },
-        { "label": "Noch Fragen – reden wir", "next": "result-vergleich-kontakt" }
+        {
+          "label": "Ich will einen Freelancer",
+          "next": "neue-art"
+        },
+        {
+          "label": "Noch Fragen – reden wir",
+          "next": "result-vergleich-kontakt"
+        }
       ]
     },
-
     "info-freelancer-auswaehlen": {
       "type": "info",
-      "text": "Fuenf Fragen an jeden Freelancer: 1. Kann ich eine Live-Website sehen, die Sie allein gebaut haben? 2. Was passiert mit meiner Website, wenn Sie aufhoeren? 3. Ist Barrierefreiheit im Angebot? 4. Wie schnell reagieren Sie bei Problemen? 5. Was kostet Nacharbeit?",
-      "detail": "Wer auf alle fuenf klar antwortet, ist vermutlich OK. Wer ausweicht, ist es nicht.",
+      "text": "Fünf Fragen an jeden Freelancer: 1. Kann ich eine Live-Website sehen, die Sie allein gebaut haben? 2. Was passiert mit meiner Website, wenn Sie aufhören? 3. Ist Barrierefreiheit im Angebot? 4. Wie schnell reagieren Sie bei Problemen? 5. Was kostet Nacharbeit?",
+      "detail": "Wer auf alle fünf klar antwortet, ist vermutlich OK. Wer ausweicht, ist es nicht.",
       "options": [
-        { "label": "Ich will Ihre Antworten hoeren", "next": "result-vergleich-kontakt" }
+        {
+          "label": "Ich will Ihre Antworten hören",
+          "next": "result-vergleich-kontakt"
+        },
+        {
+          "label": "Erst noch andere Fragen klären",
+          "next": "vergleich-was"
+        }
       ]
     },
-
     "info-selber-vs-profi": {
       "type": "info",
-      "text": "Selbst funktioniert fuer: persoenliche Portfolios, Hobby-Blogs, erste Tests. Profi brauchen Sie fuer: individuelle Prozesse, Barrierefreiheit, Performance, strukturierte Daten, alles was nach drei Jahren noch wartbar sein soll.",
+      "text": "Selbst funktioniert für: persönliche Portfolios, Hobby-Blogs, erste Tests. Profi brauchen Sie für: individuelle Prozesse, Barrierefreiheit, Performance, strukturierte Daten, alles was nach drei Jahren noch wartbar sein soll.",
       "detail": "Faustregel: Wenn die Website Kunden gewinnen soll, lohnt sich ein Profi. Wenn sie nur existieren muss, reicht Selfservice.",
       "options": [
-        { "label": "Ich brauche einen Profi", "next": "neue-art" },
-        { "label": "Ich schaue mich noch um", "next": "result-vergleich-kontakt" }
+        {
+          "label": "Ich brauche einen Profi",
+          "next": "neue-art"
+        },
+        {
+          "label": "Ich schaue mich noch um",
+          "next": "result-vergleich-kontakt"
+        }
       ]
     },
-
-
-
     "result-website": {
       "type": "result",
       "title": "Drei Dinge, die gute Firmenwebsites 2026 gemeinsam haben.",
-      "text": "Erstens: wenige Seiten, klare Struktur. Die meisten Unternehmen brauchen 5 bis 8 Seiten, nicht 40. Zweitens: die Website muss fuer KI-Systeme lesbar sein, nicht nur fuer Google. 73 % der B2B-Einkaeufer recherchieren mit ChatGPT. Drittens: Barrierefreiheit nach WCAG 2.1 AA ist seit Juni 2025 Pflicht (BFSG), nicht Kuer. Viele wissen das noch nicht.",
+      "text": "Erstens: wenige Seiten, klare Struktur. Die meisten Unternehmen brauchen 5 bis 8 Seiten, nicht 40. Zweitens: die Website muss für KI-Systeme lesbar sein, nicht nur für Google. 73 % der B2B-Einkäufer recherchieren mit ChatGPT. Drittens: Barrierefreiheit nach WCAG 2.1 AA ist seit Juni 2025 Pflicht (BFSG), nicht Kür. Viele wissen das noch nicht.\n\nTypischer Aufwand: 40–80 Stunden, je nach Umfang.",
       "proof": [
-        { "name": "Scheja & Partner", "desc": "Kanzlei, 30+ Anwaelte, mehrsprachig", "href": "https://scheja-partners.de" },
-        { "name": "The New Insider", "desc": "Stadtmagazin Osnabrueck", "href": "https://thenewinsider.de" },
-        { "name": "Streunerhilfe Plau", "desc": "Verein mit Spenden-Shop", "href": "https://streunerhilfe-plau.de" }
+        {
+          "name": "Scheja & Partner",
+          "desc": "Kanzlei, 30+ Anwälte, mehrsprachig",
+          "href": "https://scheja-partners.de"
+        },
+        {
+          "name": "The New Insider",
+          "desc": "Stadtmagazin Osnabrück",
+          "href": "https://thenewinsider.de"
+        },
+        {
+          "name": "Streunerhilfe Plau",
+          "desc": "Verein mit Spenden-Shop",
+          "href": "https://streunerhilfe-plau.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir Ihre Vorstellungen – ich melde mich innerhalb eines Werktags",
+        "href": "kontakt/"
+      }
     },
-
     "result-website-wp": {
       "type": "result",
       "title": "WordPress – aber richtig.",
-      "text": "WordPress ist die richtige Wahl, wenn Ihr Team selbst Inhalte pflegen will. Wichtig ist, dass die technische Basis sauber ist – davon haengt ab, wie schnell die Seite laeuft und wie gut sie in Suchmaschinen und KI-Systemen gefunden wird. KI-Sichtbarkeit und Barrierefreiheit baue ich in jedes Projekt ein. Texte lektoriert meine Frau Annemarie.",
+      "text": "WordPress ist die richtige Wahl, wenn Ihr Team selbst Inhalte pflegen will. Wichtig ist, dass die technische Basis sauber ist – davon hängt ab, wie schnell die Seite läuft und wie gut sie in Suchmaschinen und KI-Systemen gefunden wird. KI-Sichtbarkeit und Barrierefreiheit baue ich in jedes Projekt ein. Texte lektoriert meine Frau Annemarie.\n\nTypischer Aufwand: 50–100 Stunden inkl. Einrichtung und Schulung.",
       "proof": [
-        { "name": "Scheja & Partner", "desc": "Kanzlei, 30+ Anwaelte, YOOtheme Pro", "href": "https://scheja-partners.de" },
-        { "name": "The New Insider", "desc": "Stadtmagazin, YOOtheme Pro", "href": "https://thenewinsider.de" }
+        {
+          "name": "Scheja & Partner",
+          "desc": "Kanzlei, 30+ Anwälte, YOOtheme Pro",
+          "href": "https://scheja-partners.de"
+        },
+        {
+          "name": "The New Insider",
+          "desc": "Stadtmagazin, YOOtheme Pro",
+          "href": "https://thenewinsider.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Lassen Sie uns über Ihr WordPress-Projekt sprechen",
+        "href": "kontakt/"
+      }
     },
-
     "result-website-statisch": {
       "type": "result",
       "title": "Statisches HTML – weniger ist mehr.",
-      "text": "Wenn sich Ihre Website selten aendert, brauchen Sie kein CMS. Statische Websites laden schneller, sind sicherer und kosten fast nichts im Betrieb. Diese Website hier ist statisch – maximale Geschwindigkeit, minimaler Aufwand. Aenderungen brauchen einen Entwickler, aber bei weniger als 2 pro Monat ist das kein Problem.",
+      "text": "Wenn sich Ihre Website selten ändert, brauchen Sie kein CMS. Statische Websites laden schneller, sind sicherer und kosten fast nichts im Betrieb. Diese Website hier ist statisch – maximale Geschwindigkeit, minimaler Aufwand. Änderungen brauchen einen Entwickler, aber bei weniger als 2 pro Monat ist das kein Problem.\n\nTypischer Aufwand: 30–60 Stunden. Danach kaum laufende Kosten.",
       "proof": [
-        { "name": "Diese Website", "desc": "Statisch, Lighthouse 100, GitHub Pages" },
-        { "name": "Wirkungsbericht SiS", "desc": "Statischer Bericht mit SVG-Karte", "href": "https://wirkungsbericht.seniorpartnerinschool.de" }
+        {
+          "name": "Diese Website",
+          "desc": "Statisch, Lighthouse 100, GitHub Pages"
+        },
+        {
+          "name": "Wirkungsbericht SiS",
+          "desc": "Statischer Bericht mit SVG-Karte",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Erzählen Sie mir von Ihrem Projekt",
+        "href": "kontakt/"
+      }
     },
-
     "result-website-gross": {
       "type": "result",
-      "title": "Firmengruppe – das haeufigste Problem ist nicht die Technik.",
-      "text": "Bei 10+ Gesellschaften scheitern Projekte selten an WordPress oder am Design. Sie scheitern an der Koordination. Jede Abteilung will was anderes, niemand hat den Ueberblick. Ich habe das zwei Jahre lang fuer die Runden Group gemacht – 10+ Websites, alleiniger Entwickler, und es hat funktioniert, weil alles durch eine Person lief.",
+      "title": "Firmengruppe – das häufigste Problem ist nicht die Technik.",
+      "text": "Bei 10+ Gesellschaften scheitern Projekte selten an WordPress oder am Design. Sie scheitern an der Koordination. Jede Abteilung will was anderes, niemand hat den Überblick. Ich habe das zwei Jahre lang für die Runden Group gemacht – 10+ Websites, alleiniger Entwickler, und es hat funktioniert, weil alles durch eine Person lief.\n\nAufwand hängt vom Umfang ab. Vergleichbare Projekte: 100–300 Stunden.",
       "proof": [
-        { "name": "Runden Group", "desc": "10+ Websites, 2 Jahre einziger Entwickler", "href": "https://runden-group.eu" },
-        { "name": "Scheja & Partner", "desc": "Kanzlei, Software-Produkte, mehrsprachig", "href": "https://scheja-partners.de" }
+        {
+          "name": "Runden Group",
+          "desc": "10+ Websites, 2 Jahre einziger Entwickler",
+          "href": "https://runden-group.eu"
+        },
+        {
+          "name": "Scheja & Partner",
+          "desc": "Kanzlei, Software-Produkte, mehrsprachig",
+          "href": "https://scheja-partners.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Lassen Sie uns die Koordination besprechen",
+        "href": "kontakt/"
+      }
     },
-
     "result-shop": {
       "type": "result",
       "title": "WooCommerce – wenn Standard nicht reicht.",
-      "text": "Eigene Prozesse, Sonderpreise, Schnittstellen: dafuer ist WooCommerce gebaut. Gehoert Ihnen, kein Abo, volle Kontrolle. Ich baue das so, dass es zu Ihrem Geschaeft passt, nicht zu irgendeinem Template. Haeufigster Fehler: zu frueh zu komplex. Starten Sie mit dem, was Sie wirklich brauchen. Erweitern geht immer.",
+      "text": "Eigene Prozesse, Sonderpreise, Schnittstellen: dafür ist WooCommerce gebaut. Gehört Ihnen, kein Abo, volle Kontrolle. Ich baue das so, dass es zu Ihrem Geschäft passt, nicht zu irgendeinem Template. Häufigster Fehler: zu früh zu komplex. Starten Sie mit dem, was Sie wirklich brauchen. Erweitern geht immer.\n\nTypischer Aufwand: 80–150 Stunden, je nach Komplexität der Prozesse.",
       "proof": [
-        { "name": "Gerwing Steinwerke", "desc": "B2B-Shop mit Haendlerportal", "href": "https://gerwing.de" },
-        { "name": "Commodule-Aera", "desc": "12+ Shops in verschiedenen Branchen" }
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "B2B-Shop mit Händlerportal",
+          "href": "https://gerwing.de"
+        },
+        {
+          "name": "Commodule-Aera",
+          "desc": "12+ Shops in verschiedenen Branchen"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Erzählen Sie mir von Ihren Vertriebsprozessen",
+        "href": "kontakt/"
+      }
     },
-
     "result-shop-standard": {
       "type": "result",
       "title": "Shopify kann reichen – und das ist OK.",
-      "text": "Bei Standardprodukten ohne Sonderwuensche ist Shopify eine ehrliche Option. Fertige Themes, schnell online, wenig Wartung. Sie bezahlen monatlich plus Transaktionsgebuehren, dafuer kuemmert sich Shopify um Hosting und Sicherheit. Der Nachteil: eingeschraenkte Anpassbarkeit und kein Eigentum. Wenn Sie irgendwann individuelle Prozesse brauchen, muessen Sie umziehen. Aber fuer den Start kann es die richtige Wahl sein.",
-      "proof": [],
-      "cta": { "label": "Wenn Sie trotzdem WooCommerce wollen – reden wir", "href": "kontakt/" }
+      "text": "Bei Standardprodukten ohne Sonderwünsche ist Shopify eine ehrliche Option. Fertige Themes, schnell online, wenig Wartung. Sie bezahlen monatlich plus Transaktionsgebühren, dafür kümmert sich Shopify um Hosting und Sicherheit. Der Nachteil: eingeschränkte Anpassbarkeit und kein Eigentum. Wenn Sie irgendwann individuelle Prozesse brauchen, müssen Sie umziehen. Aber für den Start kann es die richtige Wahl sein.\n\nWenn Sie doch WooCommerce wollen: typischer Aufwand 60–100 Stunden.",
+      "proof": [
+        {
+          "name": "20+ Projekte",
+          "desc": "Seit 2010, verschiedene Shop-Systeme"
+        },
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "WooCommerce, wenn Standard nicht reicht",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Trotzdem Fragen? Kurzes Gespräch klärt das",
+        "href": "kontakt/"
+      }
     },
-
     "result-shop-gross": {
       "type": "result",
-      "title": "Grosser Katalog – da wird Infrastruktur wichtig.",
-      "text": "Ab 500 Produkten brauchen Sie mehr als ein gutes Theme. Shared Hosting stirbt bei dieser Groesse. Sie brauchen Managed Hosting, eine Staging-Umgebung zum Testen und saubere Bildkomprimierung. Dazu: vernuenftiger Import/Export fuer Produktdaten, Filter die auch bei 1000 Produkten schnell bleiben, und ein Plan fuer SEO bei grossen Katalogen. Das ist machbar, aber kein Wochenendprojekt.",
+      "title": "Großer Katalog – da wird Infrastruktur wichtig.",
+      "text": "Ab 500 Produkten brauchen Sie mehr als ein gutes Theme. Shared Hosting stirbt bei dieser Größe. Sie brauchen Managed Hosting, eine Staging-Umgebung zum Testen und saubere Bildkomprimierung. Dazu: vernünftiger Import/Export für Produktdaten, Filter die auch bei 1000 Produkten schnell bleiben, und ein Plan für SEO bei großen Katalogen. Das ist machbar, aber kein Wochenendprojekt.\n\nTypischer Aufwand: 100–200 Stunden inkl. Infrastruktur und Import.",
       "proof": [
-        { "name": "Gerwing Steinwerke", "desc": "Grosser Katalog, B2B-Prozesse", "href": "https://gerwing.de" }
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Großer Katalog, B2B-Prozesse",
+          "href": "https://gerwing.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir den Katalog-Umfang – ich schätze den Aufwand",
+        "href": "kontakt/"
+      }
     },
-
     "result-shop-b2b": {
       "type": "result",
       "title": "B2B-Shops brauchen andere Dinge als B2C.",
-      "text": "Ein B2B-Shop muss ein Werkzeug fuer Ihren Vertrieb sein, kein huebscher Katalog. Ich betreue seit 2023 einen Industriekunden mit genau diesem Setup: WooCommerce, Haendlerportal, Steinmuster-Tracking. Alleinige technische Verantwortung. Das funktioniert, weil der Shop auf die Vertriebsprozesse gebaut ist, nicht umgekehrt.",
+      "text": "Ein B2B-Shop muss ein Werkzeug für Ihren Vertrieb sein, kein hübscher Katalog. Ich betreue seit 2023 einen Industriekunden mit genau diesem Setup: WooCommerce, Händlerportal, Steinmuster-Tracking. Alleinige technische Verantwortung. Das funktioniert, weil der Shop auf die Vertriebsprozesse gebaut ist, nicht umgekehrt.\n\nTypischer Aufwand: 100–200 Stunden. Händlerportal und Schnittstellen brauchen Zeit.",
       "proof": [
-        { "name": "Gerwing Steinwerke", "desc": "WooCommerce, Haendlerportal, Retainer", "href": "https://gerwing.de" }
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "WooCommerce, Händlerportal, Retainer",
+          "href": "https://gerwing.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Erzählen Sie mir von Ihrem B2B-Vertrieb",
+        "href": "kontakt/"
+      }
     },
-
     "result-portal-karriere": {
       "type": "result",
       "title": "Karriereportal – Custom lohnt sich bei Ihnen.",
-      "text": "Eigenes Design, Integration in Ihre Website, Standort-Filter, Mehrsprachigkeit, Onboarding: das bildet kein Standardtool ab. Ich habe fuer die Runden Group ein Karriere-Portal plus internes Onboarding-Tool gebaut. Das haette kein fertiges Produkt so gemacht, weil die Prozesse zu spezifisch waren.",
+      "text": "Eigenes Design, Integration in Ihre Website, Standort-Filter, Mehrsprachigkeit, Onboarding: das bildet kein Standardtool ab. Ich habe für die Runden Group ein Karriere-Portal plus internes Onboarding-Tool gebaut. Das hätte kein fertiges Produkt so gemacht, weil die Prozesse zu spezifisch waren.\n\nTypischer Aufwand: 60–120 Stunden, je nach Integrationstiefe.",
       "proof": [
-        { "name": "Runden Group", "desc": "Karriere-Portal, Onboarding-Tool", "href": "https://runden-group.eu" }
+        {
+          "name": "Runden Group",
+          "desc": "Karriere-Portal, Onboarding-Tool",
+          "href": "https://runden-group.eu"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Beschreiben Sie mir Ihren Recruiting-Prozess",
+        "href": "kontakt/"
+      }
     },
-
     "result-portal-karriere-standard": {
       "type": "result",
       "title": "Standardtool reicht – ehrlich gesagt.",
-      "text": "Wenn Sie Stellen ausschreiben, Bewerbungen sammeln und einen ordentlichen Prozess wollen, machen JOIN, Personio oder Recruitee das gut. Schnell live, Bewerbermanagement inklusive, keine Entwicklungskosten. Custom-Entwicklung wuerde sich bei Ihrem Bedarf nicht rechnen. Mein Rat: starten Sie mit einem Standardtool. Wenn Sie spaeter merken, dass es nicht reicht, koennen wir immer noch reden.",
-      "proof": [],
-      "cta": { "label": "Trotzdem Fragen? Reden wir", "href": "kontakt/" }
+      "text": "Wenn Sie Stellen ausschreiben, Bewerbungen sammeln und einen ordentlichen Prozess wollen, machen JOIN, Personio oder Recruitee das gut. Schnell live, Bewerbermanagement inklusive, keine Entwicklungskosten. Custom-Entwicklung würde sich bei Ihrem Bedarf nicht rechnen. Mein Rat: starten Sie mit einem Standardtool. Wenn Sie später merken, dass es nicht reicht, können wir immer noch reden.",
+      "proof": [
+        {
+          "name": "Runden Group",
+          "desc": "Karriere-Portal, Custom statt Standard",
+          "href": "https://runden-group.eu"
+        }
+      ],
+      "cta": {
+        "label": "Trotzdem Fragen? Reden wir",
+        "href": "kontakt/"
+      }
     },
-
     "result-portal-kunden": {
       "type": "result",
-      "title": "Kundenportal – darauf muessen Sie achten.",
-      "text": "Ein Login-Bereich fuer Kunden ist technisch anspruchsvoller als eine normale Website, weil Datenschutz (DSGVO) von Anfang an mitgedacht werden muss. Das ist machbar und Routine, wenn man es von Beginn an einplant. Wichtig ist, dass Sie vorab klaeren: Was sollen Kunden sehen und tun koennen? Wer verwaltet die Zugaenge? Dann kann ich Ihnen sagen, wie der beste Weg aussieht.",
+      "title": "Kundenportal – darauf müssen Sie achten.",
+      "text": "Ein Login-Bereich für Kunden ist technisch anspruchsvoller als eine normale Website, weil Datenschutz (DSGVO) von Anfang an mitgedacht werden muss. Das ist machbar und Routine, wenn man es von Beginn an einplant. Wichtig ist, dass Sie vorab klären: Was sollen Kunden sehen und tun können? Wer verwaltet die Zugänge? Dann kann ich Ihnen sagen, wie der beste Weg aussieht.\n\nTypischer Aufwand: 60–120 Stunden, DSGVO-Konzept inklusive.",
       "proof": [
-        { "name": "Gerwing Steinwerke", "desc": "B2B-Haendlerportal mit Login", "href": "https://gerwing.de" }
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "B2B-Händlerportal mit Login",
+          "href": "https://gerwing.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Erzählen Sie mir, was Kunden sehen sollen",
+        "href": "kontakt/"
+      }
     },
-
     "result-portal-intern": {
       "type": "result",
       "title": "Custom-Tool – wenn es sein muss, dann richtig.",
-      "text": "Sie haben geprueft ob ein fertiges Tool reicht, und die Antwort ist nein. Dann bauen wir was. Karriere-Portale, Kundenportale, interne Tools, interaktive Berichte – das ist die Art Projekte, die mich am meisten interessieren. Dieser Berater-Funnel hier ist so ein Fall: massgeschneidert, kein fertiges Produkt haette das so gemacht.",
+      "text": "Sie haben geprüft ob ein fertiges Tool reicht, und die Antwort ist nein. Dann bauen wir was. Karriere-Portale, Kundenportale, interne Tools, interaktive Berichte – das ist die Art Projekte, die mich am meisten interessieren. Dieser Berater-Funnel hier ist so ein Fall: maßgeschneidert, kein fertiges Produkt hätte das so gemacht.\n\nAufwand variiert stark. Erstgespräch klärt den Rahmen.",
       "proof": [
-        { "name": "Seniorpartner in School", "desc": "Interaktiver Wirkungsbericht mit SVG-Karte", "href": "https://wirkungsbericht.seniorpartnerinschool.de" },
-        { "name": "Runden Group", "desc": "Karriere-Portal, Onboarding-Tool", "href": "https://runden-group.eu" }
+        {
+          "name": "Seniorpartner in School",
+          "desc": "Interaktiver Wirkungsbericht mit SVG-Karte",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+        },
+        {
+          "name": "Runden Group",
+          "desc": "Karriere-Portal, Onboarding-Tool",
+          "href": "https://runden-group.eu"
+        }
       ],
-      "cta": { "label": "Reden wir ueber Ihr Projekt", "href": "kontakt/" }
+      "cta": {
+        "label": "Reden wir über Ihr Projekt",
+        "href": "kontakt/"
+      }
     },
-
     "result-portal-tool": {
       "type": "result",
       "title": "Fertiges Tool – oft die bessere Wahl.",
-      "text": "Kein Entwickler sagt das gern, aber: wenn ein fertiges Tool 80 % abdeckt, ist Custom-Entwicklung meistens die teurere Loesung. Asana, Notion, HubSpot, Pipedrive – die funktionieren, weil tausende Firmen damit arbeiten. Wenn Sie spaeter merken, dass Standardtools an ihre Grenzen stossen, koennen wir immer noch reden. Aber starten Sie nicht mit Custom, wenn Standard reicht.",
-      "proof": [],
-      "cta": { "label": "Trotzdem Fragen? Reden wir", "href": "kontakt/" }
+      "text": "Kein Entwickler sagt das gern, aber: wenn ein fertiges Tool 80 % abdeckt, ist Custom-Entwicklung meistens die teurere Lösung. Asana, Notion, HubSpot, Pipedrive – die funktionieren, weil tausende Firmen damit arbeiten. Wenn Sie später merken, dass Standardtools an ihre Grenzen stoßen, können wir immer noch reden. Aber starten Sie nicht mit Custom, wenn Standard reicht.",
+      "proof": [
+        {
+          "name": "50+ Projekte",
+          "desc": "Erfahrung mit Standard- und Custom-Lösungen"
+        }
+      ],
+      "cta": {
+        "label": "Trotzdem Fragen? Reden wir",
+        "href": "kontakt/"
+      }
     },
-
     "result-portal-bericht": {
       "type": "result",
       "title": "Interaktiver Bericht – genau mein Ding.",
-      "text": "Jahresberichte, Wirkungsberichte, Nachhaltigkeitsberichte – als PDF verstauben die. Als interaktive Website werden sie gelesen, geteilt und verlinkt. Ich habe fuer Seniorpartner in School einen digitalen Wirkungsbericht mit interaktiver SVG-Deutschlandkarte und Infografiken gebaut. Statisches HTML, kein Backend. Das Schoene an Berichten: klarer Scope, klares Ende, messbares Ergebnis.",
+      "text": "Jahresberichte, Wirkungsberichte, Nachhaltigkeitsberichte – als PDF verstauben die. Als interaktive Website werden sie gelesen, geteilt und verlinkt. Ich habe für Seniorpartner in School einen digitalen Wirkungsbericht mit interaktiver SVG-Deutschlandkarte und Infografiken gebaut. Statisches HTML, kein Backend. Das Schöne an Berichten: klarer Scope, klares Ende, messbares Ergebnis.\n\nTypischer Aufwand: 40–80 Stunden. Klarer Scope, klares Ende.",
       "proof": [
-        { "name": "Seniorpartner in School", "desc": "Interaktiver Wirkungsbericht 2025", "href": "https://wirkungsbericht.seniorpartnerinschool.de" }
+        {
+          "name": "Seniorpartner in School",
+          "desc": "Interaktiver Wirkungsbericht 2025",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir den aktuellen Bericht – ich mache einen Entwurf",
+        "href": "kontakt/"
+      }
     },
-
     "result-landingpage": {
       "type": "result",
       "title": "Was eine Landingpage braucht – und was nicht.",
-      "text": "Ein Ziel. Einen CTA. Kein Navigationsmenue, das den Besucher wieder wegfuehrt. Die haeufigsten Fehler: zu viel Text, zu viele Optionen, kein klarer naechster Schritt. Statisches HTML reicht fast immer. Schneller als WordPress, kein Wartungsaufwand. Wenn eine Seite reicht, verkaufe ich Ihnen keine zehn.",
+      "text": "Ein Ziel. Einen CTA. Kein Navigationsmenü, das den Besucher wieder wegführt. Die häufigsten Fehler: zu viel Text, zu viele Optionen, kein klarer nächster Schritt. Statisches HTML reicht fast immer. Schneller als WordPress, kein Wartungsaufwand. Wenn eine Seite reicht, verkaufe ich Ihnen keine zehn.\n\nTypischer Aufwand: 15–30 Stunden. Statisch, schnell fertig.",
       "proof": [
-        { "name": "Mehrweg-Heroes", "desc": "Podcast-Landingpage", "href": "https://mehrweg-heroes.eu" },
-        { "name": "Wirkungsbericht SiS", "desc": "Statischer Bericht mit Infografiken", "href": "https://wirkungsbericht.seniorpartnerinschool.de" }
+        {
+          "name": "Mehrweg-Heroes",
+          "desc": "Podcast-Landingpage",
+          "href": "https://mehrweg-heroes.eu"
+        },
+        {
+          "name": "Wirkungsbericht SiS",
+          "desc": "Statischer Bericht mit Infografiken",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir das Angebot – ich entwerfe die Seite",
+        "href": "kontakt/"
+      }
     },
-
     "result-redesign": {
       "type": "result",
       "title": "Redesign – wenn das Design nicht mehr passt.",
-      "text": "Das Design ist veraltet, aber Technik und Inhalte stimmen noch? Dann brauchen Sie kein Komplett-Projekt, sondern ein visuelles Update. Neues Theme, neue Typografie, bessere Bildsprache – ohne alles von Grund auf neu zu bauen. Spart Zeit und Geld. Ich schaue mir an, was da ist, und sage ehrlich, was sich lohnt. Diese Website hier ist mein eigenes Redesign.",
+      "text": "Das Design ist veraltet, aber Technik und Inhalte stimmen noch? Dann brauchen Sie kein Komplett-Projekt, sondern ein visuelles Update. Neues Theme, neue Typografie, bessere Bildsprache – ohne alles von Grund auf neu zu bauen. Spart Zeit und Geld. Ich schaue mir an, was da ist, und sage ehrlich, was sich lohnt. Diese Website hier ist mein eigenes Redesign.\n\nTypischer Aufwand: 30–60 Stunden, je nachdem wie viel sich ändert.",
       "proof": [
-        { "name": "Diese Website", "desc": "Eigenes Redesign 2026" },
-        { "name": "Casarotex", "desc": "Textil-Unternehmen, Neugestaltung", "href": "https://casarotex.de" }
+        {
+          "name": "Diese Website",
+          "desc": "Eigenes Redesign 2026"
+        },
+        {
+          "name": "Casarotex",
+          "desc": "Textil-Unternehmen, Neugestaltung",
+          "href": "https://casarotex.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir die URL – ich sage Ihnen, was sich lohnt",
+        "href": "kontakt/"
+      }
     },
-
     "result-redesign-technik": {
       "type": "result",
       "title": "Technik veraltet – das Fundament muss stimmen.",
-      "text": "Wenn die Seite auf dem Handy nicht richtig funktioniert oder keine sichere Verbindung hat (kein Schloss-Symbol im Browser), hilft kein neues Design. Erst muss das technische Fundament stimmen. Manchmal reicht ein ueberschaubarer Eingriff, manchmal muss mehr passieren. Ich schaue mir das an und sage Ihnen ehrlich, was noetig ist.",
+      "text": "Wenn die Seite auf dem Handy nicht richtig funktioniert oder keine sichere Verbindung hat (kein Schloss-Symbol im Browser), hilft kein neues Design. Erst muss das technische Fundament stimmen. Manchmal reicht ein überschaubarer Eingriff, manchmal muss mehr passieren. Ich schaue mir das an und sage Ihnen ehrlich, was nötig ist.",
       "proof": [
-        { "name": "Diese Website", "desc": "Lighthouse 100, statisches HTML" }
+        {
+          "name": "Diese Website",
+          "desc": "Lighthouse 100, statisches HTML"
+        }
       ],
-      "cta": { "label": "Wenn Sie Hilfe brauchen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir die URL – ich prüfe das Fundament",
+        "href": "kontakt/"
+      }
     },
-
     "result-redesign-content": {
       "type": "result",
-      "title": "Inhalte veraltet – oft schneller geloest als gedacht.",
-      "text": "Bevor Sie ein Redesign beauftragen: Pruefen Sie, ob neue Texte und Fotos reichen. Stimmt die Leistungsbeschreibung noch? Sind alle Mitarbeiter aktuell? Stimmen die Kontaktdaten? Sind die Fotos aelter als 5 Jahre? Ein Content-Update kostet einen Bruchteil eines Redesigns und bringt oft mehr, weil Besucher Inhalte lesen, nicht Layouts bewundern.",
+      "title": "Inhalte veraltet – oft schneller gelöst als gedacht.",
+      "text": "Bevor Sie ein Redesign beauftragen: Prüfen Sie, ob neue Texte und Fotos reichen. Stimmt die Leistungsbeschreibung noch? Sind alle Mitarbeiter aktuell? Stimmen die Kontaktdaten? Sind die Fotos älter als 5 Jahre? Ein Content-Update kostet einen Bruchteil eines Redesigns und bringt oft mehr, weil Besucher Inhalte lesen, nicht Layouts bewundern.",
       "proof": [
-        { "name": "Casarotex", "desc": "Content-Update statt Relaunch", "href": "https://casarotex.de" }
+        {
+          "name": "Casarotex",
+          "desc": "Content-Update statt Relaunch",
+          "href": "https://casarotex.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir die URL – ich sage Ihnen, was zu tun ist",
+        "href": "kontakt/"
+      }
     },
-
     "result-redesign-komplett": {
       "type": "result",
       "title": "Komplett-Redesign – so planen Sie das sinnvoll.",
-      "text": "Wenn Design, Technik und Inhalte veraltet sind, lohnt sich ein Neuanfang. Aber nicht planlos. Schritt 1: Was muss die neue Website koennen (nicht: haben). Schritt 2: Was funktioniert von der alten Seite (Analytics, meistbesuchte Seiten). Schritt 3: Erst dann Design und Technik entscheiden. Haeufigster Fehler: sofort ein Design beauftragen, bevor klar ist, was die Website leisten soll.",
+      "text": "Wenn Design, Technik und Inhalte veraltet sind, lohnt sich ein Neuanfang. Aber nicht planlos. Schritt 1: Was muss die neue Website können (nicht: haben). Schritt 2: Was funktioniert von der alten Seite (Analytics, meistbesuchte Seiten). Schritt 3: Erst dann Design und Technik entscheiden. Häufigster Fehler: sofort ein Design beauftragen, bevor klar ist, was die Website leisten soll.\n\nTypischer Aufwand: 60–120 Stunden inkl. Konzept und Umsetzung.",
       "proof": [
-        { "name": "Diese Website", "desc": "Eigenes Redesign 2026, komplett neu" },
-        { "name": "Runden Group", "desc": "10+ Websites von Grund auf", "href": "https://runden-group.eu" }
+        {
+          "name": "Diese Website",
+          "desc": "Eigenes Redesign 2026, komplett neu"
+        },
+        {
+          "name": "Runden Group",
+          "desc": "10+ Websites von Grund auf",
+          "href": "https://runden-group.eu"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Lassen Sie uns den Neuanfang planen",
+        "href": "kontakt/"
+      }
     },
-
     "result-performance-wp": {
       "type": "result",
-      "title": "WordPress langsam – das ist loesbar.",
-      "text": "WordPress wird meistens langsam, weil ueber die Jahre zu viele Erweiterungen dazugekommen sind. Jede laedt eigenen Code, und irgendwann merkt man das. Dazu kommt oft ein Theme, das mehr kann als noetig – und dafuer alles ausbremst. Das laesst sich aufraeumen, ohne die Website neu zu bauen. Schicken Sie mir die Adresse, ich schaue mir das an und sage Ihnen, was sich machen laesst.",
+      "title": "WordPress langsam – das ist lösbar.",
+      "text": "WordPress wird meistens langsam, weil über die Jahre zu viele Erweiterungen dazugekommen sind. Jede lädt eigenen Code, und irgendwann merkt man das. Dazu kommt oft ein Theme, das mehr kann als nötig – und dafür alles ausbremst. Das lässt sich aufräumen, ohne die Website neu zu bauen. Schicken Sie mir die Adresse, ich schaue mir das an und sage Ihnen, was sich machen lässt.\n\nTypischer Aufwand: 5–15 Stunden. Oft schneller als gedacht.",
       "proof": [
-        { "name": "20+ WordPress-Sites", "desc": "Laufende Betreuung und Optimierung" }
+        {
+          "name": "20+ WordPress-Sites",
+          "desc": "Laufende Betreuung und Optimierung"
+        }
       ],
-      "cta": { "label": "Wenn Sie allein nicht weiterkommen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir die URL – erste Einschätzung kostenlos",
+        "href": "kontakt/"
+      }
     },
-
     "result-performance": {
       "type": "result",
-      "title": "Langsame Website – meistens schnell geloest.",
-      "text": "Die haeufigsten Ursachen: zu grosse Bilder, zu viele Erweiterungen die ueber die Jahre dazugekommen sind, oder ein Hosting-Anbieter der zu wenig Leistung liefert. Nichts davon ist ein grosses Problem. Ein Entwickler findet die Ursache und loest das meistens in wenigen Stunden. Schicken Sie mir die Adresse Ihrer Website, ich schaue mir das an.",
+      "title": "Langsame Website – meistens schnell gelöst.",
+      "text": "Die häufigsten Ursachen: zu große Bilder, zu viele Erweiterungen die über die Jahre dazugekommen sind, oder ein Hosting-Anbieter der zu wenig Leistung liefert. Nichts davon ist ein großes Problem. Ein Entwickler findet die Ursache und löst das meistens in wenigen Stunden. Schicken Sie mir die Adresse Ihrer Website, ich schaue mir das an.\n\nTypischer Aufwand: 5–15 Stunden für Analyse und Optimierung.",
       "proof": [
-        { "name": "Diese Website", "desc": "Lighthouse 100, statisches HTML" },
-        { "name": "Gerwing Steinwerke", "desc": "Performance-Optimierung im laufenden Betrieb", "href": "https://gerwing.de" }
+        {
+          "name": "Diese Website",
+          "desc": "Lighthouse 100, statisches HTML"
+        },
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Performance-Optimierung im laufenden Betrieb",
+          "href": "https://gerwing.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie allein nicht weiterkommen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir die URL – erste Einschätzung kostenlos",
+        "href": "kontakt/"
+      }
     },
-
     "result-bfsg": {
       "type": "result",
-      "title": "BFSG – was das fuer Sie heisst.",
-      "text": "Seit Juni 2025 Pflicht, Bussgelder bis 100.000 EUR. Die haeufigsten Probleme: Text ist schlecht lesbar, die Seite laesst sich nicht ohne Maus bedienen, Bilder haben keine Beschreibungen fuer sehbehinderte Nutzer. 96 % aller Websites haben noch Fehler. Ich pruefe Ihre Seite, sage Ihnen genau was zu tun ist und setze es um.",
+      "title": "BFSG – was das für Sie heißt.",
+      "text": "Seit Juni 2025 Pflicht, Bußgelder bis 100.000 EUR. Die häufigsten Probleme: Text ist schlecht lesbar, die Seite lässt sich nicht ohne Maus bedienen, Bilder haben keine Beschreibungen für sehbehinderte Nutzer. 96 % aller Websites haben noch Fehler. Ich prüfe Ihre Seite, sage Ihnen genau was zu tun ist und setze es um.\n\nTypischer Aufwand: 10–30 Stunden für Audit und Umsetzung.",
       "proof": [
-        { "name": "Diese Website", "desc": "WCAG 2.1 AA, BFSG-konform" },
-        { "name": "Seniorpartner in School", "desc": "Barrierefreier Wirkungsbericht", "href": "https://wirkungsbericht.seniorpartnerinschool.de" }
+        {
+          "name": "Diese Website",
+          "desc": "WCAG 2.1 AA, BFSG-konform"
+        },
+        {
+          "name": "Seniorpartner in School",
+          "desc": "Barrierefreier Wirkungsbericht",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+        }
       ],
-      "cta": { "label": "Wenn Sie Hilfe brauchen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Lassen Sie uns Ihre Website prüfen",
+        "href": "kontakt/"
+      }
     },
-
     "result-bfsg-fix": {
       "type": "result",
       "title": "BFSG-Fehler beheben – das ist machbar.",
-      "text": "Sie wissen schon, welche Fehler existieren? Dann koennen wir direkt loslegen. Bei einer typischen Website ist das ueberschaubar. Ich behebe die Probleme und dokumentiere alles, damit Sie bei einer Pruefung nachweisen koennen, was gemacht wurde. Ersteinschaetzung kostenlos.",
+      "text": "Sie wissen schon, welche Fehler existieren? Dann können wir direkt loslegen. Bei einer typischen Website ist das überschaubar. Ich behebe die Probleme und dokumentiere alles, damit Sie bei einer Prüfung nachweisen können, was gemacht wurde. Ersteinschätzung kostenlos.\n\nTypischer Aufwand: 5–20 Stunden, je nach Anzahl der Fehler.",
       "proof": [
-        { "name": "Diese Website", "desc": "WCAG 2.1 AA, BFSG-konform" }
+        {
+          "name": "Diese Website",
+          "desc": "WCAG 2.1 AA, BFSG-konform"
+        }
       ],
-      "cta": { "label": "Fehler schicken – ich schaetze den Aufwand", "href": "kontakt/" }
+      "cta": {
+        "label": "Fehler schicken – ich schätze den Aufwand",
+        "href": "kontakt/"
+      }
     },
-
     "result-seo-google": {
       "type": "result",
       "title": "Google-Sichtbarkeit – was 2026 noch funktioniert.",
-      "text": "Die Grundlagen aendern sich nicht: klare Seitentitel, schnelle Ladezeit, funktioniert auf dem Handy. Was sich geaendert hat: Googles KI-Zusammenfassungen druecken klassische Ergebnisse nach unten. Wer dort noch sichtbar sein will, braucht eine technisch saubere Website. Es gibt kostenlose Tools von Google selbst, die zeigen, fuer welche Begriffe Sie gefunden werden und wo Klicks verloren gehen. Ich richte das ein und erklaere Ihnen, was die Zahlen bedeuten.",
+      "text": "Die Grundlagen ändern sich nicht: klare Seitentitel, schnelle Ladezeit, funktioniert auf dem Handy. Was sich geändert hat: Googles KI-Zusammenfassungen drücken klassische Ergebnisse nach unten. Wer dort noch sichtbar sein will, braucht eine technisch saubere Website. Es gibt kostenlose Tools von Google selbst, die zeigen, für welche Begriffe Sie gefunden werden und wo Klicks verloren gehen. Ich richte das ein und erkläre Ihnen, was die Zahlen bedeuten.",
       "proof": [
-        { "name": "Diese Website", "desc": "SEO + GEO optimiert" }
+        {
+          "name": "Diese Website",
+          "desc": "SEO + GEO optimiert"
+        }
       ],
-      "cta": { "label": "Wenn Sie Hilfe brauchen – reden wir", "href": "kontakt/" }
+      "cta": {
+        "label": "Schicken Sie mir die URL – ich richte die Tools ein",
+        "href": "kontakt/"
+      }
     },
-
     "result-seo-ki": {
       "type": "result",
-      "title": "KI-Sichtbarkeit – darum kuemmern sich noch wenige.",
-      "text": "Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein Problem, das kein klassisches SEO loest. KI-Systeme brauchen eine andere Art von Struktur auf Ihrer Website, damit sie Ihr Unternehmen korrekt erfassen und zitieren. Das ist technische Arbeit, die ich in jedes Projekt einbaue. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.",
+      "title": "KI-Sichtbarkeit – darum kümmern sich noch wenige.",
+      "text": "Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein Problem, das kein klassisches SEO löst. KI-Systeme brauchen eine andere Art von Struktur auf Ihrer Website, damit sie Ihr Unternehmen korrekt erfassen und zitieren. Das ist technische Arbeit, die ich in jedes Projekt einbaue. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.",
       "proof": [
-        { "name": "Diese Website", "desc": "GEO-optimiert, maschinenlesbar" }
+        {
+          "name": "Diese Website",
+          "desc": "GEO-optimiert, maschinenlesbar"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" },
-      "ctaSecondary": { "label": "Daten und Quellen", "href": "leistungen/ki-sichtbarkeit.html" }
+      "cta": {
+        "label": "Machen Sie den ChatGPT-Test – und dann reden wir",
+        "href": "kontakt/"
+      },
+      "ctaSecondary": {
+        "label": "Daten und Quellen",
+        "href": "leistungen/ki-sichtbarkeit.html"
+      }
     },
-
     "result-seo": {
       "type": "result",
-      "title": "SEO vs. GEO – was sich veraendert hat.",
-      "text": "Klassisches SEO funktioniert noch. Aber: 73 % der B2B-Einkaeufer recherchieren inzwischen mit ChatGPT, und 61 % weniger Klicks landen auf klassischen Google-Ergebnissen seit AI Overviews. Ihre Website muss nicht nur fuer Google lesbar sein, sondern fuer jedes KI-System. Schnelltest: Fragen Sie ChatGPT nach Ihrem Unternehmen. Wenn die Antwort duenn oder falsch ist, haben Sie ein GEO-Problem.",
+      "title": "SEO vs. GEO – was sich verändert hat.",
+      "text": "Klassisches SEO funktioniert noch. Aber: 73 % der B2B-Einkäufer recherchieren inzwischen mit ChatGPT, und 61 % weniger Klicks landen auf klassischen Google-Ergebnissen seit AI Overviews. Ihre Website muss nicht nur für Google lesbar sein, sondern für jedes KI-System. Schnelltest: Fragen Sie ChatGPT nach Ihrem Unternehmen. Wenn die Antwort dünn oder falsch ist, haben Sie ein GEO-Problem.",
       "proof": [
-        { "name": "Diese Website", "desc": "GEO-optimiert, maschinenlesbar" }
+        {
+          "name": "Diese Website",
+          "desc": "GEO-optimiert, maschinenlesbar"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" },
-      "ctaSecondary": { "label": "Mehr zu KI-Sichtbarkeit", "href": "leistungen/ki-sichtbarkeit.html" }
+      "cta": {
+        "label": "Schicken Sie mir die URL – ich prüfe Google und KI",
+        "href": "kontakt/"
+      },
+      "ctaSecondary": {
+        "label": "Mehr zu KI-Sichtbarkeit",
+        "href": "leistungen/ki-sichtbarkeit.html"
+      }
     },
-
     "result-technik-wp": {
       "type": "result",
       "title": "WordPress-Problem – ich kenne das System von innen.",
-      "text": "WordPress-Probleme haben meistens mit Erweiterungen zu tun, die sich gegenseitig in die Quere kommen. Oder mit einem Update, das etwas kaputt gemacht hat. Das laesst sich systematisch eingrenzen und loesen. Ich habe beim Hersteller von YOOtheme gearbeitet und betreue ueber 20 WordPress-Websites. Schicken Sie mir eine Beschreibung des Problems, ich gebe Ihnen eine erste Einschaetzung.",
+      "text": "WordPress-Probleme haben meistens mit Erweiterungen zu tun, die sich gegenseitig in die Qüre kommen. Oder mit einem Update, das etwas kaputt gemacht hat. Das lässt sich systematisch eingrenzen und lösen. Ich habe beim Hersteller von YOOtheme gearbeitet und betreue über 20 WordPress-Websites. Schicken Sie mir eine Beschreibung des Problems, ich gebe Ihnen eine erste Einschätzung.",
       "proof": [
-        { "name": "YOOtheme", "desc": "Ehemaliger Support Manager", "href": "https://yootheme.com" },
-        { "name": "20+ WordPress-Sites", "desc": "Laufende Betreuung" }
+        {
+          "name": "YOOtheme",
+          "desc": "Ehemaliger Support Manager",
+          "href": "https://yootheme.com"
+        },
+        {
+          "name": "20+ WordPress-Sites",
+          "desc": "Laufende Betreuung"
+        }
       ],
-      "cta": { "label": "Problem schildern – erste Einschaetzung kostenlos", "href": "kontakt/" }
+      "cta": {
+        "label": "Problem schildern – erste Einschätzung kostenlos",
+        "href": "kontakt/"
+      }
     },
-
     "result-technik-woo": {
       "type": "result",
       "title": "WooCommerce-Problem – da geht es oft um Geld.",
       "text": "Wenn der Shop Probleme hat, betrifft das meistens direkt Ihren Umsatz: Bestellungen gehen nicht durch, Preise stimmen nicht, der Zahlungsanbieter meldet Fehler. Das ist nichts, womit man experimentieren sollte, solange der Shop live ist. Schicken Sie mir eine Beschreibung, was passiert. Ich kenne WooCommerce von innen und finde das Problem.",
       "proof": [
-        { "name": "Gerwing Steinwerke", "desc": "WooCommerce, laufender Betrieb", "href": "https://gerwing.de" }
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "WooCommerce, laufender Betrieb",
+          "href": "https://gerwing.de"
+        }
       ],
-      "cta": { "label": "Problem schildern – erste Einschaetzung kostenlos", "href": "kontakt/" }
+      "cta": {
+        "label": "Problem schildern – Shops haben Priorität",
+        "href": "kontakt/"
+      }
     },
-
     "result-technik": {
       "type": "result",
-      "title": "Irgendwas ist kaputt – das klaeren wir.",
-      "text": "Wenn Sie nicht genau wissen, was los ist: kein Problem. Beschreiben Sie mir, was passiert (oder nicht passiert), seit wann, und auf welcher Seite. Je genauer, desto schneller bin ich. WordPress und WooCommerce kenne ich von innen, ich habe beim Hersteller gearbeitet. Erste Einschaetzung kostenlos.",
+      "title": "Irgendwas ist kaputt – das klären wir.",
+      "text": "Wenn Sie nicht genau wissen, was los ist: kein Problem. Beschreiben Sie mir, was passiert (oder nicht passiert), seit wann, und auf welcher Seite. Je genauer, desto schneller bin ich. WordPress und WooCommerce kenne ich von innen, ich habe beim Hersteller gearbeitet. Erste Einschätzung kostenlos.",
       "proof": [
-        { "name": "YOOtheme", "desc": "Ehemaliger Support Manager", "href": "https://yootheme.com" },
-        { "name": "20+ Websites", "desc": "Laufende Betreuung seit Jahren" }
+        {
+          "name": "YOOtheme",
+          "desc": "Ehemaliger Support Manager",
+          "href": "https://yootheme.com"
+        },
+        {
+          "name": "20+ Websites",
+          "desc": "Laufende Betreuung seit Jahren"
+        }
       ],
-      "cta": { "label": "Problem schildern – erste Einschaetzung kostenlos", "href": "kontakt/" }
+      "cta": {
+        "label": "Problem schildern – erste Einschätzung kostenlos",
+        "href": "kontakt/"
+      }
     },
-
     "result-technik-sicherheit": {
       "type": "result",
       "title": "Gehackt – jetzt schnell handeln.",
-      "text": "Wenn Ihre Website gehackt wurde oder Malware enthaelt: nicht selbst daran herumreparieren. Informieren Sie Ihren Hosting-Anbieter und melden Sie sich bei mir. Ich finde die Sicherheitsluecke, raeume auf und sichere die Seite ab, damit das nicht nochmal passiert.",
+      "text": "Wenn Ihre Website gehackt wurde oder Malware enthält: nicht selbst daran herumreparieren. Informieren Sie Ihren Hosting-Anbieter und melden Sie sich bei mir. Ich finde die Sicherheitslücke, räume auf und sichere die Seite ab, damit das nicht nochmal passiert.",
       "proof": [
-        { "name": "YOOtheme", "desc": "Ehemaliger Support Manager", "href": "https://yootheme.com" },
-        { "name": "20+ Websites", "desc": "Laufende Betreuung und Sicherheit" }
+        {
+          "name": "YOOtheme",
+          "desc": "Ehemaliger Support Manager",
+          "href": "https://yootheme.com"
+        },
+        {
+          "name": "20+ Websites",
+          "desc": "Laufende Betreuung und Sicherheit"
+        }
       ],
-      "cta": { "label": "Sofort melden", "href": "kontakt/" }
+      "cta": {
+        "label": "Sofort melden – ich reagiere schnell",
+        "href": "kontakt/"
+      }
     },
-
     "result-betreuung-wp-basis": {
       "type": "result",
-      "title": "WordPress Basis – laeuft im Hintergrund.",
-      "text": "Updates, Backups, Sicherheits-Monitoring. Ich update manuell, pruefe danach und rolle zurueck wenn noetig. Sie merken nichts davon, und genau das ist der Punkt. Was viele nicht wissen: WordPress-Updates ohne Kontrolle koennen die Seite zerschiessen. Ein Plugin-Update bricht ein anderes, ein Theme-Update aendert das Layout. Deshalb macht das jemand, der die Seite kennt.",
+      "title": "WordPress Basis – läuft im Hintergrund.",
+      "text": "Updates, Backups, Sicherheits-Monitoring. Ich update manuell, prüfe danach und rolle zurück wenn nötig. Sie merken nichts davon, und genau das ist der Punkt. Was viele nicht wissen: WordPress-Updates ohne Kontrolle können die Seite zerschießen. Ein Plugin-Update bricht ein anderes, ein Theme-Update ändert das Layout. Deshalb macht das jemand, der die Seite kennt.\n\nMonatlicher Aufwand: ab 15 EUR/Monat für Basis-Sicherheit.",
       "proof": [
-        { "name": "Dark Fortress", "desc": "Betreuung seit 2018", "href": "https://darkfortress.org" },
-        { "name": "Woodshed Studio", "desc": "Betreuung seit 2018", "href": "https://woodshedstudio.de" }
+        {
+          "name": "Dark Fortress",
+          "desc": "Betreuung seit 2018",
+          "href": "https://darkfortress.org"
+        },
+        {
+          "name": "Woodshed Studio",
+          "desc": "Betreuung seit 2018",
+          "href": "https://woodshedstudio.de"
+        }
       ],
-      "cta": { "label": "Lassen Sie uns reden", "href": "kontakt/" }
+      "cta": {
+        "label": "Lassen Sie uns über Ihre Website sprechen",
+        "href": "kontakt/"
+      }
     },
-
     "result-betreuung-wp-standard": {
       "type": "result",
-      "title": "WordPress Standard – fuer Websites, die leben.",
-      "text": "Alles aus der Basis, plus regelmaessige Aenderungen und neue Inhalte. Sie schicken eine Mail, ich setze es um. Nicht jedes Mal erklaeren, wo was ist. Nicht jedes Mal das CMS neu verstehen. Ich betreue manche Kunden seit 2018. Kurze Wege, kein Ticket-System.",
+      "title": "WordPress Standard – für Websites, die leben.",
+      "text": "Alles aus der Basis, plus regelmäßige Änderungen und neue Inhalte. Sie schicken eine Mail, ich setze es um. Nicht jedes Mal erklären, wo was ist. Nicht jedes Mal das CMS neu verstehen. Ich betreue manche Kunden seit 2018. Kurze Wege, kein Ticket-System.\n\nMonatlicher Aufwand: 80–200 EUR/Monat, je nach Änderungsfrequenz.",
       "proof": [
-        { "name": "Dark Fortress", "desc": "Band-Website, Betreuung seit 2018", "href": "https://darkfortress.org" },
-        { "name": "Woodshed Studio", "desc": "Tonstudio, Betreuung seit 2018", "href": "https://woodshedstudio.de" }
+        {
+          "name": "Dark Fortress",
+          "desc": "Band-Website, Betreuung seit 2018",
+          "href": "https://darkfortress.org"
+        },
+        {
+          "name": "Woodshed Studio",
+          "desc": "Tonstudio, Betreuung seit 2018",
+          "href": "https://woodshedstudio.de"
+        }
       ],
-      "cta": { "label": "Lassen Sie uns reden", "href": "kontakt/" }
+      "cta": {
+        "label": "Lassen Sie uns die Zusammenarbeit besprechen",
+        "href": "kontakt/"
+      }
     },
-
     "result-betreuung-woo-basis": {
       "type": "result",
       "title": "WooCommerce Basis – Updates und Monitoring.",
-      "text": "Updates, Backups, Sicherheit – wie bei WordPress, aber mit Blick auf Shop-spezifische Dinge: Zahlungsanbieter-Updates, WooCommerce-Kompatibilitaet, Bestellprozess-Check nach Updates. Bei Shops ist das wichtiger als bei normalen Websites, weil ein kaputtes Update direkt Umsatz kostet.",
+      "text": "Updates, Backups, Sicherheit – wie bei WordPress, aber mit Blick auf Shop-spezifische Dinge: Zahlungsanbieter-Updates, WooCommerce-Kompatibilität, Bestellprozess-Check nach Updates. Bei Shops ist das wichtiger als bei normalen Websites, weil ein kaputtes Update direkt Umsatz kostet.\n\nMonatlicher Aufwand: ab 40 EUR/Monat für Shop-Monitoring.",
       "proof": [
-        { "name": "Gerwing Steinwerke", "desc": "WooCommerce-Betreuung seit 2023", "href": "https://gerwing.de" }
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "WooCommerce-Betreuung seit 2023",
+          "href": "https://gerwing.de"
+        }
       ],
-      "cta": { "label": "Lassen Sie uns reden", "href": "kontakt/" }
+      "cta": {
+        "label": "Lassen Sie uns über Ihren Shop sprechen",
+        "href": "kontakt/"
+      }
     },
-
     "result-betreuung-woo-standard": {
       "type": "result",
       "title": "WooCommerce Standard – laufende Hilfe.",
-      "text": "Updates plus regelmaessige Aenderungen: neue Produkte, Preisanpassungen, Aktionen, Layout-Tweaks. Dazu: Bestellmonitoring, Performance-Checks bei wachsendem Katalog. Ich kenne Ihren Shop und reagiere schnell wenn was klemmt.",
+      "text": "Updates plus regelmäßige Änderungen: neue Produkte, Preisanpassungen, Aktionen, Layout-Tweaks. Dazu: Bestellmonitoring, Performance-Checks bei wachsendem Katalog. Ich kenne Ihren Shop und reagiere schnell wenn was klemmt.\n\nMonatlicher Aufwand: 100–250 EUR/Monat inkl. laufender Hilfe.",
       "proof": [
-        { "name": "Gerwing Steinwerke", "desc": "WooCommerce-Retainer seit 2023", "href": "https://gerwing.de" }
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "WooCommerce-Retainer seit 2023",
+          "href": "https://gerwing.de"
+        }
       ],
-      "cta": { "label": "Lassen Sie uns reden", "href": "kontakt/" }
+      "cta": {
+        "label": "Lassen Sie uns die Zusammenarbeit besprechen",
+        "href": "kontakt/"
+      }
     },
-
     "result-betreuung-statisch": {
       "type": "result",
       "title": "Statische Website – ehrlich: da brauchen Sie fast nichts.",
-      "text": "Kein CMS, keine Datenbank, keine Plugins, keine Updates. Statische Websites sind wartungsarm per Definition. SSL-Zertifikat, Domain-Verlaengerung, fertig. Wenn Sie auf GitHub Pages oder Netlify hosten, ist das kostenlos. Was Sie trotzdem brauchen koennten: jemanden, der Aenderungen am Code macht, wenn sich Inhalte aendern.",
+      "text": "Kein CMS, keine Datenbank, keine Plugins, keine Updates. Statische Websites sind wartungsarm per Definition. SSL-Zertifikat, Domain-Verlängerung, fertig. Wenn Sie auf GitHub Pages oder Netlify hosten, ist das kostenlos. Was Sie trotzdem brauchen könnten: jemanden, der Änderungen am Code macht, wenn sich Inhalte ändern.\n\nÄnderungen nach Aufwand. Kein laufender Vertrag nötig.",
       "proof": [
-        { "name": "Diese Website", "desc": "Statisch, GitHub Pages, kostenloses Hosting" }
+        {
+          "name": "Diese Website",
+          "desc": "Statisch, GitHub Pages, kostenloses Hosting"
+        }
       ],
-      "cta": { "label": "Lassen Sie uns reden", "href": "kontakt/" }
+      "cta": {
+        "label": "Bei Bedarf melden – kein Vertrag nötig",
+        "href": "kontakt/"
+      }
     },
-
     "result-betreuung-premium": {
       "type": "result",
-      "title": "Premium – wenn die Website geschaeftskritisch ist.",
-      "text": "Manche Unternehmen brauchen keinen Betreuungsvertrag, sondern einen eigenen Entwickler. Nur ohne Sozialabgaben, Urlaub und Buerokosten. Premium heisst: ich bin Ihr fester Ansprechpartner fuer Entwicklung, Design, Strategie und Compliance. Priority-Support, Retainer, kurze Wege. So arbeite ich mit Gerwing Steinwerke – alleinige technische Verantwortung seit 2023. Das lohnt sich, wenn Ihre Website direkt Umsatz bringt oder wenn Ausfallzeiten Geld kosten.",
+      "title": "Premium – wenn die Website geschäftskritisch ist.",
+      "text": "Manche Unternehmen brauchen keinen Betreuungsvertrag, sondern einen eigenen Entwickler. Nur ohne Sozialabgaben, Urlaub und Bürokosten. Premium heißt: ich bin Ihr fester Ansprechpartner für Entwicklung, Design, Strategie und Compliance. Priority-Support, Retainer, kurze Wege. So arbeite ich mit Gerwing Steinwerke – alleinige technische Verantwortung seit 2023. Das lohnt sich, wenn Ihre Website direkt Umsatz bringt oder wenn Ausfallzeiten Geld kosten.\n\nMonatlicher Aufwand: 400–800 EUR/Monat. Eigener Entwickler ohne Fixkosten.",
       "proof": [
-        { "name": "Gerwing Steinwerke", "desc": "Retainer, alleinige Verantwortung seit 2023", "href": "https://gerwing.de" }
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Retainer, alleinige Verantwortung seit 2023",
+          "href": "https://gerwing.de"
+        }
       ],
-      "cta": { "label": "Lassen Sie uns reden", "href": "kontakt/" }
+      "cta": {
+        "label": "Lassen Sie uns über den Retainer sprechen",
+        "href": "kontakt/"
+      }
     },
-
     "result-geo": {
       "type": "result",
-      "title": "So pruefen Sie Ihre KI-Sichtbarkeit selbst.",
-      "text": "Einfacher Test: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein Problem. Was Sie selbst tun koennen: klare, faktische Texte auf Ihrer Website. Konkrete Aussagen statt Marketing-Phrasen. Was technische Arbeit braucht: eine Struktur auf Ihrer Website, die KI-Systeme lesen und zuordnen koennen. Das baue ich in jedes Projekt ein. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.",
+      "title": "So prüfen Sie Ihre KI-Sichtbarkeit selbst.",
+      "text": "Einfacher Test: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein Problem. Was Sie selbst tun können: klare, faktische Texte auf Ihrer Website. Konkrete Aussagen statt Marketing-Phrasen. Was technische Arbeit braucht: eine Struktur auf Ihrer Website, die KI-Systeme lesen und zuordnen können. Das baue ich in jedes Projekt ein. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.\n\nGEO-Optimierung ist in jedem Projekt enthalten, ohne Aufpreis.",
       "proof": [
-        { "name": "Diese Website", "desc": "GEO-optimiert, maschinenlesbar" }
+        {
+          "name": "Diese Website",
+          "desc": "GEO-optimiert, maschinenlesbar"
+        }
       ],
-      "cta": { "label": "Wenn Sie das nicht allein machen wollen – reden wir", "href": "kontakt/" },
-      "ctaSecondary": { "label": "Daten und Quellen", "href": "leistungen/ki-sichtbarkeit.html" }
+      "cta": {
+        "label": "Machen Sie den ChatGPT-Test – und dann reden wir",
+        "href": "kontakt/"
+      },
+      "ctaSecondary": {
+        "label": "Daten und Quellen",
+        "href": "leistungen/ki-sichtbarkeit.html"
+      }
     },
-
     "result-geo-audit": {
       "type": "result",
-      "title": "Audit – was ich konkret pruefe.",
-      "text": "Ich pruefe, wie gut KI-Systeme Ihre Website verstehen. Findet ChatGPT Ihr Unternehmen, und stimmt das, was es sagt? Hat Ihre Website die technische Struktur, die KI-Systeme brauchen? Werden KI-Crawler ausgesperrt? Sie bekommen einen konkreten Bericht mit Prioritaeten – was sofort gemacht werden sollte und was warten kann. Erstgespraech kostenlos.",
-      "proof": [],
-      "cta": { "label": "Audit anfragen", "href": "kontakt/" }
+      "title": "Audit – was ich konkret prüfe.",
+      "text": "Ich prüfe, wie gut KI-Systeme Ihre Website verstehen. Findet ChatGPT Ihr Unternehmen, und stimmt das, was es sagt? Hat Ihre Website die technische Struktur, die KI-Systeme brauchen? Werden KI-Crawler ausgesperrt? Sie bekommen einen konkreten Bericht mit Prioritäten – was sofort gemacht werden sollte und was warten kann. Erstgespräch kostenlos.\n\nAudit-Aufwand: 5–10 Stunden. Erstgespräch kostenlos.",
+      "proof": [
+        {
+          "name": "Diese Website",
+          "desc": "GEO-optimiert, maschinenlesbar"
+        },
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Strukturierte Daten, Schema.org",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Audit anfragen – Erstgespräch kostenlos",
+        "href": "kontakt/"
+      }
     },
-
     "result-vergleich-kontakt": {
       "type": "result",
       "title": "Sie haben die richtigen Fragen gestellt.",
-      "text": "Die meisten Leute fragen nur nach dem Preis. Sie haben nach dem Wie gefragt. Meine Antworten auf die fuenf Freelancer-Fragen: 1. Live-Websites: 20+ Stueck, schauen Sie sich die Referenzen unten an. 2. Uebergabe: Alles dokumentiert, Standard-Technologien, kein proprietaerer Code. 3. BFSG: in jedem Projekt enthalten. 4. Reaktionszeit: 24 Stunden, bei Premium am selben Tag. 5. Nacharbeit: Aufwand vorher geschaetzt, ich halte mich dran.",
+      "text": "Die meisten Leute fragen nur nach dem Preis. Sie haben nach dem Wie gefragt. Meine Antworten auf die fünf Freelancer-Fragen: 1. Live-Websites: 20+ Stück, schauen Sie sich die Referenzen unten an. 2. Übergabe: Alles dokumentiert, Standard-Technologien, kein proprietärer Code. 3. BFSG: in jedem Projekt enthalten. 4. Reaktionszeit: 24 Stunden, bei Premium am selben Tag. 5. Nacharbeit: Aufwand vorher geschätzt, ich halte mich dran.",
       "proof": [
-        { "name": "Gerwing Steinwerke", "desc": "Retainer seit 2023", "href": "https://gerwing.de" },
-        { "name": "Runden Group", "desc": "10+ Websites, 2 Jahre", "href": "https://runden-group.eu" },
-        { "name": "Scheja & Partner", "desc": "Kanzlei, 30+ Anwaelte", "href": "https://scheja-partners.de" }
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Retainer seit 2023",
+          "href": "https://gerwing.de"
+        },
+        {
+          "name": "Runden Group",
+          "desc": "10+ Websites, 2 Jahre",
+          "href": "https://runden-group.eu"
+        },
+        {
+          "name": "Scheja & Partner",
+          "desc": "Kanzlei, 30+ Anwälte",
+          "href": "https://scheja-partners.de"
+        }
       ],
-      "cta": { "label": "Lassen Sie uns reden", "href": "kontakt/" }
+      "cta": {
+        "label": "Stellen Sie mir Ihre fünf Fragen – ich antworte ehrlich",
+        "href": "kontakt/"
+      }
     }
   }
 }
