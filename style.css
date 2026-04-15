@@ -2519,6 +2519,17 @@ a.funnel-proof-link .funnel-proof-name {
   font-weight: 600;
 }
 
+/* Contact methods inside editorial main column — stack vertically */
+.editorial-main .contact-methods {
+  grid-template-columns: 1fr;
+}
+
+/* Horizontal stats bar for full-width pages (no sidebar) */
+.editorial-stats--row {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 680px;
+}
+
 /* Editorial responsive */
 @media (max-width: 900px) {
   .editorial-layout {
@@ -2541,6 +2552,10 @@ a.funnel-proof-link .funnel-proof-name {
 }
 
 @media (max-width: 600px) {
+  .editorial-stats--row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .funnel {
     padding: 48px var(--space-md) var(--space-xl);
   }
