@@ -104,7 +104,7 @@
           "next": "neue-cms"
         },
         {
-          "label": "Large – corporate group, multilingual",
+          "label": "Large – multiple related websites, multilingual",
           "next": "result-website-gross"
         }
       ]
@@ -424,7 +424,7 @@
     "geo-info": {
       "type": "info",
       "text": "Short version: 73% of B2B buyers research with ChatGPT. 61% fewer clicks on classic Google results since AI Overviews. If AI systems can't understand your website, you don't exist for these users.",
-      "detail": "I structure websites so that AI systems can correctly capture and cite them. I do this in every project, at no extra charge.",
+      "detail": "I structure websites so that AI systems can correctly capture and cite them. I do this in every project. Not because it's free, but because it's pointless to leave it out.",
       "options": [
         {
           "label": "Sounds relevant – tell me more",
@@ -675,13 +675,13 @@
     },
     "result-website-gross": {
       "type": "result",
-      "title": "Corporate group – the most common problem isn't the technology.",
-      "text": "With 10+ subsidiaries, web projects rarely fail because of WordPress or design. They fail because of coordination. Every department wants something different, nobody has the overview. The solution is simple: one person who knows all websites and has all contacts. No agency team where you have to explain who needs what every time. I did this for two years for the Runden Group – 10+ websites, sole developer, and it worked because everything went through one person.\n\nEffort depends on scope. Comparable projects: 100–300 hours.",
+      "title": "Multiple websites – the most common problem isn't the technology.",
+      "text": "When several websites belong together, projects rarely fail because of WordPress or design. They fail because of coordination. Every department wants something different, nobody has the overview. The solution is simple: one person who knows all websites and has all contacts. No agency team where you have to explain who needs what every time. I've managed projects like this for years – multiple websites, one person, and it worked because everything went through me.\n\nEffort depends on scope. Comparable projects: 100–300 hours.",
       "proof": [
         {
-          "name": "Runden Group",
-          "desc": "10+ websites, 2 years as sole developer",
-          "href": "https://runden-group.eu"
+          "name": "Gerwing Steinwerke",
+          "desc": "Complex WordPress project, ongoing retainer",
+          "href": "https://gerwing.de"
         },
         {
           "name": "Scheja & Partner",
@@ -892,9 +892,9 @@
           "desc": "Own redesign 2026, from scratch"
         },
         {
-          "name": "Runden Group",
-          "desc": "10+ websites from the ground up",
-          "href": "https://runden-group.eu"
+          "name": "Gerwing Steinwerke",
+          "desc": "Complete WordPress project",
+          "href": "https://gerwing.de"
         }
       ],
       "cta": {
@@ -1102,14 +1102,14 @@
       "text": "WordPress updates without oversight can break your site. A plugin update breaks another, a theme update changes the layout. That's why I update manually, check afterwards and roll back if needed. Basic (from EUR 15/month): updates, backups, security monitoring. You notice nothing, and that's exactly the point. Standard (from EUR 80/month): plus small changes, new content. You send an email, I implement it. What you actually need depends on how often your site changes.\n\nBasic from EUR 15/month. Standard from EUR 80/month.",
       "proof": [
         {
-          "name": "Dark Fortress",
-          "desc": "Maintained since 2018",
-          "href": "https://darkfortress.org"
+          "name": "Gerwing Steinwerke",
+          "desc": "WordPress retainer since 2023",
+          "href": "https://gerwing.de"
         },
         {
-          "name": "Woodshed Studio",
-          "desc": "Maintained since 2018",
-          "href": "https://woodshedstudio.de"
+          "name": "Scheja & Partner",
+          "desc": "Ongoing maintenance, multilingual",
+          "href": "https://scheja-partners.de"
         }
       ],
       "cta": {
@@ -1167,7 +1167,7 @@
     "result-geo": {
       "type": "result",
       "title": "How to check your AI visibility yourself.",
-      "text": "Quick test: Open ChatGPT and ask about your company. Is the answer correct and complete? If not, you have a problem. What you can do without a developer: write clear, factual text. No marketing phrases, but concrete statements. 'We manufacture concrete paving stones in Osnabrueck since 1968' – instead of: 'We are your partner for premium outdoor design.' What needs technical work: Schema.org, JSON-LD, machine-readable endpoints. This website here is the example – ask ChatGPT about me.\n\nGEO optimisation is included in every project, at no extra charge.",
+      "text": "Quick test: Open ChatGPT and ask about your company. Is the answer correct and complete? If not, you have a problem. What you can do without a developer: write clear, factual text. No marketing phrases, but concrete statements. 'We manufacture concrete paving stones in Osnabrueck since 1968' – instead of: 'We are your partner for premium outdoor design.' What needs technical work: Schema.org, JSON-LD, machine-readable endpoints. This website here is the example – ask ChatGPT about me.\n\nGEO optimisation is included in every project. Not because it's free, but because it's pointless to leave it out.",
       "proof": [
         {
           "name": "This website",
@@ -1186,7 +1186,7 @@
     "result-geo-audit": {
       "type": "result",
       "title": "Audit – what I specifically check.",
-      "text": "First: Does ChatGPT find your company, and is what it says correct? Second: Is structured data present (Schema.org, JSON-LD)? Third: Is your content machine-readable or hidden behind JavaScript? Fourth: Do you have a robots.txt that doesn't block AI crawlers? You get a concrete report with priorities – what should be fixed immediately and what can wait. Initial consultation free.\n\nAudit effort: 5–10 hours. Initial consultation free.",
+      "text": "First: Does ChatGPT find your company, and is what it says correct? Second: Is structured data present (Schema.org, JSON-LD)? Third: Is your content machine-readable or hidden behind JavaScript? Fourth: Do you have a robots.txt that doesn't block AI crawlers? You get a concrete report with priorities – what should be fixed immediately and what can wait.\n\nAudit effort: 5–10 hours. 15 minutes on the phone to get started.",
       "proof": [
         {
           "name": "This website",
@@ -1199,7 +1199,7 @@
         }
       ],
       "cta": {
-        "label": "Request an audit – initial consultation free",
+        "label": "Request an audit – 15 minutes is all it takes",
         "href": "../kontakt/"
       }
     },
@@ -1214,9 +1214,9 @@
           "href": "https://gerwing.de"
         },
         {
-          "name": "Runden Group",
-          "desc": "10+ websites, 2 years",
-          "href": "https://runden-group.eu"
+          "name": "Seniorpartner in School",
+          "desc": "Interactive impact report",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
         },
         {
           "name": "Scheja & Partner",

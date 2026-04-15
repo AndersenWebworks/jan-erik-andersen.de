@@ -1,70 +1,38 @@
-# Jan-Erik Andersen - Webentwicklung & Digitale Beratung
+# Jan-Erik Andersen — Freiberuflicher Webentwickler
 
-> Freiberuflicher Webentwickler und digitaler Berater mit 25+ Jahren Erfahrung. Konzept, Design, Entwicklung, KI-Sichtbarkeit und laufende Betreuung aus einer Hand. Ein Ansprechpartner statt fuenf Dienstleister. 50+ Projekte, 14+ Branchen, 20+ live Websites.
+Websites, Shops, digitale Tools und KI-Sichtbarkeit. WordPress, WooCommerce, statisches HTML. Seit 1998 im Web, seit 2010 selbstständig. Deutschlandweit remote, Plau am See.
 
 ## Leistungen
+- Neu bauen: Firmenwebsites, Online-Shops, Portale und Tools
+- Besser machen: Redesign, Performance, Barrierefreiheit (BFSG)
+- Am Laufen halten: Betreuung in drei Stufen (Basis ab 15 EUR/Monat, Standard ab 80 EUR/Monat, Premium ab 400 EUR/Monat)
 
-### 1. Sichtbar werden
-- Website-Neubau und Redesign (WordPress, WooCommerce, YOOtheme Pro, statisches HTML)
-- KI-Sichtbarkeit (GEO/AVO) - in jedes Projekt eingebaut, kein Aufpreis
-- BFSG-Barrierefreiheit (WCAG 2.1 AA)
-- Preisrahmen: 2.500-8.000 EUR
+## KI-Sichtbarkeit (GEO)
+Jedes Projekt wird für KI-Systeme optimiert: strukturierte Daten, Schema.org JSON-LD, maschinenlesbare Endpoints (/ai/), Robots-Konfiguration für KI-Crawler. Wissenschaftlich belegt: +37 % Visibility (Aggarwal et al., 2024).
 
-### 2. Besser arbeiten
-- Backend-Tools und B2B-Portale
-- Produktkataloge und Bestellsysteme
-- WooCommerce B2B und B2C
-- Digitale Roadmaps
-- Preisrahmen: ab 5.000 EUR
+## Referenzen
+- Gerwing Steinwerke (B2B-Industrie, WooCommerce, laufender Retainer) — gerwing.de
+- Scheja & Partner (Datenschutzrecht, 30 Anwälte, Software-Produkte) — scheja-partners.de
+- Seniorpartner in School e.V. (Wirkungsbericht, interaktive SVG-Karte, Pro Bono) — wirkungsbericht.seniorpartnerinschool.de
+- Runden Group (Firmengruppe, Kreislaufwirtschaft, mehrere Websites) — runden-group.eu
+- 20+ betreute Live-Websites, 14+ Branchen
 
-### 3. Abgesichert bleiben
-- Monatliche Betreuung und Retainer (15-800 EUR/Monat)
-- DSGVO-Compliance, BFSG, E-Rechnung
-- Updates, Backups, Sicherheit, QA
-- Manche Kunden seit 2018
+## Technologien
+WordPress, WooCommerce, YOOtheme Pro, statisches HTML, Vanilla JS, Schema.org, JSON-LD
 
-## Referenzen (Auswahl)
-
-- **Gerwing Steinwerke** - WooCommerce-Shop, B2B-Haendlerportal, Steinmuster-Tracking. Alleinige technische Verantwortung seit 2023. Retainer.
-- **Runden Group** - Gesamter Web-Auftritt einer Firmengruppe (10+ Gesellschaften). Custom Plugins, Kundenportal, zweisprachig. Zwei Jahre einziger Entwickler.
-- **Scheja & Partners** - Datenschutzkanzlei Bonn, 30+ Anwaelte. Software-Produktseiten, NIS2-Check, DSGVO-Tools, mehrsprachig.
-- **Seniorpartner in School e.V.** - Digitaler Wirkungsbericht 2025. Interaktive SVG-Deutschlandkarte, Infografiken. Statisches HTML. Pro Bono.
-- **Streunerhilfe Plau** - Tierschutzverein. Spenden-Infrastruktur, WooCommerce-Shop, Adoptions-Listings. Pro Bono.
-- **The New Insider** - Stadtmagazin Osnabrueck. YOOtheme Pro, langjaerige Betreuung.
-- **Dark Fortress / Woodshed Studio / Triptykon** - Band-Websites und Tonstudio. Internationale Abrechnung. Betreuung seit 2018.
-- **CASARO / Casarotex** - B2B-Textilien mit Sansibar-Lizenz.
-- **Onkologische Praxis Laatzen** - Haematologie/Onkologie.
-- **Soundhealing Hamburg** - Klangschalenpraxis mit Shop und Buchung.
-
-## Beruflicher Hintergrund
-
-- Webentwicklung seit 1999 (erste Selbststaendigkeit mit 14)
-- Multimedia Design, Hamburger Technische Kunstschule (2007-2010)
-- Games-QA: Goodgame Studios, Deep Silver FISHLABS, InnoGames
-- YOOtheme GmbH: Support Management (hat beim Framework-Hersteller gearbeitet)
-- Tangram Werbeagentur: Frontend-Entwicklung (2017-2023)
-- Andersen Webworks: Selbststaendig seit 2010
-- KI-augmentiert seit 2025 (Code-Generierung, Testing, Recherche)
-- Lektorat: Annemarie Andersen (annemarie-andersen.de) - eingebaut in alle Projekte
+## Barrierefreiheit
+WCAG 2.1 AA, BFSG-konform seit Juni 2025
 
 ## Kontakt
-
 - E-Mail: mail@andersen-webworks.de
-- Telefon: +49 38733 270015
+- Telefon: 038733 270015
+- LinkedIn: linkedin.com/in/andersen-erik
+- Stundensatz: 80 EUR netto
 - Website: https://jan-erik-andersen.de
-- LinkedIn: https://www.linkedin.com/in/andersen-erik
 
-## Seiten
-
-- [Startseite](/)
-- [Leistungen](/leistungen/)
-- [KI-Sichtbarkeit](/leistungen/ki-sichtbarkeit.html)
-- [Projekte](/projekte/)
-- [Ueber mich](/ueber/)
-- [Kontakt](/kontakt/)
-
-## Maschinenlesbare Daten
-
-- [AI Manifest](/ai/manifest.json)
-- [Services](/ai/services.json)
-- [Identity](/ai/identity-schema.json)
+## Maschinenlesbare Endpoints
+- /ai/manifest.json — Discovery
+- /ai/identity-schema.json — Person (Schema.org)
+- /ai/services.json — Leistungen
+- /ai/faq-schema.json — FAQ
+- /ai/health.json — Status

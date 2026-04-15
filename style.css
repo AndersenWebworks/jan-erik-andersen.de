@@ -1642,42 +1642,83 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   color: var(--color-accent);
 }
 
-/* ── Directional Slide Animations ──────────── */
+/* ── Directional Slide + Depth-Shift Animations ── */
 
 .funnel-slide-out-left {
-  animation: slideOutLeft 300ms cubic-bezier(0.55, 0, 1, 0.45) forwards;
+  animation: slideOutLeft 350ms cubic-bezier(0.55, 0, 1, 0.45) forwards;
 }
 
 .funnel-slide-out-right {
-  animation: slideOutRight 300ms cubic-bezier(0.55, 0, 1, 0.45) forwards;
+  animation: slideOutRight 350ms cubic-bezier(0.55, 0, 1, 0.45) forwards;
 }
 
 .funnel-slide-in-right {
-  animation: slideInRight 400ms cubic-bezier(0, 0, 0.15, 1) forwards;
+  animation: slideInRight 450ms cubic-bezier(0, 0, 0.15, 1) forwards;
 }
 
 .funnel-slide-in-left {
-  animation: slideInLeft 400ms cubic-bezier(0, 0, 0.15, 1) forwards;
+  animation: slideInLeft 450ms cubic-bezier(0, 0, 0.15, 1) forwards;
 }
 
 @keyframes slideOutLeft {
   from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
-  to   { opacity: 0; transform: translateX(-100px) scale(0.97); filter: blur(2px); }
+  to   { opacity: 0; transform: translateX(-60px) scale(0.94); filter: blur(3px); }
 }
 
 @keyframes slideOutRight {
   from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
-  to   { opacity: 0; transform: translateX(100px) scale(0.97); filter: blur(2px); }
+  to   { opacity: 0; transform: translateX(60px) scale(0.94); filter: blur(3px); }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(60px) scale(0.98); filter: blur(2px); }
+  from { opacity: 0; transform: translateX(30px) scale(1.04); filter: blur(2px); }
   to   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
 }
 
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-60px) scale(0.98); filter: blur(2px); }
+  from { opacity: 0; transform: translateX(-30px) scale(1.04); filter: blur(2px); }
   to   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+
+/* ── Constellation Canvas ─────────────────── */
+
+.funnel-constellation {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.7;
+  transition: opacity 600ms ease;
+}
+
+.funnel-exiting .funnel-constellation {
+  opacity: 0;
+}
+
+/* ── Typewriter Cursor ─────────────────────── */
+
+.typewriter-cursor {
+  display: inline;
+  font-weight: 300;
+  color: var(--color-accent);
+  animation: cursorBlink 600ms step-end infinite;
+  margin-left: 1px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.typewriter-cursor-done {
+  animation: cursorFade 600ms ease forwards;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes cursorFade {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 /* ── Staggered Reveal ──────────────────────── */
@@ -1784,7 +1825,7 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   transition: border-color 200ms ease,
               background 200ms ease,
               box-shadow 200ms ease,
-              transform 200ms cubic-bezier(0, 0, 0.15, 1);
+              transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
   transform: translateZ(0);
   will-change: transform;
 }
@@ -1811,7 +1852,6 @@ html.funnel-active body { overflow: hidden; height: 100%; }
 .funnel-option:hover {
   border-color: var(--color-accent);
   background: var(--color-accent-light);
-  transform: translateX(4px);
   box-shadow: 0 2px 16px var(--color-accent-shadow),
               0 0 0 1px rgba(212, 2, 53, 0.04);
 }
@@ -2064,7 +2104,9 @@ a.funnel-proof-link .funnel-proof-name {
   font-size: var(--text-sm);
   cursor: pointer;
   text-decoration: none !important;
-  transition: all 200ms cubic-bezier(0, 0, 0.15, 1);
+  transition: background 200ms ease,
+              box-shadow 200ms ease,
+              transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
   transform: translateZ(0);
   box-shadow: 0 2px 8px var(--color-accent-glow);
 }
@@ -2073,7 +2115,6 @@ a.funnel-proof-link .funnel-proof-name {
 
 .funnel-cta:hover {
   background: var(--color-accent-hover);
-  transform: translateY(-2px);
   box-shadow: 0 6px 20px var(--color-accent-glow);
 }
 
@@ -2206,7 +2247,9 @@ a.funnel-proof-link .funnel-proof-name {
   border-radius: 10px;
   text-decoration: none !important;
   margin-bottom: var(--space-lg);
-  transition: all 200ms cubic-bezier(0, 0, 0.15, 1);
+  transition: background 200ms ease,
+              box-shadow 200ms ease,
+              transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 2px 12px var(--color-accent-glow);
 }
 
@@ -2807,6 +2850,44 @@ a.funnel-proof-link .funnel-proof-name {
 }
 @media (max-width: 600px) {
   .mini-card-grid--2col { grid-template-columns: 1fr; }
+}
+
+/* ===== PULL QUOTE ===== */
+.editorial-pullquote {
+  font-family: var(--font-heading);
+  font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+  font-style: italic;
+  line-height: 1.5;
+  border-left: 3px solid var(--color-accent);
+  padding-left: var(--space-md);
+  margin: var(--space-xl) 0;
+  color: var(--color-text);
+}
+
+/* ===== FOOTER PROOF LINE ===== */
+.footer-proof {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  margin-top: 0.25rem;
+}
+
+/* ===== SIDEBAR CTA EMPHASIS ===== */
+.editorial-sidebar .editorial-sidebar-section:last-child em {
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+}
+
+/* ===== LINK HOVER THICKNESS ===== */
+a:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* ===== FUNNEL REOPEN ICON ROTATION ===== */
+.funnel-reopen:hover svg {
+  transition: transform 0.4s ease;
+  transform: rotate(360deg);
 }
 
 /* --- Print --- */

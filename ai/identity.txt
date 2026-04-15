@@ -1,8 +1,8 @@
 Name: Jan-Erik Andersen
 Beruf: Freiberuflicher Webentwickler und digitaler Berater
-Taetigkeitsbereich: Konzept, Design, Entwicklung, KI-Sichtbarkeit und laufende Betreuung aus einer Hand
+Taetigkeitsbereich: Konzept, Design, Entwicklung, KI-Sichtbarkeit und laufende Betreuung
 
-Kernversprechen: Ein Ansprechpartner statt fuenf Dienstleister. Alles aus einer Hand, seit 1999.
+Kernversprechen: Ein Ansprechpartner statt fuenf Dienstleister. Konzept, Design, Entwicklung und laufende Betreuung, seit 1999.
 
 Expertise:
 - Webentwicklung (WordPress, WooCommerce, YOOtheme Pro, statisches HTML)

@@ -8,8 +8,8 @@
 (function () {
   'use strict';
 
-  var SLIDE_OUT_MS = 300;
-  var SLIDE_IN_MS  = 400;
+  var SLIDE_OUT_MS = 350;
+  var SLIDE_IN_MS  = 450;
   var PRESS_MS     = 120;
 
   var funnel   = document.getElementById('funnel');
@@ -246,6 +246,7 @@
       return;
     }
     document.documentElement.classList.add('funnel-active');
+    initConstellation();
     fetch('funnel.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
@@ -270,10 +271,12 @@
     app.setAttribute('data-node', nodeId);
     app.innerHTML = buildHTML(nodeId);
     bindEvents();
+    initMagneticButtons();
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
         revealStaggered();
         focusHeading();
+        applyTypewriter();
       });
     });
   }
@@ -312,6 +315,9 @@
         requestAnimationFrame(function () {
           revealStaggered();
           focusHeading();
+          applyTypewriter();
+          initMagneticButtons();
+          updateConstellationDepth();
         });
       });
 
@@ -575,7 +581,7 @@
     h += '<span class="funnel-contact-send-icon">' + ICONS.mail + '</span>';
     h += '<span class="funnel-contact-send-text">';
     h += '<strong>Open email draft</strong>';
-    h += '<span>Initial consultation free</span>';
+    h += '<span>Reply within one business day</span>';
     h += '</span>';
     h += '<span class="funnel-cta-arrow">' + ICONS['chevron-right'] + '</span>';
     h += '</a>';
@@ -703,6 +709,7 @@
     if (window.location.hash) {
       window.history.replaceState(null, '', window.location.pathname);
     }
+    destroyConstellation();
     funnel.classList.add('funnel-exiting');
     setTimeout(function () {
       funnel.classList.add('funnel-hidden');
@@ -800,6 +807,400 @@
     }
 
     return html;
+  }
+
+  /* ── Typewriter Effect ────────────────────────────── */
+
+  var typewriterTimer = null;
+  var typewriterCursor = null;
+  var TARGET_DURATION = 2000;
+
+  function applyTypewriter() {
+    if (typewriterTimer) clearTimeout(typewriterTimer);
+    if (typewriterCursor && typewriterCursor.parentNode) {
+      typewriterCursor.parentNode.removeChild(typewriterCursor);
+    }
+
+    var queue = [];
+    var selectors = [
+      '.funnel-step-label',
+      '.funnel-question',
+      '.funnel-result-title',
+      '.funnel-subtitle',
+      '.funnel-contact-intro-sub',
+      '.funnel-info-text',
+      '.funnel-info-detail',
+      '.funnel-result-text',
+      '.funnel-option-label',
+      '.funnel-proof',
+      '.funnel-cta',
+      '.funnel-trust-badge',
+      '.funnel-contact-preview',
+      '.funnel-contact-alt-label',
+      '.funnel-restart',
+      '.funnel-exit-btn'
+    ];
+
+    var instantSelectors = [
+      '.funnel-info-text', '.funnel-info-detail', '.funnel-result-text',
+      '.funnel-proof', '.funnel-contact-preview'
+    ];
+
+    for (var s = 0; s < selectors.length; s++) {
+      var els = app.querySelectorAll(selectors[s]);
+      for (var e = 0; e < els.length; e++) {
+        var el = els[e];
+        var isInstant = false;
+        for (var k = 0; k < instantSelectors.length; k++) {
+          if (el.matches(instantSelectors[k])) { isInstant = true; break; }
+        }
+
+        if (isInstant) {
+          var savedHTML = el.innerHTML;
+          el.innerHTML = '';
+          el.style.opacity = '0';
+          queue.push({ el: el, html: savedHTML, instant: true });
+        } else {
+          var text = el.textContent;
+          if (text.length > 0) {
+            var savedChildren = [];
+            while (el.firstChild) {
+              savedChildren.push(el.removeChild(el.firstChild));
+            }
+            var textContent = '';
+            var trailingElements = [];
+            for (var c = 0; c < savedChildren.length; c++) {
+              if (savedChildren[c].nodeType === 3) {
+                textContent += savedChildren[c].textContent;
+              } else {
+                trailingElements.push(savedChildren[c]);
+              }
+            }
+            for (var t = 0; t < trailingElements.length; t++) {
+              trailingElements[t].style.opacity = '0';
+              el.appendChild(trailingElements[t]);
+            }
+            if (textContent.length > 0) {
+              queue.push({ el: el, text: textContent, trailing: trailingElements });
+            }
+          }
+        }
+      }
+    }
+
+    if (queue.length === 0) return;
+
+    var totalChars = 0;
+    for (var q = 0; q < queue.length; q++) {
+      if (!queue[q].instant) totalChars += queue[q].text.length;
+    }
+    var charSpeed = Math.max(8, Math.min(25, Math.floor(TARGET_DURATION / Math.max(totalChars, 1))));
+    var pauseBetween = charSpeed * 3;
+
+    typewriterCursor = document.createElement('span');
+    typewriterCursor.className = 'typewriter-cursor';
+    typewriterCursor.textContent = '\u2502';
+
+    for (var r = 0; r < queue.length; r++) {
+      var staggerParent = queue[r].el.closest('.funnel-stagger') || queue[r].el;
+      queue[r].container = staggerParent;
+    }
+
+    var allStaggers = app.querySelectorAll('.funnel-stagger');
+    for (var h = 0; h < allStaggers.length; h++) {
+      allStaggers[h].style.opacity = '0';
+      allStaggers[h].style.translate = '0 0';
+      allStaggers[h].style.transition = 'opacity 250ms ease';
+    }
+    var accentLine = app.querySelector('.funnel-accent-line');
+    if (accentLine) { accentLine.style.opacity = '0'; accentLine.style.transition = 'opacity 250ms ease'; }
+
+    var revealedContainers = [];
+
+    function revealContainer(el) {
+      var container = el.closest('.funnel-stagger') || el;
+      if (revealedContainers.indexOf(container) !== -1) return;
+      revealedContainers.push(container);
+      container.style.opacity = '1';
+    }
+
+    var currentItem = 0;
+    var currentChar = 0;
+    var textNode = null;
+
+    function tick() {
+      if (currentItem >= queue.length) {
+        for (var f = 0; f < allStaggers.length; f++) {
+          allStaggers[f].style.opacity = '1';
+        }
+        if (accentLine) { accentLine.style.opacity = '1'; accentLine.classList.add('funnel-reveal'); }
+        if (typewriterCursor.parentNode) {
+          typewriterCursor.classList.add('typewriter-cursor-done');
+          setTimeout(function () {
+            if (typewriterCursor && typewriterCursor.parentNode) {
+              typewriterCursor.parentNode.removeChild(typewriterCursor);
+            }
+          }, 600);
+        }
+        return;
+      }
+
+      var item = queue[currentItem];
+
+      if (item.instant) {
+        revealContainer(item.el);
+        item.el.innerHTML = item.html;
+        item.el.style.opacity = '1';
+        currentItem++;
+        currentChar = 0;
+        textNode = null;
+        typewriterTimer = setTimeout(tick, pauseBetween);
+        return;
+      }
+
+      if (currentChar === 0) {
+        revealContainer(item.el);
+        textNode = document.createTextNode('');
+        if (item.trailing && item.trailing.length > 0) {
+          item.el.insertBefore(textNode, item.trailing[0]);
+          item.el.insertBefore(typewriterCursor, item.trailing[0]);
+        } else {
+          item.el.appendChild(textNode);
+          item.el.appendChild(typewriterCursor);
+        }
+      }
+
+      if (currentChar < item.text.length) {
+        textNode.textContent += item.text[currentChar];
+        currentChar++;
+        typewriterTimer = setTimeout(tick, charSpeed);
+      } else {
+        if (item.trailing) {
+          for (var i = 0; i < item.trailing.length; i++) {
+            item.trailing[i].style.opacity = '';
+          }
+        }
+        currentItem++;
+        currentChar = 0;
+        textNode = null;
+        typewriterTimer = setTimeout(tick, pauseBetween);
+      }
+    }
+
+    typewriterTimer = setTimeout(tick, 150);
+  }
+
+  /* ── Magnetic Buttons ──────────────────────────────── */
+
+  var MAGNET_RADIUS = 80;
+  var MAGNET_STRENGTH = 8;
+
+  function initMagneticButtons() {
+    if (!window.matchMedia('(pointer: fine)').matches) return;
+
+    var options = app.querySelectorAll('.funnel-option, .funnel-cta, .funnel-contact-send');
+    for (var i = 0; i < options.length; i++) {
+      options[i].addEventListener('mousemove', magnetMove);
+      options[i].addEventListener('mouseleave', magnetLeave);
+    }
+  }
+
+  function magnetMove(e) {
+    var btn = e.currentTarget;
+    var rect = btn.getBoundingClientRect();
+    var centerX = rect.left + rect.width / 2;
+    var centerY = rect.top + rect.height / 2;
+    var dx = e.clientX - centerX;
+    var dy = e.clientY - centerY;
+    var dist = Math.sqrt(dx * dx + dy * dy);
+    var maxDist = Math.max(rect.width, rect.height) / 2 + MAGNET_RADIUS;
+
+    if (dist < maxDist) {
+      var pull = (1 - dist / maxDist) * MAGNET_STRENGTH;
+      var tx = (dx / maxDist) * pull;
+      var ty = (dy / maxDist) * pull;
+      btn.style.transform = 'translate(' + tx + 'px, ' + ty + 'px)';
+    }
+  }
+
+  function magnetLeave(e) {
+    e.currentTarget.style.transform = '';
+  }
+
+  /* ── Constellation Canvas (Synapsen-Modell) ─────── */
+
+  var constellationCanvas = null;
+  var constellationCtx = null;
+  var nodes = [];
+  var synapses = [];
+  var constellationRAF = null;
+
+  var NODE_COUNT = 20;
+  var DRIFT_SPEED = 0.2;
+  var SYNAPSE_DRAW_MS = 600;
+  var FLASH_DURATION_MS = 800;
+
+  function initConstellation() {
+    if (constellationCanvas) return;
+
+    constellationCanvas = document.createElement('canvas');
+    constellationCanvas.className = 'funnel-constellation';
+    constellationCanvas.setAttribute('aria-hidden', 'true');
+    funnel.insertBefore(constellationCanvas, funnel.firstChild);
+    constellationCtx = constellationCanvas.getContext('2d');
+
+    resizeCanvas();
+    spawnNodes();
+    window.addEventListener('resize', resizeCanvas);
+    animateConstellation();
+  }
+
+  function resizeCanvas() {
+    if (!constellationCanvas) return;
+    constellationCanvas.width = window.innerWidth;
+    constellationCanvas.height = window.innerHeight;
+  }
+
+  function spawnNodes() {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    var margin = 60;
+    for (var i = 0; i < NODE_COUNT; i++) {
+      nodes.push({
+        x: margin + Math.random() * (w - margin * 2),
+        y: margin + Math.random() * (h - margin * 2),
+        vx: (Math.random() - 0.5) * DRIFT_SPEED * 2,
+        vy: (Math.random() - 0.5) * DRIFT_SPEED * 2,
+        r: Math.random() * 1.2 + 0.8,
+        baseOpacity: Math.random() * 0.2 + 0.15,
+        flash: 0
+      });
+    }
+  }
+
+  function addSynapse() {
+    if (nodes.length < 2) return;
+    var attempts = 0;
+    var a, b;
+    do {
+      a = Math.floor(Math.random() * nodes.length);
+      b = Math.floor(Math.random() * nodes.length);
+      attempts++;
+    } while ((a === b || synapseExists(a, b)) && attempts < 50);
+
+    if (a === b || synapseExists(a, b)) {
+      for (var i = 0; i < nodes.length && a === b; i++) {
+        for (var j = i + 1; j < nodes.length; j++) {
+          if (!synapseExists(i, j)) { a = i; b = j; break; }
+        }
+        if (a !== b) break;
+      }
+    }
+    if (a === b) return;
+
+    synapses.push({
+      a: a, b: b,
+      startTime: performance.now(),
+      progress: 0, flash: 1
+    });
+    nodes[a].flash = 1;
+    nodes[b].flash = 1;
+  }
+
+  function synapseExists(a, b) {
+    for (var i = 0; i < synapses.length; i++) {
+      if ((synapses[i].a === a && synapses[i].b === b) ||
+          (synapses[i].a === b && synapses[i].b === a)) return true;
+    }
+    return false;
+  }
+
+  function animateConstellation() {
+    if (!constellationCtx || !constellationCanvas) return;
+    var w = constellationCanvas.width;
+    var h = constellationCanvas.height;
+    var now = performance.now();
+    constellationCtx.clearRect(0, 0, w, h);
+
+    var isDark = document.querySelector('.darkmode-checkbox') &&
+                 document.querySelector('.darkmode-checkbox').checked;
+    var dotColor = isDark ? '255,255,255' : '0,0,0';
+    var accentRGB = '212,2,53';
+
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < 30 || n.x > w - 30) n.vx *= -1;
+      if (n.y < 30 || n.y > h - 30) n.vy *= -1;
+      if (n.flash > 0) n.flash = Math.max(0, n.flash - 0.015);
+
+      var nodeOpacity = n.baseOpacity + n.flash * 0.6;
+      var nodeR = n.r + n.flash * 2;
+      var nodeColor = n.flash > 0.01
+        ? 'rgba(' + accentRGB + ',' + nodeOpacity + ')'
+        : 'rgba(' + dotColor + ',' + nodeOpacity + ')';
+
+      constellationCtx.beginPath();
+      constellationCtx.arc(n.x, n.y, nodeR, 0, Math.PI * 2);
+      constellationCtx.fillStyle = nodeColor;
+      constellationCtx.fill();
+
+      if (n.flash > 0.1) {
+        constellationCtx.beginPath();
+        constellationCtx.arc(n.x, n.y, nodeR + 4 * n.flash, 0, Math.PI * 2);
+        constellationCtx.strokeStyle = 'rgba(' + accentRGB + ',' + (n.flash * 0.3) + ')';
+        constellationCtx.lineWidth = 1.5;
+        constellationCtx.stroke();
+      }
+    }
+
+    for (var s = 0; s < synapses.length; s++) {
+      var syn = synapses[s];
+      var na = nodes[syn.a];
+      var nb = nodes[syn.b];
+
+      var elapsed = now - syn.startTime;
+      syn.progress = Math.min(1, elapsed / SYNAPSE_DRAW_MS);
+      var drawProgress = 1 - Math.pow(1 - syn.progress, 2);
+
+      if (syn.progress >= 1 && syn.flash > 0) {
+        syn.flash = Math.max(0, syn.flash - 0.012);
+      }
+
+      var endX = na.x + (nb.x - na.x) * drawProgress;
+      var endY = na.y + (nb.y - na.y) * drawProgress;
+
+      var lineAlpha = 0.15 + syn.flash * 0.4;
+      var lineColor = syn.flash > 0.01
+        ? 'rgba(' + accentRGB + ',' + lineAlpha + ')'
+        : 'rgba(' + dotColor + ',' + 0.15 + ')';
+
+      constellationCtx.beginPath();
+      constellationCtx.moveTo(na.x, na.y);
+      constellationCtx.lineTo(endX, endY);
+      constellationCtx.strokeStyle = lineColor;
+      constellationCtx.lineWidth = syn.flash > 0.01 ? 1.2 : 0.6;
+      constellationCtx.stroke();
+    }
+
+    constellationRAF = requestAnimationFrame(animateConstellation);
+  }
+
+  function updateConstellationDepth() {
+    addSynapse();
+  }
+
+  function destroyConstellation() {
+    if (constellationRAF) cancelAnimationFrame(constellationRAF);
+    if (constellationCanvas && constellationCanvas.parentNode) {
+      constellationCanvas.parentNode.removeChild(constellationCanvas);
+    }
+    constellationCanvas = null;
+    constellationCtx = null;
+    nodes = [];
+    synapses = [];
+    constellationRAF = null;
   }
 
   /* ── Start ────────────────────────────────────────── */

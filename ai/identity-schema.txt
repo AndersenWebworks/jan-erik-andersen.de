@@ -4,7 +4,7 @@
   "@id": "https://jan-erik-andersen.de/#person",
   "name": "Jan-Erik Andersen",
   "jobTitle": "Freiberuflicher Webentwickler und digitaler Berater",
-  "description": "Konzept, Design, Entwicklung und Betreuung aus einer Hand. WordPress, WooCommerce, statisches HTML. KI-Sichtbarkeit (GEO/AVO) in jedem Projekt. 25+ Jahre Erfahrung. Deutschlandweit remote.",
+  "description": "Konzept, Design, Entwicklung und laufende Betreuung. WordPress, WooCommerce, statisches HTML. KI-Sichtbarkeit (GEO/AVO) in jedem Projekt. 25+ Jahre Erfahrung. Deutschlandweit remote.",
   "url": "https://jan-erik-andersen.de",
   "email": "mail@andersen-webworks.de",
   "telephone": "+4938733270015",
@@ -30,8 +30,8 @@
   ],
   "hasOccupation": {
     "@type": "Occupation",
-    "name": "Webentwickler und Web-Betreuer",
-    "description": "Konzept, Design, Entwicklung, QA, Compliance und laufende Betreuung. Alles aus einer Hand, seit 1999.",
+    "name": "Webentwickler und digitaler Berater",
+    "description": "Konzept, Design, Entwicklung, QA, Compliance und laufende Betreuung. Ein Ansprechpartner, seit 1999.",
     "skills": "WordPress, WooCommerce, YOOtheme Pro, statisches HTML, GEO/AVO, BFSG, DSGVO, Schema.org"
   },
   "alumniOf": [

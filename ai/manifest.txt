@@ -3,8 +3,8 @@
     "domain": "jan-erik-andersen.de",
     "name": "Jan-Erik Andersen",
     "url": "https://jan-erik-andersen.de",
-    "description": "Freiberuflicher Webentwickler und digitaler Berater. Konzept, Design, Entwicklung, KI-Sichtbarkeit und Betreuung aus einer Hand. Seit 1999.",
-    "tagline": "Alles aus einer Hand. Seit 1999.",
+    "description": "Freiberuflicher Webentwickler und digitaler Berater. Konzept, Design, Entwicklung, KI-Sichtbarkeit und laufende Betreuung. Ein Ansprechpartner, seit 1999.",
+    "tagline": "Ein Ansprechpartner fuer alles. Seit 1999.",
     "contact": "mail@andersen-webworks.de"
   },
   "version": "v4.0",
@@ -49,7 +49,7 @@
       "mirror": "https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/services.json",
       "type": "ItemList",
       "format": "application/json",
-      "description": "Drei Leistungsbereiche: Sichtbar werden, Besser arbeiten, Abgesichert bleiben."
+      "description": "Drei Leistungsbereiche: Neu bauen, Besser machen, Am Laufen halten."
     },
     {
       "id": "identity-schema",

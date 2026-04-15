@@ -73,7 +73,7 @@
           "next": "result-website"
         },
         {
-          "label": "Bei uns ist das größer (Firmengruppe, mehrsprachig)",
+          "label": "Bei uns ist das größer (Unternehmensgruppe, mehrsprachig)",
           "next": "info-firmengruppe"
         }
       ]
@@ -99,7 +99,7 @@
     },
     "info-firmengruppe": {
       "type": "info",
-      "text": "Bei 10+ Gesellschaften scheitern Projekte selten an der Technik. Sie scheitern an der Koordination. Jede Abteilung will was anderes, niemand hat den Überblick.",
+      "text": "Bei mehreren zusammengehörenden Websites scheitern Projekte selten an der Technik. Sie scheitern an der Koordination. Jede Abteilung will was anderes, niemand hat den Überblick.",
       "detail": "Was hilft: eine Person, die alle Websites kennt. Kein Agentur-Team mit Personalrotation, wo Sie sich jedes Mal neu erklären müssen.",
       "options": [
         {
@@ -442,7 +442,7 @@
     "geo-info": {
       "type": "info",
       "text": "Kurze Version: 73 % der B2B-Einkäufer recherchieren mit ChatGPT. 61 % weniger Klicks auf klassische Google-Ergebnisse seit AI Overviews. Wenn KI-Systeme Ihre Website nicht verstehen, existieren Sie für diese Nutzer nicht.",
-      "detail": "Ich strukturiere Websites so, dass KI-Systeme sie korrekt erfassen und zitieren. Das mache ich in jedem Projekt, ohne Aufpreis.",
+      "detail": "Ich strukturiere Websites so, dass KI-Systeme sie korrekt erfassen und zitieren. Das mache ich in jedem Projekt. Nicht weil es nichts kostet, sondern weil es nichts bringt, wenn man es weglässt.",
       "options": [
         {
           "label": "Klingt relevant – erzählen Sie mehr",
@@ -587,13 +587,13 @@
     },
     "result-website-gross": {
       "type": "result",
-      "title": "Firmengruppe – das häufigste Problem ist nicht die Technik.",
-      "text": "Bei 10+ Gesellschaften scheitern Projekte selten an WordPress oder am Design. Sie scheitern an der Koordination. Jede Abteilung will was anderes, niemand hat den Überblick. Ich habe das zwei Jahre lang für die Runden Group gemacht – 10+ Websites, alleiniger Entwickler, und es hat funktioniert, weil alles durch eine Person lief.\n\nAufwand hängt vom Umfang ab. Vergleichbare Projekte: 100–300 Stunden.",
+      "title": "Unternehmensgruppe – das häufigste Problem ist nicht die Technik.",
+      "text": "Bei mehreren zusammengehörenden Websites scheitern Projekte selten an WordPress oder am Design. Sie scheitern an der Koordination. Jede Abteilung will was anderes, niemand hat den Überblick. Ich habe solche Projekte über Jahre betreut – mehrere Websites, eine Person, und es hat funktioniert, weil alles durch mich lief.\n\nAufwand hängt vom Umfang ab. Vergleichbare Projekte: 100–300 Stunden.",
       "proof": [
         {
-          "name": "Runden Group",
-          "desc": "10+ Websites, 2 Jahre einziger Entwickler",
-          "href": "https://runden-group.eu"
+          "name": "Gerwing Steinwerke",
+          "desc": "Komplexes WordPress-Projekt, laufender Retainer",
+          "href": "https://gerwing.de"
         },
         {
           "name": "Scheja & Partner",
@@ -860,9 +860,9 @@
           "desc": "Eigenes Redesign 2026, komplett neu"
         },
         {
-          "name": "Runden Group",
-          "desc": "10+ Websites von Grund auf",
-          "href": "https://runden-group.eu"
+          "name": "Gerwing Steinwerke",
+          "desc": "Komplettes WordPress-Projekt",
+          "href": "https://gerwing.de"
         }
       ],
       "cta": {
@@ -1075,14 +1075,14 @@
       "text": "Updates, Backups, Sicherheits-Monitoring. Ich update manuell, prüfe danach und rolle zurück wenn nötig. Sie merken nichts davon, und genau das ist der Punkt. Was viele nicht wissen: WordPress-Updates ohne Kontrolle können die Seite zerschießen. Ein Plugin-Update bricht ein anderes, ein Theme-Update ändert das Layout. Deshalb macht das jemand, der die Seite kennt.\n\nMonatlicher Aufwand: ab 15 EUR/Monat für Basis-Sicherheit.",
       "proof": [
         {
-          "name": "Dark Fortress",
-          "desc": "Betreuung seit 2018",
-          "href": "https://darkfortress.org"
+          "name": "Gerwing Steinwerke",
+          "desc": "WordPress-Retainer seit 2023",
+          "href": "https://gerwing.de"
         },
         {
-          "name": "Woodshed Studio",
-          "desc": "Betreuung seit 2018",
-          "href": "https://woodshedstudio.de"
+          "name": "Scheja & Partner",
+          "desc": "Laufende Betreuung, mehrsprachig",
+          "href": "https://scheja-partners.de"
         }
       ],
       "cta": {
@@ -1093,17 +1093,17 @@
     "result-betreuung-wp-standard": {
       "type": "result",
       "title": "WordPress Standard – für Websites, die leben.",
-      "text": "Alles aus der Basis, plus regelmäßige Änderungen und neue Inhalte. Sie schicken eine Mail, ich setze es um. Nicht jedes Mal erklären, wo was ist. Nicht jedes Mal das CMS neu verstehen. Ich betreue manche Kunden seit 2018. Kurze Wege, kein Ticket-System.\n\nMonatlicher Aufwand: 80–200 EUR/Monat, je nach Änderungsfrequenz.",
+      "text": "Alles aus der Basis, plus regelmäßige Änderungen und neue Inhalte. Sie schicken eine Mail, ich setze es um. Nicht jedes Mal erklären, wo was ist. Nicht jedes Mal das CMS neu verstehen. Kurze Wege, kein Ticket-System.\n\nMonatlicher Aufwand: 80–200 EUR/Monat, je nach Änderungsfrequenz.",
       "proof": [
         {
-          "name": "Dark Fortress",
-          "desc": "Band-Website, Betreuung seit 2018",
-          "href": "https://darkfortress.org"
+          "name": "Gerwing Steinwerke",
+          "desc": "Laufender Retainer, regelmäßige Änderungen",
+          "href": "https://gerwing.de"
         },
         {
-          "name": "Woodshed Studio",
-          "desc": "Tonstudio, Betreuung seit 2018",
-          "href": "https://woodshedstudio.de"
+          "name": "Seniorpartner in School",
+          "desc": "Langfristige Betreuung",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
         }
       ],
       "cta": {
@@ -1177,7 +1177,7 @@
     "result-geo": {
       "type": "result",
       "title": "So prüfen Sie Ihre KI-Sichtbarkeit selbst.",
-      "text": "Einfacher Test: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein Problem. Was Sie selbst tun können: klare, faktische Texte auf Ihrer Website. Konkrete Aussagen statt Marketing-Phrasen. Was technische Arbeit braucht: eine Struktur auf Ihrer Website, die KI-Systeme lesen und zuordnen können. Das baue ich in jedes Projekt ein. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.\n\nGEO-Optimierung ist in jedem Projekt enthalten, ohne Aufpreis.",
+      "text": "Einfacher Test: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein Problem. Was Sie selbst tun können: klare, faktische Texte auf Ihrer Website. Konkrete Aussagen statt Marketing-Phrasen. Was technische Arbeit braucht: eine Struktur auf Ihrer Website, die KI-Systeme lesen und zuordnen können. Das baue ich in jedes Projekt ein. Diese Website hier ist das Beispiel – fragen Sie ChatGPT nach mir.\n\nGEO-Optimierung ist in jedem Projekt enthalten. Nicht weil es nichts kostet, sondern weil es nichts bringt, wenn man es weglässt.",
       "proof": [
         {
           "name": "Diese Website",
@@ -1196,7 +1196,7 @@
     "result-geo-audit": {
       "type": "result",
       "title": "Audit – was ich konkret prüfe.",
-      "text": "Ich prüfe, wie gut KI-Systeme Ihre Website verstehen. Findet ChatGPT Ihr Unternehmen, und stimmt das, was es sagt? Hat Ihre Website die technische Struktur, die KI-Systeme brauchen? Werden KI-Crawler ausgesperrt? Sie bekommen einen konkreten Bericht mit Prioritäten – was sofort gemacht werden sollte und was warten kann. Erstgespräch kostenlos.\n\nAudit-Aufwand: 5–10 Stunden. Erstgespräch kostenlos.",
+      "text": "Ich prüfe, wie gut KI-Systeme Ihre Website verstehen. Findet ChatGPT Ihr Unternehmen, und stimmt das, was es sagt? Hat Ihre Website die technische Struktur, die KI-Systeme brauchen? Werden KI-Crawler ausgesperrt? Sie bekommen einen konkreten Bericht mit Prioritäten – was sofort gemacht werden sollte und was warten kann.\n\nAudit-Aufwand: 5–10 Stunden. 15 Minuten Gespräch vorab reichen.",
       "proof": [
         {
           "name": "Diese Website",
@@ -1209,7 +1209,7 @@
         }
       ],
       "cta": {
-        "label": "Audit anfragen – Erstgespräch kostenlos",
+        "label": "Audit anfragen – 15 Minuten reichen",
         "href": "kontakt/"
       }
     },
@@ -1224,9 +1224,9 @@
           "href": "https://gerwing.de"
         },
         {
-          "name": "Runden Group",
-          "desc": "10+ Websites, 2 Jahre",
-          "href": "https://runden-group.eu"
+          "name": "Seniorpartner in School",
+          "desc": "Interaktiver Wirkungsbericht",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
         },
         {
           "name": "Scheja & Partner",
