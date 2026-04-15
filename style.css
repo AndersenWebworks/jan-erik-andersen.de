@@ -2343,6 +2343,11 @@ a.funnel-proof-link .funnel-proof-name {
   border-top: none;
 }
 
+/* Editorial as header-only (no sidebar layout) — tighter bottom */
+.editorial:not(:has(.editorial-layout)) {
+  padding-bottom: var(--space-xl);
+}
+
 .editorial-layout {
   display: grid;
   grid-template-columns: 1fr 260px;
@@ -2528,6 +2533,9 @@ a.funnel-proof-link .funnel-proof-name {
 .editorial-stats--row {
   grid-template-columns: repeat(4, 1fr);
   max-width: 680px;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 /* Editorial responsive */
