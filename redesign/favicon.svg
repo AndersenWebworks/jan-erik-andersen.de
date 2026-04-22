@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- JEA Monogram Favicon for Jan-Erik Andersen -->
+
+  <!-- Background -->
+  <rect width="128" height="128" fill="#1a1a1a" rx="16"/>
+
+  <!-- Monogram: JEA stacked, highly optimized for small sizes -->
+  <text
+    x="64"
+    y="78"
+    font-family="Georgia, Times New Roman, serif"
+    font-size="58"
+    font-weight="700"
+    fill="#F9F5F0"
+    text-anchor="middle"
+    letter-spacing="-2">JEA</text>
+
+  <!-- Subtle accent line (optional, for brand distinction) -->
+  <line x1="28" y1="96" x2="100" y2="96" stroke="#8B0000" stroke-width="4" stroke-linecap="round"/>
+</svg>

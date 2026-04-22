@@ -1,0 +1,929 @@
+{
+  "meta": {
+    "version": "4.0",
+    "language": "de",
+    "updated": "2026-04-22",
+    "changelog": "Komplette Neustrukturierung: Weniger Schritte, mehr Info pro Schritt, respektvolle Exits, Schnellpfade für Eilige (Roundtable Nook/Rainer/Smeralda)"
+  },
+  "nodes": {
+    "start": {
+      "type": "question",
+      "text": "Was kann ich für Sie tun?",
+      "subtitle": "Drei Minuten, die sich lohnen. Oder Sie lesen selbst – kein Problem.",
+      "options": [
+        {
+          "label": "Ich brauche eine Website oder einen Shop",
+          "next": "neu-was"
+        },
+        {
+          "label": "Meine Website hat ein Problem",
+          "next": "problem-was"
+        },
+        {
+          "label": "Ich suche jemanden für die laufende Betreuung",
+          "next": "betreuung-was"
+        },
+        {
+          "label": "Ich will nur kurz Kontakt aufnehmen",
+          "next": "result-direkt"
+        },
+        {
+          "label": "Lieber selbst lesen",
+          "action": "scroll"
+        }
+      ]
+    },
+
+    "neu-was": {
+      "type": "question",
+      "text": "Was soll entstehen?",
+      "subtitle": "Hilft mir, die richtigen Fragen zu stellen.",
+      "options": [
+        {
+          "label": "Firmenwebsite",
+          "next": "website-budget"
+        },
+        {
+          "label": "Online-Shop",
+          "next": "shop-art"
+        },
+        {
+          "label": "Landingpage oder Onepager",
+          "next": "result-landingpage"
+        },
+        {
+          "label": "Portal, Tool oder Web-App",
+          "next": "portal-was"
+        },
+        {
+          "label": "Ich bin mir nicht sicher",
+          "next": "result-beratung"
+        }
+      ]
+    },
+
+    "website-budget": {
+      "type": "info",
+      "text": "Kurzer Reality-Check: Eine professionelle Firmenwebsite mit Barrierefreiheit (seit 2025 Pflicht) und KI-Sichtbarkeit kostet ab 2.500 EUR. Darunter empfehle ich Baukästen wie Squarespace – die können inzwischen viel.",
+      "detail": "Was Sie für 2.500–5.000 EUR bekommen: 5–8 Seiten, responsives Design, BFSG-konform, KI-lesbar, schnelle Ladezeit. Was mehr kostet: Shop-Integration, mehrsprachig, komplexe Strukturen, individuelle Funktionen.",
+      "options": [
+        {
+          "label": "Passt – erzähl mir mehr",
+          "next": "website-branche"
+        },
+        {
+          "label": "Mein Budget ist kleiner",
+          "next": "result-budget-klein"
+        },
+        {
+          "label": "Mein Projekt ist größer",
+          "next": "website-gross"
+        }
+      ]
+    },
+
+    "website-branche": {
+      "type": "question",
+      "text": "In welcher Branche sind Sie?",
+      "subtitle": "Damit ich relevante Referenzen zeigen kann.",
+      "options": [
+        {
+          "label": "Industrie, Handwerk oder Produktion",
+          "next": "result-industrie"
+        },
+        {
+          "label": "Beratung, Dienstleistung oder Agentur",
+          "next": "result-beratung-branche"
+        },
+        {
+          "label": "Recht, Steuer oder Finanzen",
+          "next": "result-recht"
+        },
+        {
+          "label": "Gesundheit, Soziales oder Verein",
+          "next": "result-sozial"
+        },
+        {
+          "label": "Andere Branche",
+          "next": "result-website"
+        }
+      ]
+    },
+
+    "website-gross": {
+      "type": "info",
+      "text": "Größere Projekte scheitern selten an der Technik. Sie scheitern an der Koordination. Jede Abteilung will was anderes, niemand hat den Überblick, und am Ende ist die Agentur schuld.",
+      "detail": "Was ich anders mache: Eine Person, die alle Websites kennt. Kein Team mit Personalrotation. Sie erklären sich einmal, nicht bei jedem Call. Ich betreue seit 2023 einen Industriekunden mit genau diesem Setup – alleinige technische Verantwortung.",
+      "options": [
+        {
+          "label": "Das klingt nach meinem Problem",
+          "next": "result-gross"
+        },
+        {
+          "label": "Bei uns ist das anders",
+          "next": "website-branche"
+        }
+      ]
+    },
+
+    "shop-art": {
+      "type": "question",
+      "text": "Was für Kunden hat der Shop?",
+      "subtitle": "Bestimmt, was der Shop können muss.",
+      "options": [
+        {
+          "label": "Endkunden (B2C)",
+          "next": "shop-b2c"
+        },
+        {
+          "label": "Händler oder Gewerbekunden (B2B)",
+          "next": "shop-b2b"
+        },
+        {
+          "label": "Beides",
+          "next": "shop-b2b"
+        }
+      ]
+    },
+
+    "shop-b2c": {
+      "type": "info",
+      "text": "Ehrliche Frage vorweg: Brauchen Sie wirklich einen Custom-Shop? Bei Standardprodukten ohne Sonderwünsche ist Shopify oft die bessere Wahl – schneller live, weniger Wartung, Sie zahlen monatlich statt einmalig viel.",
+      "detail": "WooCommerce lohnt sich bei: eigenen Prozessen, Sonderpreisen, Schnittstellen zur Warenwirtschaft, oder wenn Sie keinen monatlichen Obolus zahlen wollen. Dann gehört der Shop Ihnen. Häufigster Fehler: zu früh zu komplex.",
+      "options": [
+        {
+          "label": "Ich brauche was Individuelles",
+          "next": "shop-budget"
+        },
+        {
+          "label": "Standard könnte reichen",
+          "next": "result-shop-standard"
+        },
+        {
+          "label": "Bin mir nicht sicher",
+          "next": "result-shop-beratung"
+        }
+      ]
+    },
+
+    "shop-b2b": {
+      "type": "info",
+      "text": "B2B-Shops sind eine andere Liga. Im B2C kauft ein Mensch ein Produkt. Im B2B kauft ein Einkäufer 500 Stück, braucht Staffelpreise, ein Händlerportal, manchmal eine Freigabe durch den Vorgesetzten.",
+      "detail": "Ein B2B-Shop muss ein Werkzeug für Ihren Vertrieb sein, kein hübscher Katalog. Kein Standard-Theme bildet das ab. Der Shop wird auf Ihre Vertriebsprozesse gebaut, nicht umgekehrt. Ich betreue seit 2023 einen Industriekunden mit genau diesem Setup.",
+      "options": [
+        {
+          "label": "Genau das brauche ich",
+          "next": "result-shop-b2b"
+        },
+        {
+          "label": "Bei uns ist das einfacher",
+          "next": "shop-budget"
+        }
+      ]
+    },
+
+    "shop-budget": {
+      "type": "info",
+      "text": "Ein individueller WooCommerce-Shop kostet ab 5.000 EUR. Darunter wird es eng – nicht unmöglich, aber Sie müssen Kompromisse machen. Großer Katalog (500+ Produkte) oder B2B-Funktionen: ab 10.000 EUR.",
+      "detail": "Was im Preis enthalten ist: Design, Einrichtung, Zahlungsanbieter, Versandlogik, Barrierefreiheit, Produktimport (bis 100 Produkte). Was extra kostet: Schnittstellen, komplexe Preislogik, Händlerportal.",
+      "options": [
+        {
+          "label": "Passt in meinen Rahmen",
+          "next": "result-shop"
+        },
+        {
+          "label": "Mein Budget ist kleiner",
+          "next": "result-shop-budget-klein"
+        },
+        {
+          "label": "Mein Katalog ist größer",
+          "next": "result-shop-gross"
+        }
+      ]
+    },
+
+    "portal-was": {
+      "type": "question",
+      "text": "Was soll das Portal können?",
+      "subtitle": "Portale und Tools – mein Lieblingsterrain.",
+      "options": [
+        {
+          "label": "Kunden einloggen, Daten einsehen",
+          "next": "result-portal-kunden"
+        },
+        {
+          "label": "Stellen ausschreiben, Bewerbungen sammeln",
+          "next": "portal-karriere"
+        },
+        {
+          "label": "Internes Tool fürs Team",
+          "next": "portal-intern"
+        },
+        {
+          "label": "Interaktiver Bericht oder Report",
+          "next": "result-bericht"
+        }
+      ]
+    },
+
+    "portal-karriere": {
+      "type": "info",
+      "text": "Ehrliche Frage: Brauchen Sie wirklich Custom? JOIN, Personio, Recruitee können Stellen ausschreiben. Schnell live, Bewerbermanagement inklusive.",
+      "detail": "Custom lohnt sich bei: eigenem Design, Integration in Ihre Website, Standort-Filter, Mehrsprachigkeit, Onboarding-Prozesse. Wenn keins davon zutrifft, reicht Standard.",
+      "options": [
+        {
+          "label": "Ich brauche mehr als Standard",
+          "next": "result-portal-karriere"
+        },
+        {
+          "label": "Standard reicht wohl",
+          "next": "result-portal-standard"
+        }
+      ]
+    },
+
+    "portal-intern": {
+      "type": "info",
+      "text": "Noch eine ehrliche Frage: Projektmanagement? Asana, Notion. CRM? HubSpot, Pipedrive. Zeiterfassung? Clockify. Wenn ein fertiges Tool 80 % abdeckt, nehmen Sie das Tool.",
+      "detail": "Custom lohnt sich erst, wenn Ihre Daten zwischen Systemen fließen müssen, oder Ihre Nutzer Kunden sind statt Ihr Team. Dann bauen wir was.",
+      "options": [
+        {
+          "label": "Ich brauche wirklich Custom",
+          "next": "result-portal-custom"
+        },
+        {
+          "label": "Vielleicht reicht ein Tool",
+          "next": "result-portal-tool"
+        }
+      ]
+    },
+
+    "problem-was": {
+      "type": "question",
+      "text": "Was stört am meisten?",
+      "subtitle": "Ich sage Ihnen ehrlich, ob sich eine Reparatur lohnt.",
+      "options": [
+        {
+          "label": "Sieht veraltet aus",
+          "next": "problem-redesign"
+        },
+        {
+          "label": "Viel zu langsam",
+          "next": "result-performance"
+        },
+        {
+          "label": "Nicht barrierefrei (BFSG)",
+          "next": "result-bfsg"
+        },
+        {
+          "label": "Wird nicht gefunden (Google/KI)",
+          "next": "result-seo"
+        },
+        {
+          "label": "Irgendwas ist kaputt",
+          "next": "problem-technik"
+        }
+      ]
+    },
+
+    "problem-redesign": {
+      "type": "info",
+      "text": "Nicht alles, was alt aussieht, braucht einen Relaunch. Drei Fragen: 1. Funktioniert die Seite auf dem Handy? 2. Passen die Inhalte noch? 3. Hat sich Ihre Zielgruppe verändert?",
+      "detail": "Wenn nur eins davon zutrifft, reicht oft ein gezieltes Update statt eines Komplettumbaus. Ein Design-Update kostet 2.000–5.000 EUR, ein Komplett-Relaunch 5.000–15.000 EUR. Großer Unterschied.",
+      "options": [
+        {
+          "label": "Design reicht",
+          "next": "result-redesign"
+        },
+        {
+          "label": "Komplett neu",
+          "next": "result-relaunch"
+        },
+        {
+          "label": "Bin mir nicht sicher",
+          "next": "result-redesign-beratung"
+        }
+      ]
+    },
+
+    "problem-technik": {
+      "type": "question",
+      "text": "Was läuft bei Ihnen?",
+      "subtitle": "Hilft mir, das Problem einzugrenzen.",
+      "options": [
+        {
+          "label": "WordPress",
+          "next": "result-technik-wp"
+        },
+        {
+          "label": "WooCommerce (Shop)",
+          "next": "result-technik-woo"
+        },
+        {
+          "label": "Weiß ich nicht",
+          "next": "result-technik"
+        },
+        {
+          "label": "Gehackt oder Sicherheitsproblem",
+          "next": "result-sicherheit"
+        }
+      ]
+    },
+
+    "betreuung-was": {
+      "type": "question",
+      "text": "Was brauchen Sie?",
+      "subtitle": "Betreuung ist nicht gleich Betreuung.",
+      "options": [
+        {
+          "label": "Nur Updates und Sicherheit",
+          "next": "result-betreuung-basis"
+        },
+        {
+          "label": "Updates plus regelmäßige Änderungen",
+          "next": "result-betreuung-standard"
+        },
+        {
+          "label": "Einen festen Entwickler für alles",
+          "next": "result-betreuung-premium"
+        },
+        {
+          "label": "Bin mir nicht sicher",
+          "next": "betreuung-info"
+        }
+      ]
+    },
+
+    "betreuung-info": {
+      "type": "info",
+      "text": "Kurze Orientierung: Basis (Updates, Backups, Sicherheit) ab 15 EUR/Monat. Standard (plus Änderungen) 80–200 EUR/Monat. Premium (fester Entwickler) 400–800 EUR/Monat.",
+      "detail": "Der Unterschied: Bei Basis reagiere ich auf Probleme. Bei Standard rufen Sie an und ich setze um. Bei Premium denke ich mit, schlage vor, plane voraus. Was brauchen Sie?",
+      "options": [
+        {
+          "label": "Basis reicht",
+          "next": "result-betreuung-basis"
+        },
+        {
+          "label": "Standard klingt richtig",
+          "next": "result-betreuung-standard"
+        },
+        {
+          "label": "Premium, weil geschäftskritisch",
+          "next": "result-betreuung-premium"
+        }
+      ]
+    },
+
+    "result-direkt": {
+      "type": "result",
+      "title": "Kurzer Draht – passt mir.",
+      "text": "Kein Funnel, keine Umwege. Schreiben Sie mir, worum es geht. Ich antworte innerhalb eines Werktags. Wenn es dringend ist: anrufen.",
+      "proof": [],
+      "cta": {
+        "label": "Mail schreiben",
+        "href": "kontakt/"
+      },
+      "ctaSecondary": {
+        "label": "038733 270015",
+        "href": "tel:+4938733270015"
+      }
+    },
+
+    "result-budget-klein": {
+      "type": "result",
+      "title": "Unter 2.500 EUR – ich bin ehrlich mit Ihnen.",
+      "text": "Für dieses Budget bekomme ich keine professionelle Website mit Barrierefreiheit und KI-Sichtbarkeit hin. Nicht weil ich nicht will, sondern weil die Zeit nicht reicht.\n\nWas ich empfehle: Squarespace oder Jimdo. Die können inzwischen viel. Wenn Sie später mehr investieren können oder wollen, melden Sie sich gern. Kein Druck, kein Follow-up.\n\nOder wir reden trotzdem kurz – vielleicht gibt es einen Weg, den ich nicht sehe.",
+      "proof": [],
+      "cta": {
+        "label": "Trotzdem kurz reden",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-industrie": {
+      "type": "result",
+      "title": "Industrie und Handwerk – da kenne ich mich aus.",
+      "text": "Ich betreue seit 2023 Gerwing Steinwerke – Pflastersteine, B2B, komplexe Produktkataloge. Industriekunden brauchen keine fancy Animationen. Sie brauchen: schnelle Ladezeiten, klare Produktinformationen, und eine Seite, die auch auf dem Tablet in der Werkshalle funktioniert.\n\nBarrierefreiheit und KI-Sichtbarkeit baue ich in jedes Projekt ein. Typischer Aufwand: 40–80 Stunden, 3.200–6.400 EUR.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "B2B-Shop, Industrie, Retainer seit 2023",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Erzählen Sie mir von Ihrem Betrieb",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-beratung-branche": {
+      "type": "result",
+      "title": "Beratung und Dienstleistung – Vertrauen ist alles.",
+      "text": "Bei Beratern entscheidet die Website, ob jemand anruft oder weiterklickt. Was zählt: Kompetenz zeigen ohne anzugeben. Referenzen, die man überprüfen kann. Ein Prozess, der Sicherheit gibt.\n\nKI-Sichtbarkeit ist hier besonders wichtig – 73 % der B2B-Einkäufer recherchieren mit ChatGPT. Wenn Sie dort nicht auftauchen, existieren Sie nicht. Typischer Aufwand: 40–80 Stunden.",
+      "proof": [
+        {
+          "name": "Scheja & Partner",
+          "desc": "Datenschutz-Kanzlei, 30+ Berater",
+          "href": "https://scheja-partners.de"
+        },
+        {
+          "name": "Runden Group",
+          "desc": "Unternehmensgruppe, 7 Websites",
+          "href": "https://runden-group.eu"
+        }
+      ],
+      "cta": {
+        "label": "Schicken Sie mir Ihre aktuelle Website",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-recht": {
+      "type": "result",
+      "title": "Recht, Steuer, Finanzen – seriös muss nicht langweilig sein.",
+      "text": "Kanzleien und Steuerbüros haben ein Problem: Alle Websites sehen gleich aus. Stock-Fotos von Händeschütteln, Paragraphen-Symbole, 'Wir beraten Sie kompetent'. Das unterscheidet niemanden.\n\nWas funktioniert: echte Fotos, klare Sprache, Compliance-Tools die Leads generieren. Scheja & Partner hat interaktive DSGVO-Checks – die bringen Anfragen. Typischer Aufwand: 50–100 Stunden.",
+      "proof": [
+        {
+          "name": "Scheja & Partner",
+          "desc": "Datenschutz-Kanzlei, interaktive Tools",
+          "href": "https://scheja-partners.de"
+        }
+      ],
+      "cta": {
+        "label": "Reden wir über Ihre Positionierung",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-sozial": {
+      "type": "result",
+      "title": "Gesundheit, Soziales, Vereine – Budgets sind knapp, ich weiß.",
+      "text": "Praxen, Vereine und soziale Einrichtungen haben selten große Budgets. Dafür haben sie etwas, das Unternehmen fehlt: echte Geschichten. Menschen, denen geholfen wurde. Wirkung, die zählt.\n\nBarrierefreiheit ist hier nicht nur Pflicht, sondern Haltung. Typischer Aufwand: 30–60 Stunden. Bei Vereinen mit nachweislich knappem Budget rede ich über den Preis.",
+      "proof": [
+        {
+          "name": "Seniorpartner in School",
+          "desc": "Bundesverband, Wirkungsbericht",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+        },
+        {
+          "name": "Streunerhilfe Plau",
+          "desc": "Tierschutzverein, Spenden-Shop",
+          "href": "https://streunerhilfe-plau.de"
+        }
+      ],
+      "cta": {
+        "label": "Erzählen Sie mir von Ihrer Arbeit",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-website": {
+      "type": "result",
+      "title": "Drei Dinge, die gute Firmenwebsites 2026 gemeinsam haben.",
+      "text": "Erstens: wenige Seiten, klare Struktur. Die meisten brauchen 5–8 Seiten, nicht 40. Zweitens: die Website muss für KI-Systeme lesbar sein. 73 % der B2B-Einkäufer recherchieren mit ChatGPT. Drittens: Barrierefreiheit ist seit 2025 Pflicht, nicht Kür.\n\nTypischer Aufwand: 40–80 Stunden, 3.200–6.400 EUR.",
+      "proof": [
+        {
+          "name": "Scheja & Partner",
+          "desc": "Kanzlei, 30+ Anwälte",
+          "href": "https://scheja-partners.de"
+        },
+        {
+          "name": "Streunerhilfe Plau",
+          "desc": "Verein mit Spenden-Shop",
+          "href": "https://streunerhilfe-plau.de"
+        }
+      ],
+      "cta": {
+        "label": "Schicken Sie mir Ihre Vorstellungen",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-gross": {
+      "type": "result",
+      "title": "Größere Projekte – eine Person statt Agentur-Chaos.",
+      "text": "Was ich anders mache: Ich bin Ihr einziger Ansprechpartner. Keine Übergaben, keine Rotation, keine 'Da müsste ich nochmal nachfragen'. Sie erklären sich einmal, und ich behalte den Überblick – über Jahre.\n\nSo arbeite ich mit Gerwing Steinwerke: alleinige technische Verantwortung seit 2023. Aufwand bei Firmengruppen: 100–300 Stunden, je nach Scope.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Komplettes WordPress-Projekt, Retainer",
+          "href": "https://gerwing.de"
+        },
+        {
+          "name": "Runden Group",
+          "desc": "7 Websites, Karriereportal, Onboarding",
+          "href": "https://runden-group.eu"
+        }
+      ],
+      "cta": {
+        "label": "Lassen Sie uns die Koordination besprechen",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-landingpage": {
+      "type": "result",
+      "title": "Landingpage – eine Seite, ein Ziel.",
+      "text": "Was eine Landingpage braucht: einen klaren CTA, kein Navigationsmenü das wegführt, keine zehn Optionen. Die häufigsten Fehler: zu viel Text, zu viele Buttons, kein klarer nächster Schritt.\n\nStatisches HTML reicht fast immer. Schneller als WordPress, kein Wartungsaufwand. Typischer Aufwand: 15–30 Stunden, 1.200–2.400 EUR.",
+      "proof": [
+        {
+          "name": "Mehrweg-Heroes",
+          "desc": "Podcast-Landingpage",
+          "href": "https://mehrweg-heroes.eu"
+        }
+      ],
+      "cta": {
+        "label": "Schicken Sie mir das Angebot – ich entwerfe die Seite",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-beratung": {
+      "type": "result",
+      "title": "Nicht sicher? Dann reden wir.",
+      "text": "Sie wissen, dass Sie was brauchen, aber nicht genau was. Das ist ein guter Ausgangspunkt – ehrlicher als 'Ich will genau das'. In einem kurzen Gespräch finden wir raus, was zu Ihrem Budget und Ihren Zielen passt.\n\n15 Minuten, kein Pitch, keine Verpflichtung. Ich sage Ihnen auch, wenn ein Baukasten reicht.",
+      "proof": [],
+      "cta": {
+        "label": "15 Minuten – reden wir",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-shop": {
+      "type": "result",
+      "title": "WooCommerce – wenn Standard nicht reicht.",
+      "text": "Eigene Prozesse, Sonderpreise, Schnittstellen: dafür ist WooCommerce gebaut. Gehört Ihnen, kein Abo, volle Kontrolle. Ich baue das so, dass es zu Ihrem Geschäft passt, nicht zu irgendeinem Template.\n\nTypischer Aufwand: 80–150 Stunden, 6.400–12.000 EUR. Häufigster Fehler: zu früh zu komplex. Starten Sie mit dem, was Sie wirklich brauchen.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "B2B-Shop mit Händlerportal",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Erzählen Sie mir von Ihren Prozessen",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-shop-standard": {
+      "type": "result",
+      "title": "Shopify kann reichen – und das ist okay.",
+      "text": "Kein Entwickler sagt das gern, aber: Bei Standardprodukten ohne Sonderwünsche ist Shopify oft die bessere Wahl. Schnell live, wenig Wartung. Sie bezahlen monatlich, dafür kümmert sich Shopify um Hosting und Sicherheit.\n\nWenn Sie später individuelle Prozesse brauchen, müssen Sie umziehen. Aber für den Start kann es richtig sein. Wenn Sie trotzdem WooCommerce wollen: 60–100 Stunden, ab 4.800 EUR.",
+      "proof": [],
+      "cta": {
+        "label": "Trotzdem Fragen? Reden wir",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-shop-beratung": {
+      "type": "result",
+      "title": "Shop-Beratung – erst verstehen, dann bauen.",
+      "text": "Sie sind nicht sicher, ob Shopify reicht oder WooCommerce sein muss? Das ist eine gute Frage. Die Antwort hängt von Ihren Prozessen ab, nicht vom Preis.\n\nIn einem kurzen Gespräch klären wir: Was verkaufen Sie? Wieviele Produkte? An wen? Welche Sonderwünsche? Danach wissen Sie, was Sie brauchen.",
+      "proof": [],
+      "cta": {
+        "label": "Kurzes Gespräch – Klarheit bekommen",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-shop-b2b": {
+      "type": "result",
+      "title": "B2B-Shop – ein Werkzeug für Ihren Vertrieb.",
+      "text": "Im B2B muss der Shop arbeiten wie Ihr Vertrieb denkt. Staffelpreise, Händlerzugänge, Freigabeprozesse, Rabattlogik. Kein Template kann das – das muss gebaut werden.\n\nIch betreue seit 2023 einen Industriekunden mit genau diesem Setup: Händlerportal, Steinmuster-Tracking, Preislogik. Typischer Aufwand: 100–200 Stunden, ab 8.000 EUR.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "WooCommerce, Händlerportal, Retainer",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Erzählen Sie mir von Ihrem B2B-Vertrieb",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-shop-budget-klein": {
+      "type": "result",
+      "title": "Shop unter 5.000 EUR – geht, aber mit Kompromissen.",
+      "text": "Individueller Shop für unter 5.000 EUR ist eng. Nicht unmöglich, aber: Standarddesign anpassen statt Custom, Sie pflegen Produkte selbst, keine komplexen Prozesse.\n\nWenn das reicht – können wir reden. Wenn nicht: Shopify ist ehrlicher. Kein monatlicher Entwickler-Obolus, dafür monatliche Shopify-Gebühr. Rechnen Sie durch, was günstiger ist.",
+      "proof": [],
+      "cta": {
+        "label": "Reden wir über die Kompromisse",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-shop-gross": {
+      "type": "result",
+      "title": "Großer Katalog – da wird Infrastruktur wichtig.",
+      "text": "Ab 500 Produkten brauchen Sie mehr als ein gutes Theme. Shared Hosting stirbt bei dieser Größe. Sie brauchen: Managed Hosting, Staging zum Testen, sauberen Produktimport, Filter die bei 1000 Produkten noch schnell sind.\n\nTypischer Aufwand: 100–200 Stunden, ab 8.000 EUR. Der Import allein kann 20–40 Stunden kosten – je nachdem wie sauber Ihre Daten sind.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Großer Katalog, B2B-Prozesse",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Schicken Sie mir den Katalog-Umfang",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-portal-kunden": {
+      "type": "result",
+      "title": "Kundenportal – Datenschutz von Anfang an.",
+      "text": "Ein Login-Bereich für Kunden ist technisch anspruchsvoller, weil DSGVO von Anfang an eingebaut werden muss. Was sollen Kunden sehen? Wer verwaltet Zugänge? Wie lange werden Daten gespeichert?\n\nDas ist machbar und Routine. Typischer Aufwand: 60–120 Stunden, DSGVO-Konzept inklusive.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "B2B-Händlerportal mit Login",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Was sollen Kunden sehen können?",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-portal-karriere": {
+      "type": "result",
+      "title": "Karriereportal – Custom lohnt sich bei Ihnen.",
+      "text": "Eigenes Design, Integration in Ihre Website, Standort-Filter, Mehrsprachigkeit: das bildet kein Standardtool ab. Ich habe für die Runden Group ein Karriereportal plus internes Onboarding-Tool gebaut.\n\nTypischer Aufwand: 60–120 Stunden, je nach Integrationstiefe.",
+      "proof": [
+        {
+          "name": "Runden Group",
+          "desc": "Karriereportal, Onboarding-Tool",
+          "href": "https://runden-group.eu"
+        }
+      ],
+      "cta": {
+        "label": "Beschreiben Sie mir Ihren Recruiting-Prozess",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-portal-standard": {
+      "type": "result",
+      "title": "Standardtool reicht – ehrlich gesagt.",
+      "text": "JOIN, Personio, Recruitee – die machen das gut. Schnell live, Bewerbermanagement inklusive, keine Entwicklungskosten. Custom würde sich bei Ihrem Bedarf nicht rechnen.\n\nMein Rat: Starten Sie mit Standard. Wenn Sie später merken, dass es nicht reicht, können wir immer noch reden.",
+      "proof": [],
+      "cta": {
+        "label": "Trotzdem Fragen? Reden wir",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-portal-custom": {
+      "type": "result",
+      "title": "Custom-Tool – wenn es sein muss, dann richtig.",
+      "text": "Sie haben geprüft, ob fertige Tools reichen. Die Antwort ist nein. Dann bauen wir was. Das ist die Art Projekte, die mich am meisten interessieren.\n\nAufwand variiert stark – von 40 Stunden für einen interaktiven Bericht bis 200+ für ein komplexes Portal. Erstgespräch klärt den Rahmen.",
+      "proof": [
+        {
+          "name": "Seniorpartner in School",
+          "desc": "Interaktiver Wirkungsbericht",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+        },
+        {
+          "name": "Runden Group",
+          "desc": "Karriereportal, Onboarding",
+          "href": "https://runden-group.eu"
+        }
+      ],
+      "cta": {
+        "label": "Reden wir über Ihr Projekt",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-portal-tool": {
+      "type": "result",
+      "title": "Fertiges Tool – oft die bessere Wahl.",
+      "text": "Kein Entwickler sagt das gern: Wenn ein fertiges Tool 80 % abdeckt, ist Custom meistens teurer. Asana, Notion, HubSpot, Pipedrive – die funktionieren, weil tausende Firmen damit arbeiten.\n\nWenn Standard später nicht mehr reicht, können wir reden. Aber starten Sie nicht mit Custom, wenn Standard reicht.",
+      "proof": [],
+      "cta": {
+        "label": "Trotzdem Fragen? Reden wir",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-bericht": {
+      "type": "result",
+      "title": "Interaktiver Bericht – genau mein Ding.",
+      "text": "Jahresberichte, Wirkungsberichte, Nachhaltigkeitsberichte – als PDF verstauben die. Als interaktive Website werden sie gelesen, geteilt, verlinkt.\n\nIch habe für Seniorpartner in School einen Wirkungsbericht mit interaktiver Deutschlandkarte gebaut. Klarer Scope, klares Ende. Typischer Aufwand: 40–80 Stunden.",
+      "proof": [
+        {
+          "name": "Seniorpartner in School",
+          "desc": "Interaktiver Wirkungsbericht 2025",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+        }
+      ],
+      "cta": {
+        "label": "Schicken Sie mir den aktuellen Bericht",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-performance": {
+      "type": "result",
+      "title": "Langsame Website – meistens schnell gelöst.",
+      "text": "Die häufigsten Ursachen: zu große Bilder, zu viele Plugins die über die Jahre dazugekommen sind, oder billiges Hosting. Nichts davon ist ein großes Problem.\n\nSchicken Sie mir die URL, ich sage Ihnen in 5 Minuten, woran es liegt. Typischer Aufwand: 5–15 Stunden, 400–1.200 EUR.",
+      "proof": [],
+      "cta": {
+        "label": "URL schicken – Ersteinschätzung kostenlos",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-bfsg": {
+      "type": "result",
+      "title": "BFSG – seit Juni 2025 Pflicht.",
+      "text": "Bußgelder bis 100.000 EUR. 96 % aller Websites haben noch Fehler. Die häufigsten: Text schlecht lesbar, Seite nicht per Tastatur bedienbar, Bilder ohne Beschreibung.\n\nIch prüfe Ihre Website, sage Ihnen was zu tun ist, und setze es um. Typischer Aufwand: 10–30 Stunden.",
+      "proof": [
+        {
+          "name": "Diese Website",
+          "desc": "WCAG 2.1 AA, BFSG-konform"
+        }
+      ],
+      "cta": {
+        "label": "Website prüfen lassen",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-seo": {
+      "type": "result",
+      "title": "Sichtbarkeit – Google UND KI.",
+      "text": "Zwei verschiedene Probleme. Google: klassisches SEO, das funktioniert noch. KI: 73 % der B2B-Einkäufer recherchieren mit ChatGPT. Wenn Sie dort nicht auftauchen, existieren Sie nicht.\n\nSchnelltest: Fragen Sie ChatGPT nach Ihrem Unternehmen. Stimmt die Antwort? Wenn nicht, haben Sie ein GEO-Problem – und das löst kein klassisches SEO.",
+      "proof": [
+        {
+          "name": "Diese Website",
+          "desc": "SEO + GEO optimiert"
+        }
+      ],
+      "cta": {
+        "label": "URL schicken – ich prüfe beides",
+        "href": "kontakt/"
+      },
+      "ctaSecondary": {
+        "label": "Mehr zu KI-Sichtbarkeit",
+        "href": "leistungen/ki-sichtbarkeit.html"
+      }
+    },
+
+    "result-redesign": {
+      "type": "result",
+      "title": "Design-Update – kein Komplett-Relaunch.",
+      "text": "Neues Theme, neue Typografie, bessere Bildsprache – ohne alles von Grund auf neu zu bauen. Spart Zeit und Geld.\n\nTypischer Aufwand: 30–60 Stunden, 2.400–4.800 EUR. Ich schaue mir an was da ist und sage ehrlich, was sich lohnt.",
+      "proof": [
+        {
+          "name": "Diese Website",
+          "desc": "Eigenes Redesign 2026"
+        }
+      ],
+      "cta": {
+        "label": "URL schicken – was lohnt sich?",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-relaunch": {
+      "type": "result",
+      "title": "Komplett-Relaunch – so planen Sie das richtig.",
+      "text": "Wenn Design, Technik und Inhalte veraltet sind, lohnt sich ein Neuanfang. Aber nicht planlos. Schritt 1: Was muss die neue Website KÖNNEN (nicht: haben). Schritt 2: Was funktioniert von der alten (Analytics). Schritt 3: Erst dann Design und Technik.\n\nTypischer Aufwand: 60–120 Stunden, 4.800–9.600 EUR.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Komplettes Projekt",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Lassen Sie uns den Neuanfang planen",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-redesign-beratung": {
+      "type": "result",
+      "title": "Redesign oder Relaunch? Klären wir.",
+      "text": "Nicht alles was alt aussieht braucht einen Neubau. Manchmal reicht ein Facelift, manchmal muss mehr passieren. In 15 Minuten finden wir raus, was bei Ihnen Sinn macht.\n\nSchicken Sie mir vorher die URL – dann bin ich vorbereitet.",
+      "proof": [],
+      "cta": {
+        "label": "URL schicken + Termin machen",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-technik-wp": {
+      "type": "result",
+      "title": "WordPress-Problem – ich kenne das System von innen.",
+      "text": "WordPress-Probleme haben meistens mit Plugins zu tun, die sich in die Quere kommen. Oder mit einem Update, das was kaputt gemacht hat. Das lässt sich systematisch eingrenzen.\n\nIch habe beim Hersteller von YOOtheme gearbeitet und betreue über 20 WordPress-Websites. Schicken Sie mir eine Beschreibung – Ersteinschätzung kostenlos.",
+      "proof": [
+        {
+          "name": "YOOtheme",
+          "desc": "Ehemaliger Support Manager",
+          "href": "https://yootheme.com"
+        }
+      ],
+      "cta": {
+        "label": "Problem schildern",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-technik-woo": {
+      "type": "result",
+      "title": "WooCommerce-Problem – da geht es um Geld.",
+      "text": "Wenn der Shop Probleme hat, kostet das direkt Umsatz. Bestellungen gehen nicht durch, Preise stimmen nicht, Zahlungsanbieter meldet Fehler. Das ist nichts zum Experimentieren.\n\nSchicken Sie mir eine Beschreibung. Shops haben Priorität.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "WooCommerce, laufender Betrieb",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Problem schildern – Shops haben Priorität",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-technik": {
+      "type": "result",
+      "title": "Irgendwas ist kaputt – das klären wir.",
+      "text": "Wenn Sie nicht genau wissen was los ist: kein Problem. Beschreiben Sie was passiert (oder nicht passiert), seit wann, auf welcher Seite. Je genauer, desto schneller bin ich.\n\nErsteinschätzung kostenlos.",
+      "proof": [],
+      "cta": {
+        "label": "Problem schildern",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-sicherheit": {
+      "type": "result",
+      "title": "Gehackt – jetzt schnell handeln.",
+      "text": "Nicht selbst daran herumreparieren. Informieren Sie Ihren Hoster und melden Sie sich bei mir. Ich finde die Lücke, räume auf und sichere ab.\n\nBei Sicherheitsproblemen reagiere ich am selben Tag.",
+      "proof": [],
+      "cta": {
+        "label": "Sofort melden",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-betreuung-basis": {
+      "type": "result",
+      "title": "Basis-Betreuung – läuft im Hintergrund.",
+      "text": "Updates, Backups, Sicherheits-Monitoring. Ich update manuell, prüfe danach, rolle zurück wenn nötig. Sie merken nichts davon – und genau das ist der Punkt.\n\nAb 15 EUR/Monat für eine WordPress-Website.",
+      "proof": [
+        {
+          "name": "20+ Websites",
+          "desc": "Laufende Betreuung seit Jahren"
+        }
+      ],
+      "cta": {
+        "label": "Welche Website soll ich betreuen?",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-betreuung-standard": {
+      "type": "result",
+      "title": "Standard-Betreuung – Sie schicken, ich setze um.",
+      "text": "Alles aus der Basis, plus: Sie schicken eine Mail mit einer Änderung, ich setze um. Nicht jedes Mal erklären wo was ist. Nicht jedes Mal das CMS neu verstehen. Kurze Wege.\n\n80–200 EUR/Monat, je nach Änderungsfrequenz.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Retainer, regelmäßige Änderungen",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Lassen Sie uns die Zusammenarbeit besprechen",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-betreuung-premium": {
+      "type": "result",
+      "title": "Premium – Ihr eigener Entwickler, ohne Fixkosten.",
+      "text": "Manche brauchen keinen Betreuungsvertrag, sondern einen eigenen Entwickler. Nur ohne Sozialabgaben und Bürokosten. Premium heißt: Ich bin Ihr fester Ansprechpartner für alles. Priority-Support, Retainer, kurze Wege.\n\n400–800 EUR/Monat. So arbeite ich mit Gerwing – alleinige technische Verantwortung seit 2023.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Retainer, alleinige Verantwortung",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Lassen Sie uns über den Retainer sprechen",
+        "href": "kontakt/"
+      }
+    }
+  }
+}
