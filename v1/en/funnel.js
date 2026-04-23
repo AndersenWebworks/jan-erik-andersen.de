@@ -1,5 +1,5 @@
 /**
- * Berater-Funnel Engine v3
+ * Advisor Funnel Engine v3 (EN)
  * Premium design: SVG icons, progress dots, decorative elements,
  * directional animations, staggered reveals, scroll lock.
  * Vanilla JS, JSON-driven, no backend.
@@ -48,202 +48,98 @@
   /* ── Icon Mapping by Option Label ────────────────────────── */
   var OPTION_ICON_MAP = [
     /* Start */
-    { match: 'neue Website',          icon: 'monitor' },
-    { match: 'Website oder einen Shop', icon: 'monitor' },
-    { match: 'Problem',               icon: 'alert-triangle' },
-    { match: 'Betreuung',             icon: 'shield' },
-    { match: 'KI-Sichtbarkeit',      icon: 'eye' },
-    { match: 'Kontakt aufnehmen',     icon: 'mail' },
-    { match: 'selbst lesen',          icon: 'book-open' },
-    { match: 'Was kostet',            icon: 'file-text' },
-    { match: 'vergleiche Anbieter',   icon: 'search' },
-    /* Neue Website */
-    { match: 'Firmenwebsite',         icon: 'monitor' },
-    { match: 'Unternehmenswebsite',   icon: 'monitor' },
-    { match: 'Online-Shop',           icon: 'shopping-bag' },
-    { match: 'Web-App',               icon: 'code' },
-    { match: 'Portal, Tool',          icon: 'code' },
-    { match: 'Landingpage',           icon: 'file-text' },
-    { match: 'Onepager',              icon: 'file-text' },
-    { match: 'nicht sicher',          icon: 'search' },
-    /* Branche */
-    { match: 'Industrie',             icon: 'tool' },
-    { match: 'Recht',                 icon: 'shield' },
-    { match: 'Verein',                icon: 'shield' },
-    { match: 'Gastro',                icon: 'monitor' },
-    { match: 'Andere Branche',        icon: 'layers' },
-    /* Umfang */
-    { match: 'berschaubar',           icon: 'file-text' },
-    { match: 'Mittelgro',             icon: 'layers' },
-    { match: 'Gro',                   icon: 'maximize' },
+    { match: 'new website',           icon: 'monitor' },
+    { match: 'has a problem',         icon: 'alert-triangle' },
+    { match: 'ongoing maintenance',   icon: 'shield' },
+    { match: 'AI visibility',         icon: 'eye' },
+    { match: 'read on my own',        icon: 'book-open' },
+    { match: 'does this cost',        icon: 'file-text' },
+    { match: 'comparing providers',   icon: 'search' },
+    /* New Website */
+    { match: 'Company website',       icon: 'monitor' },
+    { match: 'Online shop',           icon: 'shopping-bag' },
+    { match: 'Web app',               icon: 'code' },
+    { match: 'Landing page',          icon: 'file-text' },
+    { match: 'one-pager',             icon: 'file-text' },
+    /* Industry */
+    { match: 'Industry',              icon: 'tool' },
+    { match: 'Law',                   icon: 'shield' },
+    { match: 'Association',           icon: 'shield' },
+    { match: 'Hospitality',           icon: 'monitor' },
+    { match: 'Other industry',        icon: 'layers' },
+    /* Scope */
+    { match: 'Manageable',            icon: 'file-text' },
+    { match: 'Medium',                icon: 'layers' },
+    { match: 'Large',                 icon: 'maximize' },
     /* CMS */
-    { match: 'pflegen selbst',        icon: 'layers' },
-    { match: 'Entwickler',            icon: 'code' },
-    { match: 'eiss noch nicht',       icon: 'search' },
-    { match: 'eiss ich nicht',        icon: 'search' },
+    { match: 'manage it ourselves',   icon: 'layers' },
+    { match: 'developer handles',     icon: 'code' },
+    { match: 'Not sure yet',          icon: 'search' },
     /* Shop */
-    { match: 'Klassischer',           icon: 'shopping-bag' },
+    { match: 'Standard online',       icon: 'shopping-bag' },
     { match: 'B2B',                   icon: 'shopping-bag' },
-    { match: 'B2C',                   icon: 'shopping-bag' },
-    { match: 'Endkunden',             icon: 'shopping-bag' },
-    { match: 'ndler',                 icon: 'shopping-bag' },
-    { match: 'Gewerbekunden',         icon: 'shopping-bag' },
-    { match: 'Unter 50',              icon: 'file-text' },
-    { match: '50 bis 500',            icon: 'layers' },
-    { match: 'ber 500',               icon: 'maximize' },
+    { match: 'Under 50',              icon: 'file-text' },
+    { match: '50 to 500',             icon: 'layers' },
+    { match: 'Over 500',              icon: 'maximize' },
     { match: 'WooCommerce',           icon: 'shopping-bag' },
-    { match: 'was Individuelles',     icon: 'code' },
-    { match: 'Standard könnte',       icon: 'layers' },
-    { match: 'Standard reicht',       icon: 'layers' },
-    { match: 'Standard klingt',       icon: 'layers' },
-    { match: 'das brauche ich',       icon: 'chevron-right' },
-    { match: 'ist das einfacher',     icon: 'layers' },
-    { match: 'ist das anders',        icon: 'layers' },
-    { match: 'in meinen Rahmen',      icon: 'chevron-right' },
     /* Portal */
-    { match: 'Karriere',              icon: 'layers' },
-    { match: 'Stellen ausschreiben',  icon: 'layers' },
-    { match: 'Bewerbungen',           icon: 'layers' },
-    { match: 'Kundenportal',          icon: 'shield' },
-    { match: 'Kunden einloggen',      icon: 'shield' },
-    { match: 'Daten einsehen',        icon: 'shield' },
-    { match: 'Internes Tool',         icon: 'code' },
-    { match: 'Bericht',               icon: 'file-text' },
-    { match: 'Report',                icon: 'file-text' },
-    { match: 'mehr als Standard',     icon: 'code' },
-    { match: 'wirklich Custom',       icon: 'code' },
-    { match: 'reicht ein Tool',       icon: 'layers' },
+    { match: 'Career',                icon: 'layers' },
+    { match: 'Customer portal',       icon: 'shield' },
+    { match: 'Internal tool',         icon: 'code' },
+    { match: 'Interactive report',    icon: 'file-text' },
     /* Problem */
-    { match: 'Design',                icon: 'monitor' },
-    { match: 'Inhalte',               icon: 'file-text' },
-    { match: 'veraltet',              icon: 'alert-triangle' },
-    { match: 'langsam',               icon: 'zap' },
-    { match: 'barrierefrei',          icon: 'shield' },
-    { match: 'gefunden',              icon: 'search' },
-    { match: 'kaputt',                icon: 'tool' },
-    { match: 'Alles zusammen',        icon: 'maximize' },
+    { match: 'design',                icon: 'monitor' },
+    { match: 'content',               icon: 'file-text' },
+    { match: 'outdated',              icon: 'alert-triangle' },
+    { match: 'slow',                  icon: 'zap' },
+    { match: 'accessible',            icon: 'shield' },
+    { match: 'found',                 icon: 'search' },
+    { match: 'broken',                icon: 'tool' },
+    { match: 'Everything',            icon: 'maximize' },
     /* Problem CMS */
     { match: 'WordPress',             icon: 'code' },
     { match: 'Shopify',               icon: 'shopping-bag' },
-    { match: 'Gehackt',               icon: 'alert-triangle' },
-    { match: 'Sicherheitsproblem',    icon: 'alert-triangle' },
     /* BFSG */
-    { match: 'Nein, noch',            icon: 'search' },
-    { match: 'Fehler sind unklar',    icon: 'alert-triangle' },
-    { match: 'Hilfe beim Fix',        icon: 'tool' },
-    { match: 'einer hat gefehlt',     icon: 'alert-triangle' },
-    { match: 'pruefen lassen',        icon: 'search' },
+    { match: 'No, not',               icon: 'search' },
+    { match: 'errors are unclear',    icon: 'alert-triangle' },
+    { match: 'help fixing',           icon: 'tool' },
+    { match: 'one failed',            icon: 'alert-triangle' },
+    { match: 'professional check',    icon: 'search' },
     /* SEO */
-    { match: 'Bei Google',            icon: 'search' },
+    { match: 'On Google',             icon: 'search' },
     { match: 'ChatGPT',               icon: 'eye' },
-    { match: 'Beides',                icon: 'search' },
-    /* Betreuung */
+    { match: 'Both',                  icon: 'search' },
+    /* Maintenance */
     { match: 'Updates',               icon: 'shield' },
-    { match: 'Sicherheit',            icon: 'shield' },
-    { match: 'nderungen',             icon: 'layers' },
-    { match: 'Komplett',              icon: 'maximize' },
-    { match: 'Statisch',              icon: 'code' },
-    { match: 'festen Entwickler',     icon: 'maximize' },
-    { match: 'Basis reicht',          icon: 'shield' },
-    { match: 'Premium',               icon: 'maximize' },
-    { match: 'schaftskritisch',       icon: 'maximize' },
+    { match: 'regular changes',       icon: 'layers' },
+    { match: 'Full service',          icon: 'maximize' },
+    { match: 'Static',                icon: 'code' },
     /* GEO */
-    { match: 'Nichts',                icon: 'book-open' },
-    { match: 'Grundidee',             icon: 'eye' },
-    { match: 'Audit',                 icon: 'search' },
-    { match: 'Klingt relevant',       icon: 'eye' },
-    /* Budget */
-    { match: 'Unter 2.400',           icon: 'file-text' },
-    { match: 'Unter 2.000',           icon: 'file-text' },
-    { match: 'Unter 4.800',           icon: 'file-text' },
-    { match: 'Unter 10.000',          icon: 'file-text' },
-    { match: 'Budget ist kleiner',    icon: 'file-text' },
-    { match: '2.400',                 icon: 'layers' },
-    { match: '2.000',                 icon: 'layers' },
-    { match: '4.800',                 icon: 'layers' },
-    { match: '10.000',                icon: 'layers' },
-    { match: '20.000',                icon: 'maximize' },
-    { match: 'ber 10.000',            icon: 'maximize' },
-    { match: 'ber 20.000',            icon: 'maximize' },
-    { match: 'Projekt ist größer',    icon: 'maximize' },
-    { match: 'Katalog ist größer',    icon: 'maximize' },
-    { match: 'Budget steht',          icon: 'search' },
-    { match: 'Baukästen',             icon: 'book-open' },
-    { match: 'Trotzdem kurz',         icon: 'mail' },
-    { match: 'Trotzdem reden',        icon: 'mail' },
-    { match: 'Trotzdem Fragen',       icon: 'mail' },
-    /* Zeitrahmen */
-    { match: 'So schnell',            icon: 'zap' },
-    { match: '1–3 Monaten',           icon: 'layers' },
-    { match: '2–3 Monaten',           icon: 'layers' },
-    { match: '3–6 Monaten',           icon: 'layers' },
-    { match: '4–8 Wochen',            icon: 'layers' },
-    { match: '6+ Monaten',            icon: 'maximize' },
-    { match: 'Kein fester',           icon: 'search' },
-    /* Produktanzahl */
-    { match: 'Unter 50 Prod',         icon: 'file-text' },
-    { match: '50–200',                icon: 'layers' },
-    { match: '200–500',               icon: 'layers' },
-    { match: 'ber 500 Prod',          icon: 'maximize' },
-    /* Branchen */
-    { match: 'Handwerk',              icon: 'tool' },
-    { match: 'Produktion',            icon: 'tool' },
-    { match: 'Beratung',              icon: 'layers' },
-    { match: 'Dienstleistung',        icon: 'layers' },
-    { match: 'Agentur',               icon: 'layers' },
-    { match: 'Steuer',                icon: 'shield' },
-    { match: 'Finanzen',              icon: 'shield' },
-    { match: 'Gesundheit',            icon: 'shield' },
-    { match: 'Soziales',              icon: 'shield' },
-    { match: 'Firmengruppe',          icon: 'maximize' },
-    { match: 'Holding',               icon: 'maximize' },
-    /* Redesign-spezifisch */
-    { match: 'Facelift',              icon: 'monitor' },
-    { match: 'Phasen-Ansatz',         icon: 'layers' },
-    { match: 'Umfang reduzieren',     icon: 'file-text' },
-    { match: 'MVP',                   icon: 'zap' },
-    { match: 'Kompromisse',           icon: 'layers' },
-    { match: 'realistisch planen',    icon: 'layers' },
-    { match: 'berdenke',              icon: 'search' },
-    /* Kosten */
+    { match: 'Nothing',               icon: 'book-open' },
+    { match: 'Basic idea',            icon: 'eye' },
+    { match: 'audit',                 icon: 'search' },
+    { match: 'Sounds relevant',       icon: 'eye' },
+    /* Costs */
     { match: 'Website',               icon: 'monitor' },
-    { match: 'Shop',                  icon: 'shopping-bag' },
-    { match: 'Einzelne Aufgabe',      icon: 'tool' },
-    { match: 'Zu teuer',              icon: 'search' },
-    /* Vergleich */
+    { match: 'shop',                  icon: 'shopping-bag' },
+    { match: 'Single task',           icon: 'tool' },
+    { match: 'Too expensive',         icon: 'search' },
+    /* Compare */
     { match: 'Freelancer vs',         icon: 'layers' },
-    { match: 'Verschiedene Freelancer', icon: 'search' },
-    { match: 'Selber machen',         icon: 'code' },
+    { match: 'Different freelancers', icon: 'search' },
+    { match: 'DIY',                   icon: 'code' },
     /* Info actions */
-    { match: 'Verstanden',            icon: 'chevron-right' },
-    { match: 'Passt',                 icon: 'chevron-right' },
-    { match: 'ich will',              icon: 'chevron-right' },
-    { match: 'Ich will',              icon: 'chevron-right' },
-    { match: 'Ich brauche',           icon: 'chevron-right' },
-    { match: 'Ich habe eine',         icon: 'tool' },
-    { match: 'Antworten',             icon: 'eye' },
-    { match: 'Noch Fragen',           icon: 'mail' },
-    { match: 'unsicher',              icon: 'search' },
-    /* CTA / Result actions */
-    { match: 'Mail schreiben',        icon: 'mail' },
-    { match: 'schicken',              icon: 'mail' },
-    { match: 'Schicken',              icon: 'mail' },
-    { match: 'rzählen',               icon: 'mail' },
-    { match: 'Reden wir',             icon: 'mail' },
-    { match: 'reden wir',             icon: 'mail' },
-    { match: 'sprechen',              icon: 'mail' },
-    { match: 'Sprechen',              icon: 'mail' },
-    { match: 'Minuten',               icon: 'mail' },
-    { match: 'besprechen',            icon: 'mail' },
-    { match: 'Beschreiben',           icon: 'mail' },
-    { match: 'schildern',             icon: 'mail' },
-    { match: 'melden',                icon: 'alert-triangle' },
-    { match: 'prüfen',                icon: 'search' },
-    { match: 'Lassen Sie uns',        icon: 'mail' },
+    { match: 'Got it',                icon: 'chevron-right' },
+    { match: 'Fits',                  icon: 'chevron-right' },
+    { match: 'I want',                icon: 'chevron-right' },
+    { match: 'I need',                icon: 'chevron-right' },
+    { match: 'I have a',              icon: 'tool' },
+    { match: 'hear your answers',     icon: 'eye' },
+    { match: 'More questions',        icon: 'mail' },
+    { match: 'not sure',              icon: 'search' },
     /* Navigation */
-    { match: 'ck zum Anfang',         icon: 'refresh-cw' },
-    { match: 'Anderes',               icon: 'layers' },
-    { match: 'Beides',                icon: 'layers' }
+    { match: 'Back to the start',     icon: 'refresh-cw' },
+    { match: 'Other',                 icon: 'layers' }
   ];
 
   function getOptionIcon(label) {
@@ -290,7 +186,7 @@
     var step = history.length + 1;
     if (step <= 1) return '';
     var total = history.length + (nodeDepths[currentNodeId] || 1);
-    return '<span class="funnel-step-label funnel-stagger" style="--i:0">Schritt ' + step + ' von ' + total + '</span>';
+    return '<span class="funnel-step-label funnel-stagger" style="--i:0">Step ' + step + ' of ' + total + '</span>';
   }
 
   /* ── Session Memory ────────────────────────────────── */
@@ -343,7 +239,6 @@
   /* ── Init ─────────────────────────────────────────── */
 
   function init() {
-    // Check for deep link to a result via URL hash
     var hash = window.location.hash.replace('#', '');
 
     if (isFunnelDone() && !hash) {
@@ -365,7 +260,7 @@
         }
       })
       .catch(function () {
-        app.innerHTML = '<p class="funnel-error">Funnel konnte nicht geladen werden.</p>';
+        app.innerHTML = '<p class="funnel-error">Could not load funnel.</p>';
       });
   }
 
@@ -400,7 +295,6 @@
     setTimeout(function () {
       app.classList.remove(outClass);
 
-      // Fire synapse BEFORE new content appears
       if (direction === 'forward') {
         updateConstellationDepth();
       }
@@ -410,7 +304,6 @@
       app.innerHTML = buildHTML(nodeId);
       bindEvents();
 
-      // D3: Update URL hash for result nodes (shareable links)
       var node = tree[nodeId];
       if (node && node.type === 'result') {
         window.history.replaceState(null, '', '#' + nodeId);
@@ -419,7 +312,6 @@
         trackEvent('contact');
       }
 
-      // Delay slide-in so the synapse line is visible first
       var synapseDelay = direction === 'forward' ? 500 : 0;
 
       setTimeout(function () {
@@ -465,17 +357,14 @@
     if (node.subtitle) {
       h += '<p class="funnel-subtitle funnel-stagger" style="--i:1">' + esc(node.subtitle) + '</p>';
     }
-    h += '<div class="funnel-accent-line funnel-stagger" style="--i:1.5"></div>';
 
     h += '<div class="funnel-options">';
     for (var i = 0; i < node.options.length; i++) {
       var opt = node.options[i];
-      var num = String(i + 1).length < 2 ? '0' + (i + 1) : String(i + 1);
       var si = 'style="--i:' + (i + 2) + '"';
       var data = opt.action ? 'data-action="' + esc(opt.action) + '"' : 'data-next="' + esc(opt.next) + '"';
       var icon = getOptionIcon(opt.label);
       h += '<button class="funnel-option funnel-stagger" ' + si + ' ' + data + '>';
-      h += '<span class="funnel-option-num">' + num + '</span>';
       if (icon) h += '<span class="funnel-option-icon">' + icon + '</span>';
       h += '<span class="funnel-option-label">' + esc(opt.label) + '</span>';
       h += '<span class="funnel-option-arrow" aria-hidden="true">' + ICONS['chevron-right'] + '</span>';
@@ -518,7 +407,7 @@
 
     if (node.proof && node.proof.length > 0) {
       h += '<div class="funnel-proof funnel-stagger" style="--i:2">';
-      h += '<span class="funnel-proof-label">Referenzen</span>';
+      h += '<span class="funnel-proof-label">References</span>';
       h += '<div class="funnel-proof-items">';
       for (var i = 0; i < node.proof.length; i++) {
         var p = node.proof[i];
@@ -543,13 +432,13 @@
 
     h += '<div class="funnel-result-actions funnel-stagger" style="--i:' + (ctaI + 1) + '">';
     h += '<button class="funnel-restart" data-action="restart">';
-    h += '<span class="funnel-action-icon">' + ICONS['refresh-cw'] + '</span> Nochmal von vorn</button>';
+    h += '<span class="funnel-action-icon">' + ICONS['refresh-cw'] + '</span> Start over</button>';
     if (node.ctaSecondary) {
       h += '<a href="' + esc(node.ctaSecondary.href) + '" class="funnel-result-link">';
       h += '<span class="funnel-action-icon">' + ICONS['external-link'] + '</span> ' + esc(node.ctaSecondary.label) + '</a>';
     }
     h += '<button class="funnel-exit-btn" data-action="exit">';
-    h += '<span class="funnel-action-icon">' + ICONS['external-link'] + '</span> Mehr \u00fcber mich lesen</button>';
+    h += '<span class="funnel-action-icon">' + ICONS['external-link'] + '</span> Read more about me</button>';
     h += '</div>';
     return h;
   }
@@ -557,297 +446,85 @@
   /* ── Email Builder from Funnel Path ─────────────────── */
 
   var RESULT_EMAILS = {
-    /* ── Direkt / Allgemein ── */
-    'result-direkt': {
-      subject: 'Kurze Anfrage',
-      body: 'ich moechte kurz mit Ihnen sprechen. Kein langer Funnel noetig – hier ist mein Anliegen:',
-      url: false
-    },
-    'result-beratung': {
-      subject: 'Beratungsgespraech',
-      body: 'ich bin nicht sicher, was genau ich brauche. Koennen wir kurz sprechen, um das zu klaeren?',
-      url: true
-    },
-    'result-budget-klein': {
-      subject: 'Website – kleines Budget',
-      body: 'mein Budget liegt unter 2.400 EUR. Ich weiss, dass das knapp ist, aber vielleicht gibt es trotzdem einen Weg.',
-      url: true
-    },
-    /* ── Neue Website ── */
     'result-website': {
-      subject: 'Neue Firmenwebsite',
-      body: 'wir brauchen eine neue Website fuer unser Unternehmen. Ich habe Ihren Berater-Funnel durchgeklickt.',
+      subject: 'New company website',
+      body: 'we need a new website for our company. We either don\'t have one yet or the current one is no longer presentable.',
       url: true
     },
-    'result-industrie': {
-      subject: 'Firmenwebsite (Industrie/Handwerk)',
-      body: 'wir sind ein Industriebetrieb und brauchen eine neue Website. Ihr Hinweis zu Gerwing Steinwerke und Ihre Erfahrung mit B2B-Katalogen klingt passend.',
+    'result-website-gross': {
+      subject: 'Website for corporate group',
+      body: 'we are a corporate group with multiple subsidiaries and need a unified web presence \u2013 probably multilingual.',
       url: true
     },
-    'result-beratung-branche': {
-      subject: 'Firmenwebsite (Beratung/Dienstleistung)',
-      body: 'wir sind eine Beratungsfirma und brauchen eine neue Website. Ihr Punkt zu Vertrauen und KI-Sichtbarkeit hat mich angesprochen.',
-      url: true
-    },
-    'result-recht': {
-      subject: 'Firmenwebsite (Kanzlei/Steuerbuero)',
-      body: 'wir sind eine Kanzlei/ein Steuerbuero und brauchen eine neue Website. Ihr Hinweis, dass alle Kanzlei-Websites gleich aussehen, trifft leider auch auf unsere zu.',
-      url: true
-    },
-    'result-sozial': {
-      subject: 'Website (Verein/soziale Einrichtung)',
-      body: 'wir sind ein Verein/eine soziale Einrichtung und brauchen eine neue Website. Ihr Hinweis zu begrenzten Budgets und echten Geschichten hat mich angesprochen.',
-      url: true
-    },
-    'result-gross': {
-      subject: 'Web-Auftritt Firmengruppe',
-      body: 'wir sind eine Unternehmensgruppe mit mehreren Gesellschaften und brauchen einen einheitlichen Web-Auftritt. Ihr Punkt zur Koordination als Hauptproblem trifft bei uns zu.',
-      url: true
-    },
-    /* ── Shop ── */
     'result-shop': {
-      subject: 'WooCommerce-Shop',
-      body: 'wir brauchen einen Online-Shop mit individuellen Anforderungen. Shopify reicht nicht, weil wir eigene Prozesse abbilden muessen.',
-      url: true
-    },
-    'result-shop-mittel': {
-      subject: 'WooCommerce-Shop (200-500 Produkte)',
-      body: 'wir brauchen einen Online-Shop mit 200-500 Produkten. Ihr Hinweis zum strukturierten Import war hilfreich – manuelles Einpflegen ist keine Option.',
-      url: true
-    },
-    'result-shop-budget-knapp': {
-      subject: 'WooCommerce-Shop (Budget begrenzt)',
-      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 4.800 EUR). Ich bin bereit, Kompromisse zu machen – reden wir ueber die Optionen.',
-      url: true
-    },
-    'result-shop-standard': {
-      subject: 'Online-Shop (Beratung)',
-      body: 'ich habe Ihren Funnel durchgeklickt und Sie haben ehrlich gesagt, dass Shopify fuer unseren Fall reichen koennte. Trotzdem wuerde ich gern kurz mit Ihnen sprechen, ob WooCommerce sich langfristig lohnt.',
-      url: true
-    },
-    'result-shop-gross': {
-      subject: 'Grosser Online-Shop (500+ Produkte)',
-      body: 'wir brauchen einen Shop mit grossem Produktkatalog. Ihre Hinweise zu Hosting und Infrastruktur bei 500+ Produkten waren hilfreich.',
+      subject: 'Online shop',
+      body: 'we want to set up an online shop for direct-to-consumer sales.',
       url: true
     },
     'result-shop-b2b': {
-      subject: 'B2B-Shop mit Haendlerportal',
-      body: 'wir brauchen einen B2B-Shop – Staffelpreise, Haendlerzugaenge, Freigabeprozesse. Kein Standard-Theme, sondern ein Werkzeug fuer unseren Vertrieb.',
+      subject: 'B2B shop with dealer portal',
+      body: 'we need a B2B shop with a dealer portal \u2013 price lists, customer accounts, the full package.',
       url: true
     },
-    'result-shop-beratung': {
-      subject: 'Shop-Beratung',
-      body: 'ich bin nicht sicher, ob Shopify reicht oder WooCommerce sein muss. Koennen wir kurz sprechen?',
-      url: true
-    },
-    'result-shop-budget-klein': {
-      subject: 'Shop (Budget begrenzt)',
-      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 4.800 EUR). Ich bin bereit, Kompromisse zu machen.',
-      url: true
-    },
-    /* ── Portal ── */
-    'result-portal-karriere': {
-      subject: 'Karriereportal (Custom)',
-      body: 'wir brauchen ein Karriereportal, das ueber das hinausgeht, was JOIN oder Personio koennen – eigenes Design, Integration in unsere Website.',
-      url: true
-    },
-    'result-portal-karriere-standard': {
-      subject: 'Karriereportal (Beratung)',
-      body: 'Sie haben ehrlich gesagt, dass ein Standardtool fuer unseren Bedarf reichen koennte. Trotzdem ein paar Fragen dazu.',
-      url: false
-    },
-    'result-portal-kunden': {
-      subject: 'Kundenportal mit Login',
-      body: 'wir brauchen einen Login-Bereich fuer unsere Kunden – Daten einsehen, Dokumente, vielleicht Bestellhistorie. Ihr Hinweis zu DSGVO-Anforderungen war wichtig.',
-      url: true
-    },
-    'result-portal-intern': {
-      subject: 'Custom-Tool / Web-App',
-      body: 'wir brauchen ein internes Tool, das kein fertiges Produkt abbilden kann. Ich habe geprueft: Standardtools reichen nicht.',
-      url: false
-    },
-    'result-portal-tool': {
-      subject: 'Beratung Toolauswahl',
-      body: 'Sie haben mich darauf gebracht, dass ein fertiges Tool fuer uns reichen koennte. Koennen Sie uns bei der Auswahl beraten?',
-      url: false
-    },
-    'result-portal-standard': {
-      subject: 'Karriereportal (Standard)',
-      body: 'Sie haben ehrlich gesagt, dass ein Standardtool fuer unseren Bedarf reichen koennte. Trotzdem ein paar Fragen dazu.',
-      url: false
-    },
-    'result-portal-custom': {
-      subject: 'Custom-Tool / Web-App',
-      body: 'wir brauchen ein Tool, das kein fertiges Produkt abbilden kann. Ich habe geprueft: Standardtools reichen nicht.',
-      url: false
-    },
-    'result-bericht': {
-      subject: 'Interaktiver Bericht',
-      body: 'wir moechten einen Bericht (Jahresbericht / Wirkungsbericht) als interaktive Website statt als PDF erstellen.',
+    'result-portal': {
+      subject: 'Web app / Portal',
+      body: 'we need a web app or portal \u2013 not a classic website but something interactive where users can work.',
       url: false
     },
     'result-landingpage': {
-      subject: 'Landingpage',
-      body: 'wir brauchen eine fokussierte Landingpage fuer ein konkretes Angebot. Eine Seite, ein Ziel.',
+      subject: 'Landing page',
+      body: 'we need a single, well-crafted page \u2013 a landing page for a specific offer or topic.',
       url: false
     },
-    /* ── Problem: Redesign ── */
     'result-redesign': {
-      subject: 'Design-Update unserer Website',
-      body: 'das Design unserer Website ist veraltet, aber Technik und Inhalte stimmen noch. Wir brauchen ein visuelles Update, keinen Komplett-Relaunch.',
-      url: true
-    },
-    'result-redesign-technik': {
-      subject: 'Technisches Update unserer Website',
-      body: 'unsere Website hat ein Technik-Problem: nicht responsive, veraltetes PHP oder kein HTTPS. Wir brauchen Hilfe beim technischen Fundament.',
-      url: true
-    },
-    'result-redesign-content': {
-      subject: 'Content-Update unserer Website',
-      body: 'unsere Website-Inhalte sind veraltet (falsche Leistungen, alte Fotos). Wir brauchen ein Content-Update, kein Redesign.',
-      url: true
-    },
-    'result-redesign-komplett': {
-      subject: 'Komplett-Redesign',
-      body: 'bei unserer Website ist alles veraltet: Design, Technik und Inhalte. Wir brauchen einen Neuanfang, aber sinnvoll geplant.',
-      url: true
-    },
-    'result-relaunch': {
-      subject: 'Komplett-Relaunch',
-      body: 'unsere Website braucht einen kompletten Neuanfang – Design, Technik und Inhalte. Ich habe Ihren Funnel durchgeklickt.',
-      url: true
-    },
-    'result-redesign-beratung': {
-      subject: 'Redesign oder Relaunch?',
-      body: 'ich bin nicht sicher, ob ein Facelift reicht oder ob wir einen Komplett-Relaunch brauchen. Koennen wir das klaeren?',
-      url: true
-    },
-    /* ── Problem: Performance ── */
-    'result-performance-wp': {
-      subject: 'WordPress-Performance',
-      body: 'unsere WordPress-Website ist zu langsam. Ich habe pagespeed.web.dev geprueft und der Score ist nicht gut. Koennen Sie sich das anschauen?',
+      subject: 'Website redesign',
+      body: 'our website no longer looks contemporary. We need a redesign \u2013 technology, design, or both.',
       url: true
     },
     'result-performance': {
-      subject: 'Website zu langsam',
-      body: 'unsere Website ist zu langsam. Ich habe pagespeed.web.dev getestet. Koennen Sie sich das anschauen?',
+      subject: 'Website too slow',
+      body: 'our website is too slow and we\'re not sure why. Could you take a look?',
       url: true
     },
-    /* ── Problem: BFSG ── */
     'result-bfsg': {
-      subject: 'Barrierefreiheit / BFSG',
-      body: 'wir muessen unsere Website barrierefrei machen (BFSG). Ich habe den Schnelltest aus Ihrem Funnel gemacht und mindestens ein Problem gefunden.',
-      url: true
-    },
-    'result-bfsg-fix': {
-      subject: 'BFSG-Fehler beheben',
-      body: 'wir haben unsere Website pruefen lassen und wissen, welche BFSG-Fehler existieren. Koennen Sie die beheben und dokumentieren?',
-      url: true
-    },
-    /* ── Problem: SEO / GEO ── */
-    'result-seo-google': {
-      subject: 'Google-Sichtbarkeit',
-      body: 'unsere Website wird bei Google schlecht gefunden. Koennen Sie sich das anschauen?',
-      url: true
-    },
-    'result-seo-ki': {
-      subject: 'KI-Sichtbarkeit',
-      body: 'ich habe ChatGPT nach unserem Unternehmen gefragt und die Antwort war duenn oder falsch. Koennen Sie helfen, unsere Website fuer KI-Systeme sichtbar zu machen?',
+      subject: 'Accessibility / EAA',
+      body: 'we need to make our website accessible (European Accessibility Act). Can you assess what\'s needed?',
       url: true
     },
     'result-seo': {
-      subject: 'Website wird nicht gefunden',
-      body: 'unsere Website wird schlecht gefunden – weder bei Google noch bei KI-Systemen. Koennen Sie sich das anschauen?',
-      url: true
-    },
-    /* ── Problem: Technik ── */
-    'result-technik-wp': {
-      subject: 'WordPress-Problem',
-      body: 'unsere WordPress-Website hat ein technisches Problem. Ich habe Plugins deaktiviert und den Health Check geprueft, komme aber nicht weiter.',
-      url: true
-    },
-    'result-technik-woo': {
-      subject: 'WooCommerce-Problem',
-      body: 'unser WooCommerce-Shop hat ein Problem – Bestellungen, Zahlungen oder Darstellung. Koennen Sie sich das zeitnah anschauen?',
+      subject: 'Website not being found',
+      body: 'our website isn\'t being found well \u2013 neither on Google nor in AI assistants. We need help with visibility.',
       url: true
     },
     'result-technik': {
-      subject: 'Technisches Problem',
-      body: 'auf unserer Website ist etwas kaputt und wir kommen nicht weiter. Koennen Sie sich das anschauen?',
+      subject: 'Technical problem',
+      body: 'something on our website is broken and we can\'t figure it out. Could you take a look soon?',
       url: true
     },
-    'result-technik-sicherheit': {
-      subject: 'DRINGEND: Website gehackt',
-      body: 'unsere Website wurde vermutlich gehackt oder enthaelt Malware. Wir brauchen schnell Hilfe.',
-      url: true
-    },
-    'result-sicherheit': {
-      subject: 'DRINGEND: Website gehackt',
-      body: 'unsere Website wurde vermutlich gehackt oder enthaelt Malware. Wir brauchen schnell Hilfe.',
-      url: true
-    },
-    /* ── Betreuung ── */
     'result-betreuung-basis': {
-      subject: 'Website-Betreuung (Basis)',
-      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer Website kuemmert.',
+      subject: 'Website maintenance (Basic)',
+      body: 'we\'re looking for someone to handle updates, security and backups for our website \u2013 reliably and in the background.',
       url: true
     },
     'result-betreuung-standard': {
-      subject: 'Website-Betreuung (Standard)',
-      body: 'wir suchen jemanden fuer die laufende Betreuung unserer Website – Updates plus regelmaessige inhaltliche Aenderungen.',
+      subject: 'Website maintenance',
+      body: 'we\'re looking for someone for ongoing website maintenance \u2013 not just technical but also regular content changes.',
       url: true
     },
     'result-betreuung-premium': {
-      subject: 'Website-Betreuung (Premium/Retainer)',
-      body: 'wir suchen im Grunde einen eigenen Webentwickler – jemanden, der unsere Website komplett betreut. Retainer-Modell.',
+      subject: 'Full-service maintenance',
+      body: 'we\'re essentially looking for our own web developer \u2013 someone who fully maintains our website and takes care of everything.',
       url: true
     },
-    'result-betreuung-wp-basis': {
-      subject: 'WordPress-Betreuung (Basis)',
-      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer WordPress-Website kuemmert.',
-      url: true
-    },
-    'result-betreuung-wp-standard': {
-      subject: 'WordPress-Betreuung (Standard)',
-      body: 'wir suchen jemanden fuer die laufende Betreuung unserer WordPress-Website – Updates plus regelmaessige inhaltliche Aenderungen.',
-      url: true
-    },
-    'result-betreuung-woo-basis': {
-      subject: 'WooCommerce-Betreuung (Basis)',
-      body: 'wir suchen jemanden, der sich um Updates und Monitoring unseres WooCommerce-Shops kuemmert.',
-      url: true
-    },
-    'result-betreuung-woo-standard': {
-      subject: 'WooCommerce-Betreuung (Standard)',
-      body: 'wir suchen jemanden fuer die laufende Betreuung unseres WooCommerce-Shops – Updates plus regelmaessige Aenderungen und Support.',
-      url: true
-    },
-    'result-betreuung-statisch': {
-      subject: 'Betreuung statische Website',
-      body: 'wir haben eine statische Website und brauchen gelegentlich jemanden fuer Aenderungen.',
-      url: true
-    },
-    'result-betreuung-premium': {
-      subject: 'Komplett-Betreuung',
-      body: 'wir suchen im Grunde einen eigenen Webentwickler – jemanden, der unsere Website komplett betreut und sich um alles kuemmert. Retainer-Modell.',
-      url: true
-    },
-    /* ── GEO ── */
     'result-geo': {
-      subject: 'KI-Sichtbarkeit',
-      body: 'ich habe auf Ihrer Website gelesen, wie Sie Websites fuer KI-Systeme sichtbar machen. Das interessiert mich.',
+      subject: 'AI visibility',
+      body: 'I read on your website about how you make websites visible to AI systems. I\'m interested \u2013 can you tell me more?',
       url: true
     },
     'result-geo-audit': {
-      subject: 'KI-Sichtbarkeits-Audit',
-      body: 'mich wuerde interessieren, wie sichtbar unsere Website fuer KI-Systeme ist. Koennen Sie das pruefen?',
+      subject: 'AI visibility audit',
+      body: 'I\'d like to know how visible our website is to AI systems. Can you check?',
       url: true
-    },
-    /* ── Vergleich ── */
-    'result-vergleich-kontakt': {
-      subject: 'Anfrage nach Anbietervergleich',
-      body: 'ich habe Ihren Berater-Funnel durchgeklickt und die Tipps zur Freelancer-Auswahl waren hilfreich. Ich wuerde gern Ihre Antworten auf die fuenf Fragen hoeren.',
-      url: false
     }
   };
 
@@ -861,21 +538,21 @@
 
   function buildEmailFromPath() {
     var resultId = getLastResultId();
-    var fb = { subject: 'Anfrage', body: 'ich habe mir Ihre Website angeschaut und w\u00fcrde gern mit Ihnen sprechen.', url: false };
+    var fb = { subject: 'Inquiry', body: 'I\'ve looked at your website and would like to speak with you.', url: false };
     var data = RESULT_EMAILS[resultId] || fb;
 
     var subject = data.subject;
-    var body = 'Hallo Herr Andersen,\n\n' + data.body;
+    var body = 'Hello Mr. Andersen,\n\n' + data.body;
     if (data.url) {
-      body += '\n\nUnsere Website: [URL]';
+      body += '\n\nOur website: [URL]';
     }
-    body += '\n\nK\u00f6nnen wir kurz telefonieren?\n\nViele Gr\u00fc\u00dfe\n[Ihr Name]';
+    body += '\n\nCould we have a brief call?\n\nBest regards\n[Your name]';
 
-    var previewHtml = 'Hallo Herr Andersen,\n\n' + esc(data.body);
+    var previewHtml = 'Hello Mr. Andersen,\n\n' + esc(data.body);
     if (data.url) {
-      previewHtml += '\n\nUnsere Website: <span class="funnel-contact-placeholder">[URL]</span>';
+      previewHtml += '\n\nOur website: <span class="funnel-contact-placeholder">[URL]</span>';
     }
-    previewHtml += '\n\nK\u00f6nnen wir kurz telefonieren?\n\nViele Gr\u00fc\u00dfe\n<span class="funnel-contact-placeholder">[Ihr Name]</span>';
+    previewHtml += '\n\nCould we have a brief call?\n\nBest regards\n<span class="funnel-contact-placeholder">[Your name]</span>';
 
     return { subject: subject, body: body, previewHtml: previewHtml };
   }
@@ -889,17 +566,17 @@
 
     /* Personal intro with portrait */
     h += '<div class="funnel-contact-intro funnel-stagger">';
-    h += '<img src="portrait.webp" alt="Jan-Erik Andersen" class="funnel-contact-portrait" width="56" height="56" loading="lazy">';
+    h += '<img src="../portrait.webp" alt="Jan-Erik Andersen" class="funnel-contact-portrait" width="56" height="56" loading="lazy">';
     h += '<div class="funnel-contact-intro-text">';
-    h += '<h3 class="funnel-result-title" tabindex="-1">Freut mich.</h3>';
-    h += '<p class="funnel-contact-intro-sub">Ich hab schon mal was vorbereitet \u2013 Sie m\u00fcssen nur noch absenden.</p>';
+    h += '<h3 class="funnel-result-title" tabindex="-1">Glad you\u2019re here.</h3>';
+    h += '<p class="funnel-contact-intro-sub">I\u2019ve prepared something \u2013 you just need to send it.</p>';
     h += '</div>';
     h += '</div>';
 
     /* Email preview */
     h += '<div class="funnel-contact-preview funnel-stagger" style="--i:1">';
     h += '<div class="funnel-contact-preview-header">';
-    h += '<span class="funnel-contact-preview-to">An: mail@andersen-webworks.de</span>';
+    h += '<span class="funnel-contact-preview-to">To: mail@andersen-webworks.de</span>';
     h += '<span class="funnel-contact-preview-subject">' + esc(email.subject) + '</span>';
     h += '</div>';
     h += '<div class="funnel-contact-preview-body">' + email.previewHtml + '</div>';
@@ -909,18 +586,18 @@
     h += '<a href="' + esc(mailtoHref) + '" class="funnel-contact-send funnel-stagger" style="--i:2" data-action="mailto">';
     h += '<span class="funnel-contact-send-icon">' + ICONS.mail + '</span>';
     h += '<span class="funnel-contact-send-text">';
-    h += '<strong>Mail-Entwurf \u00f6ffnen</strong>';
-    h += '<span>Erstgespr\u00e4ch kostenlos</span>';
+    h += '<strong>Open email draft</strong>';
+    h += '<span>Reply within one business day</span>';
     h += '</span>';
     h += '<span class="funnel-cta-arrow">' + ICONS['chevron-right'] + '</span>';
     h += '</a>';
 
     /* D2: Trust badge */
-    h += '<p class="funnel-trust-badge funnel-stagger" style="--i:2.5">E-Mails beantworte ich innerhalb eines Werktags. 26 Jahre im Web \u00b7 50+ Projekte \u00b7 14+ Branchen.</p>';
+    h += '<p class="funnel-trust-badge funnel-stagger" style="--i:2.5">I reply to emails within one business day. 26 years in web \u00b7 50+ projects \u00b7 14+ industries.</p>';
 
     /* Alternative contact */
     h += '<div class="funnel-contact-alt funnel-stagger" style="--i:3">';
-    h += '<span class="funnel-contact-alt-label">Oder direkt:</span>';
+    h += '<span class="funnel-contact-alt-label">Or directly:</span>';
     h += '<a href="tel:+4938733270015" class="funnel-result-link">';
     h += '<span class="funnel-action-icon">' + ICONS.phone + '</span> 038733 270015</a>';
     h += '<a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="funnel-result-link">';
@@ -929,9 +606,9 @@
 
     h += '<div class="funnel-result-actions funnel-stagger" style="--i:4">';
     h += '<button class="funnel-restart" data-action="restart">';
-    h += '<span class="funnel-action-icon">' + ICONS['refresh-cw'] + '</span> Nochmal von vorn</button>';
+    h += '<span class="funnel-action-icon">' + ICONS['refresh-cw'] + '</span> Start over</button>';
     h += '<button class="funnel-exit-btn" data-action="exit">';
-    h += '<span class="funnel-action-icon">' + ICONS['external-link'] + '</span> Mehr \u00fcber mich lesen</button>';
+    h += '<span class="funnel-action-icon">' + ICONS['external-link'] + '</span> Read more about me</button>';
     h += '</div>';
 
     return h;
@@ -939,8 +616,8 @@
 
   function backBtn() {
     if (history.length === 0) return '';
-    return '<button class="funnel-back funnel-stagger" aria-label="Zur\u00fcck">' +
-           '<span class="funnel-back-arrow" aria-hidden="true">' + ICONS['arrow-left'] + '</span> Zur\u00fcck</button>';
+    return '<button class="funnel-back funnel-stagger" aria-label="Back">' +
+           '<span class="funnel-back-arrow" aria-hidden="true">' + ICONS['arrow-left'] + '</span> Back</button>';
   }
 
   /* ── Stagger Reveal ───────────────────────────────── */
@@ -1016,7 +693,6 @@
         return;
       }
       if (next) {
-        // D1: Track path choice on start screen
         if (currentNodeId === 'start') {
           trackEvent('path', next);
         }
@@ -1036,7 +712,6 @@
 
   function exitFunnel() {
     markFunnelDone();
-    // Clear URL hash on exit
     if (window.location.hash) {
       window.history.replaceState(null, '', window.location.pathname);
     }
@@ -1072,10 +747,9 @@
     funnel.addEventListener('touchend', function (e) {
       var dx = e.changedTouches[0].clientX - touchStartX;
       var dy = e.changedTouches[0].clientY - touchStartY;
-      // Only trigger on horizontal swipes (not vertical scroll)
       if (Math.abs(dx) > SWIPE_THRESHOLD && Math.abs(dx) > Math.abs(dy) * 1.5) {
         if (dx > 0 && history.length > 0) {
-          goBack(); // Swipe right = go back
+          goBack();
         }
       }
     }, { passive: true });
@@ -1099,7 +773,6 @@
   function formatText(str) {
     var html = esc(str);
 
-    // Convert numbered lists: "1. text 2. text 3. text" → <ol>
     if (/\b1\.\s/.test(html) && /\b2\.\s/.test(html)) {
       var idx = html.search(/\b1\.\s/);
       var intro = html.slice(0, idx);
@@ -1131,7 +804,6 @@
       }
     }
 
-    // Convert double newlines to visual breaks (for price hints etc.)
     if (html.indexOf('\n\n') > -1) {
       var segs = html.split('\n\n');
       html = segs[0];
@@ -1144,25 +816,17 @@
   }
 
   /* ── Typewriter Effect ────────────────────────────── */
-  /*
-   * One cursor per slide. Types ALL visible text sequentially.
-   * Plain text elements: character by character.
-   * HTML-rich elements (info-text, result-text): fade in as block.
-   * Cursor blinks, moves between elements, disappears when done.
-   */
 
   var typewriterTimer = null;
   var typewriterCursor = null;
-  var TARGET_DURATION = 2000; // total typing time in ms
+  var TARGET_DURATION = 2000;
 
   function applyTypewriter() {
-    // Kill any running typewriter
     if (typewriterTimer) clearTimeout(typewriterTimer);
     if (typewriterCursor && typewriterCursor.parentNode) {
       typewriterCursor.parentNode.removeChild(typewriterCursor);
     }
 
-    // Collect elements to type, in visual order
     var queue = [];
     var selectors = [
       '.funnel-step-label',
@@ -1183,7 +847,6 @@
       '.funnel-exit-btn'
     ];
 
-    // HTML-rich elements that get revealed as a block, not typed
     var instantSelectors = [
       '.funnel-info-text', '.funnel-info-detail', '.funnel-result-text',
       '.funnel-proof', '.funnel-contact-preview'
@@ -1204,15 +867,12 @@
           el.style.opacity = '0';
           queue.push({ el: el, html: savedHTML, instant: true });
         } else {
-          // Only type elements that have direct text
           var text = el.textContent;
           if (text.length > 0) {
-            // Preserve child elements (icons, arrows) - only blank out text nodes
             var savedChildren = [];
             while (el.firstChild) {
               savedChildren.push(el.removeChild(el.firstChild));
             }
-            // Separate text nodes from element nodes
             var textContent = '';
             var trailingElements = [];
             for (var c = 0; c < savedChildren.length; c++) {
@@ -1222,7 +882,6 @@
                 trailingElements.push(savedChildren[c]);
               }
             }
-            // Re-append non-text children (icons etc) hidden
             for (var t = 0; t < trailingElements.length; t++) {
               trailingElements[t].style.opacity = '0';
               el.appendChild(trailingElements[t]);
@@ -1237,7 +896,6 @@
 
     if (queue.length === 0) return;
 
-    // Calculate speed: total chars / target duration
     var totalChars = 0;
     for (var q = 0; q < queue.length; q++) {
       if (!queue[q].instant) totalChars += queue[q].text.length;
@@ -1245,27 +903,21 @@
     var charSpeed = Math.max(8, Math.min(25, Math.floor(TARGET_DURATION / Math.max(totalChars, 1))));
     var pauseBetween = charSpeed * 3;
 
-    // Create cursor
     typewriterCursor = document.createElement('span');
     typewriterCursor.className = 'typewriter-cursor';
     typewriterCursor.textContent = '\u2502';
 
-    // Map each queue item to its closest stagger-parent (button, div, etc.)
-    // so we can reveal the container when its content starts typing
     for (var r = 0; r < queue.length; r++) {
       var staggerParent = queue[r].el.closest('.funnel-stagger') || queue[r].el;
       queue[r].container = staggerParent;
     }
 
-    // Hide ALL stagger elements - they fade in when typewriter reaches them
     var allStaggers = app.querySelectorAll('.funnel-stagger');
     for (var h = 0; h < allStaggers.length; h++) {
-      // Don't use the stagger transition - we control visibility directly
       allStaggers[h].style.opacity = '0';
       allStaggers[h].style.translate = '0 0';
       allStaggers[h].style.transition = 'opacity 250ms ease';
     }
-    // Also hide accent line
     var accentLine = app.querySelector('.funnel-accent-line');
     if (accentLine) { accentLine.style.opacity = '0'; accentLine.style.transition = 'opacity 250ms ease'; }
 
@@ -1284,12 +936,10 @@
 
     function tick() {
       if (currentItem >= queue.length) {
-        // Done - reveal anything still hidden (accent line, back btn, etc.)
         for (var f = 0; f < allStaggers.length; f++) {
           allStaggers[f].style.opacity = '1';
         }
         if (accentLine) { accentLine.style.opacity = '1'; accentLine.classList.add('funnel-reveal'); }
-        // Fade out cursor
         if (typewriterCursor.parentNode) {
           typewriterCursor.classList.add('typewriter-cursor-done');
           setTimeout(function () {
@@ -1314,7 +964,6 @@
         return;
       }
 
-      // First char of element: reveal container + place cursor
       if (currentChar === 0) {
         revealContainer(item.el);
         textNode = document.createTextNode('');
@@ -1344,7 +993,6 @@
       }
     }
 
-    // Start after slide-in settles
     typewriterTimer = setTimeout(tick, 150);
   }
 
@@ -1386,25 +1034,17 @@
   }
 
   /* ── Constellation Canvas (Synapsen-Modell) ─────── */
-  /*
-   * Punkte schweben langsam. Start: NULL Verbindungen.
-   * Pro beantworteter Frage: eine neue Synapse wird geknuepft.
-   * Zwei zufaellige unverbundene Punkte werden gewaehlt.
-   * Linie wird animiert gezeichnet (Startpunkt -> Endpunkt),
-   * kurz rot aufleuchtend, dann zurueck zu normaler Farbe.
-   * Je tiefer im Funnel = dichteres Netz.
-   */
 
   var constellationCanvas = null;
   var constellationCtx = null;
   var nodes = [];
-  var synapses = []; // { a: idx, b: idx, progress: 0..1, flash: 0..1 }
+  var synapses = [];
   var constellationRAF = null;
 
   var NODE_COUNT = 20;
   var DRIFT_SPEED = 0.2;
-  var SYNAPSE_DRAW_MS = 600;  // time to draw one synapse line
-  var FLASH_DURATION_MS = 800; // red glow duration after connection
+  var SYNAPSE_DRAW_MS = 600;
+  var FLASH_DURATION_MS = 800;
 
   function initConstellation() {
     if (constellationCanvas) return;
@@ -1430,7 +1070,6 @@
   function spawnNodes() {
     var w = window.innerWidth;
     var h = window.innerHeight;
-    // Spread nodes across viewport with margin
     var margin = 60;
     for (var i = 0; i < NODE_COUNT; i++) {
       nodes.push({
@@ -1440,16 +1079,14 @@
         vy: (Math.random() - 0.5) * DRIFT_SPEED * 2,
         r: Math.random() * 1.2 + 0.8,
         baseOpacity: Math.random() * 0.2 + 0.15,
-        flash: 0 // 0..1, red glow when synapse connects
+        flash: 0
       });
     }
   }
 
-  /* ── Knuepfe eine neue Synapse ── */
-
   var lastConnectedNode = -1;
   var connectedNodes = {};
-  var connectionOrder = 0; // counter for numbering connected nodes
+  var connectionOrder = 0;
 
   function addSynapse() {
     if (nodes.length < 2) return;
@@ -1457,11 +1094,9 @@
     var a, b;
 
     if (lastConnectedNode === -1) {
-      // First synapse: pick two random nodes
       a = Math.floor(Math.random() * nodes.length);
       do { b = Math.floor(Math.random() * nodes.length); } while (b === a);
     } else {
-      // Continue from last endpoint: find nearest unconnected node
       a = lastConnectedNode;
       b = -1;
       var bestDist = Infinity;
@@ -1472,7 +1107,6 @@
         var d = Math.sqrt(dx * dx + dy * dy);
         if (d < bestDist) { bestDist = d; b = i; }
       }
-      // If all nodes connected, pick any unconnected pair
       if (b === -1) {
         for (var j = 0; j < nodes.length; j++) {
           for (var k = j + 1; k < nodes.length; k++) {
@@ -1483,16 +1117,13 @@
       }
     }
 
-    if (b === -1 || a === b) return; // fully connected
+    if (b === -1 || a === b) return;
 
     synapses.push({
-      a: a,
-      b: b,
+      a: a, b: b,
       startTime: performance.now(),
-      progress: 0,
-      flash: 1
+      progress: 0, flash: 1
     });
-
     nodes[a].flash = 1;
     nodes[b].flash = 1;
     if (!connectedNodes[a]) { connectionOrder++; nodes[a].label = connectionOrder; connectedNodes[a] = true; }
@@ -1508,8 +1139,6 @@
     return false;
   }
 
-  /* ── Animation Loop ── */
-
   function animateConstellation() {
     if (!constellationCtx || !constellationCanvas) return;
     var w = constellationCanvas.width;
@@ -1522,22 +1151,14 @@
     var dotColor = isDark ? '255,255,255' : '0,0,0';
     var accentRGB = '212,2,53';
 
-    // Update + draw nodes
     for (var i = 0; i < nodes.length; i++) {
       var n = nodes[i];
-
-      // Drift
       n.x += n.vx;
       n.y += n.vy;
-
-      // Soft bounce off edges
       if (n.x < 30 || n.x > w - 30) n.vx *= -1;
       if (n.y < 30 || n.y > h - 30) n.vy *= -1;
-
-      // Decay flash
       if (n.flash > 0) n.flash = Math.max(0, n.flash - 0.015);
 
-      // Draw node
       var nodeOpacity = n.baseOpacity + n.flash * 0.6;
       var nodeR = n.r + n.flash * 2;
       var nodeColor = n.flash > 0.01
@@ -1549,7 +1170,6 @@
       constellationCtx.fillStyle = nodeColor;
       constellationCtx.fill();
 
-      // Label: 01, 02, ... for connected nodes
       if (n.label) {
         var labelNum = n.label < 10 ? '0' + n.label : '' + n.label;
         constellationCtx.font = '500 9px ui-monospace, SF Mono, Monaco, Consolas, monospace';
@@ -1558,7 +1178,6 @@
         constellationCtx.fillText(labelNum, n.x, n.y - nodeR - 5);
       }
 
-      // Glow ring when flashing
       if (n.flash > 0.1) {
         constellationCtx.beginPath();
         constellationCtx.arc(n.x, n.y, nodeR + 4 * n.flash, 0, Math.PI * 2);
@@ -1568,28 +1187,22 @@
       }
     }
 
-    // Update + draw synapses
     for (var s = 0; s < synapses.length; s++) {
       var syn = synapses[s];
       var na = nodes[syn.a];
       var nb = nodes[syn.b];
 
-      // Advance drawing progress
       var elapsed = now - syn.startTime;
       syn.progress = Math.min(1, elapsed / SYNAPSE_DRAW_MS);
-      // Ease-out for drawing
       var drawProgress = 1 - Math.pow(1 - syn.progress, 2);
 
-      // Decay flash after fully drawn
       if (syn.progress >= 1 && syn.flash > 0) {
         syn.flash = Math.max(0, syn.flash - 0.012);
       }
 
-      // Interpolate line endpoint
       var endX = na.x + (nb.x - na.x) * drawProgress;
       var endY = na.y + (nb.y - na.y) * drawProgress;
 
-      // Line color: red while flashing, then normal
       var lineAlpha = 0.15 + syn.flash * 0.4;
       var lineColor = syn.flash > 0.01
         ? 'rgba(' + accentRGB + ',' + lineAlpha + ')'
@@ -1607,7 +1220,6 @@
   }
 
   function updateConstellationDepth() {
-    // Add one synapse per answered question
     addSynapse();
   }
 

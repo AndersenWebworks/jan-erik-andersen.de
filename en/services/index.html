@@ -3,47 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Services by Jan-Erik Andersen: Company websites, online shops, portals, redesign, accessibility, AI visibility and ongoing maintenance. WordPress, WooCommerce, static HTML.">
+  <meta name="description" content="Web design, online shops, frontend development, consulting, website analysis. Five things, and those right. Jan-Erik Andersen – €80/h instead of agency prices.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jan-erik-andersen.de/en/services/">
   <meta property="og:title" content="Services – Jan-Erik Andersen">
-  <meta property="og:description" content="Company websites, online shops, portals, redesign, accessibility, AI visibility and ongoing maintenance. WordPress, WooCommerce, static HTML.">
+  <meta property="og:description" content="Web design, online shops, frontend development, consulting, website analysis. Five things, and those right.">
   <meta property="og:image" content="https://jan-erik-andersen.de/portrait.webp">
   <meta property="og:locale" content="en_US">
   <link rel="canonical" href="https://jan-erik-andersen.de/en/services/">
   <link rel="alternate" hreflang="de" href="https://jan-erik-andersen.de/leistungen/">
   <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/services/">
-  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
   <title>Services – Jan-Erik Andersen</title>
-  <link rel="stylesheet" href="../../style.css?v=7.0">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "OfferCatalog",
-    "name": "Services by Jan-Erik Andersen",
+    "@type": "Service",
     "provider": { "@id": "https://jan-erik-andersen.de/#person" },
-    "itemListElement": [
-      {
-        "@type": "Offer",
-        "name": "Build new",
-        "description": "Company websites, online shops, portals and tools. WordPress, WooCommerce or static HTML. With AI visibility and accessibility.",
-        "category": "Web Development"
-      },
-      {
-        "@type": "Offer",
-        "name": "Make it better",
-        "description": "Redesign, performance optimization, accessibility retrofitting (EAA/BFSG). Analysis of existing websites.",
-        "category": "Optimization"
-      },
-      {
-        "@type": "Offer",
-        "name": "Keep it running",
-        "description": "WordPress maintenance in three tiers: Basic from 15 EUR/month, Standard from 80 EUR/month, Premium from 400 EUR/month.",
-        "category": "Maintenance"
-      }
-    ]
+    "name": "Web Development & Digital Consulting",
+    "description": "Web design, online shops, frontend development, project management, website analysis. Five things, and those right.",
+    "serviceType": ["Web Design", "Online Shops", "Frontend Development", "Project Management", "Website Analysis"],
+    "areaServed": { "@type": "Country", "name": "Germany" },
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Services",
+      "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Web Design", "description": "Company websites with WordPress or static HTML. Responsive, accessible, GDPR compliant." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Online Shops", "description": "WooCommerce shops with B2B features like dealer conditions and price groups." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Frontend Development", "description": "Clean code, Lighthouse scores of 90+. Figma, Sketch or napkin sketch to code." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Project Management & Consulting", "description": "Concept development, requirements analysis, implementation management, vendor coordination." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Analysis", "description": "Performance, SEO, accessibility, security – all measurable, all concrete." } }
+      ]
+    }
   }
   </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -56,8 +56,10 @@
         <span class="header-brand-surname">Andersen</span>
       </a>
       <nav class="header-nav" id="header-nav">
-        <a href="../services/">Services</a>
+        <a href="../services/" class="header-nav-active">Services</a>
         <a href="../projects/">Projects</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../faq/">FAQ</a>
         <a href="../about/">About</a>
         <a href="../contact/" class="header-nav-cta">Contact</a>
       </nav>
@@ -70,13 +72,6 @@
             <span class="pill-indicator"></span>
           </span>
         </label>
-        <div class="pill-toggle">
-          <div class="pill-track">
-            <a href="../../" class="pill-option">DE</a>
-            <a href="../" class="pill-option active">EN</a>
-            <span class="pill-indicator"></span>
-          </div>
-        </div>
         <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="logo-link">
           <img src="../../linkedin-logo.png" alt="LinkedIn" width="24" height="24">
         </a>
@@ -86,150 +81,144 @@
 
   <main id="main">
 
-    <section class="editorial">
-      <div class="editorial-layout container">
+    <section class="services-section">
+      <div class="section-inner container">
+        <div class="services-intro">
+          <h1>What I do</h1>
+          <p class="hero-lead">Five things, and those right. I don't do everything – but what I do, I do well.</p>
+        </div>
 
-        <div class="editorial-main">
+        <div class="services-grid services-grid--full">
 
-          <h1 class="editorial-headline">What I do (and&nbsp;what&nbsp;I&nbsp;don't)</h1>
-          <p class="editorial-lead">WordPress, WooCommerce, static HTML — depends on what you need. I don't recommend by template, I recommend after understanding how your business works.</p>
-
-          <!-- ===== CLUSTER 1: BUILD NEW ===== -->
-          <div class="chapter-mark" id="visible"><span>01</span></div>
-          <h2>Build new</h2>
-          <p>Company website, shop or tool — the technology comes after the problem:</p>
-
-          <div class="cluster-grid cluster-grid--2col">
-            <div class="cluster-card">
-              <h3>Company website</h3>
-              <p class="cluster-desc">WordPress if your team needs to manage content. Static HTML if speed and zero maintenance matter. Similar setup for <a href="../projects/">Scheja &amp; Partner</a> — law firm, 30 lawyers, three software product pages.</p>
-            </div>
-            <div class="cluster-card">
-              <h3>Online shop</h3>
-              <p class="cluster-desc">WooCommerce when off-the-shelf shops aren't enough. B2B dealer conditions, price groups, sample shipping, custom checkout processes. I rebuilt the shop for <a href="../projects/">Gerwing Steinwerke</a> from scratch in 2023.</p>
-            </div>
-            <div class="cluster-card">
-              <h3>Portal or tool</h3>
-              <p class="cluster-desc">Login areas, dealer portals, order systems, interactive reports. Not every digital problem is a website — sometimes you need something custom. Example: the <a href="https://wirkungsbericht.seniorpartnerinschool.de" target="_blank" rel="noopener">impact report for SiS</a>.</p>
-            </div>
-          </div>
-
-          <p>You know what you need? <a href="mailto:mail@andersen-webworks.de">Get in touch</a>.</p>
-
-          <!-- Ornament -->
-          <div class="ornament"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L12 6L6 12L0 6Z"/></svg></div>
-
-          <!-- ===== CLUSTER 2: MAKE IT BETTER ===== -->
-          <div class="chapter-mark" id="tools"><span>02</span></div>
-          <h2>Make it better</h2>
-          <p>Your website exists but something's off? Redesign, performance, accessibility retrofitting — or all three at once.</p>
-
-          <div class="cluster-grid cluster-grid--2col">
-            <div class="cluster-card">
-              <h3>Redesign</h3>
-              <p class="cluster-desc">Not everything that looks dated needs a full relaunch. Sometimes a new layout is enough, sometimes the structure needs work. I look at what's there and tell you honestly what's worth doing.</p>
-            </div>
-            <div class="cluster-card">
-              <h3>Performance</h3>
-              <p class="cluster-desc">Slow websites lose customers and rankings. I find out what's causing it — whether it's the hosting, the images, the theme or a plugin that's dragging everything down.</p>
-            </div>
-            <div class="cluster-card">
-              <h3>Accessibility (EAA/BFSG)</h3>
-              <p class="cluster-desc">Since June 2025, websites must be accessible. Not "should be", must be. Fines up to 100,000 EUR. WCAG 2.1 AA is my standard — and if your existing site doesn't meet it, we'll figure out what needs to happen.</p>
+          <div class="service-item" id="webdesign">
+            <div class="service-number">01</div>
+            <div class="service-content">
+              <h2>Web Design</h2>
+              <p>Company websites that work – not just look good. WordPress for clients who want to manage content themselves. Static HTML for maximum speed and minimal maintenance. Responsive, accessible, GDPR compliant. I don't ask "What do you like?" but "What should the site achieve for you?"</p>
+              <div class="service-example">
+                <div class="service-example-label">Example</div>
+                <p>Scheja & Partner – Data privacy law firm with 30 attorneys, multilingual including NIS2 compliance check.</p>
+              </div>
+              <div class="service-tags">
+                <span class="tag">WordPress</span>
+                <span class="tag">Static HTML</span>
+                <span class="tag">Responsive</span>
+                <span class="tag">WCAG 2.1 AA</span>
+              </div>
             </div>
           </div>
 
-          <p>Three years of games QA taught me one thing: finding bugs systematically is a learned profession. That helps here.</p>
-          <p>Sounds like your problem? <a href="mailto:mail@andersen-webworks.de">A short call sorts the rest</a>.</p>
-
-          <!-- Ornament -->
-          <div class="ornament"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L12 6L6 12L0 6Z"/></svg></div>
-
-          <!-- ===== CLUSTER 3: KEEP IT RUNNING ===== -->
-          <div class="chapter-mark" id="secure"><span>03</span></div>
-          <h2>Keep it running</h2>
-          <p>WordPress needs updates. Plugins need maintenance. Security vulnerabilities need patching. And since June 2025, accessibility is a legal requirement. For <a href="../projects/">Gerwing Steinwerke</a> I've been solely responsible for the tech since 2023 — ongoing retainer.</p>
-
-          <div class="cluster-grid cluster-grid--2col">
-            <div class="cluster-card">
-              <h3>Basic</h3>
-              <p class="cluster-desc">WordPress core and plugin updates, backups, security monitoring. From 15&nbsp;EUR/month.</p>
-            </div>
-            <div class="cluster-card">
-              <h3>Standard</h3>
-              <p class="cluster-desc">Updates plus content changes, compliance checks, performance monitoring. From 80&nbsp;EUR/month.</p>
-            </div>
-            <div class="cluster-card">
-              <h3>Premium</h3>
-              <p class="cluster-desc">Full service: further development, new features, GEO monitoring, technical consulting. From 400&nbsp;EUR/month.</p>
+          <div class="service-item" id="shops">
+            <div class="service-number">02</div>
+            <div class="service-content">
+              <h2>Online Shops</h2>
+              <p>WooCommerce shops designed from the start with clear processes. Product management, variants, filters, checkout – I build the system so you can operate it without constantly calling me. B2B features like dealer conditions and price groups are no magic when you know what you're doing.</p>
+              <div class="service-example">
+                <div class="service-example-label">Example</div>
+                <p>Gerwing Steinwerke – WooCommerce shop for one of Germany's largest paving stone manufacturers, completely rebuilt in 2023 including B2B dealer portal.</p>
+              </div>
+              <div class="service-tags">
+                <span class="tag">WooCommerce</span>
+                <span class="tag">B2B / B2C</span>
+                <span class="tag">Germanized</span>
+                <span class="tag">E-Invoicing</span>
+              </div>
             </div>
           </div>
 
-          <p>Already have a website and need someone to look after it? <a href="mailto:mail@andersen-webworks.de">Get in touch</a>.</p>
+          <div class="service-item" id="frontend">
+            <div class="service-number">03</div>
+            <div class="service-content">
+              <h2>Frontend Development</h2>
+              <p>Clean code that doesn't drive other developers crazy. I implement designs – whether from Figma, Sketch, or a napkin sketch. Performance is not a bonus but a baseline requirement. Lighthouse scores of 90+ are standard, not luck.</p>
+              <div class="service-example">
+                <div class="service-example-label">Example</div>
+                <p>Runden Group – complete web presence of a corporate group (7 websites), bilingual custom plugins, career portal, client portal.</p>
+              </div>
+              <div class="service-tags">
+                <span class="tag">HTML / CSS / JS</span>
+                <span class="tag">YOOtheme Pro</span>
+                <span class="tag">Performance</span>
+                <span class="tag">Figma → Code</span>
+              </div>
+            </div>
+          </div>
 
-          <!-- Ornament -->
-          <div class="ornament"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L12 6L6 12L0 6Z"/></svg></div>
+          <div class="service-item" id="consulting">
+            <div class="service-number">04</div>
+            <div class="service-content">
+              <h2>Project Management & Consulting</h2>
+              <p>You have a project but no plan? Or a plan but nobody to implement and manage it? I take on both. Concept development, requirements analysis, implementation management – and if needed, also communication with your other service providers. No Jira, no Slack chaos, no overhead.</p>
+              <div class="service-example">
+                <div class="service-example-label">Example</div>
+                <p>Runden Group – two years sole responsibility for 11 websites of a corporate group including coordination with external design team.</p>
+              </div>
+              <div class="service-tags">
+                <span class="tag">Concepts</span>
+                <span class="tag">Management</span>
+                <span class="tag">Tech Consulting</span>
+                <span class="tag">Vendor Coordination</span>
+              </div>
+            </div>
+          </div>
 
-          <h2>AI Visibility</h2>
-          <p>AI visibility is standard in my work. Not because it's free, but because it's pointless to leave it out. Structured data, machine-readable endpoints, AI crawler configuration — I build that into every project. And that's one of the reasons my projects cost more than a template from a page builder, but also deliver more.</p>
-          <p><a href="ai-visibility.html">What AI visibility means in practice →</a></p>
-
-          <!-- Ornament -->
-          <div class="ornament"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L12 6L6 12L0 6Z"/></svg></div>
-
-          <h2>Contact</h2>
-          <p>Not sure what you need? That's what the call is for. 15 minutes.</p>
-          <div class="editorial-contact">
-            <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
-            <a href="tel:+4938733270015">038733 270015</a>
-            <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">LinkedIn</a>
+          <div class="service-item" id="analysis">
+            <div class="service-number">05</div>
+            <div class="service-content">
+              <h2>Website Analysis</h2>
+              <p>You have a website but it's not delivering? I look at what's causing that. Performance, SEO, accessibility, security, user guidance – all measurable, all concrete. No vague recommendations, but a report with clear priorities and effort estimates.</p>
+              <p>Three years in games QA taught me: Finding errors systematically is a learned profession.</p>
+              <div class="service-tags">
+                <span class="tag">Performance Audit</span>
+                <span class="tag">BFSG Check</span>
+                <span class="tag">SEO Analysis</span>
+                <span class="tag">Security</span>
+              </div>
+            </div>
           </div>
 
         </div>
 
-        <aside class="editorial-sidebar">
+        <div class="section-links">
+          <a href="../pricing/">What it costs → View pricing</a>
+          <a href="../projects/">Projects in detail → Selected projects</a>
+          <a href="../faq/">Common questions → FAQ</a>
+        </div>
+      </div>
+    </section>
 
-          <div class="editorial-sidebar-section">
-            <h3>Contents</h3>
-            <ul>
-              <li><a href="#visible">01 — Build new</a></li>
-              <li><a href="#tools">02 — Make it better</a></li>
-              <li><a href="#secure">03 — Keep it running</a></li>
-            </ul>
+    <section class="section--alt">
+      <div class="section-inner container">
+        <div class="sidebar-card sidebar-card--wide">
+          <h2>Always included</h2>
+          <ul class="sidebar-list sidebar-list--grid">
+            <li>AI visibility (Schema.org, JSON-LD)</li>
+            <li>Accessibility (BFSG / WCAG 2.1 AA)</li>
+            <li>GDPR compliant</li>
+            <li>Professionally edited texts (<a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie Andersen</a>)</li>
+            <li>No vendor lock-in</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-section">
+      <div class="section-inner container">
+        <div class="contact-inner">
+          <h2>Does something fit?</h2>
+          <p>15 minutes on the phone, then you'll know if I'm the right one.</p>
+          <div class="contact-methods">
+            <div class="contact-method">
+              <div class="contact-method-label">Email</div>
+              <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">Phone</div>
+              <a href="tel:+4938733270015">+49 38733 270015</a>
+            </div>
           </div>
-
-          <div class="editorial-sidebar-section">
-            <h3>Technologies</h3>
-            <p>WordPress, WooCommerce, YOOtheme&nbsp;Pro, static HTML, Vanilla&nbsp;JS, Schema.org, JSON-LD</p>
-          </div>
-
-          <div class="editorial-sidebar-section">
-            <h3>What's always included</h3>
-            <ul>
-              <li>AI Visibility (GEO)</li>
-              <li>Accessibility (EAA/WCAG 2.1 AA)</li>
-              <li>GDPR Compliant</li>
-              <li>Copy proofread by <a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie Andersen</a></li>
-            </ul>
-          </div>
-
-          <div class="editorial-sidebar-section">
-            <h3>Deep Dives</h3>
-            <ul>
-              <li><a href="ai-visibility.html">AI Visibility in Detail</a></li>
-              <li><a href="../projects/">Project References</a></li>
-            </ul>
-          </div>
-
-          <div class="editorial-sidebar-section">
-            <h3>Contact</h3>
-            <p><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a><br>
-            <a href="tel:+4938733270015">038733 270015</a></p>
-            <p><em>Talking is free.</em></p>
-          </div>
-
-        </aside>
-
+          <p class="section-cta"><a href="../pricing/" class="btn btn-secondary">View pricing →</a></p>
+        </div>
       </div>
     </section>
 
@@ -238,15 +227,19 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-content">
-        <span>&copy; 2026 Jan-Erik Andersen / Andersen Webworks</span>
+        <span>© 2026 Andersen Webworks · <a href="../">Jan-Erik Andersen</a></span>
         <ul class="footer-links">
-          <li><a href="../imprint.html">Imprint</a></li>
-          <li><a href="../privacy.html">Privacy</a></li>
-          <li><a href="../accessibility.html">Accessibility</a></li>
+          <li><a href="../services/">Services</a></li>
+          <li><a href="../projects/">Projects</a></li>
+          <li><a href="../pricing/">Pricing</a></li>
+          <li><a href="../faq/">FAQ</a></li>
+          <li><a href="../../../en/imprint.html">Imprint</a></li>
+          <li><a href="../../../en/privacy.html">Privacy</a></li>
         </ul>
       </div>
     </div>
   </footer>
+
   <script>
   (function() {
     var cb = document.getElementById('darkmode-toggle');
@@ -257,7 +250,5 @@
     });
   })();
   </script>
-  <script src="../../header-mobile.js"></script>
-  <img src="https://jan-erik-andersen.goatcounter.com/count?p=/en/services/" alt="" style="position:absolute;left:-9999px" aria-hidden="true">
 </body>
 </html>

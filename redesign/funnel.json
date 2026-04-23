@@ -64,8 +64,8 @@
 
     "website-budget": {
       "type": "info",
-      "text": "Kurzer Reality-Check: Eine professionelle Firmenwebsite mit Barrierefreiheit (seit 2025 Pflicht) und KI-Sichtbarkeit kostet ab 2.500 EUR. Darunter empfehle ich Baukästen wie Squarespace – die können inzwischen viel.",
-      "detail": "Was Sie für 2.500–5.000 EUR bekommen: 5–8 Seiten, responsives Design, BFSG-konform, KI-lesbar, schnelle Ladezeit. Was mehr kostet: Shop-Integration, mehrsprachig, komplexe Strukturen, individuelle Funktionen.",
+      "text": "Kurzer Reality-Check: Eine professionelle Firmenwebsite mit Barrierefreiheit (seit 2025 Pflicht) und KI-Sichtbarkeit kostet ab 2.400 EUR. Darunter empfehle ich Baukästen wie Squarespace – die können inzwischen viel.",
+      "detail": "Was Sie für 2.400–4.800 EUR bekommen: 5–8 Seiten, responsives Design, BFSG-konform, KI-lesbar, schnelle Ladezeit. Was mehr kostet: Shop-Integration, mehrsprachig, komplexe Strukturen, individuelle Funktionen.",
       "options": [
         {
           "label": "Passt – erzähl mir mehr",
@@ -184,7 +184,7 @@
 
     "shop-budget": {
       "type": "info",
-      "text": "Ein individueller WooCommerce-Shop kostet ab 5.000 EUR. Darunter wird es eng – nicht unmöglich, aber Sie müssen Kompromisse machen. Großer Katalog (500+ Produkte) oder B2B-Funktionen: ab 10.000 EUR.",
+      "text": "Ein individueller WooCommerce-Shop kostet ab 4.800 EUR. Darunter wird es eng – nicht unmöglich, aber Sie müssen Kompromisse machen. Großer Katalog (500+ Produkte) oder B2B-Funktionen: ab 10.000 EUR.",
       "detail": "Was im Preis enthalten ist: Design, Einrichtung, Zahlungsanbieter, Versandlogik, Barrierefreiheit, Produktimport (bis 100 Produkte). Was extra kostet: Schnittstellen, komplexe Preislogik, Händlerportal.",
       "options": [
         {
@@ -391,7 +391,7 @@
 
     "result-budget-klein": {
       "type": "result",
-      "title": "Unter 2.500 EUR – ich bin ehrlich mit Ihnen.",
+      "title": "Unter 2.400 EUR – ich bin ehrlich mit Ihnen.",
       "text": "Für dieses Budget bekomme ich keine professionelle Website mit Barrierefreiheit und KI-Sichtbarkeit hin. Nicht weil ich nicht will, sondern weil die Zeit nicht reicht.\n\nWas ich empfehle: Squarespace oder Jimdo. Die können inzwischen viel. Wenn Sie später mehr investieren können oder wollen, melden Sie sich gern. Kein Druck, kein Follow-up.\n\nOder wir reden trotzdem kurz – vielleicht gibt es einen Weg, den ich nicht sehe.",
       "proof": [],
       "cta": {
@@ -608,8 +608,8 @@
 
     "result-shop-budget-klein": {
       "type": "result",
-      "title": "Shop unter 5.000 EUR – geht, aber mit Kompromissen.",
-      "text": "Individueller Shop für unter 5.000 EUR ist eng. Nicht unmöglich, aber: Standarddesign anpassen statt Custom, Sie pflegen Produkte selbst, keine komplexen Prozesse.\n\nWenn das reicht – können wir reden. Wenn nicht: Shopify ist ehrlicher. Kein monatlicher Entwickler-Obolus, dafür monatliche Shopify-Gebühr. Rechnen Sie durch, was günstiger ist.",
+      "title": "Shop unter 4.800 EUR – geht, aber mit Kompromissen.",
+      "text": "Individueller Shop für unter 4.800 EUR ist eng. Nicht unmöglich, aber: Standarddesign anpassen statt Custom, Sie pflegen Produkte selbst, keine komplexen Prozesse.\n\nWenn das reicht – können wir reden. Wenn nicht: Shopify ist ehrlicher. Kein monatlicher Entwickler-Obolus, dafür monatliche Shopify-Gebühr. Rechnen Sie durch, was günstiger ist.",
       "proof": [],
       "cta": {
         "label": "Reden wir über die Kompromisse",

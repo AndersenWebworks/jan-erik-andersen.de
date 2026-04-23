@@ -1,38 +1,31 @@
 {
   "meta": {
-    "version": "2.5",
+    "version": "4.0",
     "language": "en",
-    "updated": "2026-04-15"
+    "updated": "2026-04-23",
+    "changelog": "Complete restructuring synced with DE: Fewer steps, more info per step, respectful exits, fast tracks"
   },
   "nodes": {
     "start": {
       "type": "question",
-      "text": "What brings you here?",
-      "subtitle": "No chatbot, no popup. Just a few honest questions.",
+      "text": "What can I do for you?",
+      "subtitle": "Three minutes well spent. Or read on your own – no problem.",
       "options": [
         {
-          "label": "I need a new website",
-          "next": "neue-art"
+          "label": "I need a website or shop",
+          "next": "neu-was"
         },
         {
           "label": "My website has a problem",
-          "next": "problem-art"
+          "next": "problem-was"
         },
         {
           "label": "I'm looking for ongoing maintenance",
-          "next": "betreuung-umfang"
+          "next": "betreuung-was"
         },
         {
-          "label": "I'm interested in AI visibility",
-          "next": "geo-wissen"
-        },
-        {
-          "label": "What does this cost?",
-          "next": "kosten-art"
-        },
-        {
-          "label": "I'm comparing providers",
-          "next": "vergleich-was"
+          "label": "I just want to get in touch",
+          "next": "result-direkt"
         },
         {
           "label": "I'd rather read on my own",
@@ -40,700 +33,566 @@
         }
       ]
     },
-    "neue-art": {
+
+    "neu-was": {
       "type": "question",
-      "text": "What kind of project?",
-      "subtitle": "Good. New website – there are different directions.",
+      "text": "What should be built?",
+      "subtitle": "Helps me ask the right questions.",
       "options": [
         {
           "label": "Company website",
-          "next": "neue-branche"
+          "next": "website-budget"
         },
         {
           "label": "Online shop",
-          "next": "neue-shop"
-        },
-        {
-          "label": "Web app or customer portal",
-          "next": "portal-was"
+          "next": "shop-art"
         },
         {
           "label": "Landing page or one-pager",
           "next": "result-landingpage"
+        },
+        {
+          "label": "Portal, tool or web app",
+          "next": "portal-was"
+        },
+        {
+          "label": "I'm not sure",
+          "next": "result-beratung"
         }
       ]
     },
-    "neue-branche": {
-      "type": "question",
-      "text": "What industry are you in?",
-      "subtitle": "Helps me advise more specifically.",
+
+    "website-budget": {
+      "type": "info",
+      "text": "Quick reality check: A professional company website with accessibility (mandatory since 2025) and AI visibility starts at EUR 2,400. Below that I recommend site builders like Squarespace – they've come a long way.",
+      "detail": "What you get for EUR 2,400–4,800: 5–8 pages, responsive design, accessibility compliant, AI-readable, fast loading. What costs more: shop integration, multilingual, complex structures, custom features.",
       "options": [
         {
-          "label": "Industry / Manufacturing",
-          "next": "neue-umfang"
+          "label": "Works for me – tell me more",
+          "next": "website-branche"
         },
         {
-          "label": "Law / Consulting / Legal",
-          "next": "neue-umfang"
+          "label": "My budget is smaller",
+          "next": "result-budget-klein"
         },
         {
-          "label": "Association / Nonprofit",
-          "next": "neue-umfang"
+          "label": "My project is bigger",
+          "next": "website-gross"
+        }
+      ]
+    },
+
+    "website-branche": {
+      "type": "question",
+      "text": "What industry are you in?",
+      "subtitle": "So I can show relevant references.",
+      "options": [
+        {
+          "label": "Industry, trades or manufacturing",
+          "next": "result-industrie"
         },
         {
-          "label": "Hospitality / Tourism / Holiday rental",
-          "next": "neue-umfang"
+          "label": "Consulting, services or agency",
+          "next": "result-beratung-branche"
+        },
+        {
+          "label": "Law, tax or finance",
+          "next": "result-recht"
+        },
+        {
+          "label": "Health, social or nonprofit",
+          "next": "result-sozial"
         },
         {
           "label": "Other industry",
-          "next": "neue-umfang"
-        }
-      ]
-    },
-    "neue-umfang": {
-      "type": "question",
-      "text": "How big will it be?",
-      "subtitle": "14+ industries in 26 years. Something fitting is there.",
-      "options": [
-        {
-          "label": "Manageable – a few pages",
-          "next": "neue-cms"
-        },
-        {
-          "label": "Medium – various sections",
-          "next": "neue-cms"
-        },
-        {
-          "label": "Large – multiple related websites, multilingual",
-          "next": "result-website-gross"
-        }
-      ]
-    },
-    "neue-cms": {
-      "type": "question",
-      "text": "Do you manage content yourself or does someone do it for you?",
-      "subtitle": "Important question. The right technology depends on it.",
-      "options": [
-        {
-          "label": "We manage it ourselves (text, images, news)",
-          "next": "result-website-wp"
-        },
-        {
-          "label": "Our developer handles it",
-          "next": "result-website-statisch"
-        },
-        {
-          "label": "Not sure yet",
-          "next": "info-cms-vergleich"
-        }
-      ]
-    },
-    "info-cms-vergleich": {
-      "type": "info",
-      "text": "WordPress makes sense if your team regularly updates text, images or news. You log in, change something, done. Static HTML is faster, more secure and cheaper to run – but changes require a developer.",
-      "detail": "Rule of thumb: More than 2 changes per month? WordPress. Fewer? Static is enough.",
-      "options": [
-        {
-          "label": "Got it – next",
           "next": "result-website"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
         }
       ]
     },
-    "neue-shop": {
-      "type": "question",
-      "text": "What kind of shop?",
-      "subtitle": "Online shop. My territory.",
+
+    "website-gross": {
+      "type": "info",
+      "text": "Larger projects rarely fail because of technology. They fail because of coordination. Every department wants something different, nobody has the overview, and in the end the agency gets blamed.",
+      "detail": "What I do differently: One person who knows all the websites. No team with staff rotation. You explain yourself once, not on every call. I've been supporting an industrial client with exactly this setup since 2023 – sole technical responsibility.",
       "options": [
         {
-          "label": "Standard online shop",
-          "next": "shop-produkte"
+          "label": "That sounds like my problem",
+          "next": "result-gross"
         },
         {
-          "label": "B2B with dealer portal",
+          "label": "It's different for us",
+          "next": "website-branche"
+        }
+      ]
+    },
+
+    "shop-art": {
+      "type": "question",
+      "text": "Who are your shop customers?",
+      "subtitle": "Determines what the shop needs to do.",
+      "options": [
+        {
+          "label": "End consumers (B2C)",
+          "next": "shop-b2c"
+        },
+        {
+          "label": "Dealers or business customers (B2B)",
+          "next": "shop-b2b"
+        },
+        {
+          "label": "Both",
+          "next": "shop-b2b"
+        }
+      ]
+    },
+
+    "shop-b2c": {
+      "type": "info",
+      "text": "Honest question upfront: Do you really need a custom shop? For standard products without special requirements, Shopify is often the better choice – faster to launch, less maintenance, you pay monthly instead of a large sum upfront.",
+      "detail": "WooCommerce makes sense for: custom processes, special pricing, integrations with your inventory system, or if you don't want to pay a monthly fee. Then the shop is yours. Most common mistake: going too complex too early.",
+      "options": [
+        {
+          "label": "I need something custom",
+          "next": "shop-budget"
+        },
+        {
+          "label": "Standard might be enough",
+          "next": "result-shop-standard"
+        },
+        {
+          "label": "Not sure",
+          "next": "result-shop-beratung"
+        }
+      ]
+    },
+
+    "shop-b2b": {
+      "type": "info",
+      "text": "B2B shops are a different league. In B2C, one person buys one product. In B2B, a buyer orders 500 units, needs tiered pricing, a dealer portal, sometimes approval from a supervisor.",
+      "detail": "A B2B shop needs to be a tool for your sales team, not a pretty catalogue. No standard theme can do this. The shop is built around your sales processes, not the other way around. I've been supporting an industrial client with exactly this setup since 2023.",
+      "options": [
+        {
+          "label": "That's exactly what I need",
           "next": "result-shop-b2b"
+        },
+        {
+          "label": "It's simpler for us",
+          "next": "shop-budget"
         }
       ]
     },
-    "shop-produkte": {
-      "type": "question",
-      "text": "Roughly how many products?",
-      "subtitle": "Determines the complexity.",
+
+    "shop-budget": {
+      "type": "info",
+      "text": "A custom WooCommerce shop starts at EUR 4,800. Below that it gets tight – not impossible, but you'll need to make compromises. Large catalogue (500+ products) or B2B features: from EUR 10,000.",
+      "detail": "What's included: design, setup, payment provider, shipping logic, accessibility, product import (up to 100 products). What costs extra: integrations, complex pricing logic, dealer portal.",
       "options": [
         {
-          "label": "Under 50",
-          "next": "info-shop-einfach"
-        },
-        {
-          "label": "50 to 500",
+          "label": "Fits my budget",
           "next": "result-shop"
         },
         {
-          "label": "Over 500",
+          "label": "My budget is smaller",
+          "next": "result-shop-budget-klein"
+        },
+        {
+          "label": "My catalogue is larger",
           "next": "result-shop-gross"
         }
       ]
     },
-    "info-shop-einfach": {
-      "type": "info",
-      "text": "Under 50 products: check if Shopify is enough. Ready-made themes, quick to launch, low maintenance. Costs ~30 EUR/month plus 2% per transaction. WooCommerce is yours (no subscription) but needs hosting and more setup.",
-      "detail": "WooCommerce pays off when you need custom processes – special pricing, integrations, individual checkout flows.",
-      "options": [
-        {
-          "label": "I want WooCommerce",
-          "next": "result-shop"
-        },
-        {
-          "label": "I'm not sure",
-          "next": "result-shop"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
+
     "portal-was": {
       "type": "question",
-      "text": "What kind of portal?",
+      "text": "What should the portal do?",
       "subtitle": "Portals and tools – my favourite territory.",
       "options": [
         {
-          "label": "Career / job portal",
-          "next": "result-portal-karriere"
-        },
-        {
-          "label": "Customer portal / login area",
+          "label": "Customer login, view data",
           "next": "result-portal-kunden"
         },
         {
-          "label": "Internal tool / dashboard",
-          "next": "result-portal-intern"
+          "label": "Post jobs, collect applications",
+          "next": "portal-karriere"
+        },
+        {
+          "label": "Internal tool for the team",
+          "next": "portal-intern"
         },
         {
           "label": "Interactive report",
-          "next": "result-portal-bericht"
+          "next": "result-bericht"
         }
       ]
     },
-    "problem-art": {
+
+    "portal-karriere": {
+      "type": "info",
+      "text": "Honest question: Do you really need custom? JOIN, Personio, Recruitee can post jobs. Quick to launch, applicant management included.",
+      "detail": "Custom makes sense for: your own design, integration into your website, location filters, multilingual, onboarding processes. If none of these apply, standard is enough.",
+      "options": [
+        {
+          "label": "I need more than standard",
+          "next": "result-portal-karriere"
+        },
+        {
+          "label": "Standard is probably enough",
+          "next": "result-portal-standard"
+        }
+      ]
+    },
+
+    "portal-intern": {
+      "type": "info",
+      "text": "Another honest question: Project management? Asana, Notion. CRM? HubSpot, Pipedrive. Time tracking? Clockify. If a ready-made tool covers 80%, use the tool.",
+      "detail": "Custom only makes sense when your data needs to flow between systems, or your users are customers rather than your team. Then we build something.",
+      "options": [
+        {
+          "label": "I really need custom",
+          "next": "result-portal-custom"
+        },
+        {
+          "label": "Maybe a tool is enough",
+          "next": "result-portal-tool"
+        }
+      ]
+    },
+
+    "problem-was": {
       "type": "question",
-      "text": "What's the biggest issue?",
-      "subtitle": "OK. What exactly is the problem?",
+      "text": "What bothers you most?",
+      "subtitle": "I'll tell you honestly if a repair is worth it.",
       "options": [
         {
           "label": "Looks outdated",
-          "next": "redesign-was"
+          "next": "problem-redesign"
         },
         {
           "label": "Way too slow",
-          "next": "performance-cms"
+          "next": "result-performance"
         },
         {
-          "label": "Not accessible (BFSG/EAA)",
-          "next": "bfsg-status"
+          "label": "Not accessible (EAA/BFSG)",
+          "next": "result-bfsg"
         },
         {
-          "label": "Can't be found",
-          "next": "seo-wo"
+          "label": "Can't be found (Google/AI)",
+          "next": "result-seo"
         },
         {
           "label": "Something is broken",
-          "next": "technik-cms"
+          "next": "problem-technik"
         }
       ]
     },
-    "redesign-was": {
-      "type": "question",
-      "text": "What exactly is outdated?",
-      "subtitle": "Not everything that looks old needs a relaunch.",
+
+    "problem-redesign": {
+      "type": "info",
+      "text": "Not everything that looks old needs a relaunch. Three questions: 1. Does the site work on mobile? 2. Is the content still relevant? 3. Has your target audience changed?",
+      "detail": "If only one applies, a targeted update is often enough instead of a complete rebuild. A design update costs EUR 2,000–5,000, a complete relaunch EUR 5,000–15,000. Big difference.",
       "options": [
         {
-          "label": "The design (looks like 2015)",
+          "label": "Design is enough",
           "next": "result-redesign"
         },
         {
-          "label": "The technology (slow, not mobile)",
-          "next": "result-redesign-technik"
+          "label": "Complete rebuild",
+          "next": "result-relaunch"
         },
         {
-          "label": "The content (wrong text, old photos)",
-          "next": "result-redesign-content"
-        },
-        {
-          "label": "Everything",
-          "next": "result-redesign-komplett"
+          "label": "Not sure",
+          "next": "result-redesign-beratung"
         }
       ]
     },
-    "performance-cms": {
+
+    "problem-technik": {
       "type": "question",
-      "text": "Which system is running?",
-      "subtitle": "The cause often depends on the CMS.",
-      "options": [
-        {
-          "label": "WordPress",
-          "next": "result-performance-wp"
-        },
-        {
-          "label": "Shopify / other system",
-          "next": "result-performance-andere"
-        },
-        {
-          "label": "Don't know",
-          "next": "result-performance"
-        }
-      ]
-    },
-    "bfsg-status": {
-      "type": "question",
-      "text": "Have you had it checked?",
-      "subtitle": "96% of all websites still have accessibility issues.",
-      "options": [
-        {
-          "label": "No, not at all",
-          "next": "info-bfsg-quickcheck"
-        },
-        {
-          "label": "Yes, but the errors are unclear",
-          "next": "result-bfsg"
-        },
-        {
-          "label": "Yes, I need help fixing them",
-          "next": "result-bfsg-fix"
-        }
-      ]
-    },
-    "info-bfsg-quickcheck": {
-      "type": "info",
-      "text": "Three quick tests you can run right now: 1. Keyboard test: Can you navigate your website with just Tab and Enter, no mouse? 2. Contrast test: Is light text on a light background readable? Install the WAVE browser extension. 3. Image test: Do all images have alt texts? Right-click, Inspect, search for alt=.",
-      "detail": "If any of the three tests fails, you have accessibility action items. The good news: most errors can be fixed quickly.",
-      "options": [
-        {
-          "label": "At least one failed",
-          "next": "result-bfsg"
-        },
-        {
-          "label": "I still want a professional check",
-          "next": "result-bfsg"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "seo-wo": {
-      "type": "question",
-      "text": "Where can't you be found?",
-      "subtitle": "Google and AI systems are two different problems.",
-      "options": [
-        {
-          "label": "On Google",
-          "next": "result-seo-google"
-        },
-        {
-          "label": "On ChatGPT / AI systems",
-          "next": "result-seo-ki"
-        },
-        {
-          "label": "Both / not sure",
-          "next": "result-seo"
-        }
-      ]
-    },
-    "technik-cms": {
-      "type": "question",
-      "text": "Which system?",
-      "subtitle": "So I can help more specifically.",
+      "text": "What system are you running?",
+      "subtitle": "Helps me narrow down the problem.",
       "options": [
         {
           "label": "WordPress",
           "next": "result-technik-wp"
         },
         {
-          "label": "WooCommerce",
+          "label": "WooCommerce (shop)",
           "next": "result-technik-woo"
         },
         {
-          "label": "Other / don't know",
+          "label": "Don't know",
           "next": "result-technik"
+        },
+        {
+          "label": "Hacked or security issue",
+          "next": "result-sicherheit"
         }
       ]
     },
-    "betreuung-umfang": {
+
+    "betreuung-was": {
       "type": "question",
       "text": "What do you need?",
-      "subtitle": "Maintenance. I do this for 20+ clients.",
+      "subtitle": "Maintenance isn't all the same.",
       "options": [
         {
-          "label": "Updates, security, backups",
-          "next": "betreuung-cms"
+          "label": "Just updates and security",
+          "next": "result-betreuung-basis"
         },
         {
-          "label": "That plus regular changes",
-          "next": "betreuung-cms"
+          "label": "Updates plus regular changes",
+          "next": "result-betreuung-standard"
         },
         {
-          "label": "Full service: one contact for everything",
+          "label": "A dedicated developer for everything",
+          "next": "result-betreuung-premium"
+        },
+        {
+          "label": "Not sure",
+          "next": "betreuung-info"
+        }
+      ]
+    },
+
+    "betreuung-info": {
+      "type": "info",
+      "text": "Quick overview: Basic (updates, backups, security) from EUR 15/month. Standard (plus changes) EUR 80–200/month. Premium (dedicated developer) EUR 400–800/month.",
+      "detail": "The difference: With Basic I react to problems. With Standard you call and I implement. With Premium I think ahead, suggest improvements, plan proactively. What do you need?",
+      "options": [
+        {
+          "label": "Basic is enough",
+          "next": "result-betreuung-basis"
+        },
+        {
+          "label": "Standard sounds right",
+          "next": "result-betreuung-standard"
+        },
+        {
+          "label": "Premium, because business-critical",
           "next": "result-betreuung-premium"
         }
       ]
     },
-    "betreuung-cms": {
-      "type": "question",
-      "text": "Which system are you running?",
-      "subtitle": "The effort depends on it.",
-      "options": [
-        {
-          "label": "WordPress",
-          "next": "result-betreuung-wp"
-        },
-        {
-          "label": "WooCommerce",
-          "next": "result-betreuung-woo"
-        },
-        {
-          "label": "Static / Other",
-          "next": "result-betreuung-statisch"
-        }
-      ]
-    },
-    "geo-wissen": {
-      "type": "question",
-      "text": "How much do you know about AI visibility?",
-      "subtitle": "Good topic. Few are paying attention to this so far.",
-      "options": [
-        {
-          "label": "Nothing – explain it to me",
-          "next": "geo-info"
-        },
-        {
-          "label": "Basic idea clear – how do you do it?",
-          "next": "result-geo"
-        },
-        {
-          "label": "I want an audit of my website",
-          "next": "result-geo-audit"
-        }
-      ]
-    },
-    "geo-info": {
-      "type": "info",
-      "text": "Short version: 73% of B2B buyers research with ChatGPT. 61% fewer clicks on classic Google results since AI Overviews. If AI systems can't understand your website, you don't exist for these users.",
-      "detail": "I structure websites so that AI systems can correctly capture and cite them. I do this in every project. Not because it's free, but because it's pointless to leave it out.",
-      "options": [
-        {
-          "label": "Sounds relevant – tell me more",
-          "next": "result-geo"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "kosten-art": {
-      "type": "question",
-      "text": "What do you need a price estimate for?",
-      "subtitle": "Honest numbers. No starting-at prices that triple.",
-      "options": [
-        {
-          "label": "Website",
-          "next": "info-kosten-website"
-        },
-        {
-          "label": "Online shop",
-          "next": "info-kosten-shop"
-        },
-        {
-          "label": "Ongoing maintenance",
-          "next": "info-kosten-betreuung"
-        },
-        {
-          "label": "Single task / hourly rate",
-          "next": "info-kosten-stunde"
-        }
-      ]
-    },
-    "info-kosten-website": {
-      "type": "info",
-      "text": "Realistic 2026 prices for company websites: 5-8 pages, responsive, accessible: EUR 3,000 to 6,000. Medium with sections, multilingual: EUR 6,000 to 15,000. Corporate group, complex: EUR 15,000 to 40,000. Plus hosting (EUR 5-30/month) and optional maintenance.",
-      "detail": "My hourly rate: EUR 80 net. I bill by effort, not gut feeling. Before the project starts, you get an estimate I stick to.",
-      "options": [
-        {
-          "label": "Fits – I need a website",
-          "next": "neue-art"
-        },
-        {
-          "label": "Too expensive – cheaper options?",
-          "next": "info-kosten-guenstig"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "info-kosten-guenstig": {
-      "type": "info",
-      "text": "Cheaper options exist. Static HTML instead of WordPress saves hosting and maintenance. Fewer pages means less effort. And if you supply text and images yourself instead of me developing content, the price drops significantly.",
-      "detail": "What I don't recommend: site builders like Wix or Jimdo. They cost more long-term because you never truly own it and will eventually need to migrate anyway. And they can't do accessibility properly.",
-      "options": [
-        {
-          "label": "Got it – I want a website",
-          "next": "neue-art"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "info-kosten-shop": {
-      "type": "info",
-      "text": "Functional WooCommerce shop: from EUR 5,000. With custom processes (B2B, integrations): EUR 10,000 to 25,000. Plus: hosting (EUR 10-50/month), payment fees where applicable.",
-      "detail": "Shopify is cheaper to set up (ready-made themes) but more expensive to run: EUR 29+/month plus 2% transaction fee. From ~300 orders/month, WooCommerce becomes more economical.",
-      "options": [
-        {
-          "label": "I want to build a shop",
-          "next": "neue-shop"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "info-kosten-betreuung": {
-      "type": "info",
-      "text": "Basic (updates, backups, monitoring): from EUR 15/month. Standard (plus changes, content): from EUR 80/month. Premium (dedicated developer, priority): EUR 400-800/month.",
-      "detail": "All plans cancellable monthly. No 12-month contract. Most small websites only need Basic.",
-      "options": [
-        {
-          "label": "I need maintenance",
-          "next": "betreuung-umfang"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "info-kosten-stunde": {
-      "type": "info",
-      "text": "My hourly rate: EUR 80 net. Small tasks (change text, swap image): 15-30 minutes. Debug a plugin issue: 1-3 hours. Build a new subpage: 3-8 hours.",
-      "detail": "I estimate the effort upfront and stick to it. If it takes longer than estimated, that's on me.",
-      "options": [
-        {
-          "label": "I have a specific task",
-          "next": "result-technik"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "vergleich-was": {
-      "type": "question",
-      "text": "What are you comparing?",
-      "subtitle": "Good that you're comparing. Everyone should.",
-      "options": [
-        {
-          "label": "Freelancer vs. agency",
-          "next": "info-freelancer-vs-agentur"
-        },
-        {
-          "label": "Different freelancers",
-          "next": "info-freelancer-auswaehlen"
-        },
-        {
-          "label": "DIY vs. hiring a pro",
-          "next": "info-selber-vs-profi"
-        }
-      ]
-    },
-    "info-freelancer-vs-agentur": {
-      "type": "info",
-      "text": "Agency: multiple specialists, project manager, processes. Good for large teams and high budgets. Downside: people rotate, you explain yourself every time. Freelancer: one person who knows your project from start to finish. Faster paths, lower overhead.",
-      "detail": "The most common objection to freelancers: What if they get sick? My answer: I document everything so another developer could take over at any time. And I haven't been unavailable in 26 years.",
-      "options": [
-        {
-          "label": "I want a freelancer",
-          "next": "neue-art"
-        },
-        {
-          "label": "More questions – let's talk",
-          "next": "result-vergleich-kontakt"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "info-freelancer-auswaehlen": {
-      "type": "info",
-      "text": "Five questions for every freelancer before you sign: 1. Can I see a live website you built alone? 2. What happens to my website if you quit? 3. Is accessibility (BFSG/EAA) included in your offer? 4. How quickly do you respond to problems? 5. What does an hour of post-project work cost?",
-      "detail": "Anyone who can answer all five clearly is probably fine. Anyone who dodges is not.",
-      "options": [
-        {
-          "label": "I want to hear your answers",
-          "next": "result-vergleich-kontakt"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "info-selber-vs-profi": {
-      "type": "info",
-      "text": "DIY works for: simple landing pages (Carrd, GitHub Pages), blogs (WordPress.com), small shops (Shopify with standard theme). You need a pro for: custom processes, accessibility, performance optimization, structured data, anything that should still be maintainable after three years.",
-      "detail": "Rule of thumb: If the website should make money or win clients, a pro pays off. If it just needs to exist, self-service is fine.",
-      "options": [
-        {
-          "label": "I need a professional",
-          "next": "neue-art"
-        },
-        {
-          "label": "Back to the start",
-          "next": "start"
-        }
-      ]
-    },
-    "result-website": {
+
+    "result-direkt": {
       "type": "result",
-      "title": "Three things good company websites in 2026 have in common.",
-      "text": "First: few pages, clear structure. Most companies need 5 to 8 pages, not 40. Second: the website must be readable for AI systems, not just for Google. 73% of B2B buyers research with ChatGPT. Third: accessibility per WCAG 2.1 AA has been mandatory since June 2025 (European Accessibility Act), not optional. Many don't know this yet.\n\nTypical effort: 40–80 hours, depending on scope.",
+      "title": "Direct line – works for me.",
+      "text": "No funnel, no detours. Write to me about what you need. I respond within one business day. If it's urgent: call.",
+      "proof": [],
+      "cta": {
+        "label": "Send email",
+        "href": "contact/"
+      },
+      "ctaSecondary": {
+        "label": "+49 38733 270015",
+        "href": "tel:+4938733270015"
+      }
+    },
+
+    "result-budget-klein": {
+      "type": "result",
+      "title": "Under EUR 2,400 – I'll be honest with you.",
+      "text": "For this budget I can't deliver a professional website with accessibility and AI visibility. Not because I don't want to, but because there isn't enough time.\n\nWhat I recommend: Squarespace or Jimdo. They've come a long way. If you can invest more later, get in touch. No pressure, no follow-up.\n\nOr we talk briefly anyway – maybe there's a way I don't see.",
+      "proof": [],
+      "cta": {
+        "label": "Let's talk anyway",
+        "href": "contact/"
+      }
+    },
+
+    "result-industrie": {
+      "type": "result",
+      "title": "Industry and trades – I know this space.",
+      "text": "I've been supporting Gerwing Steinwerke since 2023 – paving stones, B2B, complex product catalogues. Industrial clients don't need fancy animations. They need: fast loading times, clear product information, and a site that works on a tablet in the workshop.\n\nAccessibility and AI visibility are built into every project. Typical effort: 40–80 hours, EUR 3,200–6,400.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "B2B shop, industry, retainer since 2023",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Tell me about your business",
+        "href": "contact/"
+      }
+    },
+
+    "result-beratung-branche": {
+      "type": "result",
+      "title": "Consulting and services – trust is everything.",
+      "text": "For consultants, the website decides whether someone calls or clicks away. What matters: showing competence without bragging. References you can verify. A process that provides certainty.\n\nAI visibility is particularly important here – 73% of B2B buyers research with ChatGPT. If you don't show up there, you don't exist. Typical effort: 40–80 hours.",
       "proof": [
         {
           "name": "Scheja & Partner",
-          "desc": "Law firm, 30+ lawyers, multilingual",
+          "desc": "Data protection law firm, 30+ consultants",
           "href": "https://scheja-partners.de"
         },
         {
-          "name": "The New Insider",
-          "desc": "City magazine Osnabrueck",
-          "href": "https://thenewinsider.de"
+          "name": "Runden Group",
+          "desc": "Corporate group, 7 websites",
+          "href": "https://runden-group.eu"
+        }
+      ],
+      "cta": {
+        "label": "Send me your current website",
+        "href": "contact/"
+      }
+    },
+
+    "result-recht": {
+      "type": "result",
+      "title": "Law, tax, finance – serious doesn't have to be boring.",
+      "text": "Law firms and tax offices have a problem: all websites look the same. Stock photos of handshakes, paragraph symbols, 'We advise you competently'. That doesn't differentiate anyone.\n\nWhat works: real photos, clear language, compliance tools that generate leads. Scheja & Partner has interactive GDPR checks – they bring inquiries. Typical effort: 50–100 hours.",
+      "proof": [
+        {
+          "name": "Scheja & Partner",
+          "desc": "Data protection law firm, interactive tools",
+          "href": "https://scheja-partners.de"
+        }
+      ],
+      "cta": {
+        "label": "Let's talk about your positioning",
+        "href": "contact/"
+      }
+    },
+
+    "result-sozial": {
+      "type": "result",
+      "title": "Health, social, nonprofits – budgets are tight, I know.",
+      "text": "Practices, associations and social organisations rarely have big budgets. But they have something companies lack: real stories. People who were helped. Impact that matters.\n\nAccessibility here is not just a requirement, but an attitude. Typical effort: 30–60 hours. For associations with demonstrably tight budgets, I'll discuss the price.",
+      "proof": [
+        {
+          "name": "Seniorpartner in School",
+          "desc": "Federal association, impact report",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
         },
         {
           "name": "Streunerhilfe Plau",
-          "desc": "Non-profit with donation shop",
+          "desc": "Animal welfare, donation shop",
           "href": "https://streunerhilfe-plau.de"
         }
       ],
       "cta": {
-        "label": "Send me your ideas – I’ll reply within one business day",
-        "href": "../kontakt/"
+        "label": "Tell me about your work",
+        "href": "contact/"
       }
     },
-    "result-website-wp": {
+
+    "result-website": {
       "type": "result",
-      "title": "WordPress – but done right.",
-      "text": "WordPress is the right choice if your team wants to manage content themselves. But: not every theme and not every page builder is good. Elementor and Divi are popular but generate bloated code and slow your site down. I work with YOOtheme Pro or the native block editor – clean code, faster load times, no plugin lock-in. AI visibility and accessibility are built into every project. Copy edited by my wife Annemarie.\n\nTypical effort: 50–100 hours incl. setup and training.",
+      "title": "Three things good company websites in 2026 have in common.",
+      "text": "First: few pages, clear structure. Most need 5–8 pages, not 40. Second: the website must be readable for AI systems. 73% of B2B buyers research with ChatGPT. Third: accessibility has been mandatory since 2025, not optional.\n\nTypical effort: 40–80 hours, EUR 3,200–6,400.",
       "proof": [
         {
           "name": "Scheja & Partner",
-          "desc": "Law firm, 30+ lawyers, YOOtheme Pro",
+          "desc": "Law firm, 30+ lawyers",
           "href": "https://scheja-partners.de"
         },
         {
-          "name": "The New Insider",
-          "desc": "City magazine, YOOtheme Pro",
-          "href": "https://thenewinsider.de"
+          "name": "Streunerhilfe Plau",
+          "desc": "Association with donation shop",
+          "href": "https://streunerhilfe-plau.de"
         }
       ],
       "cta": {
-        "label": "Let’s talk about your WordPress project",
-        "href": "../kontakt/"
+        "label": "Send me your ideas",
+        "href": "contact/"
       }
     },
-    "result-website-statisch": {
+
+    "result-gross": {
       "type": "result",
-      "title": "Static HTML – less is more.",
-      "text": "If a developer manages the content, you don't need a CMS. Static websites load faster, are more secure (no login, no database, no updates) and cost almost nothing to run. GitHub Pages or Netlify: EUR 0 hosting. This website here is static. Lighthouse 100, no framework, no build tool. Push to the repo, live instantly. The downside: for every text change you need me or a developer. At less than 2 changes per month, that's not a problem.\n\nTypical effort: 30–60 hours. Minimal running costs afterwards.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "Static, Lighthouse 100, GitHub Pages"
-        },
-        {
-          "name": "Impact Report SiS",
-          "desc": "Static report with SVG map",
-          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
-        }
-      ],
-      "cta": {
-        "label": "Tell me about your project",
-        "href": "../kontakt/"
-      }
-    },
-    "result-website-gross": {
-      "type": "result",
-      "title": "Multiple websites – the most common problem isn't the technology.",
-      "text": "When several websites belong together, projects rarely fail because of WordPress or design. They fail because of coordination. Every department wants something different, nobody has the overview. The solution is simple: one person who knows all websites and has all contacts. No agency team where you have to explain who needs what every time. I've managed projects like this for years – multiple websites, one person, and it worked because everything went through me.\n\nEffort depends on scope. Comparable projects: 100–300 hours.",
+      "title": "Larger projects – one person instead of agency chaos.",
+      "text": "What I do differently: I'm your only point of contact. No handovers, no rotation, no 'I'd have to check on that'. You explain yourself once, and I keep the overview – for years.\n\nThis is how I work with Gerwing Steinwerke: sole technical responsibility since 2023. Effort for corporate groups: 100–300 hours, depending on scope.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Complex WordPress project, ongoing retainer",
+          "desc": "Complete WordPress project, retainer",
           "href": "https://gerwing.de"
         },
         {
-          "name": "Scheja & Partner",
-          "desc": "Law firm, software products, multilingual",
-          "href": "https://scheja-partners.de"
+          "name": "Runden Group",
+          "desc": "7 websites, career portal, onboarding",
+          "href": "https://runden-group.eu"
         }
       ],
       "cta": {
-        "label": "Let’s discuss the coordination",
-        "href": "../kontakt/"
+        "label": "Let's discuss coordination",
+        "href": "contact/"
       }
     },
+
+    "result-landingpage": {
+      "type": "result",
+      "title": "Landing page – one page, one goal.",
+      "text": "What a landing page needs: a clear CTA, no navigation menu leading away, no ten options. The most common mistakes: too much text, too many buttons, no clear next step.\n\nStatic HTML is almost always enough. Faster than WordPress, no maintenance. Typical effort: 15–30 hours, EUR 1,200–2,400.",
+      "proof": [
+        {
+          "name": "Mehrweg-Heroes",
+          "desc": "Podcast landing page",
+          "href": "https://mehrweg-heroes.eu"
+        }
+      ],
+      "cta": {
+        "label": "Send me the offer – I'll design the page",
+        "href": "contact/"
+      }
+    },
+
+    "result-beratung": {
+      "type": "result",
+      "title": "Not sure? Let's talk.",
+      "text": "You know you need something, but not exactly what. That's a good starting point – more honest than 'I want exactly this'. In a short conversation we'll figure out what fits your budget and goals.\n\n15 minutes, no pitch, no obligation. I'll also tell you if a site builder is enough.",
+      "proof": [],
+      "cta": {
+        "label": "15 minutes – let's talk",
+        "href": "contact/"
+      }
+    },
+
     "result-shop": {
       "type": "result",
-      "title": "Honest assessment: WooCommerce vs. Shopify.",
-      "text": "Shopify is easier at first. Ready-made themes, quick to launch. But you're renting: monthly fees, transaction costs, limited customisation. WooCommerce is yours. You pay for hosting and development, but the shop belongs to you. For standard products with few special requirements, Shopify may suffice. Once you need custom processes – special pricing, integrations, custom checkout – WooCommerce becomes more economical. Most common e-commerce mistake: too complex too early. Start with what you actually need.\n\nTypical effort: 80–150 hours, depending on process complexity.",
+      "title": "WooCommerce – when standard isn't enough.",
+      "text": "Custom processes, special pricing, integrations: that's what WooCommerce is built for. It's yours, no subscription, full control. I build it to fit your business, not some template.\n\nTypical effort: 80–150 hours, EUR 6,400–12,000. Most common mistake: going too complex too early. Start with what you really need.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
           "desc": "B2B shop with dealer portal",
           "href": "https://gerwing.de"
-        },
-        {
-          "name": "Commodule-Aera",
-          "desc": "12+ shops across various industries"
         }
       ],
       "cta": {
-        "label": "Tell me about your sales processes",
-        "href": "../kontakt/"
+        "label": "Tell me about your processes",
+        "href": "contact/"
       }
     },
-    "result-shop-gross": {
+
+    "result-shop-standard": {
       "type": "result",
-      "title": "Large catalogue – infrastructure matters.",
-      "text": "From 500 products, you need more than a good theme. Shared hosting dies at this scale. You need managed hosting (from EUR 30/month), a staging environment for testing and proper image compression (otherwise product pages become painful). Plus: solid import/export for product data, filters that stay fast at 1,000 products, and an SEO plan for large catalogues. This is doable but not a weekend project.\n\nTypical effort: 100–200 hours incl. infrastructure and import.",
-      "proof": [
-        {
-          "name": "Gerwing Steinwerke",
-          "desc": "Large catalogue, B2B processes",
-          "href": "https://gerwing.de"
-        }
-      ],
+      "title": "Shopify might be enough – and that's okay.",
+      "text": "No developer likes to say this, but: for standard products without special requirements, Shopify is often the better choice. Quick to launch, low maintenance. You pay monthly, but Shopify handles hosting and security.\n\nIf you need custom processes later, you'll have to migrate. But for the start it can be right. If you still want WooCommerce: 60–100 hours, from EUR 4,800.",
+      "proof": [],
       "cta": {
-        "label": "Send me the catalogue scope – I’ll estimate the effort",
-        "href": "../kontakt/"
+        "label": "Still have questions? Let's talk",
+        "href": "contact/"
       }
     },
+
+    "result-shop-beratung": {
+      "type": "result",
+      "title": "Shop consultation – understand first, then build.",
+      "text": "You're not sure if Shopify is enough or it has to be WooCommerce? That's a good question. The answer depends on your processes, not the price.\n\nIn a short conversation we'll clarify: What do you sell? How many products? To whom? What special requirements? Then you'll know what you need.",
+      "proof": [],
+      "cta": {
+        "label": "Quick call – get clarity",
+        "href": "contact/"
+      }
+    },
+
     "result-shop-b2b": {
       "type": "result",
-      "title": "B2B shops need different things than B2C.",
-      "text": "In B2C, a person buys one product. In B2B, a buyer orders 500 units, needs tiered pricing, a dealer portal, maybe approval from their manager. No standard theme handles that. A B2B shop must be a tool for your sales team, not a pretty catalogue. Since 2023 I've been running an industrial client with exactly this setup: WooCommerce, dealer portal, sample tracking. Sole technical responsibility. It works because the shop was built around the sales processes, not the other way around.\n\nTypical effort: 100–200 hours. Dealer portal and integrations take time.",
+      "title": "B2B shop – a tool for your sales team.",
+      "text": "In B2B the shop has to work like your sales team thinks. Tiered pricing, dealer access, approval processes, discount logic. No template can do this – it has to be built.\n\nI've been supporting an industrial client with exactly this setup since 2023: dealer portal, sample tracking, pricing logic. Typical effort: 100–200 hours, from EUR 8,000.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
@@ -742,30 +601,43 @@
         }
       ],
       "cta": {
-        "label": "Tell me about your B2B sales process",
-        "href": "../kontakt/"
+        "label": "Tell me about your B2B sales",
+        "href": "contact/"
       }
     },
-    "result-portal-karriere": {
+
+    "result-shop-budget-klein": {
       "type": "result",
-      "title": "Career portal – buy off the shelf or build custom?",
-      "text": "If you just want to post jobs: JOIN, Personio or Recruitee can do that. EUR 50-300/month, quick to launch, applicant management included. Custom makes sense when your portal needs more: your own design, integration into your website, onboarding processes, location filters, multilingual support. I built a career portal plus internal onboarding tool for the Runden Group. No standard tool would have covered it because the processes were too specific.\n\nTypical effort: 60–120 hours, depending on integration depth.",
+      "title": "Shop under EUR 4,800 – possible, but with compromises.",
+      "text": "Custom shop for under EUR 4,800 is tight. Not impossible, but: adapt a standard design instead of custom, you manage products yourself, no complex processes.\n\nIf that's enough – we can talk. If not: Shopify is more honest. No monthly developer fee, but monthly Shopify fee instead. Calculate what's cheaper.",
+      "proof": [],
+      "cta": {
+        "label": "Let's discuss the compromises",
+        "href": "contact/"
+      }
+    },
+
+    "result-shop-gross": {
+      "type": "result",
+      "title": "Large catalogue – infrastructure matters.",
+      "text": "From 500 products you need more than a good theme. Shared hosting dies at this size. You need: managed hosting, staging for testing, clean product import, filters that stay fast at 1000 products.\n\nTypical effort: 100–200 hours, from EUR 8,000. The import alone can take 20–40 hours – depending on how clean your data is.",
       "proof": [
         {
-          "name": "Runden Group",
-          "desc": "Career portal, onboarding tool",
-          "href": "https://runden-group.eu"
+          "name": "Gerwing Steinwerke",
+          "desc": "Large catalogue, B2B processes",
+          "href": "https://gerwing.de"
         }
       ],
       "cta": {
-        "label": "Describe your recruiting process to me",
-        "href": "../kontakt/"
+        "label": "Send me the catalogue scope",
+        "href": "contact/"
       }
     },
+
     "result-portal-kunden": {
       "type": "result",
-      "title": "Customer portal – what to watch out for.",
-      "text": "Login area means: user management, passwords, sessions, data protection. That's not trivial. For WordPress there are solutions (MemberPress, WooCommerce Memberships), for static sites you need a backend. Important: GDPR. Personal data behind a login requires a processing register, a privacy policy that covers it, and encrypted transmission (HTTPS). Sounds involved, but it's routine when planned from the start.\n\nTypical effort: 60–120 hours, GDPR concept included.",
+      "title": "Customer portal – privacy from the start.",
+      "text": "A login area for customers is technically more demanding because GDPR has to be built in from the start. What should customers see? Who manages access? How long is data stored?\n\nThis is doable and routine. Typical effort: 60–120 hours, GDPR concept included.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
@@ -774,30 +646,76 @@
         }
       ],
       "cta": {
-        "label": "Tell me what customers should see",
-        "href": "../kontakt/"
+        "label": "What should customers be able to see?",
+        "href": "contact/"
       }
     },
-    "result-portal-intern": {
+
+    "result-portal-karriere": {
       "type": "result",
-      "title": "Internal tool – do you really need custom?",
-      "text": "Honest question. Project management? Asana or Notion. CRM? HubSpot or Pipedrive. Time tracking? Clockify. Custom development only pays off when your process doesn't fit an existing tool. The line is where your data needs to flow between systems or where standard tools bend your workflow instead of supporting it. If 80% works with an off-the-shelf tool, use the tool. The last 20% can be solved with integrations.\n\nEffort varies widely. Initial consultation clarifies the scope.",
+      "title": "Career portal – custom makes sense for you.",
+      "text": "Your own design, integration into your website, location filters, multilingual: no standard tool can do this. I built a career portal plus internal onboarding tool for Runden Group.\n\nTypical effort: 60–120 hours, depending on integration depth.",
       "proof": [
         {
           "name": "Runden Group",
-          "desc": "Internal onboarding tool",
+          "desc": "Career portal, onboarding tool",
           "href": "https://runden-group.eu"
         }
       ],
       "cta": {
-        "label": "Let’s talk about your project",
-        "href": "../kontakt/"
+        "label": "Describe your recruiting process",
+        "href": "contact/"
       }
     },
-    "result-portal-bericht": {
+
+    "result-portal-standard": {
+      "type": "result",
+      "title": "Standard tool is enough – honestly.",
+      "text": "JOIN, Personio, Recruitee – they do this well. Quick to launch, applicant management included, no development costs. Custom wouldn't pay off for your needs.\n\nMy advice: Start with standard. If you later find it's not enough, we can still talk.",
+      "proof": [],
+      "cta": {
+        "label": "Still have questions? Let's talk",
+        "href": "contact/"
+      }
+    },
+
+    "result-portal-custom": {
+      "type": "result",
+      "title": "Custom tool – if it has to be, do it right.",
+      "text": "You've checked if ready-made tools are enough. The answer is no. Then we build something. This is the kind of project that interests me most.\n\nEffort varies widely – from 40 hours for an interactive report to 200+ for a complex portal. Initial conversation clarifies the scope.",
+      "proof": [
+        {
+          "name": "Seniorpartner in School",
+          "desc": "Interactive impact report",
+          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+        },
+        {
+          "name": "Runden Group",
+          "desc": "Career portal, onboarding",
+          "href": "https://runden-group.eu"
+        }
+      ],
+      "cta": {
+        "label": "Let's talk about your project",
+        "href": "contact/"
+      }
+    },
+
+    "result-portal-tool": {
+      "type": "result",
+      "title": "Ready-made tool – often the better choice.",
+      "text": "No developer likes to say this: If a ready-made tool covers 80%, custom is usually more expensive. Asana, Notion, HubSpot, Pipedrive – they work because thousands of companies use them.\n\nIf standard isn't enough later, we can talk. But don't start with custom if standard is enough.",
+      "proof": [],
+      "cta": {
+        "label": "Still have questions? Let's talk",
+        "href": "contact/"
+      }
+    },
+
+    "result-bericht": {
       "type": "result",
       "title": "Interactive report – right up my alley.",
-      "text": "Annual reports, impact reports, sustainability reports – as PDFs they gather dust. As interactive websites they get read, shared and linked. I built a digital impact report for Seniorpartner in School with an interactive SVG map of Germany and infographics. Static HTML, no backend, runs on any server. The beauty of reports: clear scope, clear end, measurable result.\n\nTypical effort: 40–80 hours. Clear scope, clear end.",
+      "text": "Annual reports, impact reports, sustainability reports – as PDFs they gather dust. As interactive websites they get read, shared, linked.\n\nI built an impact report with an interactive Germany map for Seniorpartner in School. Clear scope, clear end. Typical effort: 40–80 hours.",
       "proof": [
         {
           "name": "Seniorpartner in School",
@@ -806,210 +724,42 @@
         }
       ],
       "cta": {
-        "label": "Send me the current report – I’ll draft a concept",
-        "href": "../kontakt/"
+        "label": "Send me the current report",
+        "href": "contact/"
       }
     },
-    "result-landingpage": {
-      "type": "result",
-      "title": "What a landing page needs – and what it doesn't.",
-      "text": "One goal. One CTA. No navigation menu that leads visitors away. The most common mistakes: too much text, too many options, no clear next step. A landing page is not a miniature website but a focused funnel. Static HTML almost always suffices. Faster than WordPress, no maintenance overhead, hosting costs almost nothing. If one page is enough, I won't sell you ten.\n\nTypical effort: 15–30 hours. Static, quick to deliver.",
-      "proof": [
-        {
-          "name": "Mehrweg-Heroes",
-          "desc": "Podcast landing page",
-          "href": "https://mehrweg-heroes.eu"
-        },
-        {
-          "name": "Impact Report SiS",
-          "desc": "Static report with infographics",
-          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
-        }
-      ],
-      "cta": {
-        "label": "Send me the offer – I’ll design the page",
-        "href": "../kontakt/"
-      }
-    },
-    "result-redesign": {
-      "type": "result",
-      "title": "Redesign or facelift? Here's how to find out.",
-      "text": "Three questions: Is the technology outdated (PHP 7, no HTTPS, not responsive)? Then redesign. Is the content wrong (outdated services, old staff, old photos)? Then a content update often suffices. Has your audience changed? Then you need a new concept, not just a new design. Many agencies sell a relaunch when an update would be enough. I look at what's there and honestly tell you what's worth it.\n\nTypical effort: 30–60 hours, depending on how much changes.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "Own redesign 2026"
-        },
-        {
-          "name": "Casarotex",
-          "desc": "Textile company, redesign",
-          "href": "https://casarotex.de"
-        }
-      ],
-      "cta": {
-        "label": "Send me the URL – I’ll tell you what’s worth it",
-        "href": "../kontakt/"
-      }
-    },
-    "result-redesign-technik": {
-      "type": "result",
-      "title": "Outdated technology – the foundation must be right.",
-      "text": "If the site isn't responsive or runs on PHP 7, no new design will help. First fix the base: current PHP, HTTPS, responsive layout, performance. Sometimes a theme switch is enough, sometimes the CMS itself needs updating. Check: Is your site running PHP 8.1+? Is SSL active? Does it look usable on a phone? If any answer is no, start there.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "Lighthouse 100, static HTML"
-        }
-      ],
-      "cta": {
-        "label": "Send me the URL – I’ll check the foundation",
-        "href": "../kontakt/"
-      }
-    },
-    "result-redesign-content": {
-      "type": "result",
-      "title": "Outdated content – often solved faster than expected.",
-      "text": "Before commissioning a redesign: check if new text and photos are enough. Checklist: Are the service descriptions still accurate? Are all staff members current? Are the contact details correct? Are the photos older than 5 years? A content update costs a fraction of a redesign and often delivers more, because visitors read content, not admire layouts.",
-      "proof": [
-        {
-          "name": "Casarotex",
-          "desc": "Content update instead of relaunch",
-          "href": "https://casarotex.de"
-        }
-      ],
-      "cta": {
-        "label": "Send me the URL – I’ll tell you what needs to change",
-        "href": "../kontakt/"
-      }
-    },
-    "result-redesign-komplett": {
-      "type": "result",
-      "title": "Complete redesign – how to plan it sensibly.",
-      "text": "When design, technology and content are all outdated, a fresh start pays off. But not without a plan. Step 1: Define what the new website must do (not what it should have). Step 2: Check what works well on the old site (analytics, most visited pages). Step 3: Only then decide on design and technology. The most common mistake: commissioning a design before it's clear what the website should achieve.\n\nTypical effort: 60–120 hours incl. concept and implementation.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "Own redesign 2026, from scratch"
-        },
-        {
-          "name": "Gerwing Steinwerke",
-          "desc": "Complete WordPress project",
-          "href": "https://gerwing.de"
-        }
-      ],
-      "cta": {
-        "label": "Let’s plan the fresh start",
-        "href": "../kontakt/"
-      }
-    },
+
     "result-performance": {
       "type": "result",
-      "title": "The three most common bottlenecks – and what you can do yourself.",
-      "text": "First: images. Uncompressed PNGs are the most common reason for slow sites. Use WebP, limit max width to 1920px. Second: too much JavaScript. Slider plugins, chat widgets, analytics scripts – each costs load time. Check what you really need. Third: bad hosting. Shared hosting at EUR 3/month is slow, period. Self-check: pagespeed.web.dev. Above 90 is good, below 50 is a problem.\n\nTypical effort: 5–15 hours for analysis and optimisation.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "Lighthouse 100, static HTML"
-        },
-        {
-          "name": "Gerwing Steinwerke",
-          "desc": "Performance optimisation in live operation",
-          "href": "https://gerwing.de"
-        }
-      ],
+      "title": "Slow website – usually quick to fix.",
+      "text": "The most common causes: images too large, too many plugins accumulated over the years, or cheap hosting. None of these is a big problem.\n\nSend me the URL, I'll tell you in 5 minutes what's causing it. Typical effort: 5–15 hours, EUR 400–1,200.",
+      "proof": [],
       "cta": {
-        "label": "Send me the URL – initial assessment free",
-        "href": "../kontakt/"
+        "label": "Send URL – initial assessment free",
+        "href": "contact/"
       }
     },
-    "result-performance-wp": {
-      "type": "result",
-      "title": "WordPress slow – the five usual suspects.",
-      "text": "1. Too many plugins. Above 20 gets critical, above 30 your site is guaranteed to be slow. Deactivate everything you don't use daily. 2. Page builders (Elementor, Divi). They generate bloated HTML code. 3. No caching plugin. WP Super Cache or W3 Total Cache are free and deliver 30-50% improvement immediately. 4. Images not compressed. ShortPixel or Imagify solve this automatically. 5. PHP version too old. Anything below PHP 8.1 is slower and insecure. Switchable in the hosting panel.\n\nTypical effort: 5–15 hours. Often faster than expected.",
-      "proof": [
-        {
-          "name": "20+ WordPress sites",
-          "desc": "Ongoing maintenance and optimisation"
-        }
-      ],
-      "cta": {
-        "label": "Send me the URL – initial assessment free",
-        "href": "../kontakt/"
-      }
-    },
-    "result-performance-andere": {
-      "type": "result",
-      "title": "Not WordPress – still slow?",
-      "text": "The universal bottlenecks apply everywhere: large images, too much JavaScript, bad hosting. Check pagespeed.web.dev for what Google says. The most common hints: Largest Contentful Paint too high (large image above fold), Total Blocking Time too high (JavaScript blocking), Cumulative Layout Shift (elements jump while loading). Shopify shops often slow down due to apps – each app loads its own JavaScript. Deactivate apps you don't need.\n\nTypical effort: 5–15 hours for analysis and optimisation.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "Lighthouse 100, static HTML"
-        }
-      ],
-      "cta": {
-        "label": "Send me the URL – initial assessment free",
-        "href": "../kontakt/"
-      }
-    },
+
     "result-bfsg": {
       "type": "result",
-      "title": "European Accessibility Act – what it means for your website.",
-      "text": "Mandatory since June 2025, fines up to EUR 100,000. The standard is WCAG 2.1 AA. The three most common errors: too little contrast (light text on light background), no keyboard navigation (Tab key must reach all links), missing alt texts on images. Self-check: install the WAVE browser extension – it shows errors directly on the page. Or test whether you can operate your own website using only the keyboard. If you get stuck somewhere, your users have the same problem.\n\nTypical effort: 10–30 hours for audit and implementation.",
+      "title": "EAA/BFSG – mandatory since June 2025.",
+      "text": "Fines up to EUR 100,000. 96% of all websites still have issues. The most common: text hard to read, site not keyboard-navigable, images without descriptions.\n\nI'll check your website, tell you what needs to be done, and implement it. Typical effort: 10–30 hours.",
       "proof": [
         {
           "name": "This website",
-          "desc": "WCAG 2.1 AA, EAA-compliant"
-        },
-        {
-          "name": "Seniorpartner in School",
-          "desc": "Accessible impact report",
-          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
+          "desc": "WCAG 2.1 AA, EAA compliant"
         }
       ],
       "cta": {
-        "label": "Let’s check your website",
-        "href": "../kontakt/"
+        "label": "Get website checked",
+        "href": "contact/"
       }
     },
-    "result-bfsg-fix": {
-      "type": "result",
-      "title": "Fixing accessibility issues – what it costs and takes.",
-      "text": "Depends on the scope. The most common fixes: adjusting contrasts (1-2 hours), adding alt texts (1 hour per 20 images), fixing keyboard navigation (2-8 hours depending on theme), making forms accessible (2-4 hours). For a typical WordPress site with 10-20 pages: 8 to 20 hours of effort. I document the changes so you can prove what was done in case of an audit. Initial assessment free.\n\nTypical effort: 5–20 hours, depending on the number of errors.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "WCAG 2.1 AA, EAA-compliant"
-        }
-      ],
-      "cta": {
-        "label": "Send your errors – I’ll estimate the effort",
-        "href": "../kontakt/"
-      }
-    },
+
     "result-seo": {
       "type": "result",
-      "title": "SEO vs. GEO – what has changed.",
-      "text": "Classic SEO still works. But: 73% of B2B buyers now research with ChatGPT, and 61% fewer clicks land on classic Google results since AI Overviews. Your website must be readable not just for Google but for every AI system. Quick test: Ask ChatGPT about your company. If the answer is thin or wrong, you have a GEO problem. What you can do yourself: write clear, factual text. Concrete statements instead of marketing phrases.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "GEO-optimised, machine-readable"
-        }
-      ],
-      "cta": {
-        "label": "Send me the URL – I’ll check Google and AI",
-        "href": "../kontakt/"
-      },
-      "ctaSecondary": {
-        "label": "More on AI visibility",
-        "href": "services/ai-visibility.html"
-      }
-    },
-    "result-seo-google": {
-      "type": "result",
-      "title": "Google SEO – what still works in 2026.",
-      "text": "The basics don't change: clean titles and descriptions, fast load times (Core Web Vitals), mobile optimisation, internal linking. What many forget: Google Search Console. Free, shows you exactly which terms you rank for and where you're losing clicks. Register at search.google.com/search-console. What has changed: AI Overviews push organic results down. Structured data (Schema.org) helps remain visible in the remaining results.",
+      "title": "Visibility – Google AND AI.",
+      "text": "Two different problems. Google: classic SEO, still works. AI: 73% of B2B buyers research with ChatGPT. If you don't show up there, you don't exist.\n\nQuick test: Ask ChatGPT about your company. Is the answer correct? If not, you have a GEO problem – and classic SEO won't solve it.",
       "proof": [
         {
           "name": "This website",
@@ -1017,216 +767,162 @@
         }
       ],
       "cta": {
-        "label": "Send me the URL – I’ll set up the tools",
-        "href": "../kontakt/"
-      }
-    },
-    "result-seo-ki": {
-      "type": "result",
-      "title": "AI visibility – how to check it yourself.",
-      "text": "Open ChatGPT and ask about your company. Is the answer correct? Complete? If ChatGPT doesn't know you or says incorrect things, you have a problem that no classic SEO solves. What helps: clear, factual text on your website. Concrete statements instead of marketing phrases. Structured data (Schema.org, JSON-LD) so AI systems can categorise your content. Machine-readable endpoints. And a robots.txt that doesn't block AI crawlers. I set up the technical side in every project.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "GEO-optimised, machine-readable"
-        }
-      ],
-      "cta": {
-        "label": "Try the ChatGPT test – then let’s talk",
-        "href": "../kontakt/"
+        "label": "Send URL – I'll check both",
+        "href": "contact/"
       },
       "ctaSecondary": {
-        "label": "Data and sources",
+        "label": "More about AI visibility",
         "href": "services/ai-visibility.html"
       }
     },
-    "result-technik": {
+
+    "result-redesign": {
       "type": "result",
-      "title": "First aid before you call someone.",
-      "text": "Three things you can check yourself: First: try a different browser. If the problem only occurs in one browser, it's the cache – Ctrl+Shift+Del, clear cache, reload. Second: deactivate plugins. Open WordPress admin, deactivate all plugins, check if the problem is gone. Then reactivate one by one. Third: open the browser console (F12) and look for red error messages. If it says 403 or 500, it's a server problem.",
+      "title": "Design update – not a complete relaunch.",
+      "text": "New theme, new typography, better imagery – without rebuilding everything from scratch. Saves time and money.\n\nTypical effort: 30–60 hours, EUR 2,400–4,800. I'll look at what's there and honestly tell you what's worth it.",
+      "proof": [
+        {
+          "name": "This website",
+          "desc": "Own redesign 2026"
+        }
+      ],
+      "cta": {
+        "label": "Send URL – what's worth it?",
+        "href": "contact/"
+      }
+    },
+
+    "result-relaunch": {
+      "type": "result",
+      "title": "Complete relaunch – how to plan it right.",
+      "text": "When design, technology and content are all outdated, a fresh start makes sense. But not without a plan. Step 1: What must the new website DO (not: have). Step 2: What works from the old one (analytics). Step 3: Only then design and technology.\n\nTypical effort: 60–120 hours, EUR 4,800–9,600.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "Complete project",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Let's plan the fresh start",
+        "href": "contact/"
+      }
+    },
+
+    "result-redesign-beratung": {
+      "type": "result",
+      "title": "Redesign or relaunch? Let's clarify.",
+      "text": "Not everything that looks old needs a rebuild. Sometimes a facelift is enough, sometimes more is needed. In 15 minutes we'll figure out what makes sense for you.\n\nSend me the URL beforehand – then I'll be prepared.",
+      "proof": [],
+      "cta": {
+        "label": "Send URL + book a call",
+        "href": "contact/"
+      }
+    },
+
+    "result-technik-wp": {
+      "type": "result",
+      "title": "WordPress problem – I know the system inside out.",
+      "text": "WordPress problems usually have to do with plugins conflicting. Or an update that broke something. This can be systematically narrowed down.\n\nI worked for the makers of YOOtheme and maintain over 20 WordPress websites. Send me a description – initial assessment free.",
       "proof": [
         {
           "name": "YOOtheme",
           "desc": "Former Support Manager",
           "href": "https://yootheme.com"
-        },
+        }
+      ],
+      "cta": {
+        "label": "Describe the problem",
+        "href": "contact/"
+      }
+    },
+
+    "result-technik-woo": {
+      "type": "result",
+      "title": "WooCommerce problem – this is about money.",
+      "text": "When the shop has problems, it costs revenue directly. Orders don't go through, prices are wrong, payment provider reports errors. This is not something to experiment with.\n\nSend me a description. Shops get priority.",
+      "proof": [
+        {
+          "name": "Gerwing Steinwerke",
+          "desc": "WooCommerce, ongoing operation",
+          "href": "https://gerwing.de"
+        }
+      ],
+      "cta": {
+        "label": "Describe problem – shops get priority",
+        "href": "contact/"
+      }
+    },
+
+    "result-technik": {
+      "type": "result",
+      "title": "Something is broken – we'll figure it out.",
+      "text": "If you don't know exactly what's wrong: no problem. Describe what's happening (or not happening), since when, on which page. The more precise, the faster I am.\n\nInitial assessment free.",
+      "proof": [],
+      "cta": {
+        "label": "Describe the problem",
+        "href": "contact/"
+      }
+    },
+
+    "result-sicherheit": {
+      "type": "result",
+      "title": "Hacked – act fast now.",
+      "text": "Don't try to fix it yourself. Inform your host and contact me. I'll find the vulnerability, clean up and secure it.\n\nFor security issues I respond the same day.",
+      "proof": [],
+      "cta": {
+        "label": "Report immediately",
+        "href": "contact/"
+      }
+    },
+
+    "result-betreuung-basis": {
+      "type": "result",
+      "title": "Basic maintenance – runs in the background.",
+      "text": "Updates, backups, security monitoring. I update manually, check afterwards, roll back if needed. You don't notice any of it – and that's exactly the point.\n\nFrom EUR 15/month for a WordPress website.",
+      "proof": [
         {
           "name": "20+ websites",
           "desc": "Ongoing maintenance for years"
         }
       ],
       "cta": {
-        "label": "Describe the problem – initial assessment free",
-        "href": "../kontakt/"
+        "label": "Which website should I maintain?",
+        "href": "contact/"
       }
     },
-    "result-technik-wp": {
+
+    "result-betreuung-standard": {
       "type": "result",
-      "title": "WordPress problems – solve systematically.",
-      "text": "Step 1: WordPress Health Check (under Tools, Site Health). Shows known issues. Step 2: Deactivate all plugins, switch to default theme (Twenty Twenty-Four). Problem gone? Then it's a plugin or theme issue. Reactivate plugins one by one until the error returns. Step 3: Check PHP version (hosting panel). Anything below 8.1 is outdated. Step 4: If nothing helps – Recovery Mode. WordPress sends a link by email when the site crashes. You can still log in with it.",
-      "proof": [
-        {
-          "name": "YOOtheme",
-          "desc": "Former Support Manager",
-          "href": "https://yootheme.com"
-        },
-        {
-          "name": "20+ WordPress sites",
-          "desc": "Ongoing maintenance"
-        }
-      ],
-      "cta": {
-        "label": "Describe the problem – initial assessment free",
-        "href": "../kontakt/"
-      }
-    },
-    "result-technik-woo": {
-      "type": "result",
-      "title": "WooCommerce problems – a different league.",
-      "text": "WooCommerce bugs often involve money: orders don't go through, prices are wrong, payment provider reports errors. Don't experiment on your own while the shop is live. What you can check: Are all plugins up to date? Is a caching plugin caching the cart (common error)? Are shipping settings correct? Does the test order work in the payment provider's sandbox mode? For payment issues: always check with the payment provider (Stripe, PayPal, Mollie) first for logged errors.",
+      "title": "Standard maintenance – you send, I implement.",
+      "text": "Everything from Basic, plus: you send an email with a change, I implement it. No explaining where things are every time. No re-learning the CMS every time. Short paths.\n\nEUR 80–200/month, depending on change frequency.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "WooCommerce, live operation",
+          "desc": "Retainer, regular changes",
           "href": "https://gerwing.de"
         }
       ],
       "cta": {
-        "label": "Describe the problem – shops get priority",
-        "href": "../kontakt/"
+        "label": "Let's discuss the collaboration",
+        "href": "contact/"
       }
     },
-    "result-betreuung-wp": {
-      "type": "result",
-      "title": "WordPress maintenance – what's really needed.",
-      "text": "WordPress updates without oversight can break your site. A plugin update breaks another, a theme update changes the layout. That's why I update manually, check afterwards and roll back if needed. Basic (from EUR 15/month): updates, backups, security monitoring. You notice nothing, and that's exactly the point. Standard (from EUR 80/month): plus small changes, new content. You send an email, I implement it. What you actually need depends on how often your site changes.\n\nBasic from EUR 15/month. Standard from EUR 80/month.",
-      "proof": [
-        {
-          "name": "Gerwing Steinwerke",
-          "desc": "WordPress retainer since 2023",
-          "href": "https://gerwing.de"
-        },
-        {
-          "name": "Scheja & Partner",
-          "desc": "Ongoing maintenance, multilingual",
-          "href": "https://scheja-partners.de"
-        }
-      ],
-      "cta": {
-        "label": "Let’s talk about your website",
-        "href": "../kontakt/"
-      }
-    },
-    "result-betreuung-woo": {
-      "type": "result",
-      "title": "WooCommerce maintenance – more effort than WordPress alone.",
-      "text": "A shop needs more attention than a company website. Payment providers change their APIs, WooCommerce updates can break the checkout, tax rules change. Plus: order monitoring, plugin compatibility, performance monitoring as the catalogue grows. I recommend at least Standard maintenance (from EUR 80/month) for active shops. Basic only works if the shop barely has orders. For business-critical shops: Premium, so problems are resolved the same day.\n\nBasic from EUR 40/month. Standard from EUR 80/month.",
-      "proof": [
-        {
-          "name": "Gerwing Steinwerke",
-          "desc": "WooCommerce retainer since 2023",
-          "href": "https://gerwing.de"
-        }
-      ],
-      "cta": {
-        "label": "Let’s talk about your shop",
-        "href": "../kontakt/"
-      }
-    },
-    "result-betreuung-statisch": {
-      "type": "result",
-      "title": "Static website – honestly: you barely need anything.",
-      "text": "No CMS, no database, no plugins, no updates. Static websites are low-maintenance by definition. SSL certificate, domain renewal, done. If you host on GitHub Pages or Netlify, that costs EUR 0. What you might still need: someone to make code changes when content changes. And someone to keep an eye on the hosting. For that, Basic maintenance (from EUR 15/month) or simply hourly billing is enough.\n\nChanges billed by effort. No ongoing contract needed.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "Static, GitHub Pages, EUR 0 hosting"
-        }
-      ],
-      "cta": {
-        "label": "Get in touch when needed – no contract required",
-        "href": "../kontakt/"
-      }
-    },
+
     "result-betreuung-premium": {
       "type": "result",
-      "title": "Premium – when the website is business-critical.",
-      "text": "Some companies don't need a maintenance contract but their own developer. Just without social contributions, holidays and office costs. Premium means: I'm your dedicated contact for development, design, strategy and compliance. Priority support, retainer, short paths. That's how I work with Gerwing Steinwerke – sole technical responsibility since 2023. This pays off when your website directly generates revenue or when downtime costs money.\n\nMonthly retainer: EUR 400–800/month. Your own developer without fixed costs.",
+      "title": "Premium – your own developer, without fixed costs.",
+      "text": "Some don't need a maintenance contract, but their own developer. Just without social contributions and office costs. Premium means: I'm your dedicated contact for everything. Priority support, retainer, short paths.\n\nEUR 400–800/month. This is how I work with Gerwing – sole technical responsibility since 2023.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Retainer, sole responsibility since 2023",
+          "desc": "Retainer, sole responsibility",
           "href": "https://gerwing.de"
         }
       ],
       "cta": {
-        "label": "Let’s discuss the retainer",
-        "href": "../kontakt/"
-      }
-    },
-    "result-geo": {
-      "type": "result",
-      "title": "How to check your AI visibility yourself.",
-      "text": "Quick test: Open ChatGPT and ask about your company. Is the answer correct and complete? If not, you have a problem. What you can do without a developer: write clear, factual text. No marketing phrases, but concrete statements. 'We manufacture concrete paving stones in Osnabrueck since 1968' – instead of: 'We are your partner for premium outdoor design.' What needs technical work: Schema.org, JSON-LD, machine-readable endpoints. This website here is the example – ask ChatGPT about me.\n\nGEO optimisation is included in every project. Not because it's free, but because it's pointless to leave it out.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "GEO-optimised, machine-readable"
-        }
-      ],
-      "cta": {
-        "label": "Try the ChatGPT test – then let’s talk",
-        "href": "../kontakt/"
-      },
-      "ctaSecondary": {
-        "label": "Data and sources",
-        "href": "services/ai-visibility.html"
-      }
-    },
-    "result-geo-audit": {
-      "type": "result",
-      "title": "Audit – what I specifically check.",
-      "text": "First: Does ChatGPT find your company, and is what it says correct? Second: Is structured data present (Schema.org, JSON-LD)? Third: Is your content machine-readable or hidden behind JavaScript? Fourth: Do you have a robots.txt that doesn't block AI crawlers? You get a concrete report with priorities – what should be fixed immediately and what can wait.\n\nAudit effort: 5–10 hours. 15 minutes on the phone to get started.",
-      "proof": [
-        {
-          "name": "This website",
-          "desc": "GEO-optimised, machine-readable"
-        },
-        {
-          "name": "Gerwing Steinwerke",
-          "desc": "Structured data, Schema.org",
-          "href": "https://gerwing.de"
-        }
-      ],
-      "cta": {
-        "label": "Request an audit – 15 minutes is all it takes",
-        "href": "../kontakt/"
-      }
-    },
-    "result-vergleich-kontakt": {
-      "type": "result",
-      "title": "You asked the right questions.",
-      "text": "Most people only ask about price. You asked about the how. That speaks to good decisions. My answers to the five freelancer questions: 1. Live websites: 20+ of them, see the references below. 2. Handover: everything documented, standard technologies, no proprietary code. 3. Accessibility: included in every project. 4. Response time: 24 hours, same-day for Premium. 5. Post-project work: EUR 80/hour, effort estimated upfront. If that works for you – let's talk.",
-      "proof": [
-        {
-          "name": "Gerwing Steinwerke",
-          "desc": "Retainer since 2023",
-          "href": "https://gerwing.de"
-        },
-        {
-          "name": "Seniorpartner in School",
-          "desc": "Interactive impact report",
-          "href": "https://wirkungsbericht.seniorpartnerinschool.de"
-        },
-        {
-          "name": "Scheja & Partner",
-          "desc": "Law firm, 30+ lawyers",
-          "href": "https://scheja-partners.de"
-        }
-      ],
-      "cta": {
-        "label": "Ask me your five questions – I’ll answer honestly",
-        "href": "../kontakt/"
+        "label": "Let's talk about the retainer",
+        "href": "contact/"
       }
     }
   }

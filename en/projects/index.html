@@ -3,34 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="20+ live websites, 14 industries – from B2B industry to federal associations. Projects and references by Jan-Erik Andersen.">
+  <meta name="description" content="27 projects, 14+ industries – from B2B industry to federal associations. Case studies, testimonials, and references from Jan-Erik Andersen.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jan-erik-andersen.de/en/projects/">
   <meta property="og:title" content="Projects – Jan-Erik Andersen">
-  <meta property="og:description" content="20+ live websites, 14 industries. Projects and references by Jan-Erik Andersen.">
+  <meta property="og:description" content="27 projects, 14+ industries. Case studies with Gerwing, Runden Group, Scheja & Partner.">
   <meta property="og:image" content="https://jan-erik-andersen.de/portrait.webp">
   <meta property="og:locale" content="en_US">
   <link rel="canonical" href="https://jan-erik-andersen.de/en/projects/">
   <link rel="alternate" hreflang="de" href="https://jan-erik-andersen.de/projekte/">
   <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/projects/">
-  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
   <title>Projects – Jan-Erik Andersen</title>
-  <link rel="stylesheet" href="../../style.css?v=7.0">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "ItemList",
     "name": "Projects by Jan-Erik Andersen",
-    "description": "20+ live websites, 14 industries. Web development, e-commerce, digital tools, long-term maintenance.",
+    "description": "27 projects, 14+ industries. Web development, e-commerce, digital tools, long-term maintenance.",
     "author": { "@id": "https://jan-erik-andersen.de/#person" },
-    "numberOfItems": 20,
+    "numberOfItems": 27,
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Gerwing Steinwerke", "description": "WooCommerce shop, B2B dealer portal, sample tracking. Sole technical responsibility since 2023.", "url": "https://gerwing.de" },
-      { "@type": "ListItem", "position": 2, "name": "Runden Group", "description": "Complete web presence with 10+ subsidiaries. Career portal, custom plugins, bilingual.", "url": "https://runden-group.eu" },
-      { "@type": "ListItem", "position": 3, "name": "Scheja & Partner", "description": "Data protection law firm. Software product pages, NIS2 check, multilingual.", "url": "https://scheja-partners.de" }
+      { "@type": "ListItem", "position": 1, "name": "Gerwing Steinwerke", "description": "B2B shop for paving stones. WooCommerce, dealer portal, sample orders. Sole technical responsibility since 2023.", "url": "https://gerwing.de" },
+      { "@type": "ListItem", "position": 2, "name": "Runden Group", "description": "7 websites for corporate group, bilingual, portals, custom tools. 2 years sole responsibility.", "url": "https://runden-group.eu" },
+      { "@type": "ListItem", "position": 3, "name": "Scheja & Partner", "description": "Data privacy law firm with 30 attorneys. Compliance tools, NIS2 check, multilingual.", "url": "https://scheja-partners.de" }
     ]
   }
   </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -44,7 +50,9 @@
       </a>
       <nav class="header-nav" id="header-nav">
         <a href="../services/">Services</a>
-        <a href="../projects/">Projects</a>
+        <a href="../projects/" class="header-nav-active">Projects</a>
+        <a href="../pricing/">Pricing</a>
+        <a href="../faq/">FAQ</a>
         <a href="../about/">About</a>
         <a href="../contact/" class="header-nav-cta">Contact</a>
       </nav>
@@ -57,13 +65,6 @@
             <span class="pill-indicator"></span>
           </span>
         </label>
-        <div class="pill-toggle">
-          <div class="pill-track">
-            <a href="../../" class="pill-option">DE</a>
-            <a href="../" class="pill-option active">EN</a>
-            <span class="pill-indicator"></span>
-          </div>
-        </div>
         <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="logo-link">
           <img src="../../linkedin-logo.png" alt="LinkedIn" width="24" height="24">
         </a>
@@ -73,201 +74,206 @@
 
   <main id="main">
 
-    <section class="editorial">
-      <div class="editorial-layout container">
-
-        <div class="editorial-main">
-
-          <h1 class="editorial-headline">From Paving Stones to Black&nbsp;Metal</h1>
-          <p class="editorial-lead">From paving stones to black metal, from animal rescue to data privacy law. All live. All maintained.</p>
-
-          <!-- ===== MAIN PROJECTS ===== -->
-          <div class="project-grid project-grid--single">
-
-            <div class="project-card">
-              <span class="project-tag">B2B / Industry</span>
-              <h3>Gerwing Steinwerke</h3>
-              <p class="project-desc">Gerwing makes paving stones — one of the largest manufacturers in Germany. I rebuilt the WooCommerce shop from scratch in 2023. Since then I'm solely responsible for all things tech: shop, dealer portal, sample orders. Ongoing retainer.</p>
-              <div class="tech-tags">
-                <span class="tech-tag">WooCommerce</span>
-                <span class="tech-tag">Custom Tools</span>
-                <span class="tech-tag">B2B Portal</span>
-                <span class="tech-tag">Retainer</span>
-              </div>
-              <p class="project-links"><a href="https://gerwing.de" target="_blank" rel="noopener">gerwing.de</a></p>
+    <!-- Featured Projects -->
+    <section class="projects-section">
+      <div class="section-inner container">
+        <div class="section-header">
+          <h1>Selected Projects</h1>
+          <p class="section-subtitle">Three projects that show what one person can achieve – when they know what they're doing. Detailed case studies below.</p>
+        </div>
+        <div class="projects-grid">
+          <article class="project-card">
+            <div class="project-tags">
+              <span class="tag">B2B / Industry</span>
+              <span class="tag">WooCommerce</span>
+              <span class="tag">since 2023</span>
             </div>
-
-            <div class="project-card">
-              <span class="project-tag">Corporate Group / Circular Economy</span>
-              <h3>Runden Group</h3>
-              <p class="project-desc">The Runden Group is a corporate group in the circular economy space. I built the entire web presence — runden-group.eu plus the subsidiary sites. Career portal, podcast integration, customer portal, custom plugins, bilingual. Was the sole developer for two years.</p>
-              <div class="tech-tags">
-                <span class="tech-tag">Custom Plugins</span>
-                <span class="tech-tag">Customer Portal</span>
-                <span class="tech-tag">Bilingual</span>
-              </div>
-              <p class="project-links"><a href="https://runden-group.eu" target="_blank" rel="noopener">runden-group.eu</a> · <a href="https://wbg-pooling.eu" target="_blank" rel="noopener">wbg-pooling.eu</a> · <a href="https://lhm-pooling.eu" target="_blank" rel="noopener">lhm-pooling.eu</a> · <a href="https://rubetrans.eu" target="_blank" rel="noopener">rubetrans.eu</a> · <a href="https://planworks.eu" target="_blank" rel="noopener">planworks.eu</a> · <a href="https://ecobyte.eu" target="_blank" rel="noopener">ecobyte.eu</a> · <a href="https://mehrweg-heroes.eu" target="_blank" rel="noopener">mehrweg-heroes.eu</a></p>
+            <h2>Gerwing Steinwerke</h2>
+            <p>B2B shop for paving stones. Complete rebuild 2023, sole technical responsibility since. Dealer portal, sample orders, price groups.</p>
+            <a href="https://gerwing.de" class="project-link" target="_blank" rel="noopener">gerwing.de →</a>
+          </article>
+          <article class="project-card">
+            <div class="project-tags">
+              <span class="tag">Corporate Group</span>
+              <span class="tag">7 Websites</span>
+              <span class="tag">2023–2025</span>
             </div>
-
-            <div class="project-card">
-              <span class="project-tag">Law / Data Protection</span>
-              <h3>Scheja &amp; Partner</h3>
-              <p class="project-desc">Scheja &amp; Partner is a data protection law firm in Bonn. 30 lawyers, 300+ mandates. I built the website, three software product pages (PrivacyPilot, HintPilot, TrainingPilot), plus interactive tools like the NIS2 check. All bilingual.</p>
-              <div class="tech-tags">
-                <span class="tech-tag">Software Products</span>
-                <span class="tech-tag">Compliance Tools</span>
-                <span class="tech-tag">Multilingual</span>
-              </div>
-              <p class="project-links"><a href="https://scheja-partners.de" target="_blank" rel="noopener">scheja-partners.de</a></p>
+            <h2>Runden Group</h2>
+            <p>Seven websites for a corporate group, bilingual, with portals and custom tools. Two years sole responsibility for everything.</p>
+            <a href="https://runden-group.eu" class="project-link" target="_blank" rel="noopener">runden-group.eu →</a>
+          </article>
+          <article class="project-card">
+            <div class="project-tags">
+              <span class="tag">Legal / Data Privacy</span>
+              <span class="tag">WordPress</span>
+              <span class="tag">multilingual</span>
             </div>
+            <h2>Scheja & Partner</h2>
+            <p>Law firm website with interactive compliance tools that generate leads. 30 attorneys, two languages, three software products.</p>
+            <a href="https://scheja-partners.de" class="project-link" target="_blank" rel="noopener">scheja-partners.de →</a>
+          </article>
+        </div>
+      </div>
+    </section>
 
-          </div>
-
-          <!-- Ornament -->
-          <div class="ornament"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L12 6L6 12L0 6Z"/></svg></div>
-
-          <!-- ===== MORE CLIENTS ===== -->
-          <h2>More Clients</h2>
-          <div class="mini-card-grid mini-card-grid--2col">
-
-            <div class="mini-card">
-              <span class="project-tag">Holiday Rentals</span>
-              <h3>Coastal Apartments</h3>
-              <p>11 holiday apartments across three locations (Sylt, Zingst, Hohen Wieschendorf). Plus single property with booking system.</p>
-              <p class="project-links"><a href="https://ferienwohnungen-an-der-kueste.de" target="_blank" rel="noopener">ferienwohnungen-an-der-kueste.de</a> · <a href="https://beachhouse-no1.de" target="_blank" rel="noopener">beachhouse-no1.de</a></p>
-            </div>
-
-            <div class="mini-card">
-              <span class="project-tag">Media</span>
-              <h3>The New Insider</h3>
-              <p>City magazine Osnabrück. Long-term maintenance with support package.</p>
-              <p class="project-links"><a href="https://thenewinsider.de" target="_blank" rel="noopener">thenewinsider.de</a></p>
-            </div>
-
-            <div class="mini-card">
-              <span class="project-tag">Health</span>
-              <h3>Oncology Practice Laatzen</h3>
-              <p>Haematology / oncology practice.</p>
-              <p class="project-links"><a href="https://onkolaatzen.de" target="_blank" rel="noopener">onkolaatzen.de</a></p>
-            </div>
-
-            <div class="mini-card">
-              <span class="project-tag">Wellness</span>
-              <h3>Soundhealing Hamburg</h3>
-              <p>Sound healing practice with shop and booking.</p>
-              <p class="project-links"><a href="https://soundhealing-hamburg.de" target="_blank" rel="noopener">soundhealing-hamburg.de</a></p>
-            </div>
-
-            <div class="mini-card">
-              <span class="project-tag">Music &amp; Culture</span>
-              <h3>Dark Fortress / Woodshed Studio</h3>
-              <p>Band websites and recording studio. Low-maintenance, long-term support.</p>
-            </div>
-
-            <div class="mini-card">
-              <span class="project-tag">Textile / B2B</span>
-              <h3>CASARO</h3>
-              <p>B2B textiles with Sansibar licence.</p>
-              <p class="project-links"><a href="https://casarotex.de" target="_blank" rel="noopener">casarotex.de</a></p>
-            </div>
-
-          </div>
-
-          <!-- Ornament -->
-          <div class="ornament"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L12 6L6 12L0 6Z"/></svg></div>
-
-          <!-- ===== PRO BONO ===== -->
-          <h2>Pro Bono</h2>
-          <div class="project-grid project-grid--single">
-
-            <div class="project-card">
-              <span class="project-tag">Nonprofit / Federal Association</span>
-              <h3>Seniorpartner in School e.V.</h3>
-              <p class="project-desc">Seniorpartner in School is a federal association that trains people over 55 as school mediators — active across Germany. I built the digital impact report 2025 for them: interactive SVG map of Germany, infographics, storytelling. Static HTML, fast, accessible, maintenance-free. Plus ongoing website maintenance. Pro bono, naturally.</p>
-              <div class="tech-tags">
-                <span class="tech-tag">Static HTML</span>
-                <span class="tech-tag">Interactive Map</span>
-                <span class="tech-tag">Infographics</span>
-              </div>
-              <p class="project-links"><a href="https://wirkungsbericht.seniorpartnerinschool.de" target="_blank" rel="noopener">wirkungsbericht.seniorpartnerinschool.de</a></p>
-            </div>
-
-            <div class="project-card">
-              <span class="project-tag">Animal Welfare / Plau am See</span>
-              <h3>Streunerhilfe Plau</h3>
-              <p class="project-desc">Website for the local animal welfare association in Plau am See. Donation infrastructure with interactive calculator, WooCommerce shop, adoption listings, Instagram feed. 100% volunteer work.</p>
-              <div class="tech-tags">
-                <span class="tech-tag">Donation System</span>
-                <span class="tech-tag">WooCommerce</span>
-                <span class="tech-tag">Adoption Listings</span>
-              </div>
-              <p class="project-links"><a href="https://streunerhilfe-plau.de" target="_blank" rel="noopener">streunerhilfe-plau.de</a></p>
-            </div>
-
-          </div>
-
-          <!-- Ornament -->
-          <div class="ornament"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 0L12 6L6 12L0 6Z"/></svg></div>
-
-          <h2>Contact</h2>
-          <p>Planning something similar? Get in touch. 15 minutes, then you'll know.</p>
-          <div class="editorial-contact">
-            <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
-            <a href="tel:+4938733270015">038733 270015</a>
-            <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">LinkedIn</a>
-          </div>
-
+    <!-- Case Studies -->
+    <section class="case-studies-section">
+      <div class="section-inner container">
+        <div class="section-header">
+          <h2>What my projects look like</h2>
+          <p class="section-subtitle">What was the starting point, what did I do, what came out of it. Three projects, told openly.</p>
         </div>
 
-        <aside class="editorial-sidebar">
-
-          <div class="editorial-stats">
-            <div class="editorial-stat">
-              <span class="editorial-stat-number">20+</span>
-              <span class="editorial-stat-label">Live websites</span>
-            </div>
-            <div class="editorial-stat">
-              <span class="editorial-stat-number">14+</span>
-              <span class="editorial-stat-label">Industries</span>
-            </div>
-            <div class="editorial-stat">
-              <span class="editorial-stat-number">28</span>
-              <span class="editorial-stat-label">Years on the web</span>
-            </div>
-            <div class="editorial-stat">
-              <span class="editorial-stat-number">2</span>
-              <span class="editorial-stat-label">Pro bono projects</span>
-            </div>
+        <!-- Case Study 1: Gerwing -->
+        <article class="case-study" id="gerwing">
+          <div class="case-study-header">
+            <span class="tag">B2B / Industry · WooCommerce</span>
+            <h3>Gerwing Steinwerke</h3>
+            <a href="https://gerwing.de" target="_blank" rel="noopener">gerwing.de</a>
           </div>
-
-          <div class="editorial-sidebar-section">
-            <h3>Industries</h3>
-            <ul>
-              <li>B2B / Industry</li>
-              <li>Law / Data Protection</li>
-              <li>Holiday Rentals</li>
-              <li>Media</li>
-              <li>Health</li>
-              <li>Music &amp; Culture</li>
-              <li>Textile / B2B</li>
-              <li>Nonprofit</li>
-              <li>Animal Welfare</li>
-            </ul>
+          <div class="case-study-content">
+            <p>Gerwing manufactures paving stones – in a league where hardware stores buy from them. When I came on in 2023, there was a shop that served nobody: End customers couldn't find their way around, dealers couldn't order, samples only via phone.</p>
+            <p>I rebuilt the entire shop from scratch. WooCommerce as the base, but heavily customized: B2B dealer portal with login and special conditions, a stone sample ordering system with email tracking, product filters by color, format, and application area. Plus a file storage system for the internal team.</p>
+            <p>The result: A shop that serves both target groups – end customers who want to get inspired, and dealers who need to order quickly. Since then I maintain the shop alone. No agency in between, no ticket system. One message is enough.</p>
           </div>
-
-          <div class="editorial-sidebar-section">
-            <h3>Technologies</h3>
-            <p>WordPress, WooCommerce, YOOtheme&nbsp;Pro, static HTML, Vanilla&nbsp;JS, Custom Plugins</p>
+          <div class="case-study-details">
+            <div class="detail"><strong>Task:</strong> Shop rebuild + B2B portal</div>
+            <div class="detail"><strong>Technology:</strong> WooCommerce, Custom Plugins</div>
+            <div class="detail"><strong>Period:</strong> 2023 (rebuild), ongoing since</div>
+            <div class="detail"><strong>Maintenance:</strong> Sole technical responsibility</div>
+            <div class="detail"><strong>Status:</strong> Active retainer (€800/month)</div>
           </div>
+          <p class="case-study-comparison">What an agency would charge: ~€30,000 project costs + €2,500/month retainer</p>
+          <p class="case-study-link"><a href="../services/#shops">→ More about online shops</a></p>
+        </article>
 
-          <div class="editorial-sidebar-section">
-            <h3>Contact</h3>
-            <p><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a><br>
-            <a href="tel:+4938733270015">038733 270015</a></p>
+        <!-- Case Study 2: Runden -->
+        <article class="case-study" id="runden">
+          <div class="case-study-header">
+            <span class="tag">Corporate Group · 7 Websites · WordPress</span>
+            <h3>Runden Group</h3>
+            <a href="https://runden-group.eu" target="_blank" rel="noopener">runden-group.eu</a>
           </div>
+          <div class="case-study-content">
+            <p>Runden Group is a family business with subsidiaries in recycling, logistics, IT, building planning, and agriculture. Each company needed its own website – uniform in appearance, but individual in content.</p>
+            <p>I built the entire web presence: seven websites on WordPress with YOOtheme Pro, each bilingual (DE/EN), plus a career portal, a client portal, a podcast section, and a custom-built onboarding tool. The designs came as Figma mockups – everything else I derived and implemented.</p>
+            <p>For two years I was solely responsible for the entire web presence of this corporate group. Updates, content maintenance, new features, technical problems – all across my desk. This is the project I cite when someone says: "As a single person you can't manage a corporate group."</p>
+          </div>
+          <div class="case-study-details">
+            <div class="detail"><strong>Task:</strong> Complete web presence</div>
+            <div class="detail"><strong>Scope:</strong> 11 websites + portals + tools</div>
+            <div class="detail"><strong>Technology:</strong> WordPress, YOOtheme Pro, Custom Plugins</div>
+            <div class="detail"><strong>Period:</strong> 2023–2025 (2 years)</div>
+            <div class="detail"><strong>Special:</strong> Sole responsibility</div>
+          </div>
+          <p class="case-study-link"><a href="../services/#frontend">→ More about project management & frontend</a></p>
+        </article>
 
-        </aside>
+        <!-- Case Study 3: Scheja -->
+        <article class="case-study" id="scheja">
+          <div class="case-study-header">
+            <span class="tag">Legal / Data Privacy · WordPress · multilingual</span>
+            <h3>Scheja & Partner</h3>
+            <a href="https://scheja-partners.de" target="_blank" rel="noopener">scheja-partners.de</a>
+          </div>
+          <div class="case-study-content">
+            <p>A data privacy law firm with 30 attorneys in Bonn – specialized in compliance, NIS2, and GDPR. The requirement: a website that doesn't just present the firm, but also sells their software products and offers interactive compliance tools.</p>
+            <p>I built three product pages, an interactive NIS2 check (that shows visitors if they're affected), and a GDPR assessment tool. Everything bilingual, with structured data for legal services, so the firm appears correctly in AI search systems as a data privacy specialist.</p>
+            <p>This project shows what happens when you understand web development not as "build a pretty site" but as a tool for business development. The compliance tools generate leads. The website works for the firm – not just as a business card.</p>
+          </div>
+          <div class="case-study-details">
+            <div class="detail"><strong>Task:</strong> Website + compliance tools</div>
+            <div class="detail"><strong>Technology:</strong> WordPress, Custom Interactive Tools</div>
+            <div class="detail"><strong>Languages:</strong> German / English</div>
+            <div class="detail"><strong>Special:</strong> Lead-generating compliance tools</div>
+          </div>
+          <p class="case-study-link"><a href="../services/#webdesign">→ More about web design & consulting</a></p>
+        </article>
 
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section--alt">
+      <div class="section-inner container">
+        <div class="section-header">
+          <h2>What clients say</h2>
+          <p class="section-subtitle">5.0 out of 5 stars on Google. No bought reviews, no employee reviews.</p>
+        </div>
+        <div class="testimonials-grid">
+          <blockquote class="testimonial">
+            <p>"Seniorpartner in School is a nationwide social organization. A well-designed digital impact report is important for our work. Jan-Erik and the competent editor Annemarie professionally and accessibly set up this new format for us. Great teamwork, reliable and committed. SiS says THANK YOU!"</p>
+            <footer>
+              <strong>Karin Chierchia</strong>
+              <span>Seniorpartner in School e.V., Federal Association</span>
+            </footer>
+          </blockquote>
+          <blockquote class="testimonial">
+            <p>"Professionally, I've worked with various media designers and I'm happy to have found a reliable partner in Andersen Webworks for several years now. Professional web design that keeps surprising me – my ideas are taken seriously and get the finishing touch from Mr. Andersen. That's how you stand out from the competition!"</p>
+            <footer>
+              <strong>Corvin Jaedicke</strong>
+              <span>ai-coustics</span>
+            </footer>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pro Bono -->
+    <section class="projects-section">
+      <div class="section-inner container">
+        <div class="section-header">
+          <h2>Pro Bono Projects</h2>
+        </div>
+        <div class="projects-grid projects-grid--2col">
+          <article class="project-card">
+            <h3>Seniorpartner in School e.V.</h3>
+            <p>Digital impact report with interactive SVG Germany map (static HTML).</p>
+            <a href="https://wirkungsbericht.seniorpartnerinschool.de" class="project-link" target="_blank" rel="noopener">wirkungsbericht.seniorpartnerinschool.de →</a>
+          </article>
+          <article class="project-card">
+            <h3>Streunerhilfe Plau e.V.</h3>
+            <p>Animal rescue website with donation system and adoption listings (WordPress + YOOtheme Pro).</p>
+            <a href="https://streunerhilfe-plau.de" class="project-link" target="_blank" rel="noopener">streunerhilfe-plau.de →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- More Clients -->
+    <section class="section--alt">
+      <div class="section-inner container">
+        <div class="section-header">
+          <h2>More clients and employers</h2>
+        </div>
+        <div class="clients-grid">
+          <span class="client-logo">The New Insider</span>
+          <span class="client-logo">CASARO</span>
+          <span class="client-logo">Onkologie Laatzen</span>
+          <span class="client-logo">Soundhealing Hamburg</span>
+          <span class="client-logo">Dark Fortress</span>
+          <span class="client-logo">Woodshed Studio</span>
+          <span class="client-logo">Goodgame Studios</span>
+          <span class="client-logo">Deep Silver FISHLABS</span>
+          <span class="client-logo">Daedalic Entertainment</span>
+          <span class="client-logo">InnoGames</span>
+          <span class="client-logo">YOOtheme</span>
+          <span class="client-logo">WBG Pooling</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="contact-section">
+      <div class="section-inner container">
+        <div class="contact-inner">
+          <h2>Planning a similar project?</h2>
+          <p>15 minutes on the phone, then you'll know if I'm the right one.</p>
+          <div class="hero-ctas" style="justify-content: center;">
+            <a href="../contact/" class="btn btn-primary">Discuss project</a>
+            <a href="../pricing/" class="btn btn-secondary">View pricing</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -276,15 +282,19 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-content">
-        <span>&copy; 2026 Jan-Erik Andersen / Andersen Webworks</span>
+        <span>© 2026 Andersen Webworks · <a href="../">Jan-Erik Andersen</a></span>
         <ul class="footer-links">
-          <li><a href="../imprint.html">Imprint</a></li>
-          <li><a href="../privacy.html">Privacy</a></li>
-          <li><a href="../accessibility.html">Accessibility</a></li>
+          <li><a href="../services/">Services</a></li>
+          <li><a href="../projects/">Projects</a></li>
+          <li><a href="../pricing/">Pricing</a></li>
+          <li><a href="../faq/">FAQ</a></li>
+          <li><a href="../../../en/imprint.html">Imprint</a></li>
+          <li><a href="../../../en/privacy.html">Privacy</a></li>
         </ul>
       </div>
     </div>
   </footer>
+
   <script>
   (function() {
     var cb = document.getElementById('darkmode-toggle');
@@ -295,7 +305,5 @@
     });
   })();
   </script>
-  <script src="../../header-mobile.js"></script>
-  <img src="https://jan-erik-andersen.goatcounter.com/count?p=/en/projects/" alt="" style="position:absolute;left:-9999px" aria-hidden="true">
 </body>
 </html>

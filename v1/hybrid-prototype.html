@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andersen Webworks – Hybrid Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================
+       HYBRID PROTOTYPE
+       Editorial Layout + Annemaries Visual Style
+       ============================================ */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Kühlere Palette (weg vom Braun) */
+      --color-bg: #FAFBFC;
+      --color-bg-alt: #F3F4F6;
+      --color-bg-card: #FFFFFF;
+      --color-text: #111827;
+      --color-text-secondary: #4B5563;
+      --color-text-muted: #9CA3AF;
+      --color-accent: #DC2626;
+      --color-accent-hover: #B91C1C;
+      --color-accent-light: rgba(220, 38, 38, 0.08);
+      --color-border: #E5E7EB;
+      --color-border-strong: #D1D5DB;
+
+      /* Typografie: Fraunces (moderne Serif) + Inter */
+      --font-serif: 'Fraunces', Georgia, serif;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+      /* Sizes */
+      --text-xs: 0.75rem;
+      --text-sm: 0.875rem;
+      --text-base: 1rem;
+      --text-lg: 1.125rem;
+      --text-xl: 1.25rem;
+      --text-2xl: 1.5rem;
+      --text-3xl: 2rem;
+      --text-4xl: 2.5rem;
+      --text-5xl: 3.5rem;
+
+      /* Spacing */
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2rem;
+      --space-2xl: 3rem;
+      --space-3xl: 4rem;
+      --space-4xl: 6rem;
+
+      /* Layout */
+      --max-width: 1200px;
+      --sidebar-width: 320px;
+      --content-width: 720px;
+
+      /* Effects */
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.04);
+      --radius-sm: 6px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+    }
+
+    /* Dark Mode */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-bg: #0F0F0F;
+        --color-bg-alt: #1A1A1A;
+        --color-bg-card: #1F1F1F;
+        --color-text: #F9FAFB;
+        --color-text-secondary: #D1D5DB;
+        --color-text-muted: #6B7280;
+        --color-accent: #EF4444;
+        --color-accent-hover: #F87171;
+        --color-accent-light: rgba(239, 68, 68, 0.12);
+        --color-border: #2D2D2D;
+        --color-border-strong: #404040;
+      }
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      font-size: var(--text-base);
+      line-height: 1.7;
+      color: var(--color-text);
+      background: var(--color-bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- Typography --- */
+    h1, h2, h3, h4 {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      line-height: 1.2;
+      color: var(--color-text);
+    }
+
+    h1 { font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl)); letter-spacing: -0.02em; }
+    h2 { font-size: clamp(var(--text-2xl), 4vw, var(--text-3xl)); letter-spacing: -0.01em; }
+    h3 { font-size: var(--text-xl); }
+
+    p { margin-bottom: var(--space-md); max-width: 65ch; }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: none;
+      transition: color 150ms ease;
+    }
+    a:hover { color: var(--color-accent-hover); text-decoration: underline; }
+
+    /* --- Header --- */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--space-md) 0;
+    }
+
+    .header-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: var(--font-serif);
+      font-size: var(--text-lg);
+      font-weight: 600;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: var(--space-xl);
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--color-text-secondary);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .nav-links a:hover { color: var(--color-text); }
+
+    .nav-cta {
+      background: var(--color-accent);
+      color: white !important;
+      padding: var(--space-xs) var(--space-lg);
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+    }
+    .nav-cta:hover { background: var(--color-accent-hover); text-decoration: none; }
+
+    /* --- Hero Section --- */
+    .hero {
+      padding: var(--space-4xl) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hero-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+      display: grid;
+      grid-template-columns: 1fr var(--sidebar-width);
+      gap: var(--space-3xl);
+      align-items: start;
+    }
+
+    .hero-content h1 {
+      margin-bottom: var(--space-lg);
+    }
+
+    .hero-lead {
+      font-size: var(--text-lg);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-xl);
+      max-width: 55ch;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: var(--text-sm);
+      text-decoration: none;
+      transition: all 150ms ease;
+    }
+
+    .btn-primary {
+      background: var(--color-accent);
+      color: white;
+    }
+    .btn-primary:hover { background: var(--color-accent-hover); color: white; text-decoration: none; }
+
+    .btn-secondary {
+      background: var(--color-bg-card);
+      color: var(--color-text);
+      border: 1px solid var(--color-border-strong);
+    }
+    .btn-secondary:hover { background: var(--color-bg-alt); text-decoration: none; }
+
+    .availability-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+    .availability-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #22C55E;
+      border-radius: 50%;
+    }
+
+    /* Hero Sidebar */
+    .hero-sidebar {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+
+    .portrait {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+
+    .stat {
+      text-align: center;
+      padding: var(--space-sm);
+    }
+
+    .stat-value {
+      font-family: var(--font-serif);
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .stat-label {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .trust-logos {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+
+    .trust-logo {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      background: var(--color-bg-alt);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+    }
+
+    /* --- Comparison Section --- */
+    .comparison-section {
+      padding: var(--space-4xl) 0;
+      background: var(--color-bg-alt);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .section-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-3xl);
+    }
+
+    .section-header h2 {
+      margin-bottom: var(--space-sm);
+    }
+
+    .section-subtitle {
+      color: var(--color-text-secondary);
+      font-size: var(--text-lg);
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .comparison-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+
+    .comparison-card.highlight {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 1px var(--color-accent);
+    }
+
+    .comparison-card h3 {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-lg);
+    }
+
+    .comparison-card.highlight h3 {
+      color: var(--color-accent);
+    }
+
+    .comparison-list {
+      list-style: none;
+    }
+
+    .comparison-list li {
+      padding: var(--space-sm) 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: var(--text-sm);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    .comparison-list li:last-child { border-bottom: none; }
+
+    .comparison-list .icon {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-sm);
+    }
+
+    .comparison-card:not(.highlight) .icon { color: var(--color-text-muted); }
+    .comparison-card.highlight .icon { color: var(--color-accent); }
+
+    .price-example {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      text-align: center;
+    }
+
+    .price-example-title {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-md);
+    }
+
+    .price-comparison {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-md);
+    }
+
+    .price-old {
+      font-size: var(--text-xl);
+      color: var(--color-text-muted);
+      text-decoration: line-through;
+    }
+
+    .price-arrow {
+      color: var(--color-accent);
+      font-size: var(--text-xl);
+    }
+
+    .price-new {
+      font-family: var(--font-serif);
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    .price-savings {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+    }
+
+    /* --- Services Section (Numbered) --- */
+    .services-section {
+      padding: var(--space-4xl) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .services-intro {
+      max-width: 600px;
+      margin-bottom: var(--space-3xl);
+    }
+
+    .services-grid {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2xl);
+    }
+
+    .service-item {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: var(--space-xl);
+      padding-bottom: var(--space-2xl);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .service-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .service-number {
+      font-family: var(--font-serif);
+      font-size: var(--text-4xl);
+      font-weight: 700;
+      color: var(--color-accent);
+      opacity: 0.25;
+      line-height: 1;
+    }
+
+    .service-content h3 {
+      margin-bottom: var(--space-sm);
+    }
+
+    .service-content p {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-md);
+    }
+
+    .service-example {
+      background: var(--color-bg-alt);
+      border-left: 3px solid var(--color-accent);
+      padding: var(--space-md);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      margin-bottom: var(--space-md);
+    }
+
+    .service-example-label {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: var(--color-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-xs);
+    }
+
+    .service-example p {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      margin-bottom: 0;
+    }
+
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+    }
+
+    .tag {
+      font-size: var(--text-xs);
+      color: var(--color-text-secondary);
+      background: var(--color-bg-alt);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--radius-sm);
+    }
+
+    /* --- Projects Section --- */
+    .projects-section {
+      padding: var(--space-4xl) 0;
+      background: var(--color-bg-alt);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+    }
+
+    .project-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      transition: all 200ms ease;
+    }
+
+    .project-card:hover {
+      border-color: var(--color-border-strong);
+      box-shadow: var(--shadow-md);
+    }
+
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-md);
+    }
+
+    .project-card h3 {
+      margin-bottom: var(--space-sm);
+    }
+
+    .project-card p {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-md);
+    }
+
+    .project-link {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    /* --- Editorial Content Section (Two Column) --- */
+    .editorial-section {
+      padding: var(--space-4xl) 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .editorial-layout {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+      display: grid;
+      grid-template-columns: 1fr var(--sidebar-width);
+      gap: var(--space-3xl);
+    }
+
+    .editorial-main h2 {
+      margin-bottom: var(--space-lg);
+    }
+
+    .editorial-main p {
+      color: var(--color-text-secondary);
+    }
+
+    .editorial-main p:first-of-type::first-letter {
+      font-family: var(--font-serif);
+      font-size: 3.5em;
+      float: left;
+      line-height: 0.8;
+      margin-right: 0.1em;
+      color: var(--color-accent);
+    }
+
+    .editorial-sidebar {
+      position: sticky;
+      top: calc(60px + var(--space-xl));
+    }
+
+    .sidebar-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+      margin-bottom: var(--space-lg);
+    }
+
+    .sidebar-card h4 {
+      font-family: var(--font-sans);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-muted);
+      margin-bottom: var(--space-md);
+    }
+
+    .sidebar-list {
+      list-style: none;
+    }
+
+    .sidebar-list li {
+      padding: var(--space-xs) 0;
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .sidebar-list li::before {
+      content: '✓';
+      color: var(--color-accent);
+      font-weight: 600;
+    }
+
+    .sidebar-cta {
+      text-align: center;
+    }
+
+    .sidebar-cta p {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      font-style: italic;
+      margin-bottom: var(--space-md);
+    }
+
+    /* --- Pricing Section --- */
+    .pricing-section {
+      padding: var(--space-4xl) 0;
+      background: var(--color-bg-alt);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-xl);
+    }
+
+    .pricing-card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl);
+    }
+
+    .pricing-card.featured {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 1px var(--color-accent);
+    }
+
+    .pricing-header {
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-lg);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .pricing-type {
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-xs);
+    }
+
+    .pricing-card.featured .pricing-type {
+      color: var(--color-accent);
+    }
+
+    .pricing-price {
+      font-family: var(--font-serif);
+      font-size: var(--text-3xl);
+      font-weight: 700;
+    }
+
+    .pricing-price span {
+      font-size: var(--text-base);
+      font-weight: 400;
+      color: var(--color-text-muted);
+    }
+
+    .pricing-compare {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      text-decoration: line-through;
+    }
+
+    .pricing-desc {
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-lg);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: var(--space-lg);
+    }
+
+    .pricing-features li {
+      padding: var(--space-xs) 0;
+      font-size: var(--text-sm);
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-sm);
+    }
+
+    .pricing-features li::before {
+      content: '✓';
+      color: var(--color-accent);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    /* --- Contact Section --- */
+    .contact-section {
+      padding: var(--space-4xl) 0;
+    }
+
+    .contact-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-inner h2 {
+      margin-bottom: var(--space-md);
+    }
+
+    .contact-inner > p {
+      color: var(--color-text-secondary);
+      font-size: var(--text-lg);
+      margin-bottom: var(--space-2xl);
+      max-width: none;
+    }
+
+    .contact-methods {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-xl);
+      margin-bottom: var(--space-2xl);
+    }
+
+    .contact-method {
+      text-align: center;
+    }
+
+    .contact-method-label {
+      font-size: var(--text-xs);
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: var(--space-xs);
+    }
+
+    .contact-method a {
+      font-size: var(--text-lg);
+      font-weight: 600;
+    }
+
+    .guarantees {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: var(--space-lg);
+    }
+
+    .guarantee {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+
+    .guarantee::before {
+      content: '✓';
+      color: var(--color-accent);
+    }
+
+    /* --- Footer --- */
+    .site-footer {
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--color-border);
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 var(--space-xl);
+    }
+
+    .footer-inner p {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+      max-width: none;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-lg);
+      margin-top: var(--space-md);
+    }
+
+    .footer-links a {
+      font-size: var(--text-sm);
+      color: var(--color-text-muted);
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 1024px) {
+      .hero-inner,
+      .editorial-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-sidebar {
+        order: -1;
+        max-width: 400px;
+      }
+
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .projects-grid,
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .service-item {
+        grid-template-columns: 60px 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+
+      .service-item {
+        grid-template-columns: 1fr;
+      }
+
+      .service-number {
+        font-size: var(--text-2xl);
+        margin-bottom: var(--space-sm);
+      }
+
+      .contact-methods {
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .guarantees {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo">Andersen Webworks</a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#leistungen">Leistungen</a></li>
+          <li><a href="#projekte">Projekte</a></li>
+          <li><a href="#preise">Preise</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#kontakt" class="nav-cta">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <h1>Die Kompetenz einer Agentur.<br>Ohne den Ballast.</h1>
+        <p class="hero-lead">
+          Ich bin Jan-Erik Andersen. Ich baue Websites, Shops und Tools — und ich bleib dran.
+          Bei mir reden Sie mit dem Entwickler. Und der macht auch die Arbeit.
+        </p>
+        <div class="hero-ctas">
+          <a href="#kontakt" class="btn btn-primary">Projekt starten</a>
+          <a href="#preise" class="btn btn-secondary">Preise ansehen</a>
+        </div>
+        <div class="availability-badge">
+          Aktuell verfügbar — Kapazität für neue Projekte
+        </div>
+      </div>
+      <aside class="hero-sidebar">
+        <img src="portrait.webp" alt="Jan-Erik Andersen" class="portrait">
+        <div class="stats-grid">
+          <div class="stat">
+            <div class="stat-value">27</div>
+            <div class="stat-label">Jahre im Web</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">20+</div>
+            <div class="stat-label">Live-Websites</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">14</div>
+            <div class="stat-label">Branchen</div>
+          </div>
+          <div class="stat">
+            <div class="stat-value">80€</div>
+            <div class="stat-label">statt 150€</div>
+          </div>
+        </div>
+        <div class="trust-logos">
+          <span class="trust-logo">Gerwing</span>
+          <span class="trust-logo">Scheja & Partner</span>
+          <span class="trust-logo">SiS e.V.</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Comparison -->
+  <section class="comparison-section">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Was passiert, wenn Sie eine Agentur buchen</h2>
+        <p class="section-subtitle">Der Unterschied ist nicht die Qualität — es ist der Overhead.</p>
+      </div>
+      <div class="comparison-grid">
+        <div class="comparison-card">
+          <h3>Typische Agentur</h3>
+          <ul class="comparison-list">
+            <li><span class="icon">×</span> 120–180 €/h (davon 30% Overhead)</li>
+            <li><span class="icon">×</span> Ihr Ansprechpartner macht nicht die Arbeit</li>
+            <li><span class="icon">×</span> Entscheidungen brauchen Umwege</li>
+            <li><span class="icon">×</span> Juniors setzen um, Seniors verkaufen</li>
+            <li><span class="icon">×</span> Abhängigkeit durch proprietäre Systeme</li>
+            <li><span class="icon">×</span> Meetings, die Mails hätten sein können</li>
+          </ul>
+        </div>
+        <div class="comparison-card highlight">
+          <h3>Bei mir</h3>
+          <ul class="comparison-list">
+            <li><span class="icon">✓</span> 80 €/h — ein Ansprechpartner für alles</li>
+            <li><span class="icon">✓</span> Wer berät, der baut auch</li>
+            <li><span class="icon">✓</span> Entscheidung am Telefon, Umsetzung am selben Tag</li>
+            <li><span class="icon">✓</span> 27 Jahre Erfahrung in jeder Zeile Code</li>
+            <li><span class="icon">✓</span> Offene Standards, jederzeit übertragbar</li>
+            <li><span class="icon">✓</span> Klartext per Mail statt Termin-Ping-Pong</li>
+          </ul>
+        </div>
+      </div>
+      <div class="price-example">
+        <div class="price-example-title">Rechenbeispiel: Firmenwebsite (8 Seiten, WordPress, barrierefrei)</div>
+        <div class="price-comparison">
+          <span class="price-old">8.000–12.000 €</span>
+          <span class="price-arrow">→</span>
+          <span class="price-new">3.200 €</span>
+        </div>
+        <div class="price-savings">Sie sparen: 4.800–8.800 € — ohne Qualitätsverlust.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services (Numbered) -->
+  <section class="services-section" id="leistungen">
+    <div class="section-inner">
+      <div class="services-intro">
+        <h2>Was ich mache</h2>
+        <p>Fünf Dinge, und die richtig. Ich mache nicht alles — aber was ich mache, sitzt.</p>
+      </div>
+      <div class="services-grid">
+
+        <div class="service-item">
+          <div class="service-number">01</div>
+          <div class="service-content">
+            <h3>Webdesign</h3>
+            <p>Firmenwebsites, die funktionieren — nicht nur gut aussehen. WordPress für Kunden, die selbst Inhalte pflegen wollen. Statisches HTML für maximale Geschwindigkeit.</p>
+            <div class="service-example">
+              <div class="service-example-label">Beispiel</div>
+              <p>Scheja & Partner — Datenschutzkanzlei mit 30 Anwälten, mehrsprachig, inklusive NIS2-Compliance-Check.</p>
+            </div>
+            <div class="service-tags">
+              <span class="tag">WordPress</span>
+              <span class="tag">Statisches HTML</span>
+              <span class="tag">WCAG 2.1 AA</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-number">02</div>
+          <div class="service-content">
+            <h3>Online-Shops</h3>
+            <p>WooCommerce-Shops, die von Anfang an auf klare Prozesse ausgelegt sind. B2B-Features wie Händlerkonditionen und Preisgruppen sind kein Hexenwerk, wenn man weiß, was man tut.</p>
+            <div class="service-example">
+              <div class="service-example-label">Beispiel</div>
+              <p>Gerwing Steinwerke — WooCommerce-Shop für einen der größten deutschen Pflastersteinhersteller, 2023 komplett neu gebaut.</p>
+            </div>
+            <div class="service-tags">
+              <span class="tag">WooCommerce</span>
+              <span class="tag">B2B / B2C</span>
+              <span class="tag">E-Rechnung</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-number">03</div>
+          <div class="service-content">
+            <h3>Frontend-Entwicklung</h3>
+            <p>Sauberer Code, der andere Entwickler nicht in den Wahnsinn treibt. Ich setze Designs um — ob aus Figma, Sketch oder einer Servietten-Skizze. Lighthouse-Scores von 90+ sind Standard.</p>
+            <div class="service-example">
+              <div class="service-example-label">Beispiel</div>
+              <p>Runden Group — kompletter Web-Auftritt einer Firmengruppe (7 Websites), zweisprachig, mit Portalen und Custom-Tools.</p>
+            </div>
+            <div class="service-tags">
+              <span class="tag">HTML / CSS / JS</span>
+              <span class="tag">YOOtheme Pro</span>
+              <span class="tag">Performance</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-number">04</div>
+          <div class="service-content">
+            <h3>Beratung & Projektmanagement</h3>
+            <p>Sie haben ein Projekt, aber keinen Plan? Oder einen Plan, aber niemanden, der ihn umsetzt? Ich übernehme beides. Kein Jira, kein Slack-Chaos, kein Overhead.</p>
+            <div class="service-tags">
+              <span class="tag">Konzepte</span>
+              <span class="tag">Tech-Beratung</span>
+              <span class="tag">Vendor-Koordination</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-item">
+          <div class="service-number">05</div>
+          <div class="service-content">
+            <h3>Website-Analyse</h3>
+            <p>Ihre Website bringt nichts? Ich schaue mir an, woran das liegt. Performance, SEO, Barrierefreiheit, Sicherheit — alles messbar, alles konkret. Drei Jahre Games-QA haben mir beigebracht: Systematisch Fehler finden ist ein gelernter Beruf.</p>
+            <div class="service-tags">
+              <span class="tag">Performance-Audit</span>
+              <span class="tag">BFSG-Check</span>
+              <span class="tag">SEO-Analyse</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="projects-section" id="projekte">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Von Pflastersteinen bis Black Metal</h2>
+        <p class="section-subtitle">Drei Projekte, die zeigen, was eine Person leisten kann — wenn sie weiß, was sie tut.</p>
+      </div>
+      <div class="projects-grid">
+
+        <article class="project-card">
+          <div class="project-tags">
+            <span class="tag">B2B / Industrie</span>
+            <span class="tag">WooCommerce</span>
+          </div>
+          <h3>Gerwing Steinwerke</h3>
+          <p>B2B-Shop für Pflastersteine. Neubau 2023, seitdem alleinige technische Betreuung. Händlerportal, Musterbestellungen, Preisgruppen.</p>
+          <a href="https://gerwing.de" class="project-link" target="_blank">gerwing.de →</a>
+        </article>
+
+        <article class="project-card">
+          <div class="project-tags">
+            <span class="tag">Firmengruppe</span>
+            <span class="tag">7 Websites</span>
+          </div>
+          <h3>Runden Group</h3>
+          <p>Sieben Websites für eine Firmengruppe, zweisprachig, mit Portalen und Custom-Tools. Zwei Jahre allein verantwortlich.</p>
+          <a href="https://runden-group.eu" class="project-link" target="_blank">runden-group.eu →</a>
+        </article>
+
+        <article class="project-card">
+          <div class="project-tags">
+            <span class="tag">Recht / Datenschutz</span>
+            <span class="tag">WordPress</span>
+          </div>
+          <h3>Scheja & Partner</h3>
+          <p>Kanzlei-Website mit interaktiven Compliance-Tools, die Leads generieren. 30 Anwälte, zwei Sprachen.</p>
+          <a href="https://scheja-partners.de" class="project-link" target="_blank">scheja-partners.de →</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Section (Two Column) -->
+  <section class="editorial-section">
+    <div class="editorial-layout">
+      <main class="editorial-main">
+        <h2>Warum ChatGPT Sie nicht kennt</h2>
+        <p>73 Prozent der B2B-Einkäufer recherchieren inzwischen mit KI-Systemen. Nicht mit Google — mit ChatGPT, Perplexity, Claude. Wenn Ihr Unternehmen in deren Antworten nicht auftaucht, existieren Sie für diese Leute nicht.</p>
+        <p>Das Problem: Die meisten Websites sind für Google gebaut, nicht für KI. Strukturierte Daten fehlen. Schema.org? Nie gehört. JSON-LD? Klingt nach Programmiersprache. Aber genau das ist es, was KI-Systeme brauchen, um Ihr Unternehmen zu verstehen und zu zitieren.</p>
+        <p>Bei mir ist KI-Sichtbarkeit in jedem Projekt Standard. Nicht weil es nichts kostet — sondern weil es nichts bringt, wenn man es weglässt. Das ist einer der Gründe, warum meine Stunde 80 Euro kostet und nicht 50.</p>
+        <p><strong>Machen Sie den Test:</strong> Fragen Sie ChatGPT nach Ihrem Unternehmen. Wenn die Antwort dünn ist oder falsch — dann reden wir.</p>
+      </main>
+      <aside class="editorial-sidebar">
+        <div class="sidebar-card">
+          <h4>Immer dabei</h4>
+          <ul class="sidebar-list">
+            <li>KI-Sichtbarkeit (Schema.org, JSON-LD)</li>
+            <li>Barrierefreiheit (BFSG / WCAG 2.1 AA)</li>
+            <li>DSGVO-konform</li>
+            <li>Texte lektoriert (Annemarie Andersen)</li>
+            <li>Kein Vendor Lock-in</li>
+          </ul>
+        </div>
+        <div class="sidebar-card sidebar-cta">
+          <p>„Reden kostet nichts."</p>
+          <a href="#kontakt" class="btn btn-primary" style="width: 100%;">Kontakt aufnehmen</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing-section" id="preise">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>Was es kostet</h2>
+        <p class="section-subtitle">Festpreise. Keine Überraschungen. Halb so teuer wie eine Agentur.</p>
+      </div>
+      <div class="pricing-grid">
+
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <div class="pricing-type">Website</div>
+            <div class="pricing-price">ab 2.400 € <span>Festpreis</span></div>
+            <div class="pricing-compare">Agentur: 6.000–12.000 €</div>
+          </div>
+          <p class="pricing-desc">Firmenwebsite, 5–10 Seiten</p>
+          <ul class="pricing-features">
+            <li>Konzept, Design, Umsetzung</li>
+            <li>Responsive + barrierefrei</li>
+            <li>SEO + KI-Sichtbarkeit</li>
+            <li>CMS-Einweisung</li>
+            <li>30 Tage Support nach Launch</li>
+          </ul>
+          <a href="#kontakt" class="btn btn-secondary" style="width: 100%;">Anfragen</a>
+        </div>
+
+        <div class="pricing-card featured">
+          <div class="pricing-header">
+            <div class="pricing-type">Shop</div>
+            <div class="pricing-price">ab 4.800 € <span>Festpreis</span></div>
+            <div class="pricing-compare">Agentur: 12.000–25.000 €</div>
+          </div>
+          <p class="pricing-desc">WooCommerce, bis 50 Produkte</p>
+          <ul class="pricing-features">
+            <li>Produktstruktur + Varianten</li>
+            <li>Checkout + Zahlungsanbindung</li>
+            <li>Germanized (Rechtstexte)</li>
+            <li>B2B-Features bei Bedarf</li>
+            <li>Schulung Produktverwaltung</li>
+          </ul>
+          <a href="#kontakt" class="btn btn-primary" style="width: 100%;">Anfragen</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-header">
+            <div class="pricing-type">Betreuung</div>
+            <div class="pricing-price">ab 400 € <span>/Monat</span></div>
+            <div class="pricing-compare">Agentur-Retainer: 1.500+ €</div>
+          </div>
+          <p class="pricing-desc">Günstiger als ein Tag Ausfall</p>
+          <ul class="pricing-features">
+            <li>Updates, Sicherheit, Monitoring</li>
+            <li>Content-Änderungen</li>
+            <li>Performance-Überwachung</li>
+            <li>Direkte Erreichbarkeit</li>
+            <li>Monatlich kündbar</li>
+          </ul>
+          <a href="#kontakt" class="btn btn-secondary" style="width: 100%;">Anfragen</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact-section" id="kontakt">
+    <div class="section-inner">
+      <div class="contact-inner">
+        <h2>Reden wir.</h2>
+        <p>15 Minuten am Telefon, danach wissen wir beide, ob's passt. Oder schreiben Sie eine Mail — Antwort am selben Tag.</p>
+        <div class="contact-methods">
+          <div class="contact-method">
+            <div class="contact-method-label">E-Mail</div>
+            <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
+          </div>
+          <div class="contact-method">
+            <div class="contact-method-label">Telefon</div>
+            <a href="tel:+4938733270015">038733 270015</a>
+          </div>
+        </div>
+        <div class="guarantees">
+          <span class="guarantee">Antwort innerhalb eines Werktags</span>
+          <span class="guarantee">Kostenloses Erstgespräch</span>
+          <span class="guarantee">Kein Verkaufsdruck</span>
+          <span class="guarantee">Kein Vendor Lock-in</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2026 Andersen Webworks · Jan-Erik Andersen · Plau am See</p>
+      <div class="footer-links">
+        <a href="#">Impressum</a>
+        <a href="#">Datenschutz</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

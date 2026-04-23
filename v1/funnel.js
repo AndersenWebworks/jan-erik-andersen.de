@@ -49,23 +49,18 @@
   var OPTION_ICON_MAP = [
     /* Start */
     { match: 'neue Website',          icon: 'monitor' },
-    { match: 'Website oder einen Shop', icon: 'monitor' },
     { match: 'Problem',               icon: 'alert-triangle' },
     { match: 'Betreuung',             icon: 'shield' },
     { match: 'KI-Sichtbarkeit',      icon: 'eye' },
-    { match: 'Kontakt aufnehmen',     icon: 'mail' },
     { match: 'selbst lesen',          icon: 'book-open' },
     { match: 'Was kostet',            icon: 'file-text' },
     { match: 'vergleiche Anbieter',   icon: 'search' },
     /* Neue Website */
-    { match: 'Firmenwebsite',         icon: 'monitor' },
     { match: 'Unternehmenswebsite',   icon: 'monitor' },
     { match: 'Online-Shop',           icon: 'shopping-bag' },
     { match: 'Web-App',               icon: 'code' },
-    { match: 'Portal, Tool',          icon: 'code' },
     { match: 'Landingpage',           icon: 'file-text' },
     { match: 'Onepager',              icon: 'file-text' },
-    { match: 'nicht sicher',          icon: 'search' },
     /* Branche */
     { match: 'Industrie',             icon: 'tool' },
     { match: 'Recht',                 icon: 'shield' },
@@ -84,35 +79,15 @@
     /* Shop */
     { match: 'Klassischer',           icon: 'shopping-bag' },
     { match: 'B2B',                   icon: 'shopping-bag' },
-    { match: 'B2C',                   icon: 'shopping-bag' },
-    { match: 'Endkunden',             icon: 'shopping-bag' },
-    { match: 'ndler',                 icon: 'shopping-bag' },
-    { match: 'Gewerbekunden',         icon: 'shopping-bag' },
     { match: 'Unter 50',              icon: 'file-text' },
     { match: '50 bis 500',            icon: 'layers' },
     { match: 'ber 500',               icon: 'maximize' },
     { match: 'WooCommerce',           icon: 'shopping-bag' },
-    { match: 'was Individuelles',     icon: 'code' },
-    { match: 'Standard könnte',       icon: 'layers' },
-    { match: 'Standard reicht',       icon: 'layers' },
-    { match: 'Standard klingt',       icon: 'layers' },
-    { match: 'das brauche ich',       icon: 'chevron-right' },
-    { match: 'ist das einfacher',     icon: 'layers' },
-    { match: 'ist das anders',        icon: 'layers' },
-    { match: 'in meinen Rahmen',      icon: 'chevron-right' },
     /* Portal */
     { match: 'Karriere',              icon: 'layers' },
-    { match: 'Stellen ausschreiben',  icon: 'layers' },
-    { match: 'Bewerbungen',           icon: 'layers' },
     { match: 'Kundenportal',          icon: 'shield' },
-    { match: 'Kunden einloggen',      icon: 'shield' },
-    { match: 'Daten einsehen',        icon: 'shield' },
     { match: 'Internes Tool',         icon: 'code' },
     { match: 'Bericht',               icon: 'file-text' },
-    { match: 'Report',                icon: 'file-text' },
-    { match: 'mehr als Standard',     icon: 'code' },
-    { match: 'wirklich Custom',       icon: 'code' },
-    { match: 'reicht ein Tool',       icon: 'layers' },
     /* Problem */
     { match: 'Design',                icon: 'monitor' },
     { match: 'Inhalte',               icon: 'file-text' },
@@ -125,8 +100,6 @@
     /* Problem CMS */
     { match: 'WordPress',             icon: 'code' },
     { match: 'Shopify',               icon: 'shopping-bag' },
-    { match: 'Gehackt',               icon: 'alert-triangle' },
-    { match: 'Sicherheitsproblem',    icon: 'alert-triangle' },
     /* BFSG */
     { match: 'Nein, noch',            icon: 'search' },
     { match: 'Fehler sind unklar',    icon: 'alert-triangle' },
@@ -139,72 +112,14 @@
     { match: 'Beides',                icon: 'search' },
     /* Betreuung */
     { match: 'Updates',               icon: 'shield' },
-    { match: 'Sicherheit',            icon: 'shield' },
     { match: 'nderungen',             icon: 'layers' },
     { match: 'Komplett',              icon: 'maximize' },
     { match: 'Statisch',              icon: 'code' },
-    { match: 'festen Entwickler',     icon: 'maximize' },
-    { match: 'Basis reicht',          icon: 'shield' },
-    { match: 'Premium',               icon: 'maximize' },
-    { match: 'schaftskritisch',       icon: 'maximize' },
     /* GEO */
     { match: 'Nichts',                icon: 'book-open' },
     { match: 'Grundidee',             icon: 'eye' },
     { match: 'Audit',                 icon: 'search' },
     { match: 'Klingt relevant',       icon: 'eye' },
-    /* Budget */
-    { match: 'Unter 2.400',           icon: 'file-text' },
-    { match: 'Unter 2.000',           icon: 'file-text' },
-    { match: 'Unter 4.800',           icon: 'file-text' },
-    { match: 'Unter 10.000',          icon: 'file-text' },
-    { match: 'Budget ist kleiner',    icon: 'file-text' },
-    { match: '2.400',                 icon: 'layers' },
-    { match: '2.000',                 icon: 'layers' },
-    { match: '4.800',                 icon: 'layers' },
-    { match: '10.000',                icon: 'layers' },
-    { match: '20.000',                icon: 'maximize' },
-    { match: 'ber 10.000',            icon: 'maximize' },
-    { match: 'ber 20.000',            icon: 'maximize' },
-    { match: 'Projekt ist größer',    icon: 'maximize' },
-    { match: 'Katalog ist größer',    icon: 'maximize' },
-    { match: 'Budget steht',          icon: 'search' },
-    { match: 'Baukästen',             icon: 'book-open' },
-    { match: 'Trotzdem kurz',         icon: 'mail' },
-    { match: 'Trotzdem reden',        icon: 'mail' },
-    { match: 'Trotzdem Fragen',       icon: 'mail' },
-    /* Zeitrahmen */
-    { match: 'So schnell',            icon: 'zap' },
-    { match: '1–3 Monaten',           icon: 'layers' },
-    { match: '2–3 Monaten',           icon: 'layers' },
-    { match: '3–6 Monaten',           icon: 'layers' },
-    { match: '4–8 Wochen',            icon: 'layers' },
-    { match: '6+ Monaten',            icon: 'maximize' },
-    { match: 'Kein fester',           icon: 'search' },
-    /* Produktanzahl */
-    { match: 'Unter 50 Prod',         icon: 'file-text' },
-    { match: '50–200',                icon: 'layers' },
-    { match: '200–500',               icon: 'layers' },
-    { match: 'ber 500 Prod',          icon: 'maximize' },
-    /* Branchen */
-    { match: 'Handwerk',              icon: 'tool' },
-    { match: 'Produktion',            icon: 'tool' },
-    { match: 'Beratung',              icon: 'layers' },
-    { match: 'Dienstleistung',        icon: 'layers' },
-    { match: 'Agentur',               icon: 'layers' },
-    { match: 'Steuer',                icon: 'shield' },
-    { match: 'Finanzen',              icon: 'shield' },
-    { match: 'Gesundheit',            icon: 'shield' },
-    { match: 'Soziales',              icon: 'shield' },
-    { match: 'Firmengruppe',          icon: 'maximize' },
-    { match: 'Holding',               icon: 'maximize' },
-    /* Redesign-spezifisch */
-    { match: 'Facelift',              icon: 'monitor' },
-    { match: 'Phasen-Ansatz',         icon: 'layers' },
-    { match: 'Umfang reduzieren',     icon: 'file-text' },
-    { match: 'MVP',                   icon: 'zap' },
-    { match: 'Kompromisse',           icon: 'layers' },
-    { match: 'realistisch planen',    icon: 'layers' },
-    { match: 'berdenke',              icon: 'search' },
     /* Kosten */
     { match: 'Website',               icon: 'monitor' },
     { match: 'Shop',                  icon: 'shopping-bag' },
@@ -224,26 +139,9 @@
     { match: 'Antworten',             icon: 'eye' },
     { match: 'Noch Fragen',           icon: 'mail' },
     { match: 'unsicher',              icon: 'search' },
-    /* CTA / Result actions */
-    { match: 'Mail schreiben',        icon: 'mail' },
-    { match: 'schicken',              icon: 'mail' },
-    { match: 'Schicken',              icon: 'mail' },
-    { match: 'rzählen',               icon: 'mail' },
-    { match: 'Reden wir',             icon: 'mail' },
-    { match: 'reden wir',             icon: 'mail' },
-    { match: 'sprechen',              icon: 'mail' },
-    { match: 'Sprechen',              icon: 'mail' },
-    { match: 'Minuten',               icon: 'mail' },
-    { match: 'besprechen',            icon: 'mail' },
-    { match: 'Beschreiben',           icon: 'mail' },
-    { match: 'schildern',             icon: 'mail' },
-    { match: 'melden',                icon: 'alert-triangle' },
-    { match: 'prüfen',                icon: 'search' },
-    { match: 'Lassen Sie uns',        icon: 'mail' },
     /* Navigation */
     { match: 'ck zum Anfang',         icon: 'refresh-cw' },
-    { match: 'Anderes',               icon: 'layers' },
-    { match: 'Beides',                icon: 'layers' }
+    { match: 'Anderes',               icon: 'layers' }
   ];
 
   function getOptionIcon(label) {
@@ -557,49 +455,23 @@
   /* ── Email Builder from Funnel Path ─────────────────── */
 
   var RESULT_EMAILS = {
-    /* ── Direkt / Allgemein ── */
-    'result-direkt': {
-      subject: 'Kurze Anfrage',
-      body: 'ich moechte kurz mit Ihnen sprechen. Kein langer Funnel noetig – hier ist mein Anliegen:',
-      url: false
-    },
-    'result-beratung': {
-      subject: 'Beratungsgespraech',
-      body: 'ich bin nicht sicher, was genau ich brauche. Koennen wir kurz sprechen, um das zu klaeren?',
-      url: true
-    },
-    'result-budget-klein': {
-      subject: 'Website – kleines Budget',
-      body: 'mein Budget liegt unter 2.400 EUR. Ich weiss, dass das knapp ist, aber vielleicht gibt es trotzdem einen Weg.',
-      url: true
-    },
     /* ── Neue Website ── */
     'result-website': {
       subject: 'Neue Firmenwebsite',
-      body: 'wir brauchen eine neue Website fuer unser Unternehmen. Ich habe Ihren Berater-Funnel durchgeklickt.',
+      body: 'wir brauchen eine neue Website fuer unser Unternehmen. Ich habe Ihren Berater-Funnel durchgeklickt und die Tipps zu Seitenstruktur und CMS-Wahl waren hilfreich.',
       url: true
     },
-    'result-industrie': {
-      subject: 'Firmenwebsite (Industrie/Handwerk)',
-      body: 'wir sind ein Industriebetrieb und brauchen eine neue Website. Ihr Hinweis zu Gerwing Steinwerke und Ihre Erfahrung mit B2B-Katalogen klingt passend.',
+    'result-website-wp': {
+      subject: 'Neue WordPress-Website',
+      body: 'wir brauchen eine neue Website und WordPress passt zu uns, weil unser Team Inhalte selbst pflegen will. Ihr Hinweis zu Elementor/Divi vs. YOOtheme Pro war interessant.',
       url: true
     },
-    'result-beratung-branche': {
-      subject: 'Firmenwebsite (Beratung/Dienstleistung)',
-      body: 'wir sind eine Beratungsfirma und brauchen eine neue Website. Ihr Punkt zu Vertrauen und KI-Sichtbarkeit hat mich angesprochen.',
+    'result-website-statisch': {
+      subject: 'Neue statische Website',
+      body: 'wir brauchen eine neue Website. Statisches HTML klingt nach der richtigen Wahl fuer uns, weil sich unsere Inhalte selten aendern.',
       url: true
     },
-    'result-recht': {
-      subject: 'Firmenwebsite (Kanzlei/Steuerbuero)',
-      body: 'wir sind eine Kanzlei/ein Steuerbuero und brauchen eine neue Website. Ihr Hinweis, dass alle Kanzlei-Websites gleich aussehen, trifft leider auch auf unsere zu.',
-      url: true
-    },
-    'result-sozial': {
-      subject: 'Website (Verein/soziale Einrichtung)',
-      body: 'wir sind ein Verein/eine soziale Einrichtung und brauchen eine neue Website. Ihr Hinweis zu begrenzten Budgets und echten Geschichten hat mich angesprochen.',
-      url: true
-    },
-    'result-gross': {
+    'result-website-gross': {
       subject: 'Web-Auftritt Firmengruppe',
       body: 'wir sind eine Unternehmensgruppe mit mehreren Gesellschaften und brauchen einen einheitlichen Web-Auftritt. Ihr Punkt zur Koordination als Hauptproblem trifft bei uns zu.',
       url: true
@@ -608,16 +480,6 @@
     'result-shop': {
       subject: 'WooCommerce-Shop',
       body: 'wir brauchen einen Online-Shop mit individuellen Anforderungen. Shopify reicht nicht, weil wir eigene Prozesse abbilden muessen.',
-      url: true
-    },
-    'result-shop-mittel': {
-      subject: 'WooCommerce-Shop (200-500 Produkte)',
-      body: 'wir brauchen einen Online-Shop mit 200-500 Produkten. Ihr Hinweis zum strukturierten Import war hilfreich – manuelles Einpflegen ist keine Option.',
-      url: true
-    },
-    'result-shop-budget-knapp': {
-      subject: 'WooCommerce-Shop (Budget begrenzt)',
-      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 4.800 EUR). Ich bin bereit, Kompromisse zu machen – reden wir ueber die Optionen.',
       url: true
     },
     'result-shop-standard': {
@@ -633,16 +495,6 @@
     'result-shop-b2b': {
       subject: 'B2B-Shop mit Haendlerportal',
       body: 'wir brauchen einen B2B-Shop – Staffelpreise, Haendlerzugaenge, Freigabeprozesse. Kein Standard-Theme, sondern ein Werkzeug fuer unseren Vertrieb.',
-      url: true
-    },
-    'result-shop-beratung': {
-      subject: 'Shop-Beratung',
-      body: 'ich bin nicht sicher, ob Shopify reicht oder WooCommerce sein muss. Koennen wir kurz sprechen?',
-      url: true
-    },
-    'result-shop-budget-klein': {
-      subject: 'Shop (Budget begrenzt)',
-      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 4.800 EUR). Ich bin bereit, Kompromisse zu machen.',
       url: true
     },
     /* ── Portal ── */
@@ -671,17 +523,7 @@
       body: 'Sie haben mich darauf gebracht, dass ein fertiges Tool fuer uns reichen koennte. Koennen Sie uns bei der Auswahl beraten?',
       url: false
     },
-    'result-portal-standard': {
-      subject: 'Karriereportal (Standard)',
-      body: 'Sie haben ehrlich gesagt, dass ein Standardtool fuer unseren Bedarf reichen koennte. Trotzdem ein paar Fragen dazu.',
-      url: false
-    },
-    'result-portal-custom': {
-      subject: 'Custom-Tool / Web-App',
-      body: 'wir brauchen ein Tool, das kein fertiges Produkt abbilden kann. Ich habe geprueft: Standardtools reichen nicht.',
-      url: false
-    },
-    'result-bericht': {
+    'result-portal-bericht': {
       subject: 'Interaktiver Bericht',
       body: 'wir moechten einen Bericht (Jahresbericht / Wirkungsbericht) als interaktive Website statt als PDF erstellen.',
       url: false
@@ -710,16 +552,6 @@
     'result-redesign-komplett': {
       subject: 'Komplett-Redesign',
       body: 'bei unserer Website ist alles veraltet: Design, Technik und Inhalte. Wir brauchen einen Neuanfang, aber sinnvoll geplant.',
-      url: true
-    },
-    'result-relaunch': {
-      subject: 'Komplett-Relaunch',
-      body: 'unsere Website braucht einen kompletten Neuanfang – Design, Technik und Inhalte. Ich habe Ihren Funnel durchgeklickt.',
-      url: true
-    },
-    'result-redesign-beratung': {
-      subject: 'Redesign oder Relaunch?',
-      body: 'ich bin nicht sicher, ob ein Facelift reicht oder ob wir einen Komplett-Relaunch brauchen. Koennen wir das klaeren?',
       url: true
     },
     /* ── Problem: Performance ── */
@@ -781,27 +613,7 @@
       body: 'unsere Website wurde vermutlich gehackt oder enthaelt Malware. Wir brauchen schnell Hilfe.',
       url: true
     },
-    'result-sicherheit': {
-      subject: 'DRINGEND: Website gehackt',
-      body: 'unsere Website wurde vermutlich gehackt oder enthaelt Malware. Wir brauchen schnell Hilfe.',
-      url: true
-    },
     /* ── Betreuung ── */
-    'result-betreuung-basis': {
-      subject: 'Website-Betreuung (Basis)',
-      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer Website kuemmert.',
-      url: true
-    },
-    'result-betreuung-standard': {
-      subject: 'Website-Betreuung (Standard)',
-      body: 'wir suchen jemanden fuer die laufende Betreuung unserer Website – Updates plus regelmaessige inhaltliche Aenderungen.',
-      url: true
-    },
-    'result-betreuung-premium': {
-      subject: 'Website-Betreuung (Premium/Retainer)',
-      body: 'wir suchen im Grunde einen eigenen Webentwickler – jemanden, der unsere Website komplett betreut. Retainer-Modell.',
-      url: true
-    },
     'result-betreuung-wp-basis': {
       subject: 'WordPress-Betreuung (Basis)',
       body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer WordPress-Website kuemmert.',

@@ -47,25 +47,38 @@
 
   /* ── Icon Mapping by Option Label ────────────────────────── */
   var OPTION_ICON_MAP = [
-    /* Start */
+    /* Start v4.0 */
+    { match: 'website or shop',       icon: 'monitor' },
     { match: 'new website',           icon: 'monitor' },
     { match: 'has a problem',         icon: 'alert-triangle' },
     { match: 'ongoing maintenance',   icon: 'shield' },
+    { match: 'looking for ongoing',   icon: 'shield' },
+    { match: 'get in touch',          icon: 'mail' },
     { match: 'AI visibility',         icon: 'eye' },
+    { match: 'interested in AI',      icon: 'eye' },
     { match: 'read on my own',        icon: 'book-open' },
     { match: 'does this cost',        icon: 'file-text' },
     { match: 'comparing providers',   icon: 'search' },
-    /* New Website */
+    /* New Website v4.0 */
     { match: 'Company website',       icon: 'monitor' },
     { match: 'Online shop',           icon: 'shopping-bag' },
     { match: 'Web app',               icon: 'code' },
+    { match: 'Portal, tool',          icon: 'code' },
+    { match: 'customer portal',       icon: 'code' },
     { match: 'Landing page',          icon: 'file-text' },
     { match: 'one-pager',             icon: 'file-text' },
+    { match: 'not sure',              icon: 'search' },
     /* Industry */
     { match: 'Industry',              icon: 'tool' },
+    { match: 'Manufacturing',         icon: 'tool' },
     { match: 'Law',                   icon: 'shield' },
+    { match: 'Consulting',            icon: 'layers' },
+    { match: 'Legal',                 icon: 'shield' },
     { match: 'Association',           icon: 'shield' },
+    { match: 'Nonprofit',             icon: 'shield' },
     { match: 'Hospitality',           icon: 'monitor' },
+    { match: 'Tourism',               icon: 'monitor' },
+    { match: 'Holiday',               icon: 'monitor' },
     { match: 'Other industry',        icon: 'layers' },
     /* Scope */
     { match: 'Manageable',            icon: 'file-text' },
@@ -75,18 +88,37 @@
     { match: 'manage it ourselves',   icon: 'layers' },
     { match: 'developer handles',     icon: 'code' },
     { match: 'Not sure yet',          icon: 'search' },
-    /* Shop */
+    /* Shop v4.0 */
     { match: 'Standard online',       icon: 'shopping-bag' },
     { match: 'B2B',                   icon: 'shopping-bag' },
+    { match: 'B2C',                   icon: 'shopping-bag' },
+    { match: 'End consumers',         icon: 'shopping-bag' },
+    { match: 'Dealers',               icon: 'shopping-bag' },
+    { match: 'business customers',    icon: 'shopping-bag' },
     { match: 'Under 50',              icon: 'file-text' },
     { match: '50 to 500',             icon: 'layers' },
     { match: 'Over 500',              icon: 'maximize' },
     { match: 'WooCommerce',           icon: 'shopping-bag' },
-    /* Portal */
+    { match: 'something custom',      icon: 'code' },
+    { match: 'Standard might',        icon: 'layers' },
+    { match: 'simpler for us',        icon: 'layers' },
+    { match: 'Fits my budget',        icon: 'chevron-right' },
+    { match: 'budget is smaller',     icon: 'file-text' },
+    { match: 'catalogue is larger',   icon: 'maximize' },
+    { match: 'project is bigger',     icon: 'maximize' },
+    /* Portal v4.0 */
     { match: 'Career',                icon: 'layers' },
+    { match: 'Post jobs',             icon: 'layers' },
+    { match: 'applications',          icon: 'layers' },
     { match: 'Customer portal',       icon: 'shield' },
+    { match: 'Customer login',        icon: 'shield' },
+    { match: 'view data',             icon: 'shield' },
     { match: 'Internal tool',         icon: 'code' },
     { match: 'Interactive report',    icon: 'file-text' },
+    { match: 'more than standard',    icon: 'code' },
+    { match: 'really need custom',    icon: 'code' },
+    { match: 'probably enough',       icon: 'layers' },
+    { match: 'tool is enough',        icon: 'layers' },
     /* Problem */
     { match: 'design',                icon: 'monitor' },
     { match: 'content',               icon: 'file-text' },
@@ -96,9 +128,15 @@
     { match: 'found',                 icon: 'search' },
     { match: 'broken',                icon: 'tool' },
     { match: 'Everything',            icon: 'maximize' },
-    /* Problem CMS */
+    /* Problem CMS v4.0 */
     { match: 'WordPress',             icon: 'code' },
     { match: 'Shopify',               icon: 'shopping-bag' },
+    { match: 'other system',          icon: 'code' },
+    { match: 'know',                  icon: 'search' },
+    { match: 'Hacked',                icon: 'alert-triangle' },
+    { match: 'security issue',        icon: 'alert-triangle' },
+    { match: 'Design is enough',      icon: 'monitor' },
+    { match: 'Complete rebuild',      icon: 'maximize' },
     /* BFSG */
     { match: 'No, not',               icon: 'search' },
     { match: 'errors are unclear',    icon: 'alert-triangle' },
@@ -109,11 +147,17 @@
     { match: 'On Google',             icon: 'search' },
     { match: 'ChatGPT',               icon: 'eye' },
     { match: 'Both',                  icon: 'search' },
-    /* Maintenance */
+    /* Maintenance v4.0 */
     { match: 'Updates',               icon: 'shield' },
+    { match: 'security',              icon: 'shield' },
     { match: 'regular changes',       icon: 'layers' },
     { match: 'Full service',          icon: 'maximize' },
+    { match: 'dedicated developer',   icon: 'maximize' },
     { match: 'Static',                icon: 'code' },
+    { match: 'Basic is enough',       icon: 'shield' },
+    { match: 'Standard sounds',       icon: 'layers' },
+    { match: 'Premium',               icon: 'maximize' },
+    { match: 'business-critical',     icon: 'maximize' },
     /* GEO */
     { match: 'Nothing',               icon: 'book-open' },
     { match: 'Basic idea',            icon: 'eye' },
@@ -137,9 +181,25 @@
     { match: 'hear your answers',     icon: 'eye' },
     { match: 'More questions',        icon: 'mail' },
     { match: 'not sure',              icon: 'search' },
+    /* CTA / Result actions */
+    { match: 'Send',                  icon: 'mail' },
+    { match: 'send',                  icon: 'mail' },
+    { match: 'Tell me',               icon: 'mail' },
+    { match: 'talk',                  icon: 'mail' },
+    { match: 'Talk',                  icon: 'mail' },
+    { match: 'discuss',               icon: 'mail' },
+    { match: 'Discuss',               icon: 'mail' },
+    { match: 'minutes',               icon: 'mail' },
+    { match: 'Describe',              icon: 'mail' },
+    { match: 'describe',              icon: 'mail' },
+    { match: 'check',                 icon: 'search' },
+    { match: 'Check',                 icon: 'search' },
+    { match: 'report',                icon: 'alert-triangle' },
+    { match: 'Let',                   icon: 'mail' },
     /* Navigation */
     { match: 'Back to the start',     icon: 'refresh-cw' },
-    { match: 'Other',                 icon: 'layers' }
+    { match: 'Other',                 icon: 'layers' },
+    { match: 'both',                  icon: 'layers' }
   ];
 
   function getOptionIcon(label) {

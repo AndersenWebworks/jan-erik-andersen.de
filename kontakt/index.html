@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Kontakt zu Jan-Erik Andersen: E-Mail, Telefon, LinkedIn. 15 Minuten telefonieren, dann wissen wir beide ob's passt. Stundensatz 80 EUR netto.">
+  <meta name="description" content="Kontakt zu Jan-Erik Andersen: E-Mail, Telefon, LinkedIn. 15 Minuten telefonieren, dann wissen wir beide ob's passt. Kostenloses Erstgespräch.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jan-erik-andersen.de/kontakt/">
   <meta property="og:title" content="Kontakt – Jan-Erik Andersen">
-  <meta property="og:description" content="Kontakt zu Jan-Erik Andersen: E-Mail, Telefon, LinkedIn. 15 Minuten telefonieren, dann wissen wir beide ob's passt.">
+  <meta property="og:description" content="15 Minuten am Telefon, danach wissen Sie, ob es passt und was es kostet. Kein Verkaufsgespräch, keine Follow-up-Mails.">
   <meta property="og:image" content="https://jan-erik-andersen.de/portrait.webp">
   <meta property="og:locale" content="de_DE">
   <link rel="canonical" href="https://jan-erik-andersen.de/kontakt/">
   <link rel="alternate" hreflang="de" href="https://jan-erik-andersen.de/kontakt/">
   <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/contact/">
-  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg">
   <title>Kontakt – Jan-Erik Andersen</title>
-  <link rel="stylesheet" href="../style.css?v=7.0">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -45,6 +45,12 @@
     }
   }
   </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
@@ -59,25 +65,20 @@
       <nav class="header-nav" id="header-nav">
         <a href="../leistungen/">Leistungen</a>
         <a href="../projekte/">Projekte</a>
+        <a href="../preise/">Preise</a>
+        <a href="../faq/">FAQ</a>
         <a href="../ueber/">Über mich</a>
-        <a href="../kontakt/" class="header-nav-cta">Kontakt</a>
+        <a href="../kontakt/" class="header-nav-cta header-nav-active">Kontakt</a>
       </nav>
       <div class="header-right">
         <label class="pill-toggle">
           <input type="checkbox" id="darkmode-toggle" class="darkmode-checkbox">
           <span class="pill-track">
-            <span class="pill-option">Light</span>
-            <span class="pill-option">Dark</span>
+            <span class="pill-option">Hell</span>
+            <span class="pill-option">Dunkel</span>
             <span class="pill-indicator"></span>
           </span>
         </label>
-        <div class="pill-toggle">
-          <div class="pill-track">
-            <a href="../" class="pill-option active">DE</a>
-            <a href="../en/" class="pill-option">EN</a>
-            <span class="pill-indicator"></span>
-          </div>
-        </div>
         <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="logo-link">
           <img src="../linkedin-logo.png" alt="LinkedIn" width="24" height="24">
         </a>
@@ -87,113 +88,154 @@
 
   <main id="main">
 
-    <!-- ===== EDITORIAL: KONTAKT + SIDEBAR ===== -->
-    <section class="editorial">
-      <div class="editorial-layout container">
+    <section class="contact-section contact-section--hero">
+      <div class="section-inner container">
+        <div class="contact-inner">
+          <h1>Reden wir.</h1>
+          <p class="hero-lead">Kostenloses Erstgespräch: 15 Minuten am Telefon, danach wissen Sie, ob es passt und was es kostet. Kein Verkaufsgespräch, keine Follow-up-Mails. Oder schreiben Sie eine Mail – Antwort am selben Tag.</p>
 
-        <div class="editorial-main">
-
-          <h1 class="editorial-headline">Reden wir.</h1>
-
-          <p class="editorial-lead">15 Minuten telefonieren, danach wissen wir beide, ob's passt. Oder schreiben Sie mir — Antwort kommt in der Regel am selben Tag.</p>
-
-          <div class="contact-methods">
-            <div class="contact-method">
-              <span class="label">E-Mail</span>
+          <div class="contact-grid">
+            <div class="contact-method contact-method--large">
+              <div class="contact-method-label">E-Mail</div>
               <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
             </div>
-            <div class="contact-method">
-              <span class="label">Telefon</span>
+            <div class="contact-method contact-method--large">
+              <div class="contact-method-label">Telefon</div>
               <a href="tel:+4938733270015">038733 270015</a>
             </div>
-            <div class="contact-method">
-              <span class="label">LinkedIn</span>
+            <div class="contact-method contact-method--large">
+              <div class="contact-method-label">LinkedIn</div>
               <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">linkedin.com/in/andersen-erik</a>
             </div>
+            <div class="contact-method contact-method--large">
+              <div class="contact-method-label">Standort</div>
+              <span>Plau am See, Mecklenburg-Vorpommern</span>
+            </div>
           </div>
 
-          <h2>Was passiert danach?</h2>
-          <ol>
-            <li>Ich schicke Ihnen eine Zusammenfassung per Mail.</li>
-            <li>Bei Interesse: konkretes Angebot mit Umfang und Preis.</li>
-            <li>Kein Druck, keine Nachfass-Mails.</li>
-          </ol>
+          <div class="guarantees guarantees--large">
+            <span class="guarantee">Antwort auf Mails innerhalb eines Werktags</span>
+            <span class="guarantee">Kostenloses Erstgespräch (15 Min.)</span>
+            <span class="guarantee">Verfügbarkeit innerhalb von zwei Wochen</span>
+            <span class="guarantee">Keine Follow-up-Mails, kein Druck</span>
+            <span class="guarantee">Alles dokumentiert, jederzeit übertragbar</span>
+            <span class="guarantee">Offene Standards – kein Vendor Lock-in</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <h2>Häufige Fragen</h2>
-          <details>
-            <summary>Was kostet das?</summary>
-            <p>Stundensatz 80 EUR netto. Typische Projekte liegen zwischen 2.500 und 8.000 EUR. Laufende Betreuung ab 15 EUR/Monat.</p>
-          </details>
-          <details>
-            <summary>Wie schnell können Sie anfangen?</summary>
-            <p>In der Regel innerhalb von zwei Wochen.</p>
-          </details>
-          <details>
-            <summary>Was wenn ich irgendwann wechseln will?</summary>
-            <p>Alles was ich baue ist dokumentiert und auf Standard-Technologien. Wenn Sie irgendwann wechseln wollen, kann jeder Entwickler nahtlos übernehmen. Kein Lock-in.</p>
-          </details>
-
-          <h2>Firmenadresse</h2>
-          <p>
-            Jan-Erik Andersen<br>
-            Andersen Webworks<br>
-            Plau am See, Mecklenburg-Vorpommern<br>
-            Deutschland
-          </p>
-          <p>100 % remote, deutschlandweit.</p>
-
+    <section class="section--alt" id="projekt-check">
+      <div class="section-inner container">
+        <div class="section-header">
+          <h2>Projekt-Check</h2>
+          <p class="section-subtitle">Vier Fragen, dann wissen Sie, was auf Sie zukommt.</p>
         </div>
 
-        <aside class="editorial-sidebar">
+        <div class="projekt-check" id="projekt-check-app">
 
-          <div class="editorial-stats">
-            <div class="editorial-stat">
-              <span class="editorial-stat-number">&lt;&nbsp;1&nbsp;Tag</span>
-              <span class="editorial-stat-label">E-Mail-Antwortzeit</span>
-            </div>
-            <div class="editorial-stat">
-              <span class="editorial-stat-number">100%</span>
-              <span class="editorial-stat-label">Remote</span>
-            </div>
-            <div class="editorial-stat">
-              <span class="editorial-stat-number">DE+EN</span>
-              <span class="editorial-stat-label">Sprachen</span>
-            </div>
-            <div class="editorial-stat">
-              <span class="editorial-stat-number">2010</span>
-              <span class="editorial-stat-label">Seit aktiv</span>
+          <div class="projekt-check-step" data-step="1">
+            <h3>Was brauchen Sie?</h3>
+            <div class="projekt-check-options">
+              <button class="projekt-check-option" data-value="website">
+                <strong>Neue Website</strong>
+                <span>Firmenseite, Landingpage oder Portal – von Null aufgebaut</span>
+              </button>
+              <button class="projekt-check-option" data-value="shop">
+                <strong>Online-Shop</strong>
+                <span>WooCommerce-Shop mit Produkten, Warenkorb, Checkout</span>
+              </button>
+              <button class="projekt-check-option" data-value="redesign">
+                <strong>Redesign / Verbesserung</strong>
+                <span>Bestehende Seite auffrischen, schneller machen, barrierefrei</span>
+              </button>
+              <button class="projekt-check-option" data-value="betreuung">
+                <strong>Laufende Betreuung</strong>
+                <span>Updates, Sicherheit, Content-Pflege, Ansprechpartner sein</span>
+              </button>
+              <button class="projekt-check-option" data-value="analyse">
+                <strong>Website-Analyse</strong>
+                <span>Audit: Was läuft, was nicht, was kostet die Behebung</span>
+              </button>
             </div>
           </div>
 
-          <div class="editorial-sidebar-section">
-            <h3>Verfügbarkeit</h3>
-            <ul>
-              <li>Montag bis Freitag</li>
-              <li>Termine nach Vereinbarung</li>
-              <li>Deutschlandweit</li>
-            </ul>
+          <div class="projekt-check-step" data-step="2" hidden>
+            <button class="projekt-check-back">← Zurück</button>
+            <h3>Haben Sie bereits eine Website?</h3>
+            <div class="projekt-check-options">
+              <button class="projekt-check-option" data-value="wordpress">
+                <strong>Ja, WordPress</strong>
+                <span>Bestehende WordPress-Installation</span>
+              </button>
+              <button class="projekt-check-option" data-value="other">
+                <strong>Ja, anderes System</strong>
+                <span>Wix, Jimdo, Squarespace, Typo3, Custom ...</span>
+              </button>
+              <button class="projekt-check-option" data-value="none">
+                <strong>Nein, komplett neu</strong>
+                <span>Es gibt noch nichts oder die alte Seite wird ersetzt</span>
+              </button>
+            </div>
           </div>
 
-          <div class="editorial-sidebar-section">
-            <h3>Leistungen</h3>
-            <ul>
-              <li><a href="../leistungen/#sichtbar">Neu bauen</a> — Websites, Shops, Portale</li>
-              <li><a href="../leistungen/#arbeiten">Besser machen</a> — Redesign, Performance, BFSG</li>
-              <li><a href="../leistungen/#absichern">Am Laufen halten</a> — Betreuung, Compliance</li>
-            </ul>
+          <div class="projekt-check-step" data-step="3" hidden>
+            <button class="projekt-check-back">← Zurück</button>
+            <h3>Haben Sie ein grobes Budget im Kopf?</h3>
+            <div class="projekt-check-options">
+              <button class="projekt-check-option" data-value="under3k">
+                <strong>Unter 3.000 €</strong>
+                <span>Kleine Seite, wenige Unterseiten, klare Anforderungen</span>
+              </button>
+              <button class="projekt-check-option" data-value="3to8k">
+                <strong>3.000–8.000 €</strong>
+                <span>Standard-Projekt: Website oder kleiner Shop</span>
+              </button>
+              <button class="projekt-check-option" data-value="over8k">
+                <strong>Über 8.000 €</strong>
+                <span>Größeres Projekt: Shop mit B2B-Features, Portal, Custom-Tool</span>
+              </button>
+              <button class="projekt-check-option" data-value="retainer">
+                <strong>Monatliches Budget (Retainer)</strong>
+                <span>Laufende Zusammenarbeit, Stundenkontingent</span>
+              </button>
+              <button class="projekt-check-option" data-value="unknown">
+                <strong>Weiß ich noch nicht</strong>
+                <span>Kein Problem – dafür gibt es das Erstgespräch</span>
+              </button>
+            </div>
           </div>
 
-          <div class="editorial-sidebar-section">
-            <h3>Rechtliches</h3>
-            <ul>
-              <li><a href="../de/impressum.html">Impressum</a></li>
-              <li><a href="../de/datenschutz.html">Datenschutz</a></li>
-              <li><a href="../de/barrierefreiheit.html">Barrierefreiheit</a></li>
-            </ul>
+          <div class="projekt-check-step" data-step="4" hidden>
+            <button class="projekt-check-back">← Zurück</button>
+            <h3>Wann soll es losgehen?</h3>
+            <div class="projekt-check-options">
+              <button class="projekt-check-option" data-value="asap">
+                <strong>So schnell wie möglich</strong>
+                <span>Projekt drängt, Kapazität wird kurzfristig gebraucht</span>
+              </button>
+              <button class="projekt-check-option" data-value="1to3months">
+                <strong>In 1–3 Monaten</strong>
+                <span>Planung steht, Umsetzung soll bald starten</span>
+              </button>
+              <button class="projekt-check-option" data-value="flexible">
+                <strong>Flexibel</strong>
+                <span>Kein fester Termin, will erstmal reden</span>
+              </button>
+            </div>
           </div>
 
-        </aside>
+          <div class="projekt-check-result" hidden>
+            <h3>Passt.</h3>
+            <p>Basierend auf Ihren Angaben kann ich Ihnen wahrscheinlich helfen. Lassen Sie uns kurz telefonieren – 15 Minuten, dann wissen wir beide mehr.</p>
+            <div class="hero-ctas" style="justify-content: center; margin-top: var(--space-xl);">
+              <a href="mailto:mail@andersen-webworks.de?subject=Projektanfrage" class="btn btn-primary">Mail schreiben</a>
+              <a href="tel:+4938733270015" class="btn btn-secondary">Anrufen</a>
+            </div>
+            <button class="projekt-check-restart">↺ Nochmal starten</button>
+          </div>
 
+        </div>
       </div>
     </section>
 
@@ -202,15 +244,19 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-content">
-        <span>© 2026 Jan-Erik Andersen / Andersen Webworks</span>
+        <span>© 2026 Andersen Webworks · <a href="../">Jan-Erik Andersen</a></span>
         <ul class="footer-links">
-          <li><a href="../de/impressum.html">Impressum</a></li>
-          <li><a href="../de/datenschutz.html">Datenschutz</a></li>
-          <li><a href="../de/barrierefreiheit.html">Barrierefreiheit</a></li>
+          <li><a href="../leistungen/">Leistungen</a></li>
+          <li><a href="../projekte/">Projekte</a></li>
+          <li><a href="../preise/">Preise</a></li>
+          <li><a href="../faq/">FAQ</a></li>
+          <li><a href="../../de/impressum.html">Impressum</a></li>
+          <li><a href="../../de/datenschutz.html">Datenschutz</a></li>
         </ul>
       </div>
     </div>
   </footer>
+
   <script>
   (function() {
     var cb = document.getElementById('darkmode-toggle');
@@ -219,9 +265,42 @@
     cb.addEventListener('change', function() {
       localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
+
+    // Projekt-Check Mini-Funnel
+    var app = document.getElementById('projekt-check-app');
+    if (app) {
+      var steps = app.querySelectorAll('.projekt-check-step');
+      var result = app.querySelector('.projekt-check-result');
+      var currentStep = 0;
+
+      app.addEventListener('click', function(e) {
+        var btn = e.target.closest('.projekt-check-option');
+        if (btn) {
+          steps[currentStep].hidden = true;
+          currentStep++;
+          if (currentStep < steps.length) {
+            steps[currentStep].hidden = false;
+          } else {
+            result.hidden = false;
+          }
+        }
+
+        var restart = e.target.closest('.projekt-check-restart');
+        if (restart) {
+          result.hidden = true;
+          currentStep = 0;
+          steps[0].hidden = false;
+        }
+
+        var back = e.target.closest('.projekt-check-back');
+        if (back && currentStep > 0) {
+          steps[currentStep].hidden = true;
+          currentStep--;
+          steps[currentStep].hidden = false;
+        }
+      });
+    }
   })();
   </script>
-  <script src="../header-mobile.js"></script>
-  <img src="https://jan-erik-andersen.goatcounter.com/count?p=/kontakt/" alt="" style="position:absolute;left:-9999px" aria-hidden="true">
 </body>
 </html>

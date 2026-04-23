@@ -49,18 +49,23 @@
   var OPTION_ICON_MAP = [
     /* Start */
     { match: 'neue Website',          icon: 'monitor' },
+    { match: 'Website oder einen Shop', icon: 'monitor' },
     { match: 'Problem',               icon: 'alert-triangle' },
     { match: 'Betreuung',             icon: 'shield' },
     { match: 'KI-Sichtbarkeit',      icon: 'eye' },
+    { match: 'Kontakt aufnehmen',     icon: 'mail' },
     { match: 'selbst lesen',          icon: 'book-open' },
     { match: 'Was kostet',            icon: 'file-text' },
     { match: 'vergleiche Anbieter',   icon: 'search' },
     /* Neue Website */
+    { match: 'Firmenwebsite',         icon: 'monitor' },
     { match: 'Unternehmenswebsite',   icon: 'monitor' },
     { match: 'Online-Shop',           icon: 'shopping-bag' },
     { match: 'Web-App',               icon: 'code' },
+    { match: 'Portal, Tool',          icon: 'code' },
     { match: 'Landingpage',           icon: 'file-text' },
     { match: 'Onepager',              icon: 'file-text' },
+    { match: 'nicht sicher',          icon: 'search' },
     /* Branche */
     { match: 'Industrie',             icon: 'tool' },
     { match: 'Recht',                 icon: 'shield' },
@@ -79,15 +84,35 @@
     /* Shop */
     { match: 'Klassischer',           icon: 'shopping-bag' },
     { match: 'B2B',                   icon: 'shopping-bag' },
+    { match: 'B2C',                   icon: 'shopping-bag' },
+    { match: 'Endkunden',             icon: 'shopping-bag' },
+    { match: 'ndler',                 icon: 'shopping-bag' },
+    { match: 'Gewerbekunden',         icon: 'shopping-bag' },
     { match: 'Unter 50',              icon: 'file-text' },
     { match: '50 bis 500',            icon: 'layers' },
     { match: 'ber 500',               icon: 'maximize' },
     { match: 'WooCommerce',           icon: 'shopping-bag' },
+    { match: 'was Individuelles',     icon: 'code' },
+    { match: 'Standard könnte',       icon: 'layers' },
+    { match: 'Standard reicht',       icon: 'layers' },
+    { match: 'Standard klingt',       icon: 'layers' },
+    { match: 'das brauche ich',       icon: 'chevron-right' },
+    { match: 'ist das einfacher',     icon: 'layers' },
+    { match: 'ist das anders',        icon: 'layers' },
+    { match: 'in meinen Rahmen',      icon: 'chevron-right' },
     /* Portal */
     { match: 'Karriere',              icon: 'layers' },
+    { match: 'Stellen ausschreiben',  icon: 'layers' },
+    { match: 'Bewerbungen',           icon: 'layers' },
     { match: 'Kundenportal',          icon: 'shield' },
+    { match: 'Kunden einloggen',      icon: 'shield' },
+    { match: 'Daten einsehen',        icon: 'shield' },
     { match: 'Internes Tool',         icon: 'code' },
     { match: 'Bericht',               icon: 'file-text' },
+    { match: 'Report',                icon: 'file-text' },
+    { match: 'mehr als Standard',     icon: 'code' },
+    { match: 'wirklich Custom',       icon: 'code' },
+    { match: 'reicht ein Tool',       icon: 'layers' },
     /* Problem */
     { match: 'Design',                icon: 'monitor' },
     { match: 'Inhalte',               icon: 'file-text' },
@@ -100,6 +125,8 @@
     /* Problem CMS */
     { match: 'WordPress',             icon: 'code' },
     { match: 'Shopify',               icon: 'shopping-bag' },
+    { match: 'Gehackt',               icon: 'alert-triangle' },
+    { match: 'Sicherheitsproblem',    icon: 'alert-triangle' },
     /* BFSG */
     { match: 'Nein, noch',            icon: 'search' },
     { match: 'Fehler sind unklar',    icon: 'alert-triangle' },
@@ -112,30 +139,39 @@
     { match: 'Beides',                icon: 'search' },
     /* Betreuung */
     { match: 'Updates',               icon: 'shield' },
+    { match: 'Sicherheit',            icon: 'shield' },
     { match: 'nderungen',             icon: 'layers' },
     { match: 'Komplett',              icon: 'maximize' },
     { match: 'Statisch',              icon: 'code' },
+    { match: 'festen Entwickler',     icon: 'maximize' },
+    { match: 'Basis reicht',          icon: 'shield' },
+    { match: 'Premium',               icon: 'maximize' },
+    { match: 'schaftskritisch',       icon: 'maximize' },
     /* GEO */
     { match: 'Nichts',                icon: 'book-open' },
     { match: 'Grundidee',             icon: 'eye' },
     { match: 'Audit',                 icon: 'search' },
     { match: 'Klingt relevant',       icon: 'eye' },
     /* Budget */
-    { match: 'Unter 2.500',           icon: 'file-text' },
+    { match: 'Unter 2.400',           icon: 'file-text' },
     { match: 'Unter 2.000',           icon: 'file-text' },
-    { match: 'Unter 5.000',           icon: 'file-text' },
+    { match: 'Unter 4.800',           icon: 'file-text' },
     { match: 'Unter 10.000',          icon: 'file-text' },
-    { match: '2.500',                 icon: 'layers' },
+    { match: 'Budget ist kleiner',    icon: 'file-text' },
+    { match: '2.400',                 icon: 'layers' },
     { match: '2.000',                 icon: 'layers' },
-    { match: '5.000',                 icon: 'layers' },
+    { match: '4.800',                 icon: 'layers' },
     { match: '10.000',                icon: 'layers' },
     { match: '20.000',                icon: 'maximize' },
     { match: 'ber 10.000',            icon: 'maximize' },
     { match: 'ber 20.000',            icon: 'maximize' },
+    { match: 'Projekt ist größer',    icon: 'maximize' },
+    { match: 'Katalog ist größer',    icon: 'maximize' },
     { match: 'Budget steht',          icon: 'search' },
     { match: 'Baukästen',             icon: 'book-open' },
     { match: 'Trotzdem kurz',         icon: 'mail' },
     { match: 'Trotzdem reden',        icon: 'mail' },
+    { match: 'Trotzdem Fragen',       icon: 'mail' },
     /* Zeitrahmen */
     { match: 'So schnell',            icon: 'zap' },
     { match: '1–3 Monaten',           icon: 'layers' },
@@ -188,9 +224,26 @@
     { match: 'Antworten',             icon: 'eye' },
     { match: 'Noch Fragen',           icon: 'mail' },
     { match: 'unsicher',              icon: 'search' },
+    /* CTA / Result actions */
+    { match: 'Mail schreiben',        icon: 'mail' },
+    { match: 'schicken',              icon: 'mail' },
+    { match: 'Schicken',              icon: 'mail' },
+    { match: 'rzählen',               icon: 'mail' },
+    { match: 'Reden wir',             icon: 'mail' },
+    { match: 'reden wir',             icon: 'mail' },
+    { match: 'sprechen',              icon: 'mail' },
+    { match: 'Sprechen',              icon: 'mail' },
+    { match: 'Minuten',               icon: 'mail' },
+    { match: 'besprechen',            icon: 'mail' },
+    { match: 'Beschreiben',           icon: 'mail' },
+    { match: 'schildern',             icon: 'mail' },
+    { match: 'melden',                icon: 'alert-triangle' },
+    { match: 'prüfen',                icon: 'search' },
+    { match: 'Lassen Sie uns',        icon: 'mail' },
     /* Navigation */
     { match: 'ck zum Anfang',         icon: 'refresh-cw' },
-    { match: 'Anderes',               icon: 'layers' }
+    { match: 'Anderes',               icon: 'layers' },
+    { match: 'Beides',                icon: 'layers' }
   ];
 
   function getOptionIcon(label) {
@@ -517,7 +570,7 @@
     },
     'result-budget-klein': {
       subject: 'Website – kleines Budget',
-      body: 'mein Budget liegt unter 2.500 EUR. Ich weiss, dass das knapp ist, aber vielleicht gibt es trotzdem einen Weg.',
+      body: 'mein Budget liegt unter 2.400 EUR. Ich weiss, dass das knapp ist, aber vielleicht gibt es trotzdem einen Weg.',
       url: true
     },
     /* ── Neue Website ── */
@@ -564,7 +617,7 @@
     },
     'result-shop-budget-knapp': {
       subject: 'WooCommerce-Shop (Budget begrenzt)',
-      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 5.000 EUR). Ich bin bereit, Kompromisse zu machen – reden wir ueber die Optionen.',
+      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 4.800 EUR). Ich bin bereit, Kompromisse zu machen – reden wir ueber die Optionen.',
       url: true
     },
     'result-shop-standard': {
@@ -589,7 +642,7 @@
     },
     'result-shop-budget-klein': {
       subject: 'Shop (Budget begrenzt)',
-      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 5.000 EUR). Ich bin bereit, Kompromisse zu machen.',
+      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 4.800 EUR). Ich bin bereit, Kompromisse zu machen.',
       url: true
     },
     /* ── Portal ── */
