@@ -3610,7 +3610,7 @@ a:hover {
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
-  border-radius: 8px;
+  border-radius: 50%;
   margin-bottom: var(--space-lg);
 }
 
@@ -3730,7 +3730,7 @@ a:hover {
   }
 
   .hero-sidebar {
-    order: -1;
+    order: 1;
     max-width: 400px;
   }
 }
@@ -4222,7 +4222,7 @@ a:hover {
   }
 
   .hero-sidebar {
-    order: -1;
+    order: 1;
     max-width: 100%;
   }
 
