@@ -653,7 +653,7 @@
     h += '</a>';
 
     /* D2: Trust badge */
-    h += '<p class="funnel-trust-badge funnel-stagger" style="--i:2.5">I reply to emails within one business day. 26 years in web \u00b7 50+ projects \u00b7 14+ industries.</p>';
+    h += '<p class="funnel-trust-badge funnel-stagger" style="--i:2.5">I reply to emails within one business day. 27+ years building web projects \u00b7 50+ projects \u00b7 14+ industries.</p>';
 
     /* Alternative contact */
     h += '<div class="funnel-contact-alt funnel-stagger" style="--i:3">';

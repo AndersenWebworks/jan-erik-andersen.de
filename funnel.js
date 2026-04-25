@@ -916,7 +916,7 @@
     h += '</a>';
 
     /* D2: Trust badge */
-    h += '<p class="funnel-trust-badge funnel-stagger" style="--i:2.5">E-Mails beantworte ich innerhalb eines Werktags. 26 Jahre im Web \u00b7 50+ Projekte \u00b7 14+ Branchen.</p>';
+    h += '<p class="funnel-trust-badge funnel-stagger" style="--i:2.5">E-Mails beantworte ich innerhalb eines Werktags. 27+ Jahre Webprojekte \u00b7 50+ Projekte \u00b7 14+ Branchen.</p>';
 
     /* Alternative contact */
     h += '<div class="funnel-contact-alt funnel-stagger" style="--i:3">';
