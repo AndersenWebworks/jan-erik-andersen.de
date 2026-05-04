@@ -73,6 +73,13 @@
   --max-width: 1100px;
   --max-width-narrow: 680px;
 
+  /* Borders */
+  --radius-sm: 4px;
+
+  /* Typography aliases */
+  --font-heading: var(--font-serif);
+  --color-text-muted: var(--color-text-light);
+
   /* Transitions */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
