@@ -350,7 +350,17 @@
       skipFunnel();
       return;
     }
-    document.documentElement.classList.add('funnel-active');
+    // Mobile: Funnel als Block im Flow rendern, kein Modal-Overlay
+    // (Google straft Intrusive Interstitials ab; Mobile bekommt Funnel kompakt)
+    var isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+      document.documentElement.classList.add('funnel-active', 'funnel-inline');
+    } else {
+      // Desktop: Modal mit 800ms Delay -- User sieht erst Hero, dann Wow-Effekt
+      setTimeout(function () {
+        document.documentElement.classList.add('funnel-active');
+      }, 800);
+    }
     initConstellation();
     fetch('funnel.json')
       .then(function (r) { return r.json(); })

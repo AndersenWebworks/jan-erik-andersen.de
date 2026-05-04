@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Web design, online shops, frontend development, consulting, website analysis. Five things, and those right. Jan-Erik Andersen – €80/h instead of agency prices.">
+  <meta name="description" content="Three focus areas: AI Visibility, BFSG Compliance, Shops &amp; Custom Solutions. Plus web design, frontend development, consulting, analysis. Jan-Erik Andersen, since 1999.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jan-erik-andersen.de/en/services/">
   <meta property="og:title" content="Services – Jan-Erik Andersen">
-  <meta property="og:description" content="Web design, online shops, frontend development, consulting, website analysis. Five things, and those right.">
+  <meta property="og:description" content="Three focus areas: AI Visibility, BFSG Compliance, Shops &amp; Custom Solutions. Plus web design, frontend development, consulting, analysis.">
   <meta property="og:image" content="https://jan-erik-andersen.de/portrait.webp">
   <meta property="og:locale" content="en_US">
   <link rel="canonical" href="https://jan-erik-andersen.de/en/services/">
@@ -22,15 +22,17 @@
     "@type": "Service",
     "provider": { "@id": "https://jan-erik-andersen.de/#person" },
     "name": "Web Development & Digital Consulting",
-    "description": "Web design, online shops, frontend development, project management, website analysis. Five things, and those right.",
-    "serviceType": ["Web Design", "Online Shops", "Frontend Development", "Project Management", "Website Analysis"],
+    "description": "Three focus areas: AI Visibility, BFSG Compliance, Shops & Custom Solutions. Plus web design, frontend development, consulting, analysis.",
+    "serviceType": ["AI Visibility", "BFSG Compliance", "Online Shops", "Web Design", "Frontend Development", "Project Management", "Website Analysis"],
     "areaServed": { "@type": "Country", "name": "Germany" },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Services",
       "itemListElement": [
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Visibility", "description": "Get your website cited by ChatGPT, Perplexity and Claude. Structured data, llms.txt, Schema markup, semantic architecture.", "url": "https://jan-erik-andersen.de/en/services/ai-visibility/" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "BFSG Compliance & Accessibility", "description": "WCAG 2.1 AA compliant implementation. Update existing sites or new builds. Compliant with German Accessibility Strengthening Act since June 2025.", "url": "https://jan-erik-andersen.de/en/services/bfsg-accessibility/" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Shops & Custom Solutions", "description": "WooCommerce with B2B features, dealer portals, custom plugins. When standard isn't enough.", "url": "https://jan-erik-andersen.de/en/services/shops-and-custom/" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Web Design", "description": "Company websites with WordPress or static HTML. Responsive, accessible, GDPR compliant." } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Online Shops", "description": "WooCommerce shops with B2B features like dealer conditions and price groups." } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Frontend Development", "description": "Clean, documented solutions. Figma, Sketch, or napkin sketch to finished website." } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Project Management & Consulting", "description": "Concept development, requirements analysis, implementation management, vendor coordination." } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Analysis", "description": "Performance, SEO, accessibility, security – all measurable, all concrete." } }
@@ -85,19 +87,64 @@
       <div class="section-inner container">
         <div class="services-intro">
           <h1>What I do</h1>
-          <p class="hero-lead">Five things, and those right. I don't do everything – but what I do, I do well.</p>
+          <p class="hero-lead">Web development since 1999. Three focus areas where I go deeper than most. Plus four more disciplines I've been doing routinely for years.</p>
         </div>
 
+        <h2 class="services-section-heading">Three Focus Areas</h2>
+        <div class="services-grid">
+
+          <div class="service-item" id="ai-visibility">
+            <div class="service-number">01</div>
+            <div class="service-content">
+              <h3>AI Visibility</h3>
+              <p>So your website gets cited by ChatGPT, Perplexity and Claude – not just ranked on Google. Structured data, llms.txt, schema markup, semantic architecture. Built in, not bolted on.</p>
+              <div class="service-example">
+                <div class="service-example-label">Proof</div>
+                <p>This website itself, as a live technical test. Generative Engine Optimization (GEO) and Agent Visibility Optimization (AVO) aren't buzzword bingo – they're measurable disciplines.</p>
+              </div>
+              <p class="service-cta-row"><a href="ai-visibility/" class="btn-text">Details on AI Visibility →</a></p>
+            </div>
+          </div>
+
+          <div class="service-item" id="bfsg-accessibility">
+            <div class="service-number">02</div>
+            <div class="service-content">
+              <h3>BFSG Compliance &amp; Accessibility</h3>
+              <p>Since June 2025, B2C websites in Germany must be accessible. Fines up to €100,000. I build WCAG 2.1 AA compliant – as an update for existing sites or from scratch.</p>
+              <div class="service-example">
+                <div class="service-example-label">Proof</div>
+                <p>Impact Report of Seniorpartner in School, professionally and accessibly built. Quote from the chairwoman's Google review.</p>
+              </div>
+              <p class="service-cta-row"><a href="bfsg-accessibility/" class="btn-text">Details on BFSG &amp; WCAG →</a></p>
+            </div>
+          </div>
+
+          <div class="service-item" id="shops-and-custom">
+            <div class="service-number">03</div>
+            <div class="service-content">
+              <h3>Shops &amp; Custom Solutions</h3>
+              <p>WooCommerce with B2B features, dealer portals, custom plugins. When standard isn't enough, I build what's missing. Clean, documented, maintainable.</p>
+              <div class="service-example">
+                <div class="service-example-label">Proof</div>
+                <p>Gerwing Steinwerke, one of Germany's largest paving stone manufacturers. Custom stone sample tracking, B2B dealer portal, price groups. Built alone, sole technical responsibility since 2023.</p>
+              </div>
+              <p class="service-cta-row"><a href="shops-and-custom/" class="btn-text">Details on Shops &amp; Custom →</a></p>
+            </div>
+          </div>
+
+        </div>
+
+        <h2 class="services-section-heading">More Services</h2>
         <div class="services-grid services-grid--full">
 
           <div class="service-item" id="webdesign">
-            <div class="service-number">01</div>
+            <div class="service-number">04</div>
             <div class="service-content">
-              <h2>Web Design</h2>
+              <h3>Web Design</h3>
               <p>Company websites that work – not just look good. WordPress for clients who want to manage content themselves. Static HTML for maximum speed and minimal maintenance. Responsive, GDPR compliant. I think from the goal: What should the site achieve for you? Then we build backwards.</p>
               <div class="service-example">
                 <div class="service-example-label">Example</div>
-                <p>Scheja & Partner – Data privacy law firm with 30 attorneys, multilingual, with product pages for their privacy software.</p>
+                <p>Scheja &amp; Partner – Data privacy law firm with 30 attorneys, multilingual, with product pages for their privacy software.</p>
               </div>
               <div class="service-tags">
                 <span class="tag">WordPress</span>
@@ -108,28 +155,10 @@
             </div>
           </div>
 
-          <div class="service-item" id="shops">
-            <div class="service-number">02</div>
-            <div class="service-content">
-              <h2>Online Shops</h2>
-              <p>WooCommerce shops designed from the start with clear processes. Product management, variants, filters, checkout – I build the system so you can operate it without constantly calling me. B2B features like dealer conditions and price groups are no magic when you know what you're doing.</p>
-              <div class="service-example">
-                <div class="service-example-label">Example</div>
-                <p>Gerwing Steinwerke – WooCommerce shop for one of Germany's largest paving stone manufacturers, completely rebuilt in 2023 with sample ordering system and price groups.</p>
-              </div>
-              <div class="service-tags">
-                <span class="tag">WooCommerce</span>
-                <span class="tag">B2B / B2C</span>
-                <span class="tag">Germanized</span>
-                <span class="tag">E-Invoicing</span>
-              </div>
-            </div>
-          </div>
-
           <div class="service-item" id="frontend">
-            <div class="service-number">03</div>
+            <div class="service-number">05</div>
             <div class="service-content">
-              <h2>Frontend Development</h2>
+              <h3>Frontend Development</h3>
               <p>Clean solutions, documented and maintainable. If I get hit by a bus, any other developer can continue with it. I implement designs – whether from Figma, Sketch, or a napkin sketch. Performance is not a bonus but a baseline requirement – within the limits of what you want. (A homepage video kills any Lighthouse score; that's part of the initial call.)</p>
               <div class="service-example">
                 <div class="service-example-label">Example</div>
@@ -145,9 +174,9 @@
           </div>
 
           <div class="service-item" id="consulting">
-            <div class="service-number">04</div>
+            <div class="service-number">06</div>
             <div class="service-content">
-              <h2>Project Management & Consulting</h2>
+              <h3>Project Management &amp; Consulting</h3>
               <p>You have a project but no plan? Or a plan but nobody to implement and manage it? I take on both. Concept development, requirements analysis, implementation management – and if needed, also communication with your other service providers. No Jira, no Slack chaos, no overhead.</p>
               <div class="service-example">
                 <div class="service-example-label">Example</div>
@@ -163,9 +192,9 @@
           </div>
 
           <div class="service-item" id="analysis">
-            <div class="service-number">05</div>
+            <div class="service-number">07</div>
             <div class="service-content">
-              <h2>Website Analysis</h2>
+              <h3>Website Analysis</h3>
               <p>You have a website but it's not delivering? I look at what's causing that. Performance, SEO, accessibility, security, user guidance – all measurable, all concrete. No vague recommendations, but a report with clear priorities and effort estimates.</p>
               <p>Three years in games QA taught me: Finding errors systematically is a learned profession.</p>
               <div class="service-tags">
@@ -198,8 +227,8 @@
           </ul>
           <h3 style="margin-top: var(--space-lg);">On request</h3>
           <ul class="sidebar-list sidebar-list--grid">
-            <li>Accessibility (BFSG / WCAG 2.1 AA)</li>
-            <li>AI visibility (Schema.org, JSON-LD)</li>
+            <li><a href="bfsg-accessibility/">Accessibility (BFSG / WCAG 2.1 AA)</a></li>
+            <li><a href="ai-visibility/">AI visibility (Schema.org, JSON-LD)</a></li>
             <li>Professionally edited texts (<a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie Andersen</a>)</li>
           </ul>
         </div>

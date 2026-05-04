@@ -1530,9 +1530,21 @@ dd {
    refined animations, subtle textures.
    ============================================ */
 
-/* Scroll lock while funnel is active */
-html.funnel-active { overflow: hidden; height: 100%; }
-html.funnel-active body { overflow: hidden; height: 100%; }
+/* Scroll lock while funnel is active (Desktop only) */
+html.funnel-active:not(.funnel-inline) { overflow: hidden; height: 100%; }
+html.funnel-active:not(.funnel-inline) body { overflow: hidden; height: 100%; }
+
+/* Mobile: Funnel kompakt im Flow statt Modal-Overlay
+   (vermeidet Google "Intrusive Interstitials" Mobile-Penalty) */
+html.funnel-inline .funnel {
+  position: relative;
+  inset: auto;
+  z-index: auto;
+  padding: var(--space-xl) var(--space-md);
+  max-height: none;
+  min-height: 50vh;
+}
+html.funnel-inline .funnel-spotlight { display: none; }
 
 /* Funnel overlay with subtle grain texture */
 .funnel {
@@ -3048,6 +3060,98 @@ a:hover {
   text-decoration: none;
 }
 
+/* --- Themen-Anker CTA (Mehr zu ...) --- */
+.service-cta-row {
+  margin-top: var(--space-md);
+}
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  color: var(--color-accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 2px;
+  transition: border-color 150ms ease, color 150ms ease, gap 150ms ease;
+}
+.btn-text:hover,
+.btn-text:focus-visible {
+  color: var(--color-accent-hover);
+  border-bottom-color: var(--color-accent-hover);
+  text-decoration: none;
+  gap: 0.6em;
+}
+
+/* --- Testimonials --- */
+.testimonials-section {
+  padding: var(--space-4xl) 0;
+  background: var(--color-bg-alt);
+  border-bottom: 1px solid var(--color-border);
+}
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-xl);
+  margin-top: var(--space-xl);
+}
+.testimonial-card {
+  margin: 0;
+  padding: var(--space-xl);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.testimonial-context-tag {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+.testimonial-card blockquote {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: var(--text-lg);
+  line-height: 1.55;
+  color: var(--color-text);
+  font-style: italic;
+}
+.testimonial-card figcaption {
+  font-size: var(--text-base);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+.testimonial-card figcaption strong {
+  color: var(--color-text);
+}
+.testimonial-card figcaption a {
+  color: var(--color-accent);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 150ms ease;
+}
+.testimonial-card figcaption a:hover {
+  border-bottom-color: var(--color-accent);
+}
+.testimonial-card .testimonial-source {
+  display: block;
+  margin-top: 4px;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+@media (max-width: 768px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+}
+
 /* --- Comparison Section --- */
 .comparison-section {
   padding: var(--space-4xl) 0;
@@ -3325,7 +3429,7 @@ a:hover {
 /* --- Pricing Cards --- */
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: var(--space-xl);
 }
 
@@ -3895,6 +3999,53 @@ a:hover {
   border-radius: 6px;
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
+}
+
+/* --- Client Logos Section --- */
+.client-logos-section {
+  padding: var(--space-4xl) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.client-logos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xl) var(--space-2xl);
+  justify-content: center;
+  align-items: center;
+  max-width: var(--max-width);
+  margin: var(--space-2xl) auto 0;
+}
+
+.client-logos-grid a,
+.client-logos-grid span {
+  display: flex;
+  align-items: center;
+}
+
+.client-logos-grid img {
+  height: 32px;
+  width: auto;
+  opacity: 0.7;
+  transition: opacity var(--transition-base);
+}
+
+.client-logos-grid a:hover img {
+  opacity: 1;
+}
+
+body:has(.darkmode-checkbox:checked) .client-logos-grid img,
+body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
+  filter: invert(1);
+}
+
+@media (max-width: 768px) {
+  .client-logos-grid {
+    gap: var(--space-lg) var(--space-xl);
+  }
+  .client-logos-grid img {
+    height: 24px;
+  }
 }
 
 /* --- Projects Grid Modifier --- */
