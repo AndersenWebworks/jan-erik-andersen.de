@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accessibility Statement — Jan-Erik Andersen</title>
+  <link rel="canonical" href="https://jan-erik-andersen.de/en/accessibility.html">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="stylesheet" href="../style.css?v=7.0">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header has-nav" id="site-header">
+    <div class="site-header-inner">
+      <a href="./" class="header-brand">
+        <img src="../andersen-webworks-logo.png" alt="" class="header-brand-icon" width="24" height="24">
+        <span class="header-brand-name">Jan-Erik</span>
+        <span class="header-brand-surname">Andersen</span>
+      </a>
+      <nav class="header-nav" id="header-nav">
+        <a href="services/">Services</a>
+        <a href="projects/">Projects</a>
+        <a href="about/">About</a>
+        <a href="contact/" class="header-nav-cta">Contact</a>
+      </nav>
+      <div class="header-right">
+        <label class="pill-toggle">
+          <input type="checkbox" id="darkmode-toggle" class="darkmode-checkbox">
+          <span class="pill-track">
+            <span class="pill-option">Light</span>
+            <span class="pill-option">Dark</span>
+            <span class="pill-indicator"></span>
+          </span>
+        </label>
+        <div class="pill-toggle">
+          <div class="pill-track">
+            <a href="../" class="pill-option">DE</a>
+            <a href="./" class="pill-option active">EN</a>
+            <span class="pill-indicator"></span>
+          </div>
+        </div>
+        <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="logo-link">
+          <img src="../linkedin-logo.png" alt="LinkedIn" width="24" height="24">
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="hero">
+      <div class="container">
+        <h1>Accessibility Statement</h1>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+
+        <p><strong>Last updated:</strong> November 15, 2025</p>
+
+        <h2>Commitment to Accessibility</h2>
+        <p>Jan-Erik Andersen is committed to making the website <strong>jan-erik-andersen.de</strong> accessible in accordance with the German Accessibility Enhancement Act (Barrierefreiheitsstärkungsgesetz - BFSG) and the Web Content Accessibility Guidelines (WCAG 2.1) at Level AA.</p>
+
+        <h2>Conformance Status</h2>
+        <p>This website is <strong>substantially conformant</strong> with the WCAG 2.1 Level AA standards. Keyboard smoke tests (November 2025) confirmed that all essential interactions are operable.</p>
+        <ul>
+          <li><strong>Perceivable:</strong> High contrast ratios (text: 17.40:1, accents: 5.89:1), semantic HTML, clear heading hierarchy</li>
+          <li><strong>Operable:</strong> Full keyboard navigation, skip link to main content, focus outlines, and a native checkbox-based dark-mode toggle</li>
+          <li><strong>Understandable:</strong> Clear language (lang="en"), logical content structure, consistent navigation</li>
+          <li><strong>Robust:</strong> Valid HTML5, structured data (JSON-LD), screen reader compatibility</li>
+        </ul>
+
+        <h2>Technical Specifications</h2>
+        <p>The accessibility of this website is based on the following technologies:</p>
+        <ul>
+          <li>HTML5 (validated)</li>
+          <li>CSS3 with dark mode support (prefers-color-scheme)</li>
+          <li>JSON-LD for structured data</li>
+          <li>ARIA attributes for enhanced semantics</li>
+          <li>JavaScript optional (core content works without JS, interactive features like the advisor funnel require JS)</li>
+        </ul>
+
+        <h2>Known Limitations</h2>
+        <p>The current iteration intentionally stays minimal:</p>
+        <ul>
+          <li>Images include alt text, no video content present</li>
+          <li>No forms or complex widgets beyond the CSS-only accordions</li>
+          <li>The manual dark-mode toggle uses a native checkbox, JavaScript is only used for persistence (localStorage)</li>
+        </ul>
+
+        <h2>Feedback and Contact</h2>
+        <p>If you encounter barriers on this website or have questions about accessibility, please contact us:</p>
+        <p><strong>Jan-Erik Andersen</strong><br>Email: <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a><br>Phone: +49 38733 270015</p>
+        <p>We strive to respond within 5 business days.</p>
+
+        <h2>Enforcement Procedure</h2>
+        <p>If you receive unsatisfactory responses, you can contact the responsible supervisory authority:</p>
+        <p><strong>Federal Accessibility Office (Bundesfachstelle Barrierefreiheit)</strong><br><a href="https://www.bundesfachstelle-barrierefreiheit.de" target="_blank" rel="noopener">www.bundesfachstelle-barrierefreiheit.de</a></p>
+
+        <h2>Date of This Statement</h2>
+        <p>This statement was created on <strong>November 10, 2025</strong> and was last reviewed on <strong>November 15, 2025</strong>.</p>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <span>&copy; 2026 Jan-Erik Andersen / Andersen Webworks</span>
+        <ul class="footer-links">
+          <li><a href="imprint.html">Imprint</a></li>
+          <li><a href="privacy.html">Privacy</a></li>
+          <li><a href="accessibility.html">Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  <script>
+  (function() {
+    var cb = document.getElementById('darkmode-toggle');
+    var stored = localStorage.getItem('darkmode');
+    if (stored === '1') cb.checked = true;
+    cb.addEventListener('change', function() {
+      localStorage.setItem('darkmode', cb.checked ? '1' : '0');
+    });
+  })();
+  </script>
+    <script src="../header-mobile.js"></script>
+  <img src="https://jan-erik-andersen.goatcounter.com/count?p=/en/accessibility.html" alt="" style="position:absolute;left:-9999px" aria-hidden="true">
+</body>
+</html>
