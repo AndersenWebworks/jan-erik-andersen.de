@@ -86,9 +86,47 @@
             <span class="pill-indicator"></span>
           </span>
         </label>
+        <div class="pill-toggle">
+          <div class="pill-track">
+            <a href="../ueber/" class="pill-option active">DE</a>
+            <a href="../en/about/" class="pill-option">EN</a>
+            <span class="pill-indicator"></span>
+          </div>
+        </div>
         <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="logo-link">
           <img src="../linkedin-logo.png" alt="LinkedIn" width="24" height="24">
         </a>
+        <button class="header-hamburger" id="header-hamburger" aria-expanded="false" aria-controls="mobile-menu" aria-label="Menü öffnen">
+          <svg class="hamburger-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          <svg class="hamburger-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true">
+        <nav>
+          <a href="../leistungen/">Leistungen</a>
+          <a href="../projekte/">Projekte</a>
+          <a href="../preise/">Preise</a>
+          <a href="../faq/">FAQ</a>
+          <a href="../ueber/" class="header-nav-active">Über mich</a>
+          <a href="../kontakt/" class="header-nav-cta">Kontakt</a>
+        </nav>
+        <div class="mobile-menu-footer">
+          <label class="pill-toggle">
+            <input type="checkbox" class="darkmode-checkbox-mobile" aria-label="Farbschema umschalten">
+            <span class="pill-track">
+              <span class="pill-option">Hell</span>
+              <span class="pill-option">Dunkel</span>
+              <span class="pill-indicator"></span>
+            </span>
+          </label>
+          <div class="pill-toggle">
+            <div class="pill-track">
+              <a href="../ueber/" class="pill-option active">DE</a>
+              <a href="../en/about/" class="pill-option">EN</a>
+              <span class="pill-indicator"></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -242,6 +280,28 @@
     cb.addEventListener('change', function() {
       localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
+
+    // Mobile Menu
+    var hamburger = document.getElementById('header-hamburger');
+    var mobileMenu = document.getElementById('mobile-menu');
+    if (hamburger && mobileMenu) {
+      hamburger.addEventListener('click', function() {
+        var open = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', !open);
+        mobileMenu.setAttribute('aria-hidden', open);
+      });
+      var mobileDm = mobileMenu.querySelector('.darkmode-checkbox-mobile');
+      if (mobileDm) {
+        mobileDm.checked = cb.checked;
+        mobileDm.addEventListener('change', function() {
+          cb.checked = this.checked;
+          cb.dispatchEvent(new Event('change'));
+        });
+        cb.addEventListener('change', function() {
+          mobileDm.checked = cb.checked;
+        });
+      }
+    }
   })();
   </script>
 </body>
