@@ -853,6 +853,28 @@
       body: 'mich wuerde interessieren, wie sichtbar unsere Website fuer KI-Systeme ist. Koennen Sie das pruefen?',
       url: true
     },
+    /* ── GEO (neue Nodes) ── */
+    'result-geo-baukasten': {
+      subject: 'KI-Sichtbarkeit (Baukasten)',
+      body: 'unsere Website laeuft auf einem Baukastensystem und wir wuerden gern die KI-Sichtbarkeit verbessern. Ihr Funnel hat ehrlich gesagt, dass das schwierig wird – koennen wir die Optionen besprechen?',
+      url: true
+    },
+    'geo-neubau': {
+      subject: 'Neue Website mit KI-Sichtbarkeit',
+      body: 'wir planen eine neue Website und moechten, dass KI-Sichtbarkeit von Anfang an eingebaut ist. Ihr Funnel hat uns ueberzeugt.',
+      url: true
+    },
+    /* ── BFSG (neue Nodes) ── */
+    'bfsg-nicht-betroffen': {
+      subject: 'Barrierefreiheit (freiwillig)',
+      body: 'wir sind laut Ihrem Check nicht BFSG-pflichtig, wuerden unsere Website aber trotzdem barrierefrei machen lassen. Koennen Sie das einschaetzen?',
+      url: true
+    },
+    'result-bfsg-audit': {
+      subject: 'BFSG-Audit',
+      body: 'wir moechten pruefen lassen, ob unsere Website barrierefrei ist. Ihr Funnel hat uns auf konkrete Testpunkte hingewiesen – einige davon bestehen wir nicht.',
+      url: true
+    },
     /* ── Vergleich ── */
     'result-vergleich-kontakt': {
       subject: 'Anfrage nach Anbietervergleich',
@@ -869,21 +891,59 @@
     return '';
   }
 
+  var PATH_CONTEXT = {
+    'neu-was': 'Neue Website/Shop',
+    'website-budget': 'Budget-Check',
+    'website-branche': 'Branchenauswahl',
+    'website-gross': 'Grossprojekt',
+    'shop-art': 'Shop-Typ',
+    'shop-b2c': 'B2C-Shop',
+    'shop-b2b': 'B2B-Shop',
+    'shop-budget': 'Shop-Budget',
+    'portal-was': 'Portal/Tool',
+    'portal-karriere': 'Karriereportal',
+    'portal-intern': 'Internes Tool',
+    'problem-was': 'Bestehendes Problem',
+    'problem-redesign': 'Redesign-Check',
+    'problem-technik': 'Technisches Problem',
+    'betreuung-was': 'Laufende Betreuung',
+    'betreuung-info': 'Betreuungs-Pakete',
+    'geo-einstieg': 'KI-Sichtbarkeit',
+    'geo-nachr\u00fcsten': 'KI nachruesten',
+    'bfsg-check': 'BFSG-Betroffenheit',
+    'bfsg-betroffen': 'BFSG-pflichtig'
+  };
+
+  function buildPathSummary() {
+    var steps = [];
+    for (var i = 0; i < history.length; i++) {
+      if (PATH_CONTEXT[history[i]]) steps.push(PATH_CONTEXT[history[i]]);
+    }
+    return steps.length > 0 ? steps.join(' > ') : '';
+  }
+
   function buildEmailFromPath() {
     var resultId = getLastResultId();
     var fb = { subject: 'Anfrage', body: 'ich habe mir Ihre Website angeschaut und w\u00fcrde gern mit Ihnen sprechen.', url: false };
     var data = RESULT_EMAILS[resultId] || fb;
 
+    var pathSummary = buildPathSummary();
     var subject = data.subject;
     var body = 'Hallo Herr Andersen,\n\n' + data.body;
     if (data.url) {
       body += '\n\nUnsere Website: [URL]';
+    }
+    if (pathSummary) {
+      body += '\n\n(Mein Weg durch den Berater: ' + pathSummary + ')';
     }
     body += '\n\nK\u00f6nnen wir kurz telefonieren?\n\nViele Gr\u00fc\u00dfe\n[Ihr Name]';
 
     var previewHtml = 'Hallo Herr Andersen,\n\n' + esc(data.body);
     if (data.url) {
       previewHtml += '\n\nUnsere Website: <span class="funnel-contact-placeholder">[URL]</span>';
+    }
+    if (pathSummary) {
+      previewHtml += '\n\n<span class="funnel-contact-placeholder">(Mein Weg: ' + esc(pathSummary) + ')</span>';
     }
     previewHtml += '\n\nK\u00f6nnen wir kurz telefonieren?\n\nViele Gr\u00fc\u00dfe\n<span class="funnel-contact-placeholder">[Ihr Name]</span>';
 
@@ -1432,14 +1492,14 @@
   }
 
   function resizeCanvas() {
-    if (!constellationCanvas) return;
-    constellationCanvas.width = window.innerWidth;
-    constellationCanvas.height = window.innerHeight;
+    if (!constellationCanvas || !funnel) return;
+    constellationCanvas.width = funnel.offsetWidth;
+    constellationCanvas.height = funnel.offsetHeight;
   }
 
   function spawnNodes() {
-    var w = window.innerWidth;
-    var h = window.innerHeight;
+    var w = funnel ? funnel.offsetWidth : window.innerWidth;
+    var h = funnel ? funnel.offsetHeight : window.innerHeight;
     // Spread nodes across viewport with margin
     var margin = 60;
     for (var i = 0; i < NODE_COUNT; i++) {
