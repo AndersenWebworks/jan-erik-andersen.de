@@ -2588,7 +2588,7 @@ a.funnel-proof-link .funnel-proof-name {
   width: 100%;
   max-width: 200px;
   border-radius: 0;
-  aspect-ratio: 3/4;
+  aspect-ratio: 2/3;
   object-fit: cover;
   object-position: center top;
   margin-bottom: var(--space-xl);
@@ -3714,7 +3714,7 @@ a:hover {
 
 .portrait {
   width: 100%;
-  aspect-ratio: 3/4;
+  aspect-ratio: 2/3;
   object-fit: cover;
   object-position: center top;
   display: block;
