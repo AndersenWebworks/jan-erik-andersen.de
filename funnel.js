@@ -346,7 +346,7 @@
     // Check for deep link to a result via URL hash
     var hash = window.location.hash.replace('#', '');
 
-    if (isFunnelDone() && !hash) {
+    if (window.location.protocol === 'file:' || (isFunnelDone() && !hash)) {
       skipFunnel();
       return;
     }
@@ -362,10 +362,6 @@
       }, 800);
     }
     initConstellation();
-    if (window.location.protocol === 'file:') {
-      skipFunnel();
-      return;
-    }
     fetch('funnel.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
