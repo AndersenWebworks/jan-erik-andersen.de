@@ -36,15 +36,27 @@ Disallow: /verify/
 Disallow: /.git/
 Disallow: /.htaccess
 
-# Spezielle Anweisungen für AI-Agenten
-# (experimentell, nicht standardisiert)
+# KI-Crawler explizit erlauben
 User-agent: GPTBot
+Allow: /
+
 User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
 User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
 User-agent: Bingbot
+Allow: /
+
 User-agent: Googlebot
-Crawl-delay: 1
-Allow: /ai/
-Allow: /*.json
-Allow: /*.jsonld
-Allow: /*.txt
+Allow: /
+
+# llms.txt fuer KI-Systeme
+# https://jan-erik-andersen.de/llms.txt

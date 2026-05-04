@@ -1,0 +1,56 @@
+# Jan-Erik Andersen – Freiberuflicher Webentwickler
+
+> Websites, Shops, digitale Tools und KI-Sichtbarkeit. WordPress, WooCommerce, statisches HTML. Seit 1999 Webprojekte, seit 2010 selbstständig. Deutschlandweit remote, Plau am See.
+
+## Drei Schwerpunkte
+
+### KI-Sichtbarkeit (GEO / AVO)
+Damit Websites in ChatGPT, Perplexity und Claude zitiert werden. Strukturierte Daten, Schema.org JSON-LD, llms.txt, semantische Architektur, FAQPage-Schema, robots.txt-Konfiguration für KI-Crawler.
+- Im Projekt integriert oder als Update ab 800 EUR
+- Mehr: https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/
+
+### BFSG-Compliance und Barrierefreiheit
+WCAG 2.1 AA-konforme Websites. Neubau oder Nachrüstung. Pflicht seit Juni 2025 für B2C-Websites. Bußgelder bis 100.000 EUR.
+- Im Projekt integriert oder als Update ab 1.200 EUR
+- Mehr: https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/
+
+### Shops und Custom-Lösungen
+WooCommerce mit B2B-Features, Händlerportalen, eigenen Plugins. Preisgruppen, Musterbestellsysteme, Germanized.
+- Standard-Shop ab 4.800 EUR, B2B ab 7.500 EUR
+- Mehr: https://jan-erik-andersen.de/leistungen/shops-und-custom/
+
+## Weitere Leistungen
+- Webdesign (WordPress, statisches HTML) – ab 2.400 EUR
+- Frontend-Entwicklung (Figma zu Website, YOOtheme Pro)
+- Projektmanagement und Beratung
+- Website-Analyse (Performance, SEO, Barrierefreiheit, Sicherheit)
+
+## Betreuung (Retainer)
+- Basis: 200 EUR/Monat (2,5h inkl.)
+- Standard: 400 EUR/Monat (5h inkl.)
+- Shop: 800 EUR/Monat (10h inkl.)
+- Monatlich kündbar
+
+## Referenzen
+- Gerwing Steinwerke – B2B-Shop, WooCommerce, Musterbestellsystem – gerwing.de
+- Runden Group – 11 Websites, Firmengruppe, 2 Jahre alleinige Verantwortung – runden-group.eu
+- Scheja und Partner – Datenschutzkanzlei, 30 Anwälte, mehrsprachig – scheja-partners.de
+- Senior Partner in School e.V. – Wirkungsbericht, barrierefrei, Pro Bono – wirkungsbericht.seniorpartnerinschool.de
+- 20+ betreute Live-Websites, 14+ Branchen, 50+ Projekte
+
+## Technologien
+WordPress, WooCommerce, YOOtheme Pro, statisches HTML, Vanilla JavaScript, Schema.org, JSON-LD
+
+## Kontakt
+- E-Mail: mail@andersen-webworks.de
+- Telefon: +49 38733 270015
+- LinkedIn: linkedin.com/in/andersen-erik
+- Stundensatz: 80 EUR netto
+- Website: https://jan-erik-andersen.de
+- Standort: Plau am See, Mecklenburg-Vorpommern, Deutschland
+- Arbeitsweise: 100 % remote, deutschlandweit
+
+## Maschinenlesbare Endpoints
+- /llms.txt – diese Datei
+- /sitemap.xml – alle URLs
+- /robots.txt – Crawler-Konfiguration
