@@ -362,6 +362,10 @@
       }, 800);
     }
     initConstellation();
+    if (window.location.protocol === 'file:') {
+      skipFunnel();
+      return;
+    }
     fetch('funnel.json')
       .then(function (r) { return r.json(); })
       .then(function (data) {
@@ -375,7 +379,7 @@
         }
       })
       .catch(function () {
-        app.innerHTML = '<p class="funnel-error">Funnel konnte nicht geladen werden.</p>';
+        skipFunnel();
       });
   }
 
