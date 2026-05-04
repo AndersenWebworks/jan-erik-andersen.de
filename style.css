@@ -2587,9 +2587,10 @@ a.funnel-proof-link .funnel-proof-name {
 .editorial-portrait {
   width: 100%;
   max-width: 200px;
-  border-radius: 4px;
-  aspect-ratio: 1;
+  border-radius: 0;
+  aspect-ratio: 3/4;
   object-fit: cover;
+  object-position: center top;
   margin-bottom: var(--space-xl);
 }
 
