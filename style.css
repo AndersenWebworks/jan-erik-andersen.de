@@ -4594,10 +4594,9 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
   background: var(--color-bg-alt);
   padding: var(--space-lg);
   border-radius: 8px;
-  align-self: stretch;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  align-self: start;
+  position: sticky;
+  top: calc(var(--space-3xl) + 60px);
 }
 
 .case-study-sidebar dl {
