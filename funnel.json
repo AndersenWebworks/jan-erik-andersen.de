@@ -277,7 +277,7 @@
         },
         {
           "label": "Nicht barrierefrei (BFSG)",
-          "next": "result-bfsg"
+          "next": "bfsg-check"
         },
         {
           "label": "Wird nicht gefunden (Google/KI)",
@@ -292,8 +292,8 @@
 
     "problem-redesign": {
       "type": "info",
-      "text": "Nicht alles, was alt aussieht, braucht einen Relaunch. Drei Fragen: 1. Funktioniert die Seite auf dem Handy? 2. Passen die Inhalte noch? 3. Hat sich Ihre Zielgruppe verändert?",
-      "detail": "Wenn nur eins davon zutrifft, reicht oft ein gezieltes Update statt eines Komplettumbaus. Ein Design-Update kostet 2.000–5.000 EUR, ein Komplett-Relaunch 5.000–15.000 EUR. Großer Unterschied.",
+      "text": "Nicht alles, was alt aussieht, braucht einen Relaunch. Machen Sie diesen Schnelltest: 1. Öffnen Sie Ihre Website auf dem Handy – funktioniert alles? 2. Lesen Sie Ihre Startseite – stimmen die Inhalte noch? 3. Fragen Sie ChatGPT nach Ihrem Unternehmen – kommt was Brauchbares?",
+      "detail": "Wenn nur das Design veraltet ist aber Technik und Inhalt stimmen, reicht ein gezieltes Update (2.000–5.000 EUR). Wenn Technik, Inhalt UND Design nicht mehr passen, ist ein Neuanfang wirtschaftlicher (ab 4.800 EUR). Den Unterschied erkenne ich in 30 Minuten.",
       "options": [
         {
           "label": "Design reicht",
@@ -736,7 +736,7 @@
     "result-performance": {
       "type": "result",
       "title": "Langsame Website – meistens schnell gelöst.",
-      "text": "Die häufigsten Ursachen: zu große Bilder, zu viele Plugins die über die Jahre dazugekommen sind, oder billiges Hosting. Nichts davon ist ein großes Problem.\n\nSchicken Sie mir die URL, ich sage Ihnen in 5 Minuten, woran es liegt. Typischer Aufwand: 5–15 Stunden, 400–1.200 EUR.",
+      "text": "Die häufigsten Ursachen: zu große Bilder, zu viele Plugins, oder billiges Hosting. Nichts davon ist ein großes Problem.\n\nWas Sie jetzt sofort selbst tun können: Öffnen Sie pagespeed.web.dev und geben Sie Ihre URL ein. Der Score sagt Ihnen, wie ernst es ist. Unter 50 = dringend. 50–80 = verbesserungswürdig. Über 80 = kein akutes Problem.\n\nSchicken Sie mir die URL und den Score – Ersteinschätzung kostenlos. Typischer Aufwand: 5–15 Stunden, 400–1.200 EUR.",
       "proof": [],
       "cta": {
         "label": "URL schicken – Ersteinschätzung kostenlos",
@@ -744,10 +744,77 @@
       }
     },
 
+    "bfsg-check": {
+      "type": "question",
+      "text": "Kurzer Check: Verkaufen Sie Produkte oder Dienstleistungen an Verbraucher?",
+      "subtitle": "Das BFSG gilt für B2C. Reine B2B-Websites sind aktuell ausgenommen.",
+      "options": [
+        {
+          "label": "Ja, an Endkunden (B2C)",
+          "next": "bfsg-betroffen"
+        },
+        {
+          "label": "Nein, nur B2B",
+          "next": "bfsg-nicht-betroffen"
+        },
+        {
+          "label": "Beides",
+          "next": "bfsg-betroffen"
+        },
+        {
+          "label": "Bin mir nicht sicher",
+          "next": "bfsg-betroffen"
+        }
+      ]
+    },
+
+    "bfsg-betroffen": {
+      "type": "info",
+      "text": "Ihre Website muss barrierefrei sein. Seit Juni 2025 Pflicht, Bußgelder bis 100.000 EUR. Aber kein Grund zur Panik – die meisten Fehler sind systematisch und lösbar.",
+      "detail": "Selbsttest, den Sie jetzt sofort machen können: 1. Versuchen Sie, Ihre Website nur mit der Tastatur zu bedienen (Tab-Taste). Kommen Sie überall hin? 2. Zoomen Sie auf 200 % – bricht das Layout? 3. Haben alle Bilder Alt-Texte? Wenn eins davon scheitert, haben Sie konkreten Handlungsbedarf.",
+      "options": [
+        {
+          "label": "Meine Seite hat Probleme – ich brauche Hilfe",
+          "next": "result-bfsg"
+        },
+        {
+          "label": "Ich will erstmal nur prüfen lassen",
+          "next": "result-bfsg-audit"
+        }
+      ]
+    },
+
+    "bfsg-nicht-betroffen": {
+      "type": "result",
+      "title": "Aktuell keine BFSG-Pflicht – aber trotzdem sinnvoll.",
+      "text": "Reine B2B-Websites ohne Verbraucherkontakt sind vom BFSG aktuell ausgenommen. Aber: Die Auslegung wird strenger, und barrierefreie Websites funktionieren für alle besser – bessere Lesbarkeit, bessere Tastaturbedienung, bessere Suchmaschinenplatzierung.\n\nMein Rat: Wenn Ihre Website sowieso überarbeitet wird, bauen Sie Barrierefreiheit gleich mit ein. Kostet im Rahmen eines Projekts fast nichts extra.",
+      "proof": [],
+      "cta": {
+        "label": "Trotzdem prüfen lassen?",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-bfsg-audit": {
+      "type": "result",
+      "title": "BFSG-Check – ich sage Ihnen, wo Sie stehen.",
+      "text": "Ich prüfe Ihre Website auf WCAG 2.1 AA-Konformität: Kontraste, Tastaturbedienung, Screenreader-Kompatibilität, Formulare, Bilder. Sie bekommen einen konkreten Bericht mit Prioritäten und Aufwandsschätzung.\n\nAudit ab 400 EUR. Nachrüstung ab 1.200 EUR – oder im Rahmen eines Neuprojekts inklusive.",
+      "proof": [
+        {
+          "name": "Diese Website",
+          "desc": "WCAG 2.1 AA, BFSG-konform"
+        }
+      ],
+      "cta": {
+        "label": "URL schicken – Audit starten",
+        "href": "kontakt/"
+      }
+    },
+
     "result-bfsg": {
       "type": "result",
-      "title": "BFSG – seit Juni 2025 Pflicht.",
-      "text": "Bußgelder bis 100.000 EUR. 96 % aller Websites haben noch Fehler. Die häufigsten: Text schlecht lesbar, Seite nicht per Tastatur bedienbar, Bilder ohne Beschreibung.\n\nIch prüfe Ihre Website, sage Ihnen was zu tun ist, und setze es um. Typischer Aufwand: 10–30 Stunden.",
+      "title": "BFSG-Nachrüstung – das bekommen wir hin.",
+      "text": "96 % aller Websites haben Barrierefreiheits-Fehler. Die häufigsten: unzureichende Kontraste, keine Tastaturbedienbarkeit, Bilder ohne Beschreibung, Formulare ohne Labels. Das klingt nach viel, ist aber systematisch lösbar.\n\nWas Sie jetzt schon tun können: Overlay-Lösungen wie AccessiWay oder UserWay sind keine echte Barrierefreiheit – die bestehen keinen Audit. Echte Barrierefreiheit ist Bauweise, kein Plugin.\n\nNachrüstung: ab 1.200 EUR, je nach Umfang.",
       "proof": [
         {
           "name": "Diese Website",

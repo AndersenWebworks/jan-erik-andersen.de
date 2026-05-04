@@ -277,7 +277,7 @@
         },
         {
           "label": "Not accessible (EAA/BFSG)",
-          "next": "result-bfsg"
+          "next": "bfsg-check"
         },
         {
           "label": "Can't be found (Google/AI)",
@@ -292,8 +292,8 @@
 
     "problem-redesign": {
       "type": "info",
-      "text": "Not everything that looks old needs a relaunch. Three questions: 1. Does the site work on mobile? 2. Is the content still relevant? 3. Has your target audience changed?",
-      "detail": "If only one applies, a targeted update is often enough instead of a complete rebuild. A design update costs EUR 2,000–5,000, a complete relaunch EUR 5,000–15,000. Big difference.",
+      "text": "Not everything that looks old needs a relaunch. Try this quick test: 1. Open your website on your phone – does everything work? 2. Read your homepage – is the content still accurate? 3. Ask ChatGPT about your company – does anything useful come back?",
+      "detail": "If only the design is outdated but technology and content are fine, a targeted update is enough (EUR 2,000–5,000). If technology, content AND design no longer fit, a fresh start is more economical (from EUR 4,800). I can tell the difference in 30 minutes.",
       "options": [
         {
           "label": "Design is enough",
@@ -484,8 +484,8 @@
 
     "result-website": {
       "type": "result",
-      "title": "Three things good company websites in 2026 have in common.",
-      "text": "First: few pages, clear structure. Most need 5–8 pages, not 40. Second: the website must be readable for AI systems. 73% of B2B buyers research with ChatGPT. Third: accessibility has been mandatory since 2025, not optional.\n\nTypical effort: 40–80 hours, EUR 3,200–6,400.",
+      "title": "Company website – I can do that. Here's what it looks like.",
+      "text": "5–8 pages, clear structure, AI-visible, accessibility compliant. Accessibility and structured data are built in, no extra charge. CMS training included – so you can change texts and images yourself.\n\nFrom €2,400 fixed price. Typical: €2,400–5,000. Hourly rate for open scope: €80/h.",
       "proof": [
         {
           "name": "Scheja & Partner",
@@ -736,7 +736,7 @@
     "result-performance": {
       "type": "result",
       "title": "Slow website – usually quick to fix.",
-      "text": "The most common causes: images too large, too many plugins accumulated over the years, or cheap hosting. None of these is a big problem.\n\nSend me the URL, I'll tell you in 5 minutes what's causing it. Typical effort: 5–15 hours, EUR 400–1,200.",
+      "text": "The most common causes: images too large, too many plugins, or cheap hosting. None of these is a big problem.\n\nWhat you can do right now: Open pagespeed.web.dev and enter your URL. The score tells you how serious it is. Below 50 = urgent. 50–80 = room for improvement. Above 80 = no acute problem.\n\nSend me the URL and the score – initial assessment free. Typical effort: 5–15 hours, EUR 400–1,200.",
       "proof": [],
       "cta": {
         "label": "Send URL – initial assessment free",
@@ -746,8 +746,8 @@
 
     "result-bfsg": {
       "type": "result",
-      "title": "EAA/BFSG – mandatory since June 2025.",
-      "text": "Fines up to EUR 100,000. 96% of all websites still have issues. The most common: text hard to read, site not keyboard-navigable, images without descriptions.\n\nI'll check your website, tell you what needs to be done, and implement it. Typical effort: 10–30 hours.",
+      "title": "EAA/BFSG retrofit – we'll get this done.",
+      "text": "96% of all websites have accessibility issues. The most common: insufficient contrast, no keyboard navigation, images without descriptions, forms without labels. Sounds like a lot, but it's systematically solvable.\n\nWhat you can do right now: Overlay solutions like AccessiWay or UserWay aren't real accessibility – they won't pass an audit. Real accessibility is how you build, not a plugin.\n\nRetrofit: from EUR 1,200, depending on scope.",
       "proof": [
         {
           "name": "This website",
@@ -882,8 +882,8 @@
 
     "result-betreuung-basis": {
       "type": "result",
-      "title": "Basic maintenance – runs in the background.",
-      "text": "Updates, backups, security monitoring. I update manually, check afterwards, roll back if needed. You don't notice any of it – and that's exactly the point.\n\nFrom EUR 15/month for a WordPress website.",
+      "title": "Basic Maintenance – €200/month, 2.5 hours included.",
+      "text": "Updates, security, monitoring, minor content changes. I update manually, check afterwards, roll back if needed. You don't notice any of it – and that's exactly the point. Direct contact via email, cancel monthly.\n\nTip: If you only need updates and backups, Basic is enough. If you regularly have changes, Standard is more economical.",
       "proof": [
         {
           "name": "20+ websites",
@@ -898,12 +898,12 @@
 
     "result-betreuung-standard": {
       "type": "result",
-      "title": "Standard maintenance – you send, I implement.",
-      "text": "Everything from Basic, plus: you send an email with a change, I implement it. No explaining where things are every time. No re-learning the CMS every time. Short paths.\n\nEUR 80–200/month, depending on change frequency.",
+      "title": "Standard Maintenance – €400/month, 5 hours included.",
+      "text": "Everything from Basic, plus: performance monitoring, regular content changes, smaller new features. You send an email, I implement. Short paths, fast response, cancel monthly.\n\nThis is the package most of my clients use. Enough hours for regular maintenance without it getting expensive.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Retainer, regular changes",
+          "desc": "Standard retainer, regular changes",
           "href": "https://gerwing.de"
         }
       ],
@@ -915,17 +915,192 @@
 
     "result-betreuung-premium": {
       "type": "result",
-      "title": "Premium – your own developer, without fixed costs.",
-      "text": "Some don't need a maintenance contract, but their own developer. Just without social contributions and office costs. Premium means: I'm your dedicated contact for everything. Priority support, retainer, short paths.\n\nEUR 400–800/month. This is how I work with Gerwing – sole technical responsibility since 2023.",
+      "title": "Shop Maintenance – €800/month, 10 hours included.",
+      "text": "For business-critical WooCommerce shops: Everything from Standard, plus product management, shop-specific maintenance, new features, priority support. 10 hours per month, cancel monthly.\n\nThis is how I work with Gerwing Steinwerke – sole technical responsibility since 2023. One point of contact for the entire shop.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Retainer, sole responsibility",
+          "desc": "Shop retainer since 2023",
           "href": "https://gerwing.de"
         }
       ],
       "cta": {
         "label": "Let's talk about the retainer",
+        "href": "contact/"
+      }
+    },
+
+    "geo-einstieg": {
+      "type": "info",
+      "text": "Quick self-test: Ask ChatGPT or Perplexity about your company. Is the answer correct? Is your company even mentioned? If not, you have a GEO problem – and classic SEO won't solve it.",
+      "detail": "73% of B2B buyers research with AI tools instead of Google. AI systems don't just cite the first website – they need structured data (Schema.org, JSON-LD), clear semantic architecture and machine-readable content. Without that, you don't exist for this audience.",
+      "options": [
+        {
+          "label": "I have a website – it should become AI-visible",
+          "next": "geo-nachrüsten"
+        },
+        {
+          "label": "I'm planning a new website – AI visibility should be built in",
+          "next": "geo-neubau"
+        },
+        {
+          "label": "I want to understand what this actually is first",
+          "next": "result-geo"
+        }
+      ]
+    },
+
+    "geo-nachrüsten": {
+      "type": "info",
+      "text": "Retrofitting AI visibility is possible if the technical foundation is solid. WordPress: usually yes. Static HTML: yes. Site builder (Wix, Jimdo): limited to not at all.",
+      "detail": "What I retrofit: Schema.org markup (Person, Organisation, Offers, FAQ), JSON-LD Structured Data, llms.txt (machine-readable summary), semantic heading hierarchy, robots.txt for AI crawlers. From €800, depending on scope.",
+      "options": [
+        {
+          "label": "Sounds doable – let's talk",
+          "next": "result-geo-audit"
+        },
+        {
+          "label": "I have a site builder",
+          "next": "result-geo-baukasten"
+        }
+      ]
+    },
+
+    "geo-neubau": {
+      "type": "result",
+      "title": "AI visibility is standard for me – no extra charge.",
+      "text": "For new projects I build in AI visibility from the start: Schema.org for every page, FAQPage markup, llms.txt, robots.txt configuration for GPTBot, ClaudeBot and PerplexityBot. Plus semantic architecture that both humans and machines understand.\n\nThis website is the live proof. Check the source code – everything openly viewable.",
+      "proof": [
+        {
+          "name": "This website",
+          "desc": "GEO + AVO optimised, source code verifiable"
+        },
+        {
+          "name": "Scheja & Partner",
+          "desc": "Structured data for legal services",
+          "href": "https://scheja-partners.de"
+        }
+      ],
+      "cta": {
+        "label": "Discuss project with AI visibility",
+        "href": "contact/"
+      },
+      "ctaSecondary": {
+        "label": "Details on AI visibility",
+        "href": "services/ai-visibility/"
+      }
+    },
+
+    "result-geo": {
+      "type": "result",
+      "title": "AI visibility – briefly explained, no buzzwords.",
+      "text": "Google shows 10 links. ChatGPT gives one answer. If your website doesn't appear in that answer, you lose visibility – no matter how good your SEO is.\n\nThe solution is called GEO (Generative Engine Optimization): structured data that AI systems can read. Who you are, what you offer, where you work – machine-readable, not just human-readable. It's not rocket science, but someone has to do it.",
+      "proof": [
+        {
+          "name": "This website",
+          "desc": "Schema.org, JSON-LD, llms.txt – all built in"
+        }
+      ],
+      "cta": {
+        "label": "Is my website AI-visible? Get it checked",
+        "href": "contact/"
+      },
+      "ctaSecondary": {
+        "label": "In detail: AI visibility",
+        "href": "services/ai-visibility/"
+      }
+    },
+
+    "result-geo-audit": {
+      "type": "result",
+      "title": "AI visibility check – I'll take a look.",
+      "text": "Send me your URL. I'll check: Is there structured data? Is it correct? What do ChatGPT and Perplexity say about your company? From that I'll create a concrete action plan.\n\nRetrofitting from €800, depending on the scope of existing structure.",
+      "proof": [
+        {
+          "name": "This website",
+          "desc": "Live example of GEO optimisation"
+        }
+      ],
+      "cta": {
+        "label": "Send URL – start check",
+        "href": "contact/"
+      }
+    },
+
+    "result-geo-baukasten": {
+      "type": "result",
+      "title": "Site builder and AI visibility – difficult.",
+      "text": "Wix, Jimdo, Squarespace don't give you access to the source code. Structured data can only be added in a limited way there – if at all. That's a limitation of the system, not your content.\n\nTwo options: Either we see what's possible within the site builder (honestly: often not much). Or we talk about moving to a system you own – WordPress or static HTML.",
+      "proof": [],
+      "cta": {
+        "label": "Let's talk about the options",
+        "href": "contact/"
+      }
+    },
+
+    "bfsg-check": {
+      "type": "question",
+      "text": "Quick check: Do you sell products or services to consumers?",
+      "subtitle": "The EAA/BFSG applies to B2C. Pure B2B websites are currently exempt.",
+      "options": [
+        {
+          "label": "Yes, to end consumers (B2C)",
+          "next": "bfsg-betroffen"
+        },
+        {
+          "label": "No, B2B only",
+          "next": "bfsg-nicht-betroffen"
+        },
+        {
+          "label": "Both",
+          "next": "bfsg-betroffen"
+        },
+        {
+          "label": "Not sure",
+          "next": "bfsg-betroffen"
+        }
+      ]
+    },
+
+    "bfsg-betroffen": {
+      "type": "info",
+      "text": "Your website must be accessible. Mandatory since June 2025, fines up to EUR 100,000. But no reason to panic – most issues are systematic and solvable.",
+      "detail": "Self-test you can do right now: 1. Try navigating your website using only the keyboard (Tab key). Can you reach everything? 2. Zoom to 200% – does the layout break? 3. Do all images have alt texts? If any of these fails, you have concrete action needed.",
+      "options": [
+        {
+          "label": "My site has problems – I need help",
+          "next": "result-bfsg"
+        },
+        {
+          "label": "I just want an audit first",
+          "next": "result-bfsg-audit"
+        }
+      ]
+    },
+
+    "bfsg-nicht-betroffen": {
+      "type": "result",
+      "title": "No EAA/BFSG obligation currently – but still worthwhile.",
+      "text": "Pure B2B websites without consumer contact are currently exempt from the EAA/BFSG. But: interpretation is getting stricter, and accessible websites work better for everyone – better readability, better keyboard navigation, better search rankings.\n\nMy advice: If your website is being overhauled anyway, build accessibility in from the start. Costs almost nothing extra within a project.",
+      "proof": [],
+      "cta": {
+        "label": "Get it checked anyway?",
+        "href": "contact/"
+      }
+    },
+
+    "result-bfsg-audit": {
+      "type": "result",
+      "title": "EAA/BFSG check – I'll tell you where you stand.",
+      "text": "I check your website for WCAG 2.1 AA compliance: contrasts, keyboard navigation, screen reader compatibility, forms, images. You get a concrete report with priorities and effort estimates.\n\nAudit from EUR 400. Retrofit from EUR 1,200 – or included as part of a new project.",
+      "proof": [
+        {
+          "name": "This website",
+          "desc": "WCAG 2.1 AA, EAA compliant"
+        }
+      ],
+      "cta": {
+        "label": "Send URL – start audit",
         "href": "contact/"
       }
     }
