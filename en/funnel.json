@@ -24,6 +24,10 @@
           "next": "betreuung-was"
         },
         {
+          "label": "AI visibility – I want my website found in ChatGPT",
+          "next": "geo-einstieg"
+        },
+        {
           "label": "I just want to get in touch",
           "next": "result-direkt"
         },
@@ -333,18 +337,18 @@
     "betreuung-was": {
       "type": "question",
       "text": "What do you need?",
-      "subtitle": "Maintenance isn't all the same.",
+      "subtitle": "Three packages, all cancel monthly. The question is: how much initiative do you want from me?",
       "options": [
         {
-          "label": "Just updates and security",
+          "label": "Updates and security – €200/month",
           "next": "result-betreuung-basis"
         },
         {
-          "label": "Updates plus regular changes",
+          "label": "Updates plus regular changes – €400/month",
           "next": "result-betreuung-standard"
         },
         {
-          "label": "A dedicated developer for everything",
+          "label": "WooCommerce shop fully managed – €800/month",
           "next": "result-betreuung-premium"
         },
         {
@@ -356,8 +360,8 @@
 
     "betreuung-info": {
       "type": "info",
-      "text": "Quick overview: Basic (updates, backups, security) from EUR 15/month. Standard (plus changes) EUR 80–200/month. Premium (dedicated developer) EUR 400–800/month.",
-      "detail": "The difference: With Basic I react to problems. With Standard you call and I implement. With Premium I think ahead, suggest improvements, plan proactively. What do you need?",
+      "text": "Three packages, all cancel monthly. Basic (€200/month, 2.5h): updates, security, minor changes. Standard (€400/month, 5h): plus performance, content, fast response. Shop (€800/month, 10h): WooCommerce-specific, new features, priority support.",
+      "detail": "The practical difference: With Basic I handle the tech – you don't notice. With Standard you call and I implement. With Shop I think ahead, suggest improvements, plan proactively. Unused hours expire, but honestly: most clients use them.",
       "options": [
         {
           "label": "Basic is enough",
@@ -368,7 +372,7 @@
           "next": "result-betreuung-standard"
         },
         {
-          "label": "Premium, because business-critical",
+          "label": "Shop – because business-critical",
           "next": "result-betreuung-premium"
         }
       ]

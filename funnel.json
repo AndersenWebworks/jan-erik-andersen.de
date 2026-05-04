@@ -24,6 +24,10 @@
           "next": "betreuung-was"
         },
         {
+          "label": "KI-Sichtbarkeit – meine Website soll in ChatGPT gefunden werden",
+          "next": "geo-einstieg"
+        },
+        {
           "label": "Ich will nur kurz Kontakt aufnehmen",
           "next": "result-direkt"
         },
@@ -333,18 +337,18 @@
     "betreuung-was": {
       "type": "question",
       "text": "Was brauchen Sie?",
-      "subtitle": "Betreuung ist nicht gleich Betreuung.",
+      "subtitle": "Drei Pakete, monatlich kündbar. Die Frage ist: wie viel Eigeninitiative wollen Sie?",
       "options": [
         {
-          "label": "Nur Updates und Sicherheit",
+          "label": "Updates und Sicherheit – 200 EUR/Monat",
           "next": "result-betreuung-basis"
         },
         {
-          "label": "Updates plus regelmäßige Änderungen",
+          "label": "Updates plus regelmäßige Änderungen – 400 EUR/Monat",
           "next": "result-betreuung-standard"
         },
         {
-          "label": "Einen festen Entwickler für alles",
+          "label": "WooCommerce-Shop komplett betreut – 800 EUR/Monat",
           "next": "result-betreuung-premium"
         },
         {
@@ -356,8 +360,8 @@
 
     "betreuung-info": {
       "type": "info",
-      "text": "Kurze Orientierung: Basis (Updates, Backups, Sicherheit) ab 15 EUR/Monat. Standard (plus Änderungen) 80–200 EUR/Monat. Premium (fester Entwickler) 400–800 EUR/Monat.",
-      "detail": "Der Unterschied: Bei Basis reagiere ich auf Probleme. Bei Standard rufen Sie an und ich setze um. Bei Premium denke ich mit, schlage vor, plane voraus. Was brauchen Sie?",
+      "text": "Drei Pakete, alle monatlich kündbar. Basis (200 EUR/Monat, 2,5h): Updates, Sicherheit, kleine Änderungen. Standard (400 EUR/Monat, 5h): dazu Performance, Content, schnelle Reaktion. Shop (800 EUR/Monat, 10h): WooCommerce-spezifisch, neue Features, Prio-Support.",
+      "detail": "Der Unterschied in der Praxis: Bei Basis kümmere ich mich um die Technik – Sie merken nichts davon. Bei Standard rufen Sie an und ich setze um. Bei Shop denke ich mit, schlage vor, plane voraus. Nicht genutzte Stunden verfallen, aber ehrlich: die meisten Kunden nutzen sie.",
       "options": [
         {
           "label": "Basis reicht",
@@ -368,7 +372,7 @@
           "next": "result-betreuung-standard"
         },
         {
-          "label": "Premium, weil geschäftskritisch",
+          "label": "Shop – weil geschäftskritisch",
           "next": "result-betreuung-premium"
         }
       ]
@@ -480,8 +484,8 @@
 
     "result-website": {
       "type": "result",
-      "title": "Drei Dinge, die gute Firmenwebsites 2026 gemeinsam haben.",
-      "text": "Erstens: wenige Seiten, klare Struktur. Die meisten brauchen 5–8 Seiten, nicht 40. Zweitens: die Website muss für KI-Systeme lesbar sein. 73 % der B2B-Einkäufer recherchieren mit ChatGPT. Drittens: Barrierefreiheit ist seit 2025 Pflicht, nicht Kür.\n\nTypischer Aufwand: 40–80 Stunden, 3.200–6.400 EUR.",
+      "title": "Firmenwebsite – kann ich. So sieht das bei mir aus.",
+      "text": "5–8 Seiten, klare Struktur, KI-sichtbar, BFSG-konform. Barrierefreiheit und strukturierte Daten sind eingebaut, kein Aufpreis. CMS-Einweisung inklusive – damit Sie Texte und Bilder selbst ändern können.\n\nAb 2.400 EUR Festpreis. Typisch: 2.400–5.000 EUR. Stundensatz bei offenem Umfang: 80 EUR/h.",
       "proof": [
         {
           "name": "Scheja & Partner",
@@ -541,8 +545,8 @@
 
     "result-beratung": {
       "type": "result",
-      "title": "Nicht sicher? Dann reden wir.",
-      "text": "Sie wissen, dass Sie was brauchen, aber nicht genau was. Das ist ein guter Ausgangspunkt – ehrlicher als 'Ich will genau das'. In einem kurzen Gespräch finden wir raus, was zu Ihrem Budget und Ihren Zielen passt.\n\n15 Minuten, kein Pitch, keine Verpflichtung. Ich sage Ihnen auch, wenn ein Baukasten reicht.",
+      "title": "Nicht sicher? Genau dafür gibt es das Erstgespräch.",
+      "text": "Sie wissen, dass Sie was brauchen, aber nicht genau was. Das ist ehrlicher als 'Ich will genau das'. In einem kurzen Gespräch klären wir: Was soll die Website für Sie erreichen? Was haben Sie schon? Was ist realistisch mit Ihrem Budget?\n\nKostenlos, bis zu 1 Stunde. Ich sage Ihnen auch, wenn ein Baukasten reicht.",
       "proof": [],
       "cta": {
         "label": "15 Minuten – reden wir",
@@ -878,8 +882,8 @@
 
     "result-betreuung-basis": {
       "type": "result",
-      "title": "Basis-Betreuung – läuft im Hintergrund.",
-      "text": "Updates, Backups, Sicherheits-Monitoring. Ich update manuell, prüfe danach, rolle zurück wenn nötig. Sie merken nichts davon – und genau das ist der Punkt.\n\nAb 15 EUR/Monat für eine WordPress-Website.",
+      "title": "Basis-Betreuung – 200 EUR/Monat, 2,5 Stunden inklusive.",
+      "text": "Updates, Sicherheit, Monitoring, kleine Content-Änderungen. Ich update manuell, prüfe danach, rolle zurück wenn nötig. Sie merken nichts davon – und genau das ist der Punkt. Direkte Erreichbarkeit per Mail, monatlich kündbar.\n\nTipp: Wenn Sie nur Updates und Backups brauchen, reicht Basis. Wenn Sie regelmäßig Änderungen haben, ist Standard wirtschaftlicher.",
       "proof": [
         {
           "name": "20+ Websites",
@@ -894,12 +898,12 @@
 
     "result-betreuung-standard": {
       "type": "result",
-      "title": "Standard-Betreuung – Sie schicken, ich setze um.",
-      "text": "Alles aus der Basis, plus: Sie schicken eine Mail mit einer Änderung, ich setze um. Nicht jedes Mal erklären wo was ist. Nicht jedes Mal das CMS neu verstehen. Kurze Wege.\n\n80–200 EUR/Monat, je nach Änderungsfrequenz.",
+      "title": "Standard-Betreuung – 400 EUR/Monat, 5 Stunden inklusive.",
+      "text": "Alles aus Basis, plus: Performance-Überwachung, regelmäßige Content-Änderungen, kleinere neue Features. Sie schicken eine Mail, ich setze um. Kurze Wege, schnelle Reaktion, monatlich kündbar.\n\nDas ist das Paket, das die meisten meiner Kunden nutzen. Genug Stunden für regelmäßige Pflege, ohne dass es teuer wird.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Retainer, regelmäßige Änderungen",
+          "desc": "Standard-Retainer, regelmäßige Änderungen",
           "href": "https://gerwing.de"
         }
       ],
@@ -911,17 +915,125 @@
 
     "result-betreuung-premium": {
       "type": "result",
-      "title": "Premium – Ihr eigener Entwickler, ohne Fixkosten.",
-      "text": "Manche brauchen keinen Betreuungsvertrag, sondern einen eigenen Entwickler. Nur ohne Sozialabgaben und Bürokosten. Premium heißt: Ich bin Ihr fester Ansprechpartner für alles. Priority-Support, Retainer, kurze Wege.\n\n400–800 EUR/Monat. So arbeite ich mit Gerwing – alleinige technische Verantwortung seit 2023.",
+      "title": "Shop-Betreuung – 800 EUR/Monat, 10 Stunden inklusive.",
+      "text": "Für geschäftskritische WooCommerce-Shops: Alles aus Standard, plus Produktmanagement, Shop-spezifische Wartung, neue Features, priorisierter Support. 10 Stunden pro Monat, monatlich kündbar.\n\nSo arbeite ich mit Gerwing Steinwerke – alleinige technische Verantwortung seit 2023. Ein Ansprechpartner für den kompletten Shop.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Retainer, alleinige Verantwortung",
+          "desc": "Shop-Retainer seit 2023",
           "href": "https://gerwing.de"
         }
       ],
       "cta": {
         "label": "Lassen Sie uns über den Retainer sprechen",
+        "href": "kontakt/"
+      }
+    },
+
+    "geo-einstieg": {
+      "type": "info",
+      "text": "Kurzer Selbsttest: Fragen Sie ChatGPT oder Perplexity nach Ihrem Unternehmen. Stimmt die Antwort? Wird Ihr Unternehmen überhaupt erwähnt? Wenn nicht, haben Sie ein GEO-Problem – und das löst kein klassisches SEO.",
+      "detail": "73 % der B2B-Einkäufer recherchieren mit KI-Tools statt mit Google. KI-Systeme zitieren nicht einfach die erstbeste Website – sie brauchen strukturierte Daten (Schema.org, JSON-LD), klare semantische Architektur und maschinenlesbare Inhalte. Ohne das existieren Sie für diese Zielgruppe nicht.",
+      "options": [
+        {
+          "label": "Ich habe eine Website – die soll KI-sichtbar werden",
+          "next": "geo-nachrüsten"
+        },
+        {
+          "label": "Ich plane eine neue Website – KI-Sichtbarkeit soll eingebaut sein",
+          "next": "geo-neubau"
+        },
+        {
+          "label": "Ich will erst verstehen, was das genau ist",
+          "next": "result-geo"
+        }
+      ]
+    },
+
+    "geo-nachrüsten": {
+      "type": "info",
+      "text": "KI-Sichtbarkeit nachrüsten ist möglich, wenn die technische Basis stimmt. WordPress: meistens ja. Statisches HTML: ja. Baukasten (Wix, Jimdo): eingeschränkt bis gar nicht.",
+      "detail": "Was ich nachrüste: Schema.org Markup (Person, Organisation, Angebote, FAQ), JSON-LD Structured Data, llms.txt (maschinenlesbare Zusammenfassung), semantische Überschriften-Hierarchie, robots.txt für KI-Crawler. Ab 800 EUR, je nach Umfang.",
+      "options": [
+        {
+          "label": "Klingt machbar – reden wir",
+          "next": "result-geo-audit"
+        },
+        {
+          "label": "Ich habe einen Baukasten",
+          "next": "result-geo-baukasten"
+        }
+      ]
+    },
+
+    "geo-neubau": {
+      "type": "result",
+      "title": "KI-Sichtbarkeit ist bei mir Standard – kein Aufpreis.",
+      "text": "Bei neuen Projekten baue ich KI-Sichtbarkeit von Anfang an ein: Schema.org für jede Seite, FAQPage-Markup, llms.txt, robots.txt-Konfiguration für GPTBot, ClaudeBot und PerplexityBot. Dazu semantische Architektur, die sowohl Menschen als auch Maschinen verstehen.\n\nDiese Website ist der Live-Beweis. Prüfen Sie den Quelltext – alles offen einsehbar.",
+      "proof": [
+        {
+          "name": "Diese Website",
+          "desc": "GEO + AVO optimiert, Quellcode prüfbar"
+        },
+        {
+          "name": "Scheja & Partner",
+          "desc": "Strukturierte Daten für Rechtsdienstleistungen",
+          "href": "https://scheja-partners.de"
+        }
+      ],
+      "cta": {
+        "label": "Projekt mit KI-Sichtbarkeit besprechen",
+        "href": "kontakt/"
+      },
+      "ctaSecondary": {
+        "label": "Details zu KI-Sichtbarkeit",
+        "href": "leistungen/ki-sichtbarkeit/"
+      }
+    },
+
+    "result-geo": {
+      "type": "result",
+      "title": "KI-Sichtbarkeit – kurz erklärt, ohne Buzzwords.",
+      "text": "Google zeigt 10 Links. ChatGPT gibt eine Antwort. Wenn Ihre Website in dieser Antwort nicht vorkommt, verlieren Sie Sichtbarkeit – egal wie gut Ihr SEO ist.\n\nDie Lösung heißt GEO (Generative Engine Optimization): strukturierte Daten, die KI-Systeme lesen können. Wer Sie sind, was Sie anbieten, wo Sie arbeiten – maschinenlesbar, nicht nur menschenlesbar. Das ist kein Hexenwerk, aber es muss jemand machen.",
+      "proof": [
+        {
+          "name": "Diese Website",
+          "desc": "Schema.org, JSON-LD, llms.txt – alles eingebaut"
+        }
+      ],
+      "cta": {
+        "label": "Ist meine Website KI-sichtbar? Prüfen lassen",
+        "href": "kontakt/"
+      },
+      "ctaSecondary": {
+        "label": "Ausführlich: KI-Sichtbarkeit",
+        "href": "leistungen/ki-sichtbarkeit/"
+      }
+    },
+
+    "result-geo-audit": {
+      "type": "result",
+      "title": "KI-Sichtbarkeits-Check – ich schaue mir das an.",
+      "text": "Schicken Sie mir Ihre URL. Ich prüfe: Gibt es strukturierte Daten? Sind sie korrekt? Was sagen ChatGPT und Perplexity über Ihr Unternehmen? Daraus ergibt sich ein konkreter Maßnahmenplan.\n\nNachrüstung ab 800 EUR, je nach Umfang der bestehenden Struktur.",
+      "proof": [
+        {
+          "name": "Diese Website",
+          "desc": "Live-Beispiel für GEO-Optimierung"
+        }
+      ],
+      "cta": {
+        "label": "URL schicken – Check starten",
+        "href": "kontakt/"
+      }
+    },
+
+    "result-geo-baukasten": {
+      "type": "result",
+      "title": "Baukasten und KI-Sichtbarkeit – schwierig.",
+      "text": "Wix, Jimdo, Squarespace geben Ihnen keinen Zugriff auf den Quellcode. Strukturierte Daten lassen sich dort nur eingeschränkt einbauen – wenn überhaupt. Das ist eine Einschränkung des Systems, nicht Ihrer Inhalte.\n\nZwei Optionen: Entweder wir schauen, was innerhalb des Baukastens möglich ist (ehrlich: oft wenig). Oder wir reden über einen Umzug auf ein System, das Ihnen gehört – WordPress oder statisches HTML.",
+      "proof": [],
+      "cta": {
+        "label": "Reden wir über die Optionen",
         "href": "kontakt/"
       }
     }
