@@ -2496,12 +2496,23 @@ a:hover {
   max-width: none;
 }
 
-.faq-item.open .faq-answer {
+.faq-item.open .faq-answer,
+details.faq-item[open] .faq-answer {
   display: block;
 }
 
-.faq-question[aria-expanded="true"] {
+.faq-question[aria-expanded="true"],
+details.faq-item[open] > .faq-question {
   color: var(--color-accent);
+}
+
+details.faq-item > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+details.faq-item > summary::-webkit-details-marker {
+  display: none;
 }
 
 /* --- Contact Section --- */
