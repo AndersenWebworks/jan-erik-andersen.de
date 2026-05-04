@@ -1,180 +1,100 @@
-# JEA Website Umbau – Session-Handoff + Strategie
+# Session-Handoff: JEA Website – CSS-Cleanup (nach QA vom 04.05.2026)
 
-> Stand: 04.05.2026 | Vorherige Session: 3c0213ca (abgebrochen bei Write-Permission-Timeout)
+## Kontext
+Die Website jan-erik-andersen.de wurde am 04.05.2026 von One-Page auf Multi-Page-Architektur umgebaut. Dabei wurde viel HTML umstrukturiert, aber die style.css hat ~1.000 Zeilen totes CSS aus entfernten Sektionen mitgeschleppt. Ein vollständiges QA-Audit (3 parallele Agents: Content, CSS, A11y) hat die Probleme identifiziert. Alle funktionalen Bugs sind gefixt – dieser Handoff betrifft ausschließlich CSS-Bereinigung.
 
----
+## Aufgabe
+Totes CSS aus `style.css` entfernen. Doppelte Selektoren auflösen. Breakpoints vereinheitlichen. Keine funktionalen Änderungen, kein HTML, kein Content.
 
-## Strategische Marketing-Ausrichtung
+## Regeln
+- NUR style.css bearbeiten
+- Vor JEDER Löschung per Grep prüfen, ob die Klasse in einer aktiven HTML-Datei vorkommt (exclude archiv/, tests/)
+- Nach jeder größeren Löschung im Browser verifizieren (npx serve .)
+- Zwischenstände committen (alle 3-4 Löschblöcke)
+- Kein Git-Rollback, niemals
 
-### Akquise-Kanal-Entscheidung
+## Was gelöscht werden kann (QA-bestätigt, nicht in aktivem HTML)
 
-**Gewählt: SEO + KI-Sichtbarkeit als kombinierter Sog-Motor.**
-Sekundär: Empfehlungs-Bestätiger (passiv – Bestandskunden empfehlen, Interessenten verifizieren auf der Site).
+### Entfernte Sektionen (große Blöcke)
+- **Comparison Section** (~150 Zeilen ab ~3156): `.comparison-section`, `.comparison-grid`, `.comparison-card`, `.comparison-list`, `.comparison-proof`
+- **Price Example/Comparison** (~60 Zeilen ab ~3244): `.price-example`, `.price-example--large`, `.price-example-title`, `.price-comparison`, `.price-old`, `.price-new`, `.price-arrow`, `.price-savings`, `.price-note`, `.price-column`, `.price-label`
+- **Remote Section** (~12 Zeilen ab ~4797): `.remote-section`, `.remote-content`
+- **Trust Logos / Availability Badge** (~20 Zeilen): `.trust-logos`, `.trust-logo`, `.availability-badge`
+- **Alte Case-Study-Klassen** (~50 Zeilen ab ~3913): `.case-study-content`, `.case-study-details`, `.case-study-comparison`, `.case-study-link`
+- **Pricing Extras**: `.pricing-savings`, `.pricing-compare`
 
-**Ausgeschlossen:** LinkedIn, Social Media, Kaltakquise. Erik ist kein aktiver Social-Media-Nutzer, LinkedIn ist überfüllt, Kaltakquise verboten.
+### Alte Komponenten (nie in aktiven Seiten verwendet)
+- **Zero-Click Chart** (~96 Zeilen ab ~1188): alle `.zc-*` Klassen
+- **Evidence Cards** (~70 Zeilen ab ~1116): `.evidence-group`, `.evidence-item`, `.evidence-stat`, `.evidence-context`
+- **Shift Flow Diagrams** (~62 Zeilen ab ~1286): `.shift-timeline-flex`, `.shift-flow`, `.shift-row`
+- **Architecture Comparison** (~82 Zeilen ab ~1361): `.architecture-comparison-grid`, alle `.arch-*`
+- **Generative UI Flow** (~52 Zeilen ab ~1446): `.genui-flow-grid`, `.diagram-step`, alle `.step-*`
+- **Cluster Cards** (~67 Zeilen ab ~708): `.cluster-card`, `.cluster-grid`, `.cluster-number`, `.cluster-list`
+- **Old Project Grid** (~52 Zeilen ab ~826): `.project-grid`, `.project-tag`, `.project-desc`
+- **Mini Cards** (~45 Zeilen ab ~879): `.mini-card`, `.mini-card-grid`
+- **Feature Story / Domain List** (~46 Zeilen ab ~778)
+- **Homepage Intro** (~13 Zeilen ab ~995): `.homepage-intro`
+- **Old About Grid** (~33 Zeilen ab ~959): `.about-grid`, `.about-photo`
+- **Problem Statement** (~12 Zeilen ab ~700): `.problem-statement`
+- **GEO Hint** (~13 Zeilen ab ~1041): `.geo-hint`
 
-### Positionierung
+### Alte UI-Komponenten
+- **Hamburger / Mobile Menu** (~125 Zeilen ab ~506): `.header-hamburger`, `.header-mobile-menu`, `.darkmode-checkbox-mobile`
+- **Old BEM Buttons** (~15 Zeilen ab ~677): `.btn--primary`, `.btn--secondary`
+- **Funnel Spotlight** (~13 Zeilen ab ~1619): `.funnel-spotlight`
+- **Old standalone .testimonial** (~28 Zeilen ab ~3972): aktive Seiten nutzen `.testimonial-card`
+- **Old .clients-further / .client-tag** (~37 Zeilen ab ~4836): ersetzt durch `.client-logos-grid`
 
-**Drei Themen-Spitzen (Magnete für SEO/GEO):**
-1. **KI-Sichtbarkeit / GEO** – eigenes Feld, Eat-your-own-dog-food (Site als Eigenbeispiel), niedrige Konkurrenz
-2. **BFSG-Compliance** – regulatorischer Druck seit Juni 2025, klarer Suchanlass, niedrige Konkurrenz
-3. **Shops & Custom-Lösungen** – WooCommerce B2B, technisches Profil, klare Käufer-Intention
+### Alte Editorial-Komponenten (teilweise)
+- `.editorial-pullquote`, `.chapter-mark`, `.end-mark`, `.ornament`, `.footer-proof` – NUR löschen wenn Grep bestätigt, dass sie in keinem aktiven File vorkommen. Einige editorial-* Klassen WERDEN noch auf /ueber/ verwendet (z.B. `.editorial-portrait`, `.editorial-sidebar`, `.editorial-contact`)
 
-**Spitze ist Magnet, nicht Käfig:** Erik macht weiterhin alles (Webdesign, Frontend, PM), aber gefunden wird er über die drei Spitzen.
+## Doppelte Selektoren auflösen
 
-### Geschäftsmodell-Entscheidung
+Diese Selektoren existieren doppelt mit widersprüchlichen Werten. Die SPÄTERE Definition ist die aktive (CSS-Cascade). Die FRÜHERE kann gelöscht werden:
 
-**Ziel: Retainer-Anteil ausbauen.** Projektarbeit ist instabil, Retainer ist entspannt. Haushalt braucht nicht viel – durchlaufende Retainer decken Fixkosten, Projekte werden Bonus.
+| Selektor | Löschen (früher) | Behalten (später) |
+|----------|-------------------|-------------------|
+| `.btn` | ~Zeile 662 | ~Zeile 3026 |
+| `.hero` | ~Zeile 633 | ~Zeile 3690 |
+| `.project-card` + `:hover` | ~Zeile 833 | ~Zeile 3392 |
+| `.contact-methods` | ~Zeile 1056 | ~Zeile 3595 |
+| `.contact-method` | ~Zeile 1063 | ~Zeile 3602 |
+| `.process-step` | ~Zeile 933 | ~Zeile 4694 |
+| `.process-number` | ~Zeile 935 | ~Zeile 4701 |
+| `.testimonials-grid` | ~Zeile 3093 | ~Zeile 3966 |
+| `.testimonials-section` | ~Zeile 3088 | ~Zeile 4653 |
 
-**Retainer-Pakete (neu):**
-| Paket | Preis/Monat | Stunden | Geeignet für |
-|---|---|---|---|
-| Basis | 200 EUR | 2,5 h | Einfache Website, Pflege, kleine Anpassungen |
-| Standard | 400 EUR | 5 h | Mittlere Website, regelmäßige Erweiterungen, SEO-Pflege |
-| Shop | 800 EUR | 10 h | Online-Shop oder Custom-Lösung, technische Weiterentwicklung |
+**VORSICHT**: Nur den alten Block löschen, NICHT den neuen. Bei `.btn` darauf achten, dass die alte Definition `.btn` UND `.btn--primary`/`.btn--secondary` umfasst – die BEM-Varianten können komplett weg, die Basis-`.btn` nur wenn sie im alten Block steht.
 
-Zielmarke: 5 Kunden x 400 EUR = 2.000 EUR/Monat recurring in 12 Monaten.
+## Breakpoints vereinheitlichen
 
-Mini-Retainer (15-80 EUR) laufen im Bestand weiter, werden aber nicht aktiv vermarktet.
+Zwei "Mobile"-Breakpoints koexistieren:
+- `max-width: 600px` (5 Vorkommen, altes System)
+- `max-width: 640px` (2 Vorkommen, neues System)
 
-### Tonalitäts-Regeln (Verbotsliste)
+Entscheidung: auf **640px** vereinheitlichen. Die 600px-Regeln auf 640px ändern – ABER nur nach Prüfung, dass keine Konflikte mit bestehenden 640px-Regeln entstehen (gleiche Selektoren zusammenführen).
 
-- Kein Agentur-Bashing (keine Comparison-Sections, keine roten X, keine "typische Agentur")
-- Keine "Sie sparen X %"-Sprache (Discounter-Vibe, zieht Preis-Käufer an)
-- Keine Verfügbarkeits-Badges ("Aktuell verfügbar" wirkt unter Niveau)
-- Keine Arzt/Pflege-Metaphern (Hausarzt, Betreuer, Pflege)
-- Keine Verteidigungen gegen Einwände, die keiner gestellt hat
-- Keine Trust-Logos als Text-Pillen (echte SVGs oder weglassen)
-- Kein "Kunden seit 2018" (Datenbasis hält nicht stand)
-- Stating, nicht Pitching. Expertise zeigen, nicht bewerben.
+Außerdem: `.footer-content` (um Zeile 1090) hat doppelte `flex-wrap` und `gap` Properties – Duplikate entfernen.
 
-### Funnel-Architektur
+## Erwartetes Ergebnis
+- style.css ~1.000 Zeilen kürzer
+- Keine doppelten Selektoren mehr
+- Einheitliche Breakpoints: 1024 / 768 / 640 / 480
+- Keine verwaisten Klassen für entfernte HTML-Sektionen
+- Visuell identisch auf allen 26 aktiven Seiten (vor/nach Vergleich)
 
-Der Funnel ist ein echtes Beratungstool (50+ Knoten), kein stumpfer Quiz-Funnel. Er empfiehlt auch gegen den eigenen Verkauf ("Standard ist Shopify oft besser").
+## Verifikation
+Nach dem Cleanup alle Seiten im Browser prüfen (Desktop + Mobile):
+- / (Homepage)
+- /leistungen/ (+ 3 Landingpages)
+- /projekte/
+- /preise/
+- /faq/
+- /ueber/
+- /kontakt/
+- Jeweils auch /en/ Pendants
+- Dark Mode auf allen Seiten
+- Mobile (< 768px) auf allen Seiten
 
-**Technische Lösung:**
-- Desktop: Modal via JS (800ms Delay nach Pageload), localStorage Dismiss-Memory
-- Mobile: Block im Flow (kein Modal – Google Interstitial-Penalty vermeiden)
-- `funnel-active` Klasse wird NUR per JS gesetzt, nie statisch im HTML
-- Bots ohne JS sehen den vollen statischen Content (H1, Lead, alles)
-
-### Roundtable-Erkenntnisse (übernommen vs. verworfen)
-
-**Übernommen:**
-- Verbotsliste Tonalität
-- "Was ich löse"-Pattern (Problem → Lösung → Ergebnis) statt Feature-Listen
-- Differenzierte CTAs je Seitenkontext
-- FAQ-Ausbau für KI-Zitierbarkeit
-- Kontaktseite-Ausbau (FAQ + Prozess + Preistransparenz)
-- Mini-Stories für Projekte
-
-**Verworfen:**
-- "Web-Betreuer" als Selbstbezeichnung (kein Suchbegriff, semantisch schwach)
-- Hausarzt-Analogie (Erik-Veto + semantisches Risiko)
-- Retainer-Pyramide 15-40 / 80-200 / 400-800 (passt nicht zur Realität)
-- "Kunden seit 2018" als zentrales Trust-Signal (zu viel Fluktuation)
-- Funnel als Above-Fold-Hero ohne statische Schicht (SEO-Risiko)
-- "73 % der B2B-Einkäufer recherchieren mit KI" (Quelle ungeprüft)
-
----
-
-## Seitenkarte (Zielzustand)
-
-| Pfad | Zweck | Status |
-|---|---|---|
-| `/` | Akquise-Magnet, Funnel, Themen-Verteiler | teilweise umgesetzt |
-| `/leistungen/` | Pillar-Page (3 Themen oben + 4 weitere unten) | umgebaut |
-| `/leistungen/ki-sichtbarkeit/` | Themen-Spitze 1 (NEU) | FEHLT |
-| `/leistungen/bfsg-barrierefreiheit/` | Themen-Spitze 2 (NEU) | FEHLT |
-| `/leistungen/shops-und-custom/` | Themen-Spitze 3 (NEU) | FEHLT |
-| `/preise/` | Projekt-Pakete + Retainer-Pakete | noch nicht überarbeitet |
-| `/projekte/` | 6-10 echte Cases mit Ergebnis-Zahl | noch nicht überarbeitet |
-| `/ueber/` | Werdegang, Person | Remote-Block raus (erledigt) |
-| `/faq/` | 15-20 Fragen für KI-Zitierbarkeit | noch nicht ausgebaut |
-| `/kontakt/` | Drei Wege (Mail / Anruf / Funnel-Selbstauskunft) | noch nicht überarbeitet |
-
-## Home-Sektionen (Zielzustand)
-
-1. **Hero** – H1 + Lead (ohne Badge, ohne Trust-Pillen) ✅
-2. **Funnel** – JS-Modal Desktop / Block Mobile ✅
-3. **Drei Themen-Anker** – KI / BFSG / Shops als Cards ✅
-4. **Stimmen** – Testimonials mit Schema.org Review-Markup ✅
-5. **Kunden** – alle ~20 Logos mit Links zu Live-Sites ❌ FEHLT
-6. **So arbeite ich** – 4 Schritte (Bashing aus Schritt 3 raus) ❌ TODO
-7. **Pricing-Teaser** – Projekt + Retainer, Link zu /preise ❌ TODO
-8. **FAQ-Top-7** – mit FAQPage-Schema ❌ TODO
-9. **Kontakt** – drei Wege ❌ TODO
-
----
-
-## Umsetzungs-Stand (04.05.2026, uncommitted)
-
-### Erledigt (in Working Tree)
-
-**index.html:**
-- H1: "Damit Ihre Website auch gefunden wird, wenn keiner mehr googelt."
-- Lead: KI + BFSG + direkter Kontakt
-- `<title>` + og-Tags angepasst
-- Verfügbarkeits-Badge raus
-- Stats "80 EUR statt 150 EUR" → "20+ Live-Websites"
-- Trust-Section (Text-Pillen) komplett raus
-- `class="funnel-active"` aus `<html>` entfernt
-- Funnel von vor Hero nach nach Hero verschoben
-- 5 alte Service-Items → 3 Themen-Anker (KI / BFSG / Shops) mit Beleg-Boxen
-- Testimonials nach oben verschoben + Schema.org Review-Markup
-- Comparison-Section (#warum) komplett raus
-- Remote-Defensiv-Section (#remote) komplett raus
-- Tote Anker gefixt (3 Stellen)
-
-**funnel.js:**
-- Mobile-Detection (≤768px) → `funnel-inline`, kein Modal
-- Desktop: 800ms Delay vor Modal
-
-**style.css:**
-- Funnel Desktop/Mobile Unterscheidung
-- `.service-cta-row` + `.btn-text` Styles
-- Testimonial-Styles
-
-**leistungen/index.html:**
-- Hero aktualisiert
-- Neue Themen-Sektion oben (KI / BFSG / Shops → Links zu Landingpages)
-- Alte Items darunter als "Weitere Leistungen" (Online-Shops raus, Doppelung)
-
-### Offen (nächste Schritte, priorisiert)
-
-**Priorität 1 – Tote Links fixen:**
-1. `/leistungen/ki-sichtbarkeit/index.html` anlegen
-2. `/leistungen/bfsg-barrierefreiheit/index.html` anlegen
-3. `/leistungen/shops-und-custom/index.html` anlegen
-
-**Priorität 2 – Home weiter:**
-4. Kunden-Sektion (alle Logos, schwarze SVGs, Links zu Live-Sites)
-5. Prozess-Sektion entschärfen (Bashing raus)
-6. Pricing-Teaser mit Retainer-Verweis
-
-**Priorität 3 – Subpages:**
-7. `/preise/` – Sparen-Prozente raus, Retainer-Tabelle rein
-8. `/faq/` – auf 15-20 Fragen ausbauen
-9. `/projekte/` – 6-10 Cases mit Ergebnis-Zahlen
-
-**Priorität 4 – Technik:**
-10. `aggregateRating` mit 2 Reviews raus
-11. `llms.txt` im Root
-12. Sitemap.xml + robots.txt (3 neue URLs, Crawler-Allow)
-13. Footer-Bug fixen (kaputte Impressum/Datenschutz-Links auf `/de/`)
-
-**Priorität 5 – Aufräumen:**
-14. `v1/`, `redesign/`, Test-Files → `archiv/`
-
----
-
-## Arbeitsanweisungen für Folge-Session
-
-- Erik hat gesagt: "mach weiter, ich vertrau dir" – Umsetzung mit Verifikation, keine Detaildiskussion
-- Vor jeder Behauptung "existiert/funktioniert": VERIFIZIEREN via Tool
-- Themen-Landingpages: Template aus existierenden Pages ableiten (gleicher Header/Footer/Nav)
-- Jede Page braucht: H1, Substanz-Text (Problem → Lösung → Beleg), Service-Schema, CTA
-- Schwarze SVGs liegen in `logos/` – alle verwenden
-- Footer-Bug (kaputte `/de/`-Links): bewusst belassen, konsistent in neuen Pages, Fix als eigener Task
-- Kein em-dash (—), immer Halbgeviertstrich (–) mit Leerzeichen
-- Nach substantiellen Änderungen: Commit + Push anbieten
+## Repo
+`C:/Andersen/Webworks/GitHub/Webworks/jan-erik-andersen.de`

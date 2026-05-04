@@ -4593,6 +4593,7 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
   display: grid;
   grid-template-columns: 1fr 280px;
   gap: var(--space-2xl);
+  align-items: start;
 }
 
 .case-study-text p {
