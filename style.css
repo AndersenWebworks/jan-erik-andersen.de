@@ -4420,7 +4420,7 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
 
   .editorial-portrait {
     width: 150px;
-    height: 150px;
+    height: auto;
   }
 }
 
