@@ -4594,7 +4594,10 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
   background: var(--color-bg-alt);
   padding: var(--space-lg);
   border-radius: 8px;
-  height: fit-content;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .case-study-sidebar dl {
