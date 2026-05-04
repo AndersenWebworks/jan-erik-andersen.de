@@ -3707,18 +3707,31 @@ a:hover {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: 12px;
-  padding: var(--space-xl);
+  padding: 0;
+  overflow: hidden;
 }
 
 .portrait {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 4/3;
   object-fit: cover;
-  border-radius: 50%;
-  margin-bottom: var(--space-lg);
+  object-position: center top;
+  display: block;
+}
+
+.hero-sidebar-title,
+.hero-sidebar-subtitle,
+.stats-grid {
+  padding-left: var(--space-xl);
+  padding-right: var(--space-xl);
+}
+
+.stats-grid:last-child {
+  padding-bottom: var(--space-xl);
 }
 
 .hero-sidebar-title {
+  padding-top: var(--space-lg);
   font-family: var(--font-serif);
   font-size: var(--text-lg);
   font-weight: 600;
