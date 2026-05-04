@@ -469,6 +469,7 @@ body:has(.darkmode-checkbox-mobile:checked) {
   --color-accent-light: rgba(224, 112, 96, 0.1);
   --color-accent-glow: rgba(224, 112, 96, 0.2);
   --color-accent-shadow: rgba(224, 112, 96, 0.12);
+  --color-bg-card: #2A2418;
   --color-border: #3A3028;
   --color-border-dark: #5A5040;
   --color-white: #E8E3D8;
@@ -531,8 +532,8 @@ body:has(.darkmode-checkbox-mobile:checked) {
     width: 40px;
     height: 40px;
     padding: 0;
-    background: none;
-    border: 1px solid var(--color-border);
+    background: var(--color-bg-card);
+    border: 1px solid var(--color-border-dark);
     border-radius: 8px;
     cursor: pointer;
     order: 10;
@@ -569,7 +570,7 @@ body:has(.darkmode-checkbox-mobile:checked) {
     display: none;
     order: 10;
     width: 100%;
-    padding: var(--space-sm) 0 var(--space-xs);
+    padding: var(--space-md) var(--space-lg) var(--space-sm);
     border-top: 1px solid var(--color-border);
     border-bottom: 1px solid var(--color-border);
     background: var(--color-bg);
@@ -588,7 +589,7 @@ body:has(.darkmode-checkbox-mobile:checked) {
 
   .header-mobile-menu nav a {
     display: block;
-    padding: var(--space-sm) 0;
+    padding: var(--space-sm) var(--space-xs);
     font-family: var(--font-sans);
     font-size: var(--text-sm);
     text-transform: uppercase;
@@ -3398,6 +3399,7 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
   height: auto;
   margin: calc(-1 * var(--space-xl)) calc(-1 * var(--space-xl)) var(--space-lg);
   border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid var(--color-border);
   display: block;
 }
 
