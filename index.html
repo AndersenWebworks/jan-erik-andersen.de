@@ -10,8 +10,8 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jan-erik-andersen.de/">
-  <meta property="og:title" content="Jan-Erik Andersen – Damit Ihre Website auch gefunden wird, wenn keiner mehr googelt.">
-  <meta property="og:description" content="Websites, die in Google ranken und in ChatGPT, Perplexity und Claude zitiert werden. Strukturierte Daten, BFSG-konform, ohne Agentur-Overhead. 27 Jahre Webentwicklung, seit 2010 selbstständig.">
+  <meta property="og:title" content="Jan-Erik Andersen – Webentwicklung, Shops & Betreuung seit 1999">
+  <meta property="og:description" content="Die Kompetenz einer Agentur, ohne den Ballast. Websites, Shops und Betreuung – direkt mit dem Entwickler. Festpreise, 100 % remote, volle Verantwortung.">
   <meta property="og:locale" content="de_DE">
   <meta property="og:image" content="https://jan-erik-andersen.de/portrait.webp">
 
@@ -19,7 +19,7 @@
   <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/">
   <link rel="alternate" hreflang="x-default" href="https://jan-erik-andersen.de/">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <title>Jan-Erik Andersen – Damit Ihre Website auch gefunden wird, wenn keiner mehr googelt.</title>
+  <title>Jan-Erik Andersen – Webentwicklung, Shops & Betreuung seit 1999</title>
 
   <script type="application/ld+json">
   {
@@ -82,7 +82,7 @@
         <span class="header-brand-surname">Andersen</span>
       </a>
       <nav class="header-nav" id="header-nav">
-        <a href="leistungen/">Leistungen</a>
+        <div class="header-nav-dropdown"><a href="leistungen/">Leistungen</a><div class="header-nav-dropdown-menu"><a href="leistungen/ki-sichtbarkeit/">KI-Sichtbarkeit</a><a href="leistungen/bfsg-barrierefreiheit/">BFSG &amp; Barrierefreiheit</a><a href="leistungen/shops-und-custom/">Shops &amp; Custom</a></div></div>
         <a href="projekte/">Projekte</a>
         <a href="preise/">Preise</a>
         <a href="faq/">FAQ</a>
@@ -116,6 +116,9 @@
       <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav>
           <a href="leistungen/">Leistungen</a>
+          <a href="leistungen/ki-sichtbarkeit/" class="header-mobile-sub">KI-Sichtbarkeit</a>
+          <a href="leistungen/bfsg-barrierefreiheit/" class="header-mobile-sub">BFSG &amp; Barrierefreiheit</a>
+          <a href="leistungen/shops-und-custom/" class="header-mobile-sub">Shops &amp; Custom</a>
           <a href="projekte/">Projekte</a>
           <a href="preise/">Preise</a>
           <a href="faq/">FAQ</a>
@@ -153,10 +156,12 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
             Nochmal von vorn
           </button>
-          <h1>Damit Ihre Website auch gefunden wird,<br>wenn keiner mehr googelt.</h1>
-          <p class="hero-lead">Ich baue Websites, die in Google ranken und in ChatGPT, Perplexity und Claude zitiert werden. Strukturierte Daten, BFSG-konform, ohne Agentur-Overhead. 27 Jahre Webentwicklung, seit 2010 selbstständig. Sie sprechen direkt mit dem Entwickler.</p>
+          <h1 class="hero-typewriter" aria-label="Die Kompetenz einer Agentur. Ohne den Ballast.">
+            <span class="hero-typewriter-text">Die Kompetenz einer Agentur. Ohne den Ballast.</span><span class="typewriter-cursor" aria-hidden="true">|</span>
+          </h1>
+          <p class="hero-lead">Websites, Shops und Betreuung – seit 1999, direkt mit dem Entwickler. Festpreise, 100 % remote, volle Verantwortung.</p>
           <div class="hero-ctas">
-            <a href="#kontakt" class="btn btn-primary">Jetzt Projekt starten</a>
+            <a href="#kontakt" class="btn btn-primary">Erstgespräch vereinbaren</a>
             <a href="#preise" class="btn btn-secondary">Preise ansehen</a>
           </div>
         </div>
@@ -199,7 +204,7 @@
     </section>
 
     <!-- ===== PROJEKTE (Beweis zuerst) ===== -->
-    <section class="projects-section" id="projekte">
+    <section class="projects-section section--alt" id="projekte">
       <div class="section-inner container">
         <div class="section-header">
           <h2>Ausgewählte Projekte</h2>
@@ -227,17 +232,17 @@
             <a href="https://runden-group.eu" class="project-link" target="_blank" rel="noopener">runden-group.eu →</a>
           </article>
           <article class="project-card">
-            <img src="screenshots/scheja-partners.png" alt="Screenshot scheja-partners.de" class="project-card-screenshot" width="1280" height="800" loading="lazy">
+            <img src="screenshots/wbg-pooling.png" alt="Screenshot wbg-pooling.eu" class="project-card-screenshot" width="1280" height="800" loading="lazy">
             <div class="project-tags">
-              <span class="tag">Recht / Datenschutz</span>
-              <span class="tag">mehrsprachig</span>
+              <span class="tag">Logistik / Kreislaufwirtschaft</span>
+              <span class="tag">Custom Plugin</span>
             </div>
-            <h3>Scheja &amp; Partner</h3>
-            <p>Kanzlei-Website mit Software-Produktseiten. 30 Anwälte, zwei Sprachen, strukturierte Daten für KI-Sichtbarkeit.</p>
-            <a href="https://scheja-partners.de" class="project-link" target="_blank" rel="noopener">scheja-partners.de →</a>
+            <h3>WBG Pooling</h3>
+            <p>Industrie-Portal mit 360°-Produktansichten, eigenem Sales Center (Custom-Plugin WebDeck) und Salesforce-Anbindung.</p>
+            <a href="https://wbg-pooling.eu" class="project-link" target="_blank" rel="noopener">wbg-pooling.eu →</a>
           </article>
         </div>
-        <p class="section-cta"><a href="projekte/" class="btn btn-secondary">Ausführliche Case Studies lesen</a> <a href="#kontakt" class="btn btn-primary">Projekt besprechen</a></p>
+        <p class="section-cta"><a href="#kontakt" class="btn btn-primary">Projekt besprechen</a> <a href="projekte/" class="btn btn-secondary">Ausführliche Case Studies lesen</a></p>
       </div>
     </section>
 
@@ -248,8 +253,9 @@
           <h2>Drei Themen, in denen ich tiefer stecke als die meisten</h2>
           <p>Webentwicklung mache ich seit 1999. Die folgenden drei Bereiche sind die, in denen ich gerade den Unterschied mache – und für die Sie wahrscheinlich hier sind.</p>
         </div>
+        <div class="services-layout">
         <div class="services-grid">
-          <div class="service-item">
+          <div class="service-item" id="svc-ki">
             <div class="service-number">01</div>
             <div class="service-content">
               <h3>KI-Sichtbarkeit</h3>
@@ -258,7 +264,7 @@
               <p class="service-cta-row"><a href="leistungen/ki-sichtbarkeit/" class="btn-text">Mehr zu KI-Sichtbarkeit →</a></p>
             </div>
           </div>
-          <div class="service-item">
+          <div class="service-item" id="svc-bfsg">
             <div class="service-number">02</div>
             <div class="service-content">
               <h3>BFSG-Compliance &amp; Barrierefreiheit</h3>
@@ -267,7 +273,7 @@
               <p class="service-cta-row"><a href="leistungen/bfsg-barrierefreiheit/" class="btn-text">Mehr zu BFSG &amp; WCAG →</a></p>
             </div>
           </div>
-          <div class="service-item">
+          <div class="service-item" id="svc-shops">
             <div class="service-number">03</div>
             <div class="service-content">
               <h3>Shops &amp; Custom-Lösungen</h3>
@@ -277,6 +283,19 @@
             </div>
           </div>
         </div>
+        <nav class="services-quicknav">
+          <h3>Schwerpunkte</h3>
+          <a href="#svc-ki">KI-Sichtbarkeit</a>
+          <a href="#svc-bfsg">BFSG &amp; Barrierefreiheit</a>
+          <a href="#svc-shops">Shops &amp; Custom</a>
+          <h3>Außerdem</h3>
+          <a href="leistungen/">Firmenwebsites</a>
+          <a href="leistungen/">Frontend-Entwicklung</a>
+          <a href="leistungen/">Projektmanagement</a>
+          <a href="leistungen/">Website-Analyse</a>
+          <a href="leistungen/" class="services-quicknav-all">Alle Leistungen →</a>
+        </nav>
+        </div>
         <div class="standards-strip">
           <div class="standard-item"><strong>Standard bei jedem Projekt:</strong></div>
           <div class="standard-item">DSGVO-konform</div>
@@ -285,16 +304,16 @@
           <div class="standard-item">Performance-optimiert</div>
           <div class="standard-item">Lektorat (Annemarie Andersen)</div>
         </div>
-        <p class="section-cta"><a href="leistungen/">Alle Leistungen</a> · <a href="#projekte">Projekte im Detail</a> · <a href="faq/">Häufige Fragen</a></p>
+        <p class="section-cta"><a href="leistungen/" class="btn btn-secondary">Alle Leistungen</a> <span class="section-cta-or">oder <a href="#projekte">Projekte ansehen</a></span></p>
       </div>
     </section>
 
     <!-- ===== STIMMEN / TESTIMONIALS ===== -->
-    <section class="testimonials-section" id="stimmen">
+    <section class="testimonials-section section--alt" id="stimmen">
       <div class="section-inner container">
         <div class="section-header">
           <h2>Was Kunden sagen</h2>
-          <p class="section-subtitle">Zwei verifizierte Stimmen direkt von Google. Eine zur Barrierefreiheit, eine zur Langzeit-Zusammenarbeit über mehrere Jahre.</p>
+          <p class="section-subtitle">Verifizierte Stimmen von Google – ungekürzt, unbearbeitet.</p>
         </div>
         <div class="testimonials-grid">
           <figure class="testimonial-card" itemscope itemtype="https://schema.org/Review">
@@ -315,13 +334,13 @@
               „Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich, mit Andersen Webworks seit nun mehreren Jahren einen zuverlässigen Partner gefunden zu haben. Professionelles Webdesign, das mich immer wieder überrascht. Meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff. So setzt man sich von der Konkurrenz ab!"
             </blockquote>
             <figcaption>
-              <span itemprop="author" itemscope itemtype="https://schema.org/Person"><strong itemprop="name">Corvin Jaedicke</strong></span>, <span itemprop="itemReviewed" itemscope itemtype="https://schema.org/Organization"><a itemprop="url" href="https://aicoustics.com" target="_blank" rel="noopener"><span itemprop="name">ai-coustics</span></a></span>
+              <span itemprop="author" itemscope itemtype="https://schema.org/Person"><strong itemprop="name">Corvin Jaedicke</strong></span>, <span itemprop="itemReviewed" itemscope itemtype="https://schema.org/Organization"><a itemprop="url" href="https://ai-coustics.com" target="_blank" rel="noopener"><span itemprop="name">ai-coustics</span></a></span>
               <meta itemprop="reviewRating" content="5">
               <span class="testimonial-source">Google-Bewertung</span>
             </figcaption>
           </figure>
         </div>
-        <p class="section-cta"><a href="https://www.google.com/search?q=Andersen+Webworks+Plau+am+See" target="_blank" rel="noopener">Bewertungen auf Google ansehen →</a> · <a href="#kontakt">Erstgespräch vereinbaren</a></p>
+        <p class="section-cta"><a href="#kontakt" class="btn btn-primary">Erstgespräch vereinbaren</a> <a href="https://www.google.com/search?q=Andersen+Webworks+Plau+am+See" target="_blank" rel="noopener" class="btn-text">Bewertungen auf Google ansehen →</a></p>
       </div>
     </section>
 
@@ -358,42 +377,36 @@
             <div class="process-number">4</div>
             <div class="process-content">
               <h3>Launch & Betreuung</h3>
-              <p>Seite geht online. Danach bin ich weiterhin da – für Updates, Änderungen, Probleme. Oder saubere Übergabe: Sie sind nie an mich gebunden. <a href="preise/">Betreuungs-Pakete ansehen →</a></p>
+              <p>Seite geht online. Danach bin ich weiterhin da – für Updates, Änderungen, Probleme. Oder saubere Übergabe: Sie sind nie an mich gebunden. <a href="preise/" class="btn-text">Betreuungs-Pakete ansehen →</a></p>
             </div>
           </div>
         </div>
-        <p class="section-cta"><a href="#kontakt" class="btn btn-primary">Jetzt Projekt starten</a> <span class="section-cta-or">oder <a href="faq/">häufige Fragen lesen</a></span></p>
+        <p class="section-cta"><a href="#kontakt" class="btn btn-primary">Erstgespräch vereinbaren</a> <span class="section-cta-or">oder <a href="faq/" class="btn-text">häufige Fragen lesen →</a></span></p>
       </div>
     </section>
 
     <!-- ===== ABOUT (Executive Summary) ===== -->
-    <section class="about-section" id="ueber">
+    <section class="about-section section--alt" id="ueber">
       <div class="section-inner container">
         <div class="section-header">
           <h2>Wer dahinter steckt</h2>
         </div>
         <div class="about-content">
+          <img src="portrait.webp" alt="Jan-Erik Andersen" class="about-portrait" width="200" height="300" loading="lazy">
           <div class="about-text">
-            <p class="about-lead">Ich habe bei Agenturen gearbeitet. Ich weiß, wie der Laden von innen aussieht. Deshalb mache ich es anders.</p>
-            <p>Mein Hintergrund: Multimedia Design, dann drei Jahre QA in der Games-Branche (Goodgame Studios, FISHLABS, Daedalic) – professionell Fehler finden, bevor Nutzer sie sehen. 2017 bei YOOtheme, dem Hersteller meines Page Builders – ich habe die Dokumentation mitgeschrieben und arbeite seit 9 Jahren täglich damit. Seit 2023 ausschließlich selbstständig.</p>
-            <p>Meine Frau <a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie</a> ist Lektorin. Jeder Text, der über mich rausgeht, ist professionell geprüft. Das ist kein Bonus – das gehört dazu.</p>
+            <p class="about-lead">Sie sprechen mit dem Entwickler. Und der macht auch die Arbeit.</p>
+            <p>Kein Account Manager, kein Junior im Hintergrund. Ich habe bei Agenturen gearbeitet und weiß, wie viel Zeit dort in Abstimmung und Overhead verschwindet. Deshalb mache ich es anders: ein Ansprechpartner, kurze Wege, direkte Umsetzung.</p>
+            <p>Texte werden von meiner Frau <a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie</a> lektoriert – sie ist professionelle Korrektorin. Das ist kein Bonus, das gehört dazu.</p>
             <p><a href="ueber/" class="btn-text">Vollständiger Werdegang →</a></p>
           </div>
-          <div class="about-facts">
-            <dl>
-              <dt>Standort</dt>
-              <dd>Plau am See, Mecklenburg-Vorpommern</dd>
-              <dt>Arbeitsweise</dt>
-              <dd>100 % remote, deutschlandweit</dd>
-              <dt>Webprojekte seit</dt>
-              <dd>1999</dd>
-              <dt>Selbstständig seit</dt>
-              <dd>2010</dd>
-              <dt>Schwerpunkte</dt>
-              <dd>WordPress, WooCommerce, YOOtheme Pro, statisches HTML</dd>
-            </dl>
-          </div>
         </div>
+        <dl class="about-facts">
+          <div class="about-fact"><dt>Standort</dt><dd>Plau am See, MV</dd></div>
+          <div class="about-fact"><dt>Arbeitsweise</dt><dd>100 % remote</dd></div>
+          <div class="about-fact"><dt>Webprojekte seit</dt><dd>1999</dd></div>
+          <div class="about-fact"><dt>Selbstständig seit</dt><dd>2010</dd></div>
+          <div class="about-fact"><dt>Schwerpunkte</dt><dd>WordPress, WooCommerce, YOOtheme Pro</dd></div>
+        </dl>
       </div>
     </section>
 
@@ -404,7 +417,9 @@
           <h2>Was es kostet</h2>
           <p class="section-subtitle">Festpreise nach Erstgespräch. Sie wissen vorher, was Sie zahlen.</p>
         </div>
-        <div class="pricing-grid">
+
+        <h3 class="pricing-group-title">Projekte</h3>
+        <div class="pricing-grid pricing-grid-projects">
           <div class="pricing-card">
             <div class="pricing-header">
               <div class="pricing-type">Website</div>
@@ -412,42 +427,48 @@
             </div>
             <p class="pricing-desc">Firmenwebsite, 5–10 Seiten · typisch 2.400–5.000 €</p>
           </div>
-          <div class="pricing-card featured">
+          <div class="pricing-card">
             <div class="pricing-header">
               <div class="pricing-type">Shop</div>
               <div class="pricing-price">ab 4.800 € <span>Festpreis</span></div>
             </div>
             <p class="pricing-desc">WooCommerce, bis 50 Produkte · typisch 4.800–9.000 €</p>
           </div>
+        </div>
+
+        <h3 class="pricing-group-title">Betreuung</h3>
+        <p class="pricing-group-lead">Die meisten Websites sterben nach dem Launch – niemand spielt Updates ein, niemand reagiert wenn was kaputtgeht. Ich betreue aktuell 20+ Websites laufend. Monatlich kündbar, keine Mindestlaufzeit.</p>
+        <div class="pricing-grid pricing-grid-retainer">
           <div class="pricing-card">
             <div class="pricing-header">
-              <div class="pricing-type">Betreuung Basis</div>
+              <div class="pricing-type">Basis</div>
               <div class="pricing-price">200 € <span>/Monat</span></div>
             </div>
             <p class="pricing-desc">2,5h inkl. · Updates, Sicherheit, Monitoring</p>
           </div>
-          <div class="pricing-card">
+          <div class="pricing-card featured">
             <div class="pricing-header">
-              <div class="pricing-type">Betreuung Standard</div>
+              <div class="pricing-type">Standard</div>
               <div class="pricing-price">400 € <span>/Monat</span></div>
             </div>
             <p class="pricing-desc">5h inkl. · Content, Performance, schnelle Reaktion</p>
           </div>
           <div class="pricing-card">
             <div class="pricing-header">
-              <div class="pricing-type">Betreuung Shop</div>
+              <div class="pricing-type">Shop</div>
               <div class="pricing-price">800 € <span>/Monat</span></div>
             </div>
             <p class="pricing-desc">10h inkl. · WooCommerce, neue Features, Prio-Support</p>
           </div>
         </div>
-        <p class="pricing-note">Alle Preise netto, monatlich kündbar. Stundensatz bei offenem Umfang: 80 €/h netto. <a href="preise/">Details, Analyse-Paket &amp; "Wofür Sie nicht zahlen" →</a></p>
+
+        <p class="pricing-note">Alle Preise netto. Stundensatz bei offenem Umfang: 80 €/h netto. <a href="preise/" class="btn-text">Details, Analyse-Paket &amp; "Wofür Sie nicht zahlen" →</a></p>
         <p class="section-cta"><a href="#kontakt" class="btn btn-primary">Kostenloses Erstgespräch vereinbaren</a></p>
       </div>
     </section>
 
     <!-- ===== FAQ (Executive Summary – 4 Kernfragen, vollständig beantwortet) ===== -->
-    <section class="faq-section" id="faq">
+    <section class="faq-section section--alt" id="faq">
       <div class="section-inner container">
         <div class="section-header">
           <h2>Häufige Fragen</h2>
@@ -479,7 +500,7 @@
             </div>
           </div>
         </div>
-        <p class="section-cta"><a href="faq/" class="btn btn-secondary">Alle 20 Fragen und Antworten →</a></p>
+        <p class="section-cta"><a href="faq/" class="btn btn-secondary">Alle 20 Fragen und Antworten</a></p>
       </div>
     </section>
 
@@ -585,6 +606,129 @@
           mobileDm.checked = cb.checked;
         });
       }
+    }
+  })();
+  </script>
+  <script>
+  (function() {
+    var claims = [
+      'Die Kompetenz einer Agentur. Ohne den Ballast.',
+      'Damit Ihre Website auch gefunden wird, wenn keiner mehr googelt.',
+      'Ein Anruf. Ein Entwickler. Kein Briefing-Ping-Pong.',
+      'Websites, Shops und jemand, der danach noch rangeht.',
+      'BFSG-Deadline verpasst? Lässt sich nachrüsten.'
+    ];
+    var el = document.querySelector('.hero-typewriter-text');
+    var cursor = document.querySelector('.hero-typewriter .typewriter-cursor');
+    var h1 = document.querySelector('.hero-typewriter');
+    if (!el || !cursor) return;
+
+    el.textContent = '';
+    var idx = 0;
+    var charIdx = 0;
+    var holdTime = 3500;
+    var fadeDuration = 500;
+    var pauseBeforeNext = 300;
+
+    function typeSpeed() {
+      var ch = claims[idx][charIdx - 1];
+      if (ch === '.' || ch === '?' || ch === '!') return 100;
+      if (ch === ',') return 70;
+      return 30 + Math.random() * 20;
+    }
+
+    function typeNext() {
+      if (charIdx <= claims[idx].length) {
+        el.textContent = claims[idx].slice(0, charIdx);
+        charIdx++;
+        setTimeout(typeNext, typeSpeed());
+      } else {
+        h1.setAttribute('aria-label', claims[idx]);
+        setTimeout(startFade, holdTime);
+      }
+    }
+
+    function startFade() {
+      el.style.opacity = '0';
+      setTimeout(function() {
+        idx = (idx + 1) % claims.length;
+        charIdx = 0;
+        el.textContent = '';
+        setTimeout(function() {
+          el.style.opacity = '1';
+          typeNext();
+        }, pauseBeforeNext);
+      }, fadeDuration);
+    }
+
+    typeNext();
+  })();
+  </script>
+  <script>
+  (function() {
+    var sections = '.hero, .projects-section, .services-section, .testimonials-section, .process-section, .pricing-section, .contact-section, .services-grid, .section-header, .services-intro';
+
+    function typeHeading(h2) {
+      if (h2.dataset.typed) return;
+      h2.dataset.typed = '1';
+      var text = h2.textContent;
+      h2.textContent = '';
+      var cursor = document.createElement('span');
+      cursor.className = 'heading-typewriter-cursor';
+      cursor.textContent = '|';
+      h2.appendChild(cursor);
+      var i = 0;
+      function tick() {
+        if (i < text.length) {
+          h2.insertBefore(document.createTextNode(text[i]), cursor);
+          i++;
+          var ch = text[i - 1];
+          var delay = (ch === '.' || ch === '?' || ch === '!') ? 120 : (ch === ',' ? 80 : 35 + Math.random() * 20);
+          setTimeout(tick, delay);
+        } else {
+          setTimeout(function() { cursor.classList.add('done'); }, 800);
+        }
+      }
+      tick();
+    }
+
+    function startObserver() {
+      var sectionObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            sectionObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll(sections).forEach(function(el) {
+        if (!el.classList.contains('is-visible')) sectionObs.observe(el);
+      });
+
+      var headingObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            headingObs.unobserve(entry.target);
+            typeHeading(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+        headingObs.observe(h2);
+      });
+    }
+
+    var funnelActive = document.documentElement.classList.contains('funnel-active');
+    if (funnelActive) {
+      var mo = new MutationObserver(function() {
+        if (!document.documentElement.classList.contains('funnel-active')) {
+          mo.disconnect();
+          requestAnimationFrame(function() { requestAnimationFrame(startObserver); });
+        }
+      });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    } else {
+      requestAnimationFrame(function() { requestAnimationFrame(startObserver); });
     }
   })();
   </script>

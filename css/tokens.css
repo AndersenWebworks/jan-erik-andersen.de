@@ -1,0 +1,102 @@
+/* ============================================
+   TOKENS — Design Variables
+   Single source of truth for all visual values.
+   ============================================ */
+
+/* --- Local Font: Inter (Variable, self-hosted) --- */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../fonts/inter-latin-ext.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(../fonts/inter-latin.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* Colors */
+  --color-bg: #FAFBFC;
+  --color-bg-alt: #F3F4F6;
+  --color-bg-card: #FFFFFF;
+  --color-bg-dark: #111827;
+  --color-text: #111827;
+  --color-text-secondary: #4B5563;
+  --color-text-light: #9CA3AF;
+  --color-accent: #DC2626;
+  --color-accent-hover: #B91C1C;
+  --color-accent-light: rgba(220, 38, 38, 0.08);
+  --color-accent-glow: rgba(220, 38, 38, 0.15);
+  --color-accent-shadow: rgba(220, 38, 38, 0.08);
+  --color-border: #E5E7EB;
+  --color-border-dark: #D1D5DB;
+  --color-white: #FFFFFF;
+
+  /* Typography */
+  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Monaco, Consolas, monospace;
+  --font-heading: var(--font-serif);
+
+  /* Sizes */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 2rem;
+  --text-4xl: 2.5rem;
+  --text-5xl: 3.25rem;
+
+  /* Spacing */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  --space-4xl: 6rem;
+
+  /* Layout */
+  --max-width: 1100px;
+  --max-width-narrow: 680px;
+
+  /* Borders */
+  --radius-sm: 4px;
+
+  /* Aliases */
+  --color-text-muted: var(--color-text-light);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+}
+
+/* --- Dark Mode --- */
+body:has(.darkmode-checkbox:checked),
+body:has(.darkmode-checkbox-mobile:checked) {
+  --color-bg: #1A1714;
+  --color-bg-alt: #242018;
+  --color-bg-dark: #121010;
+  --color-text: #E8E3D8;
+  --color-text-secondary: #BFB098;
+  --color-text-light: #8A7D6B;
+  --color-accent: #E07060;
+  --color-accent-hover: #F08070;
+  --color-accent-light: rgba(224, 112, 96, 0.1);
+  --color-accent-glow: rgba(224, 112, 96, 0.2);
+  --color-accent-shadow: rgba(224, 112, 96, 0.12);
+  --color-bg-card: #2A2418;
+  --color-border: #3A3028;
+  --color-border-dark: #5A5040;
+  --color-white: #E8E3D8;
+}

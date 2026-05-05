@@ -7,7 +7,7 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jan-erik-andersen.de/projekte/">
   <meta property="og:title" content="Projekte – Jan-Erik Andersen">
-  <meta property="og:description" content="50+ Projekte, 14+ Branchen. Case Studies mit Gerwing, Runden Group, Scheja & Partner.">
+  <meta property="og:description" content="50+ Projekte, 14+ Branchen. Case Studies mit Gerwing, Runden Group, WBG Pooling.">
   <meta property="og:image" content="https://jan-erik-andersen.de/portrait.webp">
   <meta property="og:locale" content="de_DE">
   <link rel="canonical" href="https://jan-erik-andersen.de/projekte/">
@@ -27,7 +27,7 @@
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "Gerwing Steinwerke", "description": "B2B-Shop für Pflastersteine. WooCommerce, Musterbestellsystem, Preisgruppen. Alleinige technische Verantwortung seit 2023.", "url": "https://gerwing.de" },
       { "@type": "ListItem", "position": 2, "name": "Runden Group", "description": "11 Websites für Firmengruppe, zweisprachig, Custom-Plugins. 2 Jahre allein verantwortlich.", "url": "https://runden-group.eu" },
-      { "@type": "ListItem", "position": 3, "name": "Scheja & Partner", "description": "Datenschutzkanzlei mit 30 Anwälten. Mehrsprachig, mit Produktseiten für Datenschutz-Software.", "url": "https://scheja-partners.de" }
+      { "@type": "ListItem", "position": 3, "name": "WBG Pooling", "description": "Industrie-Portal mit 360°-Produktansichten, Sales Center (Custom-Plugin WebDeck), Salesforce-Anbindung und Job-Board-API.", "url": "https://wbg-pooling.eu" }
     ]
   }
   </script>
@@ -49,7 +49,7 @@
         <span class="header-brand-surname">Andersen</span>
       </a>
       <nav class="header-nav" id="header-nav">
-        <a href="../leistungen/">Leistungen</a>
+        <div class="header-nav-dropdown"><a href="../leistungen/">Leistungen</a><div class="header-nav-dropdown-menu"><a href="../leistungen/ki-sichtbarkeit/">KI-Sichtbarkeit</a><a href="../leistungen/bfsg-barrierefreiheit/">BFSG &amp; Barrierefreiheit</a><a href="../leistungen/shops-und-custom/">Shops &amp; Custom</a></div></div>
         <a href="../projekte/" class="header-nav-active">Projekte</a>
         <a href="../preise/">Preise</a>
         <a href="../faq/">FAQ</a>
@@ -83,6 +83,9 @@
       <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav>
           <a href="../leistungen/">Leistungen</a>
+          <a href="../leistungen/ki-sichtbarkeit/" class="header-mobile-sub">KI-Sichtbarkeit</a>
+          <a href="../leistungen/bfsg-barrierefreiheit/" class="header-mobile-sub">BFSG &amp; Barrierefreiheit</a>
+          <a href="../leistungen/shops-und-custom/" class="header-mobile-sub">Shops &amp; Custom</a>
           <a href="../projekte/" class="header-nav-active">Projekte</a>
           <a href="../preise/">Preise</a>
           <a href="../faq/">FAQ</a>
@@ -117,48 +120,6 @@
       <div class="section-inner container">
         <div class="section-header">
           <h1>Ausgewählte Projekte</h1>
-          <p class="section-subtitle">Drei Projekte, die zeigen, was eine einzelne Person leisten kann – wenn sie weiß, was sie tut. Ausführliche Case Studies weiter unten.</p>
-        </div>
-        <div class="projects-grid">
-          <article class="project-card">
-            <div class="project-tags">
-              <span class="tag">B2B / Industrie</span>
-              <span class="tag">WooCommerce</span>
-              <span class="tag">seit 2023</span>
-            </div>
-            <h2>Gerwing Steinwerke</h2>
-            <p>B2B-Shop für Pflastersteine. Neubau 2023, seitdem alleinige technische Betreuung. Musterbestellsystem, Produktfilter, Preisgruppen.</p>
-            <a href="https://gerwing.de" class="project-link" target="_blank" rel="noopener">gerwing.de →</a>
-          </article>
-          <article class="project-card">
-            <div class="project-tags">
-              <span class="tag">Firmengruppe</span>
-              <span class="tag">11 Websites</span>
-              <span class="tag">2023–2025</span>
-            </div>
-            <h2>Runden Group</h2>
-            <p>Elf Websites für eine Firmengruppe, zweisprachig, mit Karriereportal und Custom-Plugins. Zwei Jahre allein verantwortlich für alles.</p>
-            <a href="https://runden-group.eu" class="project-link" target="_blank" rel="noopener">runden-group.eu →</a>
-          </article>
-          <article class="project-card">
-            <div class="project-tags">
-              <span class="tag">Recht / Datenschutz</span>
-              <span class="tag">WordPress</span>
-              <span class="tag">mehrsprachig</span>
-            </div>
-            <h2>Scheja & Partner</h2>
-            <p>Kanzlei-Website mit Produktseiten für Datenschutz-Software. 30 Anwälte, zwei Sprachen, drei Software-Produkte.</p>
-            <a href="https://scheja-partners.de" class="project-link" target="_blank" rel="noopener">scheja-partners.de →</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Case Studies -->
-    <section class="case-studies-section">
-      <div class="section-inner container">
-        <div class="section-header">
-          <h2>Wie Projekte bei mir aussehen</h2>
           <p class="section-subtitle">Was stand am Anfang, was habe ich gemacht, was kam dabei raus. Drei Projekte, offen erzählt.</p>
         </div>
 
@@ -210,7 +171,8 @@
               <img src="../screenshots/runden-group.png" alt="Screenshot runden-group.eu – Firmengruppe mit 11 Websites" class="case-study-screenshot" width="1280" height="800" loading="lazy">
               <p>Die Runden Group ist ein Familienunternehmen mit Tochtergesellschaften in Kreislaufwirtschaft, Logistik, IT, Gebäudeplanung und Landwirtschaft. Jede Firma brauchte eine eigene Website – einheitlich im Erscheinungsbild, aber individuell im Inhalt.</p>
               <p>Ich habe den gesamten Web-Auftritt aufgebaut: 11 Websites auf WordPress mit YOOtheme Pro, jede zweisprachig (DE/EN), dazu ein Karriereportal und einen Podcast-Bereich. Die Designs kamen als Figma-Mockups – alles andere habe ich abgeleitet und umgesetzt.</p>
-              <p>Zwei Jahre lang war ich allein verantwortlich für den gesamten Web-Auftritt dieser Firmengruppe. Updates, Content-Pflege, neue Features, technische Probleme – alles über meinen Tisch. Das ist das Projekt, das ich anführe, wenn jemand sagt: „Als Einzelperson kann man doch keine Firmengruppe betreuen." → <a href="../leistungen/">Mehr zu Projektmanagement &amp; Frontend</a></p>
+              <p>Dazu kommen interne Tools: ein digitales Mitarbeiter-Onboarding-Portal (mehrsprachig: DE/EN/ES/PL) mit strukturiertem Preboarding-Prozess, Zertifikaten und Dokumentenmanagement – nicht öffentlich, aber technisch anspruchsvoll.</p>
+              <p>Zwei Jahre lang war ich allein verantwortlich für den gesamten Web-Auftritt dieser Firmengruppe. Öffentliche Websites, interne Portale, Updates, Content-Pflege, neue Features – alles über meinen Tisch. → <a href="../leistungen/">Mehr zu Projektmanagement &amp; Frontend</a></p>
             </div>
             <div class="case-study-sidebar">
               <dl>
@@ -230,32 +192,34 @@
           </div>
         </div>
 
-        <!-- Case Study 3: Scheja -->
-        <div class="case-study" id="scheja">
+        <!-- Case Study 3: WBG Pooling -->
+        <div class="case-study" id="wbg">
           <div class="case-study-header">
             <div>
-              <div class="case-study-meta">Recht / Datenschutz · WordPress · mehrsprachig</div>
-              <h3>Scheja &amp; Partner</h3>
+              <div class="case-study-meta">Logistik / Kreislaufwirtschaft · WordPress · Custom Plugin</div>
+              <h3>WBG Pooling</h3>
             </div>
-            <a href="https://scheja-partners.de" target="_blank" rel="noopener" class="project-link">scheja-partners.de →</a>
+            <a href="https://wbg-pooling.eu" target="_blank" rel="noopener" class="project-link">wbg-pooling.eu →</a>
           </div>
           <div class="case-study-body">
             <div class="case-study-text">
-              <img src="../screenshots/scheja-partners.png" alt="Screenshot scheja-partners.de – Datenschutzkanzlei" class="case-study-screenshot" width="1280" height="800" loading="lazy">
-              <p>Eine Datenschutzkanzlei mit 30 Anwälten in Bonn – spezialisiert auf Compliance, NIS2 und DSGVO. Die Anforderung: eine Website, die nicht nur die Kanzlei präsentiert, sondern auch ihre Software-Produkte verkauft.</p>
-              <p>Ich habe die Kanzlei-Website und drei Produktseiten für ihre Datenschutz-Software gebaut. Alles zweisprachig, mit strukturierten Daten für Rechtsdienstleistungen, damit die Kanzlei auch in KI-Suchsystemen korrekt als Datenschutz-Spezialist erscheint.</p>
-              <p>Das Projekt zeigt, was passiert, wenn man Webentwicklung nicht als „schöne Seite bauen" versteht, sondern als Werkzeug für Geschäftsentwicklung. Die Website arbeitet für die Kanzlei – nicht nur als Visitenkarte. → <a href="../leistungen/">Mehr zu Webdesign &amp; Beratung</a></p>
+              <img src="../screenshots/wbg-pooling.png" alt="Screenshot wbg-pooling.eu – Industrie-Portal mit 360°-Produktansichten" class="case-study-screenshot" width="1280" height="800" loading="lazy">
+              <p>WBG Pooling vermietet Mehrweg-Transportverpackungen europaweit. Die Website ist weit mehr als eine Firmenpräsenz – sie ist ein Industrie-Portal mit interaktiven 360°-Produktansichten, einem Kreislauf-Diagramm das den Pooling-Prozess erklärt, und einer Job-Board-Anbindung die offene Stellen automatisch synchronisiert.</p>
+              <p>Dazu kommt ein passwortgeschütztes Sales Center für Vertriebspartner. Die Basis: WebDeck – ein Custom-Plugin das ich für Onboarding- und Schulungsportale entwickelt habe. Quiz-System, Fortschritts-Tracking, PDF-Zertifikate, rollenbasierter Content. Das gleiche System nutze ich für Mitarbeiter-Onboarding bei weiteren Kunden.</p>
+              <p>Außerdem habe ich die Kontaktformulare an Salesforce angebunden (Web-to-Lead), damit Anfragen direkt im CRM des Kunden landen. Das Projekt zeigt, was passiert wenn eine Website nicht bei „sieht gut aus" aufhört. → <a href="../leistungen/shops-und-custom/">Mehr zu Custom-Lösungen</a></p>
             </div>
             <div class="case-study-sidebar">
               <dl>
                 <dt>Aufgabe</dt>
-                <dd>Website + Produktseiten</dd>
+                <dd>Industrie-Portal + internes Sales Center</dd>
                 <dt>Technologie</dt>
-                <dd>WordPress, YOOtheme Pro</dd>
-                <dt>Sprachen</dt>
-                <dd>Deutsch / Englisch</dd>
+                <dd>WordPress, Custom Plugin (WebDeck), WebRotate 360°</dd>
+                <dt>Integrationen</dt>
+                <dd>Salesforce (Web-to-Lead), Concludis (Job-Board API)</dd>
                 <dt>Besonderheit</dt>
-                <dd>Strukturierte Daten für Rechtsdienstleistungen</dd>
+                <dd>Eigene Onboarding-Plattform, mehrfach im Einsatz</dd>
+                <dt>Zeitraum</dt>
+                <dd>2023–2025</dd>
               </dl>
             </div>
           </div>
@@ -290,7 +254,7 @@
               „Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich, mit Andersen Webworks seit nun mehreren Jahren einen zuverlässigen Partner gefunden zu haben. Professionelles Webdesign, das mich immer wieder überrascht. Meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff. So setzt man sich von der Konkurrenz ab!"
             </blockquote>
             <figcaption>
-              <span itemprop="author" itemscope itemtype="https://schema.org/Person"><strong itemprop="name">Corvin Jaedicke</strong></span>, <span itemprop="itemReviewed" itemscope itemtype="https://schema.org/Organization"><a itemprop="url" href="https://aicoustics.com" target="_blank" rel="noopener"><span itemprop="name">ai-coustics</span></a></span>
+              <span itemprop="author" itemscope itemtype="https://schema.org/Person"><strong itemprop="name">Corvin Jaedicke</strong></span>, <span itemprop="itemReviewed" itemscope itemtype="https://schema.org/Organization"><a itemprop="url" href="https://ai-coustics.com" target="_blank" rel="noopener"><span itemprop="name">ai-coustics</span></a></span>
               <meta itemprop="reviewRating" content="5">
               <span class="testimonial-source">Google-Bewertung</span>
             </figcaption>
@@ -317,12 +281,12 @@
             <a href="https://streunerhilfe-plau.de" class="project-link" target="_blank" rel="noopener">streunerhilfe-plau.de →</a>
           </article>
         </div>
-        <p class="probono-cta-standalone"><strong>Sie sind ein Verein oder eine soziale Initiative?</strong> Schreiben Sie mir – auch bei kleinem Budget. Reduzierte Konditionen oder pro bono, je nach Projekt. <a href="../kontakt/">Kontakt aufnehmen →</a></p>
+        <p class="probono-cta-standalone"><strong>Sie sind ein Verein oder eine soziale Initiative?</strong> Schreiben Sie mir – auch bei kleinem Budget. Reduzierte Konditionen oder pro bono, je nach Projekt. <a href="../kontakt/" class="btn-text">Kontakt aufnehmen →</a></p>
       </div>
     </section>
 
     <!-- Kunden-Logos -->
-    <section class="client-logos-section">
+    <section class="client-logos-section section--alt">
       <div class="section-inner container">
         <div class="section-header">
           <h2>Kunden &amp; Arbeitgeber</h2>
@@ -344,6 +308,16 @@
           <span title="RPLC"><img src="../logos/logo-rplc-black.svg" alt="RPLC" loading="lazy"></span>
           <span title="Rubetrans"><img src="../logos/logo-rubetrans-black.svg" alt="Rubetrans" loading="lazy"></span>
           <a href="https://beachhouse.studio" target="_blank" rel="noopener" title="Beachhouse Studio"><img src="../logos/beachhouse-logo.svg" alt="Beachhouse Studio" loading="lazy"></a>
+        </div>
+
+        <div class="further-projects">
+          <a href="https://scheja-partners.de" target="_blank" rel="noopener" class="further-project-chip">Scheja &amp; Partner</a>
+          <a href="https://thenewinsider.de" target="_blank" rel="noopener" class="further-project-chip">The New Insider</a>
+          <a href="https://onkolaatzen.de" target="_blank" rel="noopener" class="further-project-chip">Onkologie Laatzen</a>
+          <a href="https://soundhealing-hamburg.de" target="_blank" rel="noopener" class="further-project-chip">Soundhealing Hamburg</a>
+          <a href="https://triptykon.net" target="_blank" rel="noopener" class="further-project-chip">Triptykon</a>
+          <span class="further-project-chip">InnoGames</span>
+          <span class="further-project-chip">YOOtheme</span>
         </div>
       </div>
     </section>
@@ -412,5 +386,61 @@
     }
   })();
   </script>
+  <script>
+  (function() {
+    var sections = '.hero, .projects-section, .services-section, .testimonials-section, .process-section, .pricing-section, .contact-section, .services-grid, .section-header, .services-intro';
+
+    function typeHeading(h2) {
+      if (h2.dataset.typed) return;
+      h2.dataset.typed = '1';
+      var text = h2.textContent;
+      h2.textContent = '';
+      var cursor = document.createElement('span');
+      cursor.className = 'heading-typewriter-cursor';
+      cursor.textContent = '|';
+      h2.appendChild(cursor);
+      var i = 0;
+      function tick() {
+        if (i < text.length) {
+          h2.insertBefore(document.createTextNode(text[i]), cursor);
+          i++;
+          var ch = text[i - 1];
+          var delay = (ch === '.' || ch === '?' || ch === '!') ? 120 : (ch === ',' ? 80 : 35 + Math.random() * 20);
+          setTimeout(tick, delay);
+        } else {
+          setTimeout(function() { cursor.classList.add('done'); }, 800);
+        }
+      }
+      tick();
+    }
+
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        var sectionObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              sectionObs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        document.querySelectorAll(sections).forEach(function(el) { sectionObs.observe(el); });
+
+        var headingObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              headingObs.unobserve(entry.target);
+              typeHeading(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+          headingObs.observe(h2);
+        });
+      });
+    });
+  })();
+  </script>
+
 </body>
 </html>

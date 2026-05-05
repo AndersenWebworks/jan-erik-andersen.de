@@ -10,8 +10,8 @@
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://jan-erik-andersen.de/en/">
-  <meta property="og:title" content="Jan-Erik Andersen – So your website gets found even when nobody googles anymore.">
-  <meta property="og:description" content="Websites that rank on Google and get cited by ChatGPT, Perplexity and Claude. Structured data, BFSG compliant, no agency overhead. 27 years of web development, freelancing since 2010.">
+  <meta property="og:title" content="Jan-Erik Andersen – Web Development, Shops & Support since 1999">
+  <meta property="og:description" content="Agency-level work, without the agency. Websites, shops and ongoing support – directly with the developer. Fixed prices, 100% remote, full accountability.">
   <meta property="og:locale" content="en_US">
   <meta property="og:image" content="https://jan-erik-andersen.de/portrait.webp">
 
@@ -19,7 +19,7 @@
   <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/">
   <link rel="alternate" hreflang="x-default" href="https://jan-erik-andersen.de/">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
-  <title>Jan-Erik Andersen – So your website gets found even when nobody googles anymore.</title>
+  <title>Jan-Erik Andersen – Web Development, Shops & Support since 1999</title>
 
   <script type="application/ld+json">
   {
@@ -82,7 +82,7 @@
         <span class="header-brand-surname">Andersen</span>
       </a>
       <nav class="header-nav" id="header-nav">
-        <a href="services/">Services</a>
+        <div class="header-nav-dropdown"><a href="services/">Services</a><div class="header-nav-dropdown-menu"><a href="services/ai-visibility/">AI Visibility</a><a href="services/bfsg-accessibility/">BFSG &amp; Accessibility</a><a href="services/shops-and-custom/">Shops &amp; Custom</a></div></div>
         <a href="projects/">Projects</a>
         <a href="pricing/">Pricing</a>
         <a href="faq/">FAQ</a>
@@ -116,6 +116,9 @@
       <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav>
           <a href="services/">Services</a>
+          <a href="services/ai-visibility/" class="header-mobile-sub">AI Visibility</a>
+          <a href="services/bfsg-accessibility/" class="header-mobile-sub">BFSG &amp; Accessibility</a>
+          <a href="services/shops-and-custom/" class="header-mobile-sub">Shops &amp; Custom</a>
           <a href="projects/">Projects</a>
           <a href="pricing/">Pricing</a>
           <a href="faq/">FAQ</a>
@@ -153,10 +156,12 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
             Start over
           </button>
-          <h1>So your website gets found<br>even when nobody googles anymore.</h1>
-          <p class="hero-lead">I build websites that rank on Google and get cited by ChatGPT, Perplexity and Claude. Structured data, BFSG compliant, no agency overhead. 27 years of web development, freelancing since 2010. You speak directly to the developer.</p>
+          <h1 class="hero-typewriter" aria-label="Agency-level work. Without the agency.">
+            <span class="hero-typewriter-text">Agency-level work. Without the agency.</span><span class="typewriter-cursor" aria-hidden="true">|</span>
+          </h1>
+          <p class="hero-lead">Websites, shops and ongoing support – since 1999, directly with the developer. Fixed prices, 100 % remote, full accountability.</p>
           <div class="hero-ctas">
-            <a href="#contact" class="btn btn-primary">Start your project</a>
+            <a href="#contact" class="btn btn-primary">Book a free call</a>
             <a href="#pricing" class="btn btn-secondary">View pricing</a>
           </div>
         </div>
@@ -199,7 +204,7 @@
     </section>
 
     <!-- ===== PROJECTS (Proof first) ===== -->
-    <section class="projects-section" id="projects">
+    <section class="projects-section section--alt" id="projects">
       <div class="section-inner container">
         <div class="section-header">
           <h2>Selected Projects</h2>
@@ -227,17 +232,17 @@
             <a href="https://runden-group.eu" class="project-link" target="_blank" rel="noopener">runden-group.eu →</a>
           </article>
           <article class="project-card">
-            <img src="../screenshots/scheja-partners.png" alt="Screenshot scheja-partners.de" class="project-card-screenshot" width="1280" height="800" loading="lazy">
+            <img src="../screenshots/wbg-pooling.png" alt="Screenshot wbg-pooling.eu" class="project-card-screenshot" width="1280" height="800" loading="lazy">
             <div class="project-tags">
-              <span class="tag">Legal / Data Privacy</span>
-              <span class="tag">multilingual</span>
+              <span class="tag">Logistics / Circular Economy</span>
+              <span class="tag">Custom Plugin</span>
             </div>
-            <h3>Scheja &amp; Partner</h3>
-            <p>Law firm website with software product pages. 30 attorneys, two languages, structured data for AI visibility.</p>
-            <a href="https://scheja-partners.de" class="project-link" target="_blank" rel="noopener">scheja-partners.de →</a>
+            <h3>WBG Pooling</h3>
+            <p>Industrial portal with 360° product views, custom sales center (WebDeck plugin), and Salesforce integration.</p>
+            <a href="https://wbg-pooling.eu" class="project-link" target="_blank" rel="noopener">wbg-pooling.eu →</a>
           </article>
         </div>
-        <p class="section-cta"><a href="projects/" class="btn btn-secondary">Full case studies</a> <a href="#contact" class="btn btn-primary">Discuss your project</a></p>
+        <p class="section-cta"><a href="#contact" class="btn btn-primary">Discuss your project</a> <a href="projects/" class="btn btn-secondary">Full case studies</a></p>
       </div>
     </section>
 
@@ -248,8 +253,9 @@
           <h2>Three areas where I go deeper than most</h2>
           <p>I've been building web projects since 1999. These three areas are where I currently make the difference – and probably why you're here.</p>
         </div>
+        <div class="services-layout">
         <div class="services-grid">
-          <div class="service-item">
+          <div class="service-item" id="svc-ki">
             <div class="service-number">01</div>
             <div class="service-content">
               <h3>AI Visibility</h3>
@@ -258,7 +264,7 @@
               <p class="service-cta-row"><a href="services/ai-visibility/" class="btn-text">More on AI Visibility →</a></p>
             </div>
           </div>
-          <div class="service-item">
+          <div class="service-item" id="svc-bfsg">
             <div class="service-number">02</div>
             <div class="service-content">
               <h3>BFSG Compliance &amp; Accessibility</h3>
@@ -267,7 +273,7 @@
               <p class="service-cta-row"><a href="services/bfsg-accessibility/" class="btn-text">More on BFSG &amp; WCAG →</a></p>
             </div>
           </div>
-          <div class="service-item">
+          <div class="service-item" id="svc-shops">
             <div class="service-number">03</div>
             <div class="service-content">
               <h3>Shops &amp; Custom Solutions</h3>
@@ -277,6 +283,19 @@
             </div>
           </div>
         </div>
+        <nav class="services-quicknav">
+          <h3>Focus areas</h3>
+          <a href="#svc-ki">AI Visibility</a>
+          <a href="#svc-bfsg">BFSG &amp; Accessibility</a>
+          <a href="#svc-shops">Shops &amp; Custom</a>
+          <h3>Also</h3>
+          <a href="services/">Company websites</a>
+          <a href="services/">Frontend development</a>
+          <a href="services/">Project management</a>
+          <a href="services/">Website analysis</a>
+          <a href="services/" class="services-quicknav-all">All services →</a>
+        </nav>
+        </div>
         <div class="standards-strip">
           <div class="standard-item"><strong>Standard on every project:</strong></div>
           <div class="standard-item">GDPR-compliant</div>
@@ -285,16 +304,16 @@
           <div class="standard-item">Performance-optimized</div>
           <div class="standard-item">Proofreading (Annemarie Andersen)</div>
         </div>
-        <p class="section-cta"><a href="services/">All Services</a> · <a href="#projects">Projects in detail</a> · <a href="faq/">Frequently asked questions</a></p>
+        <p class="section-cta"><a href="services/" class="btn btn-secondary">All Services</a> <span class="section-cta-or">or <a href="#projects">view projects</a></span></p>
       </div>
     </section>
 
     <!-- ===== TESTIMONIALS ===== -->
-    <section class="testimonials-section" id="testimonials">
+    <section class="testimonials-section section--alt" id="testimonials">
       <div class="section-inner container">
         <div class="section-header">
           <h2>What clients say</h2>
-          <p class="section-subtitle">Two verified reviews directly from Google. One about accessibility, one about long-term collaboration over several years.</p>
+          <p class="section-subtitle">Verified Google reviews – unedited, unabridged.</p>
         </div>
         <div class="testimonials-grid">
           <figure class="testimonial-card" itemscope itemtype="https://schema.org/Review">
@@ -315,13 +334,13 @@
               "Professionally, I've worked with various media designers and I'm glad to have found a reliable partner in Andersen Webworks for several years now. Professional web design that always surprises me – my ideas are taken seriously and given the final touch by Mr. Andersen. That's how you stand out from the competition!"
             </blockquote>
             <figcaption>
-              <span itemprop="author" itemscope itemtype="https://schema.org/Person"><strong itemprop="name">Corvin Jaedicke</strong></span>, <span itemprop="itemReviewed" itemscope itemtype="https://schema.org/Organization"><a itemprop="url" href="https://aicoustics.com" target="_blank" rel="noopener"><span itemprop="name">ai-coustics</span></a></span>
+              <span itemprop="author" itemscope itemtype="https://schema.org/Person"><strong itemprop="name">Corvin Jaedicke</strong></span>, <span itemprop="itemReviewed" itemscope itemtype="https://schema.org/Organization"><a itemprop="url" href="https://ai-coustics.com" target="_blank" rel="noopener"><span itemprop="name">ai-coustics</span></a></span>
               <meta itemprop="reviewRating" content="5">
               <span class="testimonial-source">Google Review</span>
             </figcaption>
           </figure>
         </div>
-        <p class="section-cta"><a href="https://www.google.com/search?q=Andersen+Webworks+Plau+am+See" target="_blank" rel="noopener">View reviews on Google →</a> · <a href="#contact">Schedule consultation</a></p>
+        <p class="section-cta"><a href="#contact" class="btn btn-primary">Schedule consultation</a> <a href="https://www.google.com/search?q=Andersen+Webworks+Plau+am+See" target="_blank" rel="noopener" class="btn-text">View reviews on Google →</a></p>
       </div>
     </section>
 
@@ -358,41 +377,34 @@
             <div class="process-number">4</div>
             <div class="process-content">
               <h3>Launch & Maintenance</h3>
-              <p>Site goes live. After that, I'm still there – for updates, changes, problems. Or clean handover: you're never locked in with me. <a href="pricing/">View maintenance packages →</a></p>
+              <p>Site goes live. After that, I'm still there – for updates, changes, problems. Or clean handover: you're never locked in with me. <a href="pricing/" class="btn-text">View maintenance packages →</a></p>
             </div>
           </div>
         </div>
-        <p class="section-cta"><a href="#contact" class="btn btn-primary">Start your project</a> <span class="section-cta-or">or <a href="faq/">read frequently asked questions</a></span></p>
+        <p class="section-cta"><a href="#contact" class="btn btn-primary">Book a free call</a> <span class="section-cta-or">or <a href="faq/" class="btn-text">read frequently asked questions →</a></span></p>
       </div>
     </section>
 
     <!-- ===== ABOUT (Executive Summary) ===== -->
-    <section class="about-section" id="about">
+    <section class="about-section section--alt" id="about">
       <div class="section-inner container">
         <div class="section-header">
           <h2>Who's behind this</h2>
         </div>
         <div class="about-content">
           <div class="about-text">
-            <p class="about-lead">I've worked at agencies. I know what they look like from the inside. That's why I do it differently.</p>
-            <p>My background: Multimedia Design, then three years of QA in the games industry (Goodgame Studios, FISHLABS, Daedalic) – professionally finding bugs before users do. In 2017 I joined YOOtheme, the makers of my page builder – I co-wrote their documentation and have been working with it daily for 9 years. Exclusively freelance since 2023.</p>
-            <p>My wife <a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie</a> is a professional proofreader. Every text that goes out through me is professionally reviewed. That's not a bonus – it's part of the deal.</p>
+            <p class="about-lead">You talk to the developer. And the developer does the work.</p>
+            <p>No account manager, no junior behind the scenes. I've worked at agencies and I know how much time gets lost in coordination and overhead. So I do it differently: one point of contact, short paths, direct implementation.</p>
+            <p>All copy is proofread by my wife <a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie</a> – she's a professional editor. That's not a bonus, it's part of the service.</p>
             <p><a href="about/" class="btn-text">Full background →</a></p>
           </div>
-          <div class="about-facts">
-            <dl>
-              <dt>Location</dt>
-              <dd>Plau am See, Mecklenburg-Vorpommern, Germany</dd>
-              <dt>Work style</dt>
-              <dd>100% remote, Germany-wide</dd>
-              <dt>Building web projects since</dt>
-              <dd>1999</dd>
-              <dt>Freelancing since</dt>
-              <dd>2010</dd>
-              <dt>Focus areas</dt>
-              <dd>WordPress, WooCommerce, YOOtheme Pro, static HTML</dd>
-            </dl>
-          </div>
+          <dl class="about-facts">
+            <div class="about-fact"><dt>Location</dt><dd>Plau am See, Mecklenburg-Vorpommern, Germany</dd></div>
+            <div class="about-fact"><dt>Work style</dt><dd>100 % remote, Germany-wide</dd></div>
+            <div class="about-fact"><dt>Building web projects since</dt><dd>1999</dd></div>
+            <div class="about-fact"><dt>Freelancing since</dt><dd>2010</dd></div>
+            <div class="about-fact"><dt>Focus areas</dt><dd>WordPress, WooCommerce, YOOtheme Pro, static HTML</dd></div>
+          </dl>
         </div>
       </div>
     </section>
@@ -404,7 +416,9 @@
           <h2>What it costs</h2>
           <p class="section-subtitle">Fixed prices after initial call. You know what you'll pay before we start.</p>
         </div>
-        <div class="pricing-grid">
+
+        <h3 class="pricing-group-title">Projects</h3>
+        <div class="pricing-grid pricing-grid-projects">
           <div class="pricing-card">
             <div class="pricing-header">
               <div class="pricing-type">Website</div>
@@ -412,42 +426,48 @@
             </div>
             <p class="pricing-desc">Company website, 5–10 pages · typically €2,400–5,000</p>
           </div>
-          <div class="pricing-card featured">
+          <div class="pricing-card">
             <div class="pricing-header">
               <div class="pricing-type">Shop</div>
               <div class="pricing-price">from €4,800 <span>fixed price</span></div>
             </div>
             <p class="pricing-desc">WooCommerce, up to 50 products · typically €4,800–9,000</p>
           </div>
+        </div>
+
+        <h3 class="pricing-group-title">Ongoing support</h3>
+        <p class="pricing-group-lead">Most websites die after launch – nobody installs updates, nobody reacts when something breaks. I currently maintain 20+ websites on retainer. Cancel monthly, no minimum term.</p>
+        <div class="pricing-grid pricing-grid-retainer">
           <div class="pricing-card">
             <div class="pricing-header">
-              <div class="pricing-type">Maintenance Basic</div>
+              <div class="pricing-type">Basic</div>
               <div class="pricing-price">€200 <span>/month</span></div>
             </div>
             <p class="pricing-desc">2.5h included · updates, security, monitoring</p>
           </div>
-          <div class="pricing-card">
+          <div class="pricing-card featured">
             <div class="pricing-header">
-              <div class="pricing-type">Maintenance Standard</div>
+              <div class="pricing-type">Standard</div>
               <div class="pricing-price">€400 <span>/month</span></div>
             </div>
             <p class="pricing-desc">5h included · content, performance, fast response</p>
           </div>
           <div class="pricing-card">
             <div class="pricing-header">
-              <div class="pricing-type">Maintenance Shop</div>
+              <div class="pricing-type">Shop</div>
               <div class="pricing-price">€800 <span>/month</span></div>
             </div>
             <p class="pricing-desc">10h included · WooCommerce, new features, priority support</p>
           </div>
         </div>
-        <p class="pricing-note">All prices net, cancel monthly. Hourly rate for open-ended scope: €80/h net. <a href="pricing/">Details, analysis package &amp; "What you don't pay for" →</a></p>
+
+        <p class="pricing-note">All prices net. Hourly rate for open-ended scope: €80/h net. <a href="pricing/" class="btn-text">Details, analysis package &amp; "What you don't pay for" →</a></p>
         <p class="section-cta"><a href="#contact" class="btn btn-primary">Schedule a free consultation</a></p>
       </div>
     </section>
 
     <!-- ===== FAQ (Executive Summary – 4 key questions, fully answered) ===== -->
-    <section class="faq-section" id="faq">
+    <section class="faq-section section--alt" id="faq">
       <div class="section-inner container">
         <div class="section-header">
           <h2>Frequently Asked Questions</h2>
@@ -479,7 +499,7 @@
             </div>
           </div>
         </div>
-        <p class="section-cta"><a href="faq/" class="btn btn-secondary">All 20 questions and answers →</a></p>
+        <p class="section-cta"><a href="faq/" class="btn btn-secondary">All 20 questions and answers</a></p>
       </div>
     </section>
 
@@ -588,6 +608,130 @@
     }
   })();
   </script>
+  <script>
+  (function() {
+    var claims = [
+      'Agency-level work. Without the agency.',
+      'So your website gets found – even when nobody googles anymore.',
+      'One call. One developer. No briefing ping-pong.',
+      'Websites, shops, and someone who still picks up after launch.',
+      'Accessibility deadline missed? Still fixable.'
+    ];
+    var el = document.querySelector('.hero-typewriter-text');
+    var cursor = document.querySelector('.hero-typewriter .typewriter-cursor');
+    var h1 = document.querySelector('.hero-typewriter');
+    if (!el || !cursor) return;
+
+    el.textContent = '';
+    var idx = 0;
+    var charIdx = 0;
+    var holdTime = 3500;
+    var fadeDuration = 500;
+    var pauseBeforeNext = 300;
+
+    function typeSpeed() {
+      var ch = claims[idx][charIdx - 1];
+      if (ch === '.' || ch === '?' || ch === '!') return 100;
+      if (ch === ',') return 70;
+      return 30 + Math.random() * 20;
+    }
+
+    function typeNext() {
+      if (charIdx <= claims[idx].length) {
+        el.textContent = claims[idx].slice(0, charIdx);
+        charIdx++;
+        setTimeout(typeNext, typeSpeed());
+      } else {
+        h1.setAttribute('aria-label', claims[idx]);
+        setTimeout(startFade, holdTime);
+      }
+    }
+
+    function startFade() {
+      el.style.opacity = '0';
+      setTimeout(function() {
+        idx = (idx + 1) % claims.length;
+        charIdx = 0;
+        el.textContent = '';
+        setTimeout(function() {
+          el.style.opacity = '1';
+          typeNext();
+        }, pauseBeforeNext);
+      }, fadeDuration);
+    }
+
+    typeNext();
+  })();
+  </script>
+  <script>
+  (function() {
+    var sections = '.hero, .projects-section, .services-section, .testimonials-section, .process-section, .pricing-section, .contact-section, .services-grid, .section-header, .services-intro';
+
+    function typeHeading(h2) {
+      if (h2.dataset.typed) return;
+      h2.dataset.typed = '1';
+      var text = h2.textContent;
+      h2.textContent = '';
+      var cursor = document.createElement('span');
+      cursor.className = 'heading-typewriter-cursor';
+      cursor.textContent = '|';
+      h2.appendChild(cursor);
+      var i = 0;
+      function tick() {
+        if (i < text.length) {
+          h2.insertBefore(document.createTextNode(text[i]), cursor);
+          i++;
+          var ch = text[i - 1];
+          var delay = (ch === '.' || ch === '?' || ch === '!') ? 120 : (ch === ',' ? 80 : 35 + Math.random() * 20);
+          setTimeout(tick, delay);
+        } else {
+          setTimeout(function() { cursor.classList.add('done'); }, 800);
+        }
+      }
+      tick();
+    }
+
+    function startObserver() {
+      var sectionObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            sectionObs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      document.querySelectorAll(sections).forEach(function(el) {
+        if (!el.classList.contains('is-visible')) sectionObs.observe(el);
+      });
+
+      var headingObs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            headingObs.unobserve(entry.target);
+            typeHeading(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+        headingObs.observe(h2);
+      });
+    }
+
+    var funnelActive = document.documentElement.classList.contains('funnel-active');
+    if (funnelActive) {
+      var mo = new MutationObserver(function() {
+        if (!document.documentElement.classList.contains('funnel-active')) {
+          mo.disconnect();
+          requestAnimationFrame(function() { requestAnimationFrame(startObserver); });
+        }
+      });
+      mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    } else {
+      requestAnimationFrame(function() { requestAnimationFrame(startObserver); });
+    }
+  })();
+  </script>
+
   <script src="funnel.js"></script>
 </body>
 </html>

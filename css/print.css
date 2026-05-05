@@ -1,0 +1,11 @@
+/* ============================================
+   PRINT
+   ============================================ */
+
+@media print {
+  .site-header, .skip-link, .funnel { display: none; }
+  body { font-size: 12pt; color: #000; background: #fff; }
+  a { color: inherit; }
+  section { padding: 1rem 0; }
+  .editorial-layout { grid-template-columns: 1fr; }
+}

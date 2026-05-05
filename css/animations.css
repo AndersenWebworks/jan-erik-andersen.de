@@ -1,0 +1,128 @@
+/* ============================================
+   ANIMATIONS — Micro-Motion & IntersectionObserver
+   Print-production metaphors: ink setting, press
+   impression, compositor laying rules.
+   ============================================ */
+
+/* --- Heading Typewriter --- */
+.heading-typewriter { display: inline; }
+
+.heading-typewriter-cursor {
+  display: inline;
+  font-weight: 300;
+  color: var(--color-accent);
+  animation: cursorBlink 600ms step-end infinite;
+  margin-left: 1px;
+  user-select: none;
+  pointer-events: none;
+}
+
+.heading-typewriter-cursor.done {
+  animation: cursorFade 600ms ease forwards;
+}
+
+/* --- Hero: Font Weight Settle --- */
+.hero h1 {
+  font-variation-settings: 'wght' 400, 'opsz' 48;
+  transition: font-variation-settings 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero.is-visible h1 {
+  font-variation-settings: 'wght' 700, 'opsz' 144;
+}
+
+/* --- Hero: Fade-in elements --- */
+.hero .hero-lead {
+  opacity: 0;
+  transition: opacity 0.9s ease 0.3s;
+}
+.hero.is-visible .hero-lead { opacity: 1; }
+
+.hero .hero-ctas {
+  opacity: 0;
+  transition: opacity 0.7s ease 0.6s;
+}
+.hero.is-visible .hero-ctas { opacity: 1; }
+
+.hero .hero-sidebar {
+  opacity: 0;
+  transition: opacity 1s ease 0.4s;
+}
+.hero.is-visible .hero-sidebar { opacity: 1; }
+
+/* --- Service Items: border resolves --- */
+.service-item {
+  border-bottom-color: transparent;
+  transition: border-bottom-color 0.6s ease 0.2s;
+}
+
+.services-grid.is-visible .service-item {
+  border-bottom-color: var(--color-border);
+}
+
+/* --- Standards Strip: opacity --- */
+.standards-strip {
+  opacity: 0;
+  transition: opacity 0.8s ease 0.3s;
+}
+
+.services-section.is-visible .standards-strip { opacity: 1; }
+
+/* --- Process Steps: connector line draws in --- */
+.process-section.is-visible .process-steps::before {
+  transform: scaleY(1);
+}
+
+/* --- Testimonial: accent border appears --- */
+.testimonial-card {
+  border-left-color: transparent;
+  transition: border-left-color 0.6s ease 0.15s;
+}
+
+.testimonials-section.is-visible .testimonial-card {
+  border-left-color: var(--color-accent);
+}
+
+/* --- Project Cards: border resolves --- */
+.project-card {
+  border-color: transparent;
+  transition: border-color 0.5s ease, box-shadow 0.2s ease;
+}
+
+.projects-section.is-visible .project-card {
+  border-color: var(--color-border);
+}
+
+.project-card:hover {
+  border-color: var(--color-border-dark);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+}
+
+/* --- Pricing: featured card accent --- */
+.pricing-card.featured {
+  border-color: transparent;
+  box-shadow: none;
+  transition: border-color 0.5s ease 0.1s, box-shadow 0.5s ease 0.1s;
+}
+
+.pricing-section.is-visible .pricing-card.featured {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 1px var(--color-accent);
+}
+
+/* --- Contact: guarantees stagger in --- */
+.guarantee {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.contact-section.is-visible .guarantee { opacity: 1; }
+.contact-section.is-visible .guarantee:nth-child(1) { transition-delay: 0.1s; }
+.contact-section.is-visible .guarantee:nth-child(2) { transition-delay: 0.2s; }
+.contact-section.is-visible .guarantee:nth-child(3) { transition-delay: 0.3s; }
+.contact-section.is-visible .guarantee:nth-child(4) { transition-delay: 0.4s; }
+.contact-section.is-visible .guarantee:nth-child(5) { transition-delay: 0.5s; }
+.contact-section.is-visible .guarantee:nth-child(6) { transition-delay: 0.6s; }
+
+/* --- Reduced Motion: intentionally not overriding is-visible animations --- */
+/* See feedback: enabling this kills the IntersectionObserver pattern. */

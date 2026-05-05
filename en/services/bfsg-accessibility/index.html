@@ -99,7 +99,7 @@
         <span class="header-brand-surname">Andersen</span>
       </a>
       <nav class="header-nav" id="header-nav">
-        <a href="../../services/" class="header-nav-active">Services</a>
+        <div class="header-nav-dropdown"><a href="../../services/" class="header-nav-active">Services</a><div class="header-nav-dropdown-menu"><a href="../../services/ai-visibility/">AI Visibility</a><a href="../../services/bfsg-accessibility/">BFSG &amp; Accessibility</a><a href="../../services/shops-and-custom/">Shops &amp; Custom</a></div></div>
         <a href="../../projects/">Projects</a>
         <a href="../../pricing/">Pricing</a>
         <a href="../../faq/">FAQ</a>
@@ -133,6 +133,9 @@
       <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true">
         <nav>
           <a href="../../services/" class="header-nav-active">Services</a>
+          <a href="../../services/ai-visibility/" class="header-mobile-sub">AI Visibility</a>
+          <a href="../../services/bfsg-accessibility/" class="header-mobile-sub">BFSG &amp; Accessibility</a>
+          <a href="../../services/shops-and-custom/" class="header-mobile-sub">Shops &amp; Custom</a>
           <a href="../../projects/">Projects</a>
           <a href="../../pricing/">Pricing</a>
           <a href="../../faq/">FAQ</a>
@@ -342,5 +345,61 @@
     }
   })();
   </script>
+  <script>
+  (function() {
+    var sections = '.hero, .projects-section, .services-section, .testimonials-section, .process-section, .pricing-section, .contact-section, .services-grid, .section-header, .services-intro';
+
+    function typeHeading(h2) {
+      if (h2.dataset.typed) return;
+      h2.dataset.typed = '1';
+      var text = h2.textContent;
+      h2.textContent = '';
+      var cursor = document.createElement('span');
+      cursor.className = 'heading-typewriter-cursor';
+      cursor.textContent = '|';
+      h2.appendChild(cursor);
+      var i = 0;
+      function tick() {
+        if (i < text.length) {
+          h2.insertBefore(document.createTextNode(text[i]), cursor);
+          i++;
+          var ch = text[i - 1];
+          var delay = (ch === '.' || ch === '?' || ch === '!') ? 120 : (ch === ',' ? 80 : 35 + Math.random() * 20);
+          setTimeout(tick, delay);
+        } else {
+          setTimeout(function() { cursor.classList.add('done'); }, 800);
+        }
+      }
+      tick();
+    }
+
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        var sectionObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              sectionObs.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        document.querySelectorAll(sections).forEach(function(el) { sectionObs.observe(el); });
+
+        var headingObs = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              headingObs.unobserve(entry.target);
+              typeHeading(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+          headingObs.observe(h2);
+        });
+      });
+    });
+  })();
+  </script>
+
 </body>
 </html>
