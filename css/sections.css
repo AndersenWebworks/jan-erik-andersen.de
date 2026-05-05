@@ -7,6 +7,7 @@
 /* --- Hero --- */
 .hero {
   border-bottom: 1px solid var(--color-border);
+  padding: var(--space-2xl) 0 var(--space-3xl);
 }
 
 .hero-inner {
@@ -19,6 +20,8 @@
 .hero-content h1 {
   margin-bottom: var(--space-lg);
   font-weight: 600;
+  font-size: clamp(2.25rem, 6.5vw, var(--text-5xl));
+  line-height: 1.1;
 }
 
 .hero-typewriter { min-height: 2.6em; }
@@ -620,7 +623,9 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
 }
 
 @media (max-width: 768px) {
-  .hero-typewriter { min-height: 3.6em; }
+  .hero { padding: var(--space-2xl) 0 var(--space-2xl); }
+  .hero-content h1 { font-size: clamp(2.375rem, 9.5vw, 3rem); line-height: 1.1; }
+  .hero-typewriter { min-height: 4.2em; }
   .hero-lead { font-size: var(--text-base); }
 
   .services-layout { grid-template-columns: 1fr; }
