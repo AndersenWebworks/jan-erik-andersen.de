@@ -31,6 +31,7 @@
     "description": "Webentwicklung, Online-Shops und digitale Beratung. Freiberufler mit 27+ Jahren Erfahrung.",
     "founder": {
       "@type": "Person",
+      "@id": "https://jan-erik-andersen.de/#person",
       "name": "Jan-Erik Andersen",
       "jobTitle": "Webentwickler & Berater",
       "url": "https://jan-erik-andersen.de",
@@ -51,8 +52,10 @@
       "@type": "OfferCatalog",
       "name": "Leistungen",
       "itemListElement": [
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "KI-Sichtbarkeit", "description": "Damit Ihre Website in ChatGPT, Perplexity und Claude zitiert wird. Strukturierte Daten, Schema.org, llms.txt, semantische Architektur.", "url": "https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "BFSG-Compliance & Barrierefreiheit", "description": "WCAG 2.1 AA-konforme Umsetzung. Update bestehender Seiten oder Neubau. Konform mit Barrierefreiheitsstärkungsgesetz seit Juni 2025.", "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/"}},
+        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Shops & Custom-Lösungen", "description": "WooCommerce mit B2B-Features, Händlerportalen, eigenen Plugins. Wenn Standard nicht reicht.", "url": "https://jan-erik-andersen.de/leistungen/shops-und-custom/"}},
         {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Webdesign", "description": "WordPress-Websites und statisches HTML, responsive, barrierefrei, DSGVO-konform"}},
-        {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Online-Shops", "description": "WooCommerce-Shops mit B2B-Features, Händlerportalen und Bestellsystemen"}},
         {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Frontend-Entwicklung", "description": "Custom Frontend-Lösungen, Performance-Optimierung, UI/UX-Umsetzung"}},
         {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Projektmanagement & Beratung", "description": "Technische Beratung, Projektsteuerung, Konzeptentwicklung"}},
         {"@type": "Offer", "itemOffered": {"@type": "Service", "name": "Website-Analyse", "description": "Performance-Audit, Barrierefreiheits-Check, SEO-Analyse, Handlungsempfehlungen"}}
@@ -289,10 +292,10 @@
           <a href="#svc-bfsg">BFSG &amp; Barrierefreiheit</a>
           <a href="#svc-shops">Shops &amp; Custom</a>
           <h3>Außerdem</h3>
-          <a href="leistungen/">Firmenwebsites</a>
-          <a href="leistungen/">Frontend-Entwicklung</a>
-          <a href="leistungen/">Projektmanagement</a>
-          <a href="leistungen/">Website-Analyse</a>
+          <a href="leistungen/#firmenwebsite">Firmenwebsites</a>
+          <a href="leistungen/#portal">Portale &amp; Tools</a>
+          <a href="leistungen/#redesign">Redesign &amp; Analyse</a>
+          <a href="leistungen/#betreuung-basis">Laufende Betreuung</a>
           <a href="leistungen/" class="services-quicknav-all">Alle Leistungen →</a>
         </nav>
         </div>
@@ -376,7 +379,7 @@
           <div class="process-step">
             <div class="process-number">4</div>
             <div class="process-content">
-              <h3>Launch & Betreuung</h3>
+              <h3>Launch &amp; Betreuung</h3>
               <p>Seite geht online. Danach bin ich weiterhin da – für Updates, Änderungen, Probleme. Oder saubere Übergabe: Sie sind nie an mich gebunden. <a href="preise/" class="btn-text">Betreuungs-Pakete ansehen →</a></p>
             </div>
           </div>
@@ -476,27 +479,27 @@
         </div>
         <div class="faq-list">
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Warum einen Freelancer statt einer Agentur?</button>
+            <button class="faq-question" aria-expanded="false">Wie lange dauert ein typisches Projekt?</button>
             <div class="faq-answer">
-              <p>Bei einer Agentur sprechen Sie mit einem Account Manager – die Arbeit macht ein Junior. Bei mir sprechen Sie mit dem Entwickler, und der macht auch die Arbeit. 80 €/h statt 120–180 €/h Agentursatz, keine Abstimmungsschleifen, keine Overhead-Kosten. Ich habe zwei Jahre lang den Web-Auftritt einer Firmengruppe mit elf Websites allein verantwortlich betreut.</p>
+              <p>Das hängt vom Umfang ab – aber deutlich schneller als bei einer Agentur, weil keine Abstimmungsschleifen dazwischen liegen. Eine konkrete Zeitschätzung bekommen Sie nach dem Erstgespräch. Ich bin in der Regel innerhalb von zwei Wochen verfügbar.</p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was bedeutet KI-Sichtbarkeit und brauche ich das?</button>
+            <button class="faq-question" aria-expanded="false">Was passiert, wenn Sie mal krank werden oder im Urlaub sind?</button>
             <div class="faq-answer">
-              <p>Immer mehr B2B-Einkäufer recherchieren mit ChatGPT oder Perplexity statt mit Google. Wenn Ihre Website dort nicht als Quelle auftaucht, existieren Sie für diese Zielgruppe nicht. KI-Sichtbarkeit bedeutet: strukturierte Daten (Schema.org, JSON-LD), semantische Architektur und maschinenlesbare Inhalte – damit KI-Systeme Ihr Unternehmen korrekt zitieren.</p>
+              <p>Alle meine Projekte laufen auf Standard-Technologie (WordPress, WooCommerce, HTML/CSS/JS). Alles ist dokumentiert. Jeder andere Entwickler kann meine Arbeit übernehmen – kein proprietäres System, kein Vendor Lock-in.</p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Muss meine Website barrierefrei sein?</button>
+            <button class="faq-question" aria-expanded="false">Kann ChatGPT nicht einfach meine Website bauen?</button>
             <div class="faq-answer">
-              <p>Wenn Sie Produkte oder Dienstleistungen an Verbraucher verkaufen: ja, seit Juni 2025 ist das Pflicht (BFSG). Bußgelder bis 100.000 €. Ich baue WCAG 2.1 AA-konform – als Neubauprojekt oder als Update für bestehende Seiten. Overlay-Lösungen wie AccessiWay sind keine echte Barrierefreiheit.</p>
+              <p>KI kann Code generieren. Was sie nicht kann: verstehen, was Ihr Unternehmen braucht. Eine Website ist nicht nur HTML – sie ist Strategie, Struktur, Nutzerführung, rechtliche Absicherung (DSGVO, Impressum, BFSG), laufende Wartung und jemand, der verantwortlich ist, wenn etwas nicht funktioniert.</p>
             </div>
           </div>
           <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Wie läuft die Zusammenarbeit ab?</button>
+            <button class="faq-question" aria-expanded="false">Was unterscheidet Sie von anderen Freelancern?</button>
             <div class="faq-answer">
-              <p>Erstgespräch (kostenlos, bis 1 Stunde), danach Konzept und Festpreis-Angebot. Während der Umsetzung: Zwischenstände, kurze Wege, direkte Änderungen. Nach dem Launch: Betreuung ab 200 €/Monat oder saubere Übergabe – Sie sind nie gebunden.</p>
+              <p>Drei Dinge. Erstens: 27 Jahre Erfahrung, davon drei Jahre professionelle QA in der Games-Branche – ich finde Fehler, bevor sie Ihre Kunden finden. Zweitens: Ich habe zwei Jahre lang den kompletten Web-Auftritt einer Firmengruppe mit elf Websites allein betreut. Drittens: Meine Frau ist Lektorin. Jeder Text ist professionell geprüft. Die meisten Freelancer liefern Code. Ich liefere ein fertiges Produkt.</p>
             </div>
           </div>
         </div>
@@ -553,6 +556,7 @@
           <li><a href="faq/">FAQ</a></li>
           <li><a href="de/impressum.html">Impressum</a></li>
           <li><a href="de/datenschutz.html">Datenschutz</a></li>
+          <li><a href="de/barrierefreiheit.html">Barrierefreiheit</a></li>
         </ul>
       </div>
     </div>

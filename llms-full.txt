@@ -1,0 +1,156 @@
+# Jan-Erik Andersen – Freiberuflicher Webentwickler (vollständig)
+
+> Websites, Shops, digitale Tools und KI-Sichtbarkeit. WordPress, WooCommerce, statisches HTML. Seit 1999 Webprojekte, seit 2010 selbstständig. Deutschlandweit remote, Plau am See.
+
+## Über Jan-Erik Andersen
+
+Hintergrund: Multimedia Design (HTK Hamburg). Drei Jahre professionelle Qualitätssicherung in der Games-Branche (Goodgame Studios, Deep Silver FISHLABS, Daedalic Entertainment, InnoGames). 2017 bei YOOtheme – dem Hersteller des Page Builders, den er heute noch einsetzt. Danach Frontend-Entwicklung in einer Werbeagentur (Tangram). Seit 2010 selbstständig, seit 2023 ausschließlich freiberuflich.
+
+Alle Texte werden von Annemarie Andersen lektoriert – sie ist professionelle Lektorin und Korrektorin.
+
+Standort: Plau am See, Mecklenburg-Vorpommern, Deutschland.
+Arbeitsweise: 100 % remote, deutschlandweit.
+
+## Drei Schwerpunkte
+
+### KI-Sichtbarkeit (GEO / AVO)
+Damit Websites in ChatGPT, Perplexity und Claude zitiert werden – nicht nur in Google ranken. Strukturierte Daten (Schema.org, JSON-LD), semantische Architektur, llms.txt, FAQPage-Schema, robots.txt-Konfiguration für KI-Crawler.
+
+GEO (Generative Engine Optimization): Optimierung von Inhalten und Struktur, damit Antwortsysteme Inhalte korrekt verstehen und zitieren. Wissenschaftlich belegt: +37–40 % Visibility (Aggarwal et al., 2024).
+
+AVO (Agent Visibility Optimization): Die praktische Zielgröße – wie gut eine Website für KI-Agenten auffindbar, zitierbar und nutzbar ist.
+
+Beleg: Die Website jan-erik-andersen.de selbst ist der technische Live-Test.
+
+- Im Projekt integriert oder als Update ab 800 EUR
+- Mehr: https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/
+
+### BFSG-Compliance und Barrierefreiheit
+WCAG 2.1 AA-konforme Websites. Neubau oder Nachrüstung bestehender Seiten. Pflicht seit Juni 2025 für B2C-Websites in Deutschland (Barrierefreiheitsstärkungsgesetz). Bußgelder bis 100.000 EUR.
+
+Leistungen: Semantisches HTML, ARIA-Labels, Tastaturbedienbarkeit, Kontrastprüfung, Screenreader-Tests, Formulare mit Labels, Bilder mit Alt-Texten.
+
+Overlay-Lösungen wie AccessiWay oder UserWay sind keine echte Barrierefreiheit, sondern Pflaster.
+
+Beleg: Wirkungsbericht des Bundesverbands Senior Partner in School e.V. – professionell und barrierefreundlich aufgesetzt.
+
+- Im Projekt integriert oder als Update ab 1.200 EUR
+- Audit: ab 400 EUR
+- Mehr: https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/
+
+### Shops und Custom-Lösungen
+WooCommerce mit B2B-Features, Händlerportalen, eigenen Plugins. Preisgruppen, Musterbestellsysteme, Germanized für Rechtstexte und E-Rechnung.
+
+Leistungen: B2B-Preisgruppen, Musterbestellsysteme mit E-Mail-Nachverfolgung, Custom Plugins, Produktstruktur (Varianten, Attribute, Filter), Germanized-Integration.
+
+- Standard-Shop ab 4.800 EUR, B2B ab 7.500 EUR
+- Mehr: https://jan-erik-andersen.de/leistungen/shops-und-custom/
+
+## Weitere Leistungen
+- Webdesign (WordPress, statisches HTML) – ab 2.400 EUR
+- Frontend-Entwicklung (Figma zu Website, YOOtheme Pro)
+- Projektmanagement und Beratung
+- Website-Analyse (Performance, SEO, Barrierefreiheit, Sicherheit) – ab 400 EUR
+
+## Betreuung (Retainer)
+- Basis: 200 EUR/Monat (2,5h inkl.) – Updates, Sicherheit, Monitoring, kleine Content-Änderungen
+- Standard: 400 EUR/Monat (5h inkl.) – dazu Performance-Überwachung, Content-Änderungen, kleinere Features
+- Shop: 800 EUR/Monat (10h inkl.) – dazu WooCommerce-spezifisch, Produkt- und Shopmanagement, neue Features, Prio-Support
+- Monatlich kündbar, keine Mindestlaufzeit
+- Stundensatz bei offenem Umfang: 80 EUR/h netto
+
+## Referenzen (Case Studies)
+
+### Gerwing Steinwerke
+- Branche: B2B / Industrie (Pflastersteine)
+- Aufgabe: Shop-Neubau 2023
+- Technologie: WooCommerce, Custom Plugins
+- Features: Steinmuster-Bestellsystem mit E-Mail-Nachverfolgung, Produktfilter nach Farbe/Format/Einsatzbereich, B2B-Preisgruppen
+- Status: Alleinige technische Verantwortung seit 2023, laufende Betreuung
+- Website: https://gerwing.de
+
+### Runden Group
+- Branche: Firmengruppe (Kreislaufwirtschaft, Logistik, IT, Gebäudeplanung, Landwirtschaft)
+- Aufgabe: Kompletter Web-Auftritt
+- Umfang: 11 Websites, zweisprachig (DE/EN), Karriereportal, Podcast-Bereich
+- Technologie: WordPress, YOOtheme Pro, Custom Plugins
+- Zeitraum: 2023–2025 (2 Jahre alleinige Verantwortung)
+- Besonderheit: Internes Mitarbeiter-Onboarding-Portal (mehrsprachig: DE/EN/ES/PL)
+- Website: https://runden-group.eu
+
+### WBG Pooling
+- Branche: Logistik / Kreislaufwirtschaft (Mehrweg-Transportverpackungen)
+- Aufgabe: Industrie-Portal + internes Sales Center
+- Technologie: WordPress, Custom Plugin (WebDeck), WebRotate 360°
+- Features: 360°-Produktansichten, Kreislauf-Diagramm, Job-Board-Anbindung (Concludis API), passwortgeschütztes Sales Center (WebDeck: Quiz-System, Fortschritts-Tracking, PDF-Zertifikate)
+- Integrationen: Salesforce (Web-to-Lead), Concludis (Job-Board API)
+- Website: https://wbg-pooling.eu
+
+### Pro Bono
+- Senior Partner in School e.V.: Digitaler Wirkungsbericht mit interaktiver SVG-Deutschlandkarte (statisches HTML)
+- Streunerhilfe Plau e.V.: Tierschutz-Website mit Spendensystem und Adoptions-Listings (WordPress + YOOtheme Pro)
+
+## Kundenstimmen (Google-Bewertungen, ungekürzt)
+
+Karin Chierchia, Vorsitzende Senior Partner in School e.V.:
+„Seniorpartner in School ist eine bundesweit agierende Sozialorganisation. Ein gut aufgestellter digitaler Wirkungsbericht ist für unsere Arbeit wichtig. Jan-Erik und die kompetente Texterin Annemarie haben das für uns neue Format professionell und barrierefreundlich aufgesetzt. Super Teamarbeit, verlässlich und engagiert. SiS sagt DANKE!"
+
+Corvin Jaedicke, ai-coustics:
+„Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich, mit Andersen Webworks seit nun mehreren Jahren einen zuverlässigen Partner gefunden zu haben. Professionelles Webdesign, das mich immer wieder überrascht. Meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff. So setzt man sich von der Konkurrenz ab!"
+
+## Häufige Fragen (Auswahl)
+
+**Was kostet eine Website?**
+Firmenwebsite: ab 2.400 EUR. Shop: ab 4.800 EUR. Betreuung: ab 200 EUR/Monat. Festpreise nach Erstgespräch.
+
+**Warum Freelancer statt Agentur?**
+80 EUR/h statt 120–180 EUR/h Agentursatz. Direkter Kontakt mit dem Entwickler, keine Abstimmungsschleifen.
+
+**Funktioniert Remote?**
+Ja, seit 2010 für Kunden in ganz Deutschland. Kein Kunde hat gesagt, das Ergebnis wäre besser geworden, wenn es ein persönliches Treffen gegeben hätte.
+
+**Was ist KI-Sichtbarkeit?**
+Strukturierte Daten (Schema.org, JSON-LD), semantische Architektur und maschinenlesbare Inhalte – damit KI-Systeme Ihr Unternehmen korrekt zitieren.
+
+**Muss meine Website barrierefrei sein?**
+Wenn Sie Produkte oder Dienstleistungen an Verbraucher verkaufen: ja, seit Juni 2025 (BFSG). Bußgelder bis 100.000 EUR.
+
+**Kann ChatGPT meine Website bauen?**
+KI kann Code generieren. Was sie nicht kann: verstehen, was Ihr Unternehmen braucht. Eine Website ist Strategie, Struktur, Nutzerführung, rechtliche Absicherung, laufende Wartung und Verantwortung.
+
+**Was passiert, wenn Sie krank werden?**
+Alles läuft auf Standard-Technologie, alles ist dokumentiert. Jeder Entwickler kann die Arbeit übernehmen – kein Vendor Lock-in.
+
+**Vollständige FAQ:** https://jan-erik-andersen.de/faq/
+
+## Technologien
+WordPress, WooCommerce, YOOtheme Pro, statisches HTML, Vanilla JavaScript, Schema.org, JSON-LD, CSS3, HTML5
+
+## Zahlen
+- 27+ Jahre Webprojekte (seit 1999)
+- 50+ Projekte
+- 14+ Branchen
+- 20+ betreute Live-Websites
+
+## Garantien
+- Antwort auf Mails innerhalb eines Werktags
+- Kostenloses Erstgespräch (bis zu 1 Stunde)
+- Verfügbarkeit innerhalb von zwei Wochen
+- Keine Follow-up-Mails, kein Druck
+- Alles dokumentiert, jederzeit übertragbar
+- Offene Standards – kein Vendor Lock-in
+
+## Kontakt
+- E-Mail: mail@andersen-webworks.de
+- Telefon: +49 38733 270015
+- LinkedIn: linkedin.com/in/andersen-erik
+- Website: https://jan-erik-andersen.de
+- Standort: Plau am See, Mecklenburg-Vorpommern, Deutschland
+- Arbeitsweise: 100 % remote, deutschlandweit
+
+## Maschinenlesbare Endpoints
+- /llms.txt – Kurzversion dieser Datei
+- /llms-full.txt – diese Datei (vollständig)
+- /sitemap.xml – alle URLs
+- /robots.txt – Crawler-Konfiguration
+- /ai/manifest.json – AI-native Discovery

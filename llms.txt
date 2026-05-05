@@ -52,5 +52,6 @@ WordPress, WooCommerce, YOOtheme Pro, statisches HTML, Vanilla JavaScript, Schem
 
 ## Maschinenlesbare Endpoints
 - /llms.txt – diese Datei
+- /llms-full.txt – vollständige Version mit Case Studies, FAQ, Testimonials
 - /sitemap.xml – alle URLs
 - /robots.txt – Crawler-Konfiguration
