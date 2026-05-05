@@ -36,8 +36,15 @@
 
 .hero-ctas {
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-md);
   margin-bottom: var(--space-xl);
+}
+
+.hero-ctas .btn,
+.hero-ctas .funnel-reopen {
+  white-space: nowrap;
 }
 
 .hero-sidebar {
@@ -107,25 +114,26 @@
 .funnel-reopen {
   display: inline-flex;
   align-items: center;
-  gap: 0.4em;
-  margin-bottom: var(--space-xl);
-  padding: 0.5em 1em;
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  background: var(--color-surface-alt, var(--color-bg));
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
+  gap: 0.5em;
+  padding: var(--space-sm) var(--space-xl);
+  font-size: var(--text-base);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 4px;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
+  transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .funnel-reopen:hover {
-  color: var(--color-text);
-  border-color: var(--color-text-secondary);
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: #fff;
 }
 
-.funnel-reopen svg { width: 14px; height: 14px; }
+.funnel-reopen svg { width: 16px; height: 16px; }
 .funnel-reopen:hover svg { transition: transform 0.4s ease; transform: rotate(360deg); }
 
 /* --- Services Section --- */
