@@ -34,7 +34,7 @@ WooCommerce mit B2B-Features, Händlerportalen, eigenen Plugins. Preisgruppen, M
 ## Referenzen
 - Gerwing Steinwerke – B2B-Shop, WooCommerce, Musterbestellsystem – gerwing.de
 - Runden Group – 11 Websites, Firmengruppe, 2 Jahre alleinige Verantwortung – runden-group.eu
-- Scheja und Partner – Datenschutzkanzlei, 30 Anwälte, mehrsprachig – scheja-partners.de
+- WBG Pooling – Industrie-Portal, 360°-Produktansichten, Custom-Plugin WebDeck, Salesforce-Anbindung – wbg-pooling.eu
 - Senior Partner in School e.V. – Wirkungsbericht, barrierefrei, Pro Bono – wirkungsbericht.seniorpartnerinschool.de
 - 20+ betreute Live-Websites, 14+ Branchen, 50+ Projekte
 
