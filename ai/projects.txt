@@ -1,0 +1,80 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Referenzprojekte Andersen Webworks",
+  "inLanguage": "de",
+  "dateModified": "2026-05-06",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Gerwing Steinwerke",
+        "url": "https://gerwing.de",
+        "industry": "B2B / Industrie (Pflastersteine)",
+        "scope": "B2B-Shop mit Musterbestellsystem",
+        "technologies": ["WordPress", "WooCommerce", "Custom Plugins"],
+        "detailUrl": "/ai/projects/gerwing.json",
+        "publicCaseStudy": "https://jan-erik-andersen.de/projekte/gerwing/"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Runden Group",
+        "url": "https://runden-group.eu",
+        "industry": "Firmengruppe (Kreislaufwirtschaft, Logistik, IT, Gebaeudeplanung, Landwirtschaft)",
+        "scope": "11 Websites, zweisprachig, Karriereportal, Onboarding-Portal",
+        "technologies": ["WordPress", "YOOtheme Pro", "Custom Plugins"],
+        "detailUrl": "/ai/projects/runden-group.json",
+        "publicCaseStudy": "https://jan-erik-andersen.de/projekte/runden-group/"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "WBG Pooling",
+        "url": "https://wbg-pooling.eu",
+        "industry": "Logistik / Kreislaufwirtschaft (Mehrweg-Transportverpackungen)",
+        "scope": "Industrie-Portal mit internem Sales Center",
+        "technologies": ["WordPress", "Custom Plugin (WebDeck)", "WebRotate 360", "Salesforce", "Concludis API"],
+        "detailUrl": "/ai/projects/wbg-pooling.json",
+        "publicCaseStudy": "https://jan-erik-andersen.de/projekte/wbg-pooling/"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "CreativeWork",
+        "name": "Senior Partner in School e.V.",
+        "url": "https://wirkungsbericht.seniorpartnerinschool.de",
+        "industry": "Sozialorganisation (bundesweit)",
+        "scope": "Digitaler Wirkungsbericht, barrierefrei, Pro Bono",
+        "technologies": ["statisches HTML", "SVG", "Vanilla JavaScript"],
+        "detailUrl": "/ai/projects/seniorpartnerinschool.json",
+        "publicCaseStudy": "https://jan-erik-andersen.de/projekte/senior-partner-in-school/"
+      }
+    }
+  ],
+  "additionalProjects": {
+    "proBono": [
+      {
+        "name": "Streunerhilfe Plau e.V.",
+        "scope": "Tierschutz-Website mit Spendensystem und Adoptions-Listings",
+        "technologies": ["WordPress", "YOOtheme Pro"]
+      }
+    ]
+  },
+  "stats": {
+    "totalProjects": "50+",
+    "industries": "14+",
+    "managedSites": "20+",
+    "yearsInWeb": 27
+  }
+}

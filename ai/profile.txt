@@ -1,0 +1,72 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://jan-erik-andersen.de/#person",
+      "name": "Jan-Erik Andersen",
+      "givenName": "Jan-Erik",
+      "familyName": "Andersen",
+      "jobTitle": "Freiberuflicher Webentwickler",
+      "url": "https://jan-erik-andersen.de",
+      "email": "mail@andersen-webworks.de",
+      "telephone": "+49 38733 270015",
+      "sameAs": ["https://www.linkedin.com/in/andersen-erik"],
+      "worksFor": {"@id": "https://jan-erik-andersen.de/#service"},
+      "alumniOf": [
+        {"@type": "EducationalOrganization", "name": "HTK Hamburg", "description": "Multimedia Design"}
+      ],
+      "knowsAbout": [
+        "WordPress", "WooCommerce", "YOOtheme Pro", "Schema.org", "JSON-LD",
+        "WCAG 2.1 AA", "BFSG", "GEO", "AVO", "B2B-Shops", "Custom Plugins",
+        "Vanilla JavaScript", "statisches HTML"
+      ],
+      "knowsLanguage": ["de", "en"],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Plau am See",
+        "addressRegion": "Mecklenburg-Vorpommern",
+        "addressCountry": "DE"
+      },
+      "description": "Webentwickler seit 1999, selbststaendig seit 2010, ausschliesslich freiberuflich seit 2023. Hintergrund: Multimedia Design (HTK Hamburg), drei Jahre QA in der Games-Branche (Goodgame Studios, Deep Silver FISHLABS, Daedalic Entertainment, InnoGames), 2017 bei YOOtheme, danach Frontend in der Werbeagentur Tangram."
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://jan-erik-andersen.de/#service",
+      "name": "Andersen Webworks",
+      "founder": {"@id": "https://jan-erik-andersen.de/#person"},
+      "url": "https://jan-erik-andersen.de",
+      "email": "mail@andersen-webworks.de",
+      "telephone": "+49 38733 270015",
+      "priceRange": "EUR 200 bis EUR 7500+",
+      "areaServed": {"@type": "Country", "name": "Deutschland"},
+      "availableLanguage": ["de", "en"],
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Plau am See",
+        "addressRegion": "Mecklenburg-Vorpommern",
+        "addressCountry": "DE"
+      },
+      "serviceType": [
+        "Web development", "WordPress", "WooCommerce",
+        "Shop development", "Web accessibility", "AI visibility / GEO"
+      ],
+      "slogan": "Websites, Shops, digitale Tools und KI-Sichtbarkeit",
+      "foundingDate": "2010"
+    }
+  ],
+  "stats": {
+    "yearsInWeb": 27,
+    "yearsFreelance": 16,
+    "projects": "50+",
+    "industries": "14+",
+    "managedSites": "20+"
+  },
+  "editorial": {
+    "lectoredBy": "Annemarie Andersen, professionelle Lektorin und Korrektorin"
+  },
+  "workingMode": {
+    "remote": true,
+    "areaServed": "Deutschland"
+  }
+}

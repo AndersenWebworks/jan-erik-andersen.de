@@ -1,0 +1,66 @@
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "name": "Haeufige Fragen Andersen Webworks",
+  "inLanguage": "de",
+  "url": "https://jan-erik-andersen.de/faq/",
+  "dateModified": "2026-05-06",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Was kostet eine Website?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Firmenwebsite: ab 2.400 EUR. Shop: ab 4.800 EUR. Betreuung: ab 200 EUR pro Monat. Festpreise nach Erstgespraech."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Warum Freelancer statt Agentur?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "80 EUR pro Stunde statt 120 bis 180 EUR pro Stunde Agentursatz. Direkter Kontakt mit dem Entwickler, keine Abstimmungsschleifen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Funktioniert Remote?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja, seit 2010 fuer Kunden in ganz Deutschland. Kein Kunde hat gesagt, das Ergebnis waere besser geworden, wenn es ein persoenliches Treffen gegeben haette."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was ist KI-Sichtbarkeit?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Strukturierte Daten (Schema.org, JSON-LD), semantische Architektur und maschinenlesbare Inhalte, damit KI-Systeme das Unternehmen korrekt zitieren."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Muss meine Website barrierefrei sein?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Wenn Produkte oder Dienstleistungen an Verbraucher verkauft werden: ja, seit Juni 2025 (BFSG). Bussgelder bis 100.000 EUR."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kann ChatGPT meine Website bauen?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "KI kann Code generieren. Was sie nicht kann: verstehen, was ein Unternehmen braucht. Eine Website ist Strategie, Struktur, Nutzerfuehrung, rechtliche Absicherung, laufende Wartung und Verantwortung."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Was passiert, wenn der Entwickler krank wird?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Alles laeuft auf Standard-Technologie, alles ist dokumentiert. Jeder Entwickler kann die Arbeit uebernehmen, kein Vendor Lock-in."
+      }
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "Kontakt Andersen Webworks",
+  "inLanguage": "de",
+  "url": "https://jan-erik-andersen.de/kontakt/",
+  "dateModified": "2026-05-06",
+  "mainEntity": {
+    "@type": "ProfessionalService",
+    "@id": "https://jan-erik-andersen.de/#service",
+    "name": "Andersen Webworks",
+    "contactPoint": [
+      {
+        "@type": "ContactPoint",
+        "email": "mail@andersen-webworks.de",
+        "telephone": "+49 38733 270015",
+        "contactType": "customer service",
+        "availableLanguage": ["de", "en"],
+        "areaServed": "DE"
+      }
+    ],
+    "sameAs": ["https://www.linkedin.com/in/andersen-erik"]
+  },
+  "guarantees": [
+    "Antwort auf E-Mails innerhalb eines Werktags",
+    "Kostenloses Erstgespraech (bis zu 1 Stunde)",
+    "Verfuegbarkeit innerhalb von zwei Wochen",
+    "Keine Follow-up-Mails, kein Druck",
+    "Alles dokumentiert, jederzeit uebertragbar",
+    "Offene Standards, kein Vendor Lock-in"
+  ],
+  "workingMode": {
+    "remote": true,
+    "areaServed": "Deutschland",
+    "location": {
+      "@type": "PostalAddress",
+      "addressLocality": "Plau am See",
+      "addressRegion": "Mecklenburg-Vorpommern",
+      "addressCountry": "DE"
+    }
+  }
+}

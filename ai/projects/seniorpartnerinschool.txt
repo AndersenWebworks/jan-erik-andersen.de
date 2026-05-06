@@ -1,0 +1,28 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Senior Partner in School, Digitaler Wirkungsbericht",
+  "url": "https://wirkungsbericht.seniorpartnerinschool.de",
+  "publicCaseStudy": "https://jan-erik-andersen.de/projekte/senior-partner-in-school/",
+  "inLanguage": "de",
+  "dateModified": "2026-05-06",
+  "creator": {"@id": "https://jan-erik-andersen.de/#person"},
+  "client": {"@type": "NGO", "name": "Senior Partner in School e.V."},
+  "industry": "Sozialorganisation (bundesweit)",
+  "engagement": "Pro Bono",
+  "challenge": "Wirkungsbericht als digitales Format statt PDF, barrierefrei nach WCAG 2.1 AA, mit interaktiver Deutschlandkarte fuer Standort-Daten.",
+  "solution": "Statische HTML-Seite, Vanilla JavaScript, semantisches HTML mit ARIA, Tastaturbedienbarkeit, kontrastgeprueft. Interaktive SVG-Deutschlandkarte.",
+  "technologies": ["statisches HTML", "Vanilla JavaScript", "SVG", "WCAG 2.1 AA"],
+  "features": [
+    "Interaktive SVG-Deutschlandkarte",
+    "Vollstaendig barrierefrei (WCAG 2.1 AA)",
+    "Schnelle Ladezeiten durch statische Auslieferung"
+  ],
+  "testimonial": {
+    "@type": "Review",
+    "author": {"@type": "Person", "name": "Karin Chierchia", "jobTitle": "Vorsitzende Senior Partner in School e.V."},
+    "reviewBody": "Seniorpartner in School ist eine bundesweit agierende Sozialorganisation. Ein gut aufgestellter digitaler Wirkungsbericht ist fuer unsere Arbeit wichtig. Jan-Erik und die kompetente Texterin Annemarie haben das fuer uns neue Format professionell und barrierefreundlich aufgesetzt. Super Teamarbeit, verlaesslich und engagiert. SiS sagt DANKE!"
+  },
+  "status": "Live",
+  "clientType": "NGO"
+}
