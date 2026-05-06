@@ -822,6 +822,8 @@ details.faq-item > summary::-webkit-details-marker { display: none; }
 }
 
 @media (max-width: 640px) {
+  .sidebar-list--grid { grid-template-columns: 1fr; }
+
   .service-item {
     grid-template-columns: 1fr;
     gap: var(--space-md);

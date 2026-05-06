@@ -17,6 +17,11 @@
   align-items: start;
 }
 
+.hero-content {
+  align-self: center;
+  min-width: 0;
+}
+
 .hero-content h1 {
   margin-bottom: var(--space-lg);
   font-weight: 600;
@@ -35,11 +40,16 @@
 }
 
 .hero-ctas {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--space-md);
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: start;
+  gap: var(--space-sm) var(--space-md);
   margin-bottom: var(--space-xl);
+}
+
+.hero-ctas .funnel-reopen {
+  grid-column: 1 / -1;
+  justify-self: start;
 }
 
 .hero-ctas .btn,
@@ -664,7 +674,10 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
 @media (max-width: 640px) {
   .case-study { padding: var(--space-lg); }
 
-  .hero-ctas { flex-direction: column; }
+  .hero-ctas { grid-template-columns: 1fr; }
+  .hero-ctas .funnel-reopen { grid-column: auto; justify-self: stretch; }
+  .hero-ctas .btn,
+  .hero-ctas .funnel-reopen { white-space: normal; text-align: center; }
 }
 
 @media (max-width: 480px) {
