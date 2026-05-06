@@ -7,24 +7,8 @@ Allow: /
 # Sitemaps
 Sitemap: https://jan-erik-andersen.de/sitemap.xml
 
-# ============================================
-# AI-READABLE ENDPOINTS (Machine Discovery)
-# ============================================
-# Startpunkt für strukturierte Daten:
-# https://jan-erik-andersen.de/ai/manifest.json
-# Mirror:
-# https://raw.githubusercontent.com/AndersenWebworks/jan-erik-andersen.de/main/ai/manifest.json
-#
-# Primäre Endpoints:
-# https://jan-erik-andersen.de/ai/identity-schema.json  (Schema.org Person)
-# https://jan-erik-andersen.de/ai/services.json         (Services als ItemList)
-# https://jan-erik-andersen.de/ai/services.txt          (Plain-Text Services)
-# https://jan-erik-andersen.de/ai/health.json           (Status)
-# https://jan-erik-andersen.de/ai/faq-schema.json       (FAQPage)
-# https://jan-erik-andersen.de/ai/identity.txt          (Plain-Text Identity)
-
-# Wichtige strukturierte Daten explizit erlauben
-Allow: /ai/
+# Strukturierte Daten für KI-Systeme
+# Primär: /llms.txt + JSON-LD in jeder HTML-Seite
 
 # JSON/JSON-LD/Text Dateien
 Allow: /*.json
