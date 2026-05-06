@@ -1,0 +1,31 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Changelog /ai/-Endpoints",
+  "inLanguage": "de",
+  "dateModified": "2026-05-06",
+  "version": "1.0",
+  "entries": [
+    {
+      "version": "1.0",
+      "date": "2026-05-06",
+      "type": "initial",
+      "summary": "Erstanlage der /ai/-Endpoints. 13 Dateien.",
+      "endpointsAdded": [
+        "/ai/manifest.json",
+        "/ai/profile.json",
+        "/ai/services.json",
+        "/ai/pricing.json",
+        "/ai/projects.json",
+        "/ai/projects/gerwing.json",
+        "/ai/projects/runden-group.json",
+        "/ai/projects/wbg-pooling.json",
+        "/ai/projects/seniorpartnerinschool.json",
+        "/ai/faq.json",
+        "/ai/contact.json",
+        "/ai/glossary.json",
+        "/ai/changelog.json"
+      ]
+    }
+  ]
+}

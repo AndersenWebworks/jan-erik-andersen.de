@@ -53,5 +53,13 @@ WordPress, WooCommerce, YOOtheme Pro, statisches HTML, Vanilla JavaScript, Schem
 ## Maschinenlesbare Endpoints
 - /llms.txt – diese Datei
 - /llms-full.txt – vollständige Version mit Case Studies, FAQ, Testimonials
+- /ai/manifest.json – Discovery-Manifest aller AI-Endpoints (Schema.org JSON-LD)
+- /ai/profile.json – Person + ProfessionalService
+- /ai/services.json – Leistungen mit Offer und Preisen
+- /ai/pricing.json – Preise, Stundensatz, Retainer
+- /ai/projects.json – Referenzprojekte (Index, Detail-Studies in /ai/projects/)
+- /ai/faq.json – FAQPage
+- /ai/contact.json – Kontakt und Garantien
+- /ai/glossary.json – Glossar (GEO, AVO, BFSG, WCAG 2.1 AA, llms.txt, JSON-LD, Schema.org)
 - /sitemap.xml – alle URLs
 - /robots.txt – Crawler-Konfiguration

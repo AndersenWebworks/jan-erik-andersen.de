@@ -1,0 +1,157 @@
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Leistungen Andersen Webworks",
+  "inLanguage": "de",
+  "dateModified": "2026-05-06",
+  "itemListElement": [
+    {
+      "@type": "Service",
+      "@id": "https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/#service",
+      "name": "KI-Sichtbarkeit (GEO/AVO)",
+      "description": "Damit Websites in ChatGPT, Perplexity und Claude zitiert werden. Strukturierte Daten (Schema.org, JSON-LD), semantische Architektur, llms.txt, FAQPage-Schema, robots.txt-Konfiguration fuer KI-Crawler.",
+      "serviceType": "AI visibility / Generative Engine Optimization",
+      "provider": {"@id": "https://jan-erik-andersen.de/#service"},
+      "areaServed": {"@type": "Country", "name": "Deutschland"},
+      "url": "https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/",
+      "offers": {
+        "@type": "Offer",
+        "priceSpecification": {
+          "@type": "PriceSpecification",
+          "priceCurrency": "EUR",
+          "minPrice": 800,
+          "valueAddedTaxIncluded": false
+        },
+        "description": "Im Projekt integriert oder als Update ab 800 EUR netto"
+      },
+      "additionalProperty": [
+        {"@type": "PropertyValue", "name": "evidence", "value": "Aggarwal et al. 2024: +37 bis +40 Prozent Visibility durch GEO"},
+        {"@type": "PropertyValue", "name": "liveTest", "value": "https://jan-erik-andersen.de"}
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/#service",
+      "name": "BFSG-Compliance und Barrierefreiheit",
+      "description": "WCAG 2.1 AA-konforme Websites. Neubau oder Nachruestung. Pflicht seit Juni 2025 fuer B2C-Websites in Deutschland (Barrierefreiheitsstaerkungsgesetz). Bussgelder bis 100.000 EUR.",
+      "serviceType": "Web accessibility / WCAG 2.1 AA",
+      "provider": {"@id": "https://jan-erik-andersen.de/#service"},
+      "areaServed": {"@type": "Country", "name": "Deutschland"},
+      "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "BFSG-Update / Neubau-Aufschlag",
+          "priceSpecification": {"@type": "PriceSpecification", "priceCurrency": "EUR", "minPrice": 1200, "valueAddedTaxIncluded": false}
+        },
+        {
+          "@type": "Offer",
+          "name": "BFSG-Audit",
+          "priceSpecification": {"@type": "PriceSpecification", "priceCurrency": "EUR", "minPrice": 400, "valueAddedTaxIncluded": false}
+        }
+      ],
+      "additionalProperty": [
+        {"@type": "PropertyValue", "name": "scopeIncludes", "value": "Semantisches HTML, ARIA-Labels, Tastaturbedienbarkeit, Kontrastpruefung, Screenreader-Tests, Formulare mit Labels, Bilder mit Alt-Texten"},
+        {"@type": "PropertyValue", "name": "rejected", "value": "Overlay-Loesungen wie AccessiWay oder UserWay (keine echte Barrierefreiheit)"}
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://jan-erik-andersen.de/leistungen/shops-und-custom/#service",
+      "name": "Shops und Custom-Loesungen",
+      "description": "WooCommerce mit B2B-Features, Haendlerportalen, eigenen Plugins. Preisgruppen, Musterbestellsysteme, Germanized fuer Rechtstexte und E-Rechnung.",
+      "serviceType": "E-commerce / WooCommerce / B2B",
+      "provider": {"@id": "https://jan-erik-andersen.de/#service"},
+      "areaServed": {"@type": "Country", "name": "Deutschland"},
+      "url": "https://jan-erik-andersen.de/leistungen/shops-und-custom/",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Standard-Shop",
+          "priceSpecification": {"@type": "PriceSpecification", "priceCurrency": "EUR", "minPrice": 4800, "valueAddedTaxIncluded": false}
+        },
+        {
+          "@type": "Offer",
+          "name": "B2B-Shop",
+          "priceSpecification": {"@type": "PriceSpecification", "priceCurrency": "EUR", "minPrice": 7500, "valueAddedTaxIncluded": false}
+        }
+      ],
+      "additionalProperty": [
+        {"@type": "PropertyValue", "name": "scopeIncludes", "value": "B2B-Preisgruppen, Musterbestellsysteme mit E-Mail-Nachverfolgung, Custom Plugins, Produktvarianten und Filter, Germanized-Integration"}
+      ]
+    },
+    {
+      "@type": "Service",
+      "name": "Webdesign",
+      "description": "Firmenwebsite auf WordPress oder statischem HTML. Inkl. Schema.org, Performance-Optimierung, Mobile-First.",
+      "serviceType": "Web design",
+      "provider": {"@id": "https://jan-erik-andersen.de/#service"},
+      "url": "https://jan-erik-andersen.de/leistungen/webdesign/",
+      "offers": {
+        "@type": "Offer",
+        "priceSpecification": {"@type": "PriceSpecification", "priceCurrency": "EUR", "minPrice": 2400, "valueAddedTaxIncluded": false}
+      }
+    },
+    {
+      "@type": "Service",
+      "name": "Frontend-Entwicklung",
+      "description": "Figma zu Website, YOOtheme Pro, Vanilla JavaScript.",
+      "serviceType": "Frontend development",
+      "provider": {"@id": "https://jan-erik-andersen.de/#service"},
+      "url": "https://jan-erik-andersen.de/leistungen/frontend-entwicklung/",
+      "offers": {
+        "@type": "Offer",
+        "priceSpecification": {"@type": "UnitPriceSpecification", "priceCurrency": "EUR", "price": 80, "unitText": "HOUR", "valueAddedTaxIncluded": false}
+      }
+    },
+    {
+      "@type": "Service",
+      "name": "Projektmanagement und Beratung",
+      "description": "Begleitung bei Webprojekten, Strategie, Auswahl von Tools und Dienstleistern.",
+      "serviceType": "Consulting / project management",
+      "provider": {"@id": "https://jan-erik-andersen.de/#service"},
+      "url": "https://jan-erik-andersen.de/leistungen/projektmanagement-beratung/",
+      "offers": {
+        "@type": "Offer",
+        "priceSpecification": {"@type": "UnitPriceSpecification", "priceCurrency": "EUR", "price": 80, "unitText": "HOUR", "valueAddedTaxIncluded": false}
+      }
+    },
+    {
+      "@type": "Service",
+      "name": "Website-Analyse",
+      "description": "Performance, SEO, Barrierefreiheit, Sicherheit. Berichtsformat mit konkreten Massnahmen.",
+      "serviceType": "Website audit",
+      "provider": {"@id": "https://jan-erik-andersen.de/#service"},
+      "url": "https://jan-erik-andersen.de/leistungen/website-analyse/",
+      "offers": {
+        "@type": "Offer",
+        "priceSpecification": {"@type": "PriceSpecification", "priceCurrency": "EUR", "minPrice": 400, "valueAddedTaxIncluded": false}
+      }
+    },
+    {
+      "@type": "Service",
+      "name": "Betreuung (Retainer)",
+      "description": "Updates, Sicherheit, Monitoring, kleine Aenderungen. Drei Stufen, monatlich kuendbar, keine Mindestlaufzeit.",
+      "serviceType": "Maintenance / retainer",
+      "provider": {"@id": "https://jan-erik-andersen.de/#service"},
+      "url": "https://jan-erik-andersen.de/leistungen/betreuung/",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Basis (2,5h inkl.)",
+          "priceSpecification": {"@type": "PriceSpecification", "priceCurrency": "EUR", "price": 200, "valueAddedTaxIncluded": false}
+        },
+        {
+          "@type": "Offer",
+          "name": "Standard (5h inkl.)",
+          "priceSpecification": {"@type": "PriceSpecification", "priceCurrency": "EUR", "price": 400, "valueAddedTaxIncluded": false}
+        },
+        {
+          "@type": "Offer",
+          "name": "Shop (10h inkl.)",
+          "priceSpecification": {"@type": "PriceSpecification", "priceCurrency": "EUR", "price": 800, "valueAddedTaxIncluded": false}
+        }
+      ]
+    }
+  ]
+}

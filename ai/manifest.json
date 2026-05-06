@@ -1,0 +1,40 @@
+{
+  "@context": "https://schema.org",
+  "@type": "DataCatalog",
+  "name": "jan-erik-andersen.de AI Endpoints",
+  "description": "Maschinenlesbare Daten-Spiegelung der Website fuer KI-Systeme und Agenten.",
+  "version": "1.0",
+  "dateModified": "2026-05-06",
+  "inLanguage": ["de", "en"],
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "publisher": {
+    "@type": "ProfessionalService",
+    "name": "Andersen Webworks",
+    "url": "https://jan-erik-andersen.de"
+  },
+  "endpoints": [
+    {"path": "/ai/manifest.json", "type": "DataCatalog", "description": "Discovery-Manifest fuer alle AI-Endpoints"},
+    {"path": "/ai/profile.json", "type": "Person + ProfessionalService", "description": "Erik Andersen und Andersen Webworks"},
+    {"path": "/ai/services.json", "type": "ItemList of Service", "description": "Alle Leistungen mit Offer und Preis-Range"},
+    {"path": "/ai/pricing.json", "type": "PriceSpecification", "description": "Preise, Stundensatz, Retainer"},
+    {"path": "/ai/projects.json", "type": "ItemList", "description": "Referenzprojekte (Index)"},
+    {"path": "/ai/projects/gerwing.json", "type": "CreativeWork", "description": "Gerwing Steinwerke B2B-Shop"},
+    {"path": "/ai/projects/runden-group.json", "type": "CreativeWork", "description": "Runden Group, 11 Websites"},
+    {"path": "/ai/projects/wbg-pooling.json", "type": "CreativeWork", "description": "WBG Pooling Industrie-Portal"},
+    {"path": "/ai/projects/seniorpartnerinschool.json", "type": "CreativeWork", "description": "Senior Partner in School Pro Bono"},
+    {"path": "/ai/faq.json", "type": "FAQPage", "description": "Haeufige Fragen"},
+    {"path": "/ai/contact.json", "type": "ContactPage", "description": "Kontakt und Garantien"},
+    {"path": "/ai/glossary.json", "type": "DefinedTermSet", "description": "GEO, AVO, BFSG, WCAG 2.1 AA, llms.txt, JSON-LD, Schema.org"},
+    {"path": "/ai/changelog.json", "type": "Dataset", "description": "Changelog der /ai/-Endpoints"}
+  ],
+  "humanReadableEquivalents": {
+    "summary": "/llms.txt",
+    "full": "/llms-full.txt",
+    "siteIndex": "/sitemap.xml",
+    "crawlerConfig": "/robots.txt"
+  },
+  "contact": {
+    "email": "mail@andersen-webworks.de",
+    "url": "https://jan-erik-andersen.de/kontakt/"
+  }
+}

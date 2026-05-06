@@ -1,0 +1,25 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "WBG Pooling, Industrie-Portal mit internem Sales Center",
+  "url": "https://wbg-pooling.eu",
+  "publicCaseStudy": "https://jan-erik-andersen.de/projekte/wbg-pooling/",
+  "inLanguage": "de",
+  "dateModified": "2026-05-06",
+  "creator": {"@id": "https://jan-erik-andersen.de/#person"},
+  "client": {"@type": "Organization", "name": "WBG Pooling"},
+  "industry": "Logistik / Kreislaufwirtschaft (Mehrweg-Transportverpackungen)",
+  "challenge": "Kombination aus oeffentlichem Industrie-Portal und passwortgeschuetztem Sales Center. 360-Grad-Produktansichten, Salesforce-Anbindung fuer Leads, externes Job-Board ueber API integriert.",
+  "solution": "WordPress mit eigenem Custom Plugin (WebDeck) fuer das Sales Center. WebRotate 360 fuer Produktansichten. Salesforce Web-to-Lead-Anbindung. Concludis API fuer Job-Listings.",
+  "technologies": ["WordPress", "Custom Plugin (WebDeck)", "WebRotate 360", "Salesforce Web-to-Lead", "Concludis API"],
+  "features": [
+    "360-Grad-Produktansichten",
+    "Kreislauf-Diagramm",
+    "Salesforce-Lead-Anbindung",
+    "Externes Job-Board via Concludis API",
+    "Passwortgeschuetztes Sales Center mit Quiz-System, Fortschritts-Tracking und PDF-Zertifikaten"
+  ],
+  "role": "Webentwicklung und Plugin-Entwicklung",
+  "status": "Live",
+  "clientType": "B2B / Industrie"
+}

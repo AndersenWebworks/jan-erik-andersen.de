@@ -1,0 +1,25 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Gerwing Steinwerke, B2B-Shop",
+  "url": "https://gerwing.de",
+  "publicCaseStudy": "https://jan-erik-andersen.de/projekte/gerwing/",
+  "inLanguage": "de",
+  "dateModified": "2026-05-06",
+  "creator": {"@id": "https://jan-erik-andersen.de/#person"},
+  "client": {"@type": "Organization", "name": "Gerwing Steinwerke"},
+  "industry": "B2B / Industrie (Pflastersteine)",
+  "challenge": "Shop-Neubau 2023 mit B2B-Anforderungen: Steinmuster-Versand, Filterung nach Eigenschaften, Preisgruppen fuer Haendler.",
+  "solution": "WooCommerce-Shop mit Custom Plugins. Steinmuster-Bestellsystem mit E-Mail-Nachverfolgung. Produktfilter nach Farbe, Format und Einsatzbereich. B2B-Preisgruppen.",
+  "technologies": ["WordPress", "WooCommerce", "Custom Plugins", "PHP", "MySQL"],
+  "features": [
+    "Steinmuster-Bestellsystem mit E-Mail-Nachverfolgung",
+    "Produktfilter (Farbe, Format, Einsatzbereich)",
+    "B2B-Preisgruppen",
+    "Germanized-Integration"
+  ],
+  "duration": "Launch 2023, laufend",
+  "role": "Alleinige technische Verantwortung",
+  "status": "Live, in laufender Betreuung",
+  "clientType": "B2B"
+}

@@ -44,3 +44,6 @@ Allow: /
 
 # llms.txt fuer KI-Systeme
 # https://jan-erik-andersen.de/llms.txt
+
+# AI-Manifest (maschinenlesbare Endpoints, Schema.org JSON-LD)
+# https://jan-erik-andersen.de/ai/manifest.json

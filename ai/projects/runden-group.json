@@ -1,0 +1,25 @@
+{
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": "Runden Group, 11 Websites einer Firmengruppe",
+  "url": "https://runden-group.eu",
+  "publicCaseStudy": "https://jan-erik-andersen.de/projekte/runden-group/",
+  "inLanguage": "de",
+  "dateModified": "2026-05-06",
+  "creator": {"@id": "https://jan-erik-andersen.de/#person"},
+  "client": {"@type": "Organization", "name": "Runden Group"},
+  "industry": "Firmengruppe: Kreislaufwirtschaft, Logistik, IT, Gebaeudeplanung, Landwirtschaft",
+  "challenge": "Konsistenter Web-Auftritt fuer 11 Tochterfirmen, zweisprachig DE/EN, gemeinsames Karriereportal, internes Onboarding-Portal in vier Sprachen.",
+  "solution": "WordPress-Architektur mit YOOtheme Pro. Custom Plugins fuer Karriereportal und Podcast-Bereich. Internes Onboarding-Portal mehrsprachig (DE/EN/ES/PL).",
+  "technologies": ["WordPress", "YOOtheme Pro", "Custom Plugins", "Multilingual"],
+  "features": [
+    "11 Websites mit gemeinsamer Designsprache",
+    "Karriereportal",
+    "Podcast-Bereich",
+    "Internes Mitarbeiter-Onboarding-Portal in DE/EN/ES/PL"
+  ],
+  "duration": "2023 bis 2025 (2 Jahre alleinige Verantwortung)",
+  "role": "Alleinige technische Verantwortung",
+  "status": "Live",
+  "clientType": "B2B / Konzernstruktur"
+}

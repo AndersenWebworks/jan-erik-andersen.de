@@ -1,0 +1,34 @@
+{
+  "@context": "https://schema.org",
+  "@type": "PriceSpecification",
+  "name": "Preise Andersen Webworks",
+  "inLanguage": "de",
+  "url": "https://jan-erik-andersen.de/preise/",
+  "priceCurrency": "EUR",
+  "valueAddedTaxIncluded": false,
+  "dateModified": "2026-05-06",
+  "rates": {
+    "hourly": {"@type": "UnitPriceSpecification", "price": 80, "priceCurrency": "EUR", "unitText": "HOUR", "valueAddedTaxIncluded": false},
+    "daily": {"@type": "UnitPriceSpecification", "price": 800, "priceCurrency": "EUR", "unitText": "DAY", "valueAddedTaxIncluded": false, "description": "10 Stunden"}
+  },
+  "projects": [
+    {"name": "Webdesign / Firmenwebsite", "minPrice": 2400, "url": "https://jan-erik-andersen.de/leistungen/webdesign/"},
+    {"name": "KI-Sichtbarkeit (Update oder im Projekt)", "minPrice": 800, "url": "https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/"},
+    {"name": "BFSG-Compliance (Update oder Neubau-Aufschlag)", "minPrice": 1200, "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/"},
+    {"name": "BFSG-Audit", "minPrice": 400, "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/"},
+    {"name": "Website-Analyse", "minPrice": 400, "url": "https://jan-erik-andersen.de/leistungen/website-analyse/"},
+    {"name": "Standard-Shop", "minPrice": 4800, "url": "https://jan-erik-andersen.de/leistungen/shops-und-custom/"},
+    {"name": "B2B-Shop", "minPrice": 7500, "url": "https://jan-erik-andersen.de/leistungen/shops-und-custom/"}
+  ],
+  "retainers": [
+    {"name": "Basis", "monthlyPrice": 200, "includedHours": 2.5, "scope": "Updates, Sicherheit, Monitoring, kleine Content-Aenderungen"},
+    {"name": "Standard", "monthlyPrice": 400, "includedHours": 5, "scope": "+ Performance-Ueberwachung, Content-Aenderungen, kleinere Features"},
+    {"name": "Shop", "monthlyPrice": 800, "includedHours": 10, "scope": "+ WooCommerce-spezifisch, Produkt- und Shopmanagement, neue Features, Prio-Support"}
+  ],
+  "terms": {
+    "noticePeriod": "monatlich kuendbar",
+    "minTerm": "keine Mindestlaufzeit",
+    "openHourlyRate": 80,
+    "agencyComparison": "typischer Agentursatz 120 bis 180 EUR pro Stunde"
+  }
+}
