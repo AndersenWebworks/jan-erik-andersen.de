@@ -67,7 +67,7 @@
 
 .portrait {
   width: 100%;
-  aspect-ratio: 2/3;
+  aspect-ratio: 3/4;
   object-fit: cover;
   object-position: center top;
   display: block;
@@ -75,12 +75,20 @@
 
 .hero-sidebar-title,
 .hero-sidebar-subtitle,
-.stats-grid {
+.stats-grid,
+.hero-sidebar-meta {
   padding-left: var(--space-xl);
   padding-right: var(--space-xl);
 }
 
-.stats-grid:last-child { padding-bottom: var(--space-xl); }
+.hero-sidebar-meta {
+  font-size: var(--text-xs);
+  color: var(--color-text-light);
+  text-align: center;
+  padding-bottom: var(--space-lg);
+  margin: 0;
+  letter-spacing: 0.03em;
+}
 
 .hero-sidebar-title {
   padding-top: var(--space-lg);
@@ -214,15 +222,20 @@
 .standards-strip {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-sm) var(--space-xl);
+  justify-content: center;
+  gap: var(--space-sm);
   margin-top: var(--space-2xl);
   padding-top: var(--space-lg);
   border-top: 1px solid var(--color-border);
 }
 
 .standard-item {
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   color: var(--color-text-secondary);
+  background: var(--color-bg-alt);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 100px;
+  border: 1px solid var(--color-border);
 }
 
 .standard-item a { color: inherit; text-decoration: none; }
@@ -294,7 +307,38 @@
   margin-bottom: 0;
 }
 
-/* --- About Section --- */
+/* --- About Teaser (Homepage) --- */
+.about-teaser {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.about-teaser-inner {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.about-teaser-inner h2 {
+  margin-bottom: var(--space-sm);
+}
+
+.about-teaser-lead {
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-style: italic;
+  color: var(--color-text);
+  line-height: 1.5;
+  margin-bottom: var(--space-md);
+  max-width: none;
+}
+
+.about-teaser-inner p {
+  color: var(--color-text-secondary);
+  max-width: none;
+  margin-bottom: var(--space-lg);
+}
+
+/* --- About Section (full, /ueber/ page) --- */
 .about-section {
   border-bottom: 1px solid var(--color-border);
 }

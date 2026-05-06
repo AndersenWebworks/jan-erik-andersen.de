@@ -206,6 +206,24 @@
   grid-template-columns: repeat(2, 1fr);
 }
 
+.pricing-grid-teaser {
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.pricing-grid-teaser .pricing-card {
+  text-align: center;
+  padding: var(--space-lg);
+}
+
+.pricing-grid-teaser .pricing-type {
+  margin-bottom: var(--space-sm);
+}
+
+.pricing-grid-teaser .pricing-price {
+  font-size: var(--text-2xl);
+}
+
 .pricing-card {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
@@ -785,6 +803,11 @@ details.faq-item > summary::-webkit-details-marker { display: none; }
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .pricing-grid-teaser {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: none;
   }
 
   .projects-grid {
