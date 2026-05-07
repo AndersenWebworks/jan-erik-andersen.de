@@ -270,34 +270,28 @@
           <p>I've been building web projects since 1999. These three areas are where I currently make the difference – and probably why you're here.</p>
         </div>
         <div class="services-layout">
-        <div class="services-grid">
-          <div class="service-item" id="svc-ki">
-            <div class="service-number">01</div>
-            <div class="service-content">
-              <h3>AI Visibility</h3>
-              <p>So your website gets cited by ChatGPT, Perplexity and Claude – not just ranked on Google. Structured data, llms.txt, schema markup, semantic architecture. Built in, not bolted on.</p>
-              <p class="service-example">Proof: This website itself, as a live technical test. Generative Engine Optimization (GEO) and Agent Visibility Optimization (AVO) aren't buzzword bingo – they're measurable disciplines.</p>
-              <p class="service-cta-row"><a href="services/ai-visibility/" class="btn-text">More on AI Visibility →</a></p>
-            </div>
-          </div>
-          <div class="service-item" id="svc-bfsg">
-            <div class="service-number">02</div>
-            <div class="service-content">
-              <h3>BFSG Compliance &amp; Accessibility</h3>
-              <p>Since June 2025, B2C websites in Germany must be accessible. Fines up to €100,000. I build WCAG 2.1 AA compliant – as an update for existing sites or from scratch.</p>
-              <p class="service-example">Proof: <a href="https://wirkungsbericht.seniorpartnerinschool.de" target="_blank" rel="noopener">Impact Report of Seniorpartner in School</a>, professionally and accessibly built. Quote from the chairwoman's Google review.</p>
-              <p class="service-cta-row"><a href="services/bfsg-accessibility/" class="btn-text">More on BFSG &amp; WCAG →</a></p>
-            </div>
-          </div>
-          <div class="service-item" id="svc-shops">
-            <div class="service-number">03</div>
-            <div class="service-content">
-              <h3>Shops &amp; Custom Solutions</h3>
-              <p>WooCommerce with B2B features, dealer portals, custom plugins. When standard isn't enough, I build what's missing – clean, documented, maintainable.</p>
-              <p class="service-example">Proof: <a href="#projects">Gerwing Steinwerke</a>, one of Germany's largest paving stone manufacturers. Custom stone sample tracking, B2B dealer portal, price groups. Built alone, sole technical responsibility since 2023.</p>
-              <p class="service-cta-row"><a href="services/shops-and-custom/" class="btn-text">More on Shops &amp; Custom →</a></p>
-            </div>
-          </div>
+        <div class="focus-grid">
+          <article class="focus-card" id="svc-ki">
+            <div class="focus-num">01</div>
+            <h3>AI Visibility</h3>
+            <p>So your website gets cited by ChatGPT, Perplexity and Claude – not just ranked on Google. Structured data, llms.txt, schema markup, semantic architecture. Built in, not bolted on.</p>
+            <div class="proof"><b>Proof:</b> This website itself, as a live technical test. Generative Engine Optimization (GEO) and Agent Visibility Optimization (AVO) aren't buzzword bingo – they're measurable disciplines.</div>
+            <a href="services/ai-visibility/" class="focus-link">More on AI Visibility <span class="arr">→</span></a>
+          </article>
+          <article class="focus-card" id="svc-bfsg">
+            <div class="focus-num">02</div>
+            <h3>BFSG Compliance &amp; Accessibility</h3>
+            <p>Since June 2025, B2C websites in Germany must be accessible. Fines up to €100,000. I build WCAG 2.1 AA compliant – as an update for existing sites or from scratch.</p>
+            <div class="proof"><b>Proof:</b> <a href="https://wirkungsbericht.seniorpartnerinschool.de" target="_blank" rel="noopener">Impact Report of Seniorpartner in School</a>, professionally and accessibly built. Quote from the chairwoman's Google review.</div>
+            <a href="services/bfsg-accessibility/" class="focus-link">More on BFSG &amp; WCAG <span class="arr">→</span></a>
+          </article>
+          <article class="focus-card" id="svc-shops">
+            <div class="focus-num">03</div>
+            <h3>Shops &amp; Custom Solutions</h3>
+            <p>WooCommerce with B2B features, dealer portals, custom plugins. When standard isn't enough, I build what's missing – clean, documented, maintainable.</p>
+            <div class="proof"><b>Proof:</b> <a href="#projects">Gerwing Steinwerke</a>, one of Germany's largest paving stone manufacturers. Custom stone sample tracking, B2B dealer portal, price groups. Built alone, sole technical responsibility since 2023.</div>
+            <a href="services/shops-and-custom/" class="focus-link">More on Shops &amp; Custom <span class="arr">→</span></a>
+          </article>
         </div>
         <nav class="services-quicknav">
           <h3>Focus areas</h3>
@@ -670,7 +664,7 @@
   </script>
   <script>
   (function() {
-    var sections = '.hero, .projects-section, .services-section, .testimonials-section, .process-section, .pricing-section, .contact-section, .services-grid, .section-header, .services-intro';
+    var sections = '.hero, .projects-section, .services-section, .testimonials-section, .process-section, .pricing-section, .contact-section, .focus-grid, .section-header, .services-intro';
 
     function typeHeading(h2) {
       if (h2.dataset.typed) return;

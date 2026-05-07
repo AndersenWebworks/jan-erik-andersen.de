@@ -1057,6 +1057,113 @@ body:has(.darkmode-checkbox-mobile:checked) .contact-promise {
   gap: var(--space-xs);
 }
 
+/* --- Focus Cards (Schwerpunkte auf Homepage) --- */
+.focus-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.focus-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(20,20,18,.04), 0 4px 14px rgba(20,20,18,.04);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.focus-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.focus-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(20,20,18,.04), 0 12px 32px rgba(20,20,18,.08);
+}
+
+.focus-card:hover::before { transform: scaleX(1); }
+
+.focus-num {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-accent);
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+.focus-card h3 {
+  font-size: var(--text-xl);
+  margin: 0;
+  font-weight: 600;
+}
+
+.focus-card > p {
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.proof {
+  margin-top: var(--space-xs);
+  padding: var(--space-md);
+  border-radius: 8px;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.proof b {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.proof a {
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-accent);
+  transition: color var(--transition-fast);
+}
+
+.proof a:hover {
+  color: var(--color-accent);
+}
+
+.focus-link {
+  margin-top: auto;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding-top: var(--space-xs);
+}
+
+.focus-link .arr {
+  transition: transform var(--transition-base);
+}
+
+.focus-link:hover .arr {
+  transform: translateX(3px);
+}
+
 /* --- Sidebar Cards --- */
 .sidebar-card {
   background: var(--color-bg-card);
@@ -1178,6 +1285,11 @@ body:has(.darkmode-checkbox-mobile:checked) .contact-promise {
 
   .service-item {
     grid-template-columns: 60px 1fr;
+  }
+
+  .focus-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
   }
 }
 
