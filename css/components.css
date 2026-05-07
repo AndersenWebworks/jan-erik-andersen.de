@@ -103,13 +103,17 @@
   text-decoration: none;
 }
 
-/* --- Tags --- */
+/* --- Tags (Monospace-Pills) --- */
 .tag {
+  font-family: var(--font-mono);
   font-size: var(--text-xs);
+  letter-spacing: 0.02em;
   color: var(--color-text-secondary);
   background: var(--color-bg-alt);
   padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  line-height: 1.4;
 }
 
 /* --- Eyebrow Label (Mono, Dot-Indikator) --- */
