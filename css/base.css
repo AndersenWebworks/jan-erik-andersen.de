@@ -105,7 +105,7 @@ strong { font-weight: 600; }
   background: var(--color-accent);
   color: #fff;
   padding: var(--space-xs) var(--space-md);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   z-index: 999;
   text-decoration: none;
   font-weight: 600;

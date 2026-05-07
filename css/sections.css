@@ -74,7 +74,7 @@
   background: var(--color-bg-alt);
   border: 1px solid var(--color-border);
   padding: 6px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
 
@@ -88,13 +88,13 @@
 .hero-sidebar {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 14px;
+  border-radius: var(--radius-2xl);
   padding: var(--space-md);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-card);
 }
 
 .portrait-frame {
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--color-bg);
   border: 1px solid var(--color-border);
@@ -150,7 +150,7 @@
 .portrait-meta-dot {
   width: 6px;
   height: 6px;
-  border-radius: 50%;
+  border-radius: var(--radius-circle);
   background: #3aa15a;
   box-shadow: 0 0 0 3px rgba(58, 161, 90, 0.18);
   flex-shrink: 0;
@@ -162,9 +162,9 @@
   grid-template-columns: repeat(4, 1fr);
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 14px;
+  border-radius: var(--radius-2xl);
   overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-card);
 }
 
 .hero-stats .stat {
@@ -208,7 +208,7 @@
   color: #fff;
   background: var(--color-accent);
   border: 1px solid var(--color-accent);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   cursor: pointer;
   transition: background 0.2s ease, border-color 0.2s ease;
 }
@@ -243,7 +243,7 @@
   padding: var(--space-xl);
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
 }
 
 .services-extras > * > h3 {
@@ -326,7 +326,7 @@
 .process-step {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
   padding: var(--space-xl);
   text-align: left;
   transition: border-color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-base);
@@ -335,7 +335,7 @@
 .process-step:hover {
   border-color: var(--color-border-dark);
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.06), 0 2px 4px -1px rgba(0,0,0,0.03);
+  box-shadow: var(--shadow-md);
 }
 
 .process-number {
@@ -343,7 +343,7 @@
   height: 36px;
   background: var(--color-accent);
   color: #fff;
-  border-radius: 10px;
+  border-radius: var(--radius-lg);
   display: grid;
   place-items: center;
   font-family: var(--font-mono);
@@ -384,9 +384,9 @@
   align-items: stretch;
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 14px;
+  border-radius: var(--radius-2xl);
   padding: var(--space-xl) var(--space-2xl);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-card);
 }
 
 .about-teaser-main {
@@ -490,7 +490,7 @@
   aspect-ratio: 3/4;
   object-fit: cover;
   object-position: center top;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 .about-text { max-width: none; }
@@ -568,7 +568,7 @@
 .case-study {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--radius-xl);
   padding: var(--space-xl);
   margin-bottom: var(--space-xl);
 }
@@ -599,7 +599,7 @@
   width: 100%;
   height: auto;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   margin-bottom: var(--space-lg);
 }
 
@@ -706,7 +706,7 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
   padding: var(--space-lg);
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   text-align: left;
   transition: border-color var(--transition-fast), background var(--transition-fast);
@@ -735,7 +735,7 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
   padding: var(--space-sm) var(--space-md);
   background: transparent;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
   cursor: pointer;

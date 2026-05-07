@@ -103,7 +103,7 @@
 
 .project-card:hover {
   border-color: var(--color-border-dark);
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-md);
 }
 
 /* --- Pricing: featured card accent --- */
@@ -115,7 +115,7 @@
 
 .pricing-section.is-visible .pricing-card.featured {
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 1px var(--color-accent);
+  box-shadow: var(--shadow-focus);
 }
 
 /* --- Contact: guarantees / promises stagger in --- */
