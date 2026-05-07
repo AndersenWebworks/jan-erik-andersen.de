@@ -238,36 +238,36 @@
           <h2>Häufige Fragen zu BFSG &amp; Barrierefreiheit</h2>
         </div>
         <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was ist das BFSG?</button>
+          <details class="faq-item">
+            <summary class="faq-question">Was ist das BFSG?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Das Barrierefreiheitsstärkungsgesetz setzt die europäische Richtlinie (European Accessibility Act) in deutsches Recht um. Seit Juni 2025 müssen Websites, die Produkte oder Dienstleistungen an Verbraucher verkaufen, barrierefrei nach WCAG 2.1 AA sein. Bußgelder bis 100.000 EUR.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Gilt das BFSG für meine Website?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Gilt das BFSG für meine Website?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Das BFSG gilt für B2C-Websites, die Produkte oder Dienstleistungen an Endverbraucher verkaufen. Reine B2B-Websites ohne Verbraucherkontakt sind aktuell ausgenommen. Im Zweifel: lieber barrierefrei bauen, denn es schadet nie, und die Auslegung wird strenger.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was bedeutet WCAG 2.1 AA?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Was bedeutet WCAG 2.1 AA?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Die Web Content Accessibility Guidelines (WCAG) definieren technische Standards für Barrierefreiheit im Web. Stufe AA ist der gesetzlich geforderte Standard. Das umfasst unter anderem: ausreichende Kontraste, Tastaturbedienung, Screenreader-Kompatibilität, Textalternativen für Bilder.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Kann meine bestehende Website barrierefrei gemacht werden?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Kann meine bestehende Website barrierefrei gemacht werden?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>In den meisten Fällen ja. Ob ein Update oder ein Neuaufbau sinnvoller ist, hängt vom technischen Zustand der bestehenden Seite ab. Bei modernen WordPress-Installationen reicht oft ein gezieltes Update. Bei veralteter Technik ist ein Neuaufbau wirtschaftlicher.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was kostet eine barrierefreie Website?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Was kostet eine barrierefreie Website?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Barrierefreiheit als Bestandteil eines neuen Projekts: im Festpreis enthalten. Als Nachrüstung für eine bestehende Website: ab 1.200 EUR, je nach Umfang und Zustand. Deutlich günstiger als ein Bußgeld von bis zu 100.000 EUR.</p>
             </div>
-          </div>
+          </details>
         </div>
       </div>
     </section>
@@ -319,15 +319,6 @@
     cb.addEventListener('change', function() {
       localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
-
-    document.querySelectorAll('.faq-question').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !expanded);
-        this.parentElement.classList.toggle('open', !expanded);
-      });
-    });
-
     // Mobile Menu
     var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');

@@ -236,36 +236,36 @@
           <h2>Häufige Fragen zu Shops &amp; Custom</h2>
         </div>
         <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Warum WooCommerce und nicht Shopify?</button>
+          <details class="faq-item">
+            <summary class="faq-question">Warum WooCommerce und nicht Shopify?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Shopify ist ein geschlossenes System: Sie mieten einen Shop, den Sie nicht besitzen. Dazu kommen Transaktionsgebühren von 2 % zusätzlich zu den Zahlungsgebühren. WooCommerce gehört Ihnen, läuft auf Ihrem Server, ist unbegrenzt anpassbar und hat keine Transaktionsgebühren. Für deutsche B2B-Anforderungen (Preisgruppen, Händlerportale, Germanized) ist WooCommerce die bessere Wahl.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Kann ich meinen Shop selbst pflegen?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Kann ich meinen Shop selbst pflegen?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Ja. Das ist der Punkt. Ich baue den Shop so, dass Sie Produkte, Preise und Inhalte selbst verwalten können, ohne mich für jede Änderung anrufen zu müssen. Nach dem Launch gibt es eine Schulung zur Produktverwaltung. Für alles, was darüber hinausgeht: Betreuungspakete ab 200 EUR/Monat.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was sind B2B-Features?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Was sind B2B-Features?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>B2B bedeutet: unterschiedliche Preise für unterschiedliche Kundengruppen. Händler sehen andere Preise als Endkunden. Dazu kommen Features wie: Musterbestellungen, Mengenrabatte, Netto-Preisanzeige, Anfrage statt Warenkorb, rollenbasierter Zugang zu bestimmten Produkten. Das ist kein Hexenwerk, wenn man weiß, wie WooCommerce intern funktioniert.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was kostet ein Online-Shop?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Was kostet ein Online-Shop?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>WooCommerce-Shop: ab 4.800 EUR Festpreis (bis 50 Produkte). Typisch: 4.800–9.000 EUR. Zum Vergleich: Eine Agentur berechnet für vergleichbaren Umfang 12.000–25.000 EUR. Nach dem Erstgespräch bekommen Sie einen konkreten Festpreis.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Kann ich meinen bestehenden Shop umbauen lassen?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Kann ich meinen bestehenden Shop umbauen lassen?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Ja, wenn die Basis stimmt. Wenn Ihr Shop auf WooCommerce läuft und technisch aktuell ist, kann ich darauf aufbauen. Wenn die Grundstruktur veraltet oder fehlerhaft ist, ist ein Neuaufbau mit Datenübernahme oft wirtschaftlicher. Das klären wir im Erstgespräch.</p>
             </div>
-          </div>
+          </details>
         </div>
       </div>
     </section>
@@ -317,15 +317,6 @@
     cb.addEventListener('change', function() {
       localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
-
-    document.querySelectorAll('.faq-question').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !expanded);
-        this.parentElement.classList.toggle('open', !expanded);
-      });
-    });
-
     // Mobile Menu
     var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');

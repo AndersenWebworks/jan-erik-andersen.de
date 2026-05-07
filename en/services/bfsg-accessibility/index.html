@@ -238,36 +238,36 @@
           <h2>FAQ – BFSG &amp; Accessibility</h2>
         </div>
         <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What is the BFSG?</button>
+          <details class="faq-item">
+            <summary class="faq-question">What is the BFSG?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>The BFSG (Accessibility Strengthening Act) implements the European Accessibility Act into German law. Since June 2025, websites selling products or services to consumers must be accessible according to WCAG 2.1 AA. Fines up to EUR 100,000.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Does the BFSG apply to my website?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Does the BFSG apply to my website?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>The BFSG applies to B2C websites selling products or services to end consumers. Pure B2B websites without consumer contact are currently exempt. When in doubt: build accessible anyway – it never hurts and interpretation is getting stricter.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What does WCAG 2.1 AA mean?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">What does WCAG 2.1 AA mean?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>The Web Content Accessibility Guidelines (WCAG) define technical standards for web accessibility. Level AA is the legally required standard. This includes: sufficient contrast, keyboard navigation, screen reader compatibility, text alternatives for images.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Can my existing website be made accessible?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Can my existing website be made accessible?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>In most cases, yes. Whether an update or a rebuild makes more sense depends on the technical condition of the existing site. Modern WordPress installations often just need a targeted update. With outdated technology, a rebuild is more cost-effective.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What does an accessible website cost?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">What does an accessible website cost?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Accessibility as part of a new project: included in the fixed price. As a retrofit for an existing website: from EUR 1,200, depending on scope and condition. Significantly cheaper than a fine of up to EUR 100,000.</p>
             </div>
-          </div>
+          </details>
         </div>
       </div>
     </section>
@@ -319,15 +319,6 @@
     cb.addEventListener('change', function() {
       localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
-
-    document.querySelectorAll('.faq-question').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !expanded);
-        this.parentElement.classList.toggle('open', !expanded);
-      });
-    });
-
     // Mobile Menu
     var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');

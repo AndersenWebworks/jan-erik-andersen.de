@@ -478,30 +478,30 @@
           <p class="section-subtitle">The four questions that come up in every initial call.</p>
         </div>
         <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">How long does a typical project take?</button>
+          <details class="faq-item">
+            <summary class="faq-question">How long does a typical project take?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>It depends on scope – but significantly faster than with an agency because there are no coordination loops in between. You'll get a specific timeline estimate after the initial call. I'm usually available within two weeks.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What happens if you get sick or go on vacation?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">What happens if you get sick or go on vacation?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>All my projects run on standard technology (WordPress, WooCommerce, HTML/CSS/JS). Everything is documented. Any other developer can take over my work – no proprietary system, no vendor lock-in.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Can't ChatGPT just build my website?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Can't ChatGPT just build my website?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>AI can generate code. What it can't do: understand what your business needs. A website isn't just HTML – it's strategy, structure, user guidance, legal compliance (GDPR, imprint, BFSG), ongoing maintenance, and someone who is responsible when something doesn't work.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What sets you apart from other freelancers?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">What sets you apart from other freelancers?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Three things. First: 27 years of experience, including three years of professional QA in the games industry – I find bugs before your customers do. Second: I maintained the entire web presence of a corporate group with eleven websites on my own for two years. Third: My wife is a professional editor. Every text is professionally proofread. Most freelancers deliver code. I deliver a finished product.</p>
             </div>
-          </div>
+          </details>
         </div>
         <p class="section-cta"><a href="faq/" class="btn btn-secondary">All 20 questions and answers</a></p>
       </div>
@@ -582,15 +582,6 @@
       new MutationObserver(updateHeader).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
       updateHeader();
     }
-
-    // FAQ Accordion
-    document.querySelectorAll('.faq-question').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !expanded);
-        this.parentElement.classList.toggle('open', !expanded);
-      });
-    });
 
     // Mobile Menu
     var hamburger = document.getElementById('header-hamburger');

@@ -478,30 +478,30 @@
           <p class="section-subtitle">Die vier Fragen, die in jedem Erstgespräch kommen.</p>
         </div>
         <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Wie lange dauert ein typisches Projekt?</button>
+          <details class="faq-item">
+            <summary class="faq-question">Wie lange dauert ein typisches Projekt?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Das hängt vom Umfang ab – aber deutlich schneller als bei einer Agentur, weil keine Abstimmungsschleifen dazwischen liegen. Eine konkrete Zeitschätzung bekommen Sie nach dem Erstgespräch. Ich bin in der Regel innerhalb von zwei Wochen verfügbar.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was passiert, wenn Sie mal krank werden oder im Urlaub sind?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Was passiert, wenn Sie mal krank werden oder im Urlaub sind?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Alle meine Projekte laufen auf Standard-Technologie (WordPress, WooCommerce, HTML/CSS/JS). Alles ist dokumentiert. Jeder andere Entwickler kann meine Arbeit übernehmen – kein proprietäres System, kein Vendor Lock-in.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Kann ChatGPT nicht einfach meine Website bauen?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Kann ChatGPT nicht einfach meine Website bauen?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>KI kann Code generieren. Was sie nicht kann: verstehen, was Ihr Unternehmen braucht. Eine Website ist nicht nur HTML – sie ist Strategie, Struktur, Nutzerführung, rechtliche Absicherung (DSGVO, Impressum, BFSG), laufende Wartung und jemand, der verantwortlich ist, wenn etwas nicht funktioniert.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was unterscheidet Sie von anderen Freelancern?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Was unterscheidet Sie von anderen Freelancern?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Drei Dinge. Erstens: 27 Jahre Erfahrung, davon drei Jahre professionelle QA in der Games-Branche – ich finde Fehler, bevor sie Ihre Kunden finden. Zweitens: Ich habe zwei Jahre lang den kompletten Web-Auftritt einer Firmengruppe mit elf Websites allein betreut. Drittens: Meine Frau ist Lektorin. Jeder Text ist professionell geprüft. Die meisten Freelancer liefern Code. Ich liefere ein fertiges Produkt.</p>
             </div>
-          </div>
+          </details>
         </div>
         <p class="section-cta"><a href="faq/" class="btn btn-secondary">Alle 20 Fragen und Antworten</a></p>
       </div>
@@ -582,15 +582,6 @@
       new MutationObserver(updateHeader).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
       updateHeader();
     }
-
-    // FAQ Accordion
-    document.querySelectorAll('.faq-question').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !expanded);
-        this.parentElement.classList.toggle('open', !expanded);
-      });
-    });
 
     // Mobile Menu
     var hamburger = document.getElementById('header-hamburger');

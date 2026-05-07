@@ -236,36 +236,36 @@
           <h2>Häufige Fragen zu KI-Sichtbarkeit</h2>
         </div>
         <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was ist KI-Sichtbarkeit?</button>
+          <details class="faq-item">
+            <summary class="faq-question">Was ist KI-Sichtbarkeit?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>KI-Sichtbarkeit bedeutet, dass Ihre Website von KI-Systemen wie ChatGPT, Perplexity, Claude und Google AI als Quelle erkannt und zitiert wird. Dafür braucht Ihre Website strukturierte Daten (Schema.org, JSON-LD), eine klare semantische Architektur und maschinenlesbare Inhalte.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was ist der Unterschied zwischen SEO und GEO?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Was ist der Unterschied zwischen SEO und GEO?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>SEO optimiert für Google-Rankings (blaue Links). GEO (Generative Engine Optimization) optimiert dafür, dass KI-Systeme Ihre Inhalte als Quelle zitieren. Beides braucht gute Inhalte, aber GEO erfordert zusätzlich strukturierte Daten, die Maschinen lesen können.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Brauche ich KI-Sichtbarkeit, wenn ich schon SEO mache?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Brauche ich KI-Sichtbarkeit, wenn ich schon SEO mache?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>SEO bleibt wichtig. Aber immer mehr B2B-Einkäufer recherchieren mit ChatGPT oder Perplexity statt mit Google. Wenn Ihre Website dort nicht auftaucht, existieren Sie für diese Zielgruppe nicht. KI-Sichtbarkeit ist kein Ersatz für SEO, sondern eine Ergänzung.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Was kostet KI-Sichtbarkeit als Leistung?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Was kostet KI-Sichtbarkeit als Leistung?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Als Bestandteil eines Website-Projekts ist es im Festpreis enthalten. Als Update für eine bestehende Website: ab 800 EUR, je nach Umfang der bestehenden Struktur. Im Betreuungspaket: kontinuierliche Optimierung inklusive.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Kann ich KI-Sichtbarkeit nachrüsten lassen?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Kann ich KI-Sichtbarkeit nachrüsten lassen?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Ja. Ich kann bestehende Websites mit strukturierten Daten, Schema-Markup und semantischer Optimierung nachrüsten. Voraussetzung: Die Website muss technisch in einem Zustand sein, der das zulässt. Das klären wir im Erstgespräch.</p>
             </div>
-          </div>
+          </details>
         </div>
       </div>
     </section>
@@ -317,15 +317,6 @@
     cb.addEventListener('change', function() {
       localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
-
-    document.querySelectorAll('.faq-question').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !expanded);
-        this.parentElement.classList.toggle('open', !expanded);
-      });
-    });
-
     // Mobile Menu
     var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');

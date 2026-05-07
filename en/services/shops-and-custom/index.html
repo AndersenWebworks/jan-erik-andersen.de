@@ -236,36 +236,36 @@
           <h2>FAQ – Shops &amp; Custom</h2>
         </div>
         <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Why WooCommerce and not Shopify?</button>
+          <details class="faq-item">
+            <summary class="faq-question">Why WooCommerce and not Shopify?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Shopify is a closed system: you rent a shop you don't own. Plus transaction fees of 2% on top of payment fees. WooCommerce belongs to you, runs on your server, is infinitely customizable and has no transaction fees. For German B2B requirements (price groups, dealer portals, Germanized), WooCommerce is the better choice.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Can I manage my shop myself?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Can I manage my shop myself?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Yes. That's the point. I build the shop so you can manage products, prices and content yourself without having to call me for every change. After launch there's a training session on product management. For everything beyond that: maintenance packages from EUR 200/month.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What are B2B features?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">What are B2B features?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>B2B means: different prices for different customer groups. Dealers see different prices than end customers. Plus features like: sample orders, volume discounts, net price display, inquiry instead of cart, role-based access to certain products. It's not magic when you know how WooCommerce works internally.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What does an online shop cost?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">What does an online shop cost?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>WooCommerce shop: from EUR 4,800 fixed price (up to 50 products). Typical: EUR 4,800–9,000. For comparison: an agency charges EUR 12,000–25,000 for comparable scope. After the initial call you'll get a concrete fixed price.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Can I have my existing shop rebuilt?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Can I have my existing shop rebuilt?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Yes, if the foundation is solid. If your shop runs on WooCommerce and is technically up to date, I can build on it. If the basic structure is outdated or flawed, a rebuild with data migration is often more cost-effective. We'll clarify this in the initial call.</p>
             </div>
-          </div>
+          </details>
         </div>
       </div>
     </section>
@@ -317,15 +317,6 @@
     cb.addEventListener('change', function() {
       localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
-
-    document.querySelectorAll('.faq-question').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !expanded);
-        this.parentElement.classList.toggle('open', !expanded);
-      });
-    });
-
     // Mobile Menu
     var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');

@@ -236,36 +236,36 @@
           <h2>FAQ – AI Visibility</h2>
         </div>
         <div class="faq-list">
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What is AI visibility?</button>
+          <details class="faq-item">
+            <summary class="faq-question">What is AI visibility?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>AI visibility means your website is recognized and cited as a source by AI systems like ChatGPT, Perplexity, Claude and Google AI. This requires structured data (Schema.org, JSON-LD), clear semantic architecture and machine-readable content.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What is the difference between SEO and GEO?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">What is the difference between SEO and GEO?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>SEO optimizes for Google rankings (blue links). GEO (Generative Engine Optimization) optimizes for AI systems citing your content as a source. Both need good content, but GEO additionally requires structured data that machines can read.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Do I need AI visibility if I already do SEO?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Do I need AI visibility if I already do SEO?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>SEO remains important. But more and more B2B buyers research with ChatGPT or Perplexity instead of Google. If your website doesn't appear there, you don't exist for this audience. AI visibility is not a replacement for SEO, but a complement.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">What does AI visibility cost?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">What does AI visibility cost?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>As part of a website project, it's included in the fixed price. As an update for an existing website: from EUR 800, depending on the scope of the existing structure. In a maintenance package: continuous optimization included.</p>
             </div>
-          </div>
-          <div class="faq-item">
-            <button class="faq-question" aria-expanded="false">Can AI visibility be retrofitted?</button>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-question">Can AI visibility be retrofitted?<span class="faq-icon" aria-hidden="true">+</span></summary>
             <div class="faq-answer">
               <p>Yes. I can retrofit existing websites with structured data, schema markup and semantic optimization. Prerequisite: the website must be in a technical condition that allows it. We'll clarify this in the initial call.</p>
             </div>
-          </div>
+          </details>
         </div>
       </div>
     </section>
@@ -317,15 +317,6 @@
     cb.addEventListener('change', function() {
       localStorage.setItem('darkmode', cb.checked ? '1' : '0');
     });
-
-    document.querySelectorAll('.faq-question').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !expanded);
-        this.parentElement.classList.toggle('open', !expanded);
-      });
-    });
-
     // Mobile Menu
     var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');
