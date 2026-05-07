@@ -72,6 +72,22 @@ for (const page of ALL_PAGES) {
 
     test('no broken images', async ({ page: p }) => {
       await p.goto(page.path);
+
+      // Lazy-Bilder eager forcen und Ladevorgang abwarten, damit naturalWidth
+      // auch ausserhalb des Viewports verlaesslich gefuellt ist.
+      await p.evaluate(async () => {
+        const lazy = Array.from(document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]'));
+        lazy.forEach((img) => { img.loading = 'eager'; });
+        const all = Array.from(document.querySelectorAll<HTMLImageElement>('img'));
+        await Promise.all(all.map((img) => {
+          if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+          return new Promise<void>((resolve) => {
+            img.addEventListener('load', () => resolve(), { once: true });
+            img.addEventListener('error', () => resolve(), { once: true });
+          });
+        }));
+      });
+
       const images = p.locator('img');
       const count = await images.count();
 
