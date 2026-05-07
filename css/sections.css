@@ -60,9 +60,17 @@
 .hero-sidebar {
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 0;
+  border-radius: 14px;
+  padding: var(--space-md);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 8px 24px rgba(0, 0, 0, 0.04);
+}
+
+.portrait-frame {
+  border-radius: 10px;
   overflow: hidden;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  margin-bottom: var(--space-md);
 }
 
 .portrait {
@@ -73,44 +81,60 @@
   display: block;
 }
 
-.hero-sidebar-title,
-.hero-sidebar-subtitle,
-.stats-grid,
-.hero-sidebar-meta {
-  padding-left: var(--space-xl);
-  padding-right: var(--space-xl);
+.portrait-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 0 var(--space-xs) var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-md);
 }
 
-.hero-sidebar-meta {
-  font-size: var(--text-xs);
-  color: var(--color-text-light);
-  text-align: center;
-  padding-bottom: var(--space-lg);
-  margin: 0;
-  letter-spacing: 0.03em;
+.portrait-meta-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
 }
 
-.hero-sidebar-title {
-  padding-top: var(--space-lg);
+.portrait-meta-identity b {
   font-family: var(--font-serif);
   font-size: var(--text-lg);
   font-weight: 600;
-  margin: 0 0 var(--space-xs);
-  text-align: center;
+  color: var(--color-text);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
-.hero-sidebar-subtitle {
-  font-size: var(--text-sm);
+.portrait-meta-role {
+  font-size: var(--text-xs);
   color: var(--color-text-secondary);
-  margin: 0 0 var(--space-lg);
-  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.portrait-meta-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: var(--text-xs);
+  color: var(--color-text-light);
+  letter-spacing: 0.02em;
+}
+
+.portrait-meta-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #3aa15a;
+  box-shadow: 0 0 0 3px rgba(58, 161, 90, 0.18);
+  flex-shrink: 0;
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-md);
-  margin-bottom: var(--space-lg);
+  gap: var(--space-sm);
+  padding: 0 var(--space-xs);
 }
 
 .stat { text-align: center; padding: var(--space-sm); }
@@ -713,6 +737,8 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
 
   .stat { padding: var(--space-xs); }
   .stat-value { font-size: var(--text-xl); }
+
+  .portrait-meta-location { white-space: normal; }
 }
 
 @media (max-width: 640px) {
