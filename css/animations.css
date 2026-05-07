@@ -110,19 +110,27 @@
   box-shadow: 0 0 0 1px var(--color-accent);
 }
 
-/* --- Contact: guarantees stagger in --- */
-.guarantee {
+/* --- Contact: guarantees / promises stagger in --- */
+.guarantee,
+.contact-promise {
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 
-.contact-section.is-visible .guarantee { opacity: 1; }
-.contact-section.is-visible .guarantee:nth-child(1) { transition-delay: 0.1s; }
-.contact-section.is-visible .guarantee:nth-child(2) { transition-delay: 0.2s; }
-.contact-section.is-visible .guarantee:nth-child(3) { transition-delay: 0.3s; }
-.contact-section.is-visible .guarantee:nth-child(4) { transition-delay: 0.4s; }
-.contact-section.is-visible .guarantee:nth-child(5) { transition-delay: 0.5s; }
-.contact-section.is-visible .guarantee:nth-child(6) { transition-delay: 0.6s; }
+.contact-section.is-visible .guarantee,
+.contact-section.is-visible .contact-promise { opacity: 1; }
+.contact-section.is-visible .guarantee:nth-child(1),
+.contact-section.is-visible .contact-promise:nth-child(1) { transition-delay: 0.1s; }
+.contact-section.is-visible .guarantee:nth-child(2),
+.contact-section.is-visible .contact-promise:nth-child(2) { transition-delay: 0.2s; }
+.contact-section.is-visible .guarantee:nth-child(3),
+.contact-section.is-visible .contact-promise:nth-child(3) { transition-delay: 0.3s; }
+.contact-section.is-visible .guarantee:nth-child(4),
+.contact-section.is-visible .contact-promise:nth-child(4) { transition-delay: 0.4s; }
+.contact-section.is-visible .guarantee:nth-child(5),
+.contact-section.is-visible .contact-promise:nth-child(5) { transition-delay: 0.5s; }
+.contact-section.is-visible .guarantee:nth-child(6),
+.contact-section.is-visible .contact-promise:nth-child(6) { transition-delay: 0.6s; }
 
 /* --- Reduced Motion: intentionally not overriding is-visible animations --- */
 /* See feedback: enabling this kills the IntersectionObserver pattern. */

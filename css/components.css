@@ -641,6 +641,153 @@ details.faq-item > summary::-webkit-details-marker { display: none; }
   max-width: none;
 }
 
+/* --- Contact Card (invertiert, Homepage-CTA-Block) --- */
+.contact-card {
+  background: var(--color-bg-dark);
+  color: var(--color-bg-card);
+  border-radius: 16px;
+  padding: var(--space-3xl);
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+body:has(.darkmode-checkbox:checked) .contact-card,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.contact-card .eyebrow {
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: var(--space-md);
+}
+
+body:has(.darkmode-checkbox:checked) .contact-card .eyebrow,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card .eyebrow {
+  color: var(--color-text-light);
+}
+
+.contact-card h2 {
+  color: #fff;
+  margin: 0 0 var(--space-md);
+}
+
+body:has(.darkmode-checkbox:checked) .contact-card h2,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card h2 {
+  color: var(--color-text);
+}
+
+.contact-card-lede {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: var(--text-lg);
+  max-width: 720px;
+  margin: 0 0 var(--space-2xl);
+}
+
+body:has(.darkmode-checkbox:checked) .contact-card-lede,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card-lede {
+  color: var(--color-text-secondary);
+}
+
+.contact-card .contact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-lg);
+  margin: 0;
+  padding-top: var(--space-xl);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+body:has(.darkmode-checkbox:checked) .contact-card .contact-grid,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card .contact-grid {
+  border-top-color: var(--color-border);
+}
+
+.contact-card .contact-method {
+  text-align: left;
+}
+
+.contact-card .contact-method-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: var(--space-xs);
+}
+
+body:has(.darkmode-checkbox:checked) .contact-card .contact-method-label,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card .contact-method-label {
+  color: var(--color-text-light);
+}
+
+.contact-card .contact-method a,
+.contact-card .contact-method span {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  color: #fff;
+}
+
+.contact-card .contact-method a {
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  transition: border-color 150ms ease;
+}
+
+.contact-card .contact-method a:hover {
+  border-bottom-color: var(--color-accent);
+  color: #fff;
+}
+
+body:has(.darkmode-checkbox:checked) .contact-card .contact-method a,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card .contact-method a,
+body:has(.darkmode-checkbox:checked) .contact-card .contact-method span,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card .contact-method span {
+  color: var(--color-text);
+}
+
+body:has(.darkmode-checkbox:checked) .contact-card .contact-method a,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card .contact-method a {
+  border-bottom-color: var(--color-border-dark);
+}
+
+.contact-promises {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md) var(--space-xl);
+  margin-top: var(--space-2xl);
+}
+
+.contact-promise {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+  padding-left: var(--space-md);
+  border-left: 2px solid var(--color-accent);
+}
+
+body:has(.darkmode-checkbox:checked) .contact-promise,
+body:has(.darkmode-checkbox-mobile:checked) .contact-promise {
+  color: var(--color-text-secondary);
+}
+
+.contact-card-cta {
+  margin-top: var(--space-2xl);
+}
+
+@media (max-width: 900px) {
+  .contact-card .contact-grid { grid-template-columns: repeat(2, 1fr); }
+  .contact-promises { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .contact-card { padding: var(--space-xl); }
+  .contact-card .contact-grid { grid-template-columns: 1fr; }
+  .contact-promises { grid-template-columns: 1fr; }
+}
+
 .contact-methods {
   display: flex;
   justify-content: center;
