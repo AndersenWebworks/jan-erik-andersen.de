@@ -22,21 +22,21 @@
 }
 
 :root {
-  /* Colors */
-  --color-bg: #FAFBFC;
-  --color-bg-alt: #F3F4F6;
+  /* Colors — warm neutrals (off-white papers, warm inks) */
+  --color-bg: #FAFAF7;
+  --color-bg-alt: #F2F1EC;
   --color-bg-card: #FFFFFF;
-  --color-bg-dark: #111827;
-  --color-text: #111827;
-  --color-text-secondary: #4B5563;
-  --color-text-light: #9CA3AF;
-  --color-accent: #DC2626;
-  --color-accent-hover: #B91C1C;
-  --color-accent-light: rgba(220, 38, 38, 0.08);
-  --color-accent-glow: rgba(220, 38, 38, 0.15);
-  --color-accent-shadow: rgba(220, 38, 38, 0.08);
-  --color-border: #E5E7EB;
-  --color-border-dark: #D1D5DB;
+  --color-bg-dark: #1A1A18;
+  --color-text: #1A1A18;
+  --color-text-secondary: #4A4A46;
+  --color-text-light: #86857D;
+  --color-accent: #A83A3A;
+  --color-accent-hover: #8F2F2F;
+  --color-accent-light: rgba(168, 58, 58, 0.08);
+  --color-accent-glow: rgba(168, 58, 58, 0.15);
+  --color-accent-shadow: rgba(168, 58, 58, 0.08);
+  --color-border: #E2E1DA;
+  --color-border-dark: #CDCBC1;
   --color-white: #FFFFFF;
 
   /* Typography */
@@ -84,19 +84,19 @@
 /* --- Dark Mode --- */
 body:has(.darkmode-checkbox:checked),
 body:has(.darkmode-checkbox-mobile:checked) {
-  --color-bg: #1A1714;
-  --color-bg-alt: #242018;
-  --color-bg-dark: #121010;
-  --color-text: #E8E3D8;
-  --color-text-secondary: #BFB098;
-  --color-text-light: #8A7D6B;
-  --color-accent: #E07060;
-  --color-accent-hover: #F08070;
-  --color-accent-light: rgba(224, 112, 96, 0.1);
-  --color-accent-glow: rgba(224, 112, 96, 0.2);
-  --color-accent-shadow: rgba(224, 112, 96, 0.12);
-  --color-bg-card: #2A2418;
-  --color-border: #3A3028;
-  --color-border-dark: #5A5040;
-  --color-white: #E8E3D8;
+  --color-bg: #121210;
+  --color-bg-alt: #1A1A18;
+  --color-bg-dark: #0E0E0C;
+  --color-text: #F0EFE9;
+  --color-text-secondary: #BAB9B1;
+  --color-text-light: #7E7D75;
+  --color-accent: #D9645A;
+  --color-accent-hover: #E47567;
+  --color-accent-light: rgba(217, 100, 90, 0.10);
+  --color-accent-glow: rgba(217, 100, 90, 0.20);
+  --color-accent-shadow: rgba(217, 100, 90, 0.12);
+  --color-bg-card: #1A1A18;
+  --color-border: #2A2A27;
+  --color-border-dark: #363632;
+  --color-white: #F0EFE9;
 }
