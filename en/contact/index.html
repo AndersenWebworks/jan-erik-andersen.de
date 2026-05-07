@@ -137,6 +137,7 @@
     <section class="contact-section contact-section--hero">
       <div class="section-inner container">
         <div class="contact-inner">
+          <div class="eyebrow"><span class="dot"></span>Contact</div>
           <h1>Let's talk.</h1>
           <p class="hero-lead">Free initial consultation: A quick call, then you'll know if it's a fit and what it costs. No sales pitch, no follow-up emails. Or send an email – reply same day.</p>
 
@@ -419,7 +420,7 @@
             }
           });
         }, { threshold: 0.3 });
-        document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+        document.querySelectorAll('.section-header h2, .contact-inner > h2, .contact-card > h2, .editorial-headline').forEach(function(h2) {
           headingObs.observe(h2);
         });
       });

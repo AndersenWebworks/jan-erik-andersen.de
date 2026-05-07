@@ -124,6 +124,7 @@
     <section class="projects-section">
       <div class="section-inner container">
         <div class="section-header">
+          <div class="eyebrow"><span class="dot"></span>Ausgewählte Arbeiten</div>
           <h1>Ausgewählte Projekte</h1>
           <p class="section-subtitle">Was stand am Anfang, was habe ich gemacht, was kam dabei raus. Drei Projekte, offen erzählt.</p>
         </div>
@@ -330,13 +331,29 @@
     <!-- CTA -->
     <section class="contact-section">
       <div class="section-inner container">
-        <div class="contact-inner">
+        <div class="contact-card">
+          <div class="eyebrow"><span class="dot"></span>Kontakt</div>
           <h2>Ähnliches Projekt geplant?</h2>
-          <p>Ein kurzer Call, danach wissen Sie, ob ich der Richtige bin.</p>
-          <div class="hero-ctas" style="justify-content: center;">
-            <a href="../kontakt/" class="btn btn-primary">Projekt besprechen <span class="btn-arr">→</span></a>
-            <a href="../#funnel" class="btn btn-secondary">Was brauchen Sie? Kurz-Check</a>
+          <p class="contact-card-lede">Ein kurzer Call, danach wissen Sie, ob ich der Richtige bin. Kein Verkaufsgespräch, keine Follow-up-Mails.</p>
+          <div class="contact-grid">
+            <div class="contact-method">
+              <div class="contact-method-label">E-Mail</div>
+              <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">Anruf</div>
+              <a href="tel:+4938733270015">038733 270015</a>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">LinkedIn</div>
+              <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">/in/andersen-erik</a>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">Standort</div>
+              <span>Plau am See · MV</span>
+            </div>
           </div>
+          <a href="mailto:mail@andersen-webworks.de" class="btn btn-primary contact-card-cta">Erstgespräch per Mail anfragen <span class="btn-arr">→</span></a>
         </div>
       </div>
     </section>
@@ -440,7 +457,7 @@
             }
           });
         }, { threshold: 0.3 });
-        document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+        document.querySelectorAll('.section-header h2, .contact-inner > h2, .contact-card > h2, .editorial-headline').forEach(function(h2) {
           headingObs.observe(h2);
         });
       });

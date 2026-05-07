@@ -276,6 +276,7 @@
     <section class="faq-section">
       <div class="section-inner container">
         <div class="section-header">
+          <div class="eyebrow"><span class="dot"></span>FAQ</div>
           <h1>Frequently Asked Questions</h1>
           <p class="section-subtitle">What clients ask me before deciding.</p>
         </div>
@@ -432,12 +433,13 @@
       </div>
     </section>
 
-    <section class="contact-section section--alt">
+    <section class="contact-section">
       <div class="section-inner container">
-        <div class="contact-inner">
+        <div class="contact-card">
+          <div class="eyebrow"><span class="dot"></span>Contact</div>
           <h2>More questions?</h2>
-          <p>A quick call clarifies more than 15 emails.</p>
-          <div class="contact-methods">
+          <p class="contact-card-lede">A quick call clarifies more than 15 emails. No sales pitch, no follow-up emails.</p>
+          <div class="contact-grid">
             <div class="contact-method">
               <div class="contact-method-label">Email</div>
               <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
@@ -446,7 +448,16 @@
               <div class="contact-method-label">Call</div>
               <a href="tel:+4938733270015">+49 38733 270015</a>
             </div>
+            <div class="contact-method">
+              <div class="contact-method-label">LinkedIn</div>
+              <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">/in/andersen-erik</a>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">Location</div>
+              <span>Plau am See · Germany</span>
+            </div>
           </div>
+          <a href="mailto:mail@andersen-webworks.de" class="btn btn-primary contact-card-cta">Request initial consultation <span class="btn-arr">→</span></a>
         </div>
       </div>
     </section>
@@ -550,7 +561,7 @@
             }
           });
         }, { threshold: 0.3 });
-        document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+        document.querySelectorAll('.section-header h2, .contact-inner > h2, .contact-card > h2, .editorial-headline').forEach(function(h2) {
           headingObs.observe(h2);
         });
       });

@@ -132,6 +132,7 @@
     <section class="services-section">
       <div class="section-inner container">
         <div class="services-intro">
+          <div class="eyebrow"><span class="dot"></span>Services</div>
           <h1>What I solve</h1>
           <p class="hero-lead">Technology follows the problem, not the other way around. WordPress when your team needs to manage content. Static HTML when speed matters. And in every case: accessibility, AI visibility, professional editing.</p>
         </div>
@@ -268,10 +269,11 @@
 
     <section class="contact-section">
       <div class="section-inner container">
-        <div class="contact-inner">
+        <div class="contact-card">
+          <div class="eyebrow"><span class="dot"></span>Contact</div>
           <h2>Does something fit?</h2>
-          <p>A quick call, then you'll know if I'm the right one.</p>
-          <div class="contact-methods">
+          <p class="contact-card-lede">A quick call, then you'll know if I'm the right one. No sales pitch, no follow-up emails.</p>
+          <div class="contact-grid">
             <div class="contact-method">
               <div class="contact-method-label">Email</div>
               <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
@@ -280,8 +282,16 @@
               <div class="contact-method-label">Call</div>
               <a href="tel:+4938733270015">+49 38733 270015</a>
             </div>
+            <div class="contact-method">
+              <div class="contact-method-label">LinkedIn</div>
+              <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">/in/andersen-erik</a>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">Location</div>
+              <span>Plau am See · Germany</span>
+            </div>
           </div>
-          <p class="section-cta"><a href="../pricing/" class="btn btn-secondary">View pricing</a></p>
+          <a href="mailto:mail@andersen-webworks.de" class="btn btn-primary contact-card-cta">Request initial consultation <span class="btn-arr">→</span></a>
         </div>
       </div>
     </section>
@@ -385,7 +395,7 @@
             }
           });
         }, { threshold: 0.3 });
-        document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+        document.querySelectorAll('.section-header h2, .contact-inner > h2, .contact-card > h2, .editorial-headline').forEach(function(h2) {
           headingObs.observe(h2);
         });
       });

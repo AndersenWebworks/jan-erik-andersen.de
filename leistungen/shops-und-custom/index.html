@@ -173,6 +173,7 @@
     <section class="services-section">
       <div class="section-inner container">
         <div class="services-intro">
+          <div class="eyebrow"><span class="dot"></span>Schwerpunkt 03</div>
           <h1>Shops &amp; Custom-Lösungen</h1>
           <p class="hero-lead">WooCommerce mit B2B-Features, Händlerportalen und eigenen Plugins. Wenn Standard nicht reicht, baue ich, was fehlt – sauber, dokumentiert, pflegbar.</p>
         </div>
@@ -272,10 +273,11 @@
 
     <section class="contact-section">
       <div class="section-inner container">
-        <div class="contact-inner">
+        <div class="contact-card">
+          <div class="eyebrow"><span class="dot"></span>Kontakt</div>
           <h2>Shop-Projekt besprechen?</h2>
-          <p>Ein kurzer Call klärt, was Sie brauchen – und was es kostet.</p>
-          <div class="contact-methods">
+          <p class="contact-card-lede">Ein kurzer Call klärt, was Sie brauchen – und was es kostet. Kein Verkaufsgespräch, keine Follow-up-Mails.</p>
+          <div class="contact-grid">
             <div class="contact-method">
               <div class="contact-method-label">E-Mail</div>
               <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
@@ -284,8 +286,16 @@
               <div class="contact-method-label">Anruf</div>
               <a href="tel:+4938733270015">038733 270015</a>
             </div>
+            <div class="contact-method">
+              <div class="contact-method-label">LinkedIn</div>
+              <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">/in/andersen-erik</a>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">Standort</div>
+              <span>Plau am See · MV</span>
+            </div>
           </div>
-          <p class="section-cta"><a href="../../leistungen/" class="btn btn-secondary">Alle Leistungen ansehen</a> <a href="../../preise/" class="btn btn-secondary">Preise ansehen</a></p>
+          <a href="mailto:mail@andersen-webworks.de" class="btn btn-primary contact-card-cta">Erstgespräch per Mail anfragen <span class="btn-arr">→</span></a>
         </div>
       </div>
     </section>
@@ -388,7 +398,7 @@
             }
           });
         }, { threshold: 0.3 });
-        document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+        document.querySelectorAll('.section-header h2, .contact-inner > h2, .contact-card > h2, .editorial-headline').forEach(function(h2) {
           headingObs.observe(h2);
         });
       });

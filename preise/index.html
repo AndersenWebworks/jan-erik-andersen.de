@@ -117,6 +117,7 @@
     <section class="pricing-section">
       <div class="section-inner container">
         <div class="section-header">
+          <div class="eyebrow"><span class="dot"></span>Preise</div>
           <h1>Was es kostet</h1>
           <p class="section-subtitle">Festpreise für definierte Projekte. Kein Stundenfressen, keine Überraschungen auf der Rechnung.</p>
         </div>
@@ -253,10 +254,11 @@
 
     <section class="contact-section">
       <div class="section-inner container">
-        <div class="contact-inner">
+        <div class="contact-card">
+          <div class="eyebrow"><span class="dot"></span>Kontakt</div>
           <h2>Konkretes Angebot?</h2>
-          <p>Ein kurzer Call, danach wissen Sie, was Ihr Projekt kostet.</p>
-          <div class="contact-methods">
+          <p class="contact-card-lede">Ein kurzer Call, danach wissen Sie, was Ihr Projekt kostet. Kein Verkaufsgespräch, keine Follow-up-Mails.</p>
+          <div class="contact-grid">
             <div class="contact-method">
               <div class="contact-method-label">E-Mail</div>
               <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
@@ -265,7 +267,16 @@
               <div class="contact-method-label">Anruf</div>
               <a href="tel:+4938733270015">038733 270015</a>
             </div>
+            <div class="contact-method">
+              <div class="contact-method-label">LinkedIn</div>
+              <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">/in/andersen-erik</a>
+            </div>
+            <div class="contact-method">
+              <div class="contact-method-label">Standort</div>
+              <span>Plau am See · MV</span>
+            </div>
           </div>
+          <a href="mailto:mail@andersen-webworks.de" class="btn btn-primary contact-card-cta">Erstgespräch per Mail anfragen <span class="btn-arr">→</span></a>
         </div>
       </div>
     </section>
@@ -369,7 +380,7 @@
             }
           });
         }, { threshold: 0.3 });
-        document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+        document.querySelectorAll('.section-header h2, .contact-inner > h2, .contact-card > h2, .editorial-headline').forEach(function(h2) {
           headingObs.observe(h2);
         });
       });

@@ -137,6 +137,7 @@
     <section class="contact-section contact-section--hero">
       <div class="section-inner container">
         <div class="contact-inner">
+          <div class="eyebrow"><span class="dot"></span>Kontakt</div>
           <h1>Reden wir.</h1>
           <p class="hero-lead">Kostenloses Erstgespräch: Ein kurzer Call, danach wissen Sie, ob es passt und was es kostet. Kein Verkaufsgespräch, keine Follow-up-Mails. Oder schreiben Sie eine Mail – Antwort am selben Tag.</p>
 
@@ -419,7 +420,7 @@
             }
           });
         }, { threshold: 0.3 });
-        document.querySelectorAll('.section-header h2, .contact-inner > h2, .editorial-headline').forEach(function(h2) {
+        document.querySelectorAll('.section-header h2, .contact-inner > h2, .contact-card > h2, .editorial-headline').forEach(function(h2) {
           headingObs.observe(h2);
         });
       });
