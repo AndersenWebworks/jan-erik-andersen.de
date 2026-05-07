@@ -66,6 +66,9 @@
   --space-3xl: 4rem;
   --space-4xl: 6rem;
 
+  /* Section vertical padding — single source of truth for all <section> blocks */
+  --section-padding-y: 6rem;
+
   /* Layout */
   --max-width: 1100px;
   --max-width-narrow: 680px;

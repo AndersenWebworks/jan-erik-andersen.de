@@ -3,15 +3,6 @@
    Used on /ueber/, /leistungen/*, /projekte/, etc.
    ============================================ */
 
-.editorial {
-  padding: var(--space-3xl) 0;
-  border-top: none;
-}
-
-.editorial:not(:has(.editorial-layout)) {
-  padding-bottom: var(--space-lg);
-}
-
 .editorial-layout {
   display: grid;
   grid-template-columns: 1fr 280px;

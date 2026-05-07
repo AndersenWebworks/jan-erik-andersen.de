@@ -120,7 +120,7 @@ strong { font-weight: 600; }
 }
 
 section {
-  padding: var(--space-4xl) 0;
+  padding: var(--section-padding-y) 0;
 }
 
 .section--alt {
@@ -167,7 +167,7 @@ dd {
 /* Type-Scale skaliert ueber clamp() in tokens.css — hier nur Layout-Spacing. */
 @media (max-width: 768px) {
   :root {
-    --space-4xl: 3rem;
+    --section-padding-y: 3rem;
     --space-3xl: 2rem;
   }
   .container,
