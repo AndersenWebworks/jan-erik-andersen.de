@@ -343,9 +343,9 @@ html[lang="en"] .testimonial-card blockquote.testimonial-body::after {
 }
 
 .pricing-grid-teaser .pricing-card {
-  text-align: center;
+  text-align: left;
   padding: var(--space-lg);
-  align-items: center;
+  align-items: stretch;
 }
 
 .pricing-grid-teaser .pricing-type {
@@ -354,13 +354,22 @@ html[lang="en"] .testimonial-card blockquote.testimonial-body::after {
 
 .pricing-grid-teaser .pricing-price {
   font-size: 1.75rem;
+  margin-bottom: var(--space-md);
 }
 
 .pricing-grid-teaser .pricing-price small,
 .pricing-grid-teaser .pricing-price span {
-  display: block;
-  margin-left: 0;
-  margin-top: var(--space-xs);
+  display: inline;
+  margin-left: 0.25em;
+  margin-top: 0;
+  white-space: normal;
+}
+
+.pricing-grid-teaser .pricing-desc {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
 }
 
 .pricing-card {
@@ -510,6 +519,46 @@ html[lang="en"] .testimonial-card blockquote.testimonial-body::after {
   max-width: 700px;
   margin: var(--space-2xl) auto 0;
   text-align: center;
+}
+
+.pricing-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.pricing-foot .pricing-note {
+  margin: 0;
+  text-align: left;
+  max-width: none;
+  flex: 1 1 auto;
+}
+
+.pricing-foot .pricing-note strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.pricing-foot .btn {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 700px) {
+  .pricing-foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .pricing-foot .pricing-note {
+    text-align: center;
+  }
+  .pricing-foot .btn {
+    align-self: center;
+  }
 }
 
 .pricing-notes {
