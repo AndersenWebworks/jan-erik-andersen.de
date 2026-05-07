@@ -68,11 +68,6 @@
 
 .services-section.is-visible .standards-strip { opacity: 1; }
 
-/* --- Process Steps: connector line draws in --- */
-.process-section.is-visible .process-steps::before {
-  transform: scaleY(1);
-}
-
 /* --- Testimonial: accent border appears --- */
 .testimonial-card {
   border-left-color: transparent;
