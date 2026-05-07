@@ -301,11 +301,21 @@
   function init() {
     var hash = window.location.hash.replace('#', '');
 
-    if (isFunnelDone() && !hash) {
+    if (window.location.protocol === 'file:' || (isFunnelDone() && !hash)) {
       skipFunnel();
       return;
     }
-    document.documentElement.classList.add('funnel-active');
+    // Mobile: render funnel inline in flow, no modal overlay
+    // (Google penalises Intrusive Interstitials; mobile gets a compact funnel)
+    var isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+      document.documentElement.classList.add('funnel-active', 'funnel-inline');
+    } else {
+      // Desktop: modal with 800ms delay – user sees the hero first, then the wow effect
+      setTimeout(function () {
+        document.documentElement.classList.add('funnel-active');
+      }, 800);
+    }
     initConstellation();
     fetch('funnel.json')
       .then(function (r) { return r.json(); })
@@ -320,7 +330,7 @@
         }
       })
       .catch(function () {
-        app.innerHTML = '<p class="funnel-error">Could not load funnel.</p>';
+        skipFunnel();
       });
   }
 
@@ -417,14 +427,17 @@
     if (node.subtitle) {
       h += '<p class="funnel-subtitle funnel-stagger" style="--i:1">' + esc(node.subtitle) + '</p>';
     }
+    h += '<div class="funnel-accent-line funnel-stagger" style="--i:1.5"></div>';
 
     h += '<div class="funnel-options">';
     for (var i = 0; i < node.options.length; i++) {
       var opt = node.options[i];
+      var num = String(i + 1).length < 2 ? '0' + (i + 1) : String(i + 1);
       var si = 'style="--i:' + (i + 2) + '"';
       var data = opt.action ? 'data-action="' + esc(opt.action) + '"' : 'data-next="' + esc(opt.next) + '"';
       var icon = getOptionIcon(opt.label);
       h += '<button class="funnel-option funnel-stagger" ' + si + ' ' + data + '>';
+      h += '<span class="funnel-option-num">' + num + '</span>';
       if (icon) h += '<span class="funnel-option-icon">' + icon + '</span>';
       h += '<span class="funnel-option-label">' + esc(opt.label) + '</span>';
       h += '<span class="funnel-option-arrow" aria-hidden="true">' + ICONS['chevron-right'] + '</span>';
@@ -506,85 +519,314 @@
   /* ── Email Builder from Funnel Path ─────────────────── */
 
   var RESULT_EMAILS = {
+    /* Direct / General */
+    'result-direkt': {
+      subject: 'Quick inquiry',
+      body: 'I\'d like to have a quick chat. No long funnel needed \u2013 here\'s my request:',
+      url: false
+    },
+    'result-beratung': {
+      subject: 'Consulting call',
+      body: 'I\'m not sure exactly what I need. Could we have a quick call to clarify?',
+      url: true
+    },
+    'result-budget-klein': {
+      subject: 'Website \u2013 small budget',
+      body: 'my budget is below 2,400 EUR. I know that\'s tight, but maybe there\'s still a way.',
+      url: true
+    },
+    /* New Website */
     'result-website': {
       subject: 'New company website',
-      body: 'we need a new website for our company. We either don\'t have one yet or the current one is no longer presentable.',
+      body: 'we need a new website for our company. I\'ve clicked through your advisor funnel.',
       url: true
     },
-    'result-website-gross': {
-      subject: 'Website for corporate group',
-      body: 'we are a corporate group with multiple subsidiaries and need a unified web presence \u2013 probably multilingual.',
+    'result-industrie': {
+      subject: 'Company website (industry/manufacturing)',
+      body: 'we are an industrial company and need a new website. Your reference to Gerwing Steinwerke and your experience with B2B catalogues sound like a fit.',
       url: true
     },
+    'result-beratung-branche': {
+      subject: 'Company website (consulting/services)',
+      body: 'we are a consulting firm and need a new website. Your point about trust and AI visibility resonated with me.',
+      url: true
+    },
+    'result-recht': {
+      subject: 'Company website (law firm/tax office)',
+      body: 'we are a law firm/tax office and need a new website. Your remark that all law firm websites look alike unfortunately applies to ours, too.',
+      url: true
+    },
+    'result-sozial': {
+      subject: 'Website (association/social organisation)',
+      body: 'we are an association/social organisation and need a new website. Your note on limited budgets and real stories spoke to me.',
+      url: true
+    },
+    'result-gross': {
+      subject: 'Web presence for corporate group',
+      body: 'we are a corporate group with several entities and need a unified web presence. Your point about coordination being the main issue applies to us.',
+      url: true
+    },
+    /* Shop */
     'result-shop': {
-      subject: 'Online shop',
-      body: 'we want to set up an online shop for direct-to-consumer sales.',
+      subject: 'WooCommerce shop',
+      body: 'we need an online shop with custom requirements. Shopify isn\'t enough because we have to map our own processes.',
+      url: true
+    },
+    'result-shop-mittel': {
+      subject: 'WooCommerce shop (200\u2013500 products)',
+      body: 'we need an online shop with 200\u2013500 products. Your note on structured imports was helpful \u2013 manual data entry isn\'t an option.',
+      url: true
+    },
+    'result-shop-budget-knapp': {
+      subject: 'WooCommerce shop (budget limited)',
+      body: 'we need a shop but have a limited budget (under 4,800 EUR). I\'m willing to compromise \u2013 let\'s talk through the options.',
+      url: true
+    },
+    'result-shop-standard': {
+      subject: 'Online shop (consulting)',
+      body: 'I\'ve clicked through your funnel and you honestly said Shopify might be enough for our case. Still, I\'d like a quick call to discuss whether WooCommerce makes sense long-term.',
+      url: true
+    },
+    'result-shop-gross': {
+      subject: 'Large online shop (500+ products)',
+      body: 'we need a shop with a large product catalogue. Your notes on hosting and infrastructure for 500+ products were helpful.',
       url: true
     },
     'result-shop-b2b': {
       subject: 'B2B shop with dealer portal',
-      body: 'we need a B2B shop with a dealer portal \u2013 price lists, customer accounts, the full package.',
+      body: 'we need a B2B shop \u2013 tiered pricing, dealer logins, approval flows. Not a stock theme but a real tool for our sales team.',
       url: true
     },
-    'result-portal': {
-      subject: 'Web app / Portal',
-      body: 'we need a web app or portal \u2013 not a classic website but something interactive where users can work.',
+    'result-shop-beratung': {
+      subject: 'Shop consulting',
+      body: 'I\'m not sure if Shopify is enough or if it has to be WooCommerce. Could we have a brief call?',
+      url: true
+    },
+    'result-shop-budget-klein': {
+      subject: 'Shop (budget limited)',
+      body: 'we need a shop but have a limited budget (under 4,800 EUR). I\'m willing to compromise.',
+      url: true
+    },
+    /* Portal */
+    'result-portal-karriere': {
+      subject: 'Career portal (custom)',
+      body: 'we need a career portal that goes beyond what JOIN or Personio can do \u2013 own design, integrated into our website.',
+      url: true
+    },
+    'result-portal-karriere-standard': {
+      subject: 'Career portal (consulting)',
+      body: 'you honestly said a standard tool might be enough for our needs. Still a few questions about it.',
+      url: false
+    },
+    'result-portal-kunden': {
+      subject: 'Customer portal with login',
+      body: 'we need a login area for our customers \u2013 viewing data, documents, maybe order history. Your note on GDPR requirements was important.',
+      url: true
+    },
+    'result-portal-intern': {
+      subject: 'Custom tool / web app',
+      body: 'we need an internal tool that no off-the-shelf product covers. I\'ve checked: standard tools aren\'t enough.',
+      url: false
+    },
+    'result-portal-tool': {
+      subject: 'Tool selection consulting',
+      body: 'you made me realise that an off-the-shelf tool might be enough for us. Could you advise us on the selection?',
+      url: false
+    },
+    'result-portal-standard': {
+      subject: 'Career portal (standard)',
+      body: 'you honestly said a standard tool might be enough for our needs. Still a few questions about it.',
+      url: false
+    },
+    'result-portal-custom': {
+      subject: 'Custom tool / web app',
+      body: 'we need a tool that no off-the-shelf product covers. I\'ve checked: standard tools aren\'t enough.',
+      url: false
+    },
+    'result-bericht': {
+      subject: 'Interactive report',
+      body: 'we\'d like to publish a report (annual/impact report) as an interactive website rather than a PDF.',
       url: false
     },
     'result-landingpage': {
       subject: 'Landing page',
-      body: 'we need a single, well-crafted page \u2013 a landing page for a specific offer or topic.',
+      body: 'we need a focused landing page for a specific offer. One page, one goal.',
       url: false
     },
+    /* Problem: Redesign */
     'result-redesign': {
-      subject: 'Website redesign',
-      body: 'our website no longer looks contemporary. We need a redesign \u2013 technology, design, or both.',
+      subject: 'Design refresh for our website',
+      body: 'the design of our website is outdated, but the technology and content are still fine. We need a visual update, not a full relaunch.',
+      url: true
+    },
+    'result-redesign-technik': {
+      subject: 'Technical update for our website',
+      body: 'our website has a technical issue: not responsive, outdated PHP or no HTTPS. We need help with the technical foundation.',
+      url: true
+    },
+    'result-redesign-content': {
+      subject: 'Content update for our website',
+      body: 'our website content is outdated (wrong services, old photos). We need a content update, not a redesign.',
+      url: true
+    },
+    'result-redesign-komplett': {
+      subject: 'Complete redesign',
+      body: 'everything on our website is outdated: design, technology and content. We need a fresh start, but planned sensibly.',
+      url: true
+    },
+    'result-relaunch': {
+      subject: 'Complete relaunch',
+      body: 'our website needs a complete fresh start \u2013 design, technology and content. I\'ve clicked through your funnel.',
+      url: true
+    },
+    'result-redesign-beratung': {
+      subject: 'Redesign or relaunch?',
+      body: 'I\'m not sure whether a facelift is enough or if we need a full relaunch. Can we figure that out together?',
+      url: true
+    },
+    /* Problem: Performance */
+    'result-performance-wp': {
+      subject: 'WordPress performance',
+      body: 'our WordPress site is too slow. I checked pagespeed.web.dev and the score isn\'t good. Could you take a look?',
       url: true
     },
     'result-performance': {
       subject: 'Website too slow',
-      body: 'our website is too slow and we\'re not sure why. Could you take a look?',
+      body: 'our website is too slow. I\'ve tested it on pagespeed.web.dev. Could you take a look?',
       url: true
     },
+    /* Problem: BFSG / EAA */
     'result-bfsg': {
       subject: 'Accessibility / EAA',
-      body: 'we need to make our website accessible (European Accessibility Act). Can you assess what\'s needed?',
+      body: 'we need to make our website accessible (European Accessibility Act). I did the quick test in your funnel and found at least one issue.',
+      url: true
+    },
+    'result-bfsg-fix': {
+      subject: 'Fix EAA issues',
+      body: 'we\'ve had our website audited and know which accessibility issues exist. Could you fix and document them?',
+      url: true
+    },
+    /* Problem: SEO / GEO */
+    'result-seo-google': {
+      subject: 'Google visibility',
+      body: 'our website isn\'t found well on Google. Could you take a look?',
+      url: true
+    },
+    'result-seo-ki': {
+      subject: 'AI visibility',
+      body: 'I asked ChatGPT about our company and the answer was thin or wrong. Could you help make our website visible to AI systems?',
       url: true
     },
     'result-seo': {
-      subject: 'Website not being found',
-      body: 'our website isn\'t being found well \u2013 neither on Google nor in AI assistants. We need help with visibility.',
+      subject: 'Website isn\'t being found',
+      body: 'our website isn\'t found well \u2013 neither on Google nor by AI systems. Could you take a look?',
+      url: true
+    },
+    /* Problem: Technical */
+    'result-technik-wp': {
+      subject: 'WordPress problem',
+      body: 'our WordPress site has a technical issue. I\'ve disabled plugins and checked the Health Check tool but can\'t make progress.',
+      url: true
+    },
+    'result-technik-woo': {
+      subject: 'WooCommerce problem',
+      body: 'our WooCommerce shop has an issue \u2013 orders, payments or display. Could you take a look soon?',
       url: true
     },
     'result-technik': {
       subject: 'Technical problem',
-      body: 'something on our website is broken and we can\'t figure it out. Could you take a look soon?',
+      body: 'something on our website is broken and we can\'t figure it out. Could you take a look?',
       url: true
     },
+    'result-technik-sicherheit': {
+      subject: 'URGENT: website hacked',
+      body: 'our website has likely been hacked or contains malware. We need help quickly.',
+      url: true
+    },
+    'result-sicherheit': {
+      subject: 'URGENT: website hacked',
+      body: 'our website has likely been hacked or contains malware. We need help quickly.',
+      url: true
+    },
+    /* Maintenance */
     'result-betreuung-basis': {
       subject: 'Website maintenance (Basic)',
-      body: 'we\'re looking for someone to handle updates, security and backups for our website \u2013 reliably and in the background.',
+      body: 'we\'re looking for someone to handle updates, security and backups for our website.',
       url: true
     },
     'result-betreuung-standard': {
-      subject: 'Website maintenance',
-      body: 'we\'re looking for someone for ongoing website maintenance \u2013 not just technical but also regular content changes.',
+      subject: 'Website maintenance (Standard)',
+      body: 'we\'re looking for someone for ongoing website maintenance \u2013 updates plus regular content changes.',
       url: true
     },
     'result-betreuung-premium': {
-      subject: 'Full-service maintenance',
-      body: 'we\'re essentially looking for our own web developer \u2013 someone who fully maintains our website and takes care of everything.',
+      subject: 'Full-service maintenance (Premium/Retainer)',
+      body: 'we\'re essentially looking for our own web developer \u2013 someone who fully maintains our website and takes care of everything. Retainer model.',
       url: true
     },
+    'result-betreuung-wp-basis': {
+      subject: 'WordPress maintenance (Basic)',
+      body: 'we\'re looking for someone to handle updates, security and backups for our WordPress site.',
+      url: true
+    },
+    'result-betreuung-wp-standard': {
+      subject: 'WordPress maintenance (Standard)',
+      body: 'we\'re looking for someone for ongoing maintenance of our WordPress site \u2013 updates plus regular content changes.',
+      url: true
+    },
+    'result-betreuung-woo-basis': {
+      subject: 'WooCommerce maintenance (Basic)',
+      body: 'we\'re looking for someone to handle updates and monitoring for our WooCommerce shop.',
+      url: true
+    },
+    'result-betreuung-woo-standard': {
+      subject: 'WooCommerce maintenance (Standard)',
+      body: 'we\'re looking for someone for ongoing maintenance of our WooCommerce shop \u2013 updates plus regular changes and support.',
+      url: true
+    },
+    'result-betreuung-statisch': {
+      subject: 'Static website maintenance',
+      body: 'we have a static website and occasionally need someone for changes.',
+      url: true
+    },
+    /* GEO */
     'result-geo': {
       subject: 'AI visibility',
-      body: 'I read on your website about how you make websites visible to AI systems. I\'m interested \u2013 can you tell me more?',
+      body: 'I read on your website about how you make websites visible to AI systems. I\'m interested.',
       url: true
     },
     'result-geo-audit': {
       subject: 'AI visibility audit',
-      body: 'I\'d like to know how visible our website is to AI systems. Can you check?',
+      body: 'I\'d like to know how visible our website is to AI systems. Could you check?',
       url: true
+    },
+    /* GEO (new nodes) */
+    'result-geo-baukasten': {
+      subject: 'AI visibility (website builder)',
+      body: 'our website runs on a website builder system and we\'d like to improve AI visibility. Your funnel said honestly that this will be tricky \u2013 can we discuss the options?',
+      url: true
+    },
+    'geo-neubau': {
+      subject: 'New website with AI visibility',
+      body: 'we\'re planning a new website and want AI visibility built in from the start. Your funnel convinced us.',
+      url: true
+    },
+    /* BFSG (new nodes) */
+    'bfsg-nicht-betroffen': {
+      subject: 'Accessibility (voluntary)',
+      body: 'according to your check we are not subject to the EAA, but we\'d still like to make our website accessible. Could you give us an estimate?',
+      url: true
+    },
+    'result-bfsg-audit': {
+      subject: 'EAA audit',
+      body: 'we\'d like to have our website checked for accessibility. Your funnel pointed us to specific test items \u2013 we fail some of them.',
+      url: true
+    },
+    /* Comparison */
+    'result-vergleich-kontakt': {
+      subject: 'Inquiry after provider comparison',
+      body: 'I clicked through your advisor funnel and the tips on choosing a freelancer were helpful. I\'d like to hear your answers to the five questions.',
+      url: false
     }
   };
 
@@ -596,21 +838,59 @@
     return '';
   }
 
+  var PATH_CONTEXT = {
+    'neu-was': 'New website/shop',
+    'website-budget': 'Budget check',
+    'website-branche': 'Industry selection',
+    'website-gross': 'Large project',
+    'shop-art': 'Shop type',
+    'shop-b2c': 'B2C shop',
+    'shop-b2b': 'B2B shop',
+    'shop-budget': 'Shop budget',
+    'portal-was': 'Portal/tool',
+    'portal-karriere': 'Career portal',
+    'portal-intern': 'Internal tool',
+    'problem-was': 'Existing problem',
+    'problem-redesign': 'Redesign check',
+    'problem-technik': 'Technical issue',
+    'betreuung-was': 'Ongoing maintenance',
+    'betreuung-info': 'Maintenance packages',
+    'geo-einstieg': 'AI visibility',
+    'geo-nachrüsten': 'Retrofit AI',
+    'bfsg-check': 'EAA applicability',
+    'bfsg-betroffen': 'EAA-required'
+  };
+
+  function buildPathSummary() {
+    var steps = [];
+    for (var i = 0; i < history.length; i++) {
+      if (PATH_CONTEXT[history[i]]) steps.push(PATH_CONTEXT[history[i]]);
+    }
+    return steps.length > 0 ? steps.join(' > ') : '';
+  }
+
   function buildEmailFromPath() {
     var resultId = getLastResultId();
     var fb = { subject: 'Inquiry', body: 'I\'ve looked at your website and would like to speak with you.', url: false };
     var data = RESULT_EMAILS[resultId] || fb;
 
+    var pathSummary = buildPathSummary();
     var subject = data.subject;
     var body = 'Hello Mr. Andersen,\n\n' + data.body;
     if (data.url) {
       body += '\n\nOur website: [URL]';
+    }
+    if (pathSummary) {
+      body += '\n\n(My path through the advisor: ' + pathSummary + ')';
     }
     body += '\n\nCould we have a brief call?\n\nBest regards\n[Your name]';
 
     var previewHtml = 'Hello Mr. Andersen,\n\n' + esc(data.body);
     if (data.url) {
       previewHtml += '\n\nOur website: <span class="funnel-contact-placeholder">[URL]</span>';
+    }
+    if (pathSummary) {
+      previewHtml += '\n\n<span class="funnel-contact-placeholder">(My path: ' + esc(pathSummary) + ')</span>';
     }
     previewHtml += '\n\nCould we have a brief call?\n\nBest regards\n<span class="funnel-contact-placeholder">[Your name]</span>';
 
@@ -1122,14 +1402,14 @@
   }
 
   function resizeCanvas() {
-    if (!constellationCanvas) return;
-    constellationCanvas.width = window.innerWidth;
-    constellationCanvas.height = window.innerHeight;
+    if (!constellationCanvas || !funnel) return;
+    constellationCanvas.width = funnel.offsetWidth;
+    constellationCanvas.height = funnel.offsetHeight;
   }
 
   function spawnNodes() {
-    var w = window.innerWidth;
-    var h = window.innerHeight;
+    var w = funnel ? funnel.offsetWidth : window.innerWidth;
+    var h = funnel ? funnel.offsetHeight : window.innerHeight;
     var margin = 60;
     for (var i = 0; i < NODE_COUNT; i++) {
       nodes.push({
