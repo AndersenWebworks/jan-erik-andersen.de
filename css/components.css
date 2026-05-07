@@ -546,12 +546,13 @@ html[lang="en"] .testimonial-card blockquote.testimonial-body::after {
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: var(--space-xl);
-  transition: border-color 0.5s ease, box-shadow 0.2s ease;
+  transition: border-color 0.5s ease, box-shadow 0.25s ease, transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .project-card:hover {
   border-color: var(--color-border-dark);
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -1px rgba(0,0,0,0.04);
+  box-shadow: 0 10px 25px -8px rgba(0,0,0,0.12), 0 4px 10px -4px rgba(0,0,0,0.06);
+  transform: translateY(-4px);
 }
 
 .project-card-screenshot {
@@ -589,6 +590,17 @@ html[lang="en"] .testimonial-card blockquote.testimonial-body::after {
   color: var(--color-accent);
   text-decoration: none;
 }
+
+/* Pfeil als Span: <span class="project-link-arr">→</span>.
+   Wandert beim Hover der Karte oder des Links nach rechts. */
+.project-link-arr {
+  display: inline-block;
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.project-card:hover .project-link-arr,
+.project-link:hover .project-link-arr,
+.project-link:focus-visible .project-link-arr { transform: translateX(4px); }
 
 .project-card.probono {
   border-left: 3px solid var(--color-accent);
