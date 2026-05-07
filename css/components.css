@@ -191,7 +191,7 @@
 .section-cta {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   gap: var(--space-md);
   margin-top: var(--space-xl);
@@ -200,7 +200,6 @@
 .section-cta-or {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  margin-left: var(--space-md);
 }
 
 /* --- Testimonials --- */
