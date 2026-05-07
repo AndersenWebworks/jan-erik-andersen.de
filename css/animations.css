@@ -68,14 +68,14 @@
 
 .services-section.is-visible .standards-strip { opacity: 1; }
 
-/* --- Testimonial: accent border appears --- */
-.testimonial-card {
-  border-left-color: transparent;
-  transition: border-left-color 0.6s ease 0.15s;
+/* --- Testimonial: stars fade in --- */
+.testimonial-stars {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.15s;
 }
 
-.testimonials-section.is-visible .testimonial-card {
-  border-left-color: var(--color-accent);
+.testimonials-section.is-visible .testimonial-stars {
+  opacity: 1;
 }
 
 /* --- Project Cards: border resolves --- */
