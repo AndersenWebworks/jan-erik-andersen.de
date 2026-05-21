@@ -19,6 +19,7 @@
   <link rel="alternate" hreflang="en" href="https://jan-erik-andersen.de/en/">
   <link rel="alternate" hreflang="x-default" href="https://jan-erik-andersen.de/">
   <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="preload" as="image" href="../portrait.webp" fetchpriority="high">
   <title>Jan-Erik Andersen – Web Development, Shops & Support since 1999</title>
 
   <script type="application/ld+json">
@@ -67,11 +68,6 @@
   <!-- aggregateRating removed: re-add when 10+ reviews -->
 
   <!-- FAQPage schema lives on /faq/ – no duplicate on homepage -->
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="../style.css">
 </head>
 <body>
@@ -234,7 +230,7 @@
         </div>
         <div class="projects-grid">
           <article class="project-card">
-            <img src="../screenshots/gerwing.png" alt="Screenshot gerwing.de" class="project-card-screenshot" width="1280" height="800" loading="lazy">
+            <img src="../logos/logo-gerwing-black.svg" alt="Gerwing Steinwerke" class="project-card-logo" width="114" height="34" loading="lazy" decoding="async">
             <div class="project-tags">
               <span class="tag">B2B / Industry</span>
               <span class="tag">WooCommerce</span>
@@ -244,7 +240,7 @@
             <a href="https://gerwing.de" class="project-link" target="_blank" rel="noopener">gerwing.de <span class="project-link-arr">→</span></a>
           </article>
           <article class="project-card">
-            <img src="../screenshots/runden-group.png" alt="Screenshot runden-group.eu" class="project-card-screenshot" width="1280" height="800" loading="lazy">
+            <img src="../logos/logo-rundengroup-black.svg" alt="Runden Group" class="project-card-logo" width="766" height="291" loading="lazy" decoding="async">
             <div class="project-tags">
               <span class="tag">Corporate Group</span>
               <span class="tag">11 Websites</span>
@@ -254,7 +250,7 @@
             <a href="https://runden-group.eu" class="project-link" target="_blank" rel="noopener">runden-group.eu <span class="project-link-arr">→</span></a>
           </article>
           <article class="project-card">
-            <img src="../screenshots/wbg-pooling.png" alt="Screenshot wbg-pooling.eu" class="project-card-screenshot" width="1280" height="800" loading="lazy">
+            <img src="../logos/logo-wbgpooling-black.svg" alt="WBG Pooling" class="project-card-logo" width="1639" height="510" loading="lazy" decoding="async">
             <div class="project-tags">
               <span class="tag">Logistics / Circular Economy</span>
               <span class="tag">Custom Plugin</span>
@@ -741,6 +737,6 @@
   })();
   </script>
 
-  <script src="funnel.js"></script>
+  <script src="funnel.js" defer></script>
 </body>
 </html>

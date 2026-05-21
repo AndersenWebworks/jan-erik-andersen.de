@@ -640,11 +640,14 @@
   align-items: start;
 }
 
-.case-study-screenshot {
+.case-study-logo {
   width: 100%;
-  height: auto;
+  height: 220px;
+  padding: var(--space-2xl);
+  object-fit: contain;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
+  background: var(--color-white);
   margin-bottom: var(--space-lg);
 }
 

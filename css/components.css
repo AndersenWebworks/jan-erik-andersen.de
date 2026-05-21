@@ -622,13 +622,16 @@ html[lang="en"] .testimonial-card blockquote.testimonial-body::after {
   transform: translateY(-4px);
 }
 
-.project-card-screenshot {
+.project-card-logo {
   width: calc(100% + 2 * var(--space-xl));
   max-width: none;
-  height: auto;
+  height: 150px;
   margin: calc(-1 * var(--space-xl)) calc(-1 * var(--space-xl)) var(--space-lg);
+  padding: var(--space-xl);
+  object-fit: contain;
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   border-bottom: 1px solid var(--color-border);
+  background: var(--color-white);
   display: block;
 }
 
@@ -1406,9 +1409,11 @@ body:has(.darkmode-checkbox-mobile:checked) .contact-promise {
     padding: var(--space-lg);
   }
 
-  .project-card-screenshot {
+  .project-card-logo {
     width: calc(100% + 2 * var(--space-lg));
+    height: 128px;
     margin: calc(-1 * var(--space-lg)) calc(-1 * var(--space-lg)) var(--space-lg);
+    padding: var(--space-lg);
   }
 
   .btn {

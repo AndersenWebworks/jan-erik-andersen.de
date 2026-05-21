@@ -40,9 +40,9 @@
   --color-white: #FFFFFF;
 
   /* Typography */
-  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-serif: Georgia, 'Times New Roman', serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
   --font-heading: var(--font-serif);
 
   /* Sizes — fluid scale (clamp): min @ 320px, max @ 1280px viewport */
