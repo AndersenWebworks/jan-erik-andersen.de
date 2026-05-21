@@ -3483,8 +3483,11 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
    FUNNEL — Interactive Advisor Overlay
    ============================================ */
 
-html.funnel-active { overflow: hidden; height: 100%; }
-html.funnel-active body { overflow: hidden; height: 100%; }
+html.funnel-active,
+html.funnel-active body { overflow: hidden; }
+html.funnel-skip:not(.funnel-active) #funnel { display: none !important; }
+html.funnel-active .site-header ~ main,
+html.funnel-skip .site-header ~ main { padding-top: 3.5rem; }
 
 .funnel {
   position: fixed;
@@ -3500,8 +3503,7 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   min-height: 100svh;
   padding: clamp(40px, 8svh, 72px) var(--space-xl);
   background: var(--color-bg);
-  transition: opacity 600ms cubic-bezier(0.4, 0, 0.2, 1),
-              filter 600ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity 450ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .funnel::before {
@@ -3517,13 +3519,15 @@ html.funnel-active body { overflow: hidden; height: 100%; }
 
 .funnel > * { position: relative; z-index: 1; }
 
-.funnel-exiting { opacity: 0; filter: blur(4px); }
+.funnel-exiting { opacity: 0; }
 .funnel-hidden { display: none !important; }
 
 .funnel-container {
   max-width: 560px;
   width: 100%;
   flex: 0 1 auto;
+  height: min(560px, calc(100vh - 150px));
+  height: min(560px, calc(100svh - 150px));
   max-height: calc(100vh - 150px);
   max-height: calc(100svh - 150px);
   overflow-y: auto;
@@ -3569,10 +3573,20 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   font-size: var(--text-sm);
   font-weight: 600;
   cursor: pointer;
-  transition: color 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 220ms ease, visibility 0ms linear 220ms, color 200ms ease, border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
 
-.funnel-skip[hidden] { display: none; }
+.funnel-skip.is-visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0ms;
+}
+
+.funnel-exiting .funnel-skip { pointer-events: none; }
 
 .funnel-skip:hover {
   color: var(--color-text);
@@ -3644,20 +3658,20 @@ html.funnel-active body { overflow: hidden; height: 100%; }
 .funnel-slide-in-left { animation: slideInLeft 450ms cubic-bezier(0, 0, 0.15, 1) forwards; }
 
 @keyframes slideOutLeft {
-  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
-  to   { opacity: 0; transform: translateX(-60px) scale(0.94); filter: blur(3px); }
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to   { opacity: 0; transform: translateX(-60px) scale(0.94); }
 }
 @keyframes slideOutRight {
-  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
-  to   { opacity: 0; transform: translateX(60px) scale(0.94); filter: blur(3px); }
+  from { opacity: 1; transform: translateX(0) scale(1); }
+  to   { opacity: 0; transform: translateX(60px) scale(0.94); }
 }
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateX(30px) scale(1.04); filter: blur(2px); }
-  to   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+  from { opacity: 0; transform: translateX(30px) scale(1.04); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
 }
 @keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-30px) scale(1.04); filter: blur(2px); }
-  to   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+  from { opacity: 0; transform: translateX(-30px) scale(1.04); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
 }
 
 /* --- Constellation --- */
@@ -4220,7 +4234,7 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
 /* --- Responsive: Height --- */
 @media (max-height: 700px) {
   .funnel { padding-top: 44px; padding-bottom: 44px; }
-  .funnel-container { max-height: calc(100vh - 120px); max-height: calc(100svh - 120px); padding-top: var(--space-sm); padding-bottom: var(--space-sm); }
+  .funnel-container { height: min(520px, calc(100vh - 120px)); height: min(520px, calc(100svh - 120px)); max-height: calc(100vh - 120px); max-height: calc(100svh - 120px); padding-top: var(--space-sm); padding-bottom: var(--space-sm); }
   .funnel-question { font-size: 1.375rem; margin-bottom: 0.25rem; }
   .funnel-subtitle { margin-bottom: var(--space-xs); }
   .funnel-options { gap: 6px; }
@@ -4237,7 +4251,7 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
 
 @media (max-height: 500px) {
   .funnel { padding-top: 36px; padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
-  .funnel-container { max-height: calc(100vh - 100px); max-height: calc(100svh - 100px); }
+  .funnel-container { height: calc(100vh - 100px); height: calc(100svh - 100px); max-height: calc(100vh - 100px); max-height: calc(100svh - 100px); }
   .funnel-question { font-size: 1.125rem; }
   .funnel-option-num { display: none; }
   .funnel-accent-line { display: none; }
@@ -4247,6 +4261,9 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
 
 /* --- Responsive: Width --- */
 @media (max-width: 640px) {
+  html.funnel-active .site-header ~ main,
+  html.funnel-skip .site-header ~ main { padding-top: 5.5rem; }
+
   .funnel { padding: 48px var(--space-md) calc(84px + env(safe-area-inset-bottom, 0px)); }
   .funnel-question { font-size: var(--text-xl); margin-bottom: var(--space-xs); }
   .funnel-subtitle { margin-bottom: var(--space-xs); }
@@ -4256,6 +4273,11 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
   .funnel-result-text { font-size: var(--text-xs); }
   .funnel-proof { padding: var(--space-sm); }
   .funnel-skip { bottom: calc(var(--space-md) + env(safe-area-inset-bottom, 0px)); width: calc(100% - (var(--space-md) * 2)); max-width: 22rem; }
+}
+
+@media (max-width: 480px) {
+  html.funnel-active .site-header ~ main,
+  html.funnel-skip .site-header ~ main { padding-top: 3.5rem; }
 }
 
 /* --- Reduced Motion --- */

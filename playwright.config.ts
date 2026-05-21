@@ -8,7 +8,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'python -m http.server 5500',
+    command: 'node tests/static-server.mjs 5500',
     port: 5500,
     reuseExistingServer: true,
   },

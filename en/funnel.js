@@ -258,8 +258,9 @@
   function isFunnelDone() {
     var raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return false;
+    if (raw === '1') return true;
     var ts = parseInt(raw, 10);
-    if (isNaN(ts)) return true; // legacy '1' value
+    if (isNaN(ts)) return true; // legacy truthy value
     return (Date.now() - ts) < STORAGE_TTL;
   }
 
@@ -279,11 +280,18 @@
   }
 
   function showSkipButton() {
-    if (skipButton) skipButton.hidden = false;
+    if (!skipButton) return;
+    skipButton.hidden = false;
+    skipButton.classList.add('is-visible');
+    skipButton.disabled = false;
+    skipButton.setAttribute('aria-hidden', 'false');
   }
 
   function hideSkipButton() {
-    if (skipButton) skipButton.hidden = true;
+    if (!skipButton) return;
+    skipButton.classList.remove('is-visible');
+    skipButton.disabled = true;
+    skipButton.setAttribute('aria-hidden', 'true');
   }
 
   function bindSkipButton() {
@@ -1063,19 +1071,22 @@
 
   function exitFunnel() {
     markFunnelDone();
-    hideSkipButton();
+    if (skipButton) skipButton.disabled = true;
+    var siteHeader = document.getElementById('site-header');
+    if (siteHeader) siteHeader.classList.add('has-nav');
     if (window.location.hash) {
       window.history.replaceState(null, '', window.location.pathname);
     }
-    destroyConstellation();
     funnel.classList.add('funnel-exiting');
+    document.documentElement.classList.remove('funnel-active');
     setTimeout(function () {
+      hideSkipButton();
+      destroyConstellation();
       funnel.classList.add('funnel-hidden');
       funnel.setAttribute('aria-hidden', 'true');
-      document.documentElement.classList.remove('funnel-active');
       window.scrollTo(0, 0);
       showReopenButton();
-    }, 650);
+    }, 480);
   }
 
   /* ── Keyboard ─────────────────────────────────────── */
@@ -1167,11 +1178,10 @@
     return html;
   }
 
-  /* ── Typewriter Effect ────────────────────────────── */
+  /* ── Smooth Reveal ────────────────────────────────── */
 
   var typewriterTimer = null;
   var typewriterCursor = null;
-  var TARGET_DURATION = 2000;
 
   function applyTypewriter() {
     if (typewriterTimer) clearTimeout(typewriterTimer);
@@ -1180,179 +1190,63 @@
     }
 
     var allStaggers = app.querySelectorAll('.funnel-stagger');
+    var staggerHeights = [];
     for (var b = 0; b < allStaggers.length; b++) {
-      var box = allStaggers[b].getBoundingClientRect();
-      if (box.height > 0) allStaggers[b].style.minHeight = Math.ceil(box.height) + 'px';
+      staggerHeights.push(Math.ceil(allStaggers[b].getBoundingClientRect().height));
     }
-
-    var queue = [];
-    var selectors = [
-      '.funnel-step-label',
-      '.funnel-question',
-      '.funnel-result-title',
-      '.funnel-subtitle',
-      '.funnel-contact-intro-sub',
-      '.funnel-info-text',
-      '.funnel-info-detail',
-      '.funnel-result-text',
-      '.funnel-proof',
-      '.funnel-cta',
-      '.funnel-trust-badge',
-      '.funnel-contact-preview',
-      '.funnel-contact-alt-label',
-      '.funnel-restart',
-      '.funnel-exit-btn'
-    ];
-
-    var instantSelectors = [
-      '.funnel-info-text', '.funnel-info-detail', '.funnel-result-text',
-      '.funnel-proof', '.funnel-contact-preview'
-    ];
-
-    for (var s = 0; s < selectors.length; s++) {
-      var els = app.querySelectorAll(selectors[s]);
-      for (var e = 0; e < els.length; e++) {
-        var el = els[e];
-        var isInstant = false;
-        for (var k = 0; k < instantSelectors.length; k++) {
-          if (el.matches(instantSelectors[k])) { isInstant = true; break; }
-        }
-
-        if (isInstant) {
-          var savedHTML = el.innerHTML;
-          el.innerHTML = '';
-          el.style.opacity = '0';
-          queue.push({ el: el, html: savedHTML, instant: true });
-        } else {
-          var text = el.textContent;
-          if (text.length > 0) {
-            var savedChildren = [];
-            while (el.firstChild) {
-              savedChildren.push(el.removeChild(el.firstChild));
-            }
-            var textContent = '';
-            var trailingElements = [];
-            for (var c = 0; c < savedChildren.length; c++) {
-              if (savedChildren[c].nodeType === 3) {
-                textContent += savedChildren[c].textContent;
-              } else {
-                trailingElements.push(savedChildren[c]);
-              }
-            }
-            for (var t = 0; t < trailingElements.length; t++) {
-              trailingElements[t].style.opacity = '0';
-              el.appendChild(trailingElements[t]);
-            }
-            if (textContent.length > 0) {
-              queue.push({ el: el, text: textContent, trailing: trailingElements });
-            }
-          }
-        }
-      }
-    }
-
-    if (queue.length === 0) return;
-
-    var totalChars = 0;
-    for (var q = 0; q < queue.length; q++) {
-      if (!queue[q].instant) totalChars += queue[q].text.length;
-    }
-    var charSpeed = Math.max(8, Math.min(25, Math.floor(TARGET_DURATION / Math.max(totalChars, 1))));
-    var pauseBetween = charSpeed * 3;
-
-    typewriterCursor = document.createElement('span');
-    typewriterCursor.className = 'typewriter-cursor';
-    typewriterCursor.textContent = '\u2502';
-
-    for (var r = 0; r < queue.length; r++) {
-      var staggerParent = queue[r].el.closest('.funnel-stagger') || queue[r].el;
-      queue[r].container = staggerParent;
+    for (var m = 0; m < allStaggers.length; m++) {
+      if (staggerHeights[m] > 0) allStaggers[m].style.minHeight = staggerHeights[m] + 'px';
     }
 
     for (var h = 0; h < allStaggers.length; h++) {
       allStaggers[h].style.opacity = '0';
       allStaggers[h].style.pointerEvents = 'none';
       allStaggers[h].style.translate = '0 0';
-      allStaggers[h].style.transition = 'opacity 250ms ease';
+      allStaggers[h].style.transition = 'opacity 240ms cubic-bezier(0, 0, 0.15, 1)';
     }
+
     var accentLine = app.querySelector('.funnel-accent-line');
-    if (accentLine) { accentLine.style.opacity = '0'; accentLine.style.transition = 'opacity 250ms ease'; }
+    if (accentLine) {
+      accentLine.style.opacity = '0';
+      accentLine.style.transition = 'opacity 240ms cubic-bezier(0, 0, 0.15, 1)';
+    }
 
-    var revealedContainers = [];
-
-    function revealContainer(el) {
-      var container = el.closest('.funnel-stagger') || el;
-      if (revealedContainers.indexOf(container) !== -1) return;
-      revealedContainers.push(container);
-      container.style.opacity = '1';
-      container.style.pointerEvents = '';
+    function revealAllRemaining() {
+      for (var i = 0; i < allStaggers.length; i++) {
+        allStaggers[i].style.opacity = '1';
+        allStaggers[i].style.pointerEvents = '';
+      }
+      if (accentLine) {
+        accentLine.style.opacity = '1';
+        accentLine.classList.add('funnel-reveal');
+      }
     }
 
     var currentItem = 0;
-    var currentChar = 0;
-    var textNode = null;
 
-    function tick() {
-      if (currentItem >= queue.length) {
-        for (var f = 0; f < allStaggers.length; f++) {
-          allStaggers[f].style.opacity = '1';
-          allStaggers[f].style.pointerEvents = '';
-        }
-        if (accentLine) { accentLine.style.opacity = '1'; accentLine.classList.add('funnel-reveal'); }
-        if (typewriterCursor.parentNode) {
-          typewriterCursor.classList.add('typewriter-cursor-done');
-          setTimeout(function () {
-            if (typewriterCursor && typewriterCursor.parentNode) {
-              typewriterCursor.parentNode.removeChild(typewriterCursor);
-            }
-          }, 600);
-        }
-        return;
-      }
-
-      var item = queue[currentItem];
-
-      if (item.instant) {
-        revealContainer(item.el);
-        item.el.innerHTML = item.html;
-        item.el.style.opacity = '1';
-        currentItem++;
-        currentChar = 0;
-        textNode = null;
-        typewriterTimer = setTimeout(tick, pauseBetween);
-        return;
-      }
-
-      if (currentChar === 0) {
-        revealContainer(item.el);
-        textNode = document.createTextNode('');
-        if (item.trailing && item.trailing.length > 0) {
-          item.el.insertBefore(textNode, item.trailing[0]);
-          item.el.insertBefore(typewriterCursor, item.trailing[0]);
-        } else {
-          item.el.appendChild(textNode);
-          item.el.appendChild(typewriterCursor);
-        }
-      }
-
-      if (currentChar < item.text.length) {
-        textNode.textContent += item.text[currentChar];
-        currentChar++;
-        typewriterTimer = setTimeout(tick, charSpeed);
-      } else {
-        if (item.trailing) {
-          for (var i = 0; i < item.trailing.length; i++) {
-            item.trailing[i].style.opacity = '';
-          }
-        }
-        currentItem++;
-        currentChar = 0;
-        textNode = null;
-        typewriterTimer = setTimeout(tick, pauseBetween);
-      }
+    if (allStaggers.length === 0) {
+      revealAllRemaining();
+      return;
     }
 
-    typewriterTimer = setTimeout(tick, 150);
+    function revealNext() {
+      if (currentItem === 0 && accentLine) {
+        accentLine.style.opacity = '1';
+        accentLine.classList.add('funnel-reveal');
+      }
+
+      if (currentItem >= allStaggers.length) {
+        revealAllRemaining();
+        return;
+      }
+
+      allStaggers[currentItem].style.opacity = '1';
+      allStaggers[currentItem].style.pointerEvents = '';
+      currentItem++;
+      typewriterTimer = setTimeout(revealNext, 115);
+    }
+
+    typewriterTimer = setTimeout(revealNext, 120);
   }
 
   /* ── Magnetic Buttons ──────────────────────────────── */

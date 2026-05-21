@@ -69,6 +69,28 @@
 
   <!-- FAQPage-Schema lebt auf /faq/ – kein Duplikat auf der Homepage -->
   <link rel="stylesheet" href="style.css">
+  <script>
+  (function() {
+    var root = document.documentElement;
+    var ttl = 7 * 24 * 60 * 60 * 1000;
+    var done = false;
+    try {
+      var raw = localStorage.getItem('funnel-done');
+      if (raw === '1') {
+        done = true;
+      } else if (raw) {
+        var ts = parseInt(raw, 10);
+        done = isNaN(ts) || (Date.now() - ts) < ttl;
+      }
+    } catch (e) {}
+
+    if (done && !window.location.hash) {
+      root.classList.add('funnel-skip');
+    } else if (window.location.protocol !== 'file:') {
+      root.classList.add('funnel-active');
+    }
+  })();
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Zum Inhalt springen</a>
@@ -219,7 +241,7 @@
           </noscript>
         </div>
       </div>
-      <button class="funnel-skip" id="funnel-skip" type="button" hidden>Überspringen</button>
+      <button class="funnel-skip" id="funnel-skip" type="button" aria-hidden="true" disabled>Überspringen</button>
     </section>
 
     <!-- ===== PROJEKTE (Beweis zuerst) ===== -->
@@ -628,7 +650,22 @@
     var h1 = document.querySelector('.hero-typewriter');
     if (!el || !cursor) return;
 
-    el.textContent = '';
+    function lockHeroHeight() {
+      if (!h1) return;
+      var originalText = el.textContent;
+      var originalOpacity = el.style.opacity;
+      var maxHeight = h1.getBoundingClientRect().height;
+      el.style.opacity = '0';
+      for (var p = 0; p < claims.length; p++) {
+        el.textContent = claims[p];
+        maxHeight = Math.max(maxHeight, h1.getBoundingClientRect().height);
+      }
+      el.textContent = originalText;
+      el.style.opacity = originalOpacity;
+      if (maxHeight > 0) h1.style.minHeight = Math.ceil(maxHeight) + 'px';
+    }
+
+    lockHeroHeight();
     var idx = 0;
     var charIdx = 0;
     var holdTime = 3500;
@@ -666,7 +703,24 @@
       }, fadeDuration);
     }
 
-    typeNext();
+    function startHeroTypewriter() {
+      if (h1 && h1.dataset.heroTypewriterStarted) return;
+      if (h1) h1.dataset.heroTypewriterStarted = '1';
+      el.textContent = '';
+      typeNext();
+    }
+
+    if (document.documentElement.classList.contains('funnel-active')) {
+      var heroMo = new MutationObserver(function() {
+        if (!document.documentElement.classList.contains('funnel-active')) {
+          heroMo.disconnect();
+          requestAnimationFrame(startHeroTypewriter);
+        }
+      });
+      heroMo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    } else {
+      startHeroTypewriter();
+    }
   })();
   </script>
   <script>
