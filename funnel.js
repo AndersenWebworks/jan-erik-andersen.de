@@ -14,11 +14,13 @@
 
   var funnel   = document.getElementById('funnel');
   var app      = document.getElementById('funnel-app');
+  var skipButton = document.getElementById('funnel-skip');
   var tree     = null;
   var history  = [];
   var currentNodeId = 'start';
   var lastResultTitle = '';
   var isAnimating = false;
+  var skipVisibilityBound = false;
 
   /* ── SVG Icon Library (Feather-style, 20x20, stroke 1.5) ── */
 
@@ -321,7 +323,50 @@
     }
   }
 
+  function showSkipButton() {
+    if (skipButton) skipButton.hidden = false;
+  }
+
+  function hideSkipButton() {
+    if (skipButton) skipButton.hidden = true;
+  }
+
+  function updateSkipButtonVisibility() {
+    if (!skipButton) return;
+    if (!document.documentElement.classList.contains('funnel-inline')) {
+      showSkipButton();
+      return;
+    }
+    var rect = funnel.getBoundingClientRect();
+    skipButton.hidden = !(rect.top < window.innerHeight && rect.bottom > 0);
+  }
+
+  function bindSkipVisibility() {
+    if (skipVisibilityBound) return;
+    skipVisibilityBound = true;
+    window.addEventListener('scroll', updateSkipButtonVisibility, { passive: true });
+    window.addEventListener('resize', updateSkipButtonVisibility);
+  }
+
+  function unbindSkipVisibility() {
+    if (!skipVisibilityBound) return;
+    skipVisibilityBound = false;
+    window.removeEventListener('scroll', updateSkipButtonVisibility);
+    window.removeEventListener('resize', updateSkipButtonVisibility);
+  }
+
+  function bindSkipButton() {
+    if (!skipButton || skipButton.getAttribute('data-bound') === 'true') return;
+    skipButton.setAttribute('data-bound', 'true');
+    skipButton.addEventListener('click', function () {
+      trackEvent('skip');
+      exitFunnel();
+    });
+  }
+
   function skipFunnel() {
+    unbindSkipVisibility();
+    hideSkipButton();
     funnel.classList.add('funnel-hidden');
     funnel.setAttribute('aria-hidden', 'true');
     document.documentElement.classList.remove('funnel-active');
@@ -361,6 +406,9 @@
         document.documentElement.classList.add('funnel-active');
       }, 800);
     }
+    bindSkipButton();
+    bindSkipVisibility();
+    updateSkipButtonVisibility();
     initConstellation();
     fetch('funnel.json')
       .then(function (r) { return r.json(); })
@@ -1106,6 +1154,8 @@
 
   function exitFunnel() {
     markFunnelDone();
+    unbindSkipVisibility();
+    hideSkipButton();
     // Clear URL hash on exit
     if (window.location.hash) {
       window.history.replaceState(null, '', window.location.pathname);
