@@ -20,7 +20,6 @@
   var currentNodeId = 'start';
   var lastResultTitle = '';
   var isAnimating = false;
-  var skipVisibilityBound = false;
 
   /* ── SVG Icon Library (Feather-style, 20x20, stroke 1.5) ── */
 
@@ -331,30 +330,6 @@
     if (skipButton) skipButton.hidden = true;
   }
 
-  function updateSkipButtonVisibility() {
-    if (!skipButton) return;
-    if (!document.documentElement.classList.contains('funnel-inline')) {
-      showSkipButton();
-      return;
-    }
-    var rect = funnel.getBoundingClientRect();
-    skipButton.hidden = !(rect.top < window.innerHeight && rect.bottom > 0);
-  }
-
-  function bindSkipVisibility() {
-    if (skipVisibilityBound) return;
-    skipVisibilityBound = true;
-    window.addEventListener('scroll', updateSkipButtonVisibility, { passive: true });
-    window.addEventListener('resize', updateSkipButtonVisibility);
-  }
-
-  function unbindSkipVisibility() {
-    if (!skipVisibilityBound) return;
-    skipVisibilityBound = false;
-    window.removeEventListener('scroll', updateSkipButtonVisibility);
-    window.removeEventListener('resize', updateSkipButtonVisibility);
-  }
-
   function bindSkipButton() {
     if (!skipButton || skipButton.getAttribute('data-bound') === 'true') return;
     skipButton.setAttribute('data-bound', 'true');
@@ -365,7 +340,6 @@
   }
 
   function skipFunnel() {
-    unbindSkipVisibility();
     hideSkipButton();
     funnel.classList.add('funnel-hidden');
     funnel.setAttribute('aria-hidden', 'true');
@@ -395,20 +369,9 @@
       skipFunnel();
       return;
     }
-    // Mobile: Funnel als Block im Flow rendern, kein Modal-Overlay
-    // (Google straft Intrusive Interstitials ab; Mobile bekommt Funnel kompakt)
-    var isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if (isMobile) {
-      document.documentElement.classList.add('funnel-active', 'funnel-inline');
-    } else {
-      // Desktop: Modal mit 800ms Delay -- User sieht erst Hero, dann Wow-Effekt
-      setTimeout(function () {
-        document.documentElement.classList.add('funnel-active');
-      }, 800);
-    }
+    document.documentElement.classList.add('funnel-active');
     bindSkipButton();
-    bindSkipVisibility();
-    updateSkipButtonVisibility();
+    showSkipButton();
     initConstellation();
     fetch('funnel.json')
       .then(function (r) { return r.json(); })
@@ -1154,7 +1117,6 @@
 
   function exitFunnel() {
     markFunnelDone();
-    unbindSkipVisibility();
     hideSkipButton();
     // Clear URL hash on exit
     if (window.location.hash) {

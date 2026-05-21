@@ -3483,19 +3483,8 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
    FUNNEL — Interactive Advisor Overlay
    ============================================ */
 
-html.funnel-active:not(.funnel-inline) { overflow: hidden; height: 100%; }
-html.funnel-active:not(.funnel-inline) body { overflow: hidden; height: 100%; }
-
-html.funnel-inline .funnel {
-  position: relative;
-  inset: auto;
-  z-index: auto;
-  padding: var(--space-xl) var(--space-md) calc(var(--space-3xl) + 72px + env(safe-area-inset-bottom, 0px));
-  max-height: none;
-  min-height: 50vh;
-}
-html.funnel-inline .funnel-container { max-height: none; }
-html.funnel-inline .funnel-spotlight { display: none; }
+html.funnel-active { overflow: hidden; height: 100%; }
+html.funnel-active body { overflow: hidden; height: 100%; }
 
 .funnel {
   position: fixed;
@@ -3505,6 +3494,8 @@ html.funnel-inline .funnel-spotlight { display: none; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 100vh;
+  height: 100dvh;
   min-height: 100vh;
   min-height: 100svh;
   padding: clamp(40px, 8svh, 72px) var(--space-xl);
@@ -4250,7 +4241,6 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
 /* --- Responsive: Width --- */
 @media (max-width: 640px) {
   .funnel { padding: 48px var(--space-md) calc(84px + env(safe-area-inset-bottom, 0px)); }
-  html.funnel-inline .funnel { padding-bottom: calc(var(--space-3xl) + 84px + env(safe-area-inset-bottom, 0px)); }
   .funnel-question { font-size: var(--text-xl); margin-bottom: var(--space-xs); }
   .funnel-subtitle { margin-bottom: var(--space-xs); }
   .funnel-options { gap: 6px; }
