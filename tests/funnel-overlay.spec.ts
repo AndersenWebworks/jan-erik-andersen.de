@@ -76,6 +76,28 @@ test.describe('funnel overlay', () => {
     }
   });
 
+  test('mobile keeps the funnel position stable while the typewriter grows text', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await openFresh(page);
+
+    await page.waitForTimeout(250);
+    const first = await page.locator('.funnel-container').boundingBox();
+
+    await page.waitForTimeout(900);
+    const mid = await page.locator('.funnel-container').boundingBox();
+
+    await page.waitForTimeout(1100);
+    const done = await page.locator('.funnel-container').boundingBox();
+
+    expect(first).not.toBeNull();
+    expect(mid).not.toBeNull();
+    expect(done).not.toBeNull();
+
+    const tops = [first!.y, mid!.y, done!.y];
+    const topDelta = Math.max(...tops) - Math.min(...tops);
+    expect(topDelta).toBeLessThanOrEqual(4);
+  });
+
   test('small mobile viewport shows a visible scrollbar when funnel content overflows', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 360 });
     await openFresh(page);

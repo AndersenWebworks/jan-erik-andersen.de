@@ -1179,6 +1179,12 @@
       typewriterCursor.parentNode.removeChild(typewriterCursor);
     }
 
+    var allStaggers = app.querySelectorAll('.funnel-stagger');
+    for (var b = 0; b < allStaggers.length; b++) {
+      var box = allStaggers[b].getBoundingClientRect();
+      if (box.height > 0) allStaggers[b].style.minHeight = Math.ceil(box.height) + 'px';
+    }
+
     var queue = [];
     var selectors = [
       '.funnel-step-label',
@@ -1189,7 +1195,6 @@
       '.funnel-info-text',
       '.funnel-info-detail',
       '.funnel-result-text',
-      '.funnel-option-label',
       '.funnel-proof',
       '.funnel-cta',
       '.funnel-trust-badge',
@@ -1264,9 +1269,9 @@
       queue[r].container = staggerParent;
     }
 
-    var allStaggers = app.querySelectorAll('.funnel-stagger');
     for (var h = 0; h < allStaggers.length; h++) {
       allStaggers[h].style.opacity = '0';
+      allStaggers[h].style.pointerEvents = 'none';
       allStaggers[h].style.translate = '0 0';
       allStaggers[h].style.transition = 'opacity 250ms ease';
     }
@@ -1280,6 +1285,7 @@
       if (revealedContainers.indexOf(container) !== -1) return;
       revealedContainers.push(container);
       container.style.opacity = '1';
+      container.style.pointerEvents = '';
     }
 
     var currentItem = 0;
@@ -1290,6 +1296,7 @@
       if (currentItem >= queue.length) {
         for (var f = 0; f < allStaggers.length; f++) {
           allStaggers[f].style.opacity = '1';
+          allStaggers[f].style.pointerEvents = '';
         }
         if (accentLine) { accentLine.style.opacity = '1'; accentLine.classList.add('funnel-reveal'); }
         if (typewriterCursor.parentNode) {

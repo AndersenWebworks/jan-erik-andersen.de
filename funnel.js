@@ -1227,7 +1227,8 @@
 
   /* ── Typewriter Effect ────────────────────────────── */
   /*
-   * One cursor per slide. Types ALL visible text sequentially.
+   * One cursor per slide. Types the lead text sequentially.
+   * Option buttons keep their final footprint and fade in after the text.
    * Plain text elements: character by character.
    * HTML-rich elements (info-text, result-text): fade in as block.
    * Cursor blinks, moves between elements, disappears when done.
@@ -1244,6 +1245,12 @@
       typewriterCursor.parentNode.removeChild(typewriterCursor);
     }
 
+    var allStaggers = app.querySelectorAll('.funnel-stagger');
+    for (var b = 0; b < allStaggers.length; b++) {
+      var box = allStaggers[b].getBoundingClientRect();
+      if (box.height > 0) allStaggers[b].style.minHeight = Math.ceil(box.height) + 'px';
+    }
+
     // Collect elements to type, in visual order
     var queue = [];
     var selectors = [
@@ -1255,7 +1262,6 @@
       '.funnel-info-text',
       '.funnel-info-detail',
       '.funnel-result-text',
-      '.funnel-option-label',
       '.funnel-proof',
       '.funnel-cta',
       '.funnel-trust-badge',
@@ -1340,10 +1346,10 @@
     }
 
     // Hide ALL stagger elements - they fade in when typewriter reaches them
-    var allStaggers = app.querySelectorAll('.funnel-stagger');
     for (var h = 0; h < allStaggers.length; h++) {
       // Don't use the stagger transition - we control visibility directly
       allStaggers[h].style.opacity = '0';
+      allStaggers[h].style.pointerEvents = 'none';
       allStaggers[h].style.translate = '0 0';
       allStaggers[h].style.transition = 'opacity 250ms ease';
     }
@@ -1358,6 +1364,7 @@
       if (revealedContainers.indexOf(container) !== -1) return;
       revealedContainers.push(container);
       container.style.opacity = '1';
+      container.style.pointerEvents = '';
     }
 
     var currentItem = 0;
@@ -1369,6 +1376,7 @@
         // Done - reveal anything still hidden (accent line, back btn, etc.)
         for (var f = 0; f < allStaggers.length; f++) {
           allStaggers[f].style.opacity = '1';
+          allStaggers[f].style.pointerEvents = '';
         }
         if (accentLine) { accentLine.style.opacity = '1'; accentLine.classList.add('funnel-reveal'); }
         // Fade out cursor
