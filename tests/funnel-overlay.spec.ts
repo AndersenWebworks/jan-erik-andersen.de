@@ -64,6 +64,35 @@ test.describe('funnel overlay', () => {
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
   });
 
+  test('completed funnel does not style the document as the skip button', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.addInitScript(() => localStorage.setItem('funnel-done', '1'));
+    await page.goto(ROOT);
+
+    await expect(page.locator('#funnel')).toBeHidden();
+    await expect(page.locator('.hero')).toBeInViewport();
+
+    const state = await page.evaluate(() => {
+      const htmlStyles = getComputedStyle(document.documentElement);
+      const hero = document.querySelector('.hero') as HTMLElement;
+
+      return {
+        htmlClass: document.documentElement.className,
+        htmlPosition: htmlStyles.position,
+        htmlVisibility: htmlStyles.visibility,
+        htmlOpacity: htmlStyles.opacity,
+        heroTop: hero.getBoundingClientRect().top
+      };
+    });
+
+    expect(state.htmlClass).toContain('funnel-skip');
+    expect(state.htmlPosition).toBe('static');
+    expect(state.htmlVisibility).toBe('visible');
+    expect(state.htmlOpacity).toBe('1');
+    expect(state.heroTop).toBeGreaterThanOrEqual(0);
+    expect(state.heroTop).toBeLessThan(120);
+  });
+
   test('mobile keeps skip visible through funnel steps', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openFresh(page);
