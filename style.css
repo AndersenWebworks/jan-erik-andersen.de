@@ -3528,11 +3528,18 @@ html.funnel-active body { overflow: hidden; height: 100%; }
   max-height: calc(100svh - 150px);
   overflow-y: auto;
   overflow-x: visible;
-  scrollbar-width: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(30, 27, 24, 0.28) transparent;
   padding: var(--space-lg) 8px;
 }
 
-.funnel-container::-webkit-scrollbar { display: none; }
+.funnel-container::-webkit-scrollbar { width: 8px; }
+.funnel-container::-webkit-scrollbar-track { background: transparent; }
+.funnel-container::-webkit-scrollbar-thumb {
+  background: rgba(30, 27, 24, 0.24);
+  border-radius: 999px;
+}
+.funnel-container::-webkit-scrollbar-thumb:hover { background: rgba(30, 27, 24, 0.36); }
 
 .funnel-app {
   display: flex;

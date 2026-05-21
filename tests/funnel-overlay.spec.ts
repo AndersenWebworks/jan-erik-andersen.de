@@ -76,6 +76,31 @@ test.describe('funnel overlay', () => {
     }
   });
 
+  test('small mobile viewport shows a visible scrollbar when funnel content overflows', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 360 });
+    await openFresh(page);
+
+    const state = await page.evaluate(() => {
+      const container = document.querySelector('.funnel-container') as HTMLElement;
+      const styles = getComputedStyle(container);
+
+      container.scrollTop = 0;
+      container.scrollTop = 48;
+
+      return {
+        canOverflow: container.scrollHeight > container.clientHeight,
+        scrolled: container.scrollTop > 0,
+        scrollbarWidth: styles.scrollbarWidth,
+        overflowY: styles.overflowY
+      };
+    });
+
+    expect(state.canOverflow).toBe(true);
+    expect(state.scrolled).toBe(true);
+    expect(state.overflowY).toBe('auto');
+    expect(state.scrollbarWidth).not.toBe('none');
+  });
+
   test('desktop remains an overlay with fixed skip', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await openFresh(page);
