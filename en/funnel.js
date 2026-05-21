@@ -365,7 +365,8 @@
       requestAnimationFrame(function () {
         revealStaggered();
         focusHeading();
-        applyTypewriter();
+        // Typewriter test disabled: keep content visible immediately.
+        // applyTypewriter();
       });
     });
   }
@@ -410,7 +411,8 @@
           requestAnimationFrame(function () {
             revealStaggered();
             focusHeading();
-            applyTypewriter();
+            // Typewriter test disabled: keep content visible immediately.
+            // applyTypewriter();
             initMagneticButtons();
           });
         });

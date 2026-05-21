@@ -76,7 +76,7 @@ test.describe('funnel overlay', () => {
     }
   });
 
-  test('mobile keeps the funnel position stable while the typewriter grows text', async ({ page }) => {
+  test('mobile keeps the funnel position stable while content settles', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openFresh(page);
 
