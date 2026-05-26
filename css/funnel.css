@@ -494,6 +494,7 @@ html.funnel-skip .site-header ~ main { padding-top: 3.5rem; }
 
 .funnel-proof-name::before {
   content: '\2014';
+  content: '\2014' / '';
   margin-right: 0;
   color: var(--color-accent);
   opacity: 0.5;
@@ -501,7 +502,11 @@ html.funnel-skip .site-header ~ main { padding-top: 3.5rem; }
 }
 
 .funnel-proof-desc { font-weight: 400; color: var(--color-text-secondary); }
-.funnel-proof-desc::before { content: '\2014 '; color: var(--color-border-dark); }
+.funnel-proof-desc::before {
+  content: '\2014 ';
+  content: '\2014 ' / '';
+  color: var(--color-border-dark);
+}
 
 a.funnel-proof-link {
   text-decoration: none;

@@ -82,9 +82,10 @@ for (const [viewportName, viewport] of Object.entries(VIEWPORTS)) {
 
       test('Preise - pricing cards stack', async ({ page: p }) => {
         await p.goto('/preise/');
-        const grid = p.locator('.pricing-grid');
-        if (await grid.count() > 0) {
-          const cols = await grid.evaluate(el =>
+        const grids = p.locator('.pricing-grid');
+        const count = await grids.count();
+        for (let i = 0; i < count; i++) {
+          const cols = await grids.nth(i).evaluate(el =>
             getComputedStyle(el).gridTemplateColumns.split(' ').length
           );
           expect(cols).toBe(1);

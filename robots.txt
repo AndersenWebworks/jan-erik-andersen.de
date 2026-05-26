@@ -4,43 +4,26 @@
 User-agent: *
 Allow: /
 
-# Sitemaps
-Sitemap: https://jan-erik-andersen.de/sitemap.xml
-
-# Strukturierte Daten für KI-Systeme
-# Primär: /llms.txt + JSON-LD in jeder HTML-Seite
-
-# JSON/JSON-LD/Text Dateien
+# Öffentliche Maschinenlesbarkeit
 Allow: /*.json
 Allow: /*.jsonld
 Allow: /*.txt
 
-# Unwichtige Dateien blockieren
+# Arbeits-, Archiv- und Referenzdateien nicht indexieren
+Disallow: /archiv/
+Disallow: /doc/
+Disallow: /docs/
+Disallow: /tests/
+Disallow: /qa-screenshots/
+Disallow: /screenshots/compare/
 Disallow: /verify/
 Disallow: /.git/
 Disallow: /.htaccess
+Disallow: /*.md$
+Disallow: /*.psd$
 
-# KI-Crawler explizit erlauben
-User-agent: GPTBot
-Allow: /
-
-User-agent: ChatGPT-User
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Claude-Web
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Googlebot
-Allow: /
+# Sitemaps
+Sitemap: https://jan-erik-andersen.de/sitemap.xml
 
 # llms.txt fuer KI-Systeme
 # https://jan-erik-andersen.de/llms.txt

@@ -1,6 +1,6 @@
 # Jan-Erik Andersen – Freiberuflicher Webentwickler (vollständig)
 
-> Websites, Shops, digitale Tools und KI-Sichtbarkeit. WordPress, WooCommerce, statisches HTML. Seit 1999 Webprojekte, seit 2010 selbstständig. Deutschlandweit remote, Plau am See.
+> Websites, WooCommerce-Shops, Website-Betreuung und KI-Sichtbarkeit. WordPress, WooCommerce, statisches HTML. Seit 1999 Webprojekte, seit 2010 selbstständig. Deutschlandweit remote, Plau am See.
 
 ## Über Jan-Erik Andersen
 
@@ -13,7 +13,7 @@ Arbeitsweise: 100 % remote, deutschlandweit.
 
 ## Drei Schwerpunkte
 
-### KI-Sichtbarkeit (GEO / AVO)
+### KI-Sichtbarkeit und GEO-Optimierung
 Damit Websites in ChatGPT, Perplexity und Claude zitiert werden – nicht nur in Google ranken. Strukturierte Daten (Schema.org, JSON-LD), semantische Architektur, llms.txt, FAQPage-Schema, robots.txt-Konfiguration für KI-Crawler.
 
 GEO (Generative Engine Optimization): Optimierung von Inhalten und Struktur, damit Antwortsysteme Inhalte korrekt verstehen und zitieren. Wissenschaftlich belegt: +37–40 % Visibility (Aggarwal et al., 2024).
@@ -38,7 +38,7 @@ Beleg: Wirkungsbericht des Bundesverbands Senior Partner in School e.V. – prof
 - Audit: ab 400 EUR
 - Mehr: https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/
 
-### Shops und Custom-Lösungen
+### WooCommerce-Shops und Custom-Lösungen
 WooCommerce mit B2B-Features, Händlerportalen, eigenen Plugins. Preisgruppen, Musterbestellsysteme, Germanized für Rechtstexte und E-Rechnung.
 
 Leistungen: B2B-Preisgruppen, Musterbestellsysteme mit E-Mail-Nachverfolgung, Custom Plugins, Produktstruktur (Varianten, Attribute, Filter), Germanized-Integration.

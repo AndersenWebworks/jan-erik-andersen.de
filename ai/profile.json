@@ -1,5 +1,6 @@
 {
   "@context": "https://schema.org",
+  "dateModified": "2026-05-25",
   "@graph": [
     {
       "@type": "Person",
@@ -17,9 +18,10 @@
         {"@type": "EducationalOrganization", "name": "HTK Hamburg", "description": "Multimedia Design"}
       ],
       "knowsAbout": [
-        "WordPress", "WooCommerce", "YOOtheme Pro", "Schema.org", "JSON-LD",
-        "WCAG 2.1 AA", "BFSG", "GEO", "AVO", "B2B-Shops", "Custom Plugins",
-        "Vanilla JavaScript", "statisches HTML"
+        "Webentwicklung", "Webdesign", "WordPress", "WooCommerce", "YOOtheme Pro",
+        "Schema.org", "JSON-LD", "WCAG 2.1 AA", "BFSG", "GEO", "AVO",
+        "B2B-Shops", "Custom Plugins", "Website-Betreuung",
+        "Vanilla JavaScript", "statisches HTML", "Remote-Zusammenarbeit"
       ],
       "knowsLanguage": ["de", "en"],
       "address": {
@@ -28,7 +30,7 @@
         "addressRegion": "Mecklenburg-Vorpommern",
         "addressCountry": "DE"
       },
-      "description": "Webentwickler seit 1999, selbststaendig seit 2010, ausschliesslich freiberuflich seit 2023. Hintergrund: Multimedia Design (HTK Hamburg), drei Jahre QA in der Games-Branche (Goodgame Studios, Deep Silver FISHLABS, Daedalic Entertainment, InnoGames), 2017 bei YOOtheme, danach Frontend in der Werbeagentur Tangram."
+      "description": "Freiberuflicher Webentwickler seit 1999, selbststaendig seit 2010, ausschliesslich freiberuflich seit 2023. Schwerpunkte: WordPress, WooCommerce, Website-Betreuung, Barrierefreiheit und KI-Sichtbarkeit. Hintergrund: Multimedia Design (HTK Hamburg), drei Jahre QA in der Games-Branche (Goodgame Studios, Deep Silver FISHLABS, Daedalic Entertainment, InnoGames), 2017 bei YOOtheme, danach Frontend in der Werbeagentur Tangram."
     },
     {
       "@type": "ProfessionalService",
@@ -48,10 +50,10 @@
         "addressCountry": "DE"
       },
       "serviceType": [
-        "Web development", "WordPress", "WooCommerce",
-        "Shop development", "Web accessibility", "AI visibility / GEO"
+        "Web development", "Web design", "WordPress", "WooCommerce",
+        "Shop development", "Website maintenance", "Web accessibility", "AI visibility / GEO"
       ],
-      "slogan": "Websites, Shops, digitale Tools und KI-Sichtbarkeit",
+      "slogan": "Websites, WooCommerce-Shops, Betreuung und KI-Sichtbarkeit",
       "foundingDate": "2010"
     }
   ],

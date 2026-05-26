@@ -3,12 +3,12 @@
   "@type": "ItemList",
   "name": "Leistungen Andersen Webworks",
   "inLanguage": "de",
-  "dateModified": "2026-05-06",
+  "dateModified": "2026-05-25",
   "itemListElement": [
     {
       "@type": "Service",
       "@id": "https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/#service",
-      "name": "KI-Sichtbarkeit (GEO/AVO)",
+      "name": "KI-Sichtbarkeit und GEO-Optimierung",
       "description": "Damit Websites in ChatGPT, Perplexity und Claude zitiert werden. Strukturierte Daten (Schema.org, JSON-LD), semantische Architektur, llms.txt, FAQPage-Schema, robots.txt-Konfiguration fuer KI-Crawler.",
       "serviceType": "AI visibility / Generative Engine Optimization",
       "provider": {"@id": "https://jan-erik-andersen.de/#service"},
@@ -32,7 +32,7 @@
     {
       "@type": "Service",
       "@id": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/#service",
-      "name": "BFSG-Compliance und Barrierefreiheit",
+      "name": "BFSG-Barrierefreiheit fuer Websites",
       "description": "WCAG 2.1 AA-konforme Websites. Neubau oder Nachruestung. Pflicht seit Juni 2025 fuer B2C-Websites in Deutschland (Barrierefreiheitsstaerkungsgesetz). Bussgelder bis 100.000 EUR.",
       "serviceType": "Web accessibility / WCAG 2.1 AA",
       "provider": {"@id": "https://jan-erik-andersen.de/#service"},
@@ -58,7 +58,7 @@
     {
       "@type": "Service",
       "@id": "https://jan-erik-andersen.de/leistungen/shops-und-custom/#service",
-      "name": "Shops und Custom-Loesungen",
+      "name": "WooCommerce-Shops und Custom-Loesungen",
       "description": "WooCommerce mit B2B-Features, Haendlerportalen, eigenen Plugins. Preisgruppen, Musterbestellsysteme, Germanized fuer Rechtstexte und E-Rechnung.",
       "serviceType": "E-commerce / WooCommerce / B2B",
       "provider": {"@id": "https://jan-erik-andersen.de/#service"},

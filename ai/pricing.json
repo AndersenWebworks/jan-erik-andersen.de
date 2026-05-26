@@ -6,7 +6,7 @@
   "url": "https://jan-erik-andersen.de/preise/",
   "priceCurrency": "EUR",
   "valueAddedTaxIncluded": false,
-  "dateModified": "2026-05-06",
+  "dateModified": "2026-05-25",
   "rates": {
     "hourly": {"@type": "UnitPriceSpecification", "price": 80, "priceCurrency": "EUR", "unitText": "HOUR", "valueAddedTaxIncluded": false},
     "daily": {"@type": "UnitPriceSpecification", "price": 800, "priceCurrency": "EUR", "unitText": "DAY", "valueAddedTaxIncluded": false, "description": "10 Stunden"}
@@ -17,7 +17,7 @@
     {"name": "BFSG-Compliance (Update oder Neubau-Aufschlag)", "minPrice": 1200, "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/"},
     {"name": "BFSG-Audit", "minPrice": 400, "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/"},
     {"name": "Website-Analyse", "minPrice": 400, "url": "https://jan-erik-andersen.de/leistungen/website-analyse/"},
-    {"name": "Standard-Shop", "minPrice": 4800, "url": "https://jan-erik-andersen.de/leistungen/shops-und-custom/"},
+    {"name": "WooCommerce-Standard-Shop", "minPrice": 4800, "url": "https://jan-erik-andersen.de/leistungen/shops-und-custom/"},
     {"name": "B2B-Shop", "minPrice": 7500, "url": "https://jan-erik-andersen.de/leistungen/shops-und-custom/"}
   ],
   "retainers": [
