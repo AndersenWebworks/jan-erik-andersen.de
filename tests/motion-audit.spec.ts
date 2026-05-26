@@ -263,6 +263,17 @@ async function runFlow(
     const startedAt = Date.now();
     await page.goto(`${ROOT}${flow.path}`);
     await page.waitForLoadState('networkidle');
+
+    if (flow.freshFunnel) {
+      await expect(page.locator('#funnel')).toBeHidden();
+      await expect(page.locator('#funnel-reopen')).toBeVisible();
+      await page.locator('#funnel-reopen').click();
+      await expect(page.locator('#funnel-skip')).toBeVisible();
+      await expect(page.locator('#funnel')).toBeVisible();
+    } else {
+      await expect(page.locator('#funnel')).toBeHidden();
+    }
+
     await page.waitForTimeout(300);
     await mark(page, 'loaded');
 

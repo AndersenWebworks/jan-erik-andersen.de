@@ -1,11 +1,10 @@
-const { test } = require('@playwright/test');
+const { test, expect } = require('@playwright/test');
 
 test('hero spacing mobile', async ({ page }) => {
   await page.setViewportSize({ width: 393, height: 851 });
-  await page.goto('http://localhost:8765/?nofunnel=1', { waitUntil: 'networkidle' });
+  await page.goto('/?nofunnel=1', { waitUntil: 'networkidle' });
   await page.evaluate(() => document.documentElement.classList.remove('funnel-active'));
   await page.waitForTimeout(800);
-  await page.screenshot({ path: 'test-hero-mobile-after.png', fullPage: false });
 
   const m = await page.evaluate(() => {
     const header = document.querySelector('.site-header');
@@ -28,4 +27,9 @@ test('hero spacing mobile', async ({ page }) => {
     };
   });
   console.log('METRICS', JSON.stringify(m, null, 2));
+  expect(m.gapHeaderToH1).toBeGreaterThanOrEqual(64);
+  expect(m.gapHeaderToH1).toBeLessThanOrEqual(150);
+  expect(m.gapH1ToLead).toBeGreaterThanOrEqual(24);
+  expect(m.gapH1ToLead).toBeLessThanOrEqual(80);
+  expect(parseFloat(m.h1FontSize)).toBeGreaterThanOrEqual(36);
 });

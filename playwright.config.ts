@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: './tests',
   timeout: 30000,
   use: {
-    baseURL: 'http://localhost:5500/redesign',
+    baseURL: 'http://localhost:5500',
     screenshot: 'only-on-failure',
   },
   webServer: {

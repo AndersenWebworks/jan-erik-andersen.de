@@ -97,6 +97,7 @@ test.describe('Button System QA - Issue #14', () => {
 
     const primaryStyles = await primary.evaluate(el => {
       const cs = getComputedStyle(el);
+      const root = getComputedStyle(document.documentElement);
       return {
         bg: cs.backgroundColor,
         color: cs.color,
@@ -104,6 +105,7 @@ test.describe('Button System QA - Issue #14', () => {
         borderRadius: cs.borderRadius,
         boxShadow: cs.boxShadow,
         padding: cs.padding,
+        accent: root.getPropertyValue('--color-accent').trim(),
       };
     });
     const ghostStyles = await ghost.evaluate(el => {
@@ -122,7 +124,15 @@ test.describe('Button System QA - Issue #14', () => {
     console.log('GHOST:', JSON.stringify(ghostStyles, null, 2));
 
     // Assertions
-    expect(primaryStyles.bg).toContain('220, 38, 38'); // accent red
+    const expectedAccent = await page.evaluate((value) => {
+      const probe = document.createElement('span');
+      probe.style.color = value;
+      document.body.appendChild(probe);
+      const color = getComputedStyle(probe).color;
+      probe.remove();
+      return color;
+    }, primaryStyles.accent);
+    expect(primaryStyles.bg).toBe(expectedAccent);
     expect(primaryStyles.color).toContain('255, 255, 255');
     expect(ghostStyles.bg).toMatch(/(rgba\(0, 0, 0, 0\)|transparent)/);
   });

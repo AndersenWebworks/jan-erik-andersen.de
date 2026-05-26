@@ -20,6 +20,7 @@
   var currentNodeId = 'start';
   var lastResultTitle = '';
   var isAnimating = false;
+  var reopenBound = false;
 
   /* ── SVG Icon Library (Feather-style, 20x20, stroke 1.5) ── */
 
@@ -272,11 +273,20 @@
     var btn = document.getElementById('funnel-reopen');
     if (btn) {
       btn.hidden = false;
-      btn.addEventListener('click', function () {
+      if (reopenBound) return;
+      reopenBound = true;
+      btn.addEventListener('click', function (event) {
+        event.preventDefault();
         localStorage.removeItem(STORAGE_KEY);
-        location.reload();
+        trackEvent('reopen');
+        startFunnel(window.location.hash.replace('#', '') || 'start');
       });
     }
+  }
+
+  function hideReopenButton() {
+    var btn = document.getElementById('funnel-reopen');
+    if (btn) btn.hidden = true;
   }
 
   function showSkipButton() {
@@ -308,7 +318,45 @@
     funnel.classList.add('funnel-hidden');
     funnel.setAttribute('aria-hidden', 'true');
     document.documentElement.classList.remove('funnel-active');
+    document.documentElement.classList.add('funnel-skip');
     showReopenButton();
+  }
+
+  function startFunnel(targetNodeId) {
+    document.documentElement.classList.remove('funnel-skip');
+    document.documentElement.classList.add('funnel-active');
+    hideReopenButton();
+
+    funnel.classList.remove('funnel-hidden', 'funnel-exiting');
+    funnel.setAttribute('aria-hidden', 'false');
+    bindSkipButton();
+    showSkipButton();
+    initConstellation();
+
+    function showStartTree() {
+      computeDepths();
+      trackEvent('start');
+      if (targetNodeId && tree[targetNodeId] && tree[targetNodeId].type === 'result') {
+        show(targetNodeId);
+      } else {
+        show('start');
+      }
+    }
+
+    if (tree) {
+      showStartTree();
+      return;
+    }
+
+    fetch('funnel.json')
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        tree = data.nodes;
+        showStartTree();
+      })
+      .catch(function () {
+        skipFunnel();
+      });
   }
 
   /* ── GoatCounter Tracking ────────────────────────── */
@@ -328,29 +376,11 @@
   function init() {
     var hash = window.location.hash.replace('#', '');
 
-    if (window.location.protocol === 'file:' || (isFunnelDone() && !hash)) {
+    if (window.location.protocol === 'file:' || ((document.documentElement.classList.contains('funnel-skip') || isFunnelDone()) && !hash)) {
       skipFunnel();
       return;
     }
-    document.documentElement.classList.add('funnel-active');
-    bindSkipButton();
-    showSkipButton();
-    initConstellation();
-    fetch('funnel.json')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        tree = data.nodes;
-        computeDepths();
-        trackEvent('start');
-        if (hash && tree[hash] && tree[hash].type === 'result') {
-          show(hash);
-        } else {
-          show('start');
-        }
-      })
-      .catch(function () {
-        skipFunnel();
-      });
+    startFunnel(hash || 'start');
   }
 
   /* ── Show (initial, no slide) ─────────────────────── */

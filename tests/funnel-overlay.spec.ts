@@ -5,11 +5,26 @@ const ROOT = 'http://127.0.0.1:5500';
 async function openFresh(page, path = '/') {
   await page.addInitScript(() => localStorage.removeItem('funnel-done'));
   await page.goto(`${ROOT}${path}`);
-  await expect(page.locator('#funnel')).toBeVisible();
+  await expect(page.locator('#funnel')).toBeHidden();
+  await expect(page.locator('#funnel-reopen')).toBeVisible();
+  await expect(page.locator('.hero')).toBeInViewport();
+  await page.locator('#funnel-reopen').click();
   await expect(page.locator('#funnel-skip')).toBeVisible();
+  await expect(page.locator('#funnel')).toBeVisible();
 }
 
 test.describe('funnel overlay', () => {
+  test('home starts with the reference hero instead of the automatic funnel', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.addInitScript(() => localStorage.removeItem('funnel-done'));
+    await page.goto(ROOT);
+
+    await expect(page.locator('#funnel')).toBeHidden();
+    await expect(page.locator('#funnel-reopen')).toBeVisible();
+    await expect(page.locator('.hero')).toBeInViewport();
+    await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('funnel-active'))).toBe(false);
+  });
+
   test('mobile opens as a viewport overlay with fixed skip', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openFresh(page);

@@ -8,9 +8,9 @@ test('JetBrains Mono is loaded and applied to mono accents', async ({ page }) =>
   // Warten bis Fonts geladen sind
   await page.evaluate(() => document.fonts.ready);
 
-  // Prueft: gibt es ueberhaupt einen Loader fuer JetBrains Mono?
-  const linkHref = await page.locator('link[href*="JetBrains+Mono"]').first().getAttribute('href');
-  expect(linkHref).toContain('JetBrains+Mono');
+  // Prueft: ist JetBrains Mono self-hosted per @font-face verfuegbar?
+  const fontReady = await page.evaluate(() => document.fonts.check('12px "JetBrains Mono"'));
+  expect(fontReady).toBe(true);
 
   // Prueft: wird die Font-Family auf typischen Mono-Akzent-Elementen wirklich verwendet?
   // Wir suchen nach einem Element mit font-family Mono (eyebrow, badge oder aehnliches)
