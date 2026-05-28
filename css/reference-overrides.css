@@ -95,12 +95,13 @@ h4,
 .case-study h2 {
   font-family: var(--font-sans);
   font-weight: 600;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
 }
 
 h1 {
   font-size: 4.5rem;
   line-height: 1.02;
+  letter-spacing: -0.03em;
   margin-bottom: 1.75rem;
 }
 
@@ -110,6 +111,7 @@ h2,
 .about-teaser-main h2 {
   font-size: 2.875rem;
   line-height: 1.08;
+  letter-spacing: -0.025em;
   max-width: 22ch;
   margin-bottom: 1rem;
 }
@@ -117,6 +119,7 @@ h2,
 h3 {
   font-size: 1.25rem;
   line-height: 1.2;
+  letter-spacing: -0.015em;
 }
 
 p {
@@ -228,7 +231,7 @@ html.funnel-active .site-header ~ main {
   font-family: var(--font-sans);
   font-size: 0.9375rem;
   font-weight: 600;
-  letter-spacing: 0;
+  letter-spacing: -0.005em;
   line-height: 1.15;
   text-transform: none;
   color: var(--color-text);
@@ -254,7 +257,7 @@ html.funnel-active .site-header ~ main {
 .header-brand-surname {
   display: inline-block;
   color: inherit;
-  letter-spacing: 0;
+  letter-spacing: inherit;
   text-transform: none;
   white-space: nowrap;
 }
@@ -273,7 +276,7 @@ html.funnel-active .site-header ~ main {
   pointer-events: auto;
   font-family: var(--font-sans);
   font-size: 0.875rem;
-  letter-spacing: 0;
+  letter-spacing: normal;
   text-transform: none;
 }
 
@@ -381,7 +384,7 @@ html.funnel-active .site-header ~ main {
 
 .pill-option {
   font-family: var(--font-mono);
-  letter-spacing: 0;
+  letter-spacing: 0.05em;
 }
 
 .logo-link img {
@@ -419,6 +422,7 @@ html.funnel-active .site-header ~ main {
   font-size: 4.5rem;
   line-height: 1.02;
   font-weight: 600;
+  letter-spacing: -0.03em;
   margin-bottom: 1.75rem;
   font-variation-settings: 'wght' 600;
 }
@@ -528,7 +532,11 @@ html.funnel-active .site-header ~ main {
 .contact-method-label,
 .eyebrow {
   font-family: var(--font-mono);
-  letter-spacing: 0;
+  letter-spacing: 0.04em;
+}
+
+.eyebrow {
+  letter-spacing: 0.06em;
 }
 
 .hero-pill,
@@ -568,11 +576,19 @@ html.funnel-active .site-header ~ main {
   border-radius: 10px;
   background: var(--color-bg-alt);
   margin-bottom: 0.875rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
 }
 
 .portrait {
   aspect-ratio: 1 / 1.15;
   border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center center;
+  background: var(--color-bg-alt);
 }
 
 .portrait-meta {
@@ -586,12 +602,14 @@ html.funnel-active .site-header ~ main {
 .portrait-meta-identity b {
   font-family: var(--font-sans);
   font-size: 0.9375rem;
+  letter-spacing: normal;
 }
 
 .portrait-meta-role,
 .portrait-meta-location {
   font-family: var(--font-mono);
   font-size: 0.72rem;
+  letter-spacing: normal;
 }
 
 .hero-stats {

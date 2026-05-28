@@ -11,8 +11,11 @@ type BoxMetric = {
   y: number;
   width: number;
   height: number;
+  fontFamily: string;
+  fontWeight: string;
   fontSize: string;
   lineHeight: string;
+  letterSpacing: string;
   background: string;
   borderRadius: string;
 };
@@ -27,8 +30,11 @@ async function elementMetric(page: Page, selector: string): Promise<BoxMetric> {
       y: Math.round(rect.y),
       width: Math.round(rect.width),
       height: Math.round(rect.height),
+      fontFamily: style.fontFamily,
+      fontWeight: style.fontWeight,
       fontSize: style.fontSize,
       lineHeight: style.lineHeight,
+      letterSpacing: style.letterSpacing,
       background: style.backgroundColor,
       borderRadius: style.borderRadius,
     };
@@ -60,10 +66,19 @@ test.describe('visible standalone template metrics', () => {
 
       expect(current.fontSize).toBe(template.fontSize);
       expect(current.lineHeight).toBe(template.lineHeight);
+      expect(current.fontFamily).toContain('Inter');
       expectClose(current.x, template.x, 12);
       expectClose(current.y, template.y, 12);
       expectClose(current.width, template.width, 16);
     }
+
+    const { template: templateH1, current: currentH1 } = await currentAndTemplate(page, '/', 'h1');
+    expect(currentH1.fontWeight).toBe(templateH1.fontWeight);
+    expect(currentH1.letterSpacing).toBe(templateH1.letterSpacing);
+
+    const currentEyebrow = await elementMetric(page, '.eyebrow');
+    expect(currentEyebrow.fontFamily).toContain('JetBrains Mono');
+    expect(currentEyebrow.letterSpacing).toBe('0.72px');
 
     const { template: templateNav, current: currentNav } = await currentAndTemplate(page, '/', 'nav');
     expectClose(currentNav.x, templateNav.x, 24);
@@ -77,6 +92,9 @@ test.describe('visible standalone template metrics', () => {
 
       expect(current.fontSize).toBe(template.fontSize);
       expect(current.lineHeight).toBe(template.lineHeight);
+      if (selector === 'h1') {
+        expect(current.letterSpacing).toBe(template.letterSpacing);
+      }
       expectClose(current.x, template.x, 4);
       expectClose(current.y, template.y, 12);
       expectClose(current.width, template.width, 4);
@@ -93,5 +111,26 @@ test.describe('visible standalone template metrics', () => {
     expect(secondary.height).toBeLessThanOrEqual(48);
     expect(quickCheck.y).toBeGreaterThan(secondary.y);
     expect(quickCheck.background).not.toBe('rgb(168, 58, 58)');
+  });
+
+  test('homepage portrait keeps the real photo uncropped inside the template card', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 1100 });
+    await page.goto('/', { waitUntil: 'networkidle' });
+
+    const portrait = await page.locator('.portrait-card .portrait').first().evaluate((img: HTMLImageElement) => {
+      const style = window.getComputedStyle(img);
+
+      return {
+        naturalWidth: img.naturalWidth,
+        naturalHeight: img.naturalHeight,
+        objectFit: style.objectFit,
+        objectPosition: style.objectPosition,
+      };
+    });
+
+    expect(portrait.naturalWidth).toBeGreaterThan(0);
+    expect(portrait.naturalHeight).toBeGreaterThan(0);
+    expect(portrait.objectFit).toBe('contain');
+    expect(portrait.objectPosition).toBe('50% 50%');
   });
 });
