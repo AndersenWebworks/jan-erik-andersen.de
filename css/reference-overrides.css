@@ -159,6 +159,31 @@ section {
   border-bottom: 1px solid var(--color-border);
 }
 
+/* Match the reference section background rhythm on the homepage. */
+main:has(> #projekte):has(> #leistungen) > #projekte.projects-section,
+main:has(> #projekte):has(> #leistungen) > #stimmen.testimonials-section,
+main:has(> #projekte):has(> #leistungen) > #ueber.about-teaser,
+main:has(> #projekte):has(> #leistungen) > #faq.faq-section,
+main:has(> #projects):has(> #services) > #projects.projects-section,
+main:has(> #projects):has(> #services) > #testimonials.testimonials-section,
+main:has(> #projects):has(> #services) > #about.about-teaser,
+main:has(> #projects):has(> #services) > #faq.faq-section {
+  background: transparent;
+  border-top: 0;
+  border-bottom: 0;
+}
+
+main:has(> #projekte):has(> #leistungen) > #leistungen.services-section,
+main:has(> #projekte):has(> #leistungen) > #prozess.process-section,
+main:has(> #projekte):has(> #leistungen) > #preise.pricing-section,
+main:has(> #projects):has(> #services) > #services.services-section,
+main:has(> #projects):has(> #services) > #process.process-section,
+main:has(> #projects):has(> #services) > #pricing.pricing-section {
+  background: var(--color-bg-alt);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
 /* Header */
 .site-header,
 .site-header.has-nav {
