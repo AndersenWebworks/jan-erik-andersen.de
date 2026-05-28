@@ -4,6 +4,7 @@ import path from 'node:path';
 
 const port = Number(process.argv[2] || 5500);
 const rootDir = process.cwd();
+const rootPrefix = rootDir.endsWith(path.sep) ? rootDir : `${rootDir}${path.sep}`;
 
 const server = http.createServer((req, res) => {
   if (!req.url) {
@@ -11,15 +12,23 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  const parsed = new URL(req.url, `http://127.0.0.1:${port}`);
-  let pathname = decodeURIComponent(parsed.pathname);
+  let pathname;
+  try {
+    const parsed = new URL(req.url, `http://127.0.0.1:${port}`);
+    pathname = decodeURIComponent(parsed.pathname);
+  } catch (error) {
+    process.stderr.write(`Bad request URL: ${req.url} ${error.message}\n`);
+    res.writeHead(400).end();
+    return;
+  }
+
   if (pathname === '/') pathname = '/index.html';
   if (pathname.endsWith('/')) pathname += 'index.html';
 
   const relative = pathname.replace(/^\/+/, '').replace(/\//g, path.sep);
   const filePath = path.resolve(rootDir, relative);
 
-  if (!filePath.startsWith(rootDir)) {
+  if (filePath !== rootDir && !filePath.startsWith(rootPrefix)) {
     res.writeHead(403).end();
     return;
   }
@@ -29,6 +38,15 @@ const server = http.createServer((req, res) => {
 
 server.listen(port, '127.0.0.1', () => {
   process.stdout.write(`Static test server listening on http://127.0.0.1:${port}\n`);
+});
+
+server.on('clientError', (error, socket) => {
+  process.stderr.write(`Client error: ${error.message}\n`);
+  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+});
+
+server.on('error', (error) => {
+  process.stderr.write(`Static test server error: ${error.message}\n`);
 });
 
 function serveFile(filePath, res) {
@@ -45,8 +63,18 @@ function serveFile(filePath, res) {
         return;
       }
 
+      const stream = fs.createReadStream(finalPath);
+      stream.on('error', (error) => {
+        process.stderr.write(`Read error for ${finalPath}: ${error.message}\n`);
+        if (!res.headersSent) {
+          res.writeHead(500).end();
+        } else {
+          res.destroy(error);
+        }
+      });
+
       res.writeHead(200, { 'Content-Type': mimeType(finalPath) });
-      fs.createReadStream(finalPath).pipe(res);
+      stream.pipe(res);
     });
   });
 }

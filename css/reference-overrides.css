@@ -918,6 +918,14 @@ html.funnel-active .funnel {
     gap: 2.5rem;
   }
 
+  .editorial-main {
+    order: -1;
+  }
+
+  .editorial-sidebar {
+    order: 0;
+  }
+
   .portrait-card,
   .hero-sidebar,
   .editorial-sidebar {

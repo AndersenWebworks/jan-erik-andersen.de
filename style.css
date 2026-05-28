@@ -1,4 +1,4 @@
-/* ===== css/tokens.css ===== */
+﻿/* ===== css/tokens.css ===== */
 /* ============================================
    TOKENS — Design Variables
    Single source of truth for all visual values.
@@ -121,7 +121,6 @@ body:has(.darkmode-checkbox-mobile:checked) {
   --color-border-dark: #363632;
   --color-white: #F0EFE9;
 }
-
 
 /* ===== css/base.css ===== */
 /* ============================================
@@ -308,7 +307,6 @@ dd {
     padding: 0 var(--space-md);
   }
 }
-
 
 /* ===== css/header.css ===== */
 /* ============================================
@@ -786,7 +784,6 @@ html.funnel-active .site-header {
   .header-mobile-menu { display: none !important; }
 }
 
-
 /* ===== css/footer.css ===== */
 /* ============================================
    FOOTER
@@ -829,7 +826,6 @@ html.funnel-active .site-header {
   color: var(--color-text);
   background-size: 100% 1px;
 }
-
 
 /* ===== css/components.css ===== */
 /* ============================================
@@ -1584,10 +1580,6 @@ details.faq-item > summary::-webkit-details-marker { display: none; }
   box-shadow: inset 0 0 0 2px var(--color-accent);
 }
 
-details.faq-item[open] > .faq-question {
-  padding-bottom: var(--space-sm);
-}
-
 .faq-icon {
   flex: none;
   position: relative;
@@ -2317,7 +2309,6 @@ body:has(.darkmode-checkbox-mobile:checked) .contact-promise {
     padding: 0.25em 0.6em;
   }
 }
-
 
 /* ===== css/sections.css ===== */
 /* ============================================
@@ -3229,7 +3220,6 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
   .hero-pill { font-size: 0.7rem; padding: 5px 10px; }
 }
 
-
 /* ===== css/editorial.css ===== */
 /* ============================================
    EDITORIAL — Newspaper/Literary Layout System
@@ -3467,7 +3457,7 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
   .editorial-layout::after { display: none; }
 
   .editorial-sidebar {
-    order: -1;
+    order: 0;
     position: static;
     display: grid;
     grid-template-columns: auto 1fr;
@@ -3520,7 +3510,6 @@ body:has(.darkmode-checkbox-mobile:checked) .client-logos-grid img {
     gap: var(--space-sm);
   }
 }
-
 
 /* ===== css/funnel.css ===== */
 /* ============================================
@@ -4357,7 +4346,6 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
   .funnel-accent-line { transition-duration: 250ms; }
 }
 
-
 /* ===== css/animations.css ===== */
 /* ============================================
    ANIMATIONS — Micro-Motion & IntersectionObserver
@@ -4504,7 +4492,6 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
 /* --- Reduced Motion: intentionally not overriding is-visible animations --- */
 /* See feedback: enabling this kills the IntersectionObserver pattern. */
 
-
 /* ===== css/print.css ===== */
 /* ============================================
    PRINT
@@ -4517,7 +4504,6 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
   section { padding: 1rem 0; }
   .editorial-layout { grid-template-columns: 1fr; }
 }
-
 
 /* ===== css/reference-overrides.css ===== */
 /* ============================================
@@ -5438,6 +5424,14 @@ html.funnel-active .funnel {
   .editorial-layout {
     grid-template-columns: 1fr;
     gap: 2.5rem;
+  }
+
+  .editorial-main {
+    order: -1;
+  }
+
+  .editorial-sidebar {
+    order: 0;
   }
 
   .portrait-card,

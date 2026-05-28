@@ -234,7 +234,7 @@
   .editorial-layout::after { display: none; }
 
   .editorial-sidebar {
-    order: -1;
+    order: 0;
     position: static;
     display: grid;
     grid-template-columns: auto 1fr;

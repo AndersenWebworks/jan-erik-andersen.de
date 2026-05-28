@@ -55,3 +55,21 @@ test.describe('subpage mobile polish', () => {
     });
   }
 });
+
+test.describe('subpage tablet polish', () => {
+  test.use({ viewport: { width: 768, height: 1024 } });
+
+  for (const path of ['/ueber/', '/en/about/']) {
+    test(`${path} keeps editorial content before profile card on tablet`, async ({ page }) => {
+      await page.goto(path);
+
+      const headlineBox = await page.locator('.editorial-main h1').boundingBox();
+      const sidebarBox = await page.locator('.editorial-sidebar').boundingBox();
+
+      expect(headlineBox).toBeTruthy();
+      expect(sidebarBox).toBeTruthy();
+      expect(headlineBox!.y).toBeLessThan(260);
+      expect(headlineBox!.y).toBeLessThan(sidebarBox!.y);
+    });
+  }
+});
