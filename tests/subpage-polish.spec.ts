@@ -36,7 +36,7 @@ test.describe('subpage mobile polish', () => {
     test(`${path} keeps mobile hero CTA hierarchy compact`, async ({ page }) => {
       await page.goto(path);
 
-      const quickCheck = page.locator('.hero-ctas .funnel-reopen');
+      const quickCheck = page.locator('.quickcheck-card .funnel-reopen');
       await expect(quickCheck).toBeVisible();
 
       const box = await quickCheck.boundingBox();
@@ -50,8 +50,10 @@ test.describe('subpage mobile polish', () => {
       });
 
       expect(box).toBeTruthy();
-      expect(box!.height).toBeLessThanOrEqual(48);
-      expect(styles.background).not.toBe('rgb(168, 58, 58)');
+      expect(box!.height).toBeGreaterThanOrEqual(50);
+      expect(box!.height).toBeLessThanOrEqual(58);
+      expect(styles.background).toBe('rgb(168, 58, 58)');
+      expect(styles.color).toBe('rgb(255, 255, 255)');
     });
   }
 });

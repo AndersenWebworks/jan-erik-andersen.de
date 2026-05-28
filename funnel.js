@@ -1,5 +1,5 @@
 /**
- * Berater-Funnel Engine v3
+ * Kurzcheck Engine v3
  * Premium design: SVG icons, progress dots, decorative elements,
  * directional animations, staggered reveals, scroll lock.
  * Vanilla JS, JSON-driven, no backend.
@@ -8,9 +8,9 @@
 (function () {
   'use strict';
 
-  var SLIDE_OUT_MS = 350;
-  var SLIDE_IN_MS  = 450;
-  var PRESS_MS     = 120;
+  var SLIDE_OUT_MS = 180;
+  var SLIDE_IN_MS  = 220;
+  var PRESS_MS     = 80;
 
   var funnel   = document.getElementById('funnel');
   var app      = document.getElementById('funnel-app');
@@ -134,7 +134,7 @@
     { match: 'Fehler sind unklar',    icon: 'alert-triangle' },
     { match: 'Hilfe beim Fix',        icon: 'tool' },
     { match: 'einer hat gefehlt',     icon: 'alert-triangle' },
-    { match: 'pruefen lassen',        icon: 'search' },
+    { match: 'prüfen lassen',        icon: 'search' },
     /* SEO */
     { match: 'Bei Google',            icon: 'search' },
     { match: 'ChatGPT',               icon: 'eye' },
@@ -314,23 +314,27 @@
   }
 
   function showReopenButton() {
-    var btn = document.getElementById('funnel-reopen');
-    if (btn) {
-      btn.hidden = false;
-      if (reopenBound) return;
-      reopenBound = true;
-      btn.addEventListener('click', function (event) {
+    var buttons = document.querySelectorAll('.funnel-reopen');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].hidden = false;
+      if (buttons[i].getAttribute('data-bound') === 'true') continue;
+      buttons[i].setAttribute('data-bound', 'true');
+      buttons[i].addEventListener('click', function (event) {
         event.preventDefault();
         localStorage.removeItem(STORAGE_KEY);
+        history = [];
         trackEvent('reopen');
         startFunnel(window.location.hash.replace('#', '') || 'start');
       });
     }
+    reopenBound = buttons.length > 0;
   }
 
   function hideReopenButton() {
-    var btn = document.getElementById('funnel-reopen');
-    if (btn) btn.hidden = true;
+    var buttons = document.querySelectorAll('.funnel-reopen');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].hidden = true;
+    }
   }
 
   function showSkipButton() {
@@ -367,6 +371,7 @@
   }
 
   function startFunnel(targetNodeId) {
+    history = [];
     document.documentElement.classList.remove('funnel-skip');
     document.documentElement.classList.add('funnel-active');
     hideReopenButton();
@@ -375,7 +380,14 @@
     funnel.setAttribute('aria-hidden', 'false');
     bindSkipButton();
     showSkipButton();
-    initConstellation();
+    destroyConstellation();
+
+    requestAnimationFrame(function () {
+      funnel.scrollIntoView({
+        block: 'start',
+        behavior: 'auto'
+      });
+    });
 
     function showStartTree() {
       computeDepths();
@@ -479,11 +491,11 @@
         trackEvent('contact');
       }
 
-      // Delay slide-in so the synapse line is visible first
-      var synapseDelay = direction === 'forward' ? 500 : 0;
+      var synapseDelay = 0;
 
       setTimeout(function () {
         app.classList.add(inClass);
+        isAnimating = false;
 
         requestAnimationFrame(function () {
           requestAnimationFrame(function () {
@@ -497,7 +509,6 @@
 
         setTimeout(function () {
           app.classList.remove(inClass);
-          isAnimating = false;
         }, SLIDE_IN_MS);
       }, synapseDelay);
     }, SLIDE_OUT_MS);
@@ -621,23 +632,23 @@
     /* ── Direkt / Allgemein ── */
     'result-direkt': {
       subject: 'Kurze Anfrage',
-      body: 'ich moechte kurz mit Ihnen sprechen. Kein langer Funnel noetig – hier ist mein Anliegen:',
+      body: 'ich möchte kurz mit Ihnen sprechen. Kein langer Funnel nötig – hier ist mein Anliegen:',
       url: false
     },
     'result-beratung': {
-      subject: 'Beratungsgespraech',
-      body: 'ich bin nicht sicher, was genau ich brauche. Koennen wir kurz sprechen, um das zu klaeren?',
+      subject: 'Beratungsgespräch',
+      body: 'ich bin nicht sicher, was genau ich brauche. Können wir kurz sprechen, um das zu klären?',
       url: true
     },
     'result-budget-klein': {
       subject: 'Website – kleines Budget',
-      body: 'mein Budget liegt unter 2.400 EUR. Ich weiss, dass das knapp ist, aber vielleicht gibt es trotzdem einen Weg.',
+      body: 'mein Budget liegt unter 2.400 EUR. Ich weiß, dass das knapp ist, aber vielleicht gibt es trotzdem einen Weg.',
       url: true
     },
     /* ── Neue Website ── */
     'result-website': {
       subject: 'Neue Firmenwebsite',
-      body: 'wir brauchen eine neue Website fuer unser Unternehmen. Ich habe Ihren Berater-Funnel durchgeklickt.',
+      body: 'wir brauchen eine neue Website für unser Unternehmen. Ich habe Ihren Kurzcheck durchgeklickt.',
       url: true
     },
     'result-industrie': {
@@ -651,8 +662,8 @@
       url: true
     },
     'result-recht': {
-      subject: 'Firmenwebsite (Kanzlei/Steuerbuero)',
-      body: 'wir sind eine Kanzlei/ein Steuerbuero und brauchen eine neue Website. Ihr Hinweis, dass alle Kanzlei-Websites gleich aussehen, trifft leider auch auf unsere zu.',
+      subject: 'Firmenwebsite (Kanzlei/Steuerbüro)',
+      body: 'wir sind eine Kanzlei/ein Steuerbüro und brauchen eine neue Website. Ihr Hinweis, dass alle Kanzlei-Websites gleich aussehen, trifft leider auch auf unsere zu.',
       url: true
     },
     'result-sozial': {
@@ -668,7 +679,7 @@
     /* ── Shop ── */
     'result-shop': {
       subject: 'WooCommerce-Shop',
-      body: 'wir brauchen einen Online-Shop mit individuellen Anforderungen. Shopify reicht nicht, weil wir eigene Prozesse abbilden muessen.',
+      body: 'wir brauchen einen Online-Shop mit individuellen Anforderungen. Shopify reicht nicht, weil wir eigene Prozesse abbilden müssen.',
       url: true
     },
     'result-shop-mittel': {
@@ -678,27 +689,27 @@
     },
     'result-shop-budget-knapp': {
       subject: 'WooCommerce-Shop (Budget begrenzt)',
-      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 4.800 EUR). Ich bin bereit, Kompromisse zu machen – reden wir ueber die Optionen.',
+      body: 'wir brauchen einen Shop, haben aber ein begrenztes Budget (unter 4.800 EUR). Ich bin bereit, Kompromisse zu machen – reden wir über die Optionen.',
       url: true
     },
     'result-shop-standard': {
       subject: 'Online-Shop (Beratung)',
-      body: 'ich habe Ihren Funnel durchgeklickt und Sie haben ehrlich gesagt, dass Shopify fuer unseren Fall reichen koennte. Trotzdem wuerde ich gern kurz mit Ihnen sprechen, ob WooCommerce sich langfristig lohnt.',
+      body: 'ich habe Ihren Funnel durchgeklickt und Sie haben ehrlich gesagt, dass Shopify für unseren Fall reichen könnte. Trotzdem würde ich gern kurz mit Ihnen sprechen, ob WooCommerce sich langfristig lohnt.',
       url: true
     },
     'result-shop-gross': {
-      subject: 'Grosser Online-Shop (500+ Produkte)',
-      body: 'wir brauchen einen Shop mit grossem Produktkatalog. Ihre Hinweise zu Hosting und Infrastruktur bei 500+ Produkten waren hilfreich.',
+      subject: 'Großer Online-Shop (500+ Produkte)',
+      body: 'wir brauchen einen Shop mit großem Produktkatalog. Ihre Hinweise zu Hosting und Infrastruktur bei 500+ Produkten waren hilfreich.',
       url: true
     },
     'result-shop-b2b': {
-      subject: 'B2B-Shop mit Haendlerportal',
-      body: 'wir brauchen einen B2B-Shop – Staffelpreise, Haendlerzugaenge, Freigabeprozesse. Kein Standard-Theme, sondern ein Werkzeug fuer unseren Vertrieb.',
+      subject: 'B2B-Shop mit Händlerportal',
+      body: 'wir brauchen einen B2B-Shop – Staffelpreise, Händlerzugänge, Freigabeprozesse. Kein Standard-Theme, sondern ein Werkzeug für unseren Vertrieb.',
       url: true
     },
     'result-shop-beratung': {
       subject: 'Shop-Beratung',
-      body: 'ich bin nicht sicher, ob Shopify reicht oder WooCommerce sein muss. Koennen wir kurz sprechen?',
+      body: 'ich bin nicht sicher, ob Shopify reicht oder WooCommerce sein muss. Können wir kurz sprechen?',
       url: true
     },
     'result-shop-budget-klein': {
@@ -709,47 +720,47 @@
     /* ── Portal ── */
     'result-portal-karriere': {
       subject: 'Karriereportal (Custom)',
-      body: 'wir brauchen ein Karriereportal, das ueber das hinausgeht, was JOIN oder Personio koennen – eigenes Design, Integration in unsere Website.',
+      body: 'wir brauchen ein Karriereportal, das über das hinausgeht, was JOIN oder Personio können – eigenes Design, Integration in unsere Website.',
       url: true
     },
     'result-portal-karriere-standard': {
       subject: 'Karriereportal (Beratung)',
-      body: 'Sie haben ehrlich gesagt, dass ein Standardtool fuer unseren Bedarf reichen koennte. Trotzdem ein paar Fragen dazu.',
+      body: 'Sie haben ehrlich gesagt, dass ein Standardtool für unseren Bedarf reichen könnte. Trotzdem ein paar Fragen dazu.',
       url: false
     },
     'result-portal-kunden': {
       subject: 'Kundenportal mit Login',
-      body: 'wir brauchen einen Login-Bereich fuer unsere Kunden – Daten einsehen, Dokumente, vielleicht Bestellhistorie. Ihr Hinweis zu DSGVO-Anforderungen war wichtig.',
+      body: 'wir brauchen einen Login-Bereich für unsere Kunden – Daten einsehen, Dokumente, vielleicht Bestellhistorie. Ihr Hinweis zu DSGVO-Anforderungen war wichtig.',
       url: true
     },
     'result-portal-intern': {
       subject: 'Custom-Tool / Web-App',
-      body: 'wir brauchen ein internes Tool, das kein fertiges Produkt abbilden kann. Ich habe geprueft: Standardtools reichen nicht.',
+      body: 'wir brauchen ein internes Tool, das kein fertiges Produkt abbilden kann. Ich habe geprüft: Standardtools reichen nicht.',
       url: false
     },
     'result-portal-tool': {
       subject: 'Beratung Toolauswahl',
-      body: 'Sie haben mich darauf gebracht, dass ein fertiges Tool fuer uns reichen koennte. Koennen Sie uns bei der Auswahl beraten?',
+      body: 'Sie haben mich darauf gebracht, dass ein fertiges Tool für uns reichen könnte. Können Sie uns bei der Auswahl beraten?',
       url: false
     },
     'result-portal-standard': {
       subject: 'Karriereportal (Standard)',
-      body: 'Sie haben ehrlich gesagt, dass ein Standardtool fuer unseren Bedarf reichen koennte. Trotzdem ein paar Fragen dazu.',
+      body: 'Sie haben ehrlich gesagt, dass ein Standardtool für unseren Bedarf reichen könnte. Trotzdem ein paar Fragen dazu.',
       url: false
     },
     'result-portal-custom': {
       subject: 'Custom-Tool / Web-App',
-      body: 'wir brauchen ein Tool, das kein fertiges Produkt abbilden kann. Ich habe geprueft: Standardtools reichen nicht.',
+      body: 'wir brauchen ein Tool, das kein fertiges Produkt abbilden kann. Ich habe geprüft: Standardtools reichen nicht.',
       url: false
     },
     'result-bericht': {
       subject: 'Interaktiver Bericht',
-      body: 'wir moechten einen Bericht (Jahresbericht / Wirkungsbericht) als interaktive Website statt als PDF erstellen.',
+      body: 'wir möchten einen Bericht (Jahresbericht / Wirkungsbericht) als interaktive Website statt als PDF erstellen.',
       url: false
     },
     'result-landingpage': {
       subject: 'Landingpage',
-      body: 'wir brauchen eine fokussierte Landingpage fuer ein konkretes Angebot. Eine Seite, ein Ziel.',
+      body: 'wir brauchen eine fokussierte Landingpage für ein konkretes Angebot. Eine Seite, ein Ziel.',
       url: false
     },
     /* ── Problem: Redesign ── */
@@ -780,82 +791,82 @@
     },
     'result-redesign-beratung': {
       subject: 'Redesign oder Relaunch?',
-      body: 'ich bin nicht sicher, ob ein Facelift reicht oder ob wir einen Komplett-Relaunch brauchen. Koennen wir das klaeren?',
+      body: 'ich bin nicht sicher, ob ein Facelift reicht oder ob wir einen Komplett-Relaunch brauchen. Können wir das klären?',
       url: true
     },
     /* ── Problem: Performance ── */
     'result-performance-wp': {
       subject: 'WordPress-Performance',
-      body: 'unsere WordPress-Website ist zu langsam. Ich habe pagespeed.web.dev geprueft und der Score ist nicht gut. Koennen Sie sich das anschauen?',
+      body: 'unsere WordPress-Website ist zu langsam. Ich habe pagespeed.web.dev geprüft und der Score ist nicht gut. Können Sie sich das anschauen?',
       url: true
     },
     'result-performance': {
       subject: 'Website zu langsam',
-      body: 'unsere Website ist zu langsam. Ich habe pagespeed.web.dev getestet. Koennen Sie sich das anschauen?',
+      body: 'unsere Website ist zu langsam. Ich habe pagespeed.web.dev getestet. Können Sie sich das anschauen?',
       url: true
     },
     /* ── Problem: BFSG ── */
     'result-bfsg': {
       subject: 'Barrierefreiheit / BFSG',
-      body: 'wir muessen unsere Website barrierefrei machen (BFSG). Ich habe den Schnelltest aus Ihrem Funnel gemacht und mindestens ein Problem gefunden.',
+      body: 'wir müssen unsere Website barrierefrei machen (BFSG). Ich habe den Schnelltest aus Ihrem Funnel gemacht und mindestens ein Problem gefunden.',
       url: true
     },
     'result-bfsg-fix': {
       subject: 'BFSG-Fehler beheben',
-      body: 'wir haben unsere Website pruefen lassen und wissen, welche BFSG-Fehler existieren. Koennen Sie die beheben und dokumentieren?',
+      body: 'wir haben unsere Website prüfen lassen und wissen, welche BFSG-Fehler existieren. Können Sie die beheben und dokumentieren?',
       url: true
     },
     /* ── Problem: SEO / GEO ── */
     'result-seo-google': {
       subject: 'Google-Sichtbarkeit',
-      body: 'unsere Website wird bei Google schlecht gefunden. Koennen Sie sich das anschauen?',
+      body: 'unsere Website wird bei Google schlecht gefunden. Können Sie sich das anschauen?',
       url: true
     },
     'result-seo-ki': {
       subject: 'KI-Sichtbarkeit',
-      body: 'ich habe ChatGPT nach unserem Unternehmen gefragt und die Antwort war duenn oder falsch. Koennen Sie helfen, unsere Website fuer KI-Systeme sichtbar zu machen?',
+      body: 'ich habe ChatGPT nach unserem Unternehmen gefragt und die Antwort war dünn oder falsch. Können Sie helfen, unsere Website für KI-Systeme sichtbar zu machen?',
       url: true
     },
     'result-seo': {
       subject: 'Website wird nicht gefunden',
-      body: 'unsere Website wird schlecht gefunden – weder bei Google noch bei KI-Systemen. Koennen Sie sich das anschauen?',
+      body: 'unsere Website wird schlecht gefunden – weder bei Google noch bei KI-Systemen. Können Sie sich das anschauen?',
       url: true
     },
     /* ── Problem: Technik ── */
     'result-technik-wp': {
       subject: 'WordPress-Problem',
-      body: 'unsere WordPress-Website hat ein technisches Problem. Ich habe Plugins deaktiviert und den Health Check geprueft, komme aber nicht weiter.',
+      body: 'unsere WordPress-Website hat ein technisches Problem. Ich habe Plugins deaktiviert und den Health Check geprüft, komme aber nicht weiter.',
       url: true
     },
     'result-technik-woo': {
       subject: 'WooCommerce-Problem',
-      body: 'unser WooCommerce-Shop hat ein Problem – Bestellungen, Zahlungen oder Darstellung. Koennen Sie sich das zeitnah anschauen?',
+      body: 'unser WooCommerce-Shop hat ein Problem – Bestellungen, Zahlungen oder Darstellung. Können Sie sich das zeitnah anschauen?',
       url: true
     },
     'result-technik': {
       subject: 'Technisches Problem',
-      body: 'auf unserer Website ist etwas kaputt und wir kommen nicht weiter. Koennen Sie sich das anschauen?',
+      body: 'auf unserer Website ist etwas kaputt und wir kommen nicht weiter. Können Sie sich das anschauen?',
       url: true
     },
     'result-technik-sicherheit': {
       subject: 'DRINGEND: Website gehackt',
-      body: 'unsere Website wurde vermutlich gehackt oder enthaelt Malware. Wir brauchen schnell Hilfe.',
+      body: 'unsere Website wurde vermutlich gehackt oder enthält Malware. Wir brauchen schnell Hilfe.',
       url: true
     },
     'result-sicherheit': {
       subject: 'DRINGEND: Website gehackt',
-      body: 'unsere Website wurde vermutlich gehackt oder enthaelt Malware. Wir brauchen schnell Hilfe.',
+      body: 'unsere Website wurde vermutlich gehackt oder enthält Malware. Wir brauchen schnell Hilfe.',
       url: true
     },
     /* ── Betreuung ── */
     'result-betreuung-basis': {
       subject: 'Website-Betreuung (Basis)',
-      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer Website kuemmert.',
+      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer Website kümmert.',
       url: true
     },
     'result-betreuung-standard': {
       subject: 'Website-Betreuung (Standard)',
-      body: 'wir suchen jemanden fuer die laufende Betreuung unserer Website – Updates plus regelmaessige inhaltliche Aenderungen.',
+      body: 'wir suchen jemanden für die laufende Betreuung unserer Website – Updates plus regelmäßige inhaltliche Änderungen.',
       url: true
     },
     'result-betreuung-premium': {
@@ -865,71 +876,71 @@
     },
     'result-betreuung-wp-basis': {
       subject: 'WordPress-Betreuung (Basis)',
-      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer WordPress-Website kuemmert.',
+      body: 'wir suchen jemanden, der sich um Updates, Sicherheit und Backups unserer WordPress-Website kümmert.',
       url: true
     },
     'result-betreuung-wp-standard': {
       subject: 'WordPress-Betreuung (Standard)',
-      body: 'wir suchen jemanden fuer die laufende Betreuung unserer WordPress-Website – Updates plus regelmaessige inhaltliche Aenderungen.',
+      body: 'wir suchen jemanden für die laufende Betreuung unserer WordPress-Website – Updates plus regelmäßige inhaltliche Änderungen.',
       url: true
     },
     'result-betreuung-woo-basis': {
       subject: 'WooCommerce-Betreuung (Basis)',
-      body: 'wir suchen jemanden, der sich um Updates und Monitoring unseres WooCommerce-Shops kuemmert.',
+      body: 'wir suchen jemanden, der sich um Updates und Monitoring unseres WooCommerce-Shops kümmert.',
       url: true
     },
     'result-betreuung-woo-standard': {
       subject: 'WooCommerce-Betreuung (Standard)',
-      body: 'wir suchen jemanden fuer die laufende Betreuung unseres WooCommerce-Shops – Updates plus regelmaessige Aenderungen und Support.',
+      body: 'wir suchen jemanden für die laufende Betreuung unseres WooCommerce-Shops – Updates plus regelmäßige Änderungen und Support.',
       url: true
     },
     'result-betreuung-statisch': {
       subject: 'Betreuung statische Website',
-      body: 'wir haben eine statische Website und brauchen gelegentlich jemanden fuer Aenderungen.',
+      body: 'wir haben eine statische Website und brauchen gelegentlich jemanden für Änderungen.',
       url: true
     },
     'result-betreuung-premium': {
       subject: 'Komplett-Betreuung',
-      body: 'wir suchen im Grunde einen eigenen Webentwickler – jemanden, der unsere Website komplett betreut und sich um alles kuemmert. Retainer-Modell.',
+      body: 'wir suchen im Grunde einen eigenen Webentwickler – jemanden, der unsere Website komplett betreut und sich um alles kümmert. Retainer-Modell.',
       url: true
     },
     /* ── GEO ── */
     'result-geo': {
       subject: 'KI-Sichtbarkeit',
-      body: 'ich habe auf Ihrer Website gelesen, wie Sie Websites fuer KI-Systeme sichtbar machen. Das interessiert mich.',
+      body: 'ich habe auf Ihrer Website gelesen, wie Sie Websites für KI-Systeme sichtbar machen. Das interessiert mich.',
       url: true
     },
     'result-geo-audit': {
       subject: 'KI-Sichtbarkeits-Audit',
-      body: 'mich wuerde interessieren, wie sichtbar unsere Website fuer KI-Systeme ist. Koennen Sie das pruefen?',
+      body: 'mich würde interessieren, wie sichtbar unsere Website für KI-Systeme ist. Können Sie das prüfen?',
       url: true
     },
     /* ── GEO (neue Nodes) ── */
     'result-geo-baukasten': {
       subject: 'KI-Sichtbarkeit (Baukasten)',
-      body: 'unsere Website laeuft auf einem Baukastensystem und wir wuerden gern die KI-Sichtbarkeit verbessern. Ihr Funnel hat ehrlich gesagt, dass das schwierig wird – koennen wir die Optionen besprechen?',
+      body: 'unsere Website läuft auf einem Baukastensystem und wir würden gern die KI-Sichtbarkeit verbessern. Ihr Funnel hat ehrlich gesagt, dass das schwierig wird – können wir die Optionen besprechen?',
       url: true
     },
     'geo-neubau': {
       subject: 'Neue Website mit KI-Sichtbarkeit',
-      body: 'wir planen eine neue Website und moechten, dass KI-Sichtbarkeit von Anfang an eingebaut ist. Ihr Funnel hat uns ueberzeugt.',
+      body: 'wir planen eine neue Website und möchten, dass KI-Sichtbarkeit von Anfang an eingebaut ist. Ihr Funnel hat uns überzeugt.',
       url: true
     },
     /* ── BFSG (neue Nodes) ── */
     'bfsg-nicht-betroffen': {
       subject: 'Barrierefreiheit (freiwillig)',
-      body: 'wir sind laut Ihrem Check nicht BFSG-pflichtig, wuerden unsere Website aber trotzdem barrierefrei machen lassen. Koennen Sie das einschaetzen?',
+      body: 'wir sind laut Ihrem Check nicht BFSG-pflichtig, würden unsere Website aber trotzdem barrierefrei machen lassen. Können Sie das einschätzen?',
       url: true
     },
     'result-bfsg-audit': {
       subject: 'BFSG-Audit',
-      body: 'wir moechten pruefen lassen, ob unsere Website barrierefrei ist. Ihr Funnel hat uns auf konkrete Testpunkte hingewiesen – einige davon bestehen wir nicht.',
+      body: 'wir möchten prüfen lassen, ob unsere Website barrierefrei ist. Ihr Funnel hat uns auf konkrete Testpunkte hingewiesen – einige davon bestehen wir nicht.',
       url: true
     },
     /* ── Vergleich ── */
     'result-vergleich-kontakt': {
       subject: 'Anfrage nach Anbietervergleich',
-      body: 'ich habe Ihren Berater-Funnel durchgeklickt und die Tipps zur Freelancer-Auswahl waren hilfreich. Ich wuerde gern Ihre Antworten auf die fuenf Fragen hoeren.',
+      body: 'ich habe Ihren Kurzcheck durchgeklickt und die Tipps zur Freelancer-Auswahl waren hilfreich. Ich würde gern Ihre Antworten auf die fünf Fragen hören.',
       url: false
     }
   };
@@ -946,7 +957,7 @@
     'neu-was': 'Neue Website/Shop',
     'website-budget': 'Budget-Check',
     'website-branche': 'Branchenauswahl',
-    'website-gross': 'Grossprojekt',
+    'website-gross': 'Großprojekt',
     'shop-art': 'Shop-Typ',
     'shop-b2c': 'B2C-Shop',
     'shop-b2b': 'B2B-Shop',
@@ -960,7 +971,7 @@
     'betreuung-was': 'Laufende Betreuung',
     'betreuung-info': 'Betreuungs-Pakete',
     'geo-einstieg': 'KI-Sichtbarkeit',
-    'geo-nachr\u00fcsten': 'KI nachruesten',
+    'geo-nachr\u00fcsten': 'KI nachrüsten',
     'bfsg-check': 'BFSG-Betroffenheit',
     'bfsg-betroffen': 'BFSG-pflichtig'
   };
@@ -979,24 +990,30 @@
     var data = RESULT_EMAILS[resultId] || fb;
 
     var pathSummary = buildPathSummary();
+    if (!pathSummary && resultId === 'result-direkt') pathSummary = 'Direktkontakt';
+    var resultTitle = tree && tree[resultId] && tree[resultId].title ? tree[resultId].title : data.subject;
+    var urgent = /DRINGEND|gehackt|Malware|WooCommerce-Problem/i.test(data.subject + ' ' + data.body);
+    var closeLine = urgent ? 'Bitte melden Sie sich schnellstm\u00f6glich.' : 'K\u00f6nnen wir kurz telefonieren?';
     var subject = data.subject;
     var body = 'Hallo Herr Andersen,\n\n' + data.body;
     if (data.url) {
-      body += '\n\nUnsere Website: [URL]';
+      body += '\n\nUnsere Website: [URL oder Domain einf\u00fcgen]';
     }
+    body += '\n\nKurzcheck-Ergebnis: ' + resultTitle;
     if (pathSummary) {
-      body += '\n\n(Mein Weg durch den Berater: ' + pathSummary + ')';
+      body += '\nMein Weg: ' + pathSummary;
     }
-    body += '\n\nK\u00f6nnen wir kurz telefonieren?\n\nViele Gr\u00fc\u00dfe\n[Ihr Name]';
+    body += '\n\n' + closeLine + '\n\nViele Gr\u00fc\u00dfe\n[Ihr Name]';
 
     var previewHtml = 'Hallo Herr Andersen,\n\n' + esc(data.body);
     if (data.url) {
-      previewHtml += '\n\nUnsere Website: <span class="funnel-contact-placeholder">[URL]</span>';
+      previewHtml += '\n\nUnsere Website: <span class="funnel-contact-placeholder">[URL oder Domain einf\u00fcgen]</span>';
     }
+    previewHtml += '\n\n<strong>Kurzcheck-Ergebnis:</strong> ' + esc(resultTitle);
     if (pathSummary) {
-      previewHtml += '\n\n<span class="funnel-contact-placeholder">(Mein Weg: ' + esc(pathSummary) + ')</span>';
+      previewHtml += '\n<span class="funnel-contact-placeholder">Mein Weg: ' + esc(pathSummary) + '</span>';
     }
-    previewHtml += '\n\nK\u00f6nnen wir kurz telefonieren?\n\nViele Gr\u00fc\u00dfe\n<span class="funnel-contact-placeholder">[Ihr Name]</span>';
+    previewHtml += '\n\n' + esc(closeLine) + '\n\nViele Gr\u00fc\u00dfe\n<span class="funnel-contact-placeholder">[Ihr Name]</span>';
 
     return { subject: subject, body: body, previewHtml: previewHtml };
   }
@@ -1013,7 +1030,7 @@
     h += '<img src="portrait.webp" alt="Jan-Erik Andersen" class="funnel-contact-portrait" width="56" height="56" loading="lazy">';
     h += '<div class="funnel-contact-intro-text">';
     h += '<h3 class="funnel-result-title" tabindex="-1">Freut mich.</h3>';
-    h += '<p class="funnel-contact-intro-sub">Ich hab schon mal was vorbereitet \u2013 Sie m\u00fcssen nur noch absenden.</p>';
+    h += '<p class="funnel-contact-intro-sub">Ich habe daraus einen sauberen Mail-Entwurf gemacht. Sie k\u00f6nnen ihn direkt \u00f6ffnen und anpassen.</p>';
     h += '</div>';
     h += '</div>';
 
@@ -1171,15 +1188,19 @@
       destroyConstellation();
       funnel.classList.add('funnel-hidden');
       funnel.setAttribute('aria-hidden', 'true');
-      window.scrollTo(0, 0);
       showReopenButton();
-    }, 480);
+    }, 220);
   }
 
   /* ── Keyboard ─────────────────────────────────────── */
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && history.length > 0) goBack();
+    if (e.key !== 'Escape' || !document.documentElement.classList.contains('funnel-active')) return;
+    if (history.length > 0) {
+      goBack();
+    } else {
+      exitFunnel();
+    }
   });
 
   /* ── C3: Mobile Swipe Navigation ─────────────────── */
@@ -1383,10 +1404,10 @@
   /* ── Constellation Canvas (Synapsen-Modell) ─────── */
   /*
    * Punkte schweben langsam. Start: NULL Verbindungen.
-   * Pro beantworteter Frage: eine neue Synapse wird geknuepft.
-   * Zwei zufaellige unverbundene Punkte werden gewaehlt.
+   * Pro beantworteter Frage: eine neue Synapse wird geknüpft.
+   * Zwei zufällige unverbundene Punkte werden gewählt.
    * Linie wird animiert gezeichnet (Startpunkt -> Endpunkt),
-   * kurz rot aufleuchtend, dann zurueck zu normaler Farbe.
+   * kurz rot aufleuchtend, dann zurück zu normaler Farbe.
    * Je tiefer im Funnel = dichteres Netz.
    */
 
@@ -1440,7 +1461,7 @@
     }
   }
 
-  /* ── Knuepfe eine neue Synapse ── */
+  /* ── Knüpfe eine neue Synapse ── */
 
   var lastConnectedNode = -1;
   var connectedNodes = {};

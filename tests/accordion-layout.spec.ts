@@ -31,6 +31,7 @@ test.describe('accordion layout stability', () => {
           const items = page.locator('details.faq-item');
           const count = await items.count();
           expect(count).toBeGreaterThan(0);
+          await expectAccordionGroupIsOnlyLayout(page.locator('.faq-list, .faq').first(), items.first());
 
           for (let index = 0; index < count; index++) {
             const item = items.nth(index);
@@ -64,6 +65,44 @@ test.describe('accordion layout stability', () => {
     });
   }
 });
+
+async function expectAccordionGroupIsOnlyLayout(group: Locator, firstItem: Locator) {
+  const groupStyle = await group.evaluate((element) => {
+    const style = window.getComputedStyle(element);
+    return {
+      backgroundColor: style.backgroundColor,
+      borderTopWidth: style.borderTopWidth,
+      borderRightWidth: style.borderRightWidth,
+      borderBottomWidth: style.borderBottomWidth,
+      borderLeftWidth: style.borderLeftWidth,
+      borderRadius: style.borderRadius,
+      boxShadow: style.boxShadow,
+      overflow: style.overflow,
+    };
+  });
+
+  expect(groupStyle.backgroundColor).toBe('rgba(0, 0, 0, 0)');
+  expect(groupStyle.borderTopWidth).toBe('0px');
+  expect(groupStyle.borderRightWidth).toBe('0px');
+  expect(groupStyle.borderBottomWidth).toBe('0px');
+  expect(groupStyle.borderLeftWidth).toBe('0px');
+  expect(groupStyle.borderRadius).toBe('0px');
+  expect(groupStyle.boxShadow).toBe('none');
+  expect(groupStyle.overflow).toBe('visible');
+
+  const itemStyle = await firstItem.evaluate((element) => {
+    const style = window.getComputedStyle(element);
+    return {
+      backgroundColor: style.backgroundColor,
+      borderTopWidth: style.borderTopWidth,
+      borderRadius: style.borderRadius,
+    };
+  });
+
+  expect(itemStyle.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
+  expect(itemStyle.borderTopWidth).not.toBe('0px');
+  expect(itemStyle.borderRadius).not.toBe('0px');
+}
 
 async function measureAccordion(item: Locator) {
   return item.evaluate((details: HTMLDetailsElement) => {

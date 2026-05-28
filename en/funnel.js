@@ -8,9 +8,9 @@
 (function () {
   'use strict';
 
-  var SLIDE_OUT_MS = 350;
-  var SLIDE_IN_MS  = 450;
-  var PRESS_MS     = 120;
+  var SLIDE_OUT_MS = 180;
+  var SLIDE_IN_MS  = 220;
+  var PRESS_MS     = 80;
 
   var funnel   = document.getElementById('funnel');
   var app      = document.getElementById('funnel-app');
@@ -270,23 +270,27 @@
   }
 
   function showReopenButton() {
-    var btn = document.getElementById('funnel-reopen');
-    if (btn) {
-      btn.hidden = false;
-      if (reopenBound) return;
-      reopenBound = true;
-      btn.addEventListener('click', function (event) {
+    var buttons = document.querySelectorAll('.funnel-reopen');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].hidden = false;
+      if (buttons[i].getAttribute('data-bound') === 'true') continue;
+      buttons[i].setAttribute('data-bound', 'true');
+      buttons[i].addEventListener('click', function (event) {
         event.preventDefault();
         localStorage.removeItem(STORAGE_KEY);
+        history = [];
         trackEvent('reopen');
         startFunnel(window.location.hash.replace('#', '') || 'start');
       });
     }
+    reopenBound = buttons.length > 0;
   }
 
   function hideReopenButton() {
-    var btn = document.getElementById('funnel-reopen');
-    if (btn) btn.hidden = true;
+    var buttons = document.querySelectorAll('.funnel-reopen');
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].hidden = true;
+    }
   }
 
   function showSkipButton() {
@@ -323,6 +327,7 @@
   }
 
   function startFunnel(targetNodeId) {
+    history = [];
     document.documentElement.classList.remove('funnel-skip');
     document.documentElement.classList.add('funnel-active');
     hideReopenButton();
@@ -331,7 +336,14 @@
     funnel.setAttribute('aria-hidden', 'false');
     bindSkipButton();
     showSkipButton();
-    initConstellation();
+    destroyConstellation();
+
+    requestAnimationFrame(function () {
+      funnel.scrollIntoView({
+        block: 'start',
+        behavior: 'auto'
+      });
+    });
 
     function showStartTree() {
       computeDepths();
@@ -432,10 +444,11 @@
         trackEvent('contact');
       }
 
-      var synapseDelay = direction === 'forward' ? 500 : 0;
+      var synapseDelay = 0;
 
       setTimeout(function () {
         app.classList.add(inClass);
+        isAnimating = false;
 
         requestAnimationFrame(function () {
           requestAnimationFrame(function () {
@@ -449,7 +462,6 @@
 
         setTimeout(function () {
           app.classList.remove(inClass);
-          isAnimating = false;
         }, SLIDE_IN_MS);
       }, synapseDelay);
     }, SLIDE_OUT_MS);
@@ -926,24 +938,30 @@
     var data = RESULT_EMAILS[resultId] || fb;
 
     var pathSummary = buildPathSummary();
+    if (!pathSummary && resultId === 'result-direkt') pathSummary = 'Direct contact';
+    var resultTitle = tree && tree[resultId] && tree[resultId].title ? tree[resultId].title : data.subject;
+    var urgent = /URGENT|hacked|malware|WooCommerce problem/i.test(data.subject + ' ' + data.body);
+    var closeLine = urgent ? 'Please get back to me as soon as possible.' : 'Could we have a brief call?';
     var subject = data.subject;
     var body = 'Hello Mr. Andersen,\n\n' + data.body;
     if (data.url) {
-      body += '\n\nOur website: [URL]';
+      body += '\n\nOur website: [URL or domain]';
     }
+    body += '\n\nQuick check result: ' + resultTitle;
     if (pathSummary) {
-      body += '\n\n(My path through the advisor: ' + pathSummary + ')';
+      body += '\nMy path: ' + pathSummary;
     }
-    body += '\n\nCould we have a brief call?\n\nBest regards\n[Your name]';
+    body += '\n\n' + closeLine + '\n\nBest regards\n[Your name]';
 
     var previewHtml = 'Hello Mr. Andersen,\n\n' + esc(data.body);
     if (data.url) {
-      previewHtml += '\n\nOur website: <span class="funnel-contact-placeholder">[URL]</span>';
+      previewHtml += '\n\nOur website: <span class="funnel-contact-placeholder">[URL or domain]</span>';
     }
+    previewHtml += '\n\n<strong>Quick check result:</strong> ' + esc(resultTitle);
     if (pathSummary) {
-      previewHtml += '\n\n<span class="funnel-contact-placeholder">(My path: ' + esc(pathSummary) + ')</span>';
+      previewHtml += '\n<span class="funnel-contact-placeholder">My path: ' + esc(pathSummary) + '</span>';
     }
-    previewHtml += '\n\nCould we have a brief call?\n\nBest regards\n<span class="funnel-contact-placeholder">[Your name]</span>';
+    previewHtml += '\n\n' + esc(closeLine) + '\n\nBest regards\n<span class="funnel-contact-placeholder">[Your name]</span>';
 
     return { subject: subject, body: body, previewHtml: previewHtml };
   }
@@ -960,7 +978,7 @@
     h += '<img src="../portrait.webp" alt="Jan-Erik Andersen" class="funnel-contact-portrait" width="56" height="56" loading="lazy">';
     h += '<div class="funnel-contact-intro-text">';
     h += '<h3 class="funnel-result-title" tabindex="-1">Glad you\u2019re here.</h3>';
-    h += '<p class="funnel-contact-intro-sub">I\u2019ve prepared something \u2013 you just need to send it.</p>';
+    h += '<p class="funnel-contact-intro-sub">I turned your answers into a clean email draft. Open it, adjust it, send it.</p>';
     h += '</div>';
     h += '</div>';
 
@@ -1116,15 +1134,19 @@
       destroyConstellation();
       funnel.classList.add('funnel-hidden');
       funnel.setAttribute('aria-hidden', 'true');
-      window.scrollTo(0, 0);
       showReopenButton();
-    }, 480);
+    }, 220);
   }
 
   /* ── Keyboard ─────────────────────────────────────── */
 
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && history.length > 0) goBack();
+    if (e.key !== 'Escape' || !document.documentElement.classList.contains('funnel-active')) return;
+    if (history.length > 0) {
+      goBack();
+    } else {
+      exitFunnel();
+    }
   });
 
   /* ── C3: Mobile Swipe Navigation ─────────────────── */

@@ -103,26 +103,33 @@ test.describe('visible standalone template metrics', () => {
     await page.goto('/', { waitUntil: 'networkidle' });
     const primary = await elementMetric(page, '.hero-ctas .btn-primary');
     const secondary = await elementMetric(page, '.hero-ctas .btn-secondary');
-    const quickCheck = await elementMetric(page, '.hero-ctas .funnel-reopen');
+    const quickCheck = await elementMetric(page, '.quickcheck-card .funnel-reopen');
 
     expect(primary.x).toBe(20);
     expect(primary.height).toBeLessThanOrEqual(46);
     expect(secondary.x).toBe(20);
     expect(secondary.height).toBeLessThanOrEqual(48);
-    expect(quickCheck.y).toBeGreaterThan(secondary.y);
-    expect(quickCheck.background).not.toBe('rgb(168, 58, 58)');
+    expect(quickCheck.y).toBeLessThan(secondary.y);
+    expect(quickCheck.height).toBeGreaterThanOrEqual(50);
+    expect(quickCheck.background).toBe('rgb(168, 58, 58)');
   });
 
-  test('homepage portrait keeps the real photo uncropped inside the template card', async ({ page }) => {
+  test('homepage portrait fills the template card without letterbox bars', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 1100 });
     await page.goto('/', { waitUntil: 'networkidle' });
 
     const portrait = await page.locator('.portrait-card .portrait').first().evaluate((img: HTMLImageElement) => {
       const style = window.getComputedStyle(img);
+      const imgRect = img.getBoundingClientRect();
+      const frameRect = img.closest('.portrait-frame')?.getBoundingClientRect();
 
       return {
         naturalWidth: img.naturalWidth,
         naturalHeight: img.naturalHeight,
+        displayWidth: Math.round(imgRect.width),
+        displayHeight: Math.round(imgRect.height),
+        frameWidth: frameRect ? Math.round(frameRect.width) : 0,
+        frameHeight: frameRect ? Math.round(frameRect.height) : 0,
         objectFit: style.objectFit,
         objectPosition: style.objectPosition,
       };
@@ -130,7 +137,11 @@ test.describe('visible standalone template metrics', () => {
 
     expect(portrait.naturalWidth).toBeGreaterThan(0);
     expect(portrait.naturalHeight).toBeGreaterThan(0);
-    expect(portrait.objectFit).toBe('contain');
+    expect(portrait.naturalWidth).toBe(portrait.naturalHeight);
+    expect(portrait.displayWidth).toBe(portrait.frameWidth);
+    expect(portrait.displayHeight).toBe(portrait.frameHeight);
+    expect(portrait.frameWidth).toBe(portrait.frameHeight);
+    expect(portrait.objectFit).toBe('cover');
     expect(portrait.objectPosition).toBe('50% 50%');
   });
 });

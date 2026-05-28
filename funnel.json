@@ -2,14 +2,14 @@
   "meta": {
     "version": "4.0",
     "language": "de",
-    "updated": "2026-04-22",
-    "changelog": "Komplette Neustrukturierung: Weniger Schritte, mehr Info pro Schritt, respektvolle Exits, Schnellpfade für Eilige (Roundtable Nook/Rainer/Smeralda)"
+    "updated": "2026-05-28",
+    "changelog": "Projekt-Kompass-Refit: sichtbarer Hero-CTA, inline statt Vollbild-Overlay, sauberere Mail-Ergebnisse"
   },
   "nodes": {
     "start": {
       "type": "question",
-      "text": "Was kann ich für Sie tun?",
-      "subtitle": "Drei Minuten, die sich lohnen. Oder Sie lesen selbst – kein Problem.",
+      "text": "Wobei kann ich helfen?",
+      "subtitle": "Ein paar Klicks – danach wissen Sie, was passt, was es ungefähr kostet und ob wir reden sollten.",
       "options": [
         {
           "label": "Ich brauche eine Website oder einen Shop",

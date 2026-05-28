@@ -124,6 +124,7 @@
             <span class="pill-indicator"></span>
           </div>
         </div>
+        <a href="contact/" class="header-meta-cta">Intro call <span aria-hidden="true">→</span></a>
         <a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="logo-link">
           <img src="../linkedin-logo.png" alt="LinkedIn" width="24" height="24">
         </a>
@@ -177,11 +178,20 @@
               <span class="hero-typewriter-text">Agency-level work. <span class="accent-word">Without the agency.</span></span><span class="typewriter-cursor" aria-hidden="true">|</span>
             </h1>
             <p class="hero-lead">Websites, shops and ongoing support – since 1999, directly with the developer. Fixed prices, 100 % remote, full accountability.</p>
-            <div class="hero-ctas">
+            <div class="quickcheck-card quickcheck-card--hero" aria-labelledby="quickcheck-title">
+              <div class="quickcheck-copy">
+                <div class="quickcheck-kicker">Project compass</div>
+                <h2 id="quickcheck-title">Not sure what you need?</h2>
+                <p>In 60 seconds you get an honest direction: likely solution, rough budget range and the next useful step.</p>
+              </div>
               <button class="funnel-reopen" id="funnel-reopen" hidden>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-                Not sure what you need? Take the quick check
+                <span class="quickcheck-icon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </span>
+                Start quick check
               </button>
+            </div>
+            <div class="hero-ctas">
               <a href="#contact" class="btn btn-primary">Book a free call <span class="btn-arr">→</span></a>
               <a href="#pricing" class="btn btn-secondary">View pricing</a>
             </div>
@@ -194,7 +204,7 @@
           </div>
           <aside class="hero-sidebar portrait-card">
             <div class="portrait-frame">
-              <img src="../portrait.webp" alt="Jan-Erik Andersen" class="portrait" width="200" height="300">
+              <img src="../portrait.webp" alt="Jan-Erik Andersen" class="portrait" width="400" height="400">
             </div>
             <div class="portrait-meta">
               <div class="portrait-meta-identity">
@@ -230,16 +240,16 @@
     </section>
 
     <!-- ===== FUNNEL ===== -->
-    <section class="funnel" id="funnel" aria-label="Interactive advisor funnel">
+    <section class="funnel" id="funnel" aria-label="Interactive project compass">
       <div class="funnel-container">
         <div class="funnel-app" id="funnel-app" role="region" aria-live="polite" aria-label="Consultation">
           <noscript>
-            <p>JavaScript is required for the interactive advisor funnel.</p>
+            <p>JavaScript is required for the interactive project compass.</p>
             <p><a href="#hero">Jump directly to overview</a></p>
           </noscript>
         </div>
       </div>
-      <button class="funnel-skip" id="funnel-skip" type="button" aria-hidden="true" disabled>Skip</button>
+      <button class="funnel-skip" id="funnel-skip" type="button" aria-hidden="true" disabled>Close</button>
     </section>
 
     <!-- ===== PROJECTS (Proof first) ===== -->

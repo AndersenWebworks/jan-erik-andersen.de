@@ -6,182 +6,159 @@ async function openFresh(page, path = '/') {
   await page.addInitScript(() => localStorage.removeItem('funnel-done'));
   await page.goto(`${ROOT}${path}`);
   await expect(page.locator('#funnel')).toBeHidden();
+  await expect(page.locator('.quickcheck-card')).toBeVisible();
   await expect(page.locator('#funnel-reopen')).toBeVisible();
-  await expect(page.locator('.hero')).toBeInViewport();
   await page.locator('#funnel-reopen').click();
   await expect(page.locator('#funnel-skip')).toBeVisible();
   await expect(page.locator('#funnel')).toBeVisible();
+  await expect(page.locator('.quickcheck-card')).toBeHidden();
 }
 
-test.describe('funnel overlay', () => {
-  test('home starts with the reference hero instead of the automatic funnel', async ({ page }) => {
+async function decodedMailto(page) {
+  const href = await page.locator('.funnel-contact-send').getAttribute('href');
+  expect(href).toBeTruthy();
+  const parsed = new URL(href!);
+  return {
+    subject: parsed.searchParams.get('subject') || '',
+    body: parsed.searchParams.get('body') || '',
+  };
+}
+
+test.describe('project compass funnel', () => {
+  test('home starts with a prominent quickcheck invitation instead of automatic funnel', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.addInitScript(() => localStorage.removeItem('funnel-done'));
     await page.goto(ROOT);
 
+    const card = page.locator('.quickcheck-card');
+    const button = page.locator('#funnel-reopen');
+
     await expect(page.locator('#funnel')).toBeHidden();
-    await expect(page.locator('#funnel-reopen')).toBeVisible();
-    await expect(page.locator('.hero')).toBeInViewport();
-    await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('funnel-active'))).toBe(false);
+    await expect(card).toBeVisible();
+    await expect(button).toBeVisible();
+    await expect(card).toContainText('Nicht sicher');
+
+    const metrics = await card.evaluate((el) => {
+      const rect = el.getBoundingClientRect();
+      const btn = el.querySelector('.funnel-reopen') as HTMLElement;
+      const btnRect = btn.getBoundingClientRect();
+      const styles = getComputedStyle(btn);
+      return {
+        cardTop: rect.top,
+        cardBottom: rect.bottom,
+        buttonHeight: btnRect.height,
+        buttonBg: styles.backgroundColor,
+        buttonColor: styles.color,
+      };
+    });
+
+    expect(metrics.cardTop).toBeGreaterThanOrEqual(0);
+    expect(metrics.cardTop).toBeLessThan(620);
+    expect(metrics.cardBottom).toBeLessThanOrEqual(844);
+    expect(metrics.buttonHeight).toBeGreaterThanOrEqual(50);
+    expect(metrics.buttonBg).toBe('rgb(168, 58, 58)');
+    expect(metrics.buttonColor).toBe('rgb(255, 255, 255)');
   });
 
-  test('mobile opens as a viewport overlay with fixed skip', async ({ page }) => {
+  test('opens inline as a template card, not as a fixed full-screen overlay', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openFresh(page);
 
     const state = await page.evaluate(() => {
       const funnel = document.querySelector('#funnel') as HTMLElement;
-      const container = document.querySelector('.funnel-container') as HTMLElement;
+      const app = document.querySelector('.funnel-app') as HTMLElement;
       const skip = document.querySelector('#funnel-skip') as HTMLElement;
       const funnelRect = funnel.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
+      const appRect = app.getBoundingClientRect();
       const skipRect = skip.getBoundingClientRect();
 
       return {
         htmlActive: document.documentElement.classList.contains('funnel-active'),
         htmlInline: document.documentElement.classList.contains('funnel-inline'),
         funnelPosition: getComputedStyle(funnel).position,
-        funnelTop: funnelRect.top,
-        funnelBottom: funnelRect.bottom,
+        appBackground: getComputedStyle(app).backgroundColor,
+        appRadius: parseFloat(getComputedStyle(app).borderRadius),
+        appWidth: appRect.width,
         funnelHeight: funnelRect.height,
         viewportHeight: window.innerHeight,
-        containerCenterDelta: Math.abs((containerRect.top + containerRect.height / 2) - window.innerHeight / 2),
-        skipBottom: window.innerHeight - skipRect.bottom,
+        skipPosition: getComputedStyle(skip).position,
         skipTop: skipRect.top,
-        scrollY: window.scrollY
+        scrollY: window.scrollY,
       };
     });
 
     expect(state.htmlActive).toBe(true);
     expect(state.htmlInline).toBe(false);
-    expect(state.funnelPosition).toBe('fixed');
-    expect(Math.abs(state.funnelTop)).toBeLessThanOrEqual(1);
-    expect(Math.abs(state.funnelBottom - state.viewportHeight)).toBeLessThanOrEqual(1);
-    expect(state.funnelHeight).toBeGreaterThanOrEqual(state.viewportHeight - 1);
-    expect(state.containerCenterDelta).toBeLessThanOrEqual(90);
-    expect(state.skipBottom).toBeGreaterThanOrEqual(8);
-    expect(state.skipTop).toBeGreaterThan(state.viewportHeight - 120);
-    expect(state.scrollY).toBe(0);
+    expect(state.funnelPosition).not.toBe('fixed');
+    expect(state.funnelHeight).toBeLessThan(state.viewportHeight * 1.25);
+    expect(state.appWidth).toBeLessThanOrEqual(760);
+    expect(state.appBackground).toBe('rgb(255, 255, 255)');
+    expect(state.appRadius).toBeGreaterThanOrEqual(10);
+    expect(state.skipPosition).toBe('absolute');
+    expect(state.skipTop).toBeGreaterThanOrEqual(0);
+    expect(state.scrollY).toBeGreaterThan(0);
   });
 
-  test('mobile locks background scroll until skip', async ({ page }) => {
+  test('page scroll stays normal while the inline funnel is open', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openFresh(page);
 
-    await page.mouse.wheel(0, 900);
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+    const before = await page.evaluate(() => window.scrollY);
+    await page.mouse.wheel(0, 600);
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(before);
 
     await page.locator('#funnel-skip').click();
     await expect(page.locator('#funnel')).toBeHidden();
     await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('funnel-active'))).toBe(false);
-
-    await page.mouse.wheel(0, 900);
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+    await expect(page.locator('#funnel-reopen')).toBeVisible();
   });
 
-  test('completed funnel does not style the document as the skip button', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.addInitScript(() => localStorage.setItem('funnel-done', '1'));
-    await page.goto(ROOT);
-
-    await expect(page.locator('#funnel')).toBeHidden();
-    await expect(page.locator('.hero')).toBeInViewport();
-
-    const state = await page.evaluate(() => {
-      const htmlStyles = getComputedStyle(document.documentElement);
-      const hero = document.querySelector('.hero') as HTMLElement;
-
-      return {
-        htmlClass: document.documentElement.className,
-        htmlPosition: htmlStyles.position,
-        htmlVisibility: htmlStyles.visibility,
-        htmlOpacity: htmlStyles.opacity,
-        heroTop: hero.getBoundingClientRect().top
-      };
-    });
-
-    expect(state.htmlClass).toContain('funnel-skip');
-    expect(state.htmlPosition).toBe('static');
-    expect(state.htmlVisibility).toBe('visible');
-    expect(state.htmlOpacity).toBe('1');
-    expect(state.heroTop).toBeGreaterThanOrEqual(0);
-    expect(state.heroTop).toBeLessThan(120);
-  });
-
-  test('mobile keeps skip visible through funnel steps', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
-    await openFresh(page);
-
-    for (let i = 0; i < 3; i++) {
-      await page.locator('.funnel-option').first().click();
-      await expect(page.locator('#funnel-skip')).toBeVisible();
-      await expect(page.locator('.funnel-container')).toBeInViewport();
-      await page.waitForTimeout(100);
-    }
-  });
-
-  test('mobile keeps the funnel position stable while content settles', async ({ page }) => {
+  test('question flow stays stable on mobile while content settles', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openFresh(page);
 
     await page.waitForTimeout(250);
-    const first = await page.locator('.funnel-container').boundingBox();
+    const first = await page.locator('.funnel-app').boundingBox();
 
     await page.waitForTimeout(900);
-    const mid = await page.locator('.funnel-container').boundingBox();
+    const mid = await page.locator('.funnel-app').boundingBox();
 
-    await page.waitForTimeout(1100);
-    const done = await page.locator('.funnel-container').boundingBox();
+    await page.waitForTimeout(900);
+    const done = await page.locator('.funnel-app').boundingBox();
 
     expect(first).not.toBeNull();
     expect(mid).not.toBeNull();
     expect(done).not.toBeNull();
 
-    const tops = [first!.y, mid!.y, done!.y];
-    const topDelta = Math.max(...tops) - Math.min(...tops);
-    expect(topDelta).toBeLessThanOrEqual(4);
+    const widths = [first!.width, mid!.width, done!.width];
+    const widthDelta = Math.max(...widths) - Math.min(...widths);
+    expect(widthDelta).toBeLessThanOrEqual(2);
   });
 
-  test('small mobile viewport shows a visible scrollbar when funnel content overflows', async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 360 });
+  test('contact result creates a useful German mail draft with real umlauts', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await openFresh(page);
 
-    const state = await page.evaluate(() => {
-      const container = document.querySelector('.funnel-container') as HTMLElement;
-      const styles = getComputedStyle(container);
+    await page.getByRole('button', { name: /Kontakt aufnehmen/i }).click();
+    await expect(page.getByRole('heading', { name: /Kurzer Draht/i })).toBeVisible();
+    await page.getByRole('button', { name: /Mail schreiben/i }).click();
+    await expect(page.locator('.funnel-contact-send')).toBeVisible();
 
-      container.scrollTop = 0;
-      container.scrollTop = 48;
-
-      return {
-        canOverflow: container.scrollHeight > container.clientHeight,
-        scrolled: container.scrollTop > 0,
-        scrollbarWidth: styles.scrollbarWidth,
-        overflowY: styles.overflowY
-      };
-    });
-
-    expect(state.canOverflow).toBe(true);
-    expect(state.scrolled).toBe(true);
-    expect(state.overflowY).toBe('auto');
-    expect(state.scrollbarWidth).not.toBe('none');
+    const email = await decodedMailto(page);
+    expect(email.subject).toBe('Kurze Anfrage');
+    expect(email.body).toContain('Kurzcheck-Ergebnis:');
+    expect(email.body).toContain('Mein Weg:');
+    expect(email.body).toContain('Können wir kurz telefonieren?');
+    expect(email.body).not.toContain('Berater-Funnel');
+    expect(email.body).not.toMatch(/\b(moechte|koennen|fuer|ueber|wuerde|pruefen|klaeren|noetig)\b/i);
   });
 
-  test('desktop remains an overlay with fixed skip', async ({ page }) => {
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await openFresh(page);
-
-    await expect(page.locator('#funnel')).toHaveCSS('position', 'fixed');
-    await expect(page.locator('#funnel-skip')).toBeVisible();
-    await expect(page.locator('#funnel')).toBeInViewport();
-  });
-
-  test('english home uses the same overlay behavior', async ({ page }) => {
+  test('english home uses the same inline behavior', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openFresh(page, '/en/');
 
-    await expect(page.locator('#funnel')).toHaveCSS('position', 'fixed');
-    await expect(page.locator('#funnel-skip')).toHaveText('Skip');
+    await expect(page.locator('#funnel')).not.toHaveCSS('position', 'fixed');
+    await expect(page.locator('#funnel-skip')).toHaveText('Close');
     await expect(page.locator('#funnel-skip')).toBeVisible();
     await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('funnel-inline'))).toBe(false);
   });

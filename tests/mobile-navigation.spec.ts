@@ -55,21 +55,13 @@ for (const viewport of MOBILE_VIEWPORTS) {
 
         const hamburger = page.locator('#header-hamburger');
         const desktopNav = page.locator('.site-header .header-nav');
-        const headerCta = desktopNav.locator('.header-nav-cta');
+        const headerCta = page.locator('.site-header .header-meta-cta').first();
         const mobileMenu = page.locator('#mobile-menu');
 
         await expect(hamburger).toBeVisible();
-        await expect(desktopNav).toBeVisible();
+        await expect(desktopNav).toBeHidden();
         await expect(headerCta).toBeVisible();
-        const visibleNonCta = await desktopNav.evaluate((nav) =>
-          Array.from(nav.children).filter((child) => {
-            if (child.classList.contains('header-nav-cta')) return false;
-            const style = window.getComputedStyle(child);
-            const box = child.getBoundingClientRect();
-            return style.display !== 'none' && box.width > 0 && box.height > 0;
-          }).length
-        );
-        expect(visibleNonCta).toBe(0);
+        await expect(headerCta).toHaveCSS('background-color', 'rgb(168, 58, 58)');
         await expect(mobileMenu).toBeHidden();
 
         await hamburger.click();
@@ -115,9 +107,12 @@ for (const viewport of DESKTOP_VIEWPORTS) {
         const hamburger = page.locator('#header-hamburger');
         const desktopNav = page.locator('.site-header .header-nav');
         const navLinks = desktopNav.locator('a');
+        const headerCta = page.locator('.site-header .header-meta-cta').first();
 
         await expect(hamburger).toBeHidden();
         await expect(desktopNav).toBeVisible();
+        await expect(headerCta).toBeVisible();
+        await expect(headerCta).toHaveCSS('background-color', 'rgb(168, 58, 58)');
         expect(await navLinks.count()).toBeGreaterThan(5);
 
         const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);

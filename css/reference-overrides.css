@@ -222,7 +222,7 @@ html.funnel-active .site-header ~ main {
   max-width: var(--max-width);
   min-height: 70px;
   padding: 0.875rem 2rem;
-  gap: 1.5rem;
+  gap: 0;
   justify-content: space-between;
 }
 
@@ -331,17 +331,44 @@ html.funnel-active .site-header ~ main {
 }
 
 .header-nav-cta {
-  background: var(--color-accent) !important;
-  border: 1px solid var(--color-accent);
-  color: #fff !important;
-  font-weight: 600;
-  box-shadow: var(--shadow-sm);
+  background: transparent !important;
+  border: 0;
+  color: var(--color-text-secondary) !important;
+  font-weight: 400;
+  box-shadow: none;
 }
 
-.header-nav-cta:hover {
-  background: var(--color-accent-hover) !important;
-  border-color: var(--color-accent-hover);
+.header-nav-cta:hover,
+.header-nav-cta.header-nav-active {
+  background: var(--color-bg-alt) !important;
+  border-color: transparent;
+  color: var(--color-text) !important;
+}
+
+.header-meta-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 42px;
+  padding: 0.625rem 1.125rem;
+  border: 0;
+  border-radius: 10px;
+  background: var(--color-accent) !important;
   color: #fff !important;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 0;
+  text-decoration: none;
+  box-shadow: var(--shadow-md);
+}
+
+.header-meta-cta:hover {
+  background: var(--color-accent-hover) !important;
+  color: #fff !important;
+  text-decoration: none;
 }
 
 .header-right {
@@ -350,8 +377,8 @@ html.funnel-active .site-header ~ main {
 }
 
 .header-right .pill-toggle:has(.darkmode-checkbox) .pill-track {
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   justify-content: center;
   padding: 0;
 }
@@ -385,6 +412,61 @@ html.funnel-active .site-header ~ main {
 .pill-option {
   font-family: var(--font-mono);
   letter-spacing: 0.05em;
+}
+
+.pill-toggle:not(:has(.darkmode-checkbox)):not(:has(.darkmode-checkbox-mobile)) .pill-track {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 70px;
+  height: 34px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.pill-toggle:not(:has(.darkmode-checkbox)):not(:has(.darkmode-checkbox-mobile)) .pill-indicator {
+  display: none;
+}
+
+.pill-toggle:not(:has(.darkmode-checkbox)):not(:has(.darkmode-checkbox-mobile)) .pill-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 32px;
+  padding: 0.4375rem 0.625rem;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 0.71875rem;
+  line-height: 1.6;
+  letter-spacing: 0.05em;
+  color: var(--color-text-light) !important;
+}
+
+.pill-toggle:not(:has(.darkmode-checkbox)):not(:has(.darkmode-checkbox-mobile)) .pill-option.active {
+  background: var(--color-text);
+  color: var(--color-bg) !important;
+}
+
+.header-nav-dropdown-menu a {
+  align-items: flex-start;
+  gap: 0.125rem;
+  min-height: 64px;
+  padding: 0.625rem 0.75rem !important;
+}
+
+.header-nav-dropdown-menu a span {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+  color: var(--color-text);
+}
+
+.header-nav-dropdown-menu a small {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--color-text-light);
 }
 
 .logo-link img {
@@ -463,10 +545,93 @@ html.funnel-active .site-header ~ main {
 
 .hero-lead {
   max-width: 35rem;
-  margin-bottom: 2.25rem;
+  margin-bottom: 1.25rem;
   color: var(--color-text-secondary);
   font-size: 1.1875rem;
   line-height: 1.55;
+}
+
+.quickcheck-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.125rem;
+  border: 1px solid color-mix(in oklab, var(--color-accent) 32%, var(--color-border));
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(135deg, color-mix(in oklab, var(--color-accent) 9%, var(--color-bg-card)) 0%, var(--color-bg-card) 56%),
+    var(--color-bg-card);
+  box-shadow: 0 18px 48px rgba(26, 26, 24, 0.08);
+}
+
+.quickcheck-card--hero {
+  max-width: 42rem;
+  margin: 0 0 1.125rem;
+}
+
+.quickcheck-copy {
+  min-width: 0;
+}
+
+.quickcheck-kicker {
+  margin-bottom: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.quickcheck-card h2 {
+  margin: 0 0 0.375rem;
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+}
+
+.quickcheck-card p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.quickcheck-card .funnel-reopen {
+  align-self: center;
+  min-width: 11.5rem;
+  min-height: 52px;
+  justify-content: center;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  box-shadow: 0 12px 28px rgba(168, 58, 58, 0.22);
+}
+
+.quickcheck-card .funnel-reopen:hover,
+.quickcheck-card .funnel-reopen:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(168, 58, 58, 0.28);
+}
+
+.quickcheck-icon {
+  display: inline-grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.quickcheck-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+html.funnel-active .quickcheck-card {
+  display: none;
 }
 
 .hero-ctas {
@@ -566,12 +731,13 @@ html.funnel-active .site-header ~ main {
 
 @media (min-width: 1101px) {
   .hero-sidebar {
-    margin-top: 1.125rem;
+    align-self: start;
+    margin-top: 2.55rem;
   }
 }
 
 .portrait-frame {
-  aspect-ratio: 1 / 1.15;
+  aspect-ratio: 1 / 1;
   border: 0;
   border-radius: 10px;
   background: var(--color-bg-alt);
@@ -582,11 +748,11 @@ html.funnel-active .site-header ~ main {
 }
 
 .portrait {
-  aspect-ratio: 1 / 1.15;
+  aspect-ratio: 1 / 1;
   border-radius: 10px;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center center;
   background: var(--color-bg-alt);
 }
@@ -908,10 +1074,19 @@ html.funnel-active .site-header ~ main {
 .contact-section--hero .contact-inner {
   padding: 3rem;
   border-radius: var(--radius-xl);
-  border: 1px solid color-mix(in oklab, var(--color-text) 20%, transparent);
-  background: var(--color-text);
-  color: var(--color-bg);
+  border: 1px solid color-mix(in oklab, #fff 18%, transparent);
+  background: var(--color-accent);
+  color: #fff;
   box-shadow: var(--shadow-xl);
+}
+
+body:has(.darkmode-checkbox:checked) .contact-card,
+body:has(.darkmode-checkbox-mobile:checked) .contact-card,
+body:has(.darkmode-checkbox:checked) .contact-section--hero .contact-inner,
+body:has(.darkmode-checkbox-mobile:checked) .contact-section--hero .contact-inner {
+  background: #a83a3a;
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #fff;
 }
 
 .contact-card h2,
@@ -927,7 +1102,7 @@ html.funnel-active .site-header ~ main {
 
 .contact-card .eyebrow,
 .contact-section--hero .contact-inner .eyebrow {
-  opacity: 0.7;
+  opacity: 0.78;
 }
 
 .contact-grid {
@@ -941,8 +1116,8 @@ html.funnel-active .site-header ~ main {
   min-width: 0;
   padding: 1rem;
   border-radius: 10px;
-  background: color-mix(in oklab, var(--color-bg) 8%, transparent);
-  border: 1px solid color-mix(in oklab, var(--color-bg) 16%, transparent);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .contact-method a,
@@ -953,7 +1128,7 @@ html.funnel-active .site-header ~ main {
 
 .contact-method-label {
   margin-bottom: 0.375rem;
-  color: color-mix(in oklab, var(--color-bg) 60%, transparent);
+  color: rgba(255, 255, 255, 0.72);
   font-size: 0.75rem;
   text-transform: uppercase;
 }
@@ -969,9 +1144,24 @@ html.funnel-active .site-header ~ main {
 .contact-card .guarantee,
 .contact-card .promise,
 .contact-section--hero .guarantee {
-  border-color: color-mix(in oklab, var(--color-bg) 18%, transparent);
-  background: color-mix(in oklab, var(--color-bg) 8%, transparent);
-  color: color-mix(in oklab, var(--color-bg) 80%, transparent);
+  border-color: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.contact-card .btn-primary,
+.contact-section--hero .contact-inner .btn-primary {
+  background: #fff;
+  border-color: #fff;
+  color: var(--color-accent);
+  box-shadow: 0 1px 2px rgba(20, 20, 18, 0.08), 0 12px 28px rgba(20, 20, 18, 0.12);
+}
+
+.contact-card .btn-primary:hover,
+.contact-section--hero .contact-inner .btn-primary:hover {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(255, 255, 255, 0.92);
+  color: var(--color-accent-hover);
 }
 
 /* Editorial subpages */
@@ -1011,9 +1201,13 @@ main > .hero:not(:has(.hero-inner)) + section {
   padding-top: 2rem;
 }
 
-/* Disable the old full-screen funnel-first visual mode. */
+/* Project compass: inline template card instead of the old full-screen mode. */
 html.funnel-active {
-  overflow: auto;
+  overflow: auto !important;
+}
+
+html.funnel-active body {
+  overflow: auto !important;
 }
 
 html.funnel-active .funnel {
@@ -1021,9 +1215,185 @@ html.funnel-active .funnel {
 }
 
 .funnel {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 1;
+  display: block;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 4rem 1.25rem;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   background: var(--color-bg-alt);
+}
+
+.funnel::before,
+.funnel-constellation,
+.funnel-spotlight {
+  display: none !important;
+}
+
+.funnel-container {
+  width: min(100%, 760px);
+  max-width: 760px;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 auto;
+  padding: 0;
+  overflow: visible;
+}
+
+.funnel-app {
+  min-height: 0;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg-card);
+  box-shadow: var(--shadow-card);
+}
+
+.funnel-back {
+  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-style: normal;
+  letter-spacing: 0.02em;
+}
+
+.funnel-step-label {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.funnel-question,
+.funnel-result-title {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+.funnel-question {
+  font-size: clamp(1.625rem, 4vw, 2.75rem);
+}
+
+.funnel-subtitle,
+.funnel-contact-intro-sub {
+  font-family: var(--font-sans);
+  font-style: normal;
+}
+
+.funnel-info-block {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.125rem;
+  border: 1px solid color-mix(in oklab, var(--color-accent) 24%, var(--color-border));
+  border-left: 4px solid var(--color-accent);
+  border-radius: 10px;
+  background: color-mix(in oklab, var(--color-accent) 6%, var(--color-bg-card));
+}
+
+.funnel-info-text {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.funnel-info-detail {
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.funnel-option {
+  min-height: 54px;
+  border-radius: 10px;
+  background: var(--color-bg-card);
+  border-color: var(--color-border);
+  box-shadow: none;
+}
+
+.funnel-option:hover,
+.funnel-option:focus-visible {
+  background: var(--color-bg-alt);
+  border-color: var(--color-accent);
+}
+
+.funnel-option-num {
+  width: 1.75rem;
+  height: 1.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.75rem;
+  border-radius: 999px;
+  background: var(--color-bg-alt);
+  color: var(--color-text-light);
+}
+
+.funnel-option:hover .funnel-option-num {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.funnel-accent-line {
+  margin-bottom: 1.25rem;
+}
+
+#funnel-skip {
+  position: absolute;
+  top: 1.25rem;
+  right: max(1.25rem, calc((100vw - 760px) / 2));
+  bottom: auto;
+  left: auto;
+  transform: none;
+  width: auto;
+  min-height: 38px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+#funnel-skip:hover {
+  transform: translateY(-1px);
+}
+
+.funnel-contact-preview {
+  border-radius: 10px;
+  background: var(--color-bg);
+}
+
+.funnel-contact-preview-header {
+  background: var(--color-bg-card);
+}
+
+.funnel-contact-send {
+  border-radius: 10px;
+}
+
+@media (max-width: 760px) {
+  .quickcheck-card {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .quickcheck-card .funnel-reopen {
+    align-self: auto;
+    width: 100%;
+  }
+
+  .funnel {
+    padding: 2.75rem 1rem 3rem;
+  }
+
+  #funnel-skip {
+    top: 0.75rem;
+    right: 1rem;
+  }
 }
 
 /* Responsive */
@@ -1071,38 +1441,26 @@ html.funnel-active .funnel {
   }
 
   .site-header .header-nav {
-    display: flex !important;
-    order: 0 !important;
-    width: auto !important;
-    margin-left: auto;
-    padding-top: 0 !important;
-    border-top: 0 !important;
-    justify-content: flex-end !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
-  }
-
-  .site-header .header-nav > :not(.header-nav-cta) {
     display: none !important;
-  }
-
-  .site-header .header-nav-cta {
-    display: inline-flex !important;
-    align-items: center;
-    min-height: 40px;
-    padding: 0.55rem 0.85rem !important;
-    font-size: 0.8125rem;
   }
 
   .header-right {
     display: flex !important;
     align-items: center;
-    gap: 0;
+    gap: 0.5rem;
     margin-left: 0;
   }
 
-  .header-right > :not(.header-hamburger) {
+  .header-right > :not(.header-meta-cta):not(.header-hamburger) {
     display: none !important;
+  }
+
+  .header-meta-cta {
+    display: inline-flex !important;
+    min-height: 40px;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.8125rem;
+    white-space: nowrap;
   }
 
   .header-hamburger {
@@ -1402,7 +1760,7 @@ html.funnel-active .funnel {
     height: 30px;
   }
 
-  .header-nav-cta {
+  .header-meta-cta {
     padding: 0.5rem 0.625rem !important;
     font-size: 0.75rem;
   }

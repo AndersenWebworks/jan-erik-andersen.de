@@ -171,10 +171,10 @@ html.funnel-skip .site-header ~ main { padding-top: 3.5rem; }
 .funnel-option:hover .funnel-option-num { color: var(--color-accent); }
 
 /* --- Slide Animations --- */
-.funnel-slide-out-left { animation: slideOutLeft 350ms cubic-bezier(0.55, 0, 1, 0.45) forwards; }
-.funnel-slide-out-right { animation: slideOutRight 350ms cubic-bezier(0.55, 0, 1, 0.45) forwards; }
-.funnel-slide-in-right { animation: slideInRight 450ms cubic-bezier(0, 0, 0.15, 1) forwards; }
-.funnel-slide-in-left { animation: slideInLeft 450ms cubic-bezier(0, 0, 0.15, 1) forwards; }
+.funnel-slide-out-left { animation: slideOutLeft 180ms cubic-bezier(0.55, 0, 1, 0.45) forwards; }
+.funnel-slide-out-right { animation: slideOutRight 180ms cubic-bezier(0.55, 0, 1, 0.45) forwards; }
+.funnel-slide-in-right { animation: slideInRight 220ms cubic-bezier(0, 0, 0.15, 1) forwards; }
+.funnel-slide-in-left { animation: slideInLeft 220ms cubic-bezier(0, 0, 0.15, 1) forwards; }
 
 @keyframes slideOutLeft {
   from { opacity: 1; transform: translateX(0) scale(1); }

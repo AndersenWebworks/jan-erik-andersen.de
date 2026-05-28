@@ -2,14 +2,14 @@
   "meta": {
     "version": "4.0",
     "language": "en",
-    "updated": "2026-04-23",
-    "changelog": "Complete restructuring synced with DE: Fewer steps, more info per step, respectful exits, fast tracks"
+    "updated": "2026-05-28",
+    "changelog": "Project compass refit: visible hero CTA, inline instead of full-screen overlay, cleaner email results"
   },
   "nodes": {
     "start": {
       "type": "question",
-      "text": "What can I do for you?",
-      "subtitle": "Three minutes well spent. Or read on your own – no problem.",
+      "text": "What do you need help with?",
+      "subtitle": "A few clicks – then you know what fits, roughly what it costs and whether we should talk.",
       "options": [
         {
           "label": "I need a website or shop",
