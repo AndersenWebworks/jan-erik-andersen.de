@@ -1,4 +1,4 @@
-﻿/* ===== css/tokens.css ===== */
+/* ===== css/tokens.css ===== */
 /* ============================================
    TOKENS — Design Variables
    Single source of truth for all visual values.
@@ -24,8 +24,8 @@
 
 :root {
   /* Colors — warm neutrals (off-white papers, warm inks) */
-  --color-bg: #FAFAF7;
-  --color-bg-alt: #F2F1EC;
+  --color-bg: #FFFFFF;
+  --color-bg-alt: #F5F4EE;
   --color-bg-card: #FFFFFF;
   --color-bg-dark: #1A1A18;
   --color-text: #1A1A18;
@@ -4529,8 +4529,8 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
 }
 
 :root {
-  --color-bg: #fafaf7;
-  --color-bg-alt: #f2f1ec;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f5f4ee;
   --color-bg-muted: #e8e7e0;
   --color-bg-card: #ffffff;
   --color-text: #1a1a18;
@@ -4767,20 +4767,16 @@ html.funnel-active .site-header ~ main {
   white-space: nowrap;
 }
 
-.header-brand-name {
-  width: 4.15rem;
-  margin-right: 0.2em;
-}
+.header-brand-name { margin-right: 0.2em; }
 
-.header-brand-surname {
-  width: 4.25rem;
-}
+.header-brand-surname { width: auto; }
 
 .header-nav {
   display: flex;
   align-items: center;
   gap: 0.375rem;
-  margin-left: auto;
+  margin-left: 6rem;
+  margin-right: auto;
   opacity: 1;
   pointer-events: auto;
   font-family: var(--font-sans);
@@ -4858,6 +4854,33 @@ html.funnel-active .site-header ~ main {
   margin-left: 0;
 }
 
+.header-right .pill-toggle:has(.darkmode-checkbox) .pill-track {
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  padding: 0;
+}
+
+.header-right .pill-toggle:has(.darkmode-checkbox) .pill-option,
+.header-right .pill-toggle:has(.darkmode-checkbox) .pill-indicator {
+  display: none;
+}
+
+.header-right .pill-toggle:has(.darkmode-checkbox) .pill-track::before {
+  content: '';
+  width: 15px;
+  height: 15px;
+  border: 1.7px solid var(--color-text-secondary);
+  border-left-color: transparent;
+  border-radius: 50%;
+  transform: rotate(-18deg);
+}
+
+.header-right .pill-toggle:has(.darkmode-checkbox):hover .pill-track::before {
+  border-color: var(--color-text);
+  border-left-color: transparent;
+}
+
 .pill-track {
   border-color: var(--color-border);
   border-radius: 8px;
@@ -4873,6 +4896,10 @@ html.funnel-active .site-header ~ main {
   width: 20px;
   height: 20px;
   opacity: 0.65;
+}
+
+.site-header .logo-link {
+  display: none;
 }
 
 .header-hamburger {
@@ -4904,11 +4931,16 @@ html.funnel-active .site-header ~ main {
   font-variation-settings: 'wght' 600;
 }
 
+.hero:has(.hero-inner) .eyebrow {
+  margin-bottom: 3.75rem;
+}
+
 .hero-typewriter {
   min-height: auto;
 }
 
 .hero-typewriter .accent-word {
+  display: inline;
   color: var(--color-accent);
 }
 
@@ -4948,9 +4980,44 @@ html.funnel-active .site-header ~ main {
   margin-bottom: 2rem;
 }
 
+.hero-ctas::after {
+  content: '';
+  order: 2;
+  flex-basis: 100%;
+  height: 0;
+}
+
+.hero-ctas .btn-primary {
+  order: 1;
+  min-width: 14.25rem;
+}
+
+.hero-ctas .btn-secondary {
+  order: 2;
+  min-width: 8.75rem;
+}
+
 .hero-ctas .funnel-reopen {
+  order: 3;
   grid-column: auto;
-  width: auto;
+  flex: 0 0 auto;
+  width: max-content;
+  min-height: 0;
+  margin-top: 0.25rem;
+  padding: 0.25rem 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.hero-ctas .funnel-reopen:hover,
+.hero-ctas .funnel-reopen:focus-visible {
+  background: transparent;
+  color: var(--color-accent);
+  border-color: transparent;
 }
 
 .hero-pills,
@@ -4995,6 +5062,12 @@ html.funnel-active .site-header ~ main {
   background: var(--color-bg-card);
   box-shadow: var(--shadow-card);
   padding: 1.25rem;
+}
+
+@media (min-width: 1101px) {
+  .hero-sidebar {
+    margin-top: 1.125rem;
+  }
 }
 
 .portrait-frame {
@@ -5659,8 +5732,8 @@ html.funnel-active .funnel {
 
   h1,
   .hero-content h1 {
-    font-size: 2.35rem;
-    line-height: 1.05;
+    font-size: 2.5rem;
+    line-height: 1.02;
   }
 
   h2,
@@ -5684,12 +5757,17 @@ html.funnel-active .funnel {
   }
 
   .header-brand {
-    max-width: 9.5rem;
+    max-width: 10.75rem;
     white-space: normal;
   }
 
   .hero {
     padding-top: 4rem;
+  }
+
+  .hero:has(.hero-inner) .eyebrow {
+    max-width: 20rem;
+    margin-bottom: 1rem;
   }
 
   main > .hero:not(:has(.hero-inner)) {
@@ -5700,7 +5778,12 @@ html.funnel-active .funnel {
     padding-top: 1.5rem;
   }
 
-  .hero-ctas,
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
   .section-cta {
     display: grid;
     grid-template-columns: 1fr;
@@ -5709,10 +5792,15 @@ html.funnel-active .funnel {
 
   .hero-ctas .funnel-reopen {
     background: transparent;
-    border-color: var(--color-border-dark);
+    border-color: transparent;
     color: var(--color-text);
     box-shadow: none;
     font-size: 0.8125rem;
+    justify-content: flex-start;
+    flex: 0 0 auto;
+    width: max-content;
+    max-width: 100%;
+    margin-top: 0.125rem;
   }
 
   .hero-ctas .funnel-reopen svg {
@@ -5720,7 +5808,10 @@ html.funnel-active .funnel {
   }
 
   .hero-ctas .btn,
-  .hero-ctas .funnel-reopen,
+  .hero-ctas .funnel-reopen {
+    width: auto;
+  }
+
   .section-cta .btn {
     width: 100%;
   }
