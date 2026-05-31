@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="168" viewBox="0 0 620 168" role="img" aria-labelledby="title desc">
+  <title id="title">Jan-Erik Andersen Wortmarke</title>
+  <desc id="desc">Typografische Wortmarke mit Andersen als Hauptname und Jan-Erik als kleiner Absenderzeile.</desc>
+  <rect x="18" y="22" width="7" height="104" rx="3.5" fill="#A83A3A"/>
+  <text x="52" y="50" fill="#4A4A46" font-family="Inter, Arial, sans-serif" font-size="20" font-weight="750">Jan-Erik</text>
+  <text x="50" y="122" fill="#1A1A18" font-family="Georgia, 'Times New Roman', serif" font-size="76" font-weight="700">Andersen<tspan fill="#A83A3A">.</tspan></text>
+  <rect x="52" y="143" width="46" height="5" rx="2.5" fill="#A83A3A"/>
+  <text x="116" y="150" fill="#86857D" font-family="Inter, Arial, sans-serif" font-size="16" font-weight="650">Webentwicklung · Shops · Betreuung · seit 1999</text>
+</svg>
