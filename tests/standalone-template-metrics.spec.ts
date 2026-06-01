@@ -80,8 +80,11 @@ test.describe('visible standalone template metrics', () => {
     expect(currentEyebrow.fontFamily).toContain('JetBrains Mono');
     expect(currentEyebrow.letterSpacing).toBe('0.72px');
 
-    const { template: templateNav, current: currentNav } = await currentAndTemplate(page, '/', 'nav');
-    expectClose(currentNav.x, templateNav.x, 24);
+    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.waitForTimeout(500);
+    const currentBrand = await elementMetric(page, '.header-brand');
+    const currentNav = await elementMetric(page, 'nav');
+    expectClose(currentNav.x, currentBrand.x + currentBrand.width + 48, 8);
   });
 
   test('homepage mobile hero keeps the standalone rhythm before functional extras', async ({ page }) => {
@@ -102,16 +105,14 @@ test.describe('visible standalone template metrics', () => {
 
     await page.goto('/', { waitUntil: 'networkidle' });
     const primary = await elementMetric(page, '.hero-ctas .btn-primary');
-    const secondary = await elementMetric(page, '.hero-ctas .btn-secondary');
     const quickCheck = await elementMetric(page, '.quickcheck-card .funnel-reopen');
 
     expect(primary.x).toBe(20);
     expect(primary.height).toBeLessThanOrEqual(46);
-    expect(secondary.x).toBe(20);
-    expect(secondary.height).toBeLessThanOrEqual(48);
-    expect(quickCheck.y).toBeLessThan(secondary.y);
-    expect(quickCheck.height).toBeGreaterThanOrEqual(50);
-    expect(quickCheck.background).toBe('rgb(168, 58, 58)');
+    await expect(page.locator('.hero-ctas .btn-secondary')).toBeHidden();
+    expect(quickCheck.y).toBeGreaterThan(primary.y);
+    expect(quickCheck.height).toBeGreaterThanOrEqual(46);
+    expect(quickCheck.background).toBe('rgba(0, 0, 0, 0)');
   });
 
   test('homepage portrait fills the template card without letterbox bars', async ({ page }) => {

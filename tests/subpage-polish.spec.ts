@@ -50,10 +50,10 @@ test.describe('subpage mobile polish', () => {
       });
 
       expect(box).toBeTruthy();
-      expect(box!.height).toBeGreaterThanOrEqual(50);
-      expect(box!.height).toBeLessThanOrEqual(58);
-      expect(styles.background).toBe('rgb(168, 58, 58)');
-      expect(styles.color).toBe('rgb(255, 255, 255)');
+      expect(box!.height).toBeGreaterThanOrEqual(46);
+      expect(box!.height).toBeLessThanOrEqual(54);
+      expect(styles.background).toBe('rgba(0, 0, 0, 0)');
+      expect(styles.color).toBe('rgb(26, 26, 24)');
     });
   }
 });

@@ -57,13 +57,12 @@ test.describe('header follows standalone template controls', () => {
     });
   }
 
-  test('mobile header keeps template CTA while preserving the site menu', async ({ page }) => {
+  test('mobile header keeps only brand and menu in the top row', async ({ page }) => {
     await page.setViewportSize(mobile);
     await page.goto('/');
 
     await expect(page.locator('.header-nav')).toBeHidden();
-    await expect(page.locator('.header-meta-cta').first()).toBeVisible();
-    await expect(page.locator('.header-meta-cta').first()).toHaveCSS('background-color', 'rgb(168, 58, 58)');
+    await expect(page.locator('.header-meta-cta').first()).toBeHidden();
     await expect(page.locator('.header-hamburger')).toBeVisible();
 
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);

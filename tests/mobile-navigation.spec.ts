@@ -60,8 +60,7 @@ for (const viewport of MOBILE_VIEWPORTS) {
 
         await expect(hamburger).toBeVisible();
         await expect(desktopNav).toBeHidden();
-        await expect(headerCta).toBeVisible();
-        await expect(headerCta).toHaveCSS('background-color', 'rgb(168, 58, 58)');
+        await expect(headerCta).toBeHidden();
         await expect(mobileMenu).toBeHidden();
 
         await hamburger.click();

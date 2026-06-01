@@ -6006,16 +6006,12 @@ html.funnel-active .funnel {
     margin-left: 0;
   }
 
-  .header-right > :not(.header-meta-cta):not(.header-hamburger) {
+  .header-right > :not(.header-hamburger) {
     display: none !important;
   }
 
   .header-meta-cta {
-    display: inline-flex !important;
-    min-height: 40px;
-    padding: 0.55rem 0.85rem;
-    font-size: 0.8125rem;
-    white-space: nowrap;
+    display: none !important;
   }
 
   .header-hamburger {
@@ -6189,6 +6185,11 @@ html.funnel-active .funnel {
     padding-top: 4rem;
   }
 
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+  }
+
   .hero:has(.hero-inner) .eyebrow {
     max-width: 20rem;
     margin-bottom: 1rem;
@@ -6206,6 +6207,81 @@ html.funnel-active .funnel {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    order: 3;
+    margin-bottom: 1.25rem;
+  }
+
+  .hero-ctas .btn-primary {
+    width: 100%;
+    max-width: 22rem;
+    min-width: 0;
+  }
+
+  .hero-ctas .btn-secondary {
+    display: none;
+  }
+
+  .quickcheck-card {
+    order: 4;
+    gap: 0.875rem;
+    margin: 0 0 1.5rem;
+    padding: 1rem 0 0;
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .quickcheck-kicker {
+    margin-bottom: 0.3rem;
+    color: var(--color-text-light);
+    letter-spacing: 0.05em;
+  }
+
+  .quickcheck-card h2 {
+    margin-bottom: 0.25rem;
+    font-size: 1.125rem;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .quickcheck-card p {
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .quickcheck-card .funnel-reopen {
+    min-height: 46px;
+    padding: 0.65rem 0.875rem;
+    border: 1px solid var(--color-border-dark);
+    border-radius: 8px;
+    background: transparent !important;
+    color: var(--color-text) !important;
+    box-shadow: none;
+  }
+
+  .quickcheck-card .funnel-reopen:hover,
+  .quickcheck-card .funnel-reopen:focus-visible {
+    background: var(--color-text) !important;
+    color: var(--color-bg) !important;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .quickcheck-card .quickcheck-icon {
+    background: var(--color-bg-alt);
+    color: inherit;
+  }
+
+  .quickcheck-card .funnel-reopen:hover .quickcheck-icon,
+  .quickcheck-card .funnel-reopen:focus-visible .quickcheck-icon {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .hero-pills {
+    order: 5;
+    margin-top: 0.25rem;
   }
 
   .section-cta {

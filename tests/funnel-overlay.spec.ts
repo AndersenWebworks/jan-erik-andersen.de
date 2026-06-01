@@ -55,9 +55,9 @@ test.describe('project compass funnel', () => {
     expect(metrics.cardTop).toBeGreaterThanOrEqual(0);
     expect(metrics.cardTop).toBeLessThan(620);
     expect(metrics.cardBottom).toBeLessThanOrEqual(844);
-    expect(metrics.buttonHeight).toBeGreaterThanOrEqual(50);
-    expect(metrics.buttonBg).toBe('rgb(168, 58, 58)');
-    expect(metrics.buttonColor).toBe('rgb(255, 255, 255)');
+    expect(metrics.buttonHeight).toBeGreaterThanOrEqual(46);
+    expect(metrics.buttonBg).toBe('rgba(0, 0, 0, 0)');
+    expect(metrics.buttonColor).toBe('rgb(26, 26, 24)');
   });
 
   test('opens inline as a template card, not as a fixed full-screen overlay', async ({ page }) => {
