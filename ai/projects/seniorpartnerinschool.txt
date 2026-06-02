@@ -10,12 +10,12 @@
   "client": {"@type": "NGO", "name": "Senior Partner in School e.V."},
   "industry": "Sozialorganisation (bundesweit)",
   "engagement": "Pro Bono",
-  "challenge": "Wirkungsbericht als digitales Format statt PDF, barrierefrei nach WCAG 2.1 AA, mit interaktiver Deutschlandkarte fuer Standort-Daten.",
+  "challenge": "Wirkungsbericht als digitales Format statt PDF, barrierearm und WCAG 2.2 AA-orientiert, mit interaktiver Deutschlandkarte fuer Standort-Daten.",
   "solution": "Statische HTML-Seite, Vanilla JavaScript, semantisches HTML mit ARIA, Tastaturbedienbarkeit, kontrastgeprueft. Interaktive SVG-Deutschlandkarte.",
-  "technologies": ["statisches HTML", "Vanilla JavaScript", "SVG", "WCAG 2.1 AA"],
+  "technologies": ["statisches HTML", "Vanilla JavaScript", "SVG", "WCAG 2.2 AA-orientiert"],
   "features": [
     "Interaktive SVG-Deutschlandkarte",
-    "Vollstaendig barrierefrei (WCAG 2.1 AA)",
+    "Barrierearme, WCAG 2.2 AA-orientierte Umsetzung",
     "Schnelle Ladezeiten durch statische Auslieferung"
   ],
   "testimonial": {

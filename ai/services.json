@@ -3,7 +3,7 @@
   "@type": "ItemList",
   "name": "Leistungen Andersen Webworks",
   "inLanguage": "de",
-  "dateModified": "2026-05-25",
+  "dateModified": "2026-05-29",
   "itemListElement": [
     {
       "@type": "Service",
@@ -32,9 +32,9 @@
     {
       "@type": "Service",
       "@id": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/#service",
-      "name": "BFSG-Barrierefreiheit fuer Websites",
-      "description": "WCAG 2.1 AA-konforme Websites. Neubau oder Nachruestung. Pflicht seit Juni 2025 fuer B2C-Websites in Deutschland (Barrierefreiheitsstaerkungsgesetz). Bussgelder bis 100.000 EUR.",
-      "serviceType": "Web accessibility / WCAG 2.1 AA",
+      "name": "BFSG-Check und Barrierefreiheit fuer Websites",
+      "description": "Pruefung, Neubau oder Nachruestung fuer vom BFSG betroffene digitale Angebote. WCAG-orientiert, ohne Overlay-Scheinloesung.",
+      "serviceType": "Web accessibility / WCAG 2.2 AA-oriented",
       "provider": {"@id": "https://jan-erik-andersen.de/#service"},
       "areaServed": {"@type": "Country", "name": "Deutschland"},
       "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/",

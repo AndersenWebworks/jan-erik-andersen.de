@@ -140,5 +140,96 @@
 .contact-section.is-visible .guarantee:nth-child(6),
 .contact-section.is-visible .contact-promise:nth-child(6) { transition-delay: 0.6s; }
 
-/* --- Reduced Motion: intentionally not overriding is-visible animations --- */
-/* See feedback: enabling this kills the IntersectionObserver pattern. */
+/* --- Reduced Motion --- */
+@media (prefers-reduced-motion: reduce) {
+  .heading-typewriter-cursor,
+  .hero-typewriter .typewriter-cursor {
+    animation: none !important;
+    display: none !important;
+  }
+
+  .hero h1,
+  .hero .hero-lead,
+  .hero .hero-ctas,
+  .hero .hero-sidebar,
+  .hero .hero-pills,
+  .hero .hero-stats,
+  .service-item,
+  .standards-strip,
+  .testimonial-stars,
+  .project-card,
+  .process-step,
+  .pricing-card,
+  .guarantee,
+  .contact-promise,
+  .btn,
+  .btn-arr,
+  .btn-text,
+  .project-link-arr,
+  .focus-card,
+  .focus-card::before,
+  .focus-link .arr,
+  .funnel-reopen,
+  .funnel-reopen svg {
+    animation: none !important;
+    transition: none !important;
+    transition-delay: 0ms !important;
+  }
+
+  .hero,
+  .projects-section,
+  .services-section,
+  .testimonials-section,
+  .process-section,
+  .pricing-section,
+  .contact-section,
+  .focus-grid,
+  .section-header,
+  .services-intro {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero h1 {
+    font-variation-settings: 'wght' 700, 'opsz' 144;
+  }
+
+  .hero .hero-lead,
+  .hero .hero-ctas,
+  .hero .hero-sidebar,
+  .hero .hero-pills,
+  .hero .hero-stats,
+  .standards-strip,
+  .testimonial-stars,
+  .guarantee,
+  .contact-promise {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .service-item,
+  .project-card {
+    border-color: var(--color-border);
+  }
+
+  .pricing-card.featured {
+    border-color: var(--color-accent);
+    box-shadow: var(--shadow-focus);
+  }
+
+  .btn:hover,
+  .pricing-card:hover,
+  .project-card:hover,
+  .process-step:hover,
+  .focus-card:hover,
+  .btn:hover .btn-arr,
+  .btn:focus-visible .btn-arr,
+  .project-card:hover .project-link-arr,
+  .project-link:hover .project-link-arr,
+  .project-link:focus-visible .project-link-arr,
+  .focus-link:hover .arr,
+  .focus-link:focus-visible .arr,
+  .funnel-reopen:hover svg {
+    transform: none !important;
+  }
+}

@@ -18,7 +18,7 @@
       ],
       "knowsAbout": [
         "WordPress", "WooCommerce", "YOOtheme Pro", "Schema.org", "JSON-LD",
-        "WCAG 2.1 AA", "BFSG", "GEO", "AVO", "B2B-Shops", "Custom Plugins",
+        "WCAG 2.2 AA-orientiert", "BFSG-Scope-Check", "GEO", "AVO", "B2B-Shops", "Custom Plugins",
         "Vanilla JavaScript", "statisches HTML"
       ],
       "knowsLanguage": ["de", "en"],

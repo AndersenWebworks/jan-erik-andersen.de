@@ -24,17 +24,17 @@
     "provider": { "@id": "https://jan-erik-andersen.de/#person" },
     "name": "Web Development & Digital Consulting",
     "description": "Three clusters: Build new websites and shops. Fix & improve existing sites. Ongoing maintenance retainers. Plus accessibility, AI visibility, professional editing.",
-    "serviceType": ["Company Website", "Online Shop", "Portal", "Redesign", "BFSG Compliance", "AI Visibility", "Website Maintenance"],
+    "serviceType": ["Company Website", "Online Shop", "Portal", "Redesign", "EAA/BFSG Scope Check", "AI Visibility", "Website Maintenance"],
     "areaServed": { "@type": "Country", "name": "Germany" },
     "hasOfferCatalog": {
       "@type": "OfferCatalog",
       "name": "Services",
       "itemListElement": [
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Company Website", "description": "WordPress for clients who manage their own content. Static HTML for maximum speed. Responsive, GDPR compliant, with CMS training." } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Company Website", "description": "WordPress for clients who manage their own content. Static HTML for maximum speed. Responsive, accessibility-friendly and privacy-conscious, with CMS training." } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Online Shop", "description": "WooCommerce with B2B features, dealer portals, price groups, custom plugins. Germanized for legal texts and e-invoicing.", "url": "https://jan-erik-andersen.de/en/services/shops-and-custom/" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Portal, Tool or Landing Page", "description": "Career portal, client portal, interactive report, focused landing page. When standard isn't enough, I build what's missing." } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Redesign & Performance", "description": "Your website looks outdated, loads too slowly, or doesn't work on mobile? I analyze what's wrong and fix it." } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "BFSG & Accessibility Retrofit", "description": "Since June 2025, B2C websites must be accessible. Fines up to 100,000 EUR. I retrofit existing sites to WCAG 2.1 AA.", "url": "https://jan-erik-andersen.de/en/services/bfsg-accessibility/" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "BFSG Check & Accessibility Retrofit", "description": "Review, retrofit or rebuild for digital offerings affected by the BFSG. WCAG-oriented and without overlay shortcuts.", "url": "https://jan-erik-andersen.de/en/services/bfsg-accessibility/" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Visibility Retrofit", "description": "Your website isn't found in ChatGPT or Perplexity? I retrofit structured data, schema markup, and semantic architecture.", "url": "https://jan-erik-andersen.de/en/services/ai-visibility/" } },
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Maintenance", "description": "Monthly retainers from 200 EUR. Updates, security, monitoring, content changes. Direct contact, monthly cancellation." } }
       ]
@@ -58,7 +58,7 @@
         <span class="header-brand-surname">Andersen</span>
       </a>
       <nav class="header-nav" id="header-nav">
-        <div class="header-nav-dropdown"><a href="../services/" class="header-nav-active">Services</a><div class="header-nav-dropdown-menu"><a href="../services/ai-visibility/"><span>AI Visibility</span><small>ChatGPT, Perplexity, Claude</small></a><a href="../services/bfsg-accessibility/"><span>BFSG &amp; Accessibility</span><small>WCAG 2.1 AA-compliant</small></a><a href="../services/shops-and-custom/"><span>Shops &amp; Custom</span><small>WooCommerce + B2B</small></a></div></div>
+        <div class="header-nav-dropdown"><a href="../services/" aria-current="page" class="header-nav-active" aria-haspopup="true" aria-expanded="false" aria-controls="services-dropdown-menu">Services</a><div class="header-nav-dropdown-menu" id="services-dropdown-menu"><a href="../services/ai-visibility/"><span>AI Visibility</span><small>ChatGPT, Perplexity, Claude</small></a><a href="../services/bfsg-accessibility/"><span>BFSG &amp; Accessibility</span><small>WCAG-oriented</small></a><a href="../services/shops-and-custom/"><span>Shops &amp; Custom</span><small>WooCommerce + B2B</small></a></div></div>
         <a href="../projects/">Projects</a>
         <a href="../pricing/">Pricing</a>
         <a href="../faq/">FAQ</a>
@@ -77,7 +77,7 @@
         <div class="pill-toggle">
           <div class="pill-track">
             <a href="../../leistungen/" class="pill-option">DE</a>
-            <a href="../services/" class="pill-option active">EN</a>
+            <a href="../services/" class="pill-option active" aria-current="page">EN</a>
             <span class="pill-indicator"></span>
           </div>
         </div>
@@ -90,9 +90,9 @@
           <svg class="hamburger-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
-      <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true" hidden inert>
         <nav>
-          <a href="../services/" class="header-nav-active">Services</a>
+          <a href="../services/" aria-current="page" class="header-nav-active">Services</a>
           <a href="../services/ai-visibility/" class="header-mobile-sub">AI Visibility</a>
           <a href="../services/bfsg-accessibility/" class="header-mobile-sub">BFSG &amp; Accessibility</a>
           <a href="../services/shops-and-custom/" class="header-mobile-sub">Shops &amp; Custom</a>
@@ -114,7 +114,7 @@
           <div class="pill-toggle">
             <div class="pill-track">
               <a href="../../leistungen/" class="pill-option">DE</a>
-              <a href="../services/" class="pill-option active">EN</a>
+              <a href="../services/" class="pill-option active" aria-current="page">EN</a>
               <span class="pill-indicator"></span>
             </div>
           </div>
@@ -140,7 +140,7 @@
             <div class="service-number">01</div>
             <div class="service-content">
               <h3>Company Website</h3>
-              <p>WordPress for clients who want to manage their own content. Static HTML for maximum speed. Responsive, GDPR compliant, with CMS training. From 2,400 EUR fixed price.</p>
+              <p>WordPress for clients who want to manage their own content. Static HTML for maximum speed. Responsive, privacy-conscious, with CMS training. From 2,400 EUR fixed price.</p>
               <div class="service-example">
                 <div class="service-example-label">Example</div>
                 <p>WBG Pooling – industrial portal with 360° product views, interactive circular economy diagram, and password-protected sales center.</p>
@@ -189,8 +189,8 @@
           <div class="service-item" id="bfsg-accessibility">
             <div class="service-number">05</div>
             <div class="service-content">
-              <h3>BFSG &amp; Accessibility Retrofit</h3>
-              <p>Since June 2025, B2C websites must be accessible. Fines up to 100,000 EUR. I retrofit existing sites to WCAG 2.1 AA – or check whether your website is affected at all. No overlay plugin, but real accessibility.</p>
+              <h3>BFSG &amp; Accessibility Check</h3>
+              <p>Since June 28, 2025, the BFSG applies to specific products and services, including e-commerce services. I check whether your website is affected and retrofit it with WCAG-oriented accessibility. No overlay plugin, but real accessibility.</p>
               <p class="service-cta-row"><a href="bfsg-accessibility/" class="btn-text">Details on BFSG &amp; WCAG →</a></p>
             </div>
           </div>
@@ -249,13 +249,13 @@
         <div class="sidebar-card sidebar-card--wide">
           <h2>Standard</h2>
           <ul class="sidebar-list sidebar-list--grid">
-            <li>GDPR compliant</li>
+            <li>Privacy-conscious setup</li>
             <li>Responsive design</li>
             <li>Open standards</li>
           </ul>
           <h3 style="margin-top: var(--space-lg);">On request</h3>
           <ul class="sidebar-list sidebar-list--grid">
-            <li>Accessibility (BFSG / WCAG 2.1 AA)</li>
+            <li>Accessibility (EAA/BFSG scope / WCAG 2.2 AA-oriented)</li>
             <li>AI visibility (Schema.org, JSON-LD)</li>
             <li>Professionally edited texts (<a href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie Andersen</a>)</li>
           </ul>
@@ -314,32 +314,130 @@
   <script>
   (function() {
     var cb = document.getElementById('darkmode-toggle');
-    var stored = localStorage.getItem('darkmode');
-    if (stored === '1') cb.checked = true;
-    cb.addEventListener('change', function() {
-      localStorage.setItem('darkmode', cb.checked ? '1' : '0');
-    });
-
-    // Mobile Menu
-    var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');
-    if (hamburger && mobileMenu) {
-      hamburger.addEventListener('click', function() {
-        var open = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !open);
-        mobileMenu.setAttribute('aria-hidden', open);
-      });
-      var mobileDm = mobileMenu.querySelector('.darkmode-checkbox-mobile');
+    var mobileDm = mobileMenu ? mobileMenu.querySelector('.darkmode-checkbox-mobile') : null;
+    var hamburger = document.getElementById('header-hamburger');
+    var dropdown = document.querySelector('.header-nav-dropdown');
+    var servicesToggle = dropdown ? dropdown.querySelector('[aria-controls="services-dropdown-menu"]') : null;
+
+    function setDarkLabels(isDark) {
+      var label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+      if (cb) cb.setAttribute('aria-label', label);
+      if (mobileDm) mobileDm.setAttribute('aria-label', label);
+    }
+
+    function setDarkMode(isDark, persist) {
+      if (cb) cb.checked = isDark;
+      if (mobileDm) mobileDm.checked = isDark;
+      setDarkLabels(isDark);
+      if (persist) localStorage.setItem('darkmode', isDark ? '1' : '0');
+    }
+
+    if (cb) {
+      var stored = localStorage.getItem('darkmode');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setDarkMode(stored === '1' || (stored !== '0' && prefersDark), false);
+      cb.addEventListener('change', function() { setDarkMode(cb.checked, true); });
       if (mobileDm) {
-        mobileDm.checked = cb.checked;
-        mobileDm.addEventListener('change', function() {
-          cb.checked = this.checked;
-          cb.dispatchEvent(new Event('change'));
-        });
-        cb.addEventListener('change', function() {
-          mobileDm.checked = cb.checked;
-        });
+        mobileDm.addEventListener('change', function() { setDarkMode(mobileDm.checked, true); });
       }
+    }
+
+    if (servicesToggle && dropdown) {
+      function setServicesExpanded(expanded) {
+        servicesToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      }
+      dropdown.addEventListener('mouseenter', function() { setServicesExpanded(true); });
+      dropdown.addEventListener('mouseleave', function() { setServicesExpanded(false); });
+      dropdown.addEventListener('focusin', function() { setServicesExpanded(true); });
+      dropdown.addEventListener('focusout', function(e) {
+        if (!dropdown.contains(e.relatedTarget)) setServicesExpanded(false);
+      });
+      dropdown.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          setServicesExpanded(false);
+          servicesToggle.focus();
+        }
+      });
+    }
+
+    var siteHeader = document.getElementById('site-header');
+    if (siteHeader) {
+      function updateHeader() {
+        var funnelGone = !document.documentElement.classList.contains('funnel-active');
+        siteHeader.classList.toggle('has-nav', funnelGone);
+      }
+      new MutationObserver(updateHeader).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      updateHeader();
+    }
+
+    var app = document.getElementById('projekt-check-app');
+    if (app) {
+      var steps = app.querySelectorAll('.projekt-check-step');
+      var result = app.querySelector('.projekt-check-result');
+      var currentStep = 0;
+
+      app.addEventListener('click', function(e) {
+        var btn = e.target.closest('.projekt-check-option');
+        if (btn) {
+          steps[currentStep].hidden = true;
+          currentStep++;
+          if (currentStep < steps.length) {
+            steps[currentStep].hidden = false;
+          } else {
+            result.hidden = false;
+          }
+        }
+
+        var restart = e.target.closest('.projekt-check-restart');
+        if (restart) {
+          result.hidden = true;
+          currentStep = 0;
+          steps[0].hidden = false;
+        }
+
+        var back = e.target.closest('.projekt-check-back');
+        if (back && currentStep > 0) {
+          steps[currentStep].hidden = true;
+          currentStep--;
+          steps[currentStep].hidden = false;
+        }
+      });
+    }
+
+    if (hamburger && mobileMenu) {
+      function setMobileMenu(open, restoreFocus) {
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+        mobileMenu.hidden = !open;
+        if (open) {
+          mobileMenu.removeAttribute('inert');
+          var firstTarget = mobileMenu.querySelector('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          if (firstTarget) firstTarget.focus();
+        } else {
+          mobileMenu.setAttribute('inert', '');
+          if (restoreFocus) hamburger.focus();
+        }
+      }
+
+      setMobileMenu(false, false);
+      hamburger.addEventListener('click', function() {
+        setMobileMenu(hamburger.getAttribute('aria-expanded') !== 'true', false);
+      });
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target.closest('a[href]')) setMobileMenu(false, true);
+      });
+      document.addEventListener('click', function(e) {
+        if (hamburger.getAttribute('aria-expanded') === 'true' && !mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          setMobileMenu(false, false);
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && hamburger.getAttribute('aria-expanded') === 'true') {
+          setMobileMenu(false, true);
+        }
+      });
     }
   })();
   </script>
@@ -358,7 +456,7 @@
       h2.appendChild(cursor);
       var i = 0;
       function tick() {
-        if (i < text.length) {
+        if (i l text.length) {
           h2.insertBefore(document.createTextNode(text[i]), cursor);
           i++;
           var ch = text[i - 1];

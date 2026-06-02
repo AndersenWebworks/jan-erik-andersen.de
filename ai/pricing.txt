@@ -14,7 +14,7 @@
   "projects": [
     {"name": "Webdesign / Firmenwebsite", "minPrice": 2400, "url": "https://jan-erik-andersen.de/leistungen/webdesign/"},
     {"name": "KI-Sichtbarkeit (Update oder im Projekt)", "minPrice": 800, "url": "https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/"},
-    {"name": "BFSG-Compliance (Update oder Neubau-Aufschlag)", "minPrice": 1200, "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/"},
+    {"name": "BFSG-Scope-Check und WCAG-orientierte Nachruestung", "minPrice": 1200, "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/"},
     {"name": "BFSG-Audit", "minPrice": 400, "url": "https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/"},
     {"name": "Website-Analyse", "minPrice": 400, "url": "https://jan-erik-andersen.de/leistungen/website-analyse/"},
     {"name": "Standard-Shop", "minPrice": 4800, "url": "https://jan-erik-andersen.de/leistungen/shops-und-custom/"},

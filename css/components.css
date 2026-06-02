@@ -34,8 +34,9 @@
 .btn:active { transform: translateY(0); }
 
 .btn:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--color-bg);
 }
 
 /* Pfeil als Span: <span class="btn-arr">→</span>.
@@ -101,6 +102,12 @@
   color: var(--color-accent-hover);
   background-size: 100% 1px;
   text-decoration: none;
+}
+
+.btn-text:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 6px var(--color-bg);
 }
 
 /* --- Tags (Monospace-Pills) --- */
@@ -677,6 +684,11 @@ html[lang="en"] .testimonial-card blockquote.testimonial-body::after {
 .project-card:hover .project-link-arr,
 .project-link:hover .project-link-arr,
 .project-link:focus-visible .project-link-arr { transform: translateX(4px); }
+
+.project-card:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: var(--shadow-focus);
+}
 
 .project-card.probono {
   border-left: 3px solid var(--color-accent);
@@ -1280,6 +1292,14 @@ body:has(.darkmode-checkbox-mobile:checked) .contact-promise {
 }
 
 .focus-link:hover .arr {
+  transform: translateX(3px);
+}
+
+.focus-card:focus-within {
+  box-shadow: var(--shadow-focus);
+}
+
+.focus-link:focus-visible .arr {
   transform: translateX(3px);
 }
 

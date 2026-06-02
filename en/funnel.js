@@ -20,6 +20,21 @@
   var lastResultTitle = '';
   var isAnimating = false;
   var reopenBound = false;
+  var reduceMotionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+  var reduceMotion = !!(reduceMotionQuery && reduceMotionQuery.matches);
+  var statusRegion = null;
+
+  if (reduceMotionQuery) {
+    var onReducedMotionChange = function (event) {
+      reduceMotion = event.matches;
+      if (reduceMotion) destroyConstellation();
+    };
+    if (reduceMotionQuery.addEventListener) {
+      reduceMotionQuery.addEventListener('change', onReducedMotionChange);
+    } else if (reduceMotionQuery.addListener) {
+      reduceMotionQuery.addListener(onReducedMotionChange);
+    }
+  }
 
   /* ── SVG Icon Library (Feather-style, 20x20, stroke 1.5) ── */
 
@@ -250,6 +265,40 @@
     return '<span class="funnel-step-label funnel-stagger" style="--i:0">Step ' + step + ' of ' + total + '</span>';
   }
 
+  function ensureStatusRegion() {
+    if (statusRegion) return statusRegion;
+    statusRegion = document.createElement('div');
+    statusRegion.className = 'funnel-status';
+    statusRegion.setAttribute('role', 'status');
+    statusRegion.setAttribute('aria-live', 'polite');
+    statusRegion.setAttribute('aria-atomic', 'true');
+    funnel.appendChild(statusRegion);
+    return statusRegion;
+  }
+
+  function getStatusText(nodeId) {
+    if (nodeId === '_contact') return 'Contact draft is ready.';
+    var node = tree && tree[nodeId];
+    if (!node) return '';
+    if (node.type === 'result') return 'Result: ' + (node.title || 'Recommendation');
+    if (node.type === 'info') return 'Note: ' + (node.text || '').replace(/\s+/g, ' ').slice(0, 90);
+    var step = history.length + 1;
+    var total = history.length + (nodeDepths[nodeId] || 1);
+    return 'Step ' + step + ' of ' + total + ': ' + (node.text || 'New question');
+  }
+
+  function announceNode(nodeId) {
+    var region = ensureStatusRegion();
+    region.textContent = getStatusText(nodeId);
+  }
+
+  function afterContentReady(nodeId, shouldAnnounce) {
+    revealStaggered();
+    focusHeading();
+    initMagneticButtons();
+    if (shouldAnnounce) announceNode(nodeId);
+  }
+
   /* ── Session Memory ────────────────────────────────── */
 
   var STORAGE_KEY = 'funnel-done';
@@ -308,6 +357,7 @@
 
     funnel.classList.remove('funnel-hidden', 'funnel-exiting');
     funnel.setAttribute('aria-hidden', 'false');
+    ensureStatusRegion();
     destroyConstellation();
 
     requestAnimationFrame(function () {
@@ -374,11 +424,13 @@
     app.setAttribute('data-node', nodeId);
     app.innerHTML = buildHTML(nodeId);
     bindEvents();
-    initMagneticButtons();
+    if (reduceMotion) {
+      afterContentReady(nodeId, true);
+      return;
+    }
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
-        revealStaggered();
-        focusHeading();
+        afterContentReady(nodeId, true);
         // Typewriter test disabled: keep content visible immediately.
         // applyTypewriter();
       });
@@ -393,6 +445,26 @@
 
     var outClass = direction === 'forward' ? 'funnel-slide-out-left' : 'funnel-slide-out-right';
     var inClass  = direction === 'forward' ? 'funnel-slide-in-right' : 'funnel-slide-in-left';
+
+    if (reduceMotion) {
+      if (direction === 'forward') updateConstellationDepth();
+      currentNodeId = nodeId;
+      app.setAttribute('data-node', nodeId);
+      app.innerHTML = buildHTML(nodeId);
+      bindEvents();
+
+      var reducedNode = tree[nodeId];
+      if (reducedNode && reducedNode.type === 'result') {
+        window.history.replaceState(null, '', '#' + nodeId);
+        trackEvent('result', nodeId);
+      } else if (nodeId === '_contact') {
+        trackEvent('contact');
+      }
+
+      isAnimating = false;
+      afterContentReady(nodeId, true);
+      return;
+    }
 
     app.classList.add(outClass);
 
@@ -429,6 +501,7 @@
             // Typewriter test disabled: keep content visible immediately.
             // applyTypewriter();
             initMagneticButtons();
+            announceNode(nodeId);
           });
         });
 
@@ -472,8 +545,8 @@
       var data = opt.action ? 'data-action="' + esc(opt.action) + '"' : 'data-next="' + esc(opt.next) + '"';
       var icon = getOptionIcon(opt.label);
       h += '<button class="funnel-option funnel-stagger" ' + si + ' ' + data + '>';
-      h += '<span class="funnel-option-num">' + num + '</span>';
-      if (icon) h += '<span class="funnel-option-icon">' + icon + '</span>';
+      h += '<span class="funnel-option-num" aria-hidden="true">' + num + '</span>';
+      if (icon) h += '<span class="funnel-option-icon" aria-hidden="true">' + icon + '</span>';
       h += '<span class="funnel-option-label">' + esc(opt.label) + '</span>';
       h += '<span class="funnel-option-arrow" aria-hidden="true">' + ICONS['chevron-right'] + '</span>';
       h += '</button>';
@@ -498,7 +571,7 @@
       var si = 'style="--i:' + (i + 1) + '"';
       var icon = getOptionIcon(opt.label);
       h += '<button class="funnel-option funnel-stagger" ' + si + ' data-next="' + esc(opt.next) + '">';
-      if (icon) h += '<span class="funnel-option-icon">' + icon + '</span>';
+      if (icon) h += '<span class="funnel-option-icon" aria-hidden="true">' + icon + '</span>';
       h += '<span class="funnel-option-label">' + esc(opt.label) + '</span>';
       h += '<span class="funnel-option-arrow" aria-hidden="true">' + ICONS['chevron-right'] + '</span>';
       h += '</button>';
@@ -535,18 +608,18 @@
     var ctaI = node.proof && node.proof.length > 0 ? 3 : 2;
     h += '<div class="funnel-cta-group funnel-stagger" style="--i:' + ctaI + '">';
     h += '<button class="funnel-cta" data-action="contact">' + esc(node.cta.label);
-    h += ' <span class="funnel-cta-arrow">' + ICONS['chevron-right'] + '</span></button>';
+    h += ' <span class="funnel-cta-arrow" aria-hidden="true">' + ICONS['chevron-right'] + '</span></button>';
     h += '</div>';
 
     h += '<div class="funnel-result-actions funnel-stagger" style="--i:' + (ctaI + 1) + '">';
     h += '<button class="funnel-restart" data-action="restart">';
-    h += '<span class="funnel-action-icon">' + ICONS['refresh-cw'] + '</span> Start over</button>';
+    h += '<span class="funnel-action-icon" aria-hidden="true">' + ICONS['refresh-cw'] + '</span> Start over</button>';
     if (node.ctaSecondary) {
       h += '<a href="' + esc(node.ctaSecondary.href) + '" class="funnel-result-link">';
-      h += '<span class="funnel-action-icon">' + ICONS['external-link'] + '</span> ' + esc(node.ctaSecondary.label) + '</a>';
+      h += '<span class="funnel-action-icon" aria-hidden="true">' + ICONS['external-link'] + '</span> ' + esc(node.ctaSecondary.label) + '</a>';
     }
     h += '<button class="funnel-exit-btn" data-action="exit">';
-    h += '<span class="funnel-action-icon">' + ICONS['external-link'] + '</span> Read more about me</button>';
+    h += '<span class="funnel-action-icon" aria-hidden="true">' + ICONS['external-link'] + '</span> Read more about me</button>';
     h += '</div>';
     return h;
   }
@@ -965,12 +1038,12 @@
 
     /* Primary CTA: send email */
     h += '<a href="' + esc(mailtoHref) + '" class="funnel-contact-send funnel-stagger" style="--i:2" data-action="mailto">';
-    h += '<span class="funnel-contact-send-icon">' + ICONS.mail + '</span>';
+    h += '<span class="funnel-contact-send-icon" aria-hidden="true">' + ICONS.mail + '</span>';
     h += '<span class="funnel-contact-send-text">';
     h += '<strong>Open email draft</strong>';
     h += '<span>Reply within one business day</span>';
     h += '</span>';
-    h += '<span class="funnel-cta-arrow">' + ICONS['chevron-right'] + '</span>';
+    h += '<span class="funnel-cta-arrow" aria-hidden="true">' + ICONS['chevron-right'] + '</span>';
     h += '</a>';
 
     /* D2: Trust badge */
@@ -980,16 +1053,16 @@
     h += '<div class="funnel-contact-alt funnel-stagger" style="--i:3">';
     h += '<span class="funnel-contact-alt-label">Or directly:</span>';
     h += '<a href="tel:+4938733270015" class="funnel-result-link">';
-    h += '<span class="funnel-action-icon">' + ICONS.phone + '</span> 038733 270015</a>';
+    h += '<span class="funnel-action-icon" aria-hidden="true">' + ICONS.phone + '</span> 038733 270015</a>';
     h += '<a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener" class="funnel-result-link">';
-    h += '<span class="funnel-action-icon">' + ICONS.linkedin + '</span> LinkedIn</a>';
+    h += '<span class="funnel-action-icon" aria-hidden="true">' + ICONS.linkedin + '</span> LinkedIn</a>';
     h += '</div>';
 
     h += '<div class="funnel-result-actions funnel-stagger" style="--i:4">';
     h += '<button class="funnel-restart" data-action="restart">';
-    h += '<span class="funnel-action-icon">' + ICONS['refresh-cw'] + '</span> Start over</button>';
+    h += '<span class="funnel-action-icon" aria-hidden="true">' + ICONS['refresh-cw'] + '</span> Start over</button>';
     h += '<button class="funnel-exit-btn" data-action="exit">';
-    h += '<span class="funnel-action-icon">' + ICONS['external-link'] + '</span> Read more about me</button>';
+    h += '<span class="funnel-action-icon" aria-hidden="true">' + ICONS['external-link'] + '</span> Read more about me</button>';
     h += '</div>';
 
     return h;
@@ -1007,6 +1080,13 @@
     var items = app.querySelectorAll('.funnel-stagger');
     for (var i = 0; i < items.length; i++) {
       items[i].classList.add('funnel-reveal');
+      if (reduceMotion) {
+        items[i].style.opacity = '';
+        items[i].style.pointerEvents = '';
+        items[i].style.translate = '';
+        items[i].style.transition = '';
+        items[i].style.minHeight = '';
+      }
     }
   }
 
@@ -1062,7 +1142,7 @@
 
     btn.classList.add('funnel-option-pressed');
 
-    setTimeout(function () {
+    var runAction = function () {
       if (action === 'scroll') {
         trackEvent('self-read');
         exitFunnel();
@@ -1080,7 +1160,13 @@
         history.push(currentNodeId);
         navigate(next, 'forward');
       }
-    }, PRESS_MS);
+    };
+
+    if (reduceMotion) {
+      runAction();
+    } else {
+      setTimeout(runAction, PRESS_MS);
+    }
   }
 
   function goBack() {
@@ -1100,12 +1186,18 @@
     }
     funnel.classList.add('funnel-exiting');
     document.documentElement.classList.remove('funnel-active');
-    setTimeout(function () {
+    var finishExit = function () {
       destroyConstellation();
       funnel.classList.add('funnel-hidden');
       funnel.setAttribute('aria-hidden', 'true');
       showReopenButton();
-    }, 220);
+      focusAfterExit();
+    };
+    if (reduceMotion) {
+      finishExit();
+    } else {
+      setTimeout(finishExit, 220);
+    }
   }
 
   /* ── Keyboard ─────────────────────────────────────── */
@@ -1147,6 +1239,16 @@
   function focusHeading() {
     var el = app.querySelector('[tabindex="-1"]');
     if (el) el.focus({ preventScroll: true });
+  }
+
+  function focusAfterExit() {
+    var reopen = document.querySelector('.funnel-reopen:not([hidden])');
+    var target = reopen || document.querySelector('main') || document.getElementById('site-header') || document.body;
+    if (!target) return;
+    if (!/^(A|BUTTON|INPUT|SELECT|TEXTAREA)$/.test(target.tagName) && !target.hasAttribute('tabindex')) {
+      target.setAttribute('tabindex', '-1');
+    }
+    target.focus({ preventScroll: true });
   }
 
   /* ── Util ─────────────────────────────────────────── */
@@ -1214,6 +1316,10 @@
     }
 
     var allStaggers = app.querySelectorAll('.funnel-stagger');
+    if (reduceMotion) {
+      revealStaggered();
+      return;
+    }
     var staggerHeights = [];
     for (var b = 0; b < allStaggers.length; b++) {
       staggerHeights.push(Math.ceil(allStaggers[b].getBoundingClientRect().height));
@@ -1279,6 +1385,7 @@
   var MAGNET_STRENGTH = 8;
 
   function initMagneticButtons() {
+    if (reduceMotion) return;
     if (!window.matchMedia('(pointer: fine)').matches) return;
 
     var options = app.querySelectorAll('.funnel-option, .funnel-cta, .funnel-contact-send');
@@ -1324,6 +1431,7 @@
   var FLASH_DURATION_MS = 800;
 
   function initConstellation() {
+    if (reduceMotion) return;
     if (constellationCanvas) return;
 
     constellationCanvas = document.createElement('canvas');
@@ -1417,6 +1525,7 @@
   }
 
   function animateConstellation() {
+    if (reduceMotion) return;
     if (!constellationCtx || !constellationCanvas) return;
     var w = constellationCanvas.width;
     var h = constellationCanvas.height;
@@ -1497,6 +1606,7 @@
   }
 
   function updateConstellationDepth() {
+    if (reduceMotion) return;
     addSynapse();
   }
 

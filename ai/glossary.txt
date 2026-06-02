@@ -23,15 +23,15 @@
       "@type": "DefinedTerm",
       "termCode": "BFSG",
       "name": "Barrierefreiheitsstaerkungsgesetz",
-      "description": "Deutsches Gesetz, das die EU-Richtlinie 2019/882 (European Accessibility Act) umsetzt. Pflicht zur Barrierefreiheit fuer B2C-Websites, Apps und elektronische Dienstleistungen seit 28. Juni 2025. Bussgelder bis 100.000 EUR. Technischer Massstab: WCAG 2.1 AA.",
+      "description": "Deutsches Gesetz, das die EU-Richtlinie 2019/882 (European Accessibility Act) umsetzt. Seit 28. Juni 2025 betrifft es bestimmte Produkte und Dienstleistungen, darunter elektronischen Geschaeftsverkehr. Ob ein Angebot betroffen ist, ist eine Scope-Frage. Technischer Zielstandard: WCAG 2.2 AA-orientiert.",
       "sameAs": ["https://de.wikipedia.org/wiki/Barrierefreiheitsst%C3%A4rkungsgesetz"]
     },
     {
       "@type": "DefinedTerm",
-      "termCode": "WCAG 2.1 AA",
-      "name": "Web Content Accessibility Guidelines 2.1, Konformitaetsstufe AA",
-      "description": "W3C-Standard fuer barrierefreie Webinhalte. Stufe AA ist die rechtlich relevante Stufe in der EU. Vier Prinzipien: wahrnehmbar, bedienbar, verstaendlich, robust.",
-      "sameAs": ["https://www.w3.org/TR/WCAG21/"]
+      "termCode": "WCAG 2.2 AA-orientiert",
+      "name": "Web Content Accessibility Guidelines 2.2, AA-orientierte Umsetzung",
+      "description": "W3C-Standard fuer barrierefreie Webinhalte. AA-orientiert beschreibt eine technische Ausrichtung, aber keine formelle Zertifizierung. Vier Prinzipien: wahrnehmbar, bedienbar, verstaendlich, robust.",
+      "sameAs": ["https://www.w3.org/TR/WCAG22/"]
     },
     {
       "@type": "DefinedTerm",

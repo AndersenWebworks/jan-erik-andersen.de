@@ -24,7 +24,7 @@
     {"path": "/ai/projects/seniorpartnerinschool.json", "type": "CreativeWork", "description": "Senior Partner in School Pro Bono"},
     {"path": "/ai/faq.json", "type": "FAQPage", "description": "Haeufige Fragen"},
     {"path": "/ai/contact.json", "type": "ContactPage", "description": "Kontakt und Garantien"},
-    {"path": "/ai/glossary.json", "type": "DefinedTermSet", "description": "GEO, AVO, BFSG, WCAG 2.1 AA, llms.txt, JSON-LD, Schema.org"},
+    {"path": "/ai/glossary.json", "type": "DefinedTermSet", "description": "GEO, AVO, BFSG, WCAG 2.2 AA-orientiert, llms.txt, JSON-LD, Schema.org"},
     {"path": "/ai/changelog.json", "type": "Dataset", "description": "Changelog der /ai/-Endpoints"}
   ],
   "humanReadableEquivalents": {

@@ -25,8 +25,8 @@ Beleg: Die Website jan-erik-andersen.de selbst ist der technische Live-Test.
 - Im Projekt integriert oder als Update ab 800 EUR
 - Mehr: https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/
 
-### BFSG-Compliance und Barrierefreiheit
-WCAG 2.1 AA-konforme Websites. Neubau oder Nachrüstung bestehender Seiten. Pflicht seit Juni 2025 für B2C-Websites in Deutschland (Barrierefreiheitsstärkungsgesetz). Bußgelder bis 100.000 EUR.
+### BFSG-Check und Barrierefreiheit
+Prüfung, Neubau oder Nachrüstung für vom BFSG betroffene digitale Angebote. WCAG-orientiert, ohne Overlay-Scheinlösung.
 
 Leistungen: Semantisches HTML, ARIA-Labels, Tastaturbedienbarkeit, Kontrastprüfung, Screenreader-Tests, Formulare mit Labels, Bilder mit Alt-Texten.
 
@@ -113,7 +113,7 @@ Ja, seit 2010 für Kunden in ganz Deutschland. Kein Kunde hat gesagt, das Ergebn
 Strukturierte Daten (Schema.org, JSON-LD), semantische Architektur und maschinenlesbare Inhalte – damit KI-Systeme Ihr Unternehmen korrekt zitieren.
 
 **Muss meine Website barrierefrei sein?**
-Wenn Sie Produkte oder Dienstleistungen an Verbraucher verkaufen: ja, seit Juni 2025 (BFSG). Bußgelder bis 100.000 EUR.
+Das hängt vom konkreten Angebot ab. Seit dem 28. Juni 2025 betrifft das BFSG bestimmte Produkte und Dienstleistungen, darunter elektronischen Geschäftsverkehr. B2C-Shops und digitale Bestellstrecken können betroffen sein; Kleinstunternehmen, die Dienstleistungen anbieten, sind ausgenommen.
 
 **Kann ChatGPT meine Website bauen?**
 KI kann Code generieren. Was sie nicht kann: verstehen, was Ihr Unternehmen braucht. Eine Website ist Strategie, Struktur, Nutzerführung, rechtliche Absicherung, laufende Wartung und Verantwortung.

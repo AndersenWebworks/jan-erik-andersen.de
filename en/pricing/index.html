@@ -43,9 +43,9 @@
         <span class="header-brand-surname">Andersen</span>
       </a>
       <nav class="header-nav" id="header-nav">
-        <div class="header-nav-dropdown"><a href="../services/">Services</a><div class="header-nav-dropdown-menu"><a href="../services/ai-visibility/"><span>AI Visibility</span><small>ChatGPT, Perplexity, Claude</small></a><a href="../services/bfsg-accessibility/"><span>BFSG &amp; Accessibility</span><small>WCAG 2.1 AA-compliant</small></a><a href="../services/shops-and-custom/"><span>Shops &amp; Custom</span><small>WooCommerce + B2B</small></a></div></div>
+        <div class="header-nav-dropdown"><a href="../services/" aria-haspopup="true" aria-expanded="false" aria-controls="services-dropdown-menu">Services</a><div class="header-nav-dropdown-menu" id="services-dropdown-menu"><a href="../services/ai-visibility/"><span>AI Visibility</span><small>ChatGPT, Perplexity, Claude</small></a><a href="../services/bfsg-accessibility/"><span>BFSG &amp; Accessibility</span><small>WCAG-oriented</small></a><a href="../services/shops-and-custom/"><span>Shops &amp; Custom</span><small>WooCommerce + B2B</small></a></div></div>
         <a href="../projects/">Projects</a>
-        <a href="../pricing/" class="header-nav-active">Pricing</a>
+        <a href="../pricing/" aria-current="page" class="header-nav-active">Pricing</a>
         <a href="../faq/">FAQ</a>
         <a href="../about/">About</a>
         <a href="../contact/" class="header-nav-cta">Contact</a>
@@ -62,7 +62,7 @@
         <div class="pill-toggle">
           <div class="pill-track">
             <a href="../../preise/" class="pill-option">DE</a>
-            <a href="../pricing/" class="pill-option active">EN</a>
+            <a href="../pricing/" class="pill-option active" aria-current="page">EN</a>
             <span class="pill-indicator"></span>
           </div>
         </div>
@@ -75,14 +75,14 @@
           <svg class="hamburger-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
-      <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true" hidden inert>
         <nav>
           <a href="../services/">Services</a>
           <a href="../services/ai-visibility/" class="header-mobile-sub">AI Visibility</a>
           <a href="../services/bfsg-accessibility/" class="header-mobile-sub">BFSG &amp; Accessibility</a>
           <a href="../services/shops-and-custom/" class="header-mobile-sub">Shops &amp; Custom</a>
           <a href="../projects/">Projects</a>
-          <a href="../pricing/" class="header-nav-active">Pricing</a>
+          <a href="../pricing/" aria-current="page" class="header-nav-active">Pricing</a>
           <a href="../faq/">FAQ</a>
           <a href="../about/">About</a>
           <a href="../contact/" class="header-nav-cta">Contact</a>
@@ -99,7 +99,7 @@
           <div class="pill-toggle">
             <div class="pill-track">
               <a href="../../preise/" class="pill-option">DE</a>
-              <a href="../pricing/" class="pill-option active">EN</a>
+              <a href="../pricing/" class="pill-option active" aria-current="page">EN</a>
               <span class="pill-indicator"></span>
             </div>
           </div>
@@ -130,7 +130,7 @@
             <ul class="pricing-features">
               <li>Concept, design, implementation</li>
               <li>Responsive design</li>
-              <li>GDPR compliant</li>
+              <li>Privacy-conscious setup</li>
               <li>CMS training</li>
               <li>30 days support after launch</li>
               <li class="pricing-feature-optional">Accessibility (BFSG): extra charge by scope</li>
@@ -299,32 +299,130 @@
   <script>
   (function() {
     var cb = document.getElementById('darkmode-toggle');
-    var stored = localStorage.getItem('darkmode');
-    if (stored === '1') cb.checked = true;
-    cb.addEventListener('change', function() {
-      localStorage.setItem('darkmode', cb.checked ? '1' : '0');
-    });
-
-    // Mobile Menu
-    var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');
-    if (hamburger && mobileMenu) {
-      hamburger.addEventListener('click', function() {
-        var open = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !open);
-        mobileMenu.setAttribute('aria-hidden', open);
-      });
-      var mobileDm = mobileMenu.querySelector('.darkmode-checkbox-mobile');
+    var mobileDm = mobileMenu ? mobileMenu.querySelector('.darkmode-checkbox-mobile') : null;
+    var hamburger = document.getElementById('header-hamburger');
+    var dropdown = document.querySelector('.header-nav-dropdown');
+    var servicesToggle = dropdown ? dropdown.querySelector('[aria-controls="services-dropdown-menu"]') : null;
+
+    function setDarkLabels(isDark) {
+      var label = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+      if (cb) cb.setAttribute('aria-label', label);
+      if (mobileDm) mobileDm.setAttribute('aria-label', label);
+    }
+
+    function setDarkMode(isDark, persist) {
+      if (cb) cb.checked = isDark;
+      if (mobileDm) mobileDm.checked = isDark;
+      setDarkLabels(isDark);
+      if (persist) localStorage.setItem('darkmode', isDark ? '1' : '0');
+    }
+
+    if (cb) {
+      var stored = localStorage.getItem('darkmode');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setDarkMode(stored === '1' || (stored !== '0' && prefersDark), false);
+      cb.addEventListener('change', function() { setDarkMode(cb.checked, true); });
       if (mobileDm) {
-        mobileDm.checked = cb.checked;
-        mobileDm.addEventListener('change', function() {
-          cb.checked = this.checked;
-          cb.dispatchEvent(new Event('change'));
-        });
-        cb.addEventListener('change', function() {
-          mobileDm.checked = cb.checked;
-        });
+        mobileDm.addEventListener('change', function() { setDarkMode(mobileDm.checked, true); });
       }
+    }
+
+    if (servicesToggle && dropdown) {
+      function setServicesExpanded(expanded) {
+        servicesToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      }
+      dropdown.addEventListener('mouseenter', function() { setServicesExpanded(true); });
+      dropdown.addEventListener('mouseleave', function() { setServicesExpanded(false); });
+      dropdown.addEventListener('focusin', function() { setServicesExpanded(true); });
+      dropdown.addEventListener('focusout', function(e) {
+        if (!dropdown.contains(e.relatedTarget)) setServicesExpanded(false);
+      });
+      dropdown.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          setServicesExpanded(false);
+          servicesToggle.focus();
+        }
+      });
+    }
+
+    var siteHeader = document.getElementById('site-header');
+    if (siteHeader) {
+      function updateHeader() {
+        var funnelGone = !document.documentElement.classList.contains('funnel-active');
+        siteHeader.classList.toggle('has-nav', funnelGone);
+      }
+      new MutationObserver(updateHeader).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      updateHeader();
+    }
+
+    var app = document.getElementById('projekt-check-app');
+    if (app) {
+      var steps = app.querySelectorAll('.projekt-check-step');
+      var result = app.querySelector('.projekt-check-result');
+      var currentStep = 0;
+
+      app.addEventListener('click', function(e) {
+        var btn = e.target.closest('.projekt-check-option');
+        if (btn) {
+          steps[currentStep].hidden = true;
+          currentStep++;
+          if (currentStep < steps.length) {
+            steps[currentStep].hidden = false;
+          } else {
+            result.hidden = false;
+          }
+        }
+
+        var restart = e.target.closest('.projekt-check-restart');
+        if (restart) {
+          result.hidden = true;
+          currentStep = 0;
+          steps[0].hidden = false;
+        }
+
+        var back = e.target.closest('.projekt-check-back');
+        if (back && currentStep > 0) {
+          steps[currentStep].hidden = true;
+          currentStep--;
+          steps[currentStep].hidden = false;
+        }
+      });
+    }
+
+    if (hamburger && mobileMenu) {
+      function setMobileMenu(open, restoreFocus) {
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+        mobileMenu.hidden = !open;
+        if (open) {
+          mobileMenu.removeAttribute('inert');
+          var firstTarget = mobileMenu.querySelector('a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+          if (firstTarget) firstTarget.focus();
+        } else {
+          mobileMenu.setAttribute('inert', '');
+          if (restoreFocus) hamburger.focus();
+        }
+      }
+
+      setMobileMenu(false, false);
+      hamburger.addEventListener('click', function() {
+        setMobileMenu(hamburger.getAttribute('aria-expanded') !== 'true', false);
+      });
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target.closest('a[href]')) setMobileMenu(false, true);
+      });
+      document.addEventListener('click', function(e) {
+        if (hamburger.getAttribute('aria-expanded') === 'true' && !mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          setMobileMenu(false, false);
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && hamburger.getAttribute('aria-expanded') === 'true') {
+          setMobileMenu(false, true);
+        }
+      });
     }
   })();
   </script>
@@ -343,7 +441,7 @@
       h2.appendChild(cursor);
       var i = 0;
       function tick() {
-        if (i < text.length) {
+        if (i l text.length) {
           h2.insertBefore(document.createTextNode(text[i]), cursor);
           i++;
           var ch = text[i - 1];

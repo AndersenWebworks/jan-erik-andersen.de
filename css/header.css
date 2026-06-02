@@ -192,6 +192,14 @@ html.funnel-active .site-header {
   color: var(--color-accent);
 }
 
+.header-nav a:focus-visible,
+.header-nav-dropdown-menu a:focus-visible,
+.header-mobile-menu nav a:focus-visible {
+  background: var(--color-bg-alt);
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
 .header-nav-cta {
   color: var(--color-accent) !important;
   font-weight: 600;
@@ -247,6 +255,12 @@ html.funnel-active .site-header {
   opacity: 0;
 }
 
+.darkmode-checkbox:focus-visible,
+.darkmode-checkbox-mobile:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
 /* --- Pill Toggle --- */
 .pill-toggle {
   display: flex;
@@ -282,6 +296,19 @@ html.funnel-active .site-header {
 }
 
 .pill-option:hover { text-decoration: none !important; }
+
+.pill-toggle:has(.darkmode-checkbox:focus-visible) .pill-track,
+.pill-toggle:has(.darkmode-checkbox-mobile:focus-visible) .pill-track {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--color-bg);
+}
+
+.pill-option:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--color-bg);
+}
 
 .pill-indicator {
   position: absolute;

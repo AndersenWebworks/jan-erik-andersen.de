@@ -64,8 +64,8 @@
 
     "website-budget": {
       "type": "info",
-      "text": "Kurzer Reality-Check: Eine professionelle Firmenwebsite mit Barrierefreiheit (seit 2025 Pflicht) und KI-Sichtbarkeit kostet ab 2.400 EUR. Darunter empfehle ich Baukästen wie Squarespace – die können inzwischen viel.",
-      "detail": "Was Sie für 2.400–4.800 EUR bekommen: 5–8 Seiten, responsives Design, BFSG-konform, KI-lesbar, schnelle Ladezeit. Was mehr kostet: Shop-Integration, mehrsprachig, komplexe Strukturen, individuelle Funktionen.",
+      "text": "Kurzer Reality-Check: Eine professionelle Firmenwebsite mit barrierearmer Umsetzung, BFSG-Scope-Check und KI-Sichtbarkeit kostet ab 2.400 EUR. Darunter empfehle ich Baukästen wie Squarespace – die können inzwischen viel.",
+      "detail": "Was Sie für 2.400–4.800 EUR bekommen: 5–8 Seiten, responsives Design, WCAG 2.2 AA-orientierte Barrierefreiheit, KI-lesbare Struktur, schnelle Ladezeit. Was mehr kostet: Shop-Integration, mehrsprachig, komplexe Strukturen, individuelle Funktionen.",
       "options": [
         {
           "label": "Passt – erzähl mir mehr",
@@ -481,7 +481,7 @@
     "result-website": {
       "type": "result",
       "title": "Firmenwebsite – kann ich. So sieht das bei mir aus.",
-      "text": "5–8 Seiten, klare Struktur, KI-sichtbar, BFSG-konform. Barrierefreiheit und strukturierte Daten sind eingebaut, kein Aufpreis. CMS-Einweisung inklusive – damit Sie Texte und Bilder selbst ändern können.\n\nAb 2.400 EUR Festpreis. Typisch: 2.400–5.000 EUR. Stundensatz bei offenem Umfang: 80 EUR/h.",
+      "text": "5–8 Seiten, klare Struktur, KI-sichtbar, WCAG 2.2 AA-orientiert. Barrierefreiheit und strukturierte Daten sind eingebaut, kein Aufpreis. BFSG-Scope wird bei Bedarf geprüft. CMS-Einweisung inklusive – damit Sie Texte und Bilder selbst ändern können.\n\nAb 2.400 EUR Festpreis. Typisch: 2.400–5.000 EUR. Stundensatz bei offenem Umfang: 80 EUR/h.",
       "proof": [
         {
           "name": "WBG Pooling",
@@ -766,7 +766,7 @@
 
     "bfsg-betroffen": {
       "type": "info",
-      "text": "Ihre Website muss barrierefrei sein. Seit Juni 2025 Pflicht, Bußgelder bis 100.000 EUR. Aber kein Grund zur Panik – die meisten Fehler sind systematisch und lösbar.",
+      "text": "Ihre Website kann vom BFSG betroffen sein, wenn sie erfasste digitale Dienstleistungen wie elektronischen Geschäftsverkehr für Verbraucher anbietet. Kein Grund zur Panik: Erst Betroffenheit klären, dann echte Barrieren systematisch beheben.",
       "detail": "Selbsttest, den Sie jetzt sofort machen können: 1. Versuchen Sie, Ihre Website nur mit der Tastatur zu bedienen (Tab-Taste). Kommen Sie überall hin? 2. Zoomen Sie auf 200 % – bricht das Layout? 3. Haben alle Bilder Alt-Texte? Wenn eins davon scheitert, haben Sie konkreten Handlungsbedarf.",
       "options": [
         {
@@ -794,11 +794,11 @@
     "result-bfsg-audit": {
       "type": "result",
       "title": "BFSG-Check – ich sage Ihnen, wo Sie stehen.",
-      "text": "Ich prüfe Ihre Website auf WCAG 2.1 AA-Konformität: Kontraste, Tastaturbedienung, Screenreader-Kompatibilität, Formulare, Bilder. Sie bekommen einen konkreten Bericht mit Prioritäten und Aufwandsschätzung.\n\nAudit ab 400 EUR. Nachrüstung ab 1.200 EUR – oder im Rahmen eines Neuprojekts inklusive.",
+      "text": "Ich prüfe Ihre Website WCAG 2.2 AA-orientiert und scope-aware zum BFSG: Kontraste, Tastaturbedienung, semantische Struktur, Formulare, Bilder. Sie bekommen einen konkreten Bericht mit Prioritäten und Aufwandsschätzung – keine formelle Zertifizierung.\n\nAudit ab 400 EUR. Nachrüstung ab 1.200 EUR – oder im Rahmen eines Neuprojekts inklusive.",
       "proof": [
         {
           "name": "Diese Website",
-          "desc": "WCAG 2.1 AA, BFSG-konform"
+          "desc": "WCAG 2.2 AA-orientiert, BFSG-Scope-Check"
         }
       ],
       "cta": {
@@ -814,7 +814,7 @@
       "proof": [
         {
           "name": "Diese Website",
-          "desc": "WCAG 2.1 AA, BFSG-konform"
+          "desc": "WCAG 2.2 AA-orientiert, BFSG-Scope-Check"
         }
       ],
       "cta": {

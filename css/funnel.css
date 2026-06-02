@@ -41,6 +41,18 @@ html.funnel-skip .site-header ~ main { padding-top: 3.5rem; }
 .funnel-exiting { opacity: 0; }
 .funnel-hidden { display: none !important; }
 
+.funnel-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .funnel-container {
   max-width: 560px;
   width: 100%;
@@ -757,28 +769,44 @@ a.funnel-proof-link .funnel-proof-name { color: var(--color-accent); }
 
 /* --- Reduced Motion --- */
 @media (prefers-reduced-motion: reduce) {
-  .funnel-stagger { transition-duration: 200ms; translate: 0 6px; }
+  .funnel,
+  .funnel-exiting,
+  .funnel-accent-line,
+  .funnel-option,
+  .funnel-option::before,
+  .funnel-option-arrow,
+  .funnel-option-icon,
+  .funnel-back-arrow,
+  .funnel-cta,
+  .funnel-cta-arrow,
+  .funnel-contact-send,
+  .funnel-action-icon {
+    transition: none !important;
+  }
+
+  .funnel-stagger,
+  .funnel-stagger.funnel-reveal {
+    opacity: 1 !important;
+    translate: 0 0 !important;
+    transition: none !important;
+    transition-delay: 0ms !important;
+  }
+
+  .funnel-accent-line,
+  .funnel-accent-line.funnel-reveal {
+    transform: none !important;
+  }
+
   .funnel-slide-out-left,
-  .funnel-slide-out-right { animation-duration: 150ms; }
+  .funnel-slide-out-right,
   .funnel-slide-in-right,
-  .funnel-slide-in-left { animation-duration: 200ms; }
-  @keyframes slideOutLeft {
-    from { opacity: 1; transform: translateX(0); }
-    to   { opacity: 0; transform: translateX(-40px); }
+  .funnel-slide-in-left {
+    animation: none !important;
   }
-  @keyframes slideOutRight {
-    from { opacity: 1; transform: translateX(0); }
-    to   { opacity: 0; transform: translateX(40px); }
+
+  .funnel-constellation,
+  .funnel-spotlight,
+  .typewriter-cursor {
+    display: none !important;
   }
-  @keyframes slideInRight {
-    from { opacity: 0; transform: translateX(30px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  @keyframes slideInLeft {
-    from { opacity: 0; transform: translateX(-30px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-  .funnel-exiting { transition-duration: 300ms; filter: none !important; }
-  .funnel-spotlight { display: none; }
-  .funnel-accent-line { transition-duration: 250ms; }
 }

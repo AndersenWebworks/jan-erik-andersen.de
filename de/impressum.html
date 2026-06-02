@@ -23,7 +23,7 @@
         <span class="header-brand-surname">Andersen</span>
       </a>
       <nav class="header-nav" id="header-nav">
-        <div class="header-nav-dropdown"><a href="../leistungen/">Leistungen</a><div class="header-nav-dropdown-menu"><a href="../leistungen/ki-sichtbarkeit/"><span>KI-Sichtbarkeit</span><small>ChatGPT, Perplexity, Claude</small></a><a href="../leistungen/bfsg-barrierefreiheit/"><span>BFSG &amp; Barrierefreiheit</span><small>WCAG 2.1 AA-konform</small></a><a href="../leistungen/shops-und-custom/"><span>Shops &amp; Custom</span><small>WooCommerce + B2B</small></a></div></div>
+        <div class="header-nav-dropdown"><a href="../leistungen/" aria-haspopup="true" aria-expanded="false" aria-controls="header-services-menu">Leistungen</a><div class="header-nav-dropdown-menu" id="header-services-menu"><a href="../leistungen/ki-sichtbarkeit/"><span>KI-Sichtbarkeit</span><small>ChatGPT, Perplexity, Claude</small></a><a href="../leistungen/bfsg-barrierefreiheit/"><span>BFSG &amp; Barrierefreiheit</span><small>WCAG 2.2 AA-orientiert</small></a><a href="../leistungen/shops-und-custom/"><span>Shops &amp; Custom</span><small>WooCommerce + B2B</small></a></div></div>
         <a href="../projekte/">Projekte</a>
         <a href="../preise/">Preise</a>
         <a href="../faq/">FAQ</a>
@@ -41,7 +41,7 @@
         </label>
         <div class="pill-toggle">
           <div class="pill-track">
-            <a href="../de/impressum.html" class="pill-option active">DE</a>
+            <a href="../de/impressum.html" class="pill-option active" aria-current="page">DE</a>
             <a href="../en/imprint.html" class="pill-option">EN</a>
             <span class="pill-indicator"></span>
           </div>
@@ -55,7 +55,7 @@
           <svg class="hamburger-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
-      <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true" hidden inert>
         <nav>
           <a href="../leistungen/">Leistungen</a>
           <a href="../leistungen/ki-sichtbarkeit/" class="header-mobile-sub">KI-Sichtbarkeit</a>
@@ -78,7 +78,7 @@
           </label>
           <div class="pill-toggle">
             <div class="pill-track">
-              <a href="../de/impressum.html" class="pill-option active">DE</a>
+              <a href="../de/impressum.html" class="pill-option active" aria-current="page">DE</a>
               <a href="../en/imprint.html" class="pill-option">EN</a>
               <span class="pill-indicator"></span>
             </div>
@@ -113,12 +113,6 @@
           E-Mail: <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
         </p>
 
-        <h2>EU-Streitschlichtung</h2>
-        <p>
-          Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:<br>
-          <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener">https://ec.europa.eu/consumers/odr/</a>
-        </p>
-
         <h2>Verbraucher­schlichtungs­verfahren</h2>
         <p>
           Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
@@ -148,30 +142,93 @@
   <script>
   (function() {
     var cb = document.getElementById('darkmode-toggle');
-    var stored = localStorage.getItem('darkmode');
-    if (stored === '1') cb.checked = true;
-    cb.addEventListener('change', function() {
-      localStorage.setItem('darkmode', cb.checked ? '1' : '0');
-    });
+    var mobileDm;
+    var stored = null;
+    try { stored = localStorage.getItem('darkmode'); } catch (e) {}
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    function syncDarkmode(isDark, persist) {
+      if (cb) {
+        cb.checked = isDark;
+        cb.setAttribute('aria-label', isDark ? 'Farbschema auf hell umschalten' : 'Farbschema auf dunkel umschalten');
+      }
+      if (mobileDm) {
+        mobileDm.checked = isDark;
+        mobileDm.setAttribute('aria-label', isDark ? 'Farbschema auf hell umschalten' : 'Farbschema auf dunkel umschalten');
+      }
+      if (persist) {
+        try { localStorage.setItem('darkmode', isDark ? '1' : '0'); } catch (e) {}
+      }
+    }
+    syncDarkmode(stored === '1' || (stored !== '0' && prefersDark), false);
+    if (cb) {
+      cb.addEventListener('change', function() {
+        syncDarkmode(cb.checked, true);
+      });
+    }
 
-    // Mobile Menu
+    // Header accessibility
+    var serviceDropdown = document.querySelector('.header-nav-dropdown');
+    var serviceTrigger = serviceDropdown ? serviceDropdown.querySelector('a[aria-haspopup="true"]') : null;
+    function setServicesExpanded(expanded) {
+      if (serviceTrigger) serviceTrigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    }
+    if (serviceDropdown && serviceTrigger) {
+      serviceDropdown.addEventListener('mouseenter', function() { setServicesExpanded(true); });
+      serviceDropdown.addEventListener('mouseleave', function() { setServicesExpanded(false); });
+      serviceDropdown.addEventListener('focusin', function() { setServicesExpanded(true); });
+      serviceDropdown.addEventListener('focusout', function(e) {
+        if (!serviceDropdown.contains(e.relatedTarget)) setServicesExpanded(false);
+      });
+      serviceDropdown.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          setServicesExpanded(false);
+          serviceTrigger.focus();
+        }
+      });
+    }
+
     var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');
     if (hamburger && mobileMenu) {
+      mobileDm = mobileMenu.querySelector('.darkmode-checkbox-mobile');
+      syncDarkmode(cb ? cb.checked : false, false);
+
+      function setMobileMenu(open, returnFocus) {
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        hamburger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+        mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+        mobileMenu.hidden = !open;
+        if (open) {
+          mobileMenu.removeAttribute('inert');
+          var firstTarget = mobileMenu.querySelector('a[href], button:not([disabled]), input:not([disabled])');
+          if (firstTarget) window.requestAnimationFrame(function() { firstTarget.focus(); });
+        } else {
+          mobileMenu.setAttribute('inert', '');
+          if (returnFocus) hamburger.focus();
+        }
+      }
+
+      setMobileMenu(false, false);
       hamburger.addEventListener('click', function() {
-        var open = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !open);
-        mobileMenu.setAttribute('aria-hidden', open);
+        setMobileMenu(this.getAttribute('aria-expanded') !== 'true', false);
       });
-      var mobileDm = mobileMenu.querySelector('.darkmode-checkbox-mobile');
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target.closest('a[href]')) setMobileMenu(false, true);
+      });
+      document.addEventListener('click', function(e) {
+        if (hamburger.getAttribute('aria-expanded') === 'true' && !mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          setMobileMenu(false, true);
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (hamburger.getAttribute('aria-expanded') === 'true') setMobileMenu(false, true);
+          if (serviceTrigger) setServicesExpanded(false);
+        }
+      });
       if (mobileDm) {
-        mobileDm.checked = cb.checked;
         mobileDm.addEventListener('change', function() {
-          cb.checked = this.checked;
-          cb.dispatchEvent(new Event('change'));
-        });
-        cb.addEventListener('change', function() {
-          mobileDm.checked = cb.checked;
+          syncDarkmode(this.checked, true);
         });
       }
     }

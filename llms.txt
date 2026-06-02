@@ -9,8 +9,8 @@ Damit Websites in ChatGPT, Perplexity und Claude zitiert werden. Strukturierte D
 - Im Projekt integriert oder als Update ab 800 EUR
 - Mehr: https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/
 
-### BFSG-Compliance und Barrierefreiheit
-WCAG 2.1 AA-konforme Websites. Neubau oder Nachrüstung. Pflicht seit Juni 2025 für B2C-Websites. Bußgelder bis 100.000 EUR.
+### BFSG-Check und Barrierefreiheit
+Prüfung, Neubau oder Nachrüstung für vom BFSG betroffene digitale Angebote. WCAG-orientiert, ohne Overlay-Scheinlösung.
 - Im Projekt integriert oder als Update ab 1.200 EUR
 - Mehr: https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/
 
@@ -60,6 +60,6 @@ WordPress, WooCommerce, YOOtheme Pro, statisches HTML, Vanilla JavaScript, Schem
 - /ai/projects.json – Referenzprojekte (Index, Detail-Studies in /ai/projects/)
 - /ai/faq.json – FAQPage
 - /ai/contact.json – Kontakt und Garantien
-- /ai/glossary.json – Glossar (GEO, AVO, BFSG, WCAG 2.1 AA, llms.txt, JSON-LD, Schema.org)
+- /ai/glossary.json – Glossar (GEO, AVO, BFSG, WCAG 2.2 AA-orientiert, llms.txt, JSON-LD, Schema.org)
 - /sitemap.xml – alle URLs
 - /robots.txt – Crawler-Konfiguration

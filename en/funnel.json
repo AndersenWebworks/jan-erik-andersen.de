@@ -64,8 +64,8 @@
 
     "website-budget": {
       "type": "info",
-      "text": "Quick reality check: A professional company website with accessibility (mandatory since 2025) and AI visibility starts at EUR 2,400. Below that I recommend site builders like Squarespace – they've come a long way.",
-      "detail": "What you get for EUR 2,400–4,800: 5–8 pages, responsive design, accessibility compliant, AI-readable, fast loading. What costs more: shop integration, multilingual, complex structures, custom features.",
+      "text": "Quick reality check: A professional company website with accessibility-oriented implementation, EAA/BFSG scope check and AI visibility starts at EUR 2,400. Below that I recommend site builders like Squarespace – they've come a long way.",
+      "detail": "What you get for EUR 2,400–4,800: 5–8 pages, responsive design, WCAG 2.2 AA-oriented accessibility, AI-readable structure, fast loading. What costs more: shop integration, multilingual, complex structures, custom features.",
       "options": [
         {
           "label": "Works for me – tell me more",
@@ -481,7 +481,7 @@
     "result-website": {
       "type": "result",
       "title": "Company website – I can do that. Here's what it looks like.",
-      "text": "5–8 pages, clear structure, AI-visible, accessibility compliant. Accessibility and structured data are built in, no extra charge. CMS training included – so you can change texts and images yourself.\n\nFrom €2,400 fixed price. Typical: €2,400–5,000. Hourly rate for open scope: €80/h.",
+      "text": "5–8 pages, clear structure, AI-visible, WCAG 2.2 AA-oriented accessibility. Accessibility and structured data are built in, no extra charge. EAA/BFSG scope is checked when relevant. CMS training included – so you can change texts and images yourself.\n\nFrom €2,400 fixed price. Typical: €2,400–5,000. Hourly rate for open scope: €80/h.",
       "proof": [
         {
           "name": "WBG Pooling",
@@ -747,7 +747,7 @@
       "proof": [
         {
           "name": "This website",
-          "desc": "WCAG 2.1 AA, EAA compliant"
+          "desc": "WCAG 2.2 AA-oriented, EAA/BFSG scope check"
         }
       ],
       "cta": {
@@ -1060,7 +1060,7 @@
 
     "bfsg-betroffen": {
       "type": "info",
-      "text": "Your website must be accessible. Mandatory since June 2025, fines up to EUR 100,000. But no reason to panic – most issues are systematic and solvable.",
+      "text": "Your website may be affected by the BFSG if it provides covered digital services such as e-commerce to consumers. No reason to panic: first clarify applicability, then fix the actual barriers systematically.",
       "detail": "Self-test you can do right now: 1. Try navigating your website using only the keyboard (Tab key). Can you reach everything? 2. Zoom to 200% – does the layout break? 3. Do all images have alt texts? If any of these fails, you have concrete action needed.",
       "options": [
         {
@@ -1088,11 +1088,11 @@
     "result-bfsg-audit": {
       "type": "result",
       "title": "EAA/BFSG check – I'll tell you where you stand.",
-      "text": "I check your website for WCAG 2.1 AA compliance: contrasts, keyboard navigation, screen reader compatibility, forms, images. You get a concrete report with priorities and effort estimates.\n\nAudit from EUR 400. Retrofit from EUR 1,200 – or included as part of a new project.",
+      "text": "I check your website with a WCAG 2.2 AA-oriented, EAA/BFSG scope-aware review: contrasts, keyboard navigation, semantic structure, forms, images. You get a concrete report with priorities and effort estimates – no formal certification.\n\nAudit from EUR 400. Retrofit from EUR 1,200 – or included as part of a new project.",
       "proof": [
         {
           "name": "This website",
-          "desc": "WCAG 2.1 AA, EAA compliant"
+          "desc": "WCAG 2.2 AA-oriented, EAA/BFSG scope check"
         }
       ],
       "cta": {

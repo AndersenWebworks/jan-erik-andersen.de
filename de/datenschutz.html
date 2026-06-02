@@ -23,7 +23,7 @@
         <span class="header-brand-surname">Andersen</span>
       </a>
       <nav class="header-nav" id="header-nav">
-        <div class="header-nav-dropdown"><a href="../leistungen/">Leistungen</a><div class="header-nav-dropdown-menu"><a href="../leistungen/ki-sichtbarkeit/"><span>KI-Sichtbarkeit</span><small>ChatGPT, Perplexity, Claude</small></a><a href="../leistungen/bfsg-barrierefreiheit/"><span>BFSG &amp; Barrierefreiheit</span><small>WCAG 2.1 AA-konform</small></a><a href="../leistungen/shops-und-custom/"><span>Shops &amp; Custom</span><small>WooCommerce + B2B</small></a></div></div>
+        <div class="header-nav-dropdown"><a href="../leistungen/" aria-haspopup="true" aria-expanded="false" aria-controls="header-services-menu">Leistungen</a><div class="header-nav-dropdown-menu" id="header-services-menu"><a href="../leistungen/ki-sichtbarkeit/"><span>KI-Sichtbarkeit</span><small>ChatGPT, Perplexity, Claude</small></a><a href="../leistungen/bfsg-barrierefreiheit/"><span>BFSG &amp; Barrierefreiheit</span><small>WCAG 2.2 AA-orientiert</small></a><a href="../leistungen/shops-und-custom/"><span>Shops &amp; Custom</span><small>WooCommerce + B2B</small></a></div></div>
         <a href="../projekte/">Projekte</a>
         <a href="../preise/">Preise</a>
         <a href="../faq/">FAQ</a>
@@ -41,7 +41,7 @@
         </label>
         <div class="pill-toggle">
           <div class="pill-track">
-            <a href="../de/datenschutz.html" class="pill-option active">DE</a>
+            <a href="../de/datenschutz.html" class="pill-option active" aria-current="page">DE</a>
             <a href="../en/privacy.html" class="pill-option">EN</a>
             <span class="pill-indicator"></span>
           </div>
@@ -55,7 +55,7 @@
           <svg class="hamburger-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
-      <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true">
+      <div class="header-mobile-menu" id="mobile-menu" aria-hidden="true" hidden inert>
         <nav>
           <a href="../leistungen/">Leistungen</a>
           <a href="../leistungen/ki-sichtbarkeit/" class="header-mobile-sub">KI-Sichtbarkeit</a>
@@ -78,7 +78,7 @@
           </label>
           <div class="pill-toggle">
             <div class="pill-track">
-              <a href="../de/datenschutz.html" class="pill-option active">DE</a>
+              <a href="../de/datenschutz.html" class="pill-option active" aria-current="page">DE</a>
               <a href="../en/privacy.html" class="pill-option">EN</a>
               <span class="pill-indicator"></span>
             </div>
@@ -106,14 +106,14 @@
 
         <h3>Datenerfassung auf dieser Website</h3>
         <p><strong>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</strong><br>Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Abschnitt „Hinweis zur verantwortlichen Stelle" in dieser Datenschutzerklärung entnehmen.</p>
-        <p><strong>Wie erfassen wir Ihre Daten?</strong><br>Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z. B. um Daten handeln, die Sie in ein Kontaktformular eingeben oder per E-Mail senden.</p>
+        <p><strong>Wie erfassen wir Ihre Daten?</strong><br>Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen, zum Beispiel wenn Sie uns per E-Mail kontaktieren. Ein serverseitiges Kontaktformular wird auf dieser Website nicht betrieben.</p>
         <p>Andere Daten werden automatisch oder nach Ihrer Einwilligung beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z. B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie diese Website betreten.</p>
 
         <h2>2. Hosting</h2>
-        <p>Diese Website wird bei <strong>GitHub Pages</strong> gehostet. Der Anbieter ist GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA (nachfolgend „GitHub").</p>
+        <p>Diese Website wird bei <strong>GitHub Pages</strong> gehostet. GitHub-Dienste werden unter anderem durch GitHub, Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA, und GitHub B.V., Prins Bernhardplein 200, 1097 JB Amsterdam, Niederlande, bereitgestellt (nachfolgend „GitHub").</p>
         <p>Wenn Sie diese Website besuchen, erfasst GitHub verschiedene Logfiles inklusive Ihrer IP-Adressen. Details entnehmen Sie der Datenschutzerklärung von GitHub: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">GitHub Privacy Statement</a></p>
         <p>Die Verwendung von GitHub Pages erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Wir haben ein berechtigtes Interesse an einer möglichst zuverlässigen Darstellung unserer Website. Sofern eine entsprechende Einwilligung abgefragt wurde, erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO; die Einwilligung ist jederzeit widerrufbar.</p>
-        <p>Die Datenübertragung in die USA wird auf die Standardvertragsklauseln der EU-Kommission gestützt. Details finden Sie hier: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-data-protection-agreement" target="_blank" rel="noopener">GitHub Data Protection Agreement</a></p>
+        <p>Soweit Daten in die USA oder andere Drittländer übertragen werden, stützt GitHub diese Übermittlungen unter anderem auf geeignete Garantien wie Standardvertragsklauseln. Details finden Sie hier: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-data-protection-agreement" target="_blank" rel="noopener">GitHub Data Protection Agreement</a> und <a href="https://docs.github.com/en/site-policy/privacy-policies/github-subprocessors" target="_blank" rel="noopener">GitHub Subprocessors</a>.</p>
 
         <h2>3. Allgemeine Hinweise und Pflichtinformationen</h2>
 
@@ -122,7 +122,7 @@
 
         <h3>Hinweis zur verantwortlichen Stelle</h3>
         <p>Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:</p>
-        <p>Jan-Erik Andersen<br>Am Ahrendsberg 18<br>19395 Ganzlin<br>E-Mail: <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a></p>
+        <p>Jan-Erik Andersen<br>Am Ahrendsberg 18<br>19395 Ganzlin<br>Telefon: 038733 270015<br>E-Mail: <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a></p>
         <p>Verantwortliche Stelle ist die natürliche oder juristische Person, die allein oder gemeinsam mit anderen über die Zwecke und Mittel der Verarbeitung von personenbezogenen Daten (z. B. Namen, E-Mail-Adressen o. Ä.) entscheidet.</p>
 
         <h3>Speicherdauer</h3>
@@ -141,7 +141,7 @@
         <p>Wenn die Datenverarbeitung auf Grundlage von Art. 6 Abs. 1 lit. e oder f DSGVO erfolgt, haben Sie jederzeit das Recht, aus Gründen, die sich aus Ihrer besonderen Situation ergeben, gegen die Verarbeitung Ihrer personenbezogenen Daten Widerspruch einzulegen.</p>
 
         <h3>Beschwerderecht bei der zuständigen Aufsichtsbehörde</h3>
-        <p>Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.</p>
+        <p>Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde zu. Zuständig für Anbieter mit Sitz in Mecklenburg-Vorpommern ist der Landesbeauftragte für Datenschutz und Informationsfreiheit Mecklenburg-Vorpommern, Lennéstraße 1, 19053 Schwerin, <a href="https://www.datenschutz-mv.de/" target="_blank" rel="noopener">www.datenschutz-mv.de</a>. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.</p>
 
         <h3>Recht auf Datenübertragbarkeit</h3>
         <p>Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen.</p>
@@ -166,7 +166,7 @@
         </ul>
         <p>Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen. Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.</p>
 
-        <h3>Kontaktformular / E-Mail-Kontakt</h3>
+        <h3>E-Mail-Kontakt</h3>
         <p>Wenn Sie uns per E-Mail kontaktieren, wird Ihre Anfrage inklusive aller daraus hervorgehenden personenbezogenen Daten (Name, Anfrage) zum Zwecke der Bearbeitung Ihres Anliegens bei uns gespeichert und verarbeitet. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.</p>
         <p>Die Verarbeitung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO, sofern Ihre Anfrage mit der Erfüllung eines Vertrags zusammenhängt oder zur Durchführung vorvertraglicher Maßnahmen erforderlich ist. In allen übrigen Fällen beruht die Verarbeitung auf unserem berechtigten Interesse an der effektiven Bearbeitung der an uns gerichteten Anfragen (Art. 6 Abs. 1 lit. f DSGVO).</p>
 
@@ -175,18 +175,22 @@
         <h3>Keine Cookies</h3>
         <p>Diese Website verwendet keine Cookies.</p>
 
-        <h3>Kein JavaScript</h3>
+        <h3>LocalStorage und JavaScript</h3>
+        <p>Diese Website verwendet JavaScript für Bedienfunktionen wie den Dark Mode, das mobile Menü und den Projekt-Kompass. Dabei können im Speicher Ihres Browsers (localStorage) einzelne Einstellungen gespeichert werden, insbesondere <code>darkmode</code> für das gewählte Farbschema und <code>funnel-done</code> für den Projekt-Kompass. Diese Informationen werden nicht an uns übermittelt und können durch Löschen der Website-Daten im Browser entfernt werden. Rechtsgrundlage ist § 25 Abs. 2 TDDDG, soweit die Speicherung für eine von Ihnen genutzte Funktion erforderlich ist, sowie Art. 6 Abs. 1 lit. f DSGVO für unser Interesse an einer nutzbaren, stabilen Website.</p>
+
+        <h3>Kein JavaScript-Tracking</h3>
         <p>Diese Website verwendet kein JavaScript für Tracking oder Analytics.</p>
 
         <h3>Besucherstatistiken (GoatCounter)</h3>
-        <p>Diese Website nutzt GoatCounter für anonyme Besucherstatistiken. GoatCounter erfasst ausschließlich aggregierte Daten wie Seitenaufrufe und Herkunftsländer, <strong>ohne personenbezogene Daten</strong> zu speichern.</p>
+        <p>Diese Website nutzt GoatCounter für datensparsame Besucherstatistiken. Die Erfassung erfolgt über ein 1x1-Pixel-Bild. GoatCounter speichert laut eigener Dokumentation aggregierte Statistikdaten und keine IP-Adressen, keine vollständigen User-Agent-Header und keine Tracker-ID.</p>
         <ul>
-          <li>Keine IP-Adressen werden gespeichert</li>
+          <li>IP-Adresse und User-Agent können zur Ermittlung von Land, Browser, System und wiederkehrenden Sitzungen kurzzeitig verarbeitet werden</li>
+          <li>Die Zuordnung aus Website, IP-Adresse und User-Agent wird laut GoatCounter nur im Arbeitsspeicher und bis zu 8 Stunden gehalten</li>
           <li>Keine Cookies werden gesetzt</li>
-          <li>Kein Fingerprinting</li>
+          <li>GoatCounter speichert nichts im Browser, also keine Cookies, keinen localStorage und keine Cache-IDs</li>
           <li>Kein Tracking über mehrere Websites hinweg</li>
         </ul>
-        <p>Die Datenerfassung erfolgt per 1x1-Pixel-Bild (kein JavaScript) auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an anonymer Nutzungsanalyse). Weitere Informationen: <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener">GoatCounter Privacy Policy</a></p>
+        <p>Die Datenerfassung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt darin, Seitenaufrufe und grobe Nutzungsmuster ohne werbliches Tracking auszuwerten. Weitere Informationen: <a href="https://www.goatcounter.com/help/privacy" target="_blank" rel="noopener">GoatCounter Privacy Policy</a> und <a href="https://www.goatcounter.com/help/gdpr" target="_blank" rel="noopener">GoatCounter GDPR Notes</a>.</p>
 
         <h3>Keine weiteren externen Dienste</h3>
         <p>Abgesehen von GoatCounter bindet diese Website keine weiteren externen Dienste wie Google Analytics, Google Fonts, Social Media Plugins oder ähnliche Tracking-Dienste ein. Alle Ressourcen werden lokal von unserem Server ausgeliefert.</p>
@@ -215,30 +219,93 @@
   <script>
   (function() {
     var cb = document.getElementById('darkmode-toggle');
-    var stored = localStorage.getItem('darkmode');
-    if (stored === '1') cb.checked = true;
-    cb.addEventListener('change', function() {
-      localStorage.setItem('darkmode', cb.checked ? '1' : '0');
-    });
+    var mobileDm;
+    var stored = null;
+    try { stored = localStorage.getItem('darkmode'); } catch (e) {}
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    function syncDarkmode(isDark, persist) {
+      if (cb) {
+        cb.checked = isDark;
+        cb.setAttribute('aria-label', isDark ? 'Farbschema auf hell umschalten' : 'Farbschema auf dunkel umschalten');
+      }
+      if (mobileDm) {
+        mobileDm.checked = isDark;
+        mobileDm.setAttribute('aria-label', isDark ? 'Farbschema auf hell umschalten' : 'Farbschema auf dunkel umschalten');
+      }
+      if (persist) {
+        try { localStorage.setItem('darkmode', isDark ? '1' : '0'); } catch (e) {}
+      }
+    }
+    syncDarkmode(stored === '1' || (stored !== '0' && prefersDark), false);
+    if (cb) {
+      cb.addEventListener('change', function() {
+        syncDarkmode(cb.checked, true);
+      });
+    }
 
-    // Mobile Menu
+    // Header accessibility
+    var serviceDropdown = document.querySelector('.header-nav-dropdown');
+    var serviceTrigger = serviceDropdown ? serviceDropdown.querySelector('a[aria-haspopup="true"]') : null;
+    function setServicesExpanded(expanded) {
+      if (serviceTrigger) serviceTrigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    }
+    if (serviceDropdown && serviceTrigger) {
+      serviceDropdown.addEventListener('mouseenter', function() { setServicesExpanded(true); });
+      serviceDropdown.addEventListener('mouseleave', function() { setServicesExpanded(false); });
+      serviceDropdown.addEventListener('focusin', function() { setServicesExpanded(true); });
+      serviceDropdown.addEventListener('focusout', function(e) {
+        if (!serviceDropdown.contains(e.relatedTarget)) setServicesExpanded(false);
+      });
+      serviceDropdown.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          setServicesExpanded(false);
+          serviceTrigger.focus();
+        }
+      });
+    }
+
     var hamburger = document.getElementById('header-hamburger');
     var mobileMenu = document.getElementById('mobile-menu');
     if (hamburger && mobileMenu) {
+      mobileDm = mobileMenu.querySelector('.darkmode-checkbox-mobile');
+      syncDarkmode(cb ? cb.checked : false, false);
+
+      function setMobileMenu(open, returnFocus) {
+        hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+        hamburger.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+        mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+        mobileMenu.hidden = !open;
+        if (open) {
+          mobileMenu.removeAttribute('inert');
+          var firstTarget = mobileMenu.querySelector('a[href], button:not([disabled]), input:not([disabled])');
+          if (firstTarget) window.requestAnimationFrame(function() { firstTarget.focus(); });
+        } else {
+          mobileMenu.setAttribute('inert', '');
+          if (returnFocus) hamburger.focus();
+        }
+      }
+
+      setMobileMenu(false, false);
       hamburger.addEventListener('click', function() {
-        var open = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', !open);
-        mobileMenu.setAttribute('aria-hidden', open);
+        setMobileMenu(this.getAttribute('aria-expanded') !== 'true', false);
       });
-      var mobileDm = mobileMenu.querySelector('.darkmode-checkbox-mobile');
+      mobileMenu.addEventListener('click', function(e) {
+        if (e.target.closest('a[href]')) setMobileMenu(false, true);
+      });
+      document.addEventListener('click', function(e) {
+        if (hamburger.getAttribute('aria-expanded') === 'true' && !mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+          setMobileMenu(false, true);
+        }
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          if (hamburger.getAttribute('aria-expanded') === 'true') setMobileMenu(false, true);
+          if (serviceTrigger) setServicesExpanded(false);
+        }
+      });
       if (mobileDm) {
-        mobileDm.checked = cb.checked;
         mobileDm.addEventListener('change', function() {
-          cb.checked = this.checked;
-          cb.dispatchEvent(new Event('change'));
-        });
-        cb.addEventListener('change', function() {
-          mobileDm.checked = cb.checked;
+          syncDarkmode(this.checked, true);
         });
       }
     }

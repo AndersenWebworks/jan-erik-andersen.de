@@ -404,8 +404,10 @@ html.funnel-active .site-header ~ main {
 .header-right .pill-toggle:has(.darkmode-checkbox) .pill-track {
   width: 34px;
   height: 34px;
+  align-items: center;
   justify-content: center;
   padding: 0;
+  color: var(--color-text-secondary);
 }
 
 .header-right .pill-toggle:has(.darkmode-checkbox) .pill-option,
@@ -414,18 +416,22 @@ html.funnel-active .site-header ~ main {
 }
 
 .header-right .pill-toggle:has(.darkmode-checkbox) .pill-track::before {
+  --theme-toggle-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3A7 7 0 0 0 21 12.79Z'/%3E%3C/svg%3E");
   content: '';
-  width: 15px;
-  height: 15px;
-  border: 1.7px solid var(--color-text-secondary);
-  border-left-color: transparent;
-  border-radius: 50%;
-  transform: rotate(-18deg);
+  display: block;
+  width: 18px;
+  height: 18px;
+  background: currentColor;
+  -webkit-mask: var(--theme-toggle-icon) center / contain no-repeat;
+  mask: var(--theme-toggle-icon) center / contain no-repeat;
+}
+
+.header-right .pill-toggle:has(.darkmode-checkbox:checked) .pill-track::before {
+  --theme-toggle-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41'/%3E%3C/svg%3E");
 }
 
 .header-right .pill-toggle:has(.darkmode-checkbox):hover .pill-track::before {
-  border-color: var(--color-text);
-  border-left-color: transparent;
+  color: var(--color-text);
 }
 
 .pill-track {
@@ -1366,27 +1372,6 @@ html.funnel-active .funnel {
   margin-bottom: 1.25rem;
 }
 
-#funnel-skip {
-  position: absolute;
-  top: 1.25rem;
-  right: max(1.25rem, calc((100vw - 760px) / 2));
-  bottom: auto;
-  left: auto;
-  transform: none;
-  width: auto;
-  min-height: 38px;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-#funnel-skip:hover {
-  transform: translateY(-1px);
-}
-
 .funnel-contact-preview {
   border-radius: 10px;
   background: var(--color-bg);
@@ -1415,10 +1400,6 @@ html.funnel-active .funnel {
     padding: 2.75rem 1rem 3rem;
   }
 
-  #funnel-skip {
-    top: 0.75rem;
-    right: 1rem;
-  }
 }
 
 /* Responsive */

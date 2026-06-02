@@ -43,7 +43,7 @@
       "name": "Muss meine Website barrierefrei sein?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Wenn Produkte oder Dienstleistungen an Verbraucher verkauft werden: ja, seit Juni 2025 (BFSG). Bussgelder bis 100.000 EUR."
+        "text": "Das haengt vom konkreten Angebot ab. Seit dem 28. Juni 2025 betrifft das BFSG bestimmte Produkte und Dienstleistungen, darunter elektronischen Geschaeftsverkehr. Sinnvoll ist zuerst ein Scope-Check; danach folgen Audit und WCAG 2.2 AA-orientierte Nachruestung."
       }
     },
     {

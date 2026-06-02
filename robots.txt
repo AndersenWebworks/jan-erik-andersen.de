@@ -13,6 +13,7 @@ Allow: /*.txt
 Disallow: /archiv/
 Disallow: /doc/
 Disallow: /docs/
+Disallow: /prototypen/
 Disallow: /tests/
 Disallow: /qa-screenshots/
 Disallow: /screenshots/compare/
