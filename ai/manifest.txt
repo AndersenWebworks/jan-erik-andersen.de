@@ -4,7 +4,7 @@
   "name": "jan-erik-andersen.de AI Endpoints",
   "description": "Maschinenlesbare Daten-Spiegelung der Website fuer KI-Systeme und Agenten.",
   "version": "1.0",
-  "dateModified": "2026-05-06",
+  "dateModified": "2026-05-25",
   "inLanguage": ["de", "en"],
   "license": "https://creativecommons.org/licenses/by/4.0/",
   "publisher": {
@@ -14,7 +14,7 @@
   },
   "endpoints": [
     {"path": "/ai/manifest.json", "type": "DataCatalog", "description": "Discovery-Manifest fuer alle AI-Endpoints"},
-    {"path": "/ai/profile.json", "type": "Person + ProfessionalService", "description": "Erik Andersen und Andersen Webworks"},
+    {"path": "/ai/profile.json", "type": "Person + ProfessionalService", "description": "Jan-Erik Andersen und Andersen Webworks"},
     {"path": "/ai/services.json", "type": "ItemList of Service", "description": "Alle Leistungen mit Offer und Preis-Range"},
     {"path": "/ai/pricing.json", "type": "PriceSpecification", "description": "Preise, Stundensatz, Retainer"},
     {"path": "/ai/projects.json", "type": "ItemList", "description": "Referenzprojekte (Index)"},
