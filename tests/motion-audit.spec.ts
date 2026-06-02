@@ -87,7 +87,6 @@ const WATCHED_SELECTORS: WatchedSelector[] = [
   { name: 'funnel-container', selector: '.funnel-container' },
   { name: 'funnel-title', selector: '.funnel-question-title' },
   { name: 'funnel-options', selector: '.funnel-options' },
-  { name: 'funnel-skip', selector: '#funnel-skip' },
   { name: 'projects', selector: '.projects-section' },
   { name: 'process', selector: '.process-section' },
   { name: 'contact', selector: '.contact-section' },
@@ -135,9 +134,9 @@ test.describe.serial('motion audit', () => {
         await page.locator('.funnel-option').first().click();
         await page.waitForTimeout(1200);
         await mark(page, 'after-second-step');
-        await page.locator('#funnel-skip').click();
+        await closeFunnelWithEscape(page, 3);
         await page.waitForTimeout(900);
-        await mark(page, 'after-skip');
+        await mark(page, 'after-close');
       }
     }));
 
@@ -152,9 +151,9 @@ test.describe.serial('motion audit', () => {
         await page.locator('.funnel-container').evaluate((el) => { el.scrollTop = 120; });
         await page.waitForTimeout(500);
         await mark(page, 'small-funnel-internal-scroll');
-        await page.locator('#funnel-skip').click();
+        await closeFunnelWithEscape(page);
         await page.waitForTimeout(700);
-        await mark(page, 'small-funnel-after-skip');
+        await mark(page, 'small-funnel-after-close');
       }
     }));
 
@@ -169,9 +168,9 @@ test.describe.serial('motion audit', () => {
         await page.locator('.funnel-option').first().click();
         await page.waitForTimeout(1000);
         await mark(page, 'desktop-after-step');
-        await page.locator('#funnel-skip').click();
+        await closeFunnelWithEscape(page, 2);
         await page.waitForTimeout(800);
-        await mark(page, 'desktop-after-skip');
+        await mark(page, 'desktop-after-close');
       }
     }));
 
@@ -220,9 +219,9 @@ test.describe.serial('motion audit', () => {
       actions: async (page) => {
         await mark(page, 'en-funnel-visible');
         await page.waitForTimeout(2200);
-        await page.locator('#funnel-skip').click();
+        await closeFunnelWithEscape(page);
         await page.waitForTimeout(800);
-        await mark(page, 'en-after-skip');
+        await mark(page, 'en-after-close');
       }
     }));
 
@@ -268,7 +267,7 @@ async function runFlow(
       await expect(page.locator('#funnel')).toBeHidden();
       await expect(page.locator('#funnel-reopen')).toBeVisible();
       await page.locator('#funnel-reopen').click();
-      await expect(page.locator('#funnel-skip')).toBeVisible();
+      await expect(page.locator('#funnel-skip')).toHaveCount(0);
       await expect(page.locator('#funnel')).toBeVisible();
     } else {
       await expect(page.locator('#funnel')).toBeHidden();
@@ -308,6 +307,13 @@ async function runFlow(
     return report;
   } finally {
     await page.close();
+  }
+}
+
+async function closeFunnelWithEscape(page: Page, presses = 1) {
+  for (let i = 0; i < presses; i++) {
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(260);
   }
 }
 

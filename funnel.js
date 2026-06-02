@@ -14,7 +14,6 @@
 
   var funnel   = document.getElementById('funnel');
   var app      = document.getElementById('funnel-app');
-  var skipButton = document.getElementById('funnel-skip');
   var tree     = null;
   var history  = [];
   var currentNodeId = 'start';
@@ -337,32 +336,7 @@
     }
   }
 
-  function showSkipButton() {
-    if (!skipButton) return;
-    skipButton.hidden = false;
-    skipButton.classList.add('is-visible');
-    skipButton.disabled = false;
-    skipButton.setAttribute('aria-hidden', 'false');
-  }
-
-  function hideSkipButton() {
-    if (!skipButton) return;
-    skipButton.classList.remove('is-visible');
-    skipButton.disabled = true;
-    skipButton.setAttribute('aria-hidden', 'true');
-  }
-
-  function bindSkipButton() {
-    if (!skipButton || skipButton.getAttribute('data-bound') === 'true') return;
-    skipButton.setAttribute('data-bound', 'true');
-    skipButton.addEventListener('click', function () {
-      trackEvent('skip');
-      exitFunnel();
-    });
-  }
-
   function skipFunnel() {
-    hideSkipButton();
     funnel.classList.add('funnel-hidden');
     funnel.setAttribute('aria-hidden', 'true');
     document.documentElement.classList.remove('funnel-active');
@@ -378,8 +352,6 @@
 
     funnel.classList.remove('funnel-hidden', 'funnel-exiting');
     funnel.setAttribute('aria-hidden', 'false');
-    bindSkipButton();
-    showSkipButton();
     destroyConstellation();
 
     requestAnimationFrame(function () {
@@ -1174,7 +1146,6 @@
 
   function exitFunnel() {
     markFunnelDone();
-    if (skipButton) skipButton.disabled = true;
     var siteHeader = document.getElementById('site-header');
     if (siteHeader) siteHeader.classList.add('has-nav');
     // Clear URL hash on exit
@@ -1184,7 +1155,6 @@
     funnel.classList.add('funnel-exiting');
     document.documentElement.classList.remove('funnel-active');
     setTimeout(function () {
-      hideSkipButton();
       destroyConstellation();
       funnel.classList.add('funnel-hidden');
       funnel.setAttribute('aria-hidden', 'true');

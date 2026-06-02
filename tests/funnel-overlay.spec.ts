@@ -9,7 +9,7 @@ async function openFresh(page, path = '/') {
   await expect(page.locator('.quickcheck-card')).toBeVisible();
   await expect(page.locator('#funnel-reopen')).toBeVisible();
   await page.locator('#funnel-reopen').click();
-  await expect(page.locator('#funnel-skip')).toBeVisible();
+  await expect(page.locator('#funnel-skip')).toHaveCount(0);
   await expect(page.locator('#funnel')).toBeVisible();
   await expect(page.locator('.quickcheck-card')).toBeHidden();
 }
@@ -67,35 +67,31 @@ test.describe('project compass funnel', () => {
     const state = await page.evaluate(() => {
       const funnel = document.querySelector('#funnel') as HTMLElement;
       const app = document.querySelector('.funnel-app') as HTMLElement;
-      const skip = document.querySelector('#funnel-skip') as HTMLElement;
       const funnelRect = funnel.getBoundingClientRect();
       const appRect = app.getBoundingClientRect();
-      const skipRect = skip.getBoundingClientRect();
 
       return {
         htmlActive: document.documentElement.classList.contains('funnel-active'),
         htmlInline: document.documentElement.classList.contains('funnel-inline'),
+        skipExists: !!document.querySelector('#funnel-skip'),
         funnelPosition: getComputedStyle(funnel).position,
         appBackground: getComputedStyle(app).backgroundColor,
         appRadius: parseFloat(getComputedStyle(app).borderRadius),
         appWidth: appRect.width,
         funnelHeight: funnelRect.height,
         viewportHeight: window.innerHeight,
-        skipPosition: getComputedStyle(skip).position,
-        skipTop: skipRect.top,
         scrollY: window.scrollY,
       };
     });
 
     expect(state.htmlActive).toBe(true);
     expect(state.htmlInline).toBe(false);
+    expect(state.skipExists).toBe(false);
     expect(state.funnelPosition).not.toBe('fixed');
     expect(state.funnelHeight).toBeLessThan(state.viewportHeight * 1.25);
     expect(state.appWidth).toBeLessThanOrEqual(760);
     expect(state.appBackground).toBe('rgb(255, 255, 255)');
     expect(state.appRadius).toBeGreaterThanOrEqual(10);
-    expect(state.skipPosition).toBe('absolute');
-    expect(state.skipTop).toBeGreaterThanOrEqual(0);
     expect(state.scrollY).toBeGreaterThan(0);
   });
 
@@ -107,7 +103,7 @@ test.describe('project compass funnel', () => {
     await page.mouse.wheel(0, 600);
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(before);
 
-    await page.locator('#funnel-skip').click();
+    await page.keyboard.press('Escape');
     await expect(page.locator('#funnel')).toBeHidden();
     await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('funnel-active'))).toBe(false);
     await expect(page.locator('#funnel-reopen')).toBeVisible();
@@ -158,8 +154,7 @@ test.describe('project compass funnel', () => {
     await openFresh(page, '/en/');
 
     await expect(page.locator('#funnel')).not.toHaveCSS('position', 'fixed');
-    await expect(page.locator('#funnel-skip')).toHaveText('Close');
-    await expect(page.locator('#funnel-skip')).toBeVisible();
+    await expect(page.locator('#funnel-skip')).toHaveCount(0);
     await expect.poll(() => page.evaluate(() => document.documentElement.classList.contains('funnel-inline'))).toBe(false);
   });
 });
