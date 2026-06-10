@@ -1824,7 +1824,7 @@ body:has(.darkmode-checkbox-mobile:checked) .contact-card .contact-method-label 
 .contact-card .contact-method span {
   font-size: 1.0625rem;
   font-weight: 500;
-  color: #fff;
+  color: #fff !important;
 }
 
 .contact-card .contact-method a {
@@ -1833,9 +1833,15 @@ body:has(.darkmode-checkbox-mobile:checked) .contact-card .contact-method-label 
   transition: border-color 150ms ease;
 }
 
-.contact-card .contact-method a:hover {
-  border-bottom-color: var(--color-accent);
-  color: #fff;
+.contact-card .contact-method a:visited,
+.contact-card .contact-method a:hover,
+.contact-card .contact-method a:focus-visible {
+  color: #fff !important;
+}
+
+.contact-card .contact-method a:hover,
+.contact-card .contact-method a:focus-visible {
+  border-bottom-color: rgba(255, 255, 255, 0.72);
 }
 
 body:has(.darkmode-checkbox:checked) .contact-card .contact-method a,
@@ -5810,6 +5816,23 @@ body:has(.darkmode-checkbox-mobile:checked) .contact-section--hero .contact-inne
 .contact-method span {
   color: inherit;
   overflow-wrap: anywhere;
+}
+
+.contact-card .contact-method a,
+.contact-card .contact-method span,
+.contact-section--hero .contact-method a,
+.contact-section--hero .contact-method span {
+  color: #fff !important;
+}
+
+.contact-card .contact-method a:visited,
+.contact-card .contact-method a:hover,
+.contact-card .contact-method a:focus-visible,
+.contact-section--hero .contact-method a:visited,
+.contact-section--hero .contact-method a:hover,
+.contact-section--hero .contact-method a:focus-visible {
+  color: #fff !important;
+  border-bottom-color: rgba(255, 255, 255, 0.72);
 }
 
 .contact-method-label {
