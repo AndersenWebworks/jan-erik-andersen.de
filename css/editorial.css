@@ -8,19 +8,6 @@
   grid-template-columns: 1fr 280px;
   gap: var(--space-2xl);
   align-items: start;
-  position: relative;
-}
-
-/* Column rule between main + sidebar */
-.editorial-layout::after {
-  content: '';
-  position: absolute;
-  right: calc(280px + var(--space-2xl) / 2 + var(--space-xl));
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--color-border);
-  pointer-events: none;
 }
 
 .editorial-headline {
@@ -231,7 +218,6 @@
 /* --- Responsive --- */
 @media (max-width: 1024px) {
   .editorial-layout { grid-template-columns: 1fr; }
-  .editorial-layout::after { display: none; }
 
   .editorial-sidebar {
     order: 0;
