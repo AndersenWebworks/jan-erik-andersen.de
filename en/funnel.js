@@ -393,16 +393,8 @@
       });
   }
 
-  /* ── GoatCounter Tracking ────────────────────────── */
-
   function trackEvent(event, detail) {
-    if (window.goatcounter && window.goatcounter.count) {
-      window.goatcounter.count({
-        path: 'funnel/' + event + (detail ? '/' + detail : ''),
-        title: 'Funnel: ' + event,
-        event: true
-      });
-    }
+    return;
   }
 
   /* ── Init ─────────────────────────────────────────── */

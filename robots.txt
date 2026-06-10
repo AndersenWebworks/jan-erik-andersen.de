@@ -9,15 +9,7 @@ Allow: /*.json
 Allow: /*.jsonld
 Allow: /*.txt
 
-# Arbeits-, Archiv- und Referenzdateien nicht indexieren
-Disallow: /archiv/
-Disallow: /doc/
-Disallow: /docs/
-Disallow: /prototypen/
-Disallow: /tests/
-Disallow: /qa-screenshots/
-Disallow: /screenshots/compare/
-Disallow: /verify/
+# Nicht öffentliche Arbeitsdateien, falls versehentlich vorhanden
 Disallow: /.git/
 Disallow: /.htaccess
 Disallow: /*.md$
