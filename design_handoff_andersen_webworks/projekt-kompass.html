@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projekt-Kompass — Jan-Erik Andersen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#fafaf7;--bg-2:#f2f1ec;--bg-3:#e8e7e0;
+    --ink:#1a1a18;--ink-2:#4a4a46;--ink-3:#86857d;
+    --rule:#e2e1da;--rule-2:#cdcbc1;--accent:#a83a3a;--accent-soft:#fdf3f3;--card:#fff;
+    --radius:16px;--radius-sm:11px;
+    --shadow:0 1px 2px rgba(20,20,18,.04),0 10px 30px rgba(20,20,18,.07);
+  }
+  :root[data-theme="dark"]{
+    --bg:#111110;--bg-2:#1a1a18;--bg-3:#232321;
+    --ink:#f1f0ea;--ink-2:#b9b8b0;--ink-3:#807f77;
+    --rule:#292926;--rule-2:#393833;--accent:#cf5757;--accent-soft:#2a1717;--card:#1a1a18;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.4);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:"Inter",ui-sans-serif,system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    display:flex;align-items:flex-start;justify-content:center;
+    padding:48px 24px;min-height:100vh;
+  }
+  .mono{font-family:"JetBrains Mono",ui-monospace,Menlo,monospace}
+
+  .kompass{
+    width:100%;max-width:680px;background:var(--card);
+    border:1px solid var(--rule);border-radius:var(--radius);
+    box-shadow:var(--shadow);overflow:hidden;position:relative;
+  }
+  /* header */
+  .kp-head{padding:26px 32px 22px;border-bottom:1px solid var(--rule);position:relative}
+  .kp-eyebrow{
+    font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--ink-3);display:flex;align-items:center;gap:8px;
+  }
+  .kp-eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--accent)}
+  .kp-eyebrow .count{margin-left:auto;color:var(--ink-3);text-transform:none;letter-spacing:0}
+  .kp-q{font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1.15;margin:14px 0 0;text-wrap:balance}
+  .kp-hint{font-size:13.5px;color:var(--ink-3);margin-top:7px}
+  /* progress */
+  .kp-prog{display:flex;gap:6px;margin-top:20px}
+  .kp-prog .seg{height:4px;flex:1;border-radius:99px;background:var(--bg-3);overflow:hidden}
+  .kp-prog .seg i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;
+    transition:width .45s cubic-bezier(.4,0,.2,1)}
+  .kp-prog .seg.done i{width:100%}
+  .kp-prog .seg.active i{width:100%}
+
+  /* body / steps */
+  .kp-body{padding:24px 32px 8px;position:relative}
+  .step{display:none;animation:stepIn .42s cubic-bezier(.2,.7,.2,1)}
+  .step.show{display:block}
+  @keyframes stepIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .opts{display:grid;gap:10px}
+  .opt{
+    display:flex;align-items:center;gap:15px;width:100%;text-align:left;
+    padding:16px 18px;border:1.5px solid var(--rule);border-radius:var(--radius-sm);
+    background:var(--card);cursor:pointer;font-family:inherit;color:var(--ink);
+    transition:border-color .16s,background .16s,transform .12s,box-shadow .16s;
+  }
+  .opt:hover{border-color:var(--rule-2);background:var(--bg-2);transform:translateY(-1px)}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+  .opt .ico{
+    flex:none;width:42px;height:42px;border-radius:11px;background:var(--bg-2);
+    display:grid;place-items:center;color:var(--ink);transition:background .16s,color .16s;
+  }
+  .opt.sel .ico{background:var(--accent);color:#fff}
+  .opt .ico svg{width:21px;height:21px}
+  .opt .txt b{font-size:15.5px;font-weight:600;display:block;letter-spacing:-.01em}
+  .opt .txt span{font-size:13px;color:var(--ink-2);line-height:1.45;display:block;margin-top:2px}
+  .opt .check{
+    margin-left:auto;flex:none;width:22px;height:22px;border-radius:50%;
+    border:1.5px solid var(--rule-2);display:grid;place-items:center;transition:.16s;
+  }
+  .opt .check svg{width:13px;height:13px;color:#fff;opacity:0;transform:scale(.5);transition:.16s}
+  .opt.sel .check{background:var(--accent);border-color:var(--accent)}
+  .opt.sel .check svg{opacity:1;transform:scale(1)}
+  .opt .check.sq{border-radius:7px}
+
+  /* footer */
+  .kp-foot{
+    display:flex;align-items:center;gap:12px;padding:18px 32px 26px;
+  }
+  .kp-back{
+    display:inline-flex;align-items:center;gap:7px;background:transparent;border:0;
+    color:var(--ink-3);font-family:inherit;font-size:13.5px;cursor:pointer;padding:8px 6px;border-radius:8px;
+  }
+  .kp-back:hover{color:var(--ink)}
+  .kp-back svg{width:15px;height:15px}
+  .kp-back[hidden]{visibility:hidden}
+  .kp-spacer{flex:1}
+  .kp-next{
+    display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:11px;
+    background:var(--ink);color:var(--bg);border:0;font-family:inherit;font-size:14px;font-weight:500;
+    cursor:pointer;transition:transform .14s,box-shadow .14s,opacity .14s;
+  }
+  .kp-next:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(20,20,18,.16)}
+  .kp-next:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+  .kp-next .arr{transition:transform .14s}
+  .kp-next:hover:not(:disabled) .arr{transform:translateX(2px)}
+
+  /* result */
+  .result{display:none;animation:stepIn .5s cubic-bezier(.2,.7,.2,1)}
+  .result.show{display:block}
+  .res-top{padding:30px 32px 24px;background:var(--ink);color:var(--bg);position:relative;overflow:hidden}
+  .res-top::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;
+    background:radial-gradient(circle,color-mix(in oklab,var(--accent) 55%,transparent),transparent 70%);opacity:.5}
+  .res-tag{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:color-mix(in oklab,var(--bg) 60%,transparent);position:relative}
+  .res-name{font-size:27px;font-weight:600;letter-spacing:-.02em;margin:8px 0 0;position:relative;line-height:1.1}
+  .res-price{margin-top:18px;display:flex;align-items:baseline;gap:9px;position:relative;flex-wrap:wrap}
+  .res-price .num{font-size:38px;font-weight:600;letter-spacing:-.03em;line-height:1}
+  .res-price .unit{font-size:13.5px;color:color-mix(in oklab,var(--bg) 65%,transparent)}
+  .res-body{padding:24px 32px 4px}
+  .res-h{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--ink-3);margin-bottom:13px}
+  .res-list{display:grid;gap:9px;margin:0 0 22px;padding:0;list-style:none}
+  .res-list li{display:flex;gap:11px;font-size:14.5px;color:var(--ink-2);line-height:1.45}
+  .res-list li svg{flex:none;width:17px;height:17px;color:var(--accent);margin-top:1px}
+  .res-next{background:var(--bg-2);border:1px solid var(--rule);border-radius:var(--radius-sm);
+    padding:16px 18px;font-size:13.5px;color:var(--ink-2);line-height:1.5;margin-bottom:6px}
+  .res-next b{color:var(--ink)}
+  .res-cta{display:flex;gap:12px;flex-wrap:wrap;padding:22px 32px 28px}
+  .res-cta a{
+    display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:11px;
+    font-size:14.5px;font-weight:500;text-decoration:none;transition:transform .14s,box-shadow .14s,background .14s;
+  }
+  .res-cta .primary{background:var(--accent);color:#fff}
+  .res-cta .primary:hover{transform:translateY(-1px);box-shadow:0 8px 22px rgba(168,58,58,.3)}
+  .res-cta .restart{background:transparent;color:var(--ink-2);border:1px solid var(--rule-2)}
+  .res-cta .restart:hover{background:var(--bg-2);color:var(--ink)}
+  .res-disclaimer{padding:0 32px 26px;font-size:12px;color:var(--ink-3);line-height:1.5}
+
+  /* embedded mode (in hero / styleguide iframe) */
+  body.embed{padding:0;min-height:0;display:block;background:transparent}
+  body.embed .kompass{max-width:none;border-radius:var(--radius)}
+</style>
+</head>
+<body>
+<div class="kompass" id="kompass" role="form" aria-label="Projekt-Kompass">
+  <div class="kp-head">
+    <div class="kp-eyebrow"><span class="dot"></span> Projekt-Kompass <span class="count" id="kpCount">Schritt 1 von 4</span></div>
+    <h2 class="kp-q" id="kpQ">Was möchten Sie umsetzen?</h2>
+    <p class="kp-hint" id="kpHint">60 Sekunden, dann kennen Sie Lösung, Preisrahmen und den nächsten Schritt.</p>
+    <div class="kp-prog" id="kpProg">
+      <div class="seg"><i></i></div><div class="seg"><i></i></div>
+      <div class="seg"><i></i></div><div class="seg"><i></i></div>
+    </div>
+  </div>
+
+  <div class="kp-body" id="kpBody"><!-- steps injected --></div>
+
+  <div class="kp-foot" id="kpFoot">
+    <button class="kp-back" id="kpBack" hidden>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      Zurück
+    </button>
+    <div class="kp-spacer"></div>
+    <button class="kp-next" id="kpNext" disabled>Weiter <span class="arr">→</span></button>
+  </div>
+</div>
+
+<script src="projekt-kompass.js"></script>
+</body>
+</html>

@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Jan-Erik Andersen — Webentwicklung, Shops &amp; Betreuung seit 1999</title>
+<meta name="description" content="Die Kompetenz einer Agentur, ohne den Ballast. Websites, Shops und Betreuung – direkt mit dem Entwickler. Festpreise ab 2.400 €, 100 % remote." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="site.css" rel="stylesheet" />
+</head>
+<body data-theme="light">
+
+<!-- ════════ HEADER ════════ -->
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a href="#top" class="brand" data-screen-label="Brand">
+      <span class="brand-mark">A</span>
+      <span>Jan-Erik Andersen<small class="mono">ANDERSEN WEBWORKS</small></span>
+    </a>
+    <nav class="nav">
+      <div class="nav-dropdown">
+        <a href="#leistungen" class="nav-link has-sub">Leistungen</a>
+        <div class="submenu">
+          <a href="#schwerpunkte"><b>KI-Sichtbarkeit</b><small>ChatGPT, Perplexity, Claude</small></a>
+          <a href="#schwerpunkte"><b>BFSG &amp; Barrierefreiheit</b><small>WCAG 2.1 AA-konform</small></a>
+          <a href="#schwerpunkte"><b>Shops &amp; Custom</b><small>WooCommerce + B2B</small></a>
+        </div>
+      </div>
+      <a href="#projekte" class="nav-link">Projekte</a>
+      <a href="#preise" class="nav-link">Preise</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <a href="#ueber" class="nav-link">Über mich</a>
+    </nav>
+    <div class="nav-meta">
+      <button class="icon-btn" id="theme-toggle" aria-label="Hell / Dunkel">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      </button>
+      <div class="lang"><button class="active">DE</button><button>EN</button></div>
+      <a href="#kontakt" class="btn btn-accent">Erstgespräch <span class="arr">→</span></a>
+      <button class="icon-btn menu-btn" id="menu-open" aria-label="Menü öffnen">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- mobile menu -->
+<div class="mobile-menu" id="mobile-menu">
+  <div class="mm-head">
+    <span class="brand"><span class="brand-mark">A</span><span>Jan-Erik Andersen</span></span>
+    <button class="icon-btn" id="menu-close" aria-label="Schließen">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div class="mm-body">
+    <a class="mm-link" href="#leistungen">Leistungen</a>
+    <a class="mm-link" href="#projekte">Projekte</a>
+    <a class="mm-link" href="#preise">Preise</a>
+    <a class="mm-link" href="#faq">FAQ</a>
+    <a class="mm-link" href="#ueber">Über mich</a>
+    <a class="mm-link" href="#kontakt">Kontakt</a>
+  </div>
+  <div class="mm-foot">
+    <a class="btn btn-accent" href="#kontakt" style="justify-content:center">Kostenloses Erstgespräch <span class="arr">→</span></a>
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--ink-3)">
+      <a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a>
+      <a href="tel:+4938733270015">038733 270015</a>
+    </div>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- ════════ HERO ════════ -->
+  <section class="hero" data-screen-label="01 Hero">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span> Webentwicklung · Shops · Betreuung · seit 1999</div>
+      <div class="hero-grid">
+        <div>
+          <h1>Die Kompetenz einer Agentur. <span class="accent">Ohne den Ballast.</span><span class="caret"></span></h1>
+          <p class="hero-sub">Websites, Shops und Betreuung — seit 1999, direkt mit dem Entwickler. Festpreise, 100&nbsp;% remote, volle Verantwortung.</p>
+          <div class="hero-ctas">
+            <a class="btn btn-accent" href="#kontakt">Erstgespräch vereinbaren <span class="arr">→</span></a>
+            <a class="btn btn-ghost" href="#preise">Preise ansehen</a>
+          </div>
+          <div class="hero-meta">
+            <span class="pill accent">BFSG · WCAG 2.1 AA</span>
+            <span class="pill">KI-Sichtbarkeit</span>
+            <span class="pill">WooCommerce</span>
+            <span class="pill">DSGVO-konform</span>
+          </div>
+        </div>
+        <div class="hero-side">
+          <iframe class="kp-frame" id="kp-hero" src="projekt-kompass.html#embed" title="Projekt-Kompass" scrolling="no"></iframe>
+        </div>
+      </div>
+
+      <div class="stats reveal">
+        <div class="stat"><div class="n">27<em>+</em></div><div class="l">Jahre Webprojekte</div></div>
+        <div class="stat"><div class="n">50<em>+</em></div><div class="l">Projekte gebaut</div></div>
+        <div class="stat"><div class="n">14<em>+</em></div><div class="l">Branchen erlebt</div></div>
+        <div class="stat"><div class="n">20<em>+</em></div><div class="l">Live-Websites</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ LOGO WALL ════════ -->
+  <div class="logowall" data-screen-label="Logo Wall">
+    <div class="lab">Kunden &amp; Arbeitgeber · eine Auswahl aus 27 Jahren</div>
+    <div class="marquee">
+      <div class="marquee-track" id="mtrack"></div>
+    </div>
+  </div>
+
+  <!-- ════════ PROJEKTE ════════ -->
+  <section id="projekte" data-screen-label="02 Projekte">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Ausgewählte Projekte</div>
+        <h2>Über 50 Projekte in 27 Jahren.<br/>Drei stelle ich genauer vor.</h2>
+        <p class="lede">Was stand am Anfang, was habe ich gemacht, was kam dabei raus.</p>
+      </div>
+      <div class="grid-3">
+        <a class="proj reveal" href="https://gerwing.de" target="_blank" rel="noopener">
+          <div class="proj-logo"><span class="lockup"><span class="sq">G</span>Gerwing</span></div>
+          <div class="proj-body">
+            <div class="proj-tags"><span class="proj-tag">B2B / Industrie</span><span class="proj-tag">WooCommerce</span></div>
+            <h3>Gerwing Steinwerke</h3>
+            <p>Kompletter Shop-Neubau 2023. Steinmuster-Bestellsystem mit E-Mail-Tracking, Produktfilter, B2B-Preisgruppen. Alleinige technische Verantwortung seitdem.</p>
+            <div class="proj-link">gerwing.de <span class="arr">→</span></div>
+          </div>
+        </a>
+        <a class="proj reveal" href="https://runden-group.eu" target="_blank" rel="noopener">
+          <div class="proj-logo"><span class="lockup"><span class="sq">R</span>Runden</span></div>
+          <div class="proj-body">
+            <div class="proj-tags"><span class="proj-tag">Firmengruppe</span><span class="proj-tag">11 Websites</span></div>
+            <h3>Runden Group</h3>
+            <p>11 Websites auf WordPress, zweisprachig, Karriereportal, mehrsprachiges Onboarding-Portal. Zwei Jahre allein verantwortlich.</p>
+            <div class="proj-link">runden-group.eu <span class="arr">→</span></div>
+          </div>
+        </a>
+        <a class="proj reveal" href="https://wbg-pooling.eu" target="_blank" rel="noopener">
+          <div class="proj-logo"><span class="lockup"><span class="sq">W</span>WBG</span></div>
+          <div class="proj-body">
+            <div class="proj-tags"><span class="proj-tag">Logistik</span><span class="proj-tag">Custom Plugin</span></div>
+            <h3>WBG Pooling</h3>
+            <p>Industrie-Portal mit 360°-Ansichten, eigenem Sales Center (Custom-Plugin WebDeck) und Salesforce-Anbindung.</p>
+            <div class="proj-link">wbg-pooling.eu <span class="arr">→</span></div>
+          </div>
+        </a>
+      </div>
+      <div class="row-ctas reveal">
+        <a class="btn btn-primary" href="#kontakt">Projekt besprechen <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="https://jan-erik-andersen.de/projekte/" target="_blank" rel="noopener">Ausführliche Case Studies lesen</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ SCHWERPUNKTE ════════ -->
+  <section id="schwerpunkte" class="tinted" data-screen-label="03 Schwerpunkte">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Schwerpunkte</div>
+        <h2>Drei Themen, in denen ich tiefer<br/>stecke als die meisten.</h2>
+        <p class="lede">Webentwicklung mache ich seit 1999. Diese drei Bereiche sind die, in denen ich gerade den Unterschied mache.</p>
+      </div>
+      <div class="grid-3">
+        <div class="focus reveal">
+          <div class="num">01</div>
+          <h3>KI-Sichtbarkeit</h3>
+          <p>Damit Ihre Website in ChatGPT, Perplexity und Claude zitiert wird, nicht nur in Google rankt. Strukturierte Daten, llms.txt, Schema-Markup — eingebaut, nicht aufgesetzt.</p>
+          <div class="proof"><b>Beleg:</b> Diese Website selbst, als technischer Live-Test. GEO &amp; AVO sind messbare Disziplinen, kein Buzzword-Bingo.</div>
+          <a class="focus-link" href="#kontakt">Mehr zu KI-Sichtbarkeit →</a>
+        </div>
+        <div class="focus reveal">
+          <div class="num">02</div>
+          <h3>BFSG &amp; Barrierefreiheit</h3>
+          <p>Seit Juni 2025 müssen B2C-Websites barrierefrei sein. Bußgelder bis 100.000 €. Ich baue WCAG 2.1 AA-konform — als Update oder von Grund auf. Kein Overlay-Plugin, echte Barrierefreiheit.</p>
+          <div class="proof"><b>Beleg:</b> Wirkungsbericht des Bundesverbands Senior Partner in School — professionell &amp; barrierefreundlich aufgesetzt.</div>
+          <a class="focus-link" href="#kontakt">Mehr zu BFSG &amp; WCAG →</a>
+        </div>
+        <div class="focus reveal">
+          <div class="num">03</div>
+          <h3>Shops &amp; Custom</h3>
+          <p>WooCommerce mit B2B-Features, Händlerportalen, eigenen Plugins. Wenn Standard nicht reicht, baue ich, was fehlt — sauber, dokumentiert, pflegbar. Und bleibe danach da.</p>
+          <div class="proof"><b>Beleg:</b> Gerwing Steinwerke, einer der größten dt. Pflastersteinhersteller. Allein gebaut, alleinige Verantwortung seit 2023.</div>
+          <a class="focus-link" href="#kontakt">Mehr zu Shops &amp; Custom →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ LEISTUNGEN ════════ -->
+  <section id="leistungen" data-screen-label="04 Leistungen">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Was ich löse</div>
+        <h2>Die Technologie richtet sich nach<br/>dem Problem — nicht umgekehrt.</h2>
+        <p class="lede">WordPress, wenn Ihr Team Inhalte pflegt. Statisches HTML, wenn Geschwindigkeit zählt. In jedem Fall: Barrierefreiheit, KI-Sichtbarkeit, professionelles Lektorat.</p>
+      </div>
+      <div class="svc-groups">
+        <div class="svc-col reveal">
+          <h4>Neu bauen</h4>
+          <div class="svc"><div class="t">Firmenwebsite <span class="pr">ab 2.400 €</span></div><div class="d">WordPress oder statisches HTML. Responsive, DSGVO-konform, mit CMS-Einweisung.</div></div>
+          <div class="svc"><div class="t">Online-Shop <span class="pr">ab 4.800 €</span></div><div class="d">WooCommerce mit B2B-Features, Preisgruppen, Custom Plugins, Germanized.</div></div>
+          <div class="svc"><div class="t">Portal / Tool / Landingpage <span class="pr">individuell</span></div><div class="d">Karriereportal, Kundenportal, interaktiver Bericht — wenn Standard nicht reicht.</div></div>
+        </div>
+        <div class="svc-col reveal">
+          <h4>Reparieren &amp; verbessern</h4>
+          <div class="svc"><div class="t">Redesign &amp; Performance <span class="pr">ab 400 €</span></div><div class="d">Analyse, was nicht stimmt — gezielt beheben oder neu bauen, wenn Flicken teurer wird.</div></div>
+          <div class="svc"><div class="t">BFSG nachrüsten <span class="pr">ab 1.200 €</span></div><div class="d">Bestehende Seiten auf WCAG 2.1 AA. Kein Overlay, echte Barrierefreiheit.</div></div>
+          <div class="svc"><div class="t">KI-Sichtbarkeit nachrüsten <span class="pr">ab 800 €</span></div><div class="d">Strukturierte Daten &amp; Schema-Markup, damit KI Ihr Unternehmen korrekt zitiert.</div></div>
+        </div>
+        <div class="svc-col reveal">
+          <h4>Laufend betreuen</h4>
+          <div class="svc"><div class="t">Basis <span class="pr">200 €/Mon</span></div><div class="d">2,5 Std. Updates, Sicherheit, Monitoring, kleine Änderungen.</div></div>
+          <div class="svc"><div class="t">Standard <span class="pr">400 €/Mon</span></div><div class="d">5 Std. + Performance, regelmäßige Änderungen, schnelle Reaktion.</div></div>
+          <div class="svc"><div class="t">Shop <span class="pr">800 €/Mon</span></div><div class="d">10 Std. + WooCommerce-Betreuung, Shopmanagement, prioritärer Support.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ KUNDENSTIMMEN ════════ -->
+  <section class="tinted" data-screen-label="05 Kunden">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Was Kunden sagen</div>
+        <h2>Echte Google-Bewertungen.<br/>Ungekürzt und unbearbeitet.</h2>
+      </div>
+      <div class="tg">
+        <div class="test reveal">
+          <div class="test-head"><div class="stars">★★★★★</div><div class="test-topic">BFSG &amp; Barrierefreiheit</div></div>
+          <div class="test-body">Jan-Erik und die kompetente Texterin Annemarie haben das für uns neue Format professionell und barrierefreundlich aufgesetzt. Super Teamarbeit, verlässlich und engagiert. SiS sagt DANKE!</div>
+          <div class="test-foot"><div class="avatar">K</div><div class="test-meta"><b>Karin Chierchia</b>Vorsitzende · Senior Partner in School e.V.</div></div>
+        </div>
+        <div class="test reveal">
+          <div class="test-head"><div class="stars">★★★★★</div><div class="test-topic">Mehrjährige Zusammenarbeit</div></div>
+          <div class="test-body">Professionelles Webdesign, das mich immer wieder überrascht. Meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff. So setzt man sich von der Konkurrenz ab!</div>
+          <div class="test-foot"><div class="avatar">C</div><div class="test-meta"><b>Corvin Jaedicke</b>ai-coustics</div></div>
+        </div>
+      </div>
+      <div class="row-ctas reveal">
+        <a class="btn btn-primary" href="#kontakt">Erstgespräch vereinbaren <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ ABLAUF ════════ -->
+  <section data-screen-label="06 Ablauf">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Wie es läuft</div>
+        <h2>Kein Pitch-Marathon. Ein kurzer<br/>Call klärt, ob es passt.</h2>
+      </div>
+      <div class="process">
+        <div class="step reveal"><div class="step-num">1</div><h3>Erstgespräch</h3><p>Ein Call — gerne per Video. Was brauchen Sie, was ist das Ziel? Kostenlos, keine Verpflichtung.</p></div>
+        <div class="step reveal"><div class="step-num">2</div><h3>Konzept &amp; Angebot</h3><p>Struktur, Seitenaufbau, technischer Ansatz. Danach: konkretes Angebot mit Festpreis und Zeitrahmen.</p></div>
+        <div class="step reveal"><div class="step-num">3</div><h3>Umsetzung</h3><p>Ich baue. Sie bekommen Zwischenstände. Änderungen direkt umgesetzt — kurze Wege.</p></div>
+        <div class="step reveal"><div class="step-num">4</div><h3>Launch &amp; Betreuung</h3><p>Seite geht online. Danach bin ich weiter da — oder saubere Übergabe. Nie an mich gebunden.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ ÜBER ════════ -->
+  <section id="ueber" class="tinted" data-screen-label="07 Ueber">
+    <div class="wrap">
+      <div class="about">
+        <div class="about-photo reveal"><span>portrait · jan-erik andersen</span></div>
+        <div class="reveal">
+          <div class="eyebrow"><span class="dot"></span> Wer dahinter steckt</div>
+          <h2 style="margin-bottom:18px">Sie sprechen mit dem Entwickler.<br/>Und der macht auch die Arbeit.</h2>
+          <p>Ich habe bei Agenturen gearbeitet und weiß, wie der Laden von innen aussieht — deshalb mache ich es anders. Hintergrund: Multimedia Design, drei Jahre Games-QA (Goodgame, FISHLABS, Daedalic), 2017 bei <a class="in" href="https://jan-erik-andersen.de/ueber/" target="_blank" rel="noopener">YOOtheme</a>. Seit 2010 selbstständig, 100&nbsp;% remote.</p>
+          <p>Kein Account Manager, kein Junior. Texte lektoriert meine Frau <a class="in" href="https://annemarie-andersen.de" target="_blank" rel="noopener">Annemarie Andersen</a> — jeder Text professionell geprüft.</p>
+          <div class="about-points">
+            <div class="apoint"><b>Direkt mit dem Entwickler</b><span>Kein Account Manager dazwischen.</span></div>
+            <div class="apoint"><b>Lektorat inklusive</b><span>Jeder Text geprüft.</span></div>
+            <div class="apoint"><b>27+ Jahre Praxis</b><span>Seit 1999, 14+ Branchen.</span></div>
+            <div class="apoint"><b>100 % remote</b><span>Plau am See, deutschlandweit.</span></div>
+          </div>
+          <div class="stations">
+            <span class="pill">Goodgame Studios</span><span class="pill">Deep Silver FISHLABS</span>
+            <span class="pill">Daedalic</span><span class="pill">InnoGames</span><span class="pill">YOOtheme</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ PREISE ════════ -->
+  <section id="preise" data-screen-label="08 Preise">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Was es kostet</div>
+        <h2>Festpreis nach dem ersten Gespräch.<br/>Keine bösen Überraschungen.</h2>
+      </div>
+      <div class="price-grid">
+        <div class="price feat reveal">
+          <div class="pn">Website</div><div class="pv">2.400 €<small>ab · Festpreis</small></div>
+          <div class="pd">Firmenwebsite, 5–10 Seiten · typisch 2.400–5.000 €</div>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>Responsive &amp; DSGVO</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>CMS-Einweisung</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>30 Tage Support</li></ul>
+        </div>
+        <div class="price reveal">
+          <div class="pn">Shop</div><div class="pv">4.800 €<small>ab · Festpreis</small></div>
+          <div class="pd">WooCommerce, bis 50 Produkte · typisch 4.800–9.000 €</div>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>Check-out + Zahlung</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>Germanized</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>B2B bei Bedarf</li></ul>
+        </div>
+        <div class="price reveal">
+          <div class="pn">Analyse</div><div class="pv">400 €<small>einmalig</small></div>
+          <div class="pd">Performance · SEO · BFSG · konkrete Empfehlungen</div>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>Bericht mit Prioritäten</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>Aufwandsschätzung</li></ul>
+        </div>
+        <div class="price reveal">
+          <div class="pn">Betreuung</div><div class="pv">200 €<small>/ Monat</small></div>
+          <div class="pd">Updates, Sicherheit, Monitoring · monatlich kündbar</div>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>2,5 Std. inklusive</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M5 12l4 4 10-11"/></svg>Keine Bindung</li></ul>
+        </div>
+      </div>
+      <div class="price-foot reveal">
+        <div>Alle Preise netto. Ohne abgrenzbaren Umfang: <b>80 €/h</b>. Eine Agentur berechnet 120–180 €/h.</div>
+        <a class="btn btn-accent" href="#kontakt">Kostenloses Erstgespräch <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ FAQ ════════ -->
+  <section id="faq" class="tinted" data-screen-label="09 FAQ">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="eyebrow"><span class="dot"></span> Häufige Fragen</div>
+        <h2>Was Kunden im Gespräch fragen,<br/>bevor sie sich entscheiden.</h2>
+      </div>
+      <div class="faq reveal">
+        <details><summary>Warum ein Freelancer statt einer Agentur?<span class="faq-ic">+</span></summary><div class="faq-body">Bei einer Agentur zahlen Sie 120–180 €/h für einen Account Manager, der Ihr Briefing weitergibt, und einen Junior, der es umsetzt. Bei mir bekommen Sie für 80 €/h den erfahrenen Entwickler mit 27+ Jahren Praxis — und Ihren direkten Ansprechpartner. Ich habe den Web-Auftritt einer Firmengruppe mit elf Websites zwei Jahre allein betreut.</div></details>
+        <details><summary>Was kostet eine Website bei Ihnen?<span class="faq-ic">+</span></summary><div class="faq-body">Firmenwebsite ab 2.400 €, Shop ab 4.800 €, Betreuung ab 200 €/Monat — Festpreise. Nach dem Erstgespräch bekommen Sie ein konkretes Angebot. Bei Aufgaben ohne klar abgrenzbaren Umfang: 80 €/h netto.</div></details>
+        <details><summary>Kann ChatGPT nicht einfach meine Website bauen?<span class="faq-ic">+</span></summary><div class="faq-body">KI kann Code generieren. Was sie nicht kann: verstehen, was Ihr Unternehmen braucht. Eine Website ist Strategie, Struktur, Nutzerführung, rechtliche Absicherung (DSGVO, BFSG), laufende Wartung und jemand, der verantwortlich ist, wenn etwas nicht funktioniert.</div></details>
+        <details><summary>Was passiert, wenn Sie krank oder im Urlaub sind?<span class="faq-ic">+</span></summary><div class="faq-body">Alle Projekte laufen auf Standard-Technologie (WordPress, WooCommerce, HTML/CSS/JS), alles dokumentiert. Jeder andere Entwickler kann übernehmen — kein Vendor Lock-in. Notfälle gehen auch im Urlaub raus.</div></details>
+        <details><summary>Funktioniert die Zusammenarbeit komplett remote?<span class="faq-ic">+</span></summary><div class="faq-body">Ja, seit 2010 für Kunden in ganz Deutschland. Video-Calls, Screen-Sharing und klare Dokumentation ersetzen jedes persönliche Treffen. Die Entwickler in Ihrer Agentur arbeiten auch remote — Sie zahlen dort nur zusätzlich für die Besprechungsräume.</div></details>
+      </div>
+      <div class="row-ctas reveal">
+        <a class="btn btn-ghost" href="https://jan-erik-andersen.de/faq/" target="_blank" rel="noopener">Alle 20 Fragen &amp; Antworten →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ KONTAKT ════════ -->
+  <section id="kontakt" data-screen-label="10 Kontakt">
+    <div class="wrap">
+      <div class="contact-card reveal">
+        <div class="eyebrow"><span class="dot"></span> Reden wir.</div>
+        <h2>Kostenloses Erstgespräch.</h2>
+        <p class="lede" style="margin-top:16px">Ein kurzer Call, danach wissen Sie, ob es passt und was es kostet. Kein Verkaufsgespräch, keine Follow-up-Mails. Oder schreiben Sie eine Mail — Antwort am selben Werktag.</p>
+        <div class="contact-grid">
+          <div><div class="ck-label">E-Mail</div><div class="ck-val"><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a></div></div>
+          <div><div class="ck-label">Anruf</div><div class="ck-val"><a href="tel:+4938733270015">038733 270015</a></div></div>
+          <div><div class="ck-label">LinkedIn</div><div class="ck-val"><a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">/in/andersen-erik</a></div></div>
+          <div><div class="ck-label">Standort</div><div class="ck-val">Plau am See · MV</div></div>
+        </div>
+        <div class="promises">
+          <div class="promise">Antwort auf Mails innerhalb eines Werktags</div>
+          <div class="promise">Erstgespräch bis zu 1 Stunde, kostenlos</div>
+          <div class="promise">Verfügbarkeit innerhalb von zwei Wochen</div>
+          <div class="promise">Keine Follow-up-Mails, kein Druck</div>
+          <div class="promise">Alles dokumentiert, jederzeit übertragbar</div>
+          <div class="promise">Offene Standards — kein Vendor Lock-in</div>
+        </div>
+        <a href="mailto:mail@andersen-webworks.de" class="btn">Erstgespräch per Mail anfragen <span class="arr">→</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Andersen Webworks · Jan-Erik Andersen</div>
+    <div class="foot-links">
+      <a href="#leistungen">Leistungen</a><a href="#projekte">Projekte</a><a href="#preise">Preise</a>
+      <a href="#faq">FAQ</a><a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#">Barrierefreiheit</a>
+    </div>
+  </div>
+</footer>
+
+<script src="site.js"></script>
+</body>
+</html>

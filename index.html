@@ -70,7 +70,7 @@
   <!-- aggregateRating entfernt: erst wieder einsetzen ab 10+ Reviews -->
 
   <!-- FAQPage-Schema lebt auf /faq/ – kein Duplikat auf der Homepage -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20260610">
   <script>
   (function() {
     var root = document.documentElement;
@@ -719,6 +719,14 @@
     var cursor = document.querySelector('.hero-typewriter .typewriter-cursor');
     var h1 = document.querySelector('.hero-typewriter');
     if (!el || !cursor) return;
+
+    if (h1 && h1.dataset.staticHero === '1') {
+      el.style.opacity = '1';
+      cursor.style.display = 'none';
+      h1.setAttribute('aria-label', claims[0]);
+      return;
+    }
+
     var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (reduceMotion) {
@@ -744,7 +752,7 @@
       if (maxHeight > 0) h1.style.minHeight = Math.ceil(maxHeight) + 'px';
     }
 
-    if (!h1 || h1.dataset.staticHero !== '1') lockHeroHeight();
+    lockHeroHeight();
     var idx = 0;
     var charIdx = 0;
     var holdTime = 3500;
@@ -783,7 +791,6 @@
     }
 
     function startHeroTypewriter() {
-      if (h1 && h1.dataset.staticHero === '1') return;
       if (h1 && h1.dataset.heroTypewriterStarted) return;
       if (h1) h1.dataset.heroTypewriterStarted = '1';
       el.textContent = '';
@@ -882,6 +889,6 @@
     }
   })();
   </script>
-  <script src="funnel.js" defer></script>
+  <script src="funnel.js?v=20260610" defer></script>
 </body>
 </html>

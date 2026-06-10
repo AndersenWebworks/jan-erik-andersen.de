@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="tokens.css" rel="stylesheet" />
+<style>
+  html,body{width:390px;height:844px;overflow:hidden;background:var(--bg)}
+  .screen{width:390px;height:844px;display:flex;flex-direction:column;background:var(--bg)}
+
+  /* status bar */
+  .status{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;
+    font-size:14px;font-weight:600;color:var(--ink);flex:none}
+  .status .right{display:flex;align-items:center;gap:6px}
+  .status .right svg{width:17px;height:13px}
+
+  /* menu header */
+  .mhead{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 16px;flex:none}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px}
+  .brand .mark{width:32px;height:32px;border-radius:9px;background:var(--ink);color:var(--bg);
+    display:grid;place-items:center;font-weight:700;font-size:15px}
+  .closeb{width:42px;height:42px;border-radius:11px;border:1px solid var(--rule);background:var(--card);
+    display:grid;place-items:center;color:var(--ink)}
+  .closeb svg{width:18px;height:18px}
+
+  .menu{flex:1;overflow:hidden;padding:8px 20px 0;display:flex;flex-direction:column}
+  .mlink{display:flex;align-items:center;justify-content:space-between;
+    padding:16px 4px;font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--ink);
+    border-bottom:1px solid var(--rule)}
+  .mlink .chev{width:9px;height:9px;border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);transform:rotate(-45deg)}
+  .mlink.open{border-bottom:0;padding-bottom:8px}
+  .mlink.open .chev{transform:rotate(45deg);border-color:var(--accent)}
+  .mlink.cur{color:var(--accent)}
+  .submenu{border-bottom:1px solid var(--rule);padding:4px 4px 16px;display:flex;flex-direction:column;gap:2px}
+  .submenu a{display:flex;flex-direction:column;padding:11px 14px;border-radius:10px;background:var(--bg-2)}
+  .submenu a + a{margin-top:6px}
+  .submenu a b{font-size:15px;font-weight:500}
+  .submenu a small{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+
+  .mfoot{flex:none;padding:18px 20px calc(18px + env(safe-area-inset-bottom));background:var(--card);border-top:1px solid var(--rule)}
+  .mctrls{display:flex;gap:10px;margin-bottom:16px}
+  .lang{display:inline-flex;border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+  .lang button{background:transparent;color:var(--ink-3);border:0;padding:11px 16px;
+    font-family:"JetBrains Mono",monospace;font-size:12px}
+  .lang button.active{background:var(--ink);color:var(--bg)}
+  .themeb{flex:none;width:46px;border-radius:10px;border:1px solid var(--rule);background:var(--card);
+    display:grid;place-items:center;color:var(--ink-2)}
+  .themeb svg{width:18px;height:18px}
+  .cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
+    padding:15px;border-radius:12px;background:var(--accent);color:#fff;font-size:16px;font-weight:500}
+  .contact-row{display:flex;justify-content:space-between;margin-top:14px;font-size:13px;color:var(--ink-3)}
+  .contact-row a{color:var(--ink-2)}
+
+  .homebar{height:5px;width:134px;border-radius:3px;background:var(--ink);opacity:.85;margin:8px auto 8px}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="status">
+    <span>9:41</span>
+    <span class="right">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 17h2v2H2zm4-3h2v5H6zm4-3h2v8h-2zm4-3h2v11h-2zm4-3h2v14h-2z"/></svg>
+      <svg viewBox="0 0 24 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="18" height="10" rx="3"/><rect x="3" y="5" width="13" height="6" rx="1.5" fill="currentColor" stroke="none"/><path d="M21 6v4" stroke-linecap="round"/></svg>
+    </span>
+  </div>
+
+  <div class="mhead">
+    <div class="brand"><span class="mark">A</span><span>Jan-Erik Andersen</span></div>
+    <button class="closeb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  </div>
+
+  <div class="menu">
+    <div class="mlink open">Leistungen <span class="chev"></span></div>
+    <div class="submenu">
+      <a href="#"><b>KI-Sichtbarkeit</b><small>ChatGPT, Perplexity, Claude</small></a>
+      <a href="#"><b>BFSG &amp; Barrierefreiheit</b><small>WCAG 2.1 AA-konform</small></a>
+      <a href="#"><b>Shops &amp; Custom</b><small>WooCommerce + B2B</small></a>
+    </div>
+    <div class="mlink cur">Projekte</div>
+    <div class="mlink">Preise</div>
+    <div class="mlink">FAQ</div>
+    <div class="mlink">Über mich</div>
+  </div>
+
+  <div class="mfoot">
+    <div class="mctrls">
+      <div class="lang"><button class="active">DE</button><button>EN</button></div>
+      <button class="themeb"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg></button>
+    </div>
+    <a class="cta">Erstgespräch vereinbaren <span>→</span></a>
+    <div class="contact-row">
+      <a href="#">mail@andersen-webworks.de</a>
+      <a href="#">038733 270015</a>
+    </div>
+    <div class="homebar"></div>
+  </div>
+</div>
+</body>
+</html>

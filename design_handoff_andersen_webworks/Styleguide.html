@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>JEA Webworks — Styleguide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="styleguide.css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ─────────── TOP TOOLBAR ─────────── -->
+<header class="toolbar">
+  <div class="tb-doc">
+    <div class="tb-logo">A</div>
+    <div class="tb-title">JEA-Webworks-Styleguide<small class="mono">v2 · 8 Artboards</small></div>
+  </div>
+  <div class="tb-sep"></div>
+  <div class="tb-tools">
+    <button class="tool active" title="Auswählen (V)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 3l15 9-6.5 1.8L10.5 20z"/></svg></button>
+    <button class="tool" title="Artboard (A)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="4" width="16" height="16" rx="1.5"/><path d="M9 2v20M2 9h20" opacity=".5"/></svg></button>
+    <button class="tool" title="Rechteck (R)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="4" y="6" width="16" height="12" rx="1.5"/></svg></button>
+    <button class="tool" title="Ellipse (E)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8"/></svg></button>
+    <button class="tool" title="Text (T)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M5 6h14M12 6v13"/></svg></button>
+    <button class="tool" title="Stift (P)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 20l4-1 10-10-3-3L5 16z"/></svg></button>
+  </div>
+  <div class="tb-spacer"></div>
+  <div class="tb-right">
+    <div class="zoom">
+      <button id="zoomOut" title="Verkleinern">−</button>
+      <span class="zval mono" id="zval">100%</span>
+      <button id="zoomIn" title="Vergrößern">+</button>
+      <button id="zoomFit" title="Einpassen">⤢</button>
+    </div>
+    <button class="tb-btn" id="resetBtn">Ansicht zurücksetzen</button>
+    <button class="tb-btn solid">Teilen</button>
+  </div>
+</header>
+
+<div class="workspace">
+
+  <!-- ─────────── LEFT PANEL ─────────── -->
+  <aside class="lpanel">
+    <div class="lp-tabs">
+      <button class="lp-tab active" data-tab="layers">Ebenen</button>
+      <button class="lp-tab" data-tab="assets">Assets</button>
+    </div>
+    <div class="lp-body">
+      <div class="layers-wrap" id="layersWrap">
+        <div class="lp-section">Devices</div>
+        <div class="layer" data-target="art-desktop"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg></span>Desktop — Home<span class="dim">1280</span></div>
+        <div class="layer" data-target="art-tablet"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="5" y="3" width="14" height="18" rx="2"/></svg></span>Tablet — Home<span class="dim">768</span></div>
+        <div class="layer" data-target="art-mobile"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="10" height="20" rx="2.5"/></svg></span>Mobile — Home<span class="dim">390</span></div>
+        <div class="layer" data-target="art-menu"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M10 8h4M10 11h4M10 14h2"/></svg></span>Mobile — Menü<span class="dim">390</span></div>
+        <div class="lp-section">Foundations</div>
+        <div class="layer" data-target="art-colors"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="10" r="1.4" fill="currentColor" stroke="none"/></svg></span>Farben<span class="dim">color</span></div>
+        <div class="layer" data-target="art-type"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M5 7h14M12 7v12"/></svg></span>Typografie<span class="dim">type</span></div>
+        <div class="lp-section">Components</div>
+        <div class="layer" data-target="art-buttons"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="9" width="18" height="6" rx="3"/></svg></span>Buttons &amp; States<span class="dim">ui</span></div>
+        <div class="layer" data-target="art-components"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg></span>Komponenten<span class="dim">ui</span></div>
+        <div class="lp-section">Tools</div>
+        <div class="layer" data-target="art-kompass"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg></span>Projekt-Kompass<span class="dim">live</span></div>
+        <div class="layer" data-target="art-kompass-m"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="10" height="20" rx="2.5"/></svg></span>Kompass — Mobil<span class="dim">390</span></div>
+      </div>
+
+      <div class="assets" id="assetsWrap">
+        <div class="lp-section">Farben</div>
+        <div class="asw-grid">
+          <div class="asw" style="background:#fafaf7" title="--bg #FAFAF7"></div>
+          <div class="asw" style="background:#f2f1ec" title="--bg-2 #F2F1EC"></div>
+          <div class="asw" style="background:#e8e7e0" title="--bg-3 #E8E7E0"></div>
+          <div class="asw" style="background:#1a1a18" title="--ink #1A1A18"></div>
+          <div class="asw" style="background:#4a4a46" title="--ink-2 #4A4A46"></div>
+          <div class="asw" style="background:#86857d" title="--ink-3 #86857D"></div>
+          <div class="asw" style="background:#e2e1da" title="--rule #E2E1DA"></div>
+          <div class="asw" style="background:#cdcbc1" title="--rule-2 #CDCBC1"></div>
+          <div class="asw" style="background:#a83a3a" title="--accent #A83A3A"></div>
+          <div class="asw" style="background:#fdf3f3" title="--accent-soft #FDF3F3"></div>
+          <div class="asw" style="background:#3aa15a" title="online #3AA15A"></div>
+          <div class="asw" style="background:#ffffff" title="--card #FFFFFF"></div>
+        </div>
+        <div class="lp-section">Zeichenstile</div>
+        <div class="charstyle"><div class="nm">H1 / Display</div><div class="pv" style="font-size:19px;font-weight:600;letter-spacing:-.02em">Die Kompetenz</div></div>
+        <div class="charstyle"><div class="nm">Lede</div><div class="pv" style="font-size:15px;color:#4a4a46">Direkt mit dem Entwickler</div></div>
+        <div class="charstyle"><div class="nm">Eyebrow / Mono</div><div class="pv mono" style="font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#86857d">seit 1999</div></div>
+        <div class="lp-section">Komponenten</div>
+        <div class="charstyle"><div class="nm">Button · Accent</div><div class="pv"><span style="display:inline-flex;background:#a83a3a;color:#fff;font-size:12px;padding:6px 12px;border-radius:8px">Erstgespräch →</span></div></div>
+        <div class="charstyle"><div class="nm">Pill</div><div class="pv"><span style="display:inline-flex;background:#fdf3f3;color:#a83a3a;font-size:11px;padding:5px 11px;border-radius:999px;font-family:'JetBrains Mono',monospace">BFSG · WCAG</span></div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─────────── CANVAS ─────────── -->
+  <div class="canvas" id="canvas">
+    <div class="stage-sizer" id="sizer">
+      <div class="stage" id="stage">
+
+        <!-- DEVICES -->
+        <section class="sec">
+          <div class="sec-head"><span class="lbl">01 · Devices</span><span class="desc">Verbesserte Seite über drei Breakpoints — Live-Render von Andersen-Webworks.html</span><span class="ln"></span></div>
+          <div class="sec-row">
+            <figure class="art" id="art-desktop" data-name="Desktop — Home" data-dim="1280 × auto" data-note="Breakpoint ≥ 980px · volle Navigation">
+              <figcaption>Desktop — Home <span class="sz">1280 × auto</span></figcaption>
+              <div class="frame browser">
+                <div class="chrome"><div class="dots"><i></i><i></i><i></i></div><div class="url">jan-erik-andersen.de · v2</div></div>
+                <iframe class="auto" data-src="Andersen-Webworks.html" style="width:1280px;height:1400px"></iframe>
+              </div>
+            </figure>
+
+            <figure class="art" id="art-tablet" data-name="Tablet — Home" data-dim="768 × auto" data-note="Breakpoint < 980px · Hamburger erscheint">
+              <figcaption>Tablet — Home <span class="sz">768 × auto</span> <span class="badge">Hamburger</span></figcaption>
+              <div class="frame bezel">
+                <div class="screen"><iframe class="auto" data-src="Andersen-Webworks.html" style="width:768px;height:1400px"></iframe></div>
+              </div>
+            </figure>
+
+            <figure class="art" id="art-mobile" data-name="Mobile — Home" data-dim="390 × auto" data-note="Breakpoint < 720px · gestapeltes Layout">
+              <figcaption>Mobile — Home <span class="sz">390 × auto</span></figcaption>
+              <div class="frame mobcap">
+                <iframe class="auto" data-src="Andersen-Webworks.html" style="width:390px;height:1400px"></iframe>
+              </div>
+            </figure>
+
+            <figure class="art" id="art-menu" data-name="Mobile — Menü offen" data-dim="390 × 844" data-note="Vollbild-Overlay · Leistungen aufgeklappt">
+              <figcaption>Mobile — Menü offen <span class="sz">390 × 844</span> <span class="badge">neu</span></figcaption>
+              <div class="frame bezel phone">
+                <div class="notch"></div>
+                <div class="screen"><iframe data-src="parts/mobile-menu.html" style="width:390px;height:844px"></iframe></div>
+              </div>
+            </figure>
+          </div>
+        </section>
+
+        <!-- FOUNDATIONS -->
+        <section class="sec">
+          <div class="sec-head"><span class="lbl">02 · Foundations</span><span class="desc">Farb-Tokens und Typo-Skala</span><span class="ln"></span></div>
+          <div class="sec-row">
+            <figure class="art" id="art-colors" data-name="Farben" data-dim="1100 × auto" data-note="12 Tokens · 1 Akzent · Light / Dark">
+              <figcaption>Farben <span class="sz">1100 × auto</span></figcaption>
+              <div class="frame"><iframe class="auto" data-src="parts/colors.html" style="width:1100px;height:1200px"></iframe></div>
+            </figure>
+
+            <figure class="art" id="art-type" data-name="Typografie" data-dim="1100 × auto" data-note="Inter + JetBrains Mono · 7-stufige Skala">
+              <figcaption>Typografie <span class="sz">1100 × auto</span></figcaption>
+              <div class="frame"><iframe class="auto" data-src="parts/type.html" style="width:1100px;height:1200px"></iframe></div>
+            </figure>
+          </div>
+        </section>
+
+        <!-- COMPONENTS -->
+        <section class="sec">
+          <div class="sec-head"><span class="lbl">03 · Components</span><span class="desc">Interaktions-Zustände und UI-Kit</span><span class="ln"></span></div>
+          <div class="sec-row">
+            <figure class="art" id="art-buttons" data-name="Buttons &amp; States" data-dim="1100 × auto" data-note="3 Stufen × 5 Zustände + Controls">
+              <figcaption>Buttons &amp; States <span class="sz">1100 × auto</span></figcaption>
+              <div class="frame"><iframe class="auto" data-src="parts/buttons.html" style="width:1100px;height:1100px"></iframe></div>
+            </figure>
+
+            <figure class="art" id="art-components" data-name="Komponenten" data-dim="1100 × auto" data-note="Karten · Formularfelder · Akkordeon">
+              <figcaption>Komponenten <span class="sz">1100 × auto</span></figcaption>
+              <div class="frame"><iframe class="auto" data-src="parts/components.html" style="width:1100px;height:1100px"></iframe></div>
+            </figure>
+          </div>
+        </section>
+
+        <!-- TOOLS / FUNNEL -->
+        <section class="sec">
+          <div class="sec-head"><span class="lbl">04 · Tools</span><span class="desc">Projekt-Kompass — interaktiver 4-Schritt-Funnel, live bedienbar</span><span class="ln"></span></div>
+          <div class="sec-row">
+            <figure class="art" id="art-kompass" data-name="Projekt-Kompass" data-dim="780 × auto" data-note="4 Fragen → Lösung, Preisrahmen, CTA · live klickbar">
+              <figcaption>Projekt-Kompass <span class="sz">interaktiv</span> <span class="badge">neu</span></figcaption>
+              <div class="frame" style="border-radius:16px;overflow:hidden"><iframe class="kp" data-src="projekt-kompass.html#embed" scrolling="no" style="width:780px;height:560px"></iframe></div>
+            </figure>
+
+            <figure class="art" id="art-kompass-m" data-name="Kompass — Mobil" data-dim="390 × 844" data-note="Funnel responsiv im Phone-Frame">
+              <figcaption>Kompass — Mobil <span class="sz">390 × 844</span></figcaption>
+              <div class="frame bezel phone">
+                <div class="notch"></div>
+                <div class="screen"><iframe class="kp" data-src="projekt-kompass.html#embed" scrolling="no" style="width:390px;height:844px"></iframe></div>
+              </div>
+            </figure>
+          </div>
+        </section>
+
+      </div>
+    </div>
+    <div class="canvas-foot">⌘/Strg + Scrollen zum Zoomen · Ziehen zum Verschieben</div>
+  </div>
+
+  <!-- ─────────── RIGHT INSPECTOR ─────────── -->
+  <aside class="rpanel" id="rpanel">
+    <div class="rp-head">
+      <div class="t" id="insName">Desktop — Home</div>
+      <div class="s" id="insType">Artboard</div>
+    </div>
+    <div class="rp-sec">
+      <div class="h">Layout</div>
+      <div class="rp-row"><span class="k">Breite</span><span class="v" id="insW">1280</span></div>
+      <div class="rp-row"><span class="k">Höhe</span><span class="v" id="insH">auto</span></div>
+      <div class="rp-row"><span class="k">Hinweis</span></div>
+      <div style="font-size:12px;color:var(--panel-ink-2);line-height:1.5" id="insNote">Breakpoint ≥ 980px · volle Navigation</div>
+    </div>
+    <div class="rp-sec">
+      <div class="h">Grid &amp; Spacing</div>
+      <div class="rp-row"><span class="k">Container</span><span class="v">max 1200</span></div>
+      <div class="rp-row"><span class="k">Gutter</span><span class="v">32 px</span></div>
+      <div class="rp-row"><span class="k">Section pad</span><span class="v">96 px</span></div>
+      <div class="rp-row"><span class="k">Radius</span><span class="v">14 / 8</span></div>
+    </div>
+    <div class="rp-sec">
+      <div class="h">Farben im Einsatz</div>
+      <div class="rp-swatch"><i style="background:#fafaf7"></i><span class="v">#FAFAF7</span><span class="k">paper</span></div>
+      <div class="rp-swatch"><i style="background:#1a1a18"></i><span class="v">#1A1A18</span><span class="k">ink</span></div>
+      <div class="rp-swatch"><i style="background:#a83a3a"></i><span class="v">#A83A3A</span><span class="k">accent</span></div>
+    </div>
+    <div class="rp-sec">
+      <div class="h">Type</div>
+      <div class="rp-row"><span class="k">Sans</span><span class="v">Inter</span></div>
+      <div class="rp-row"><span class="k">Mono</span><span class="v">JetBrains</span></div>
+    </div>
+  </aside>
+
+</div>
+
+<script src="styleguide.js"></script>
+</body>
+</html>
