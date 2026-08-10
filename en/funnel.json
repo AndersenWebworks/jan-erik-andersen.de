@@ -524,8 +524,8 @@
 
     "result-landingpage": {
       "type": "result",
-      "title": "Landing page – one page, one goal.",
-      "text": "What a landing page needs: a clear CTA, no navigation menu leading away, no ten options. The most common mistakes: too much text, too many buttons, no clear next step.\n\nStatic HTML is almost always enough. Faster than WordPress, no maintenance. Typical effort: 15–30 hours, EUR 1,200–2,400.",
+      "title": "Landing page – focused on one next step.",
+      "text": "A landing page brings an offer, a campaign or a registration together on one page. Structure, content and the call to action lead to one clear next step.\n\nDepending on content, design and functions, the typical range is EUR 1,200–2,400. For stable content, the page can be built lean without a CMS; for ongoing updates, we agree suitable maintenance.",
       "proof": [
         {
           "name": "Mehrweg-Heroes",
@@ -534,7 +534,7 @@
         }
       ],
       "cta": {
-        "label": "Send me the offer – I'll design the page",
+        "label": "Ask about a landing page",
         "href": "contact/"
       }
     },
@@ -921,7 +921,7 @@
         }
       ],
       "cta": {
-        "label": "Let's talk about the retainer",
+        "label": "Discuss the maintenance scope",
         "href": "contact/"
       }
     },

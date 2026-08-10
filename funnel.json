@@ -524,8 +524,8 @@
 
     "result-landingpage": {
       "type": "result",
-      "title": "Landingpage – eine Seite, ein Ziel.",
-      "text": "Was eine Landingpage braucht: einen klaren CTA, kein Navigationsmenü das wegführt, keine zehn Optionen. Die häufigsten Fehler: zu viel Text, zu viele Buttons, kein klarer nächster Schritt.\n\nStatisches HTML reicht fast immer. Schneller als WordPress, kein Wartungsaufwand. Typischer Aufwand: 15–30 Stunden, 1.200–2.400 EUR.",
+      "title": "Landingpage – fokussiert auf einen nächsten Schritt.",
+      "text": "Eine Landingpage bündelt ein Angebot, eine Kampagne oder eine Anmeldung auf einer Seite. Struktur, Inhalte und Handlungsaufforderung führen zu einem klaren nächsten Schritt.\n\nJe nach Inhalt, Gestaltung und Funktionen liegt der Rahmen typischerweise bei 1.200–2.400 EUR. Für stabile Inhalte kann die Seite schlank ohne CMS umgesetzt werden; bei laufenden Änderungen vereinbaren wir eine passende Pflege.",
       "proof": [
         {
           "name": "Mehrweg-Heroes",
@@ -534,7 +534,7 @@
         }
       ],
       "cta": {
-        "label": "Schicken Sie mir das Angebot – ich entwerfe die Seite",
+        "label": "Landingpage anfragen",
         "href": "kontakt/"
       }
     },
@@ -988,7 +988,7 @@
         }
       ],
       "cta": {
-        "label": "Lassen Sie uns über den Retainer sprechen",
+        "label": "Betreuungsumfang besprechen",
         "href": "kontakt/"
       }
     },
