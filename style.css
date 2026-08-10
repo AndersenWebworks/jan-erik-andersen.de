@@ -1215,6 +1215,10 @@ html[lang="en"] .testimonial-card blockquote.testimonial-body::after {
   gap: var(--space-xl);
 }
 
+.pricing-retainer-intro {
+  margin-bottom: var(--space-xl);
+}
+
 .pricing-grid-projects {
   grid-template-columns: repeat(2, 1fr);
 }

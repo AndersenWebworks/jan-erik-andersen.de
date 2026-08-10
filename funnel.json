@@ -333,18 +333,18 @@
     "betreuung-was": {
       "type": "question",
       "text": "Was brauchen Sie?",
-      "subtitle": "Drei Pakete, monatlich kündbar. Die Frage ist: wie viel Eigeninitiative wollen Sie?",
+      "subtitle": "Drei Einstiege für die laufende Betreuung. Darüber hinaus wird der Umfang passend zur Website vereinbart.",
       "options": [
         {
-          "label": "Updates und Sicherheit – 200 EUR/Monat",
+          "label": "Technische Grundpflege – 40 EUR/Monat",
           "next": "result-betreuung-basis"
         },
         {
-          "label": "Updates plus regelmäßige Änderungen – 400 EUR/Monat",
+          "label": "Laufende Website-Pflege – 80 EUR/Monat",
           "next": "result-betreuung-standard"
         },
         {
-          "label": "WooCommerce-Shop komplett betreut – 800 EUR/Monat",
+          "label": "Weiterentwicklung nach Bedarf – ab 160 EUR/Monat",
           "next": "result-betreuung-premium"
         },
         {
@@ -356,19 +356,19 @@
 
     "betreuung-info": {
       "type": "info",
-      "text": "Drei Pakete, alle monatlich kündbar. Basis (200 EUR/Monat, 2,5h): Updates, Sicherheit, kleine Änderungen. Standard (400 EUR/Monat, 5h): dazu Performance, Content, schnelle Reaktion. Shop (800 EUR/Monat, 10h): WooCommerce-spezifisch, neue Features, Prio-Support.",
-      "detail": "Der Unterschied in der Praxis: Bei Basis kümmere ich mich um die Technik – Sie merken nichts davon. Bei Standard rufen Sie an und ich setze um. Bei Shop denke ich mit, schlage vor, plane voraus. Nicht genutzte Stunden verfallen, aber ehrlich: die meisten Kunden nutzen sie.",
+      "text": "Website-Basis (40 EUR/Monat) hält die Technik mit Sicherungen und Basiswartung am Laufen. Website-Pflege (80 EUR/Monat) deckt kleine laufende Änderungen ab. Für Weiterentwicklung wird ein passender Monatsumfang vereinbart; zusätzliche Stunden kosten 80 EUR netto.",
+      "detail": "Die drei Angebote sind Einstiege, keine starren Stufen. Ein Umfang von fünf Stunden kostet zum Beispiel 400 EUR pro Monat, zehn Stunden 800 EUR.",
       "options": [
         {
-          "label": "Basis reicht",
+          "label": "Technische Grundpflege reicht",
           "next": "result-betreuung-basis"
         },
         {
-          "label": "Standard klingt richtig",
+          "label": "Laufende Pflege klingt richtig",
           "next": "result-betreuung-standard"
         },
         {
-          "label": "Shop – weil geschäftskritisch",
+          "label": "Ich brauche laufende Weiterentwicklung",
           "next": "result-betreuung-premium"
         }
       ]
@@ -945,8 +945,8 @@
 
     "result-betreuung-basis": {
       "type": "result",
-      "title": "Basis-Betreuung – 200 EUR/Monat, 2,5 Stunden inklusive.",
-      "text": "Updates, Sicherheit, Monitoring, kleine Content-Änderungen. Ich update manuell, prüfe danach, rolle zurück wenn nötig. Sie merken nichts davon – und genau das ist der Punkt. Direkte Erreichbarkeit per Mail, monatlich kündbar.\n\nTipp: Wenn Sie nur Updates und Backups brauchen, reicht Basis. Wenn Sie regelmäßig Änderungen haben, ist Standard wirtschaftlicher.",
+      "title": "Website-Basis – 40 EUR/Monat.",
+      "text": "Regelmäßige Sicherungen, Basiswartung und ein kurzer Blick auf die zentralen Funktionen halten die Website technisch am Laufen. Der Rahmen liegt bei etwa 30 Minuten im Monat.\n\nFür laufende Änderungen oder neue Aufgaben vereinbaren wir den passenden Umfang separat.",
       "proof": [
         {
           "name": "20+ Websites",
@@ -961,12 +961,12 @@
 
     "result-betreuung-standard": {
       "type": "result",
-      "title": "Standard-Betreuung – 400 EUR/Monat, 5 Stunden inklusive.",
-      "text": "Alles aus Basis, plus: Performance-Überwachung, regelmäßige Content-Änderungen, kleinere neue Features. Sie schicken eine Mail, ich setze um. Kurze Wege, schnelle Reaktion, monatlich kündbar.\n\nDas ist das Paket, das die meisten meiner Kunden nutzen. Genug Stunden für regelmäßige Pflege, ohne dass es teuer wird.",
+      "title": "Website-Pflege – 80 EUR/Monat.",
+      "text": "Für Websites, die im Alltag aktuell bleiben müssen: technische Grundpflege sowie kleine Änderungen an Texten, Bildern und wichtigen Angaben.\n\nWenn die Aufgaben mehr Raum brauchen, wird der monatliche Umfang passend vereinbart. Zusätzliche Stunden kosten 80 EUR netto.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Standard-Retainer, regelmäßige Änderungen",
+          "desc": "Laufende Website-Betreuung",
           "href": "https://gerwing.de"
         }
       ],
@@ -978,12 +978,12 @@
 
     "result-betreuung-premium": {
       "type": "result",
-      "title": "Shop-Betreuung – 800 EUR/Monat, 10 Stunden inklusive.",
-      "text": "Für geschäftskritische WooCommerce-Shops: Alles aus Standard, plus Produktmanagement, Shop-spezifische Wartung, neue Features, priorisierter Support. 10 Stunden pro Monat, monatlich kündbar.\n\nSo arbeite ich mit Gerwing Steinwerke – alleinige technische Verantwortung seit 2023. Ein Ansprechpartner für den kompletten Shop.",
+      "title": "Website-Entwicklung – ab 160 EUR/Monat.",
+      "text": "Für laufende Verbesserungen, neue Bereiche sowie Shop- und Systemthemen wird ein Monatsumfang passend zur Aufgabe vereinbart. Zusätzliche Stunden kosten 80 EUR netto.\n\nZur Orientierung: Fünf Stunden entsprechen 400 EUR im Monat, zehn Stunden 800 EUR.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Shop-Retainer seit 2023",
+          "desc": "Laufende technische Betreuung seit 2023",
           "href": "https://gerwing.de"
         }
       ],

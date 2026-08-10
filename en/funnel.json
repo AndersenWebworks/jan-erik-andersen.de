@@ -333,18 +333,18 @@
     "betreuung-was": {
       "type": "question",
       "text": "What do you need?",
-      "subtitle": "Three packages, all cancel monthly. The question is: how much initiative do you want from me?",
+      "subtitle": "Three starting points for ongoing maintenance. Beyond that, the scope is agreed around the website.",
       "options": [
         {
-          "label": "Updates and security – €200/month",
+          "label": "Technical baseline care – €40/month",
           "next": "result-betreuung-basis"
         },
         {
-          "label": "Updates plus regular changes – €400/month",
+          "label": "Ongoing website care – €80/month",
           "next": "result-betreuung-standard"
         },
         {
-          "label": "WooCommerce shop fully managed – €800/month",
+          "label": "Further development as needed – from €160/month",
           "next": "result-betreuung-premium"
         },
         {
@@ -356,19 +356,19 @@
 
     "betreuung-info": {
       "type": "info",
-      "text": "Three packages, all cancel monthly. Basic (€200/month, 2.5h): updates, security, minor changes. Standard (€400/month, 5h): plus performance, content, fast response. Shop (€800/month, 10h): WooCommerce-specific, new features, priority support.",
-      "detail": "The practical difference: With Basic I handle the tech – you don't notice. With Standard you call and I implement. With Shop I think ahead, suggest improvements, plan proactively. Unused hours expire, but honestly: most clients use them.",
+      "text": "Website Baseline (€40/month) keeps the technical side running with backups and basic maintenance. Website Care (€80/month) covers small ongoing changes. For further development, a suitable monthly scope is agreed; additional hours are €80 net.",
+      "detail": "The three offers are starting points, not fixed tiers. Five hours, for example, are €400 per month; ten hours are €800.",
       "options": [
         {
-          "label": "Basic is enough",
+          "label": "Technical baseline care is enough",
           "next": "result-betreuung-basis"
         },
         {
-          "label": "Standard sounds right",
+          "label": "Ongoing website care sounds right",
           "next": "result-betreuung-standard"
         },
         {
-          "label": "Shop – because business-critical",
+          "label": "I need ongoing development",
           "next": "result-betreuung-premium"
         }
       ]
@@ -878,8 +878,8 @@
 
     "result-betreuung-basis": {
       "type": "result",
-      "title": "Basic Maintenance – €200/month, 2.5 hours included.",
-      "text": "Updates, security, monitoring, minor content changes. I update manually, check afterwards, roll back if needed. You don't notice any of it – and that's exactly the point. Direct contact via email, cancel monthly.\n\nTip: If you only need updates and backups, Basic is enough. If you regularly have changes, Standard is more economical.",
+      "title": "Website Baseline – €40/month.",
+      "text": "Regular backups, basic maintenance and a brief check of the core website functions keep the site technically running. The scope is around 30 minutes per month.\n\nFor ongoing changes or new tasks, we agree a suitable scope separately.",
       "proof": [
         {
           "name": "20+ websites",
@@ -894,12 +894,12 @@
 
     "result-betreuung-standard": {
       "type": "result",
-      "title": "Standard Maintenance – €400/month, 5 hours included.",
-      "text": "Everything from Basic, plus: performance monitoring, regular content changes, smaller new features. You send an email, I implement. Short paths, fast response, cancel monthly.\n\nThis is the package most of my clients use. Enough hours for regular maintenance without it getting expensive.",
+      "title": "Website Care – €80/month.",
+      "text": "For websites that need to stay current day to day: technical baseline care plus small updates to text, images and key details.\n\nWhen the work needs more room, the monthly scope is agreed around the need. Additional hours are €80 net.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Standard retainer, regular changes",
+          "desc": "Ongoing website care",
           "href": "https://gerwing.de"
         }
       ],
@@ -911,12 +911,12 @@
 
     "result-betreuung-premium": {
       "type": "result",
-      "title": "Shop Maintenance – €800/month, 10 hours included.",
-      "text": "For business-critical WooCommerce shops: Everything from Standard, plus product management, shop-specific maintenance, new features, priority support. 10 hours per month, cancel monthly.\n\nThis is how I work with Gerwing Steinwerke – sole technical responsibility since 2023. One point of contact for the entire shop.",
+      "title": "Website Development – from €160/month.",
+      "text": "For ongoing improvements, new sections, and shop or system topics, the monthly scope is agreed around the work. Additional hours are €80 net.\n\nFor orientation: five hours are €400 per month; ten hours are €800.",
       "proof": [
         {
           "name": "Gerwing Steinwerke",
-          "desc": "Shop retainer since 2023",
+          "desc": "Ongoing technical care since 2023",
           "href": "https://gerwing.de"
         }
       ],
