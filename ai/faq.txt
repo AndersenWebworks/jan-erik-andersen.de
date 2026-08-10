@@ -4,14 +4,14 @@
   "name": "Haeufige Fragen Andersen Webworks",
   "inLanguage": "de",
   "url": "https://jan-erik-andersen.de/faq/",
-  "dateModified": "2026-05-25",
+  "dateModified": "2026-08-10",
   "mainEntity": [
     {
       "@type": "Question",
       "name": "Was kostet eine Website?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Firmenwebsite: ab 2.400 EUR. Shop: ab 4.800 EUR. Betreuung: ab 200 EUR pro Monat. Festpreise nach Erstgespraech."
+        "text": "Firmenwebsite: ab 2.400 EUR. Shop: ab 4.800 EUR. Betreuung: ab 40 EUR pro Monat für technische Grundpflege. Zusätzliche Betreuung wird passend zum Umfang vereinbart und mit 80 EUR netto pro Stunde berechnet."
       }
     },
     {
