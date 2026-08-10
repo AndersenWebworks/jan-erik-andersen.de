@@ -5641,7 +5641,6 @@ html.funnel-active .quickcheck-card {
 
 .services-extras,
 .also,
-.pricing-notes,
 .price-foot {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
@@ -5652,6 +5651,29 @@ html.funnel-active .quickcheck-card {
   border-radius: var(--radius-xl);
   background: var(--color-bg-card);
   box-shadow: var(--shadow-card);
+}
+
+.pricing-notes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: var(--space-xs) var(--space-lg);
+  max-width: 760px;
+  margin: 2rem auto 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  text-align: center;
+}
+
+.pricing-notes p {
+  margin: 0;
+}
+
+.pricing-notes .btn-text {
+  white-space: nowrap;
 }
 
 .services-quicknav,
