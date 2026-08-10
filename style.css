@@ -5576,6 +5576,10 @@ html.funnel-active .quickcheck-card {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.pricing-grid.pricing-grid-projects {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .testimonials-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -6183,6 +6187,10 @@ html.funnel-active .funnel {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .pricing-grid.pricing-grid-projects {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .process-grid,
   .process,
   .contact-grid {
@@ -6531,6 +6539,10 @@ html.funnel-active .funnel {
   .also,
   .pricing-notes,
   .price-foot {
+    grid-template-columns: 1fr;
+  }
+
+  .pricing-grid.pricing-grid-projects {
     grid-template-columns: 1fr;
   }
 
