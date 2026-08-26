@@ -7,17 +7,17 @@
 ### KI-Sichtbarkeit und GEO-Optimierung
 Damit Websites in ChatGPT, Perplexity und Claude zitiert werden. Strukturierte Daten, Schema.org JSON-LD, llms.txt, semantische Architektur, FAQPage-Schema, robots.txt-Konfiguration für KI-Crawler.
 - Im Projekt integriert oder als Update ab 800 EUR
-- Mehr: https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/
+- Mehr: [KI-Sichtbarkeit und GEO-Optimierung](https://jan-erik-andersen.de/leistungen/ki-sichtbarkeit/)
 
 ### BFSG-Check und Barrierefreiheit
 Prüfung, Neubau oder Nachrüstung für vom BFSG betroffene digitale Angebote. WCAG-orientiert, ohne Overlay-Scheinlösung.
 - Im Projekt integriert oder als Update ab 1.200 EUR
-- Mehr: https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/
+- Mehr: [BFSG-Check und Barrierefreiheit](https://jan-erik-andersen.de/leistungen/bfsg-barrierefreiheit/)
 
 ### WooCommerce-Shops und Custom-Lösungen
 WooCommerce mit B2B-Features, Händlerportalen, eigenen Plugins. Preisgruppen, Musterbestellsysteme, Germanized.
 - Standard-Shop ab 4.800 EUR, B2B ab 7.500 EUR
-- Mehr: https://jan-erik-andersen.de/leistungen/shops-und-custom/
+- Mehr: [WooCommerce-Shops und Custom-Lösungen](https://jan-erik-andersen.de/leistungen/shops-und-custom/)
 
 ## Weitere Leistungen
 - Webdesign (WordPress, statisches HTML) – ab 2.400 EUR
@@ -32,10 +32,10 @@ WooCommerce mit B2B-Features, Händlerportalen, eigenen Plugins. Preisgruppen, M
 - Monatlich kündbar
 
 ## Referenzen
-- Gerwing Steinwerke – B2B-Shop, WooCommerce, Musterbestellsystem – gerwing.de
-- Runden Group – 11 Websites, Firmengruppe, 2 Jahre alleinige Verantwortung – runden-group.eu
-- WBG Pooling – Industrie-Portal, 360°-Produktansichten, Custom-Plugin WebDeck, Salesforce-Anbindung – wbg-pooling.eu
-- Senior Partner in School e.V. – Wirkungsbericht, barrierefrei, Pro Bono – wirkungsbericht.seniorpartnerinschool.de
+- [Gerwing Steinwerke](https://gerwing.de/) – B2B-Shop, WooCommerce, Musterbestellsystem
+- [Runden Group](https://runden-group.eu/) – 11 Websites, Firmengruppe, 2 Jahre alleinige Verantwortung
+- [WBG Pooling](https://wbg-pooling.eu/) – Industrie-Portal, 360°-Produktansichten, Custom-Plugin WebDeck, Salesforce-Anbindung
+- [Senior Partner in School e.V.](https://wirkungsbericht.seniorpartnerinschool.de/) – Wirkungsbericht, barrierefrei, Pro Bono
 - 20+ betreute Live-Websites, 14+ Branchen, 50+ Projekte
 
 ## Technologien
@@ -44,9 +44,9 @@ WordPress, WooCommerce, YOOtheme Pro, statisches HTML, Vanilla JavaScript, Schem
 ## Kontakt
 - E-Mail: mail@andersen-webworks.de
 - Telefon: +49 38733 270015
-- LinkedIn: linkedin.com/in/andersen-erik
+- LinkedIn: [Jan-Erik Andersen](https://www.linkedin.com/in/andersen-erik/)
 - Stundensatz: 80 EUR netto
-- Website: https://jan-erik-andersen.de
+- Website: [jan-erik-andersen.de](https://jan-erik-andersen.de/)
 - Standort: Plau am See, Mecklenburg-Vorpommern, Deutschland
 - Arbeitsweise: 100 % remote, deutschlandweit
 
