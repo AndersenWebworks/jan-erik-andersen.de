@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Andersen Webworks | Website-Abo</title>
+  <meta name="description" content="Professionelle Websites als Abo: individuell gebaut, persoenlich betreut und ohne hohe Startkosten.">
+  <style>
+    :root {
+      --paper: #f4f3ed;
+      --paper-deep: #e8e8e0;
+      --white: #fff;
+      --ink: #171817;
+      --muted: #656862;
+      --line: #d8d9d1;
+      --coral: #d85e55;
+      --coral-dark: #ad453f;
+      --sage: #a9b7a7;
+      --max: 1240px;
+      --shadow: 0 24px 60px rgba(23, 24, 23, .16);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.55; }
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+    .ww-wrap { width: min(calc(100% - 48px), var(--max)); margin: 0 auto; }
+    .ww-header { position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); background: rgba(244, 243, 237, .94); backdrop-filter: blur(16px); }
+    .ww-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 28px; min-height: 76px; }
+    .ww-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 700 19px/1 Georgia, serif; letter-spacing: .01em; }
+    .ww-logo-mark { width: 13px; height: 13px; border-radius: 50%; background: var(--coral); }
+    .ww-logo small { color: var(--muted); font: 600 10px/1 Inter, sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+    .ww-nav { display: flex; align-items: center; gap: 26px; font-size: 13px; }
+    .ww-nav a { text-decoration: none; }
+    .ww-nav a:hover { color: var(--coral-dark); }
+    .ww-nav-cta { padding: 11px 16px; border-radius: 4px; color: var(--white); background: var(--ink); font-weight: 700; }
+
+    .ww-hero { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); min-height: 650px; }
+    .ww-hero-media { position: relative; display: flex; align-items: center; padding: clamp(28px, 5vw, 70px); overflow: hidden; background: var(--paper-deep); }
+    .ww-hero-media::before { position: absolute; inset: 0 auto 0 0; width: 6px; background: var(--coral); content: ""; }
+    .ww-media-note { position: absolute; top: 28px; left: 32px; color: var(--muted); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .15em; text-transform: uppercase; }
+    .ww-demo-frame { position: relative; width: min(100%, 680px); margin: 30px auto 0; transform: rotate(-1.2deg); border: 1px solid #c4c5bc; border-radius: 12px; background: var(--white); box-shadow: var(--shadow); }
+    .ww-demo-frame img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 11px; }
+    .ww-demo-tag { position: absolute; right: 18px; bottom: 18px; padding: 8px 10px; border: 1px solid rgba(255,255,255,.65); border-radius: 3px; color: var(--white); background: rgba(23,24,23,.72); font: 600 10px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .ww-hero-copy { display: flex; flex-direction: column; justify-content: center; padding: 72px clamp(28px, 6vw, 82px); color: var(--white); background: var(--coral); }
+    .ww-hero-kicker { margin: 0 0 26px; color: rgba(255,255,255,.78); font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .16em; text-transform: uppercase; }
+    .ww-hero h1 { max-width: 600px; margin: 0 0 22px; font: 700 3.65rem/.96 Georgia, serif; letter-spacing: 0; }
+    .ww-hero-lead { max-width: 470px; margin: 0 0 30px; color: rgba(255,255,255,.88); font-size: 18px; line-height: 1.55; }
+    .ww-price { display: flex; align-items: baseline; gap: 9px; margin-bottom: 27px; }
+    .ww-price strong { font-size: 30px; line-height: 1; }
+    .ww-price span { color: rgba(255,255,255,.76); font-size: 12px; }
+    .ww-actions { display: flex; flex-wrap: wrap; gap: 11px; }
+    .ww-button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 18px; border: 1px solid transparent; border-radius: 4px; font-size: 13px; font-weight: 750; text-decoration: none; }
+    .ww-button-primary { color: var(--coral-dark); background: var(--white); }
+    .ww-button-secondary { border-color: rgba(255,255,255,.46); color: var(--white); background: transparent; }
+    .ww-person { display: flex; align-items: center; gap: 12px; margin-top: 38px; color: rgba(255,255,255,.82); font-size: 12px; }
+    .ww-person img { width: 46px; height: 46px; object-fit: cover; border: 2px solid rgba(255,255,255,.7); border-radius: 50%; }
+    .ww-person strong { color: var(--white); }
+
+    .ww-benefits { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--line); background: var(--white); }
+    .ww-benefit { padding: 36px 34px 40px; border-right: 1px solid var(--line); }
+    .ww-benefit:last-child { border-right: 0; }
+    .ww-rule { width: 32px; height: 4px; margin-bottom: 19px; background: var(--coral); }
+    .ww-benefit h2 { margin: 0 0 9px; font: 700 25px/1.05 Georgia, serif; }
+    .ww-benefit p { max-width: 31ch; margin: 0; color: var(--muted); font-size: 14px; }
+
+    .ww-section { padding: 96px 0; }
+    .ww-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 38px; }
+    .ww-section-heading h2 { max-width: 640px; margin: 0; font: 700 3.1rem/1.02 Georgia, serif; }
+    .ww-section-heading p { max-width: 330px; margin: 0; color: var(--muted); font-size: 14px; }
+    .ww-showcase { background: var(--paper); }
+    .ww-showcase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .ww-showcase-item { overflow: hidden; border: 1px solid var(--line); background: var(--white); }
+    .ww-showcase-item img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+    .ww-showcase-item:nth-child(2) img { filter: saturate(.78) hue-rotate(20deg); }
+    .ww-showcase-item:nth-child(3) img { filter: saturate(.72) sepia(.14); }
+    .ww-showcase-copy { padding: 18px 18px 20px; }
+    .ww-showcase-copy small { color: var(--coral-dark); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; }
+    .ww-showcase-copy h3 { margin: 8px 0 0; font: 700 22px/1.08 Georgia, serif; }
+
+    .ww-offer { border-top: 1px solid var(--line); background: var(--white); }
+    .ww-offer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .ww-plan { padding: 34px; border: 1px solid var(--line); }
+    .ww-plan-featured { border-color: var(--coral); box-shadow: inset 0 4px 0 var(--coral); }
+    .ww-plan small { color: var(--muted); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; }
+    .ww-plan h3 { margin: 14px 0 10px; font: 700 2.2rem/1 Georgia, serif; }
+    .ww-plan-price { margin-bottom: 17px; font-size: 23px; font-weight: 750; }
+    .ww-plan p { max-width: 40ch; margin: 0; color: var(--muted); font-size: 14px; }
+    .ww-plan ul { display: grid; gap: 8px; margin: 23px 0 0; padding: 0; color: var(--muted); font-size: 13px; list-style: none; }
+    .ww-plan li::before { margin-right: 8px; color: var(--coral); content: "✓"; font-weight: 800; }
+
+    .ww-process { color: var(--white); background: var(--ink); }
+    .ww-process .ww-section-heading p { color: rgba(255,255,255,.62); }
+    .ww-process-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,.2); }
+    .ww-step { padding: 24px 20px 0 0; border-right: 1px solid rgba(255,255,255,.2); }
+    .ww-step:not(:first-child) { padding-left: 20px; }
+    .ww-step:last-child { border-right: 0; }
+    .ww-step strong { display: block; margin-bottom: 20px; color: var(--coral); font: 700 32px/1 Georgia, serif; }
+    .ww-step h3 { margin: 0 0 8px; font: 700 21px/1.1 Georgia, serif; }
+    .ww-step p { margin: 0; color: rgba(255,255,255,.66); font-size: 13px; }
+
+    .ww-faq { background: var(--paper); }
+    .ww-faq-list { max-width: 860px; border-top: 1px solid var(--line); }
+    .ww-faq details { border-bottom: 1px solid var(--line); }
+    .ww-faq summary { padding: 21px 0; cursor: pointer; font: 700 20px/1.2 Georgia, serif; list-style: none; }
+    .ww-faq summary::-webkit-details-marker { display: none; }
+    .ww-faq summary::after { float: right; color: var(--coral); content: "+"; font: 400 26px/1 Inter, sans-serif; }
+    .ww-faq details[open] summary::after { content: "-"; }
+    .ww-faq details p { max-width: 700px; margin: 0 0 22px; color: var(--muted); font-size: 14px; }
+
+    .ww-contact { padding: 72px 0 82px; color: var(--white); background: var(--coral); }
+    .ww-contact-inner { display: flex; align-items: end; justify-content: space-between; gap: 34px; }
+    .ww-contact h2 { max-width: 700px; margin: 0 0 16px; font: 700 3.5rem/1 Georgia, serif; }
+    .ww-contact p { max-width: 520px; margin: 0; color: rgba(255,255,255,.82); font-size: 15px; }
+    .ww-contact .ww-button-primary { flex: 0 0 auto; }
+    .ww-footer { padding: 24px 0; color: var(--muted); background: var(--paper); font-size: 12px; }
+    .ww-footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+    .ww-footer a { text-decoration: none; }
+
+    @media (max-width: 980px) {
+      .ww-nav { gap: 16px; }
+      .ww-nav a:not(.ww-nav-cta) { display: none; }
+      .ww-hero h1 { font-size: 3.25rem; }
+      .ww-hero-copy { padding: 52px 38px; }
+      .ww-section { padding: 72px 0; }
+      .ww-section-heading h2 { font-size: 2.55rem; }
+    }
+    @media (max-width: 720px) {
+      .ww-wrap { width: min(calc(100% - 32px), var(--max)); }
+      .ww-header-inner { min-height: 68px; }
+      .ww-logo { font-size: 16px; }
+      .ww-logo small { display: none; }
+      .ww-hero { display: flex; flex-direction: column-reverse; min-height: 0; }
+      .ww-hero-copy { padding: 54px 24px 48px; }
+      .ww-hero h1 { font-size: 3.1rem; }
+      .ww-hero-lead { font-size: 16px; }
+      .ww-hero-media { padding: 58px 16px 28px; }
+      .ww-media-note { top: 23px; left: 18px; }
+      .ww-demo-frame { margin-top: 8px; transform: none; }
+      .ww-benefits, .ww-showcase-grid, .ww-offer-grid { grid-template-columns: 1fr; }
+      .ww-benefit { border-right: 0; border-bottom: 1px solid var(--line); }
+      .ww-benefit:last-child { border-bottom: 0; }
+      .ww-section-heading { display: block; }
+      .ww-section-heading h2 { margin-bottom: 17px; font-size: 2.4rem; }
+      .ww-process-grid { grid-template-columns: 1fr 1fr; }
+      .ww-step { min-height: 150px; border-bottom: 1px solid rgba(255,255,255,.2); }
+      .ww-step:nth-child(2) { border-right: 0; }
+      .ww-step:nth-child(3), .ww-step:nth-child(4) { border-bottom: 0; }
+      .ww-contact-inner, .ww-footer-inner { display: block; }
+      .ww-contact h2 { font-size: 2.6rem; }
+      .ww-contact .ww-button { margin-top: 26px; }
+      .ww-footer-inner > * + * { margin-top: 9px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="ww-header">
+    <div class="ww-wrap ww-header-inner">
+      <a class="ww-logo" href="#top"><span class="ww-logo-mark" aria-hidden="true"></span>andersen <span style="font-family: Inter, sans-serif; font-weight: 500;">webworks</span><small>by Jan-Erik Andersen</small></a>
+      <nav class="ww-nav" aria-label="Hauptnavigation">
+        <a href="#beispiele">Beispiele</a>
+        <a href="#ablauf">Ablauf</a>
+        <a href="#preise">Preise</a>
+        <a href="#fragen">Fragen</a>
+        <a class="ww-nav-cta" href="#kontakt">Kurzcheck starten</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="ww-hero">
+      <div class="ww-hero-media">
+        <div class="ww-media-note">Website-Abo / visuelle Richtung</div>
+        <figure class="ww-demo-frame">
+          <img src="website-demo.png" alt="Beispiel einer modern gestalteten Website in einem Browserfenster">
+          <figcaption class="ww-demo-tag">echte Website statt Stockmotiv</figcaption>
+        </figure>
+      </div>
+      <div class="ww-hero-copy">
+        <p class="ww-hero-kicker">Website auf Zeit</p>
+        <h1>Professionell<br>online.<br>Ohne hohe<br>Startkosten.</h1>
+        <p class="ww-hero-lead">Eine klare Website, persoenlich gebaut, gehostet und laufend gepflegt.</p>
+        <div class="ww-price"><strong>ab 99 EUR</strong><span>netto / Monat</span></div>
+        <div class="ww-actions">
+          <a class="ww-button ww-button-primary" href="#kontakt">Website-Kurzcheck</a>
+          <a class="ww-button ww-button-secondary" href="#beispiele">Beispiele ansehen</a>
+        </div>
+        <div class="ww-person"><img src="portrait.webp" alt="Jan-Erik Andersen"><span>Direkt mit dem Entwickler<br><strong>100 % remote</strong></span></div>
+      </div>
+    </section>
+
+    <section class="ww-benefits" aria-label="Drei visuelle Leitideen">
+      <div class="ww-benefit"><div class="ww-rule"></div><h2>Ein Auftritt</h2><p>Ruhige Typografie, echte Screens und ein klarer roter Fokus.</p></div>
+      <div class="ww-benefit"><div class="ww-rule"></div><h2>Ein Ansprechpartner</h2><p>Persoenlich, direkt und ohne Agentur-Umwege.</p></div>
+      <div class="ww-benefit"><div class="ww-rule"></div><h2>Ein System</h2><p>Die Split-Signatur oben, danach eine lesbare, luftige Seite.</p></div>
+    </section>
+
+    <section class="ww-section ww-showcase" id="beispiele">
+      <div class="ww-wrap">
+        <div class="ww-section-heading"><h2>So kann ein Auftritt aussehen.</h2><p>Drei Richtungen, ein gemeinsames System: klar, charaktervoll und auf kleinen Bildschirmen genauso ruhig.</p></div>
+        <div class="ww-showcase-grid">
+          <article class="ww-showcase-item"><img src="website-demo.png" alt="Demo-Auftritt fuer einen Handwerksbetrieb"><div class="ww-showcase-copy"><small>Handwerk</small><h3>Gute Arbeit darf sichtbar sein.</h3></div></article>
+          <article class="ww-showcase-item"><img src="website-demo.png" alt="Demo-Auftritt fuer eine Beratung"><div class="ww-showcase-copy"><small>Beratung</small><h3>Kompetenz ohne laute Show.</h3></div></article>
+          <article class="ww-showcase-item"><img src="website-demo.png" alt="Demo-Auftritt fuer ein Studio"><div class="ww-showcase-copy"><small>Studio</small><h3>Ein Ort, den man gern betritt.</h3></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="ww-section ww-offer" id="preise">
+      <div class="ww-wrap">
+        <div class="ww-section-heading"><h2>Zwei klare Wege. Kein Tarifdschungel.</h2><p>Der Einstieg bleibt schlank. Wenn mehr gebraucht wird, wächst die Betreuung mit.</p></div>
+        <div class="ww-offer-grid">
+          <article class="ww-plan ww-plan-featured"><small>Starter</small><h3>Onepager</h3><div class="ww-plan-price">ab 99 EUR / Monat</div><p>Eine kompakte Website mit fester Struktur und gebuendeltem Pflegeumfang.</p><ul><li>eine Landingpage</li><li>Hosting, SSL und Backups</li><li>kleine gebuendelte Aenderung monatlich</li></ul></article>
+          <article class="ww-plan"><small>Business</small><h3>Mehr Raum</h3><div class="ww-plan-price">ab 149 EUR / Monat</div><p>Mehr Seiten, mehr Pflege und mehr Raum fuer wachsende Angebote.</p><ul><li>bis zu sieben Seiten</li><li>monatliche Inhalts- und Designpflege</li><li>Termin-, Blog- oder Anfragefunktion</li></ul></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="ww-section ww-process" id="ablauf">
+      <div class="ww-wrap">
+        <div class="ww-section-heading"><h2>Vom ersten Bild bis zum laufenden Auftritt.</h2><p>Die Bewegung steckt im Prozess, nicht in einer komplizierten Oberfläche.</p></div>
+        <div class="ww-process-grid">
+          <div class="ww-step"><strong>01</strong><h3>Kurzcheck</h3><p>Wir klaeren Ziel, Branche und den sinnvollsten Umfang.</p></div>
+          <div class="ww-step"><strong>02</strong><h3>Erste Version</h3><p>Du siehst schnell eine echte, klickbare Richtung.</p></div>
+          <div class="ww-step"><strong>03</strong><h3>Launch</h3><p>Domain, Inhalte und Technik werden sauber zusammengebracht.</p></div>
+          <div class="ww-step"><strong>04</strong><h3>Betreuung</h3><p>Die Seite bleibt aktuell, ohne dass du dich darum kuemmern musst.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="ww-section ww-faq" id="fragen">
+      <div class="ww-wrap">
+        <div class="ww-section-heading"><h2>Die wichtigen Fragen stehen sichtbar auf der Seite.</h2><p>Kein Kleingedrucktes als Designtrick.</p></div>
+        <div class="ww-faq-list">
+          <details open><summary>Bleibt meine Domain meine Domain?</summary><p>Ja. Die Domain wird auf deinen Namen registriert. Inhalte und Daten bleiben exportierbar.</p></details>
+          <details><summary>Was passiert bei einer Kuendigung?</summary><p>Laufzeit, Export und eine moegliche Uebergabe werden vorab transparent vereinbart.</p></details>
+          <details><summary>Sind Shops im Starter enthalten?</summary><p>Nein. Shops, Portale und individuelle Funktionen bekommen ein eigenes Konzept und einen eigenen Preis.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="ww-contact" id="kontakt">
+      <div class="ww-wrap ww-contact-inner"><div><h2>Eine Website, die zu deinem Business passt?</h2><p>Schick mir kurz Branche, Ziel und vorhandene Domain. Danach weisst du, ob das Abo-Modell sinnvoll ist.</p></div><a class="ww-button ww-button-primary" href="mailto:mail@andersen-webworks.de?subject=Website-Kurzcheck">Kurzcheck anfragen</a></div>
+    </section>
+  </main>
+
+  <footer class="ww-footer"><div class="ww-wrap ww-footer-inner"><span>Andersen Webworks by Jan-Erik Andersen</span><span><a href="jan-erik-andersen-neu.html">Persoenliche Seite</a> &nbsp; <a href="#top">Nach oben</a></span></div></footer>
+</body>
+</html>
