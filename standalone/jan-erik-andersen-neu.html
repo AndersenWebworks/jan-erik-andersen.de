@@ -4,160 +4,197 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Jan-Erik Andersen | Webentwicklung, Shops und Betreuung</title>
-  <meta name="description" content="Websites, Shops und digitale Werkzeuge: direkt mit Jan-Erik Andersen, seit 1999 und 100 Prozent remote.">
+  <meta name="description" content="Websites, WooCommerce-Shops und digitale Werkzeuge: direkt mit Jan-Erik Andersen, seit 1999 und 100 Prozent remote.">
   <style>
     :root {
       --paper: #f6f5ef;
+      --paper-deep: #e8e9e1;
       --white: #fff;
       --ink: #191a18;
-      --muted: #676963;
-      --line: #deded7;
-      --coral: #d85e55;
-      --coral-dark: #a6423d;
       --navy: #233743;
-      --sage: #c6d0c2;
-      --max: 1180px;
-      --shadow: 0 17px 42px rgba(25, 26, 24, .12);
+      --muted: #626760;
+      --line: #d7d8d0;
+      --coral: #d85e55;
+      --coral-dark: #8f3935;
+      --sage: #a9b7a7;
+      --max: 1240px;
+      --shadow: 0 22px 58px rgba(25, 26, 24, .14);
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { margin: 0; color: var(--ink); background: var(--paper); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.65; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.6; }
     a { color: inherit; }
     img { display: block; max-width: 100%; }
+    :focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
     .ja-wrap { width: min(calc(100% - 48px), var(--max)); margin: 0 auto; }
     .ja-header { position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--line); background: rgba(246, 245, 239, .95); backdrop-filter: blur(16px); }
-    .ja-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 30px; min-height: 74px; }
-    .ja-brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font: 700 18px/1 Georgia, serif; }
-    .ja-brand-mark { width: 10px; height: 10px; border-radius: 50%; background: var(--coral); }
+    .ja-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 30px; min-height: 76px; }
+    .ja-brand { display: inline-flex; align-items: center; gap: 10px; color: var(--navy); text-decoration: none; font: 700 18px/1 Georgia, serif; }
+    .ja-brand-mark { width: 11px; height: 11px; border-radius: 50%; background: var(--coral); }
     .ja-brand span:last-child { color: var(--coral); }
-    .ja-nav { display: flex; align-items: center; gap: 21px; font-size: 13px; }
+    .ja-nav { display: flex; align-items: center; gap: 24px; font-size: 13px; }
     .ja-nav a { text-decoration: none; }
     .ja-nav a:hover { color: var(--coral-dark); }
-    .ja-nav-cta { padding: 10px 14px; border-radius: 4px; color: var(--white); background: var(--ink); font-weight: 700; }
+    .ja-nav-cta { padding: 11px 16px; border-radius: 4px; color: var(--white); background: var(--ink); font-weight: 700; }
 
-    .ja-hero { padding: 75px 0 58px; overflow: hidden; border-bottom: 1px solid var(--line); background: var(--white); }
-    .ja-hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(320px, .75fr); align-items: center; gap: 72px; }
-    .ja-eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 0 0 34px; color: var(--muted); font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .14em; text-transform: uppercase; }
+    .ja-hero { padding: 78px 0 63px; border-bottom: 1px solid var(--line); background: var(--white); overflow: hidden; }
+    .ja-hero-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(320px, .8fr); align-items: center; gap: 74px; }
+    .ja-eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 0 0 30px; color: var(--muted); font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; }
     .ja-eyebrow::before { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); content: ""; }
-    .ja-hero h1 { max-width: 760px; margin: 0 0 24px; color: var(--navy); font: 700 5.3rem/.98 Georgia, serif; letter-spacing: 0; }
+    .ja-hero h1 { max-width: 780px; margin: 0 0 24px; color: var(--navy); font: 700 clamp(3.35rem, 6vw, 5.55rem)/.94 Georgia, serif; letter-spacing: 0; }
     .ja-hero h1 em { color: var(--coral); font-style: normal; }
-    .ja-lead { max-width: 610px; margin: 0 0 31px; color: #4e5554; font-size: 19px; line-height: 1.55; }
-    .ja-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-    .ja-button { display: inline-flex; align-items: center; justify-content: center; min-height: 45px; padding: 0 17px; border: 1px solid transparent; border-radius: 4px; font-size: 13px; font-weight: 750; text-decoration: none; }
+    .ja-lead { max-width: 645px; margin: 0 0 30px; color: #4e5554; font-size: 19px; line-height: 1.55; }
+    .ja-actions { display: flex; flex-wrap: wrap; gap: 11px; }
+    .ja-button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 18px; border: 1px solid transparent; border-radius: 4px; font-size: 13px; font-weight: 750; text-decoration: none; }
     .ja-button-primary { color: var(--white); background: var(--coral); }
     .ja-button-primary:hover { background: var(--coral-dark); }
     .ja-button-secondary { border-color: var(--line); color: var(--ink); background: var(--paper); }
-    .ja-hero-note { margin-top: 23px; color: var(--muted); font-size: 12px; }
-    .ja-portrait-wrap { position: relative; max-width: 365px; margin-left: auto; }
-    .ja-portrait-wrap::before { position: absolute; top: -18px; right: -19px; width: 110px; height: 110px; border: 1px solid var(--coral); content: ""; }
+    .ja-button-secondary:hover { border-color: var(--coral); }
+    .ja-hero-note { display: flex; flex-wrap: wrap; gap: 9px 18px; margin-top: 23px; color: var(--muted); font-size: 12px; }
+    .ja-portrait-wrap { position: relative; max-width: 370px; margin-left: auto; }
+    .ja-portrait-wrap::before { position: absolute; top: -19px; right: -20px; width: 112px; height: 112px; border: 1px solid var(--coral); content: ""; }
     .ja-portrait { position: relative; overflow: hidden; border: 1px solid var(--line); background: var(--paper); box-shadow: var(--shadow); }
     .ja-portrait img { width: 100%; aspect-ratio: 1 / 1.13; object-fit: cover; }
     .ja-portrait-caption { display: flex; justify-content: space-between; gap: 14px; padding: 15px 17px; border-top: 1px solid var(--line); background: var(--white); font-size: 12px; }
     .ja-portrait-caption strong { font-family: Georgia, serif; }
     .ja-portrait-caption span:last-child { color: var(--muted); }
 
-    .ja-ribbon { border-bottom: 1px solid var(--line); background: var(--paper); }
-    .ja-ribbon-inner { display: grid; grid-template-columns: 1.3fr .7fr; align-items: center; gap: 36px; padding: 28px 0; }
-    .ja-ribbon h2 { margin: 0; font: 700 27px/1.08 Georgia, serif; }
-    .ja-ribbon p { margin: 0; color: var(--muted); font-size: 14px; }
-    .ja-ribbon-link { justify-self: end; padding-bottom: 3px; border-bottom: 1px solid var(--coral); color: var(--coral-dark); font-size: 13px; font-weight: 700; text-decoration: none; }
+    .ja-proof { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); background: var(--paper); }
+    .ja-proof-item { padding: 25px 28px 27px; border-right: 1px solid var(--line); }
+    .ja-proof-item:last-child { border-right: 0; }
+    .ja-proof-item strong { display: block; color: var(--navy); font: 700 31px/1 Georgia, serif; }
+    .ja-proof-item span { display: block; margin-top: 7px; color: var(--muted); font-size: 12px; }
+
+    .ja-ribbon { border-bottom: 1px solid var(--line); background: var(--navy); }
+    .ja-ribbon-inner { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 35px; padding: 28px 0; color: var(--white); }
+    .ja-ribbon h2 { margin: 0; font: 700 28px/1.08 Georgia, serif; }
+    .ja-ribbon p { margin: 8px 0 0; color: rgba(255,255,255,.68); font-size: 14px; }
+    .ja-ribbon-link { justify-self: end; padding-bottom: 3px; border-bottom: 1px solid var(--coral); color: #f28a7f; font-size: 13px; font-weight: 700; text-decoration: none; }
 
     .ja-section { padding: 92px 0; }
-    .ja-section-title { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 38px; }
-    .ja-section-title h2 { max-width: 650px; margin: 0; color: var(--navy); font: 700 3.35rem/1.02 Georgia, serif; }
-    .ja-section-title p { max-width: 320px; margin: 0; color: var(--muted); font-size: 14px; }
+    .ja-section-heading { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 40px; }
+    .ja-section-heading h2 { max-width: 720px; margin: 0; color: var(--navy); font: 700 clamp(2.45rem, 4vw, 3.55rem)/.98 Georgia, serif; }
+    .ja-section-heading p { max-width: 360px; margin: 0; color: var(--muted); font-size: 14px; }
+
     .ja-services { background: var(--white); border-bottom: 1px solid var(--line); }
-    .ja-service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .ja-service { padding: 28px 26px 30px; border-top: 3px solid var(--coral); background: var(--paper); }
-    .ja-service:nth-child(2) { border-top-color: var(--navy); }
-    .ja-service:nth-child(3) { border-top-color: #8b9e85; }
-    .ja-service small { color: var(--muted); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .13em; }
-    .ja-service h3 { margin: 18px 0 10px; color: var(--navy); font: 700 25px/1.05 Georgia, serif; }
-    .ja-service p { margin: 0; color: var(--muted); font-size: 14px; }
-    .ja-service a { display: inline-block; margin-top: 21px; color: var(--coral-dark); font-size: 13px; font-weight: 700; text-decoration: none; }
+    .ja-service-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; border: 1px solid var(--line); background: var(--line); }
+    .ja-service { min-height: 285px; padding: 27px 24px 29px; background: var(--white); }
+    .ja-service:nth-child(2) { background: #fbfaf5; }
+    .ja-service:nth-child(3) { background: #f1f4ee; }
+    .ja-service:nth-child(4) { background: #f7f0ed; }
+    .ja-service small, .ja-project small, .ja-route small, .ja-timeline small { color: var(--muted); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .ja-service h3 { margin: 20px 0 10px; color: var(--navy); font: 700 25px/1.04 Georgia, serif; }
+    .ja-service p { margin: 0; color: var(--muted); font-size: 13px; }
+    .ja-service-price { display: block; margin-top: 20px; color: var(--coral-dark); font-size: 13px; font-weight: 750; }
+    .ja-service a, .ja-project a, .ja-route a { display: inline-block; margin-top: 17px; color: var(--coral-dark); font-size: 13px; font-weight: 750; text-decoration: none; }
 
-    .ja-work { background: var(--paper); }
-    .ja-work-layout { display: grid; grid-template-columns: .9fr 1.1fr; align-items: center; gap: 60px; }
-    .ja-work-copy h2 { max-width: 450px; margin: 0 0 18px; color: var(--navy); font: 700 3.15rem/1.02 Georgia, serif; }
-    .ja-work-copy p { max-width: 430px; margin: 0; color: var(--muted); font-size: 15px; }
-    .ja-work-list { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; border: 1px solid var(--line); background: var(--line); }
-    .ja-work-item { min-height: 150px; padding: 22px; background: var(--white); }
-    .ja-work-item strong { display: block; margin-bottom: 36px; color: var(--coral); font: 700 30px/1 Georgia, serif; }
-    .ja-work-item h3 { margin: 0 0 5px; color: var(--navy); font: 700 19px/1.1 Georgia, serif; }
-    .ja-work-item span { color: var(--muted); font-size: 12px; }
+    .ja-projects { background: var(--paper); }
+    .ja-featured-project { display: grid; grid-template-columns: 1.08fr .92fr; overflow: hidden; border: 1px solid var(--line); background: var(--white); }
+    .ja-featured-media { min-height: 400px; background: #e9ebe3; }
+    .ja-featured-media img { width: 100%; height: 100%; object-fit: cover; }
+    .ja-featured-copy { display: flex; flex-direction: column; justify-content: center; padding: 45px 46px; }
+    .ja-featured-copy h3 { max-width: 470px; margin: 14px 0 13px; color: var(--navy); font: 700 2.9rem/1.02 Georgia, serif; }
+    .ja-featured-copy p { max-width: 470px; margin: 0; color: var(--muted); font-size: 14px; }
+    .ja-featured-copy a { align-self: flex-start; margin-top: 25px; color: var(--coral-dark); font-size: 13px; font-weight: 750; text-decoration: none; }
+    .ja-project-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 1px; border: 1px solid var(--line); background: var(--line); }
+    .ja-project { min-height: 290px; padding: 26px 23px 25px; background: var(--white); }
+    .ja-project:nth-child(2) { background: #fbfaf5; }
+    .ja-project:nth-child(3) { background: #f1f4ee; }
+    .ja-project:nth-child(4) { background: #f7f0ed; }
+    .ja-project-logo { display: flex; align-items: center; height: 73px; margin-bottom: 22px; }
+    .ja-project-logo img { width: min(100%, 175px); max-height: 65px; object-fit: contain; object-position: left center; }
+    .ja-project h3 { margin: 12px 0 8px; color: var(--navy); font: 700 22px/1.05 Georgia, serif; }
+    .ja-project p { margin: 0; color: var(--muted); font-size: 13px; }
+    .ja-project a { margin-top: 16px; }
+    .ja-project-note { margin: 24px 0 0; color: var(--muted); font-size: 12px; }
 
-    .ja-case { padding: 0 0 92px; background: var(--paper); }
-    .ja-case-frame { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; overflow: hidden; border: 1px solid var(--line); background: var(--white); }
-    .ja-case-image { min-height: 370px; background: #e6e8df; }
-    .ja-case-image img { width: 100%; height: 100%; object-fit: cover; }
-    .ja-case-copy { display: flex; flex-direction: column; justify-content: center; padding: 48px; }
-    .ja-case-copy small { color: var(--coral-dark); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .13em; text-transform: uppercase; }
-    .ja-case-copy h2 { max-width: 420px; margin: 15px 0 14px; color: var(--navy); font: 700 2.7rem/1.04 Georgia, serif; }
-    .ja-case-copy p { max-width: 420px; margin: 0; color: var(--muted); font-size: 14px; }
-    .ja-case-copy a { display: inline-block; margin-top: 24px; color: var(--coral-dark); font-size: 13px; font-weight: 700; text-decoration: none; }
-
-    .ja-proof { color: var(--white); background: var(--navy); }
-    .ja-proof .ja-section-title h2 { color: var(--white); }
-    .ja-proof .ja-section-title p { color: rgba(255,255,255,.66); }
-    .ja-proof-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,255,.24); }
-    .ja-proof-stat { padding: 25px 18px 0 0; border-right: 1px solid rgba(255,255,255,.24); }
-    .ja-proof-stat:not(:first-child) { padding-left: 18px; }
-    .ja-proof-stat:last-child { border-right: 0; }
-    .ja-proof-stat strong { display: block; color: var(--coral); font: 700 40px/1 Georgia, serif; }
-    .ja-proof-stat span { display: block; margin-top: 8px; color: rgba(255,255,255,.66); font-size: 13px; }
+    .ja-about { color: var(--white); background: var(--navy); }
+    .ja-about .ja-section-heading h2 { color: var(--white); }
+    .ja-about .ja-section-heading p { color: rgba(255,255,255,.66); }
+    .ja-about-grid { display: grid; grid-template-columns: .92fr 1.08fr; gap: 62px; align-items: start; }
+    .ja-about-copy p { max-width: 470px; margin: 0; color: rgba(255,255,255,.76); font-size: 16px; }
+    .ja-about-copy p + p { margin-top: 18px; }
+    .ja-timeline { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid rgba(255,255,255,.24); }
+    .ja-timeline-item { min-height: 128px; padding: 22px 22px 22px 0; border-bottom: 1px solid rgba(255,255,255,.24); }
+    .ja-timeline-item:nth-child(even) { padding-left: 22px; border-left: 1px solid rgba(255,255,255,.24); }
+    .ja-timeline-item strong { display: block; margin-bottom: 11px; color: var(--coral); font: 700 24px/1 Georgia, serif; }
+    .ja-timeline-item p { margin: 0; color: rgba(255,255,255,.7); font-size: 13px; }
 
     .ja-paths { background: var(--white); border-bottom: 1px solid var(--line); }
     .ja-path-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .ja-path { padding: 27px 24px 30px; border: 1px solid var(--line); }
+    .ja-path { min-height: 265px; padding: 28px 25px 30px; border: 1px solid var(--line); background: var(--paper); }
     .ja-path-featured { border-color: var(--coral); box-shadow: inset 0 4px 0 var(--coral); }
-    .ja-path small { color: var(--muted); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .12em; text-transform: uppercase; }
-    .ja-path h3 { margin: 14px 0 8px; color: var(--navy); font: 700 25px/1.05 Georgia, serif; }
-    .ja-path-price { margin-bottom: 13px; font-size: 19px; font-weight: 750; }
+    .ja-path h3 { margin: 15px 0 8px; color: var(--navy); font: 700 26px/1.03 Georgia, serif; }
+    .ja-path-price { margin-bottom: 13px; color: var(--coral-dark); font-size: 20px; font-weight: 750; }
     .ja-path p { margin: 0; color: var(--muted); font-size: 13px; }
-    .ja-path a { display: inline-block; margin-top: 19px; color: var(--coral-dark); font-size: 13px; font-weight: 700; text-decoration: none; }
+    .ja-path-note { margin: 26px 0 0; padding-top: 19px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+    .ja-path-note strong { color: var(--ink); }
 
-    .ja-contact { padding: 76px 0 84px; color: var(--white); background: var(--coral); }
-    .ja-contact-inner { display: flex; align-items: end; justify-content: space-between; gap: 35px; }
-    .ja-contact h2 { max-width: 650px; margin: 0 0 14px; font: 700 3.3rem/1.02 Georgia, serif; }
-    .ja-contact p { max-width: 490px; margin: 0; color: rgba(255,255,255,.83); font-size: 15px; }
+    .ja-faq { background: var(--paper); }
+    .ja-faq-list { max-width: 920px; border-top: 1px solid var(--line); }
+    .ja-faq details { border-bottom: 1px solid var(--line); }
+    .ja-faq summary { padding: 21px 0; cursor: pointer; font: 700 20px/1.2 Georgia, serif; list-style: none; }
+    .ja-faq summary::-webkit-details-marker { display: none; }
+    .ja-faq summary::after { float: right; color: var(--coral-dark); content: "+"; font: 400 26px/1 Inter, sans-serif; }
+    .ja-faq details[open] summary::after { content: "–"; }
+    .ja-faq details p { max-width: 760px; margin: 0 0 22px; color: var(--muted); font-size: 14px; }
+
+    .ja-contact { padding: 74px 0 84px; color: var(--white); background: var(--coral); }
+    .ja-contact-inner { display: flex; align-items: end; justify-content: space-between; gap: 36px; }
+    .ja-contact h2 { max-width: 720px; margin: 0 0 15px; color: var(--ink); font: 700 clamp(2.6rem, 4.5vw, 3.9rem)/.97 Georgia, serif; }
+    .ja-contact p { max-width: 540px; margin: 0; color: rgba(25,26,24,.77); font-size: 15px; }
+    .ja-contact-meta { margin-top: 17px !important; font-size: 13px !important; }
+    .ja-contact-meta a { font-weight: 750; text-decoration: none; }
     .ja-contact .ja-button { flex: 0 0 auto; color: var(--coral-dark); background: var(--white); }
-    .ja-footer { padding: 25px 0; color: var(--muted); font-size: 12px; }
-    .ja-footer-inner { display: flex; justify-content: space-between; gap: 18px; }
+    .ja-footer { padding: 24px 0; color: var(--muted); background: var(--paper); font-size: 12px; }
+    .ja-footer-inner { display: flex; justify-content: space-between; gap: 20px; }
     .ja-footer a { text-decoration: none; }
 
-    @media (max-width: 980px) {
+    @media (max-width: 1050px) {
+      .ja-nav { gap: 15px; }
       .ja-nav a:not(.ja-nav-cta) { display: none; }
-      .ja-hero h1 { font-size: 4rem; }
-      .ja-hero-grid { gap: 44px; }
-      .ja-section { padding: 70px 0; }
-      .ja-section-title h2, .ja-work-copy h2 { font-size: 2.6rem; }
+      .ja-hero h1 { font-size: 4.25rem; }
+      .ja-section { padding: 72px 0; }
+      .ja-section-heading h2 { font-size: 2.75rem; }
+      .ja-service-grid, .ja-project-grid { grid-template-columns: repeat(2, 1fr); }
+      .ja-service { min-height: 245px; }
     }
     @media (max-width: 720px) {
       .ja-wrap { width: min(calc(100% - 32px), var(--max)); }
       .ja-header-inner { min-height: 68px; }
       .ja-brand { font-size: 16px; }
-      .ja-hero { padding: 50px 0 42px; }
-      .ja-hero-grid, .ja-ribbon-inner, .ja-work-layout, .ja-case-frame { grid-template-columns: 1fr; }
-      .ja-hero h1 { font-size: 2.85rem; }
+      .ja-hero { padding: 52px 0 43px; }
+      .ja-hero-grid, .ja-ribbon-inner, .ja-featured-project, .ja-about-grid { grid-template-columns: 1fr; }
+      .ja-hero h1 { font-size: 3rem; }
       .ja-lead { font-size: 16px; }
-      .ja-portrait-wrap { max-width: 360px; margin: 15px 0 0; }
+      .ja-portrait-wrap { max-width: 360px; margin: 18px 0 0; }
       .ja-portrait-wrap::before { display: none; }
+      .ja-proof { grid-template-columns: 1fr 1fr; }
+      .ja-proof-item { min-height: 112px; border-bottom: 1px solid var(--line); }
+      .ja-proof-item:nth-child(2n) { border-right: 0; }
+      .ja-proof-item:nth-child(n+3) { border-bottom: 0; }
       .ja-ribbon-link { justify-self: start; }
-      .ja-service-grid, .ja-path-grid { grid-template-columns: 1fr; }
-      .ja-section-title { display: block; }
-      .ja-section-title h2 { margin-bottom: 17px; font-size: 2.45rem; }
-      .ja-work-copy h2 { font-size: 2.55rem; }
-      .ja-work-list { margin-top: 28px; }
-      .ja-case-image { min-height: 240px; }
-      .ja-case-copy { padding: 31px 24px 35px; }
-      .ja-proof-grid { grid-template-columns: 1fr 1fr; }
-      .ja-proof-stat { min-height: 115px; border-bottom: 1px solid rgba(255,255,255,.24); }
-      .ja-proof-stat:nth-child(2) { border-right: 0; }
-      .ja-proof-stat:nth-child(3), .ja-proof-stat:nth-child(4) { border-bottom: 0; }
+      .ja-section-heading { display: block; }
+      .ja-section-heading h2 { margin-bottom: 17px; font-size: 2.45rem; }
+      .ja-service-grid, .ja-project-grid, .ja-path-grid { grid-template-columns: 1fr; }
+      .ja-service { min-height: 0; }
+      .ja-featured-media { min-height: 265px; }
+      .ja-featured-copy { padding: 33px 24px 37px; }
+      .ja-featured-copy h3 { font-size: 2.45rem; }
+      .ja-project { min-height: 0; }
+      .ja-project-logo { height: 62px; margin-bottom: 17px; }
+      .ja-about-grid { gap: 36px; }
+      .ja-timeline-item { min-height: 145px; }
       .ja-contact-inner, .ja-footer-inner { display: block; }
-      .ja-contact h2 { font-size: 2.7rem; }
-      .ja-contact .ja-button { margin-top: 26px; }
+      .ja-contact h2 { font-size: 2.75rem; }
+      .ja-contact .ja-button { margin-top: 27px; }
       .ja-footer-inner > * + * { margin-top: 9px; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .ja-hero > .ja-wrap > *, .ja-service, .ja-featured-project, .ja-project, .ja-path { animation: ja-rise .55s both; }
+      .ja-service:nth-child(2), .ja-project:nth-child(2), .ja-path:nth-child(2) { animation-delay: .06s; }
+      .ja-service:nth-child(3), .ja-project:nth-child(3), .ja-path:nth-child(3) { animation-delay: .11s; }
+      @keyframes ja-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
     }
   </style>
 </head>
@@ -169,7 +206,7 @@
         <a href="#leistungen">Leistungen</a>
         <a href="#projekte">Projekte</a>
         <a href="#wege">Preise</a>
-        <a href="#ueber">Ueber mich</a>
+        <a href="#ueber">Über mich</a>
         <a class="ja-nav-cta" href="#kontakt">Projekt besprechen</a>
       </nav>
     </div>
@@ -180,44 +217,97 @@
       <div class="ja-wrap ja-hero-grid">
         <div>
           <p class="ja-eyebrow">Webentwicklung · Shops · Betreuung · seit 1999</p>
-          <h1>Websites, die <em>funktionieren.</em></h1>
-          <p class="ja-lead">Direkt mit dem Entwickler: klare digitale Auftritte, anspruchsvolle Shops und Betreuung ohne Agentur-Umwege.</p>
-          <div class="ja-actions"><a class="ja-button ja-button-primary" href="#kontakt">Projekt besprechen</a><a class="ja-button ja-button-secondary" href="andersen-webworks-neu.html">Website-Abo ansehen</a></div>
-          <p class="ja-hero-note">Festpreise · offene Standards · 100 % remote</p>
+          <h1>Websites, Shops und Tools. <em>Direkt mit dem Entwickler.</em></h1>
+          <p class="ja-lead">Seit 1999 baue ich digitale Auftritte, WooCommerce-Shops und individuelle Werkzeuge. 100 Prozent remote aus Plau am See, mit klarer Verantwortung vom ersten Gespräch bis zum Betrieb.</p>
+          <div class="ja-actions"><a class="ja-button ja-button-primary" href="#kontakt">Erstgespräch vereinbaren</a><a class="ja-button ja-button-secondary" href="andersen-webworks-neu.html">Website-Abo ansehen</a></div>
+          <p class="ja-hero-note"><span>Festpreise</span><span>offene Standards</span><span>saubere Übergabe</span></p>
         </div>
         <div class="ja-portrait-wrap"><figure class="ja-portrait"><img src="portrait.webp" alt="Jan-Erik Andersen"><figcaption class="ja-portrait-caption"><strong>Jan-Erik Andersen</strong><span>Webentwickler &amp; Berater</span></figcaption></figure></div>
       </div>
     </section>
 
-    <section class="ja-ribbon"><div class="ja-wrap ja-ribbon-inner"><h2>Du brauchst nicht mehr Agentur. Du brauchst den richtigen Auftritt.</h2><p>Eine Seite kann schlank starten und trotzdem professionell wachsen.</p><a class="ja-ribbon-link" href="andersen-webworks-neu.html">Website-Abo von Andersen Webworks &rarr;</a></div></section>
+    <section class="ja-proof" aria-label="Erfahrung von Jan-Erik Andersen">
+      <div class="ja-proof-item"><strong>27+</strong><span>Jahre Webprojekte</span></div>
+      <div class="ja-proof-item"><strong>50+</strong><span>umgesetzte Projekte</span></div>
+      <div class="ja-proof-item"><strong>14+</strong><span>Branchen erlebt</span></div>
+      <div class="ja-proof-item"><strong>20+</strong><span>aktive Live-Websites</span></div>
+    </section>
+
+    <section class="ja-ribbon">
+      <div class="ja-wrap ja-ribbon-inner"><div><h2>Ein Ansprechpartner. Drei sinnvolle Wege.</h2><p>Individuelles Projekt, Website-Abo oder Betreuung einer bestehenden Seite.</p></div><a class="ja-ribbon-link" href="andersen-webworks-neu.html">Zum Website-Abo von Andersen Webworks &rarr;</a></div>
+    </section>
 
     <section class="ja-section ja-services" id="leistungen">
       <div class="ja-wrap">
-        <div class="ja-section-title"><h2>Drei Dinge, die ich besonders gut zusammenbringe.</h2><p>Technik, Gestaltung und die Entscheidungen dazwischen.</p></div>
+        <div class="ja-section-heading"><h2>Was ich für Sie online zusammenbringe.</h2><p>Technik, Gestaltung und die Entscheidungen dazwischen.</p></div>
         <div class="ja-service-grid">
-          <article class="ja-service"><small>01 / Sichtbarkeit</small><h3>Websites mit Richtung</h3><p>Struktur, Inhalte und technische Basis fuer Menschen und Suchsysteme.</p><a href="#kontakt">Mehr dazu &rarr;</a></article>
-          <article class="ja-service"><small>02 / Commerce</small><h3>Shops, die mehr koennen</h3><p>WooCommerce, B2B-Logik und eigene Funktionen, wenn Standard nicht reicht.</p><a href="#kontakt">Projekt besprechen &rarr;</a></article>
-          <article class="ja-service"><small>03 / Bestand</small><h3>Betreuung, die bleibt</h3><p>Updates, Sicherheit und Weiterentwicklung mit einer Person, die das System kennt.</p><a href="#wege">Wege ansehen &rarr;</a></article>
+          <article class="ja-service"><small>01 / Firmenwebsite</small><h3>Websites mit Richtung</h3><p>Struktur, Inhalte und eine technische Basis, die Menschen und Suchsysteme verstehen.</p><span class="ja-service-price">ab 2.400 EUR als Festpreis</span><a href="#kontakt">Projekt besprechen &rarr;</a></article>
+          <article class="ja-service"><small>02 / Commerce</small><h3>Shops &amp; B2B</h3><p>WooCommerce, Produktlogik, Preisgruppen und eigene Funktionen, wenn Standard nicht reicht.</p><span class="ja-service-price">ab 4.800 EUR · B2B ab 7.500 EUR</span><a href="#kontakt">Shop anfragen &rarr;</a></article>
+          <article class="ja-service"><small>03 / Sichtbarkeit</small><h3>GEO, Zugang &amp; Struktur</h3><p>Technische und inhaltliche Verbesserungen für Auffindbarkeit, Barrierearmut und klare Wege.</p><span class="ja-service-price">GEO-Update ab 800 EUR</span><a href="#kontakt">Kurzcheck anfragen &rarr;</a></article>
+          <article class="ja-service"><small>04 / Bestand</small><h3>Betreuung, die bleibt</h3><p>Updates, Sicherheit und Weiterentwicklung mit einer Person, die das System kennt.</p><span class="ja-service-price">ab 40 EUR / Monat</span><a href="#wege">Betreuungswege ansehen &rarr;</a></article>
         </div>
       </div>
     </section>
 
-    <section class="ja-section ja-work" id="ueber">
-      <div class="ja-wrap ja-work-layout">
-        <div class="ja-work-copy"><h2>Direkt mit dem Entwickler. Von der ersten Idee bis zum Betrieb.</h2><p>Keine Übergabe an ein wechselndes Team, keine Blackbox. Du sprichst mit der Person, die plant, baut und Verantwortung übernimmt.</p></div>
-        <div class="ja-work-list"><div class="ja-work-item"><strong>01</strong><h3>Konzept</h3><span>Struktur und Ziel zuerst.</span></div><div class="ja-work-item"><strong>02</strong><h3>Umsetzung</h3><span>Sauber, schnell, dokumentiert.</span></div><div class="ja-work-item"><strong>03</strong><h3>Launch</h3><span>Gemessen statt geraten.</span></div><div class="ja-work-item"><strong>04</strong><h3>Weiter</h3><span>Betreuung ohne Lock-in.</span></div></div>
+    <section class="ja-section ja-projects" id="projekte">
+      <div class="ja-wrap">
+        <div class="ja-section-heading"><h2>Ausgewählte Projekte. Unterschiedliche Aufgaben, derselbe Anspruch.</h2><p>Reale Arbeiten aus Shop, Industrie, Sozialbereich und Vereinsarbeit.</p></div>
+        <article class="ja-featured-project">
+          <div class="ja-featured-media"><img src="case-gerwing.png" alt="Gerwing-Steinwerke-Website mit Produktkatalog und Shop"></div>
+          <div class="ja-featured-copy"><small>Gerwing Steinwerke / B2B-WooCommerce</small><h3>Vom Produktkatalog bis zur Musterbestellung.</h3><p>Neubau des Shops mit Filtern nach Farbe, Format und Verwendung, Steinmuster-Bestellung, B2B-Preisgruppen und Germanized. Seit 2023 live und in laufender Betreuung.</p><a href="https://gerwing.de" target="_blank" rel="noopener">gerwing.de ansehen &rarr;</a></div>
+        </article>
+        <div class="ja-project-grid">
+          <article class="ja-project"><div class="ja-project-logo"><img src="logo-wbgpooling-black.svg" alt="WBG Pooling"></div><small>Industrie / Portal</small><h3>WBG Pooling</h3><p>360-Grad-Produktansichten, Salesforce-Web-to-Lead, Job-API und geschütztes Sales Center.</p><a href="https://wbg-pooling.eu" target="_blank" rel="noopener">Projekt ansehen &rarr;</a></article>
+          <article class="ja-project"><div class="ja-project-logo"><img src="logo-rundengroup-black.svg" alt="Runden Group"></div><small>Unternehmensgruppe / Plattform</small><h3>Runden Group</h3><p>Elf Websites in Deutsch und Englisch, Karriereportal, Podcast und internes Onboarding in vier Sprachen.</p><a href="https://runden-group.eu" target="_blank" rel="noopener">Projekt ansehen &rarr;</a></article>
+          <article class="ja-project"><div class="ja-project-logo"><img src="logo-sis.svg" alt="Senior Partner in School"></div><small>Sozialorganisation / HTML</small><h3>Senior Partner in School</h3><p>Digitaler Wirkungsbericht mit interaktiver Deutschlandkarte statt statischem PDF. Pro Bono entwickelt.</p><a href="https://wirkungsbericht.seniorpartnerinschool.de" target="_blank" rel="noopener">Wirkungsbericht ansehen &rarr;</a></article>
+          <article class="ja-project"><div class="ja-project-logo"><img src="logo-streunerhilfe.png" alt="Streunerhilfe Plau"></div><small>Verein / WordPress</small><h3>Streunerhilfe Plau</h3><p>Lokaler Tierschutz-Auftritt mit Spendensystem und Vermittlungs-Listings.</p><a href="https://streunerhilfe-plau.de" target="_blank" rel="noopener">Website ansehen &rarr;</a></article>
+        </div>
+        <p class="ja-project-note">Weitere Arbeiten: ai-coustics und viele kleinere Auftritte für Unternehmen, Vereine und Initiativen.</p>
       </div>
     </section>
 
-    <section class="ja-case" id="projekte">
-      <div class="ja-wrap ja-case-frame"><div class="ja-case-image"><img src="website-demo.png" alt="Beispiel einer gestalteten Firmenwebsite"></div><div class="ja-case-copy"><small>Ausgewaehlte Arbeit</small><h2>Ein digitales Zuhause fuer gute Arbeit.</h2><p>Die Gestaltung darf Charakter haben. Die Technik muss trotzdem ruhig, schnell und pflegbar bleiben.</p><a href="#kontakt">Projekte ansehen &rarr;</a></div></div>
+    <section class="ja-section ja-about" id="ueber">
+      <div class="ja-wrap">
+        <div class="ja-section-heading"><h2>Direkt mit dem Entwickler. Von der ersten Idee bis zum Betrieb.</h2><p>Kein wechselndes Team, keine Blackbox und keine Übergabe kurz vor dem Launch.</p></div>
+        <div class="ja-about-grid">
+          <div class="ja-about-copy"><p>Sie sprechen mit der Person, die plant, baut, erklärt und Verantwortung übernimmt. Das hält Entscheidungen kurz und die Technik nachvollziehbar.</p><p>Ich arbeite standardnah mit WordPress, YOOtheme, WooCommerce und statischem HTML. Wenn eine individuelle Funktion nötig ist, wird sie passend zum Projekt gebaut und dokumentiert.</p></div>
+          <div class="ja-timeline">
+            <div class="ja-timeline-item"><strong>1999</strong><p>Erste Webprojekte und der Einstieg in Multimedia Design.</p></div>
+            <div class="ja-timeline-item"><strong>2010</strong><p>Selbstständig, mit Front-end-, Agentur- und QA-Erfahrung aus der Games-Branche.</p></div>
+            <div class="ja-timeline-item"><strong>Heute</strong><p>Websites, Shops, Tools und laufende Betreuung für Unternehmen und Organisationen.</p></div>
+            <div class="ja-timeline-item"><strong>Arbeitsweise</strong><p>Kostenloses Erstgespräch bis zu einer Stunde, klare Angebote und saubere Übergabe.</p></div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="ja-section ja-proof"><div class="ja-wrap"><div class="ja-section-title"><h2>Erfahrung ist kein Ornament. Sie macht Entscheidungen besser.</h2><p>Ein ruhiger Prozess, der auch nach dem Launch noch funktioniert.</p></div><div class="ja-proof-grid"><div class="ja-proof-stat"><strong>27+</strong><span>Jahre Webprojekte</span></div><div class="ja-proof-stat"><strong>50+</strong><span>Projekte gebaut</span></div><div class="ja-proof-stat"><strong>14+</strong><span>Branchen erlebt</span></div><div class="ja-proof-stat"><strong>1:1</strong><span>direkter Ansprechpartner</span></div></div></div></section>
+    <section class="ja-section ja-paths" id="wege">
+      <div class="ja-wrap">
+        <div class="ja-section-heading"><h2>Der passende Weg für Ihr Projekt.</h2><p>Vom schlanken Einstieg bis zur individuellen Plattform.</p></div>
+        <div class="ja-path-grid">
+          <article class="ja-path ja-path-featured"><small>Website-Abo</small><h3>Schlank starten</h3><div class="ja-path-price">Preisbeispiel ab 129 EUR / Monat</div><p>Aufbau, Hosting und definierte Pflege für eine fokussierte Website. Der genaue Umfang steht im Angebot.</p><a href="andersen-webworks-neu.html">Abo ansehen &rarr;</a></article>
+          <article class="ja-path"><small>Festpreis</small><h3>Individuell bauen</h3><div class="ja-path-price">Website ab 2.400 EUR</div><p>Eigene Struktur, Inhalte und Technik. Shops starten ab 4.800 EUR, B2B-Shops ab 7.500 EUR.</p><a href="#kontakt">Angebot anfragen &rarr;</a></article>
+          <article class="ja-path"><small>Betreuung</small><h3>Weiterentwickeln</h3><div class="ja-path-price">40 / 80 / 160 EUR / Monat</div><p>Basis, Website-Pflege oder Entwicklung für bestehende Auftritte. Zusätzliche Arbeit wird mit 80 EUR / Stunde kalkuliert.</p><a href="#kontakt">Betreuung besprechen &rarr;</a></article>
+        </div>
+        <p class="ja-path-note"><strong>Transparent statt vermischt:</strong> Das Website-Abo ist ein eigenes Modell. Die Betreuungspreise gelten für bereits vorhandene Websites und ersetzen kein neues Projekt.</p>
+      </div>
+    </section>
 
-    <section class="ja-section ja-paths" id="wege"><div class="ja-wrap"><div class="ja-section-title"><h2>Der passende Weg fuer dein Projekt.</h2><p>Vom schlanken Einstieg bis zur individuellen Plattform.</p></div><div class="ja-path-grid"><article class="ja-path ja-path-featured"><small>Website-Abo</small><h3>Schlank starten</h3><div class="ja-path-price">ab 99 EUR / Monat</div><p>Standardisierte Website, Hosting und definierte Pflege.</p><a href="andersen-webworks-neu.html">Abo ansehen &rarr;</a></article><article class="ja-path"><small>Festpreis</small><h3>Individuell bauen</h3><div class="ja-path-price">ab 2.400 EUR</div><p>Firmenwebsite mit eigener Struktur, Inhalt und Technik.</p><a href="#kontakt">Angebot anfragen &rarr;</a></article><article class="ja-path"><small>Betreuung</small><h3>Weiterentwickeln</h3><div class="ja-path-price">nach Umfang</div><p>Updates, Sicherheit und neue Funktionen fuer bestehende Auftritte.</p><a href="#kontakt">Betreuung besprechen &rarr;</a></article></div></div></section>
+    <section class="ja-section ja-faq" id="fragen">
+      <div class="ja-wrap">
+        <div class="ja-section-heading"><h2>Was vor dem Start wichtig ist.</h2><p>Offen beantwortet, bevor Sie sich entscheiden.</p></div>
+        <div class="ja-faq-list">
+          <details open><summary>Arbeiten Sie auch komplett remote?</summary><p>Ja. Die Zusammenarbeit läuft digital und persönlich. Jan-Erik sitzt in Plau am See und ist in der Regel innerhalb von zwei Wochen verfügbar.</p></details>
+          <details><summary>Kann KI nicht einfach die Website bauen?</summary><p>KI hilft bei Recherche, Varianten und Routine. Struktur, technische Verantwortung, Datenschutz und die Entscheidung, was für Ihr Angebot stimmt, bleiben menschliche Arbeit.</p></details>
+          <details><summary>Was ist der Unterschied zwischen Abo und Betreuung?</summary><p>Das Abo bündelt Aufbau, Hosting und Pflege einer neuen Website. Betreuung startet bei einer vorhandenen Seite und umfasst je nach Paket technische Pflege oder Weiterentwicklung.</p></details>
+          <details><summary>Kann ich mit einer bestehenden Domain umziehen?</summary><p>Ja. Domain, Inhalte und Zugänge werden geprüft und der Umzug wird vorab abgestimmt. Eine saubere Übergabe bleibt jederzeit möglich.</p></details>
+        </div>
+      </div>
+    </section>
 
-    <section class="ja-contact" id="kontakt"><div class="ja-wrap ja-contact-inner"><div><h2>Reden wir ueber das, was online wirklich weiterhilft.</h2><p>Eine kurze Nachricht reicht. Du bekommst eine ehrliche Richtung und den naechsten sinnvollen Schritt.</p></div><a class="ja-button" href="mailto:mail@andersen-webworks.de?subject=Projekt besprechen">Erstgespraech anfragen</a></div></section>
+    <section class="ja-contact" id="kontakt">
+      <div class="ja-wrap ja-contact-inner"><div><h2>Reden wir über das, was online wirklich weiterhilft.</h2><p>Eine kurze Nachricht mit Branche, Ziel und vorhandener Domain reicht. Sie bekommen eine ehrliche Richtung und den nächsten sinnvollen Schritt.</p><p class="ja-contact-meta"><a href="mailto:mail@andersen-webworks.de?subject=Projekt%20besprechen">mail@andersen-webworks.de</a> · <a href="tel:+4938733270015">038733 270015</a> · Antwort am selben Werktag</p></div><a class="ja-button" href="mailto:mail@andersen-webworks.de?subject=Projekt%20besprechen">Erstgespräch anfragen</a></div>
+    </section>
   </main>
 
   <footer class="ja-footer"><div class="ja-wrap ja-footer-inner"><span>Jan-Erik Andersen · Plau am See · 100 % remote</span><span><a href="andersen-webworks-neu.html">Andersen Webworks</a> &nbsp; <a href="#top">Nach oben</a></span></div></footer>
