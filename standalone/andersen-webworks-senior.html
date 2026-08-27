@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Andersen Webworks | Website-Abo ohne hohe Startkosten</title>
+  <meta name="description" content="Professionelle Websites als monatliches Abo: gebaut, gehostet und persönlich betreut. Von Jan-Erik Andersen.">
+  <style>
+    :root {
+      --red: #e4003b;
+      --red-dark: #a6002b;
+      --ink: #171918;
+      --ink-soft: #2a302f;
+      --paper: #f4f3ee;
+      --white: #fff;
+      --line: rgba(23, 25, 24, .18);
+      --line-light: rgba(255, 255, 255, .28);
+      --muted: #626865;
+      --teal: #2c4a51;
+      --max: 1280px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.55; }
+    body, button, a { -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+    button { font: inherit; }
+    :focus-visible { outline: 3px solid #ffbecc; outline-offset: 4px; }
+    .skip { position: absolute; left: -999px; top: auto; }
+    .skip:focus { left: 16px; top: 16px; z-index: 100; padding: 10px 14px; color: var(--ink); background: var(--white); }
+    .wrap { width: min(calc(100% - 56px), var(--max)); margin: 0 auto; }
+
+    .hero { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(420px, .92fr); min-height: 780px; color: var(--white); background: var(--red); }
+    .hero-proof { position: relative; display: flex; flex-direction: column; min-height: 780px; color: var(--ink); background: var(--paper); }
+    .hero-proof-head { display: flex; align-items: center; justify-content: space-between; min-height: 78px; padding: 0 40px; border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; }
+    .brand-mark { width: 28px; height: 28px; border-radius: 50%; object-fit: contain; }
+    .brand-name { font: 700 17px/1 Georgia, serif; letter-spacing: .015em; }
+    .brand-name span { font-family: Inter, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+    .proof-label { color: var(--muted); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .hero-proof-main { display: flex; flex: 1; flex-direction: column; justify-content: center; padding: 40px clamp(24px, 5vw, 78px) 28px; }
+    .proof-frame { position: relative; width: 100%; max-width: 760px; margin: 0 auto; overflow: hidden; background: var(--white); box-shadow: 18px 20px 0 rgba(23, 25, 24, .08); }
+    .proof-frame img { width: 100%; aspect-ratio: 1.52 / 1; object-fit: cover; object-position: top center; }
+    .proof-caption { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; padding: 13px 15px 14px; border-top: 1px solid var(--line); color: var(--muted); background: var(--white); font-size: 12px; }
+    .proof-caption strong { color: var(--ink); font-size: 13px; }
+    .proof-controls { display: flex; align-items: center; justify-content: space-between; gap: 20px; max-width: 760px; margin: 20px auto 0; }
+    .proof-controls p { margin: 0; color: var(--muted); font-size: 12px; }
+    .proof-tabs { display: flex; gap: 17px; }
+    .proof-tab { padding: 0 0 4px; border: 0; border-bottom: 1px solid transparent; color: var(--muted); background: transparent; cursor: pointer; font-size: 12px; }
+    .proof-tab[aria-selected="true"] { border-color: var(--red); color: var(--ink); font-weight: 750; }
+
+    .hero-panel { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 0 clamp(30px, 5vw, 76px) 42px; background: var(--red); }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; min-height: 78px; border-bottom: 1px solid rgba(255, 255, 255, .33); }
+    .panel-brand { color: var(--white); font: 700 17px/1 Georgia, serif; letter-spacing: .015em; text-decoration: none; }
+    .panel-brand span { display: block; margin-top: 4px; font-family: Inter, sans-serif; font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+    .menu summary { display: inline-flex; align-items: center; gap: 10px; color: var(--white); cursor: pointer; list-style: none; font-size: 12px; }
+    .menu summary::-webkit-details-marker { display: none; }
+    .menu-icon { display: grid; gap: 4px; width: 22px; }
+    .menu-icon i { display: block; height: 1px; background: currentColor; }
+    .menu[open] .menu-icon i:first-child { transform: translateY(2.5px) rotate(45deg); }
+    .menu[open] .menu-icon i:last-child { transform: translateY(-2.5px) rotate(-45deg); }
+    .menu-links { position: absolute; top: 71px; right: 0; z-index: 5; display: grid; min-width: 208px; padding: 10px 18px; border: 1px solid rgba(255, 255, 255, .3); background: var(--ink); }
+    .menu-links a { padding: 10px 0; color: var(--white); text-decoration: none; font-size: 13px; }
+    .menu-links a + a { border-top: 1px solid rgba(255, 255, 255, .18); }
+    .panel-content { max-width: 620px; margin: auto 0; padding: 42px 0 30px; }
+    .panel-content h1 { max-width: 620px; margin: 0 0 24px; color: var(--white); font: 700 clamp(3.35rem, 5.6vw, 6rem)/.98 Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -.045em; }
+    .panel-content h1 span { display: block; color: rgba(255, 255, 255, .64); }
+    .panel-lead { max-width: 440px; margin: 0 0 24px; color: rgba(255, 255, 255, .84); font-size: 17px; line-height: 1.5; }
+    .panel-price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 17px; }
+    .panel-price strong { color: var(--white); font: 700 clamp(3.3rem, 5vw, 5.1rem)/.88 Inter, ui-sans-serif, sans-serif; letter-spacing: -.055em; }
+    .panel-price span { color: rgba(255, 255, 255, .83); font-size: 13px; }
+    .panel-scope { display: flex; flex-wrap: wrap; gap: 9px 14px; margin: 0 0 22px; color: rgba(255, 255, 255, .74); font-size: 12px; }
+    .panel-scope span::before { display: inline-block; width: 5px; height: 5px; margin: 0 7px 2px 0; border-radius: 50%; background: currentColor; content: ""; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 48px; padding: 0 19px; border: 1px solid transparent; text-decoration: none; font-size: 13px; font-weight: 750; }
+    .button svg { width: 17px; height: 17px; }
+    .button-light { color: var(--ink); background: var(--white); }
+    .button-light:hover { background: #f4ebe9; }
+    .button-ghost { border-color: rgba(255, 255, 255, .55); color: var(--white); background: transparent; }
+    .button-ghost:hover { border-color: var(--white); }
+    .panel-person { display: flex; align-items: center; gap: 13px; color: rgba(255, 255, 255, .77); font-size: 12px; }
+    .panel-person img { width: 52px; height: 52px; border: 1px solid rgba(255, 255, 255, .78); border-radius: 50%; object-fit: cover; }
+    .panel-person strong { display: block; margin-bottom: 2px; color: var(--white); font-size: 13px; }
+
+    .proof-bar { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px solid var(--line); background: var(--white); }
+    .proof-stat { padding: 23px clamp(16px, 3vw, 38px) 24px; border-right: 1px solid var(--line); }
+    .proof-stat:last-child { border-right: 0; }
+    .proof-stat strong { display: block; color: var(--teal); font: 700 28px/1 Georgia, serif; }
+    .proof-stat span { display: block; margin-top: 7px; color: var(--muted); font-size: 12px; }
+
+    .section { padding: 110px 0; }
+    .section-dark { color: var(--white); background: var(--ink); }
+    .section-teal { color: var(--white); background: var(--teal); }
+    .section-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(230px, .8fr); align-items: end; gap: 42px; margin-bottom: 52px; }
+    .section-head h2 { max-width: 700px; margin: 0; font: 700 clamp(2.35rem, 4.4vw, 4.35rem)/.98 Inter, ui-sans-serif, sans-serif; letter-spacing: -.045em; }
+    .section-head p { max-width: 390px; margin: 0; color: var(--muted); font-size: 14px; }
+    .section-dark .section-head p, .section-teal .section-head p { color: rgba(255, 255, 255, .67); }
+
+    .promise-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line-light); }
+    .promise { padding: 26px 22px 0 0; border-right: 1px solid var(--line-light); }
+    .promise + .promise { padding-left: 22px; }
+    .promise:last-child { border-right: 0; }
+    .promise-number { color: #f19aad; font: 700 22px/1 Georgia, serif; }
+    .promise h3 { margin: 23px 0 8px; color: var(--white); font: 700 21px/1.1 Inter, sans-serif; letter-spacing: -.02em; }
+    .promise p { margin: 0; color: rgba(255, 255, 255, .67); font-size: 13px; }
+
+    .rental { background: var(--paper); }
+    .rental-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(42px, 8vw, 120px); align-items: start; }
+    .rental-intro p { max-width: 510px; margin: 25px 0 0; color: var(--muted); font-size: 16px; }
+    .rental-list { border-top: 1px solid var(--line); }
+    .rental-row { display: grid; grid-template-columns: 38px minmax(150px, .7fr) minmax(180px, 1.3fr); gap: 20px; align-items: baseline; padding: 19px 0; border-bottom: 1px solid var(--line); }
+    .rental-row b { color: var(--red); font: 700 18px/1 Georgia, serif; }
+    .rental-row strong { font-size: 15px; }
+    .rental-row span { color: var(--muted); font-size: 13px; }
+    .rental-note { margin: 21px 0 0; color: var(--muted); font-size: 12px; }
+
+    .cases { background: var(--white); }
+    .case-row { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr); min-height: 360px; border-top: 1px solid var(--line); }
+    .case-row + .case-row { margin-top: 22px; }
+    .case-row:nth-child(even) { grid-template-columns: minmax(300px, .88fr) minmax(0, 1.12fr); }
+    .case-row:nth-child(even) .case-media { order: 2; }
+    .case-media { display: flex; align-items: center; justify-content: center; overflow: hidden; background: #e7e7df; }
+    .case-media img { width: 100%; height: 100%; min-height: 360px; object-fit: cover; object-position: top center; }
+    .case-media.logo { padding: 38px; background: var(--paper); }
+    .case-media.logo img { width: min(72%, 310px); height: auto; min-height: 0; object-fit: contain; }
+    .case-copy { display: flex; flex-direction: column; justify-content: center; padding: 48px clamp(24px, 5vw, 72px); }
+    .case-copy small { color: var(--red-dark); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .11em; text-transform: uppercase; }
+    .case-copy h3 { max-width: 430px; margin: 13px 0 13px; color: var(--teal); font: 700 clamp(2rem, 3.5vw, 3.25rem)/.98 Inter, sans-serif; letter-spacing: -.04em; }
+    .case-copy p { max-width: 420px; margin: 0; color: var(--muted); font-size: 14px; }
+    .case-copy a { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; margin-top: 26px; color: var(--red-dark); font-size: 13px; font-weight: 750; text-decoration: none; }
+    .case-copy a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .case-more { margin: 28px 0 0; color: var(--muted); font-size: 13px; }
+
+    .plans { background: var(--paper); }
+    .plan-table { border-top: 1px solid var(--line); }
+    .plan-row { display: grid; grid-template-columns: 1.05fr .35fr .95fr 1.1fr; gap: 22px; align-items: center; min-height: 92px; border-bottom: 1px solid var(--line); }
+    .plan-row:first-child { color: var(--muted); font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .1em; text-transform: uppercase; }
+    .plan-row strong { font: 700 24px/1 Inter, sans-serif; letter-spacing: -.03em; }
+    .plan-row .plan-price { color: var(--red-dark); font-size: 20px; font-weight: 750; }
+    .plan-row span { color: var(--muted); font-size: 13px; }
+    .plan-foot { display: flex; justify-content: space-between; gap: 24px; margin-top: 22px; color: var(--muted); font-size: 12px; }
+    .plan-foot strong { color: var(--ink); }
+
+    .process { color: var(--white); background: var(--teal); }
+    .process-line { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255, 255, 255, .28); }
+    .process-step { position: relative; padding: 25px 24px 0 0; border-right: 1px solid rgba(255, 255, 255, .28); }
+    .process-step + .process-step { padding-left: 24px; }
+    .process-step:last-child { border-right: 0; }
+    .process-step b { display: block; color: #f19aad; font: 700 23px/1 Georgia, serif; }
+    .process-step h3 { margin: 22px 0 8px; color: var(--white); font: 700 20px/1.1 Inter, sans-serif; }
+    .process-step p { margin: 0; color: rgba(255, 255, 255, .68); font-size: 13px; }
+
+    .faq { background: var(--white); }
+    .faq-list { max-width: 930px; border-top: 1px solid var(--line); }
+    .faq details { border-bottom: 1px solid var(--line); }
+    .faq summary { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding: 21px 0; cursor: pointer; list-style: none; font: 700 19px/1.2 Inter, sans-serif; letter-spacing: -.02em; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary svg { flex: 0 0 auto; width: 18px; height: 18px; color: var(--red); }
+    .faq details p { max-width: 720px; margin: -3px 0 23px; color: var(--muted); font-size: 14px; }
+
+    .contact { padding: 82px 0 91px; color: var(--white); background: var(--red); }
+    .contact-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 34px; }
+    .contact h2 { max-width: 720px; margin: 0 0 15px; color: var(--white); font: 700 clamp(2.5rem, 5vw, 5rem)/.96 Inter, sans-serif; letter-spacing: -.05em; }
+    .contact p { max-width: 560px; margin: 0; color: rgba(255, 255, 255, .84); font-size: 15px; }
+    .contact-meta { margin-top: 17px !important; font-size: 13px !important; }
+    .contact-meta a { font-weight: 750; text-decoration: none; }
+    .contact-meta a:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .contact .button { white-space: nowrap; }
+    .footer { padding: 25px 0; color: var(--muted); background: var(--paper); font-size: 12px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 24px; }
+    .footer a { text-decoration: none; }
+    .footer a:hover { color: var(--ink); }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; min-height: 0; }
+      .hero-panel { order: 1; min-height: 680px; }
+      .hero-proof { order: 2; min-height: auto; }
+      .hero-proof-head { padding-inline: 28px; }
+      .hero-proof-main { padding: 55px 28px 33px; }
+      .section { padding: 82px 0; }
+      .section-head { grid-template-columns: 1fr; gap: 18px; margin-bottom: 36px; }
+      .promise-grid, .process-line { grid-template-columns: 1fr 1fr; }
+      .promise:nth-child(2), .process-step:nth-child(2) { border-right: 0; }
+      .promise:nth-child(-n+2), .process-step:nth-child(-n+2) { padding-bottom: 27px; border-bottom: 1px solid var(--line-light); }
+      .promise:nth-child(3), .promise:nth-child(4), .process-step:nth-child(3), .process-step:nth-child(4) { padding-top: 27px; }
+      .rental-grid { grid-template-columns: 1fr; gap: 42px; }
+      .case-row, .case-row:nth-child(even) { grid-template-columns: 1fr; }
+      .case-row:nth-child(even) .case-media { order: 0; }
+      .case-media img { min-height: 0; max-height: 460px; }
+      .case-copy { padding-block: 38px 46px; }
+      .plan-row { grid-template-columns: 1fr .45fr 1.1fr; gap: 14px; }
+      .plan-row span:last-child { grid-column: 1 / -1; padding-bottom: 20px; }
+      .plan-row:first-child span:last-child { grid-column: auto; padding-bottom: 0; }
+      .plan-foot { display: block; }
+      .plan-foot > * + * { margin-top: 8px; }
+      .contact-grid { grid-template-columns: 1fr; align-items: start; }
+      .contact .button { justify-self: start; }
+    }
+
+    @media (max-width: 600px) {
+      .wrap { width: min(calc(100% - 34px), var(--max)); }
+      .hero-panel { min-height: 650px; padding-inline: 21px; }
+      .panel-head { min-height: 68px; }
+      .panel-content { padding: 50px 0 42px; }
+      .panel-content h1 { margin-bottom: 24px; font-size: clamp(2.7rem, 13vw, 4.2rem); letter-spacing: -.055em; }
+      .panel-lead { font-size: 16px; }
+      .panel-price strong { font-size: 4rem; }
+      .hero-proof-head { min-height: 65px; padding-inline: 17px; }
+      .hero-proof-main { padding: 37px 17px 27px; }
+      .proof-frame { box-shadow: 9px 10px 0 rgba(23, 25, 24, .08); }
+      .proof-frame img { aspect-ratio: 1.1 / 1; }
+      .proof-caption { display: block; padding-inline: 12px; }
+      .proof-caption span { display: block; margin-top: 4px; }
+      .proof-controls { display: block; margin-top: 16px; }
+      .proof-tabs { margin-top: 13px; }
+      .proof-bar { grid-template-columns: 1fr 1fr; }
+      .proof-stat { padding: 18px 17px 20px; border-bottom: 1px solid var(--line); }
+      .proof-stat:nth-child(2n) { border-right: 0; }
+      .proof-stat:nth-child(n+3) { border-bottom: 0; }
+      .proof-stat strong { font-size: 25px; }
+      .section { padding: 66px 0; }
+      .section-head h2 { font-size: 2.55rem; }
+      .promise-grid, .process-line { grid-template-columns: 1fr; }
+      .promise, .promise + .promise, .process-step, .process-step + .process-step { padding: 20px 0; border-right: 0; border-bottom: 1px solid var(--line-light); }
+      .promise:last-child, .process-step:last-child { border-bottom: 0; }
+      .promise h3, .process-step h3 { margin-top: 14px; }
+      .rental-row { grid-template-columns: 27px 1fr; gap: 8px 13px; }
+      .rental-row span { grid-column: 2; }
+      .case-copy { padding-inline: 0; }
+      .case-copy h3 { font-size: 2.45rem; }
+      .case-media.logo { min-height: 250px; }
+      .plan-row { grid-template-columns: 1fr auto; gap: 9px 16px; padding: 21px 0; }
+      .plan-row:first-child { display: none; }
+      .plan-row strong { font-size: 21px; }
+      .plan-row .plan-price { grid-column: 2; grid-row: 1; }
+      .plan-row span { grid-column: 1 / -1; }
+      .contact { padding: 66px 0 73px; }
+      .contact h2 { font-size: 3rem; }
+      .footer-inner { display: block; }
+      .footer-inner > * + * { margin-top: 9px; }
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-panel > *, .hero-proof-main > *, .section-head, .case-row, .promise, .rental-row, .plan-row { animation: reveal .55s both; }
+      .hero-panel > *:nth-child(2) { animation-delay: .06s; }
+      .hero-panel > *:nth-child(3) { animation-delay: .12s; }
+      .hero-proof-main > *:nth-child(2) { animation-delay: .06s; }
+      @keyframes reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Zum Hauptinhalt springen</a>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-proof">
+        <div class="hero-proof-head">
+          <a class="brand" href="#main" aria-label="Andersen Webworks Startseite"><img class="brand-mark" src="andersen-webworks-logo.png" alt=""><span class="brand-name">andersen <span>webworks</span></span></a>
+          <span class="proof-label">Ein echtes Projekt</span>
+        </div>
+        <div class="hero-proof-main">
+          <figure class="proof-frame">
+            <img id="proof-image" src="case-gerwing.png" alt="Gerwing-Steinwerke-Website mit Produktkatalog und Shop">
+            <figcaption class="proof-caption"><strong id="proof-title">Gerwing Steinwerke</strong><span id="proof-detail">WooCommerce · B2B · Desktop</span></figcaption>
+          </figure>
+          <div class="proof-controls">
+            <p>So sieht eine betreute Website aus.</p>
+            <div class="proof-tabs" role="tablist" aria-label="Gerwing-Ansichten">
+              <button class="proof-tab" type="button" role="tab" aria-selected="true" data-image="case-gerwing.png" data-alt="Gerwing-Steinwerke-Website mit Produktkatalog und Shop" data-detail="WooCommerce · B2B · Desktop">Desktop</button>
+              <button class="proof-tab" type="button" role="tab" aria-selected="false" data-image="case-gerwing-mobile.png" data-alt="Mobile Ansicht des Gerwing-Shops" data-detail="WooCommerce · B2B · Mobile">Mobile</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-panel">
+        <div class="panel-head">
+          <a class="panel-brand" href="https://jan-erik-andersen.de/">ANDERSEN<span>WEBWORKS</span></a>
+          <details class="menu">
+            <summary><span>Menü</span><span class="menu-icon" aria-hidden="true"><i></i><i></i></span></summary>
+            <nav class="menu-links" aria-label="Hauptnavigation">
+              <a href="#angebot">Das Abo</a>
+              <a href="#projekte">Projekte</a>
+              <a href="#preise">Preise</a>
+              <a href="#fragen">Fragen</a>
+              <a href="#kontakt">Kurzcheck</a>
+            </nav>
+          </details>
+        </div>
+        <div class="panel-content">
+          <h1 id="hero-title">Professionell online.<span>Ohne hohe Startkosten.</span></h1>
+          <p class="panel-lead">Eine Website, die zu Ihrem Angebot passt, sauber gebaut ist und im Alltag nicht liegen bleibt.</p>
+          <div class="panel-price"><strong>129</strong><span>EUR / Monat<br>netto, ab</span></div>
+          <p class="panel-scope"><span>Hosting</span><span>SSL</span><span>Technische Pflege</span></p>
+          <a class="button button-light" href="#kontakt">Kurzcheck starten <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7"/></svg></a>
+        </div>
+        <div class="panel-person"><img src="portrait.webp" alt="Jan-Erik Andersen"><span><strong>Direkt mit dem Entwickler</strong>seit 1999 · 100 % remote</span></div>
+      </div>
+    </section>
+
+    <section class="proof-bar" aria-label="Erfahrung von Andersen Webworks">
+      <div class="proof-stat"><strong>27+</strong><span>Jahre Webprojekte</span></div>
+      <div class="proof-stat"><strong>50+</strong><span>umgesetzte Projekte</span></div>
+      <div class="proof-stat"><strong>14+</strong><span>Branchen</span></div>
+      <div class="proof-stat"><strong>20+</strong><span>aktive Live-Websites</span></div>
+    </section>
+
+    <section class="section section-dark" id="angebot">
+      <div class="wrap">
+        <div class="section-head"><h2>Eine Website, die weiterläuft.</h2><p>Sie müssen keinen Baukasten lernen und niemanden für jede kleine Änderung suchen. Sie bekommen einen klaren Umfang und einen festen Ansprechpartner.</p></div>
+        <div class="promise-grid">
+          <article class="promise"><span class="promise-number">01</span><h3>Struktur</h3><p>Wir klären Angebot, Ziel und Seitenumfang, bevor gebaut wird.</p></article>
+          <article class="promise"><span class="promise-number">02</span><h3>Technik</h3><p>Hosting, SSL, Backups und Grundpflege sind Teil des Rahmens.</p></article>
+          <article class="promise"><span class="promise-number">03</span><h3>Inhalte</h3><p>Texte, Bilder und wichtige Angaben bleiben im vereinbarten Umfang aktuell.</p></article>
+          <article class="promise"><span class="promise-number">04</span><h3>Kontakt</h3><p>Sie sprechen mit der Person, die Ihre Website gebaut hat.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section rental">
+      <div class="wrap rental-grid">
+        <div class="rental-intro"><div class="section-head"><h2>Was monatlich passiert.</h2></div><p>Das Abo ist kein Versprechen von „alles inklusive“. Es ist ein sauber definierter Rahmen, der eine Website im Alltag verlässlich hält.</p></div>
+        <div>
+          <div class="rental-list">
+            <div class="rental-row"><b>01</b><strong>Aufbau</strong><span>Eine fokussierte Website oder ein kompakter Mehrseiter.</span></div>
+            <div class="rental-row"><b>02</b><strong>Pflege</strong><span>Technische Grundpflege, Backups und vereinbarte Inhaltsänderungen.</span></div>
+            <div class="rental-row"><b>03</b><strong>Erweiterung</strong><span>Neue Bereiche werden separat geplant, statt heimlich im Monatsumfang zu verschwinden.</span></div>
+            <div class="rental-row"><b>04</b><strong>Übergabe</strong><span>Domain und Inhalte bleiben bei Ihnen; Laufzeit und Übergabe stehen im Angebot.</span></div>
+          </div>
+          <p class="rental-note">Shops, Portale, externe Buchungssysteme und Rechtstexte erhalten ein eigenes Konzept und einen eigenen Preis.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section cases" id="projekte">
+      <div class="wrap">
+        <div class="section-head"><h2>Reale Projekte. Unterschiedliche Aufgaben.</h2><p>Die Beispiele zeigen die technische Bandbreite. Sie sind Referenzen aus dem Gesamtangebot und nicht automatisch der Starterumfang des Abos.</p></div>
+        <article class="case-row">
+          <div class="case-media"><img src="case-gerwing-mobile.png" alt="Mobile Ansicht des Gerwing-Shops"></div>
+          <div class="case-copy"><small>B2B · WooCommerce</small><h3>Gerwing Steinwerke</h3><p>Shop-Neubau mit Steinmuster-Bestellung, Filtern nach Farbe und Format und B2B-Preisgruppen. Seit 2023 live und in laufender Betreuung.</p><a href="https://gerwing.de" target="_blank" rel="noopener">gerwing.de <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a></div>
+        </article>
+        <article class="case-row">
+          <div class="case-media"><img src="case-sis.png" alt="Ausschnitt des digitalen Wirkungsberichts von Senior Partner in School"></div>
+          <div class="case-copy"><small>Sozialorganisation · HTML</small><h3>Senior Partner in School</h3><p>Digitaler Wirkungsbericht statt PDF: statisches HTML, interaktive Deutschlandkarte und WCAG-2.2-AA-orientierte Umsetzung.</p><a href="https://wirkungsbericht.seniorpartnerinschool.de" target="_blank" rel="noopener">Wirkungsbericht ansehen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a></div>
+        </article>
+        <article class="case-row">
+          <div class="case-media logo"><img src="logo-streunerhilfe.png" alt="Logo der Streunerhilfe Plau"></div>
+          <div class="case-copy"><small>Verein · WordPress</small><h3>Streunerhilfe Plau</h3><p>Website mit Spendensystem und Vermittlungs-Listings für einen lokalen Tierschutzverein. Eine klare Aufgabe, sauber umgesetzt.</p><a href="https://streunerhilfe-plau.de" target="_blank" rel="noopener">streunerhilfe-plau.de <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg></a></div>
+        </article>
+        <p class="case-more">Weitere Projekte: WBG Pooling, Runden Group, ai-coustics und viele kleinere Auftritte für Unternehmen, Vereine und Initiativen.</p>
+      </div>
+    </section>
+
+    <section class="section plans" id="preise">
+      <div class="wrap">
+        <div class="section-head"><h2>Zwei Abo-Wege. Ein klarer Rahmen.</h2><p>Monatsraten für einen definierten Umfang, keine Flatrate für alles.</p></div>
+        <div class="plan-table" role="table" aria-label="Website-Abo-Preise">
+          <div class="plan-row" role="row"><span role="columnheader">Variante</span><span role="columnheader">Preis</span><span role="columnheader">Geeignet für</span><span role="columnheader">Enthalten</span></div>
+          <div class="plan-row" role="row"><strong role="cell">Ein Auftritt</strong><span class="plan-price" role="cell">ab 129 EUR</span><span role="cell">Ein Angebot, eine Leistung oder ein klarer lokaler Auftritt.</span><span role="cell">Eine fokussierte Seite, Hosting, SSL, Backups und kleiner monatlicher Inhaltsumfang.</span></div>
+          <div class="plan-row" role="row"><strong role="cell">Business</strong><span class="plan-price" role="cell">ab 199 EUR</span><span role="cell">Mehrere Leistungen, Referenzen und ein Auftritt, der wachsen soll.</span><span role="cell">Bis zu fünf Seiten als Startumfang, Inhalts- und Technikpflege sowie Anfrageweg.</span></div>
+        </div>
+        <div class="plan-foot"><span><strong>Bestandsbetreuung:</strong> ab 40 EUR/Monat · Website-Pflege 80 EUR/Monat · Weiterentwicklung ab 160 EUR/Monat</span><span>Alle Preise netto.</span></div>
+      </div>
+    </section>
+
+    <section class="section process">
+      <div class="wrap">
+        <div class="section-head"><h2>Ein kurzer Weg bis zum Launch.</h2><p>Ein kostenloses Gespräch klärt, ob das Abo passt oder ein Festpreisprojekt sinnvoller ist.</p></div>
+        <div class="process-line">
+          <article class="process-step"><b>01</b><h3>Kurzcheck</h3><p>Ziel, Umfang und vorhandene Inhalte klären.</p></article>
+          <article class="process-step"><b>02</b><h3>Richtung</h3><p>Struktur und technischer Ansatz werden konkret.</p></article>
+          <article class="process-step"><b>03</b><h3>Launch</h3><p>Domain, Inhalte und Technik gehen sauber zusammen online.</p></article>
+          <article class="process-step"><b>04</b><h3>Weiter</h3><p>Der Ansprechpartner bleibt derselbe. Übergabe ist möglich.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq" id="fragen">
+      <div class="wrap">
+        <div class="section-head"><h2>Was vor dem Abo wichtig ist.</h2><p>Offen beantwortet, bevor Sie sich entscheiden.</p></div>
+        <div class="faq-list">
+          <details open><summary>Was ist der Unterschied zu Wix oder Jimdo? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Ein Baukasten kann für den Start passen. Beim Abo bekommen Sie eine von mir gebaute Website, einen definierten Pflegeumfang und einen direkten Ansprechpartner. Ihre Domain und Inhalte bleiben bei Ihnen.</p></details>
+          <details><summary>Was passiert bei einer Kündigung? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Die konkreten Laufzeit- und Übergaberegeln stehen im Angebot. Domain und Inhalte bleiben beim Kunden; eine saubere Übergabe oder ein Export wird transparent vereinbart.</p></details>
+          <details><summary>Ist ein Shop im Abo enthalten? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Nein. WooCommerce-Shops, B2B-Preisgruppen, Portale und individuelle Funktionen brauchen mehr Planung. Dafür gibt es ein eigenes Angebot.</p></details>
+          <details><summary>Kann die Website später erweitert werden? <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></summary><p>Ja. Kleine Inhaltsänderungen gehören in den vereinbarten Rahmen. Neue Seiten, Integrationen und größere Funktionen werden separat geplant.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact" id="kontakt">
+      <div class="wrap contact-grid"><div><h2>Passt das zu Ihrem Angebot?</h2><p>Schicken Sie kurz Branche, Ziel und vorhandene Domain. Danach wissen Sie, ob das Abo-Modell sinnvoll ist oder ein Festpreisprojekt besser passt.</p><p class="contact-meta"><a href="mailto:mail@andersen-webworks.de?subject=Website-Abo%20Kurzcheck">mail@andersen-webworks.de</a> · <a href="tel:+4938733270015">038733 270015</a></p></div><a class="button button-light" href="mailto:mail@andersen-webworks.de?subject=Website-Abo%20Kurzcheck">Erstgespräch vereinbaren <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 12h15M13 5l7 7-7 7"/></svg></a></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="wrap footer-inner"><span>Andersen Webworks by Jan-Erik Andersen · Plau am See · 100 % remote</span><span><a href="https://jan-erik-andersen.de/">Persönliche Seite</a> · <a href="#main">Nach oben</a></span></div></footer>
+
+  <script>
+    const image = document.querySelector('#proof-image');
+    const title = document.querySelector('#proof-title');
+    const detail = document.querySelector('#proof-detail');
+    document.querySelectorAll('.proof-tab').forEach((tab) => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.proof-tab').forEach((item) => item.setAttribute('aria-selected', 'false'));
+        tab.setAttribute('aria-selected', 'true');
+        image.src = tab.dataset.image;
+        image.alt = tab.dataset.alt;
+        detail.textContent = tab.dataset.detail;
+        title.textContent = 'Gerwing Steinwerke';
+      });
+    });
+  </script>
+</body>
+</html>
