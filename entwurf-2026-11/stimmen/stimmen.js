@@ -57,7 +57,7 @@ export default function (K) {
     return pr;
   }
 
-  K.sheet(-13, 34, -8.2, 8);
+  K.sheet(-13, 34, -45, 8);
 
   // ---------- Überschrift: steht wie der Name der Eröffnung aus dem Bogen auf ----------
   const EH = 1.05, HX = -7.6, HZ = 5.2;
@@ -69,7 +69,7 @@ export default function (K) {
   // Fünf Seiten liegen im Bogen deckungsgleich als geschlossener Bericht (Rechteck, um −h gedreht, damit das aufgeschlagene Zickzack
   // quer zum Bild läuft). Die erste Seite steht an ihrer Fußkante auf, jede weitere schlägt an der abwechselnd rechten und linken
   // Kante um gam auf (geschlossen = 0, aufgeschlagen = gam = 180° − 2h). Seiten mit ungerader Nummer zeigen dem Betrachter ihre Unterseite.
-  const LW = 3.6, LH = 1.95, MX = .25, hh = 26 * DEG, gam = PI - 2 * hh, A0 = [-7.5, 2.4];
+  const LW = 2.8, LH = 2.7, MX = .25, hh = 26 * DEG, gam = PI - 2 * hh, A0 = [-7.5, 2.4];
   const d0 = [Math.cos(hh), -Math.sin(hh)], eb = [-Math.sin(hh), -Math.cos(hh)];
   const lp = (u, v) => [A0[0] + d0[0] * u + eb[0] * v, A0[1] + d0[1] * u + eb[1] * v];
   const PG = ["#fbfaf6", "#f1eee6", "#fbfaf6", "#f1eee6", "#fbfaf6"].map(c3);
@@ -90,32 +90,33 @@ export default function (K) {
   const E0 = .2, tw = (LW - 2 * MX) / E0 - .3;                 // Textbreite in em
   const ON = [TP[0] + .03, TP[0] + .05, TP[1] + .05, TP[2] + .05, TP[3] + .05];
   const topY = LH - .3;
+  // Die ersten beiden Seiten verlieren ihren Text, wenn die Lesestelle weitergezogen ist (sonst stünde am linken Rand breiter Bildschirme halber Text)
   // Sätze 1 und 2 (Satz 2 trägt zusätzlich eine Wirkungsgrafik ohne Zahlen)
   const sT = [];
-  sT[0] = block(pg[0], LW, wrap(TEXT.sis[0], tw), E0, ON[0], MX, topY, 1, {}, eb);
-  sT[1] = block(pg[1], LW, wrap(TEXT.sis[1], tw), E0, ON[1], MX, topY, -1, {}, eb);
+  sT[0] = block(pg[0], LW, wrap(TEXT.sis[0], tw), E0, ON[0], MX, topY, 1, { off: .46 }, eb);
+  sT[1] = block(pg[1], LW, wrap(TEXT.sis[1], tw), E0, ON[1], MX, topY, -1, { off: .46 }, eb);
   sT[2] = block(pg[2], LW, wrap(TEXT.sis[2], tw), E0, ON[2], MX, topY, 1, {}, eb);
   const E3 = .26, E4 = .32;
   sT[3] = block(pg[3], LW, wrap(TEXT.sis[3], (LW - 2 * MX) / E3 - .3), E3, ON[3], MX, topY, -1, {}, eb);
   sT[4] = block(pg[4], LW, wrap(TEXT.sis[4], (LW - 2 * MX) / E4 - .3), E4, ON[4], MX, topY, 1, {}, eb);
   // Wirkungsgrafik auf Seite 2: fünf Balken, der letzte kräftig (Schmuck, keine Zahlen)
   {
-    const gw = 2.3, gh = .62, PXU = 300;
+    const gw = 1.8, gh = .7, PXU = 300;
     const chart = K.decal(Math.round(gw * PXU), Math.round(gh * PXU), (x, W, H) => {
       const n = 5, bw = W / (n * 1.6), gap = (W - n * bw) / (n - 1), hs = [.28, .4, .52, .68, .92];
       x.strokeStyle = "rgba(48,48,51,.5)"; x.lineWidth = 3; x.beginPath(); x.moveTo(0, H - 2); x.lineTo(W, H - 2); x.stroke();
       hs.forEach((v, i) => { x.fillStyle = i === n - 1 ? "rgba(48,48,51,.62)" : "rgba(48,48,51,.2)"; x.fillRect(i * (bw + gap), H - 2 - v * (H - 8), bw, v * (H - 8)); });
     }, gw, gh, ON[1] + .02, .03);
-    K.onPanel(pg[1], chart, LW - (MX + gw / 2), .5, -1, eb);
+    K.onPanel(pg[1], chart, LW - (MX + gw / 2), .45, -1, eb);
   }
   // Quelle auf der letzten Seite, mit rotem Punkt
-  const qE = .2, qTop = .88;
-  const sQ = block(pg[4], LW, TEXT.sisQuelle, qE, ON[4] + .02, MX + .34, qTop, 1, { col: MUTED, fade: .03 }, eb);
+  const qE = .18, qTop = 1.0;
+  const sQ = block(pg[4], LW, TEXT.sisQuelle, qE, ON[4] + .02, MX, qTop, 1, { col: MUTED, fade: .03 }, eb);
   const dot1 = K.decal(64, 64, (x, W, H) => { x.fillStyle = RED; x.beginPath(); x.arc(W / 2, H / 2, W / 2 - 2, 0, 2 * PI); x.fill(); }, .15, .15, ON[4] + .02, .03);
-  K.onPanel(pg[4], dot1, MX + .08, qTop - .7 * qE + .06, 1, eb);
+  K.onPanel(pg[4], dot1, MX + .09, qTop + .22, 1, eb);
 
   // ---------- 2. ai-coustics: Zackenreihe wird glatt, Fahne steht auf ----------
-  const X0 = 12.6, ZW = -2.5, CB = 1.7, BL = 3.5, BWT = .5, NT = 28, FWD = 3.6, FH = 1.55, NB = 4;
+  const X0 = 12.6, ZW = -2.5, CB = 1.7, BL = 4.0, BWT = .5, NT = 32, FWD = 3.6, FH = 1.55, NB = 4;
   const WTOT = NB * BL + FWD, XF = NB * BL;                    // Band: vier Textblöcke, rechts darunter Platz für die Quelle
   F.part("welle", .56, .10);
   const TB = [.64, .10];
@@ -133,10 +134,10 @@ export default function (K) {
   const flag = K.panel(B, B.uv(XF, CB), B.uv(XF + FWD, CB), [0, -1], FR[0], FR[1], 0, { ang0: -(PI - .25), over: .06 });
   K.P(flag, [[0, 0], [FWD, 0], [FWD, FH], [0, FH]], c3("#fbfaf7"), [.5, .5, .5, .5]);
   // Text auf dem Band: vier Blöcke, jeder ein Satzteil im Wortlaut; erscheint der Reihe nach
-  const BON = [.70, .74, .78, .82], ET = .2, btw = (BL - .4) / ET - .3;
+  const BON = [.70, .74, .78, .82], ET = .2, btw = 3.1 / ET - .3;
   const bT = TEXT.ai.slice(0, 4).map((s, j) => {
     // Block 3 trägt zwei Satzteile (Komma bleibt stehen), Block 4 den Rest vor dem Schluss
-    return block(B, WTOT, wrap(s, btw), ET, BON[j], j * BL + .2, CB - .3, 1, { fade: .03 });
+    return block(B, WTOT, wrap(s, btw), ET, BON[j], j * BL + .2, CB - .3, 1, j < 2 ? { fade: .03, off: .90 } : { fade: .03 });
   });
   const EF = .3;
   const fT = block(flag, FWD, wrap(TEXT.ai[4], (FWD - .5) / EF - .3), EF, FR[0] + .04, .25, FH - .38, 1, { fade: .03 });
@@ -155,8 +156,10 @@ export default function (K) {
   // ---------- Kamera ----------
   const pxBase = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
   const pxD = (W, H, s) => pxBase(W, H) * s.e / .2;
-  const pxN = (v) => (W, H, s) => v * s.e / .2;
+  // breitere Handys (ab 390 px) bekommen größere Schrift, damit der sichtbare Ausschnitt in Textbreiten gleich bleibt (Nachbarn bleiben draußen)
+  const pxN = (v) => (W, H, s) => v * Math.max(1, W / 390) * s.e / .2;
   const FACE = V(0, 0, -1);
+  const pxL = (W, H, s) => Math.min(21, pxBase(W, H) + 1.2) * s.e / .2, LSY = -.05;
   const orbit = (C, az, el, D) => ({ tgt: V(C[0], C[1], C[2]), cam: V(C[0] + D * Math.sin(az * DEG) * Math.cos(el * DEG), C[1] + D * Math.sin(el * DEG), C[2] + D * Math.cos(az * DEG) * Math.cos(el * DEG)) });
   const ov = (b, C, az, el, D, DN, elN = el, CN = C) => { const a = orbit(C, az, el, D), n = orbit(CN, az, elN, DN); return { b, cam: a.cam, tgt: a.tgt, camN: n.cam, tgtN: n.tgt }; };
 
@@ -166,10 +169,10 @@ export default function (K) {
   const stopD = (arr, o = {}) => ({ face: FACE, pitch: 10, npitch: 9, px: pxD, pxN: pxN(17), yaw: -4, nyaw: -3, sx: 0, sy: -.06, nsx: 0, nsy: -.05, ...o, prints: arr });
   const keys = [{ w: 0, stop: S.head }];
   if (!N) {
-    S.l1 = stopD([sT[0], sT[1], sT[2]], { b: ON[2] + .03 });
-    S.l2 = stopD([sT[2], sT[3], sT[4], sQ], { b: ON[4] + .05 });
-    S.w1 = stopD([bT[0], bT[1], bT[2]], { b: .81, sy: -.12 });
-    S.w2 = stopD([bT[2], bT[3], fT, aQ], { b: 1, sy: -.2 });
+    S.l1 = stopD([sT[0], sT[1], sT[2]], { b: ON[2] + .03, pitch: 18, px: pxL, sy: LSY });
+    S.l2 = stopD([sT[2], sT[3], sT[4], sQ], { b: ON[4] + .05, pitch: 18, px: pxL, sy: LSY, sx: .14 });
+    S.w1 = stopD([bT[0], bT[1], bT[2]], { b: .81, sy: -.12, pitch: 15 });
+    S.w2 = stopD([bT[2], bT[3], fT, aQ], { b: 1, sy: -.2, sx: .06, pitch: 15 });
     keys.push(
       { w: .5, ...ov(.12, [-5.2, .5, 2.0], -3, 34, 15.5, 21) },
       { w: .8, ...ov(.27, [-3.2, .9, 1.4], 0, 26, 19.5, 19.5) },
@@ -178,21 +181,23 @@ export default function (K) {
       { w: 1.3, stop: S.w1 }, { w: 1.2, stop: S.w2 }
     );
   } else {
-    sT.forEach((p, k) => { S["l" + k] = stopD([p].concat(k === 4 ? [sQ] : []), { b: ON[k] + .04 }); });
-    bT.forEach((p, k) => { S["w" + k] = stopD([p], { b: BON[k] + .04, pxN: pxN(16.5) }); });
-    S.wf = stopD([fT, aQ], { b: 1, sy: -.3, nsy: -.12, pxN: pxN(16.5) });
+    // Handy: zwei Seiten je Lesestelle (Seiten 1+2, 3+4, 4+5 mit Quelle)
+    // (Text der nächsten Seite erscheint erst nach der Lesestelle, damit am Rand kein halber Text steht)
+    [[0, 1], [2, 3], [3, 4]].forEach((ks, i) => { S["l" + i] = stopD(ks.map(k => sT[k]).concat(ks.includes(4) ? [sQ] : []), { b: ON[ks[ks.length - 1]] + (ks.includes(4) ? .04 : .02), pxN: pxN(16), nsx: i === 2 ? .18 : 0 }); });
+    bT.forEach((p, k) => { S["w" + k] = stopD([p], { b: BON[k] + .04, pxN: pxN(16), nsx: [0, -.04, 0, -.10][k] }); });
+    S.wf = stopD([fT, aQ], { b: 1, sy: -.3, nsy: -.12, nsx: -.06, pxN: pxN(16) });
     keys.push(
-      { w: .5, ...ov(.12, [-5.2, .5, 2.0], -3, 34, 15.5, 21) },
-      { w: .55, ...ov(.22, [-4, .9, 1.4], 0, 26, 19.5, 19.5) },
-      ...[0, 1, 2, 3, 4].map(k => ({ w: .55, stop: S["l" + k] })),
-      { w: .7, ...ov(.62, [19, .5, -1.2], 4, 30, 33, 23, 30, [14.5, .9, -1.8]) },
-      ...[0, 1, 2, 3].map(k => ({ w: .55, stop: S["w" + k] })),
-      { w: 1.0, stop: S.wf }
+      { w: .4, ...ov(.12, [-5.2, .5, 2.0], -3, 34, 15.5, 21) },
+      { w: .4, ...ov(.22, [-4, .9, 1.4], 0, 26, 19.5, 19.5) },
+      ...[0, 1, 2].map(k => ({ w: .5, stop: S["l" + k] })),
+      { w: .5, ...ov(.62, [19, .5, -1.2], 4, 30, 33, 23, 30, [14.5, .9, -1.8]) },
+      ...[0, 1, 2, 3].map(k => ({ w: .5, stop: S["w" + k] })),
+      { w: .9, stop: S.wf }
     );
   }
   return {
     fov: 32, fovN: 44,
-    track: N ? 720 : 600,
+    track: N ? 600 : 600,
     thread: { pts: [V(endA[0], .004, endA[1] + .05), V(endA[0] + .9, .004, endA[1] - .5), V(X0 - 1.1, .004, ZW + .9), V(X0 - .35, .004, ZW + .3)], t0: .55, t1: .61 },
     stops: Object.values(S),
     keys,

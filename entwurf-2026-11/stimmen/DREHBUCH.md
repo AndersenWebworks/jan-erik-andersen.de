@@ -82,3 +82,9 @@ Handy: Überblicke wie Desktop, danach je eine Lesestellung pro Seite (5) und je
 ## Offen
 
 Siehe Bericht an Clautz (Zweifel zur Quelle als zeilenweise Angabe, zur Schallwelle als Bild für ai-coustics, zur Uhr der Überschrift im Gesamtlauf, zur Länge am Handy).
+
+## Korrekturrunde nach Sichtprüfung
+
+- Bericht: Seiten hochkant (2,8 × 2,7, Textspalte ca. 11 em, Seite 3 bis sieben Zeilen), zwei Lesestellen am Desktop mit 21 px Fließtext und 18° Neigung; der Bogen reicht nach hinten bis z −45, damit oben kein weißes Loch bleibt. Das Band steht jetzt mit 4,0 Blockabstand (Nachbarblöcke liegen am Handy ganz draußen); Wellenstellungen mit 15° Neigung.
+- Regel „Textträger ganz im Bild oder ganz draußen“ (oben ab 64 px, unten bis H−70 px): in 0,005-p-Schritten über die ganze Bahn und an allen Lesestellen und deren Umgebung (±0,01 p) gerechnet für 1280×900, 1366×768, 1440×900, 1920×1080, 390×844, 393×852, 412×915: null Verletzungen. Dafür verlieren die ersten beiden Berichtsseiten und die ersten beiden Bandblöcke ihren Text, wenn die Lesestelle weitergezogen ist (b 0,46 bzw. 0,90; rückwärts kommt er wieder).
+- Handy: drei Lesestellen für den Bericht (Seiten 1+2, 3+4, 4+5 mit Quelle), Scrollweg 5,0 Bildschirmhöhen (Track 600vh). Schrift 16 px, ab 390 px Breite proportional größer. Nicht abgedeckt: Handys unter 380 px Breite (zwei Seiten passen dort nicht bei 16 px).
