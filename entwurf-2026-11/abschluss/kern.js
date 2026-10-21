@@ -1,6 +1,6 @@
 // Abschluss jan-erik-andersen.de (Wie ich arbeite, Für Agenturen, Kontakt), Fassung 2026-11, Bogen + Bastellinien.
 // Kopie von entwurf-2026-11/bogen/kern.js. Änderungen gegenüber der Vorlage: K.add, K.paperMaterial, K.link (klickbare Drucke per Raycast),
-// K.word mit opt.clock "b" (Lettern laufen nach dem Baufortschritt statt nach der Zeit, Abdruck schließt nach b).
+// Zwischenhalte: Schlüssel mit slow:1 bremsen die Bahn wie Lesestellen. K.word mit opt.clock "b" (Lettern laufen nach dem Baufortschritt statt nach der Zeit, Abdruck schließt nach b).
 // Eröffnung jan-erik-andersen.de, Fassung 2026-11, Bogen + Bastellinien.
 // Bühne wie in Raumtext 2: ein Papierbogen als Grundstück, jedes Teil hängt im Faltbaum und klappt aus dem Bogen hoch,
 // die Lettern des Namens stehen aus dem Bogen auf und lassen ihren Abdruck zurück, Text ist auf die Flächen gedruckt.
@@ -278,7 +278,7 @@ export function start(renderer, VARIANTS) {
     def.bOfU = pchip(keyU, def.keys.map(k => k.b));
     def.idxOfU = pchip(keyU, def.keys.map((k, i) => i));
     // Zeitverzerrung: an Lesestellen sinkt die Bahngeschwindigkeit auf rund ein Drittel, nie auf null
-    const STOPU = def.keys.filter(k => k.stop && !k.noWarp).map(k => k.u);
+    const STOPU = def.keys.filter(k => (k.stop || k.slow) && !k.noWarp).map(k => k.u);
     const WARP_MIN = def.warpMin || .34, WARP_W = def.warpW || .028, NW = 3000;
     const warpP = new Float64Array(NW + 1);
     const bump = u => STOPU.length ? Math.max(...STOPU.map(s => Math.exp(-(((u - s) / WARP_W) ** 2)))) : 0;

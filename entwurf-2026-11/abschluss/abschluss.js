@@ -107,6 +107,7 @@ export default function (K) {
   const orbit = (tgt, el, az, dist, distN, elN, tgtN) => ({ tgt, cam: ring(tgt, el, az, dist), tgtN: tgtN || tgt, camN: ring(tgtN || tgt, elN || el + 6, az * .6, distN || dist * .7) });
   const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
   const stops = {};
+  const carriers = []; // Textträger mit ihren Drucken (Prüfung: ganz im Bild oder ganz draußen)
 
   // Bogen: ein langer Streifen, die drei Szenen liegen hintereinander (x von -9,5 bis 46)
   K.sheet(-9.5, 46, -13, 6.6);
@@ -151,19 +152,27 @@ export default function (K) {
     const T1 = K.print(["Ich arbeite mit aktuellen", "KI-Werkzeugen und habe dafür", "eigene Abläufe entwickelt."], .145, .11, { align: "center", lh: 1.2 });
     K.onPanel(sl, T1, SW / 2, SHH / 2, 1);
 
-    // Drei Helferarme: Ständer, langer Ausleger nach hinten über die Bahn, Hand nach unten
+    // Drei Greifarme aus Papier: Sockel, Glied 1 (Schulter), Glied 2 (Ellbogen), Gabel mit zwei Zinken, die das Teil halten
     F.part("arme", .005, .05);
-    const AW = .42, UH = 1.3, FL = 3.2, HH = .42, az = z(1.2);
+    const BWd = .9, BHt = .45, GW = .3, L1 = 1.5, L2 = 2.4, TH1 = 1.1, TH2 = -.15, YK = .15, FNL = .5, az = z(1.2);
     LX.forEach((x, i) => {
       const t = .06 + .006 * i;
-      const up = K.panel(R, [x - AW / 2, az], [x + AW / 2, az], [0, -1], t, .03, Q, { over: .05 });
-      K.rect(up, 0, 0, AW, UH, ARM);
-      const fo = K.panel(up, up.uv(0, UH), up.uv(AW, UH), [0, -1], t + .02, .035, -Q, { over: .05 });
-      K.rect(fo, 0, 0, AW, FL, ARM2);
-      const ha = K.panel(fo, fo.uv(0, FL), fo.uv(AW, FL), [0, -1], t + .045, .025, -Q, { over: .05 });
-      K.rect(ha, 0, 0, AW, HH, ARM);
+      const base = K.panel(R, [x - BWd / 2, az], [x + BWd / 2, az], [0, -1], t, .03, Q, { over: .05 });
+      K.rect(base, 0, 0, BWd, BHt, ARM2);
+      const g1 = K.panel(base, base.uv(BWd / 2 - GW / 2, BHt), base.uv(BWd / 2 + GW / 2, BHt), [0, -1], t + .02, .03, TH1 - Q, { over: .05 });
+      K.rect(g1, 0, 0, GW, L1, ARM);
+      const g2 = K.panel(g1, g1.uv(0, L1), g1.uv(GW, L1), [0, -1], t + .035, .035, TH2 - TH1, { over: .05 });
+      K.P(g2, [[0, 0], [GW, 0], [GW, L2 - YK], [0, L2 - YK]], ARM2, [.5, .5, 0, .5]);
+      K.rect(g2, -.35, L2 - YK, GW + .35, L2, ARM2);
+      for (const [u0, u1] of [[-.35, -.25], [GW + .25, GW + .35]]) {
+        const fi = K.panel(g2, g2.uv(u0, L2), g2.uv(u1, L2), [0, -1], t + .05, .025, -Q - TH2, { over: .05 });
+        K.rect(fi, 0, 0, u1 - u0, FNL, ARM);
+      }
+      // Gelenke: Ring mit Bolzen auf Schulter und Ellbogen
+      const joint = (nd, v) => K.onPanel(nd, K.decal(128, 128, (c, W, H) => { c.strokeStyle = ink(.7); c.lineWidth = W * .07; c.beginPath(); c.arc(W / 2, H / 2, W * .38, 0, 7); c.stroke(); c.fillStyle = ink(.75); c.beginPath(); c.arc(W / 2, H / 2, W * .13, 0, 7); c.fill(); }, .24, .24, .1, .02), GW / 2, v, 1);
+      joint(g1, .17); joint(g1, L1 - .17);
     });
-    const ZH = az - FL, HOLD = UH - HH - .02 - .06;
+    const ZH = az - L1 * Math.cos(TH1) - L2 * Math.cos(TH2), HOLD = BHt + L1 * Math.sin(TH1) + L2 * Math.sin(TH2) - .3;
 
     F.part("schild", .015, .05);
     const sr = K.panel(R, [4.1 - SW / 2, z(-.4)], [4.1 + SW / 2, z(-.4)], [0, -1], .09, .035, Q, { over: .05 });
@@ -171,24 +180,18 @@ export default function (K) {
     const T2 = K.print(["Damit schaffe ich allein Projekte,", "für die früher ein kleines Team", "nötig war, etwa Schnittstellen", "oder Datenumzüge."], .14, .125, { align: "center", lh: 1.22 });
     K.onPanel(sr, T2, SW / 2, SHH / 2, 1);
 
-    // Prüfrahmen: zwei Pfosten und ein Sturz; Satz 3, erste Hälfte, steht auf dem Sturz
+    // Prüfrahmen: zwei Pfosten und ein Sturz; der ganze Satz 3 steht auf dem Sturz
     F.part("rahmen", .02, .05);
-    const FO = 2.5, FHt = 2.2, PO = .3, LI = .85, fz = z(-5.0), HP = FHt - LI;
+    const FO = 2.5, FHt = 2.4, PO = .3, LI = 1.0, fz = z(-5.0), HP = FHt - LI;
     const fr = K.panel(R, [-FO, fz], [FO, fz], [0, -1], .10, .04, Q, { over: .05 });
     K.P(fr, [[0, 0], [PO, 0], [PO, HP], [0, HP]], FRAMEC, [.5, .5, 0, .5]);
     K.P(fr, [[2 * FO - PO, 0], [2 * FO, 0], [2 * FO, HP], [2 * FO - PO, HP]], FRAMEC, [.5, .5, 0, .5]);
     K.P(fr, [[0, HP], [2 * FO, HP], [2 * FO, FHt], [0, FHt]], FRAMEC);
-    const T3a = K.print(["Entscheidungen und Verantwortung", "bleiben bei mir,"], .23, .14, { align: "center", lh: 1.2 });
-    K.onPanel(fr, T3a, FO, HP + LI / 2, 1);
+    const T3 = K.print(["Entscheidungen und Verantwortung", "bleiben bei mir, und ausgeliefert", "wird nur, was ich geprüft habe."], .2, .14, { align: "center", lh: 1.2 });
+    K.onPanel(fr, T3, FO, HP + LI / 2, 1);
 
-    // Ausgabe: Rückwand mit Satz 3, zweite Hälfte; davor drei Plätze im Bogen
-    F.part("ausgabe", .025, .05);
-    const BW = 4.6, BH = 1.3, bz = z(-10.0);
-    const bk = K.panel(R, [-BW / 2, bz], [BW / 2, bz], [0, -1], .125, .04, Q, { over: .05 });
-    K.rect(bk, 0, 0, BW, BH, SIGN);
-    const T3b = K.print(["und ausgeliefert wird nur,", "was ich geprüft habe."], .22, .16, { align: "center", lh: 1.2 });
-    K.onPanel(bk, T3b, BW / 2, BH / 2, 1);
-    const ZS = z(-8.9);
+    // Plätze im Bogen hinter dem Rahmen
+    const ZS = z(-9.4);
     K.onFlat(R, K.decal(1200, 300, (x, W, H) => {
       x.strokeStyle = ink(.4); x.lineWidth = 5; x.lineCap = "round";
       LX.forEach(lx => {
@@ -196,10 +199,10 @@ export default function (K) {
         const c = s * .2;
         for (const [sx2, sy2] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { const px = cx + sx2 * hh, py = H / 2 + sy2 * hh; x.beginPath(); x.moveTo(px - sx2 * c, py); x.lineTo(px, py); x.lineTo(px, py - sy2 * c); x.stroke(); }
       });
-    }, 4.8, 1.2, .13), 0, ZS);
+    }, 4.8, 1.2, .16), 0, ZS);
 
     // Teile: kommen aus der Hand, laufen durch den Prüfrahmen (roter Haken), rasten im Platz ein
-    const TS = .8, TT = .12, TCOL = ["#f1ece0", "#ebe6da", "#f4efe6"], S0 = [.15, .19, .23];
+    const TS = .76, TT = .12, TCOL = ["#f1ece0", "#ebe6da", "#f4efe6"], S0 = [.15, .19, .23];
     LX.forEach((x, i) => {
       const g = new THREE.Group();
       const box = new THREE.Mesh(new THREE.BoxGeometry(TS, TT, TS), K.paperMaterial(TCOL[i]));
@@ -230,11 +233,12 @@ export default function (K) {
     });
 
     // Lesestellen
+    carriers.push({ n: "h1", nodes: [], prints: H1 });
     stops.h1 = { prints: H1, pitch: 9, sy: 0, nsy: 0, px: (W, H) => H * .075, pxN: 38, fit: .74, fitN: .86, b: .06 };
+    carriers.push({ n: 'T1', nodes: [sl], prints: [T1] }, { n: 'T2', nodes: [sr], prints: [T2] }, { n: 'T3', nodes: [fr], prints: [T3] });
     stops.t1 = { carrier: [sl], prints: [T1], px: pxD, pitch: 14, yaw: -10, sy: -.1, nsy: -.1, npitch: 16, nyaw: 0, b: .14 };
     stops.t2 = { carrier: [sr], prints: [T2], px: pxD, pitch: 14, yaw: 14, sy: -.15, nsy: -.1, npitch: 16, nyaw: 8, b: .205 };
-    stops.t3a = { carrier: [fr], prints: [T3a], px: pxD, pitch: 14, yaw: -14, sy: .08, nsy: .1, npitch: 16, nyaw: 0, b: .245 };
-    stops.t3b = { carrier: [bk], prints: [T3b], px: pxD, pitch: 34, yaw: 8, sy: .1, nsy: .1, npitch: 34, nyaw: 0, b: .35 };
+    stops.t3 = { carrier: [fr], prints: [T3], px: pxD, pitch: 38, yaw: -8, sy: .1, nsy: .1, npitch: 38, nyaw: 0, b: .35 };
   }
 
   // =====================================================================================================
@@ -308,7 +312,9 @@ export default function (K) {
     const tS4 = K.print(["Konditionen und freie", "Kapazität nenne ich Ihnen", "auf Anfrage."], .085, .63, { align: "center", lh: 1.2 });
     K.onFlat(T_B.top, tS4, OX2 + 3.3, z(.63));
 
+    carriers.push({ n: "h2", nodes: [], prints: H2 });
     stops.h2 = { prints: H2, pitch: 10, sy: 0, nsy: 0, px: (W, H) => H * .075, pxN: 38, fit: .74, fitN: .86, b: .43 };
+    carriers.push({ n: 'sA', nodes: [T_A.apron], prints: [tA] }, { n: 'sMon', nodes: [m4], prints: [tS2] }, { n: 'sB', nodes: [T_B.apron], prints: [tS3] }, { n: 'sMat', nodes: [T_B.top], prints: [tS4], only: 1 });
     stops.s1 = { carrier: [T_A.apron], prints: [tA], px: pxD, pitch: 14, yaw: -8, sy: -.2, nsy: -.1, npitch: 16, nyaw: 0, b: .50 };
     stops.s2 = { carrier: [m4], prints: [tS2], px: pxD, pitch: 12, yaw: 10, sy: .05, nsy: 0, npitch: 14, nyaw: 4, b: .625 };
     stops.s3 = { carrier: [T_B.apron], prints: [tS3], px: pxD, pitch: 14, yaw: 8, sy: -.2, nsy: -.1, npitch: 16, nyaw: 4, b: .635 };
@@ -325,7 +331,7 @@ export default function (K) {
     const H3 = heading(rows, N ? .5 : .72, z(4.6), .715, "kopf3", OX3);
 
     // Umschlag: der Körper liegt als Papier auf dem Bogen (die Karten stehen aus ihm auf), die Klappe liegt hinten und klappt auf
-    const BW = 7.2, zF = z(1.9), zB = z(-2.7);
+    const BW = 7.2, zF = z(1.9), zB = z(N ? -2.95 : -2.7), CX = N ? 2.1 : 1.6, ZBK = N ? -1.3 : -.95, ZFR = N ? 1.5 : 1.15;
     F.poly(R, [[OX3 - BW / 2, zF], [OX3 + BW / 2, zF], [OX3 + BW / 2, zB], [OX3 - BW / 2, zB]], BODY, .5, .01);
     F.part("klappe", .70, .05);
     const FH = 3.2, flap = K.panel(R, [OX3 - BW / 2, zB], [OX3 + BW / 2, zB], [0, -1], .83, .06, Q + .3, { over: .04 });
@@ -335,10 +341,10 @@ export default function (K) {
     F.part("karten", .71, .06);
     const CW = 2.6, CHt = .95, DD = .5, EM = .115, LV = { over: .05 };
     const spots = [
-      { x: OX3 - 1.6, zh: z(-.95), label: "Mail", val: "mail@andersen-webworks.de", href: "mailto:mail@andersen-webworks.de" },
-      { x: OX3 + 1.6, zh: z(-.95), label: "Telefon", val: "+49 38733 270015", href: "tel:+4938733270015" },
-      { x: OX3 - 1.6, zh: z(1.15), label: "LinkedIn", val: "andersen-erik", href: "https://www.linkedin.com/in/andersen-erik/" },
-      { x: OX3 + 1.6, zh: z(1.15), label: "Lebenslauf", val: "PDF herunterladen", href: "#" }
+      { x: OX3 - CX, zh: z(ZBK), label: "Mail", val: "mail@andersen-webworks.de", href: "mailto:mail@andersen-webworks.de" },
+      { x: OX3 + CX, zh: z(ZBK), label: "Telefon", val: "+49 38733 270015", href: "tel:+4938733270015" },
+      { x: OX3 - CX, zh: z(ZFR), label: "LinkedIn", val: "andersen-erik", href: "https://www.linkedin.com/in/andersen-erik/" },
+      { x: OX3 + CX, zh: z(ZFR), label: "Lebenslauf", val: "PDF herunterladen", href: "#" }
     ];
     const decs = spots.map((s, i) => {
       const t = .88 + .014 * i;
@@ -350,9 +356,11 @@ export default function (K) {
       const dec = K.decal(c.wpx, c.hpx, c.draw, CW, CHt, .93 + .01 * i, .02);
       K.onPanel(face, dec, CW / 2, CHt / 2, 1);
       K.link(dec, s.href);
+      carriers.push({ n: 'card' + s.label, nodes: [face], prints: [dec] });
       return dec;
     });
 
+    carriers.push({ n: "h3", nodes: [], prints: H3 });
     stops.h3 = { prints: H3, pitch: 10, sy: 0, nsy: 0, px: (W, H) => H * .07, pxN: 34, fit: .74, fitN: .86, b: .77 };
     if (!N) stops.all = { prints: decs, e0: EM, px: pxD, fit: .8, pitch: 30, yaw: 0, sy: -.05, b: 1 };
     else spots.forEach((s, i) => { stops["c" + i] = { prints: [decs[i]], e0: EM, px: 16, pxN: 16, fitN: .94, pitch: 28, npitch: 28, nyaw: 0, nsy: -.05, b: .955 + .015 * i }; });
@@ -366,28 +374,27 @@ export default function (K) {
   const keys = [
     // Szene 1: Überschrift steht (nach der Zeit), Bastellinien zeichnen sich, Kamera hebt sich über den Bogen, Teile klappen hoch, Teile laufen durch
     { w: .3, b: 0, cam: V(0, 3.1, 22.9), tgt: V(0, .27, 5), camN: V(0, 2.6, 19.8), tgtN: V(0, .2, 4.6) },
-    { w: .5, stop: S.h1 },
-    { w: .65, b: .09, ...orbit(V(0, .6, -3), 34, 8, 26, 21, 44, V(0, .6, -3.5)) },
+    { w: .4, stop: S.h1 },
+    { w: .5, slow: 1, b: .09, ...orbit(V(0, .6, -3), 34, 8, 26, 21, 44, V(0, .6, -3.5)) },
     { w: .7, stop: S.t1 },
-    { w: .6, b: .17, ...orbit(V(0, .6, -1.5), 28, 18, 13, 10, 36) },
+    { w: .6, slow: 1, b: .17, ...orbit(V(0, .6, -1.5), 30, 0, 17, 9, 38) },
     { w: .7, stop: S.t2 },
-    { w: .55, b: .235, ...orbit(V(0, .6, -4), 26, -15, 12, 9.5, 34) },
-    { w: .7, stop: S.t3a },
-    { w: .75, stop: S.t3b },
-    { w: .85, b: .385, ...orbit(V(9, .5, -2), 30, 0, 24, 30, 40) },
+    { w: .6, slow: 1, b: .26, ...orbit(V(0, .6, -2.5), 34, 0, 17, 9.5, 38) },
+    { w: .8, stop: S.t3 },
+    { w: .7, slow: 1, b: .385, ...orbit(V(9, .5, -2), 30, 0, 24, 30, 40) },
     // Szene 2
     { w: .9, stop: S.h2 },
-    { w: .75, b: .47, ...orbit(V(OX2, 1, 0), 30, 0, 17, 25, 38) },
+    { w: .75, slow: 1, b: .47, ...orbit(V(OX2, 1, 0), 30, 0, 17, 25, 38) },
     { w: .9, stop: S.s1 },
     { w: .9, stop: S.s2 },
     { w: .8, stop: S.s3 },
     { w: .8, stop: S.s4 },
-    { w: .9, b: .72, ...orbit(V(OX2 + 10, 0, 1), 30, 0, 18, 24, 40) },
+    { w: .9, slow: 1, b: .72, ...orbit(V(OX2 + 10, 0, 1), 30, 0, 18, 24, 40) },
     // Szene 3: der Faden kommt an, die Klappe geht auf, die Karten stehen auf
     { w: 1, stop: S.h3 },
-    { w: 1.8, b: .86, ...orbit(V(OX3, .8, -.5), 32, 0, 15, 20, 40) },
-    ...(N ? [S.c0, S.c1, S.c2, S.c3].map(s => ({ w: 1.1, stop: s })) : [{ w: 1.4, b: .93, ...orbit(V(OX3, .8, -.5), 34, 10, 12) }, { w: 2, stop: S.all }])
+    { w: 1.8, slow: 1, b: .86, ...orbit(V(OX3, .8, -.5), 32, 0, 15, 20, 40) },
+    ...(N ? [S.c0, S.c1, S.c2, S.c3].map(s => ({ w: 1.1, stop: s })) : [{ w: 1.4, slow: 1, b: .93, ...orbit(V(OX3, .8, -.5), 34, 10, 12) }, { w: 2, stop: S.all }])
   ];
   Object.entries(S).forEach(([k, v]) => { v.name = k; });
-  return { fov: 32, fovN: 44, track: 1350, stops: Object.values(S), keys, thread };
+  return { fov: 32, fovN: 44, track: 1250, stops: Object.values(S), keys, thread, carriers };
 }

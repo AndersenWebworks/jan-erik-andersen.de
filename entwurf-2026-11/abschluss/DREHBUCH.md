@@ -13,16 +13,15 @@ Rot erscheint nur als Akzent: Haken auf den geprüften Teilen (Szene 1), tickend
 
 **Kernaussage:** Mit eigenen KI-Abläufen schaffe ich allein, wofür früher ein kleines Team nötig war; Entscheidungen und Verantwortung bleiben bei mir, ausgeliefert wird nur Geprüftes.
 
-**Konstrukt (neu gedacht, kein Kanban, kein Kran, kein Bau):** drei Helferarme, ein Prüfrahmen, drei Plätze zum Einrasten. Die Arme liefern drei Teile zu (Schnittstelle, Datenumzug, Website), jedes Teil läuft durch den Prüfrahmen, bekommt dort den roten Haken und rastet danach in seinen Platz ein. Die Bahn läuft in die Tiefe, die Kamera folgt.
+**Konstrukt (neu gedacht, kein Kanban, kein Kran, kein Bau):** drei Greifarme aus Papier, ein Prüfrahmen, drei Plätze im Bogen. Jeder Arm hat Sockel, Schulterglied, Ellbogenglied mit sichtbaren Gelenkringen und eine Gabel mit zwei Zinken, die das Teil hält und absetzt. Die Teile (Schnittstelle, Datenumzug, Website) gleiten durch den Prüfrahmen, bekommen dort den roten Haken und rasten danach in ihren Platz ein. Die Bahn läuft in die Tiefe, die Kamera folgt.
 
 Begründung Satz für Satz:
 
 | Satz (wörtlich) | Bauteil | Warum genau dort |
 |---|---|---|
 | „Ich arbeite mit aktuellen KI-Werkzeugen und habe dafür eigene Abläufe entwickelt.“ | Schild links neben den Armen | Die Werkzeuge stehen direkt daneben, das Schild ist ihr Typenschild. |
-| „Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge.“ | Lieferschein rechts neben der Bahn | Drei Arme arbeiten gleichzeitig (= kleines Team) und liefern genau diese Beispiele: die Teile tragen das Zeichen einer Schnittstelle (zwei Stecker) und eines Datenumzugs (Datenbank, Pfeil, Datenbank), das dritte eine Website. |
-| „Entscheidungen und Verantwortung bleiben bei mir,“ | Sturz des Prüfrahmens | Der Rahmen ist die Stelle, an der entschieden wird; jedes Teil muss durch. |
-| „und ausgeliefert wird nur, was ich geprüft habe.“ | Rückwand über den drei Plätzen | Hier landet nur, was den Rahmen passiert hat; die Teile tragen den roten Haken. |
+| „Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge.“ | Lieferschein rechts neben der Bahn | Drei Arme arbeiten gleichzeitig (= kleines Team); die Teile tragen das Zeichen einer Schnittstelle, eines Datenumzugs und einer Website. |
+| „Entscheidungen und Verantwortung bleiben bei mir, und ausgeliefert wird nur, was ich geprüft habe.“ (ungeteilt) | Sturz des Prüfrahmens | Der Rahmen ist die Stelle, an der entschieden und geprüft wird; die Teile laufen darunter durch, dahinter rasten sie ein. Die Lesestelle steht von oben (38°), damit der Sturz die Plätze nicht verdeckt. |
 
 Schläge (b, Bildschirmhöhen = Abstand ab Start bei 1280 × 900; Handy in Klammern):
 
@@ -30,10 +29,10 @@ Schläge (b, Bildschirmhöhen = Abstand ab Start bei 1280 × 900; Handy in Klamm
 |---|---|---|---|
 | Überschrift | Zeit (nicht b) | 0 | „Wie ich arbeite“ steht nach .15 s aus dem Bogen auf (Name-Verhalten der Eröffnung), Abdruck schließt sich. Handy zweizeilig. |
 | Bastellinien | 0 … .075 | 0 … .6 | Schnitt- und Falzlinien aller Teile zeichnen sich. |
-| Aufklappen | .06 … .165 | .6 … 1.9 | Schilder, drei Arme (Ständer, Ausleger, Hand), Prüfrahmen, Rückwand klappen hoch. Satz 1 ab .11, Satz 2 ab .125, Satz 3 ab .14 und .16. |
+| Aufklappen | .06 … .165 | .6 … 1.9 | Schilder, drei Arme (Sockel, zwei Glieder, Gabel), Prüfrahmen klappen hoch. Satz 1 ab .11, Satz 2 ab .125, Satz 3 ab .14. |
 | Teile laufen | .15 … .36 | 1.6 … 4.5 | Teil 1 fällt bei .15 aus der Hand, Teil 2 bei .19, Teil 3 bei .23; je Teil: fallen (.02), zum Rahmen gleiten (.045), am Rahmen kurz halten, roter Haken springt auf (.02), zum Platz gleiten und mit kleinem Überschwingen einrasten (.045). |
 
-Kamera: Startbild frontal, niedrig, Überschrift groß im Vordergrund (Blickhöhe 9°). Dann hebt sie sich (34°) und fährt über den Bogen, Lesestellen an Schild links (14°), Lieferschein rechts (14°, Gier 14°), Sturz (14°) und Rückwand (34°, damit die Teile in den Plätzen hinter dem Sturz sichtbar bleiben). Am Ende schwenkt sie nach rechts zur nächsten Szene.
+Kamera: Startbild frontal, niedrig, Überschrift groß im Vordergrund (Blickhöhe 9°). Dann hebt sie sich (34°) und fährt über den Bogen, Lesestellen an Schild links (14°), Lieferschein rechts (14°) und Sturz (38°, damit die Plätze dahinter sichtbar bleiben). Zwischenhalte (Schlüssel mit `slow:1`, bremsen wie Lesestellen) zeigen beide Schilder ganz im Bild. Am Ende schwenkt sie nach rechts zur nächsten Szene.
 
 ## Szene 2: Für Agenturen
 
@@ -73,7 +72,7 @@ Kamera: Überschrift frontal, Überblick über den offenen Umschlag (32°), dann
 
 ## Tempo in Zahlen
 
-- Scrolllänge 1350 vh = 12,5 Bildschirmhöhen über alles; je Szene (Überschrift bis nächste Überschrift) Breitbild rund 5,4 / 4,6 / 2,5, Handy 4,7 / 4,0 / 3,8.
+- Scrolllänge 1250 vh = 11,5 Bildschirmhöhen über alles; je Szene (Überschrift bis nächste Überschrift) Breitbild 4,5 / 4,5 / 2,5, Handy 3,9 / 3,9 / 3,7.
 - Abstand benachbarter Lesestellen 0,4 … 1,0 Bildschirmhöhen (Zeitverzerrung: an Lesestellen sinkt die Bahngeschwindigkeit auf rund ein Drittel, nie auf null).
 - Kein Scroll-Lock, kein Hijacking; die Kamera folgt gedämpft (wie `kern.js`).
 
@@ -83,6 +82,7 @@ Werkzeuge in `tmp/abschluss/`: `harness.mjs` (Modell und Kamera wie in `kern.js`
 
 - Fließtext Breitbild 19,8 px, Handy 16 px an allen Lesestellen; Überschriften 67 px (Breitbild) bzw. 38 px.
 - Anschnitt: Textblöcke und Kartenflächen liegen vollständig im Bild, Breitbild mindestens 69 px Rand, Handy Textblöcke mindestens 52 px, Kartenfläche mindestens 9 px (der Text auf der Karte beginnt rund 37 px vom Rand). Lange Tischzargen (Szene 2) laufen am Handy bewusst über den Bildrand.
+- Textblöcke ganz im Bild (zwischen 64 px oben und H−70 px unten) oder ganz draußen: geprüft in Schritten von 0,005 p an allen langsamen Stellen (Lesestellen und Zwischenhalte, Text ab 15 px). Breitbild nur 3 Messpunkte am Rand (Lieferschein, 15 px, beim Abfahren), Handy nur Schwenks zwischen zwei Lesestellen, bei denen der nächste Text einläuft.
 - Verdeckung der Textflächen durch Modellteile: 0 % an allen Stellen (Ausnahme: untere Kartenkante der hinteren Reihe in der Breitbildstellung, dort steht kein Text).
 - Überlappung der Faltflächen im Bogen: 0 von 687 Paaren, keine Schnittlinie durch fremde Teile.
 - Kamera: auf der ganzen Bahn keine Fläche näher als 1,2 Einheiten, Mindesthöhe 2,6.
