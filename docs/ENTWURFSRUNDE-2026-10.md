@@ -37,6 +37,7 @@ Vorschau im Webchat: `/api/project-preview/?projectId=jea-website&path=<ordner>%
 9. **Komplexe 3D-Modelle auf Opus bauen**, nicht auf dem Standard-Helfer.
 10. **Prüfen in der Vorschau:** Das Browserwerkzeug kann im abgeschotteten Vorschau-iframe weder Knöpfe drücken noch die Konsole lesen. Zwischenstände deshalb über einen Anker wie `#p=0.4` ansteuerbar machen (Ankerwechsel lädt nicht neu); Knopf und Konsole lokal in einem nachgebauten Sandbox-iframe testen. Gewicht und Timing von Bewegung sieht man nur in Bewegung, nicht auf Standbildern.
 11. **Text an kleinen, zugehörigen Flächen** (Ladenschild, Lettern, einrastende Wand mit Überschrift) trägt. Langer Fließtext auf großen Wänden wird wieder zur Tafel (Raumtext 2).
+12. **Keine Headless-Edge mit SwiftShader.** `--use-angle=swiftshader` rechnet WebGL auf dem Prozessor; zwei solche Läufe parallel haben am 21.10.2026 den Rechner voll ausgelastet und den Webchat-Server mitgerissen. Prüfbilder über das Browserwerkzeug des Webchats; ist lokal doch ein Headless-Lauf nötig, dann höchstens einer, mit Grafikkarte, niedriger Priorität und beendet direkt nach dem Bild.
 
 ## Die Varianten
 
