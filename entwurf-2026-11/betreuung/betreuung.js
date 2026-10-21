@@ -83,7 +83,8 @@ export default function (K) {
 
   // ---------- Bildschirm: Fuß, Hals, Bildschirm (wie in der Eröffnung), steht direkt auf dem Bogen ----------
   F.part("monitor", .03, .08);
-  const FW = 1.6, ZFB = -1.6, NH = .8, NW = .34, CH = .58, SW = DX + .3, SL = CH + DY + .1;
+  // am Handy höheres Kinn für den größeren dreizeiligen Druck (größerer Druck = Kamera weiter weg = Bildschirm ganz im Bild)
+  const FW = 1.6, ZFB = -1.6, NH = .8, NW = .34, CH = N ? .9 : .58, SW = DX + .3, SL = CH + DY + .1;
   const foot = K.slab(R, MX - FW / 2, MX + FW / 2, ZFB + NH, ZFB, .04, .2, .04, { col: METAL, top: METAL, walls: "lrb" });
   const neck = K.panel(foot, [MX - NW / 2, ZFB], [MX + NW / 2, ZFB], [0, 1], .22, .08, Q, { over: .04 });
   K.P(neck, [[0, 0], [NW, 0], [NW, NH], [0, NH]], METAL, [.5, .5, 0, .5]);
@@ -109,7 +110,7 @@ export default function (K) {
   };
   K.onPanel(scr, K.decal(Math.round(SW * PXU), Math.round(SL * PXU), screenDraw, SW, SL, .29, .04), U(0), SL / 2, -1);
   // am Handy dreizeilig: die erste Zeile wäre bei 16 px rund 330 von 390 px breit
-  const T1 = K.print(N ? ["Zwischen dem Bekanntwerden", "einer Lücke in einem", "WordPress-Plugin"] : ["Zwischen dem Bekanntwerden einer Lücke", "in einem WordPress-Plugin"], .12, .38, { align: "center", lh: 1.18 });
+  const T1 = K.print(N ? ["Zwischen dem Bekanntwerden", "einer Lücke in einem", "WordPress-Plugin"] : ["Zwischen dem Bekanntwerden einer Lücke", "in einem WordPress-Plugin"], N ? .21 : .12, .38, { align: "center", lh: 1.18 });
   K.onPanel(scr, T1, U(0), (CH - bz) / 2 - .01, -1);
 
   // ---------- Lücke: das Stück der Zeile färbt sich rot, ein roter Rahmen legt sich herum, dann kippt es nach hinten ----------
@@ -130,11 +131,12 @@ export default function (K) {
   // Zwei Knoten am selben Scharnier: A öffnet die Tür beim Aufbau (−90°, zeigt nach vorn), B schließt sie auf die Lücke (weitere −90°).
   // Ebene −2: nach beiden Drehungen liegt der Flicken 0,0075 vor dem Bildschirm (Ebene des Endzustands = Höhe des Scharniers A).
   F.part("flicken", .05, .05);
-  const tv0 = vOf(ROWS[GR] + RH) - .02, tv1 = vOf(ROWS[GR]) + .02, GW = SW / 2 - (HOLE.x0 - DX / 2 - .1);
+  // höherer Flicken für den dreizeiligen, größeren Druck (größerer Druck = Kamera weiter weg = Bildschirm ganz im Bild)
+  const TM = N ? .145 : .11, tv0 = vOf(ROWS[GR] + RH) - TM, tv1 = vOf(ROWS[GR]) + TM, GW = SW / 2 - (HOLE.x0 - DX / 2 - .1);
   const tA = K.panel(scr, scr.uv(uR, tv0), scr.uv(uR, tv1), [1, 0], .31, .06, -Q, { own: R, lv: -2, over: .04 });
   const tab = K.panel(tA, scr.uv(uR, tv0), scr.uv(uR, tv1), [1, 0], B_PATCH, D_PATCH, -Q, { own: R, lv: -2, nofold: 1, bounce: .045 });
   K.rect(tab, 0, 0, tv1 - tv0, GW, FACE, [0, .5, .5, .5]);
-  const T3 = K.print(["Ich halte Ihre Seite deshalb", "laufend aktuell"], .1, .58, { align: "center", lh: 1.18 });
+  const T3 = K.print(["Ich halte Ihre Seite", "deshalb laufend", "aktuell"], N ? .16 : .14, .58, { align: "center", lh: 1.18 });
   // Mitte des Drucks über der Mitte der Lücke (Abstand von der rechten Bildschirmkante)
   K.onPanel(tab, T3, (tv1 - tv0) / 2, SW / 2 - ((HOLE.x0 + HOLE.x1) / 2 - DX / 2), 1, [0, 1]);
 
@@ -143,8 +145,9 @@ export default function (K) {
   const CX0 = 2.6, CZ0 = .3, { W: TW, D: TD, H: TH } = CLK;
   const ck = K.box(R, CX0, CX0 + TW, CZ0, CZ0 - TD, TH, .24, .1, { col: CASE, fcol: FRONTC });
   K.onPanel(ck.fr, K.decal(Math.round(TW * 600), Math.round(TH * 600), clockFront, TW, TH, .31, .04), TW / 2, TH / 2, -1);
-  const T2 = K.print(["und dem ersten Angriff", "vergehen oft nur Stunden."], .1, .44, { align: "center", lh: 1.18 });
-  K.onPanel(ck.fr, T2, TW / 2, .42, -1);
+  // dreizeilig und größer: an der Lesestelle steht die Kamera dadurch weiter weg, Bildschirm mit Lücke und Uhr passen zusammen ins Bild
+  const T2 = K.print(["und dem ersten", "Angriff vergehen", "oft nur Stunden."], .15, .44, { align: "center", lh: 1.18 });
+  K.onPanel(ck.fr, T2, TW / 2, .4, -1);
   // Zeiger: eigene Gruppe auf der Front (oben = Oberkante), drehen sich um die Mitte des Zifferblatts
   const hands = new THREE.Group(); K.add(hands);
   F.attach(ck.fr, hands, ck.fr.uv(TW / 2, CLK.cv), [0, 1], -1, .006);
@@ -170,7 +173,8 @@ export default function (K) {
   K.rect(cf, 0, 0, CW, L, CALC, .5);
   const cb = K.panel(cf, cf.uv(0, L), cf.uv(CW, L), [0, -1], .28, .07, -2 * AL, ko);
   K.rect(cb, 0, 0, CW, L, CALC, .5);
-  const T4 = K.print(["und sehe regelmäßig nach,", "ob sie sauber läuft."], .1, .7, { align: "center", lh: 1.18 });
+  // größerer Druck: Kamera weiter weg, die umschlagenden Blätter bleiben im Bild
+  const T4 = K.print(["und sehe regelmäßig nach,", "ob sie sauber läuft."], .13, .7, { align: "center", lh: 1.18 });
   K.onPanel(cf, T4, CW / 2, .34, 1, [0, -1]);
   F.part("blaetter", .5, .01);
   const NP = 6, PU0 = .1, PWc = CW - .2, PL = 1.3, PA = PI + 2 * AL - .06, PF0 = .75, PFS = .035, PFD = .05;
@@ -204,10 +208,15 @@ export default function (K) {
   // ---------- Lesestellen ----------
   const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
   const S = {
-    t1: { prints: [T1], px: pxD, pitch: 12, yaw: -6, sy: -.5, sx: .08, b: .47, npitch: 12, nyaw: 0, nsy: -.52, nsx: -.17 },
-    t2: { prints: [T2], px: pxD, pitch: 8, yaw: 2, sy: -.5, sx: .32, b: .56, npitch: 8, nyaw: -6, nsy: -.5 },
-    t3: { prints: [T3], px: pxD, pitch: 6, yaw: 36, sy: -.05, sx: .1, b: .7, npitch: 6, nyaw: 40, nsy: -.1 },
-    t4: { prints: [T4], px: pxD, pitch: 16, yaw: -4, sy: -.45, b: .86, npitch: 16, nyaw: -4, nsy: -.5 }
+    // Bildlagen gerechnet (_pruefung/suche3.mjs): Textträger an jeder Lesestelle ganz im Bild (x 0…W, y 64…H−70) oder ganz draußen,
+    // gemeinsam für 1280×900, 1920×1080, 1366×768, 1440×900, 1536×864, 1280×720 bzw. 390×844, 360×780, 414×896; Kamera-x steigt von T1 bis T4.
+    // Sicherheitsabstand 20 px im Bild bzw. 100 px draußen (Handy 5–10 / 30–60), damit es auch kurz vor und nach der Lesestelle gilt
+    t1: { prints: [T1], px: pxD, pitch: 6, yaw: 4, sy: -.45, sx: .2, b: .47, npitch: 10, nyaw: 10, nsy: -.2, nsx: 0 },
+    // Uhr-Lesestelle: Bildschirm mit offener Lücke, Flicken und Uhr zusammen im Bild (Text rechts), am Handy nur die Uhr
+    t2: { prints: [T2], px: pxD, pitch: 8, yaw: -2, sy: -.4, sx: .7, b: .56, npitch: 8, nyaw: -6, nsy: -.2, nsx: 0 },
+    t3: { prints: [T3], px: pxD, pitch: 6, yaw: 18, sy: 0, sx: .45, b: .7, npitch: 12, nyaw: 42, nsy: -.15, nsx: .25 },
+    // Kalender: Abstand mit Luft nach oben für die umschlagenden Blätter, Uhr ganz draußen
+    t4: { prints: [T4], px: pxD, pitch: 16, yaw: -12, sy: -.45, sx: -.65, b: .86, npitch: 16, nyaw: -4, nsy: -.2, nsx: 0 }
   };
   return {
     fov: 32, fovN: 44,

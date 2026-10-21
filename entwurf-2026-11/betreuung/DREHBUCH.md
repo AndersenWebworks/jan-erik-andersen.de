@@ -12,9 +12,9 @@ Aufgeteilt in vier Satzteile an den Satzgrenzen bzw. an „und“, kein Wort ver
 | Teil | Wortlaut | Bauteil |
 |---|---|---|
 | Ü | Betreuung und Absicherung | Lettern, die aus dem Bogen aufstehen (vorn, vor dem Bildschirm) |
-| T1 | Zwischen dem Bekanntwerden einer Lücke / in einem WordPress-Plugin | Kinn des Bildschirms, direkt unter der Plugin-Liste |
-| T2 | und dem ersten Angriff / vergehen oft nur Stunden. | Front der Tischuhr, unter dem Zifferblatt |
-| T3 | Ich halte Ihre Seite deshalb / laufend aktuell | auf dem Flicken, der sich über die Lücke legt |
+| T1 | Zwischen dem Bekanntwerden einer Lücke / in einem WordPress-Plugin (Handy dreizeilig) | Kinn des Bildschirms, direkt unter der Plugin-Liste |
+| T2 | und dem ersten / Angriff vergehen / oft nur Stunden. | Front der Tischuhr, unter dem Zifferblatt |
+| T3 | Ich halte Ihre Seite / deshalb laufend / aktuell | auf dem Flicken, der sich über die Lücke legt |
 | T4 | und sehe regelmäßig nach, / ob sie sauber läuft. | Fuß des Aufstellkalenders, unter den Blättern |
 
 ## Kernaussage
@@ -54,20 +54,22 @@ Rot nur an der Lücke (Rahmen und gekipptes Stück). Haken, Zeiger, Rahmen Tinte
 | Bastellinien | 0,03–0,18 | 0,1–0,35 | Raster, Schnitt- und Falzlinien als Welle von links: Bildschirm, Flicken, Uhr, Kalender | Überblick 36°, 18,6 | 40°, 17, Bildschirm bis Uhr |
 | Gerüst | 0,10–0,24 | 0,2–0,45 | Haarlinien des Endzustands im Raum (ohne Lücke, Flicken, Blätter) | | |
 | Hochklappen | 0,20–0,38 | 0,36–0,86 | Fuß 0,20, Hals 0,22–0,30, Bildschirm kippt 0,30–0,34, Uhr 0,24–0,34, Kalender 0,28–0,35, Flicken öffnet als Tür 0,31–0,37 | sinkt auf 21°, 19 | 22°, 15,5 |
-| Lesestelle T1 | 0,47 | 1,49 | roter Rahmen und rotes Stück ab 1,19 BH, Stück kippt 0,465–0,52 (1,4–1,9 BH) | 12°, Gier −6°, 9,5 | 12°, 7,8 |
-| Lesestelle T2 | 0,56 | 2,23 | Zeiger laufen 0,47–0,64 (1,5–2,7 BH), drei Runden des Minutenzeigers | 8°, Gier 2°, 7,9; Lücke und Tür links im Bild | 8°, −6°, 6,5; nur Uhr |
+| Lesestelle T1 | 0,47 | 1,49 | roter Rahmen und rotes Stück ab 1,19 BH, Stück kippt 0,465–0,52 (1,4–1,9 BH) | 6°, Gier 4°, 9,5 | 10°, 10°, 13,7 |
+| Lesestelle T2 | 0,56 | 2,23 | Zeiger laufen 0,47–0,64 (1,5–2,7 BH), drei Runden des Minutenzeigers ab 10 Uhr | 8°, Gier −2°, 11,9; Bildschirm mit offener Lücke, Flicken und Uhr ganz im Bild | 8°, −6°, 9,8; nur Uhr, Bildschirm ganz draußen |
 | Flicken | 0,60–0,66 | 2,51–2,73 | Tür schwenkt zu, legt sich über die Lücke, Rückprall 4,5 %, roter Rahmen verblasst | fährt nach rechts | |
-| Lesestelle T3 | 0,70 | 2,98 | T3 auf dem Flicken | 6°, Gier 36° (von rechts), 7,9 | 6°, 40°, 6,5 |
-| Lesestelle T4 | 0,86 | 3,77 | Blätter schlagen um 0,75–0,94 (3,27–4,18 BH), je Blatt 0,05, Abstand 0,035, Haken je neuem Blatt | 16°, Gier −4°, 7,9 | 16°, 6,5 |
+| Lesestelle T3 | 0,70 | 2,98 | T3 auf dem Flicken | 6°, Gier 18° (von rechts), 11,1 | 12°, 42°, 10,4 |
+| Lesestelle T4 | 0,86 | 3,77 | Blätter schlagen um 0,75–0,94 (3,27–4,18 BH), je Blatt 0,05, Abstand 0,035, Haken je neuem Blatt | 16°, Gier −12°, 10,3, Uhr ganz draußen | 16°, −4°, 8,5 |
 | Ende | 1 | 4,4 | alles steht, letztes Blatt mit Haken | Überblick 22°, 19 | Uhr und Kalender, 24°, 14 |
 
-Kamera-x an den Lesestellen Desktop −3,05 / 2,63 / 3,25 / 6,89, Handy −1,55 / 2,74 / 3,05 / 6,99: zwischen T1 und T4 läuft die Kamera nie nach links (in 0,002-Schritten gerechnet).
+Kamera-x an den Lesestellen (1280 × 900) −1,92 / −0,40 / 0,36 / 8,09, Handy 0,51 / 2,40 / 5,28 / 6,84: zwischen T1 und T4 läuft die Kamera nie nach links (in 0,002-Schritten gerechnet, alle Größen).
+
+**Regel Textträger (Korrektur 22.10.2026 nach Clautz' Sichtprüfung):** Textträger (Bildschirm, Uhr, Flicken, Kalender samt Blättern) stehen an jeder Lesestelle ganz im Bild (x 0 … W, y 64 … H − 70) oder ganz draußen. Gesucht über Gier, Neigung und Bildlage (`_pruefung/suche3.mjs`, `kombi.mjs`) gemeinsam für 1280 × 900, 1920 × 1080, 1366 × 768, 1440 × 900, 1536 × 864, 1280 × 720 bzw. 390 × 844, 360 × 780, 414 × 896, mit Sicherheitsabstand 20 px im Bild und 100 px draußen (Handy 10 / 30–60), am Kalender über alle Blattstellungen b 0,82–0,90. Damit mehr Welt ins Bild passt, sind T2 (0,15, dreizeilig), T3 (0,14, dreizeilig, Flicken höher) und T4 (0,13) größer gedruckt, am Handy auch T1 (0,21, Kinn 0,9) und T3 (0,16); die Schrift bleibt bei 19–21 px bzw. 16 px, die Kamera steht dafür weiter weg. Bahn in 0,005-Schritten (`traeger.mjs`): in den langsamen Zonen (Bahngeschwindigkeit unter 60 %) nirgends angeschnitten; nur am Rand der Zonen (61–70 %) streifen beim Ein- und Ausfahren einzelne Proben den Rand (1920 × 1080: Uhr 5 Proben; Handy: Kalender 1–2 Proben beim Anfahren, 360 × 780 Bildschirm 1 Probe mit 1 px).
 Tempo: Lesestellen über die Zeitverzerrung des Kerns auf rund ein Drittel verlangsamt, nie Stillstand. Aufbau fertig nach 0,86 Bildschirmhöhen.
 
 ## Rechnung (Prüfskripte in `_pruefung/`, nicht im Repo)
 
-- Lesestellen (`pruef.mjs`): Schrift 19,8 px bei 1280 × 900, 20,5 px bei 1920 × 1080, 19,3 px bei 1366 × 768, 16 px am Handy. Kein Text verdeckt (9 Strahlen je Druck), Leserichtung überall +x, Normale zur Kamera 0,77–1,0 (T3 schräg von rechts).
-- Bildlage: T1 Desktop x 485–892, darüber die Lücke (y 391–439); T2 Uhr x 686–1014, Lücke und Tür links; T4 Kalender x 428–852. Handy: T1 dreizeilig x 43–281, Lücke x 128–383 ganz im Bild.
+- Lesestellen (`pruef.mjs`): Schrift 19,8 px bei 1280 × 900, 20,5 px bei 1920 × 1080, 19,3 px bei 1366 × 768, 16 px am Handy. Kein Text verdeckt (9 Strahlen je Druck), Leserichtung überall +x, Normale zur Kamera 0,77–1,0.
+- Durchdringung (`schnitt.mjs`, Kante durch Fläche über b): keine zwischen Bildschirm, Flicken, Uhr und Kalender; nur die bekannte Stelle der Blätter am Kalenderrücken (unten).
 - Bogen (`bogen.mjs`): keine Überlappung von Teilen in der Ruhelage, keine Schnitt- oder Falzlinie durch fremde Teile, kein Teil taucht beim Klappen unter den Bogen, Hüllquader von Flicken, Uhr, Kalender und Bildschirm schneiden sich nie. Flicken liegt am Ende 0,0075 vor dem Bildschirm und nie dahinter.
 - Blätter (`blaetter.mjs`): landen außen auf der Rückwand, in richtiger Reihenfolge; die ersten rund 0,15 am Rücken liegen bis 0,009 in der Rückwand (nur von hinten sichtbar).
 - Laufzeit (`rauch.mjs`): echter `kern.js` mit der Szene in Node mit nachgebildetem DOM und Renderer, 17 Zustände ohne Fehler und ohne NaN.
