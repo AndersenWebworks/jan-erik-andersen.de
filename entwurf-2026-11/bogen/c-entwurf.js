@@ -222,6 +222,14 @@ export default function (K) {
   K.cable([V(0, 2.62, ZFB - .05), V(.15, ty, ZFB - .08), V(X1 * .5, ty, ZFB - .02), V(X1 * .82, ty, -1.25), V(X1 - .14, ty, zd - .12), V(X1 - .01, ty - .004, zd - .02),
     V(xe, HT - .1, zd), V(xe + .02, 1.4, zd + .02), V(xe + .05, .3, zd + .03), V(xe + .22, .025, zd), V(xe + gap * .45, .025, zd - .12), V(PX0 - .3, .03, -.78), V(PX0 - .07, .12, -.8), V(PX0, .2, -.8)], .024, "#8e8981", .44, .05);
 
+  // ---------- Konstruktionsphase (Drehbuch „Konstruktionsphase“ in docs/FASSUNG-2026-11.md) ----------
+  // Gerüst: die Kanten von Tisch, Bildschirm und Rechner im Endzustand (aus dem Faltplan gerechnet) zeichnen sich über b .09–.25
+  // Strich für Strich als Welle von links nach rechts im Raum, mit Überständen über die Ecken und zwei bis drei versetzten Strichen;
+  // die Teile klappen hinein, beim Einrasten zieht sich der Überstand zurück und die Linie blendet aus.
+  F.geruest({ tags: ["tisch", "blatt", "rechner"], t0: .09, t1: .25, du: .03, a: .5 });
+  // Bleistiftspur: Eckmarken und zarte Konstruktionskanten auf den Flächen, bleibt stehen; auf Flächen mit Text nur Eckmarken
+  F.spur({ tags: ["tisch", "blatt", "rechner"], quiet: [apron, scr, pc.rt, pc.top, pc.fr], a: .3 });
+
   // ---------- Anriss des nächsten Abschnitts am Ende der Linie ----------
   F.part("gerwing", .9, .06);
   const ge = N ? .26 : .17, g1 = K.print(["Gerwing · WooCommerce · seit 2023"], ge, .93, { track: .03, col: "#66666a" });
@@ -266,6 +274,9 @@ export default function (K) {
     // Sichtfeld Breitbild 32° statt 36° (Kamera rund 12 % weiter weg, Bogen weniger trapezförmig verzerrt); hochkant 44° wie bisher
     fov: 32, fovN: 44,
     track: 750,
+    // Raster wie auf einer Schneidematte, auf den Bogen gedruckt: Teilung 0,5, jede fünfte Linie kräftiger; zieht als Welle von links
+    // nach rechts mit den Bastellinien ein (b ab .004, voll bis rund .085), geht auf den Teilen weg, sobald sie hochklappen, verblasst b .40–.46
+    grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .40 },
     thread: { pts: [LED, V(LED.x + .06, .8, LED.z), V(LED.x + .2, .004, PZ0 + .25), V(PX0 + 2.2, .004, .6), V(PX0 + 3.2, .004, -.2), V(PX0 + 3.25, .004, -2.6), V(PX0 + 2.2, .004, -5.0), V(5.0, .004, -9.2), V(-2.6, .004, -12.6), V(-4.0, .004, -13.6)], t0: .88, t1: 1 },
     stops: Object.values(S),
     keys: [

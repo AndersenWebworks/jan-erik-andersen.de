@@ -7,7 +7,7 @@
 // Anker: #v=a|c wählt die Variante, #p=0…1 steuert einen Zustand an, #…&w=390&h=844 zeigt den Handy-Ausschnitt (Prüfhilfe).
 import * as THREE from "three";
 import { SCHRIFTEN } from "./fonts/schriften.js";
-import { Model, kit, paperMaterial, edgeMaterial, rissMaterial, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
+import { Model, kit, paperMaterial, edgeMaterial, rissMaterial, geruestMaterial, gridOn, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
 
 const win = (b, t0, d) => clamp((b - t0) / d, 0, 1);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -112,12 +112,12 @@ export function start(renderer, VARIANTS) {
   }
 
   // ---------- Variante laden ----------
-  let F = null, K = null, M = null, meshes = [], anims = [], cur = null, thread = null;
+  let F = null, K = null, M = null, meshes = [], anims = [], cur = null, thread = null, sheets = [], bMats = [];
   const rissMat = rissMaterial();
   function clear() {
     for (const o of meshes) { scene.remove(o); if (o.geometry) o.geometry.dispose(); if (o.material && o.material !== rissMat) { if (o.material.map) o.material.map.dispose(); o.material.dispose(); } o.traverse && o.traverse(c => { if (c !== o && c.geometry) c.geometry.dispose(); }); }
     for (const p of prints) { scene.remove(p.mesh); p.mesh.geometry.dispose(); p.mat.map.dispose(); p.mat.dispose(); }
-    meshes = []; prints.length = 0; anims = []; thread = null;
+    meshes = []; prints.length = 0; anims = []; thread = null; sheets = []; bMats = [];
   }
   const add = o => { scene.add(o); meshes.push(o); return o; };
 
@@ -188,7 +188,7 @@ export function start(renderer, VARIANTS) {
         const g = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, .03, z1 - z0), paperMaterial(col));
         g.position.set((x0 + x1) / 2, -.0152, (z0 + z1) / 2);
         const e = new THREE.LineSegments(new THREE.EdgesGeometry(g.geometry), new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: .32, depthWrite: false }));
-        g.add(e); add(g);
+        g.add(e); add(g); sheets.push(g);
         // später Bogen (Anriss des nächsten Abschnitts): erscheint erst, wenn die Bahn dorthin führt
         if (from >= 0) anims.push(b => { g.visible = b >= from; });
         return g;
@@ -201,6 +201,9 @@ export function start(renderer, VARIANTS) {
     const riss = add(new THREE.LineSegments(M.geoR, rissMat));
     for (const o of [mesh, lines, riss]) o.frustumCulled = false;
     mesh.renderOrder = 0; lines.renderOrder = 1; riss.renderOrder = 1;
+    // Konstruktionsphase (nur Varianten mit def.grid bzw. F.geruest): Raster auf dem Bogen und den liegenden Teilen, Gerüst im Raum
+    if (def.grid) { gridOn(mesh.material, true, def.grid); bMats.push(mesh.material); for (const g of sheets) { gridOn(g.material, false, def.grid); bMats.push(g.material); } }
+    if (M.geoG) { const gm = geruestMaterial(), gl = add(new THREE.LineSegments(M.geoG, gm)); gl.frustumCulled = false; gl.renderOrder = 1; bMats.push(gm); }
     if (def.thread) buildThread(def.thread);
     prep(def);
     cur = def;
@@ -388,6 +391,7 @@ export function start(renderer, VARIANTS) {
     const b = state.b;
     M.update(b, tl);
     rissMat.uniforms.uB.value = b;
+    for (const m of bMats) { if (m.uniforms.uGB) m.uniforms.uGB.value = b; else m.uniforms.uB.value = b; }
     for (const a of anims) a(b, time);
     for (const pr of prints) {
       if (pr.on < 0 && pr.off === undefined && pr.tOff === undefined) continue;

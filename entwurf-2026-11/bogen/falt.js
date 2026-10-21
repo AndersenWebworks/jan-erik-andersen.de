@@ -41,6 +41,12 @@ const PAPER_VERT = `
   attribute vec3 aCol;
   #endif
   varying vec3 vCol; varying vec3 vW; varying float vDepth;
+  #ifdef GRID
+  varying vec3 vR; varying float vG;
+  #ifdef GRIDA
+  attribute vec3 aRest; attribute float aG;
+  #endif
+  #endif
   void main() {
     #ifdef UCOL
     vCol = uCol;
@@ -49,6 +55,13 @@ const PAPER_VERT = `
     #endif
     vec4 wp = modelMatrix * vec4(position, 1.0);
     vW = wp.xyz;
+    #ifdef GRID
+    #ifdef GRIDA
+    vR = aRest; vG = aG;
+    #else
+    vR = wp.xyz; vG = 1.0;
+    #endif
+    #endif
     vec4 mv = viewMatrix * wp;
     vDepth = -mv.z;
     gl_Position = projectionMatrix * mv;
@@ -57,6 +70,18 @@ const PAPER_VERT = `
 const PAPER_FRAG = `
   uniform vec3 uL; uniform vec2 uFar; uniform vec2 uNear;
   varying vec3 vCol; varying vec3 vW; varying float vDepth;
+  #ifdef GRID
+  // Schneidematten-Raster, auf den Bogen gedruckt (Lage in der Ruhelage, wandert also mit dem Teil), nach b ein- und ausgeblendet.
+  // uGP: Teilung, jede n-te kräftiger, Deckkraft fein, Deckkraft kräftig. uGT: Beginn, Welle je Einheit x, Einblenddauer, Beginn Ausblenden
+  uniform float uGB; uniform vec4 uGP; uniform vec4 uGT; uniform vec3 uInk;
+  varying vec3 vR; varying float vG;
+  float gridLine(vec2 q) {
+    vec2 fw = max(fwidth(q), vec2(1e-4));
+    vec2 d = abs(fract(q - 0.5) - 0.5) / fw;
+    // dichter als rund 4 px: ausblenden statt Moiré
+    return (1.0 - min(min(d.x, d.y), 1.0)) * (1.0 - smoothstep(.22, .5, max(fw.x, fw.y)));
+  }
+  #endif
   void main() {
     float ign = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
     if (smoothstep(uNear.x, uNear.y, vDepth) < ign) discard;
@@ -66,6 +91,15 @@ const PAPER_FRAG = `
     float sh = 0.86 + 0.14 * max(dif, 0.0) - 0.11 * max(-dif, 0.0);
     float ao = mix(1.0, mix(0.9, 1.0, smoothstep(0.0, 0.8, vW.y)), 1.0 - abs(n.y));
     vec3 c = vCol * sh * ao;
+    #ifdef GRID
+    float gin = clamp((uGB - uGT.x - (vR.x + 12.0) * uGT.y) / uGT.z, 0.0, 1.0);
+    float gk = gin * gin * (3.0 - 2.0 * gin) * (1.0 - smoothstep(uGT.w, uGT.w + .06, uGB)) * vG;
+    if (gk > 0.001) {
+      vec2 q = vR.xz / uGP.x;
+      float ga = max(gridLine(q) * uGP.z, gridLine(q / uGP.y) * uGP.w) * gk;
+      c = mix(c, uInk * sh, ga);
+    }
+    #endif
     float k = 1.0 - smoothstep(uFar.x, uFar.y, vDepth);
     gl_FragColor = vec4(mix(vec3(1.0), c, k), 1.0);
     #include <colorspace_fragment>
@@ -108,12 +142,49 @@ const RISS_FRAG = `
   }`;
 export function paperMaterial(col) {
   const m = new THREE.ShaderMaterial({
-    uniforms: { uL: { value: LIGHT }, uFar: { value: FAR }, uNear: { value: NEAR }, uCol: { value: col ? new THREE.Color(col) : new THREE.Color() } },
+    uniforms: { uL: { value: LIGHT }, uFar: { value: FAR }, uNear: { value: NEAR }, uCol: { value: col ? new THREE.Color(col) : new THREE.Color() },
+      uGB: { value: 0 }, uGP: { value: new THREE.Vector4() }, uGT: { value: new THREE.Vector4() }, uInk: { value: new THREE.Vector3(...INK) } },
     vertexShader: PAPER_VERT, fragmentShader: PAPER_FRAG, side: THREE.DoubleSide,
     polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 2
   });
   if (col) m.defines = { UCOL: 1 };
   return m;
+}
+// Raster auf dem Bogen einschalten (nur Varianten, die es wünschen; ohne Aufruf bleibt der Shader wie bisher).
+// attr: Fläche hat aRest/aG (Faltmodell), sonst Weltlage (fester Bogen). g: { step, every, a, aM, t0, wave, d, out }
+export function gridOn(mat, attr, g) {
+  mat.defines = { ...(mat.defines || {}), GRID: 1, ...(attr ? { GRIDA: 1 } : {}) };
+  mat.uniforms.uGP.value.set(g.step, g.every, g.a, g.aM);
+  mat.uniforms.uGT.value.set(g.t0, g.wave, g.d, g.out);
+  mat.needsUpdate = true;
+  return mat;
+}
+// Gerüst: Haarlinien des Endzustands im Raum. aP = (Start in b, Dauer, Lauf 0…1, Ausblenden ab b), aO: Überstand (Richtung × Länge)
+const GER_VERT = `
+  uniform float uB;
+  attribute vec4 aCol; attribute vec4 aP; attribute vec3 aO;
+  varying vec4 vC; varying vec4 vP; varying float vF;
+  void main() {
+    vC = aCol; vP = aP;
+    // der Überstand zieht sich zurück, während das Teil einrastet; danach blendet die Linie aus
+    float r = 1.0 - smoothstep(aP.w - .04, aP.w - .005, uB);
+    vF = 1.0 - smoothstep(aP.w - .01, aP.w + .02, uB);
+    gl_Position = projectionMatrix * viewMatrix * vec4(position + aO * r, 1.0);
+  }`;
+const GER_FRAG = `
+  uniform float uB;
+  varying vec4 vC; varying vec4 vP; varying float vF;
+  void main() {
+    float g = clamp((uB - vP.x) / vP.y, 0.0, 1.0);
+    g = g * (2.0 - g);
+    if (g <= 0.0 || vP.z > g + 0.0001) discard;
+    float a = vC.a * vF * (1.0 + 0.6 * (1.0 - step(0.999, g)));
+    if (a < 0.004) discard;
+    gl_FragColor = vec4(vC.rgb, min(a, 1.0));
+    #include <colorspace_fragment>
+  }`;
+export function geruestMaterial() {
+  return new THREE.ShaderMaterial({ uniforms: { uB: { value: 0 } }, vertexShader: GER_VERT, fragmentShader: GER_FRAG, transparent: true, depthWrite: false });
 }
 export function edgeMaterial() {
   return new THREE.ShaderMaterial({
@@ -130,7 +201,8 @@ export function Model() {
   const nodes = [];
   const tv = [], tc = [], tn = [];          // Flächen: Ruhelage, Farbe, Knoten
   const lv = [], lc = [], ln = [];          // Haarkanten der Teile
-  const hinges = [], cuts = [], holes = [], sketches = [];
+  const hinges = [], cuts = [], holes = [], sketches = [], polys = [];
+  let gerOpt = null, spurOpt = null;
   const att = [];
   const parts = new Map(); let tag = null;
   const mk = (par, P, A, ang, t0, d, lvl, opt = {}) => {
@@ -141,6 +213,47 @@ export function Model() {
     nodes.push(n); return n;
   };
   const root = mk(null, null, null, 0, 0, 1, 0, { tag: null });
+  // Bleistiftspur: auf jeder Fläche der Teile mit o.tags Eckmarken knapp innerhalb der Kanten (zwei Striche, leicht versetzt,
+  // über die Ecke gekreuzt), an langen Kanten großer Flächen ein zarter durchgehender Strich. Beidseitig (dy ±), zeichnet sich,
+  // während das Teil einrastet, und bleibt stehen. o.quiet: Knoten mit Text, dort nur Eckmarken. Nichts ragt über die Fläche hinaus.
+  function spurOf(o) {
+    const quiet = new Set(o.quiet || []), a1 = o.a || .3, dy = o.dy || .003;
+    for (const pg of polys) {
+      const nd = pg.nd;
+      if (nd.clock === "t" || !o.tags.includes(nd.tag)) continue;
+      // doppelte Punkte und Ecken auf einer Geraden entfernen (Tischplatte, Bildschirm)
+      let P = pg.pts.filter((p, k, A) => { const q = A[(k + 1) % A.length]; return Math.hypot(q[0] - p[0], q[1] - p[1]) > 1e-5; });
+      P = P.filter((p, k, A) => {
+        const a = A[(k + A.length - 1) % A.length], c = A[(k + 1) % A.length];
+        const ux = p[0] - a[0], uz = p[1] - a[1], vx = c[0] - p[0], vz = c[1] - p[1];
+        return Math.abs(ux * vz - uz * vx) / (Math.hypot(ux, uz) * Math.hypot(vx, vz)) > 1e-3;
+      });
+      if (P.length < 3) continue;
+      const cx = P.reduce((s, p) => s + p[0], 0) / P.length, cz = P.reduce((s, p) => s + p[1], 0) / P.length;
+      const t0 = nd.t0 + nd.d * .35, segs1 = [], segs2 = [], segs3 = [];
+      P.forEach((p, k) => {
+        const q = P[(k + 1) % P.length], L = Math.hypot(q[0] - p[0], q[1] - p[1]);
+        if (L < .25) return;
+        const ux = (q[0] - p[0]) / L, uz = (q[1] - p[1]) / L;
+        let nx = -uz, nz = ux; if ((cx - p[0]) * nx + (cz - p[1]) * nz < 0) { nx = -nx; nz = -nz; }
+        const Wd = Math.max(...P.map(v => (v[0] - p[0]) * nx + (v[1] - p[1]) * nz));
+        if (Wd < .12) return;
+        const s = Math.min(.045, Wd * .22), arm = Math.min(.4, .3 * L);
+        const at = (u, v) => [p[0] + ux * u + nx * v, p[1] + uz * u + nz * v];
+        if (L < 2 * arm + .1) segs1.push([at(.4 * s, s), at(L - .4 * s, s)]);
+        else { segs1.push([at(.4 * s, s), at(arm, s)]); segs1.push([at(L - arm, s), at(L - .4 * s, s)]); }
+        // zweiter Strich: kleiner gleichmäßiger Versatz, leicht schräg, kürzer
+        segs2.push([at(.6 * s, s + .012), at(arm * .78, s + .02)]);
+        segs2.push([at(L - arm * .78, s + .02), at(L - .6 * s, s + .012)]);
+        if (!quiet.has(nd) && Wd > .6 && L > 1) segs3.push([at(arm * .9, s + .006), at(L - arm * .9, s + .006)]);
+      });
+      for (const side of [1, -1]) {
+        if (segs1.length) sketches.push({ nd, segs: segs1, t0, d: .035, a: a1, fade: null, dy: side * dy, dash: false, col: INK });
+        if (segs2.length) sketches.push({ nd, segs: segs2, t0: t0 + .006, d: .035, a: a1 * .6, fade: null, dy: side * dy * 1.1, dash: false, col: INK });
+        if (segs3.length) sketches.push({ nd, segs: segs3, t0: t0 + .012, d: .035, a: a1 * .4, fade: null, dy: side * dy * 1.2, dash: false, col: INK });
+      }
+    }
+  }
   const F = {
     root, nodes,
     // Teil: alle folgenden Knoten gehören dazu; ihre Bastellinien zeichnen sich im Fenster [t0, t0 + d] von b
@@ -169,6 +282,7 @@ export function Model() {
         if (nd !== root && !dy && !opt.nocut) cuts.push({ p: [p[0], p[1]], q: [q[0], q[1]], nd });
       }
       if (nd !== root && !dy && !opt.nocut) holes.push({ nd, pts: pts.map(p => [p[0], p[1]]) });
+      if (nd !== root && !dy) polys.push({ nd, pts: pts.map(p => [p[0], p[1]]) });
     },
     line(nd, a, b, w = .35, col = INK, dy = .0008) {
       const y = nd.lvl * EPS + dy;
@@ -176,6 +290,10 @@ export function Model() {
     },
     // Gezeichnete Linien auf der Fläche eines Knotens (z. B. Skizze): segs [[a, b], …] in x/z der Ruhelage,
     // zeichnen sich im Fenster [t0, t0 + d]; fade(b) liefert die Deckkraft (1 = voll)
+    // Konstruktionsphase (nur wer es aufruft): Gerüst des Endzustands im Raum aus den Haarkanten der Teile mit o.tags,
+    // gezeichnet im Fenster [o.t0, o.t1] von b (geruestOf); Bleistiftspur auf den Flächen der Teile (spurOf)
+    geruest(o) { gerOpt = o; },
+    spur(o) { spurOpt = o; },
     sketch(nd, segs, t0, d, opt = {}) { sketches.push({ nd, segs, t0, d, a: opt.a || .55, fade: opt.fade || null, dy: opt.dy !== undefined ? opt.dy : .0009, dash: !!opt.dash, col: opt.col || INK }); },
     // Objekt an einen Knoten hängen. p: Punkt (x, z) in der Ruhelage, q: Richtung "oben" des Objekts in der Ruhelage,
     // side +1: Oberseite der Ruhelage, -1: Unterseite.
@@ -193,6 +311,7 @@ export function Model() {
         if (!n.par || n.own) continue;
         let o = n.par; while (o.par && !o.lift) o = o.par; n.own = o;
       }
+      if (spurOpt) spurOf(spurOpt);
       // ---- Bastellinien ----
       const near = (a, b) => Math.abs(a[0] - b[0]) < 1e-4 && Math.abs(a[1] - b[1]) < 1e-4;
       const onSeg = (p, h) => {
@@ -252,6 +371,10 @@ export function Model() {
       const geoT = new THREE.BufferGeometry(), geoL = new THREE.BufferGeometry(), geoR = new THREE.BufferGeometry();
       geoT.setAttribute("position", new THREE.BufferAttribute(posT, 3).setUsage(THREE.DynamicDrawUsage));
       geoT.setAttribute("aCol", new THREE.BufferAttribute(colT, 3).setUsage(THREE.DynamicDrawUsage));
+      // Raster: Lage in der Ruhelage und Stärke je Ecke (1 im Bogen, geht weg, wenn das Teil den Bogen verlässt)
+      const gT = new Float32Array(NTP).fill(1);
+      geoT.setAttribute("aRest", new THREE.BufferAttribute(restT, 3));
+      geoT.setAttribute("aG", new THREE.BufferAttribute(gT, 1).setUsage(THREE.DynamicDrawUsage));
       geoL.setAttribute("position", new THREE.BufferAttribute(posL, 3).setUsage(THREE.DynamicDrawUsage));
       geoL.setAttribute("aCol", new THREE.BufferAttribute(colL, 4).setUsage(THREE.DynamicDrawUsage));
       geoR.setAttribute("position", new THREE.BufferAttribute(posR, 3).setUsage(THREE.DynamicDrawUsage));
@@ -286,13 +409,14 @@ export function Model() {
           }
         }
       }
+      const geoG = gerOpt ? geruestOf(gerOpt) : null;
       let lastB = NaN, lastT = NaN;
       function update(b, t) {
         if (b === lastB && t === lastT) return false; lastB = b; lastT = t;
         solve(b, t);
         xf(restT, nT, posT); xf(restL, nL, posL); xf(restR, nR, posR);
-        for (let j = 0; j < NTP; j++) { const hn = holeOf.get(j), nd = nodes[nT[j]]; if (nd === root && !hn) continue; const k = hn ? hn.mv : nd.mv; for (let c = 0; c < 3; c++) colT[j * 3 + c] = PAPER[c] + (baseC[j * 3 + c] - PAPER[c]) * k; }
-        geoT.attributes.aCol.needsUpdate = true;
+        for (let j = 0; j < NTP; j++) { const hn = holeOf.get(j), nd = nodes[nT[j]]; if (nd === root && !hn) continue; const k = hn ? hn.mv : nd.mv; for (let c = 0; c < 3; c++) colT[j * 3 + c] = PAPER[c] + (baseC[j * 3 + c] - PAPER[c]) * k; if (!hn) gT[j] = 1 - k; }
+        geoT.attributes.aCol.needsUpdate = true; geoT.attributes.aG.needsUpdate = true;
         // Haarkanten erst, wenn das Teil den Bogen verlässt
         for (let j = 0; j < nL.length; j++) { const nd = nodes[nL[j]]; colL[j * 4 + 3] = baseL[j * 4 + 3] * (nd === root ? 1 : nd.mv); }
         // Bastellinien: Schnitt bleibt als Umriss des Abdrucks (heller), Falz verschwindet, Skizze nach ihrer Blende
@@ -314,7 +438,82 @@ export function Model() {
         for (let j = 0; j < nT.length; j++) if (nodes[nT[j]].tag === name) bx.expandByPoint(v.set(posT[j * 3], posT[j * 3 + 1], posT[j * 3 + 2]));
         return bx;
       }
-      return { geoT, geoL, geoR, update, boxOf, att, nodeMat, dbg: { holes, segs, nodes } };
+      return { geoT, geoL, geoR, geoG, update, boxOf, att, nodeMat, dbg: { holes, segs, nodes, polys } };
+
+      // ---- Gerüst: Haarkanten des Endzustands, auf einer Geraden zusammengefasst, je Kante zwei bis drei Striche mit Überstand ----
+      function geruestOf(o) {
+        solve(1, 1e9);
+        const fin = new Float32Array(restL.length); xf(restL, nL, fin);
+        solve(0, 0);
+        // b, bei dem ein Knoten mit allen Eltern steht
+        const done = nd => nd.par ? Math.max(nd.clock === "t" ? 0 : nd.t0 + nd.d, done(nd.par)) : 0;
+        const raw = [];
+        for (let j = 0; j < nL.length; j += 2) {
+          const nd = nodes[nL[j]];
+          if (nd === root || nd.clock === "t" || !o.tags.includes(nd.tag) || !(baseL[j * 4 + 3] > 0)) continue;
+          const A = new THREE.Vector3(fin[j * 3], fin[j * 3 + 1], fin[j * 3 + 2]), B = new THREE.Vector3(fin[j * 3 + 3], fin[j * 3 + 4], fin[j * 3 + 5]);
+          if (A.distanceTo(B) < .03) continue;
+          raw.push({ A, B, f: done(nd) });
+        }
+        // Kanten auf einer Geraden, die sich berühren (Scharnier = Kante der Elternfläche), werden eine Linie
+        const groups = [];
+        for (const s of raw) {
+          const d = s.B.clone().sub(s.A).normalize();
+          const ax = Math.abs(d.x), ay = Math.abs(d.y), az = Math.abs(d.z), m = ax >= ay && ax >= az ? d.x : ay >= az ? d.y : d.z;
+          if (m < 0) d.negate();
+          let g = groups.find(g => g.d.dot(d) > .9995 && s.A.clone().sub(g.o).cross(g.d).length() < .004);
+          if (!g) { g = { d, o: s.A.clone(), iv: [] }; groups.push(g); }
+          const t0 = s.A.clone().sub(g.o).dot(g.d), t1 = s.B.clone().sub(g.o).dot(g.d);
+          g.iv.push([Math.min(t0, t1), Math.max(t0, t1), s.f]);
+        }
+        const E = [];
+        for (const g of groups) {
+          g.iv.sort((a, b) => a[0] - b[0]);
+          let cur = null;
+          const put = c => { if (c[1] - c[0] > .05) E.push({ A: g.o.clone().addScaledVector(g.d, c[0]), B: g.o.clone().addScaledVector(g.d, c[1]), d: g.d, L: c[1] - c[0], f: c[2] }); };
+          for (const iv of g.iv) {
+            if (cur && iv[0] <= cur[1] + .02) { cur[1] = Math.max(cur[1], iv[1]); cur[2] = Math.max(cur[2], iv[2]); }
+            else { if (cur) put(cur); cur = iv.slice(); }
+          }
+          if (cur) put(cur);
+        }
+        // Welle von links nach rechts, unten etwas früher
+        const key = e => (e.A.x + e.B.x) / 2 + .15 * (e.A.y + e.B.y) / 2;
+        E.sort((a, b) => key(a) - key(b));
+        const rnd = (i, k) => { const v = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return v - Math.floor(v); };
+        const pos = [], col = [], aP = [], aO = [], n = E.length, du = o.du || .03, ink = o.col || INK, a0 = o.a || .5;
+        const UPV = new THREE.Vector3(0, 1, 0), XV = new THREE.Vector3(1, 0, 0);
+        const stroke = (A, B, d, ovA, ovB, st, d2, a, f) => {
+          pos.push(A.x, A.y, A.z, B.x, B.y, B.z);
+          aO.push(-d.x * ovA, -d.y * ovA, -d.z * ovA, d.x * ovB, d.y * ovB, d.z * ovB);
+          aP.push(st, d2, 0, f, st, d2, 1, f);
+          col.push(...ink, a, ...ink, a);
+        };
+        E.forEach((e, i) => {
+          const st = o.t0 + (o.t1 - o.t0 - du * 1.9) * (n > 1 ? i / (n - 1) : 0);
+          const n1 = new THREE.Vector3().crossVectors(e.d, Math.abs(e.d.y) < .9 ? UPV : XV).normalize(), n2 = new THREE.Vector3().crossVectors(e.d, n1);
+          const ov = Math.min(.26, .09 + .07 * e.L);
+          // Strich 1: die Kante selbst, über beide Ecken hinaus (ungleich lang, wie von Hand)
+          stroke(e.A, e.B, e.d, ov * (.7 + .6 * rnd(i, 1)), ov * (.7 + .6 * rnd(i, 2)), st, du, a0, e.f);
+          // Strich 2: gleichmäßiger kleiner Versatz, am Ende eine Spur weiter weg (leicht schräg), kürzerer Überstand, blasser, etwas später
+          const off = .036 + .01 * rnd(i, 3);
+          stroke(e.A.clone().addScaledVector(n1, off * .8).addScaledVector(n2, off * .4), e.B.clone().addScaledVector(n1, off * 1.15).addScaledVector(n2, off * .55), e.d,
+            ov * (.35 + .3 * rnd(i, 4)), ov * (.35 + .3 * rnd(i, 5)), st + du * .45, du * .9, a0 * .55, e.f);
+          // Strich 3 nur an langen Kanten: auf der anderen Seite, nicht ganz durchgezogen
+          if (e.L > 1.2) {
+            const A3 = e.A.clone().addScaledVector(e.d, e.L * (.06 + .06 * rnd(i, 6))).addScaledVector(n1, -.028).addScaledVector(n2, -.018);
+            const B3 = e.B.clone().addScaledVector(e.d, -e.L * (.08 + .1 * rnd(i, 7))).addScaledVector(n1, -.03).addScaledVector(n2, -.02);
+            stroke(A3, B3, e.d, 0, 0, st + du * .9, du, a0 * .32, e.f);
+          }
+        });
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+        geo.setAttribute("aCol", new THREE.Float32BufferAttribute(col, 4));
+        geo.setAttribute("aP", new THREE.Float32BufferAttribute(aP, 4));
+        geo.setAttribute("aO", new THREE.Float32BufferAttribute(aO, 3));
+        geo.userData = { edges: E, strokes: pos.length / 6 };
+        return geo;
+      }
     }
   };
   return F;
