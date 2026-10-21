@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Shops und Shop-Wechsel · Jan-Erik Andersen (Entwurf Bogen)</title>
+<style>
+@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4.woff2") format("woff2"); font-weight: 200 800; font-style: normal; }
+@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4-Italic.woff2") format("woff2"); font-weight: 200 800; font-style: italic; }
+:root {
+  --bg: #ffffff;
+  --ink: #303033;
+  --muted: #66666a;
+  --red: #d40235;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --pad: clamp(18px, 4vw, 56px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+::selection { background: var(--red); color: #fff; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.track { height: 620vh; }
+
+.top { position: fixed; z-index: 2; inset: 0 0 auto 0; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 20px var(--pad); font: 500 13px/1.3 var(--sans); letter-spacing: .02em; }
+.top .mark { color: var(--ink); text-decoration: none; opacity: 0; transition: opacity .6s; }
+/* Marke N4: Newsreader 380, Andersen kursiv 340, roter Schlusspunkt, gestrichelte Falz */
+.n4 { position: relative; display: inline-block; font-family: "Newsreader N4", Georgia, serif; font-weight: 380; font-style: normal; letter-spacing: -.018em; line-height: 1; white-space: nowrap; padding-bottom: .14em; }
+.n4 i { font-weight: 340; }
+.n4 .dot { display: inline-block; width: .17em; height: .17em; margin-left: .01em; border-radius: 50%; background: var(--red); }
+.n4 .fold { position: absolute; left: -.06em; right: -.06em; top: .775em; border-bottom: .014em dashed #8f8a80; }
+.top .n4 { font-size: 20px; }
+.top .n4 .dot { width: .2em; height: .2em; }
+.top .n4 .fold { border-bottom-width: 1px; }
+.scrolled .top .mark { opacity: 1; }
+.top nav { display: flex; gap: 22px; }
+.top nav a { color: var(--ink); text-decoration: none; }
+.top nav a:hover { color: var(--red); }
+
+.hint { position: fixed; z-index: 2; left: 50%; bottom: 76px; transform: translateX(-50%); font: 500 12px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); transition: opacity .5s; pointer-events: none; white-space: nowrap; }
+.hint::after { content: ""; display: block; width: 1px; height: 26px; margin: 10px auto 0; background: var(--ink); opacity: .5; }
+.hint.off { opacity: 0; }
+
+.controls { position: fixed; z-index: 3; right: var(--pad); bottom: 22px; display: flex; gap: 8px; }
+.controls button { appearance: none; width: 42px; height: 42px; display: grid; place-items: center; background: #fff; border: 1px solid var(--ink); border-radius: 2px; color: var(--ink); cursor: pointer; }
+.controls button:hover { color: var(--red); border-color: var(--red); }
+.controls svg { width: 16px; height: 16px; }
+
+.bar { position: fixed; z-index: 2; left: var(--pad); right: var(--pad); bottom: 0; height: 1px; background: rgba(48,48,51,.15); }
+.bar i { display: block; height: 100%; width: 0; background: var(--ink); }
+
+.draft { position: fixed; z-index: 3; left: var(--pad); bottom: 22px; display: flex; gap: 14px; align-items: center; font: 500 12px/1 var(--sans); color: var(--muted); }
+.draft b { font-weight: 500; letter-spacing: .08em; text-transform: uppercase; font-size: 11px; background: var(--ink); color: #fff; padding: 7px 10px; border-radius: 2px; }
+.draft a { color: var(--muted); text-decoration: none; }
+.draft a:hover { color: var(--red); }
+.draft a[aria-current="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+.fallback { display: none; position: fixed; inset: 0; align-items: center; padding: var(--pad); }
+.fallback h1 { font-size: clamp(40px, 7vw, 88px); }
+.fallback p { max-width: 34em; margin-top: 1.2em; font-size: 18px; }
+.nogl .fallback { display: block; padding-top: 20vh; }
+.nogl #stage, .nogl .controls, .nogl .hint { display: none; }
+
+@media (max-width: 560px) {
+  .top { font-size: 12px; padding-top: 16px; }
+  .top nav { gap: 14px; }
+  .draft b { display: none; }
+  .draft { gap: 10px; bottom: 34px; }
+  .hint { bottom: 86px; }
+}
+</style>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<header class="top">
+  <a class="mark n4" href="#" aria-label="Jan-Erik Andersen"><span aria-hidden="true">Jan-Erik <i>Andersen</i><span class="dot"></span><span class="fold"></span></span></a>
+  <nav aria-label="Hauptnavigation"><a href="#">Projekte</a><a href="#">Leistungen</a><a href="#">Kontakt</a></nav>
+</header>
+<main class="sr">
+  <h2>Shops und Shop-Wechsel</h2>
+  <p>Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.</p>
+</main>
+<div class="track"></div>
+<div class="fallback"><h1>Shops und Shop-Wechsel</h1><p>Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.</p></div>
+<div class="hint" id="hint">Scrollen</div>
+<div class="controls">
+  <button id="prev" type="button" aria-label="Zurück"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 3 5 8l5 5"/></svg></button>
+  <button id="next" type="button" aria-label="Weiter"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m6 3 5 5-5 5"/></svg></button>
+</div>
+<div class="draft"><b>Entwurf Bogen</b><a href="#v=s" data-v="s">Shops und Shop-Wechsel</a></div>
+<div class="bar"><i id="bar"></i></div>
+
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module" src="./main.js"></script>
+</body>
+</html>
