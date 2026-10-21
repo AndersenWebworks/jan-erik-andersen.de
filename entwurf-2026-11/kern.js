@@ -100,28 +100,37 @@ function start(renderer, VARIANTS) {
     }));
     return mats.get(key);
   }
-  // Haarlinien, die sich zeichnen: jede Kante wächst von ihrem Anfang aus, Kante für Kante
+  // Haarlinien, die sich zeichnen: jede Kante wächst von ihrem Anfang aus, Kante für Kante (wie Konstruktion 1:
+  // auslaufend gezeichnet, die Linie im Entstehen etwas kräftiger, Konstruktionsüberstand uOv über die Ecken hinaus,
+  // der beim Einrasten der Flächen zurückgeht)
   const NET_V = `
-    attribute float aS; attribute float aT; varying float vS; varying float vT;
-    void main() { vS = aS; vT = aT; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`;
+    attribute float aS; attribute float aT; attribute vec3 aDir; uniform float uOv; varying float vS; varying float vT;
+    void main() { vS = aS; vT = aT; vec3 p = position + aDir * (aT * 2.0 - 1.0) * uOv; gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0); }`;
   const NET_F = `
     uniform vec3 uCol; uniform float uOp; uniform float uK; uniform float uSpan; varying float vS; varying float vT;
     void main() {
       float g = clamp((uK - vS) / uSpan, 0.0, 1.0);
+      g = g * (2.0 - g);
       if (vT > g + 0.0001 || g <= 0.0) discard;
-      gl_FragColor = vec4(uCol, uOp);
+      float act = 1.0 - step(0.999, g);
+      gl_FragColor = vec4(uCol, min(1.0, uOp * (1.0 + 0.6 * act)));
       #include <colorspace_fragment>
     }`;
-  function netLines(segs, col = INK, op = .58) {
-    const pos = [], aS = [], aT = [], n = segs.length;
+  function netLines(segs, col = INK, op = .58, ov = 0) {
+    const pos = [], aS = [], aT = [], aDir = [], n = segs.length;
     const span = Math.min(.5, .1 + 1.5 / n);
-    segs.forEach(([a, b], i) => { pos.push(a.x, a.y, a.z, b.x, b.y, b.z); const s = (n > 1 ? i / (n - 1) : 0) * (1 - span); aS.push(s, s); aT.push(0, 1); });
+    segs.forEach(([a, b], i) => {
+      pos.push(a.x, a.y, a.z, b.x, b.y, b.z);
+      const s = (n > 1 ? i / (n - 1) : 0) * (1 - span); aS.push(s, s); aT.push(0, 1);
+      const d = b.clone().sub(a).normalize(); aDir.push(d.x, d.y, d.z, d.x, d.y, d.z);
+    });
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
     g.setAttribute("aS", new THREE.Float32BufferAttribute(aS, 1));
     g.setAttribute("aT", new THREE.Float32BufferAttribute(aT, 1));
+    g.setAttribute("aDir", new THREE.Float32BufferAttribute(aDir, 3));
     const mat = new THREE.ShaderMaterial({
-      uniforms: { uCol: { value: new THREE.Color(col) }, uOp: { value: op }, uK: { value: 0 }, uSpan: { value: span } },
+      uniforms: { uCol: { value: new THREE.Color(col) }, uOp: { value: op }, uK: { value: 0 }, uSpan: { value: span }, uOv: { value: ov } },
       vertexShader: NET_V, fragmentShader: NET_F, transparent: true, depthWrite: false
     });
     const l = new THREE.LineSegments(g, mat); l.renderOrder = 1;
@@ -148,7 +157,8 @@ function start(renderer, VARIANTS) {
     cv.height = Math.ceil(padY * 2 + (lines.length - 1) * lh + em * 1.16);
     x.font = font; if (opt.track) x.letterSpacing = (opt.track * em) + "px";
     x.fillStyle = opt.col || "#303033"; x.textBaseline = "alphabetic";
-    lines.forEach((l, i) => x.fillText(l, padX, padY + em * .92 + i * lh));
+    // opt.align "center": Zeilen im Block mittig
+    lines.forEach((l, i) => x.fillText(l, padX + (opt.align === "center" ? (wMax - x.measureText(l).width) / 2 : 0), padY + em * .92 + i * lh));
     return { tex: texOf(cv), w: cv.width / em, h: cv.height / em, padX: padX / em };
   }
   const prints = [];
@@ -163,7 +173,8 @@ function start(renderer, VARIANTS) {
     mesh.position.set(ax, y, z);
     mesh.renderOrder = 3;
     parent.add(mesh);
-    const pr = { mesh, mat, on, e, w, h, fade: opt.fade || .018 };
+    // opt.off: Baufortschritt, ab dem der Druck wieder ausblendet (z. B. Name am Boden, wenn der Bau steht)
+    const pr = { mesh, mat, on, e, w, h, fade: opt.fade || .018, off: opt.off };
     prints.push(pr);
     return pr;
   }
@@ -200,9 +211,12 @@ function start(renderer, VARIANTS) {
     for (let i = 0; i < 4; i++) segs.push([lo[i], hi[i]]);
     for (let i = 0; i < 4; i++) segs.push([hi[i], hi[(i + 1) % 4]]);
     const isRed = col === C.red;
-    const lines = netLines(segs, isRed ? new THREE.Color(C.red) : INK, opt.edge ?? (isRed ? .9 : .66));
+    // Konstruktionsüberstand: die Kanten laufen über die Ecken hinaus und ziehen sich zurück, wenn die Flächen einrasten
+    const ov = opt.ov ?? Math.min(.12, .3 * Math.max(hx, hy, hz));
+    const lines = netLines(segs, isRed ? new THREE.Color(C.red) : INK, opt.edge ?? (isRed ? .9 : .66), ov);
     g.add(lines);
     nets.push({ l: lines, t0: net[0], d: net[1] });
+    anims.push(b => { lines.material.uniforms.uOv.value = ov * (1 - sm(win(b, face[0], face[1] * .8))); });
     // Flächen: Normale n, Scharnierrichtung v (von der Scharnierkante zur Gegenkante)
     const defs = {
       px: [V(1, 0, 0), V(0, 1, 0)], nx: [V(-1, 0, 0), V(0, 1, 0)],
@@ -231,12 +245,14 @@ function start(renderer, VARIANTS) {
       g.add(pivot);
       const f = { k, pivot, mesh, holder, lu: d.lu, lv: d.lv };
       faces[k] = f;
-      const n = live.length, fd = face[1] * .5, ft = face[0] + (n > 1 ? i / (n - 1) : 0) * (face[1] - fd);
-      const qx = new THREE.Quaternion(), X = V(1, 0, 0), open = (opt.open || 78) * PI / 180;
+      // jede Fläche schwenkt aus ihrer Scharnierkante herein (wächst dabei aus der Kante heraus),
+      // fährt an, bremst ab, schwingt kurz über den Anschlag und rastet ein (Mechanik wie im Vorspann-Test)
+      const n = live.length, fd = face[1] * .6, ft = face[0] + (n > 1 ? i / (n - 1) : 0) * (face[1] - fd);
+      const qx = new THREE.Quaternion(), X = V(1, 0, 0), open = (opt.open || 92) * PI / 180;
       anims.push(b => {
         const kf = win(b, ft, fd), m = mech(kf, .07);
         mesh.visible = kf > 0; holder.visible = kf >= 1;
-        mesh.scale.y = Math.max(.001, Math.min(1, kf * 1.6));
+        mesh.scale.y = Math.max(.001, Math.min(1, kf * 2));
         qx.setFromAxisAngle(X, open * (1 - m));
         pivot.quaternion.copy(q0).multiply(qx);
       });
@@ -382,20 +398,22 @@ function start(renderer, VARIANTS) {
     const ext = pts => { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const p of pts) { const d = p.clone().sub(s.c); const x = d.dot(right), y = d.dot(up); x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); } return { x0, x1, y0, y1 }; };
     const te = ext(s.pts);
     const padW = aspect < 1 ? 1.12 : 1.25;
-    const dSize = s.e * fore * H / (2 * t * (s.px ? s.px * (aspect < 1 ? .85 : 1) : minPx()));
+    const dSize = s.e * fore * H / (2 * t * (aspect < 1 && s.pxN ? s.pxN : s.px ? s.px * (aspect < 1 ? .85 : 1) : minPx()));
     const dFitW = (te.x1 - te.x0) * padW / (2 * t * aspect), dFitH = (te.y1 - te.y0) * 1.4 / (2 * t);
+    const grow = aspect < 1 && s.growN !== undefined ? s.growN : (s.grow ?? 1.25);
+    const bias = aspect < 1 && s.biasN !== undefined ? s.biasN : (s.bias ?? .8);
     let d = Math.max(dSize, dFitW, dFitH);
     const c = s.c.clone();
     // Bauteil mit ins Bild nehmen, soweit es die Schriftgröße erlaubt: Ziel wandert Richtung Bauteil
     if (s.withPts.length) {
       const we = ext(s.withPts.concat(s.pts));
       const fitAll = Math.max((we.y1 - we.y0) * 1.3 / (2 * t), (we.x1 - we.x0) * 1.15 / (2 * t * aspect));
-      d = Math.max(d, Math.min(fitAll, d * (s.grow ?? 1.25)));
+      d = Math.max(d, Math.min(fitAll, d * grow));
       const room = d * 2 * t * (s.room ?? .8), roomW = d * 2 * t * aspect * .97;
       const lim = (v, half, ext0, ext1) => clamp(v, ext1 - half, ext0 + half);
       // Mitte der Gesamtansicht, aber so, dass der Text vollständig im Ausschnitt bleibt
-      const cy = lim((we.y1 + we.y0) / 2 * (s.bias ?? .8), room / 2, te.y0, te.y1);
-      const cx = lim((we.x1 + we.x0) / 2 * (s.bias ?? .8), roomW / 2, te.x0, te.x1);
+      const cy = lim((we.y1 + we.y0) / 2 * bias, room / 2, te.y0, te.y1);
+      const cx = lim((we.x1 + we.x0) / 2 * bias, roomW / 2, te.x0, te.x1);
       c.addScaledVector(up, cy).addScaledVector(right, cx);
     }
     return { cam: c.clone().addScaledVector(dir, d), tgt: c, d };
@@ -419,7 +437,32 @@ function start(renderer, VARIANTS) {
     if (model) { scene.remove(model); model.traverse(o => { if (o.geometry) o.geometry.dispose(); if (o.material && o.material.map) o.material.map.dispose(); }); }
     model = new THREE.Group(); scene.add(model);
     anims = []; nets = []; prints.length = 0; thread = null;
+    // Hilfslinien (Anriss, Raster): zeichnen sich in [t0, d] (t0 < 0: stehen von Anfang an) und verblassen in [o0, od]
+    function guide(parent, segs, t0, d, o0, od, op = .3, col = INK) {
+      const l = netLines(segs, col, op); parent.add(l);
+      if (t0 < 0) l.material.uniforms.uK.value = 1; else nets.push({ l, t0, d });
+      anims.push(b => { const o = op * (1 - sm(win(b, o0, od))); l.material.uniforms.uOp.value = o; l.visible = o > .002; });
+      return l;
+    }
     const K = {
+      narrow: VW() / VH() < 1, guide,
+      // Anriss: Eckmarken der Grundrisse [x0, x1, z0, z1] in der Ebene y von parent
+      anriss(parent, rects, o0, od, op = .34, len = .2, y = .004) {
+        const segs = [];
+        for (const [x0, x1, z0, z1] of rects) for (const [x, z, sx, sz] of [[x0, z0, 1, 1], [x1, z0, -1, 1], [x1, z1, -1, -1], [x0, z1, 1, -1]]) {
+          segs.push([V(x - sx * .06, y, z), V(x + sx * len, y, z)], [V(x, y, z - sz * .06), V(x, y, z + sz * len)]);
+        }
+        return guide(parent, segs, -1, 1, o0, od, op);
+      },
+      // Bauraster am Boden wie in Konstruktion 1, aber ruhig: feine Linien, jede every-te etwas kräftiger
+      grid(x0, x1, z0, z1, step, every, t0, d, o0, od, op = .09, opM = .2) {
+        const mi = [], ma = [], y = .002;
+        const nx = Math.round((x1 - x0) / step), nz = Math.round((z1 - z0) / step);
+        for (let i = 0; i <= nx; i++) (i % every ? mi : ma).push([V(x0 + i * step, y, z1), V(x0 + i * step, y, z0)]);
+        for (let j = 0; j <= nz; j++) (j % every ? mi : ma).push([V(x0, y, z1 - j * step), V(x1, y, z1 - j * step)]);
+        guide(model, ma, t0, d * .8, o0, od, opM);
+        guide(model, mi, t0 + d * .2, d * .8, o0, od, op);
+      },
       THREE, V, C, PI, model, mech, sm, win, clamp, paper, box, print, printOn, decal, decalOn, cable, ticker, netLines,
       anim: fn => anims.push(fn),
       net: (l, t0, d) => nets.push({ l, t0, d }),
@@ -497,7 +540,13 @@ function start(renderer, VARIANTS) {
     camera.updateProjectionMatrix();
     if (cur) buildPath(cur);
   }
-  addEventListener("resize", () => { resize(); if (hold) scrollTo(0, target * maxScroll()); });
+  // Wechsel zwischen Hoch- und Querformat baut die Variante neu (Name am Handy zweizeilig)
+  let narrowNow = VW() / VH() < 1;
+  addEventListener("resize", () => {
+    const n = VW() / VH() < 1;
+    if (n !== narrowNow) { narrowNow = n; load(variant); } else resize();
+    if (hold) scrollTo(0, target * maxScroll());
+  });
   applyHash(true);
 
   let last = performance.now();
@@ -507,14 +556,14 @@ function start(renderer, VARIANTS) {
     if (Math.abs(target - p) < 1e-5) p = target;
     const time = now / 1000;
     placeCamera(p, time);
-    // Auftakt: beim Laden zeichnet sich das Netz von selbst, unabhängig vom Scrollen
+    // Auftakt (nur noch Variante B): beim Laden zeichnet sich das Netz von selbst; A und C bauen sich über das Scrollen
     const intro = (cur.introB || 0) * sm((now - t0) / 1000 / (cur.introT || 2.8));
     const b = Math.max(state.b, intro);
     for (const a of anims) a(b, time);
     for (const n of nets) n.l.material.uniforms.uK.value = win(b, n.t0, n.d);
     for (const pr of prints) {
-      if (pr.on < 0) continue;
-      const o = sm((b - pr.on) / pr.fade);
+      if (pr.on < 0 && pr.off === undefined) continue;
+      const o = (pr.on < 0 ? 1 : sm((b - pr.on) / pr.fade)) * (pr.off === undefined ? 1 : 1 - sm((b - pr.off) / .03));
       pr.mat.opacity = o; pr.mesh.visible = o > .001;
     }
     updateThread(b);

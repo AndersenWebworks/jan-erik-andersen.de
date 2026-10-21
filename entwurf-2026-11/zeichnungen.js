@@ -18,8 +18,9 @@ export function website(x, W, H, opt = {}) {
   x.strokeStyle = ink(.25); x.lineWidth = 2 * s; x.beginPath(); x.moveTo(580 * s, 480 * s); x.lineTo(700 * s, 330 * s); x.lineTo(790 * s, 420 * s); x.lineTo(850 * s, 370 * s); x.lineTo(940 * s, 480 * s); x.stroke();
   for (let c = 0; c < 3; c++) {
     const X = (60 + c * 300) * s;
-    x.fillStyle = ink(.7); x.fillRect(X, 560 * s, 160 * s, 16 * s);
-    x.fillStyle = ink(.25); for (let i = 0; i < 3; i++) x.fillRect(X, (596 + i * 24) * s, (250 - i * 40) * s, 9 * s);
+    // Spaltenblock endet bei 610 innerhalb der Zeichnungshöhe 625 (vorher liefen zwei Zeilen unten heraus)
+    x.fillStyle = ink(.7); x.fillRect(X, 536 * s, 160 * s, 16 * s);
+    x.fillStyle = ink(.25); for (let i = 0; i < 3; i++) x.fillRect(X, (566 + i * 18) * s, (250 - i * 40) * s, 8 * s);
   }
 }
 // Shop am Handy: Kopf, Suche, Raster aus Produkten mit Preis, Warenkorb-Knopf
