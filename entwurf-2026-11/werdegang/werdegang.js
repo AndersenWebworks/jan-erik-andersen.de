@@ -1,6 +1,7 @@
 // Szene Werdegang (Katalog 11/12): Treppe aus dem Bogen, acht Stufen, neueste oben (Drehbuch: DREHBUCH.md).
-// Pop-up-Logik: Zwei Wangen mit dem Treppenprofil klappen außen hoch. Die Stufen sind ein Teleskop: Stufe k ist eine Platte,
-// die sich um eine Stufenhöhe über die Stufe darunter hebt; danach klappt ihre Setzstufe (innere Lage unter der Platte) hoch
+// Pop-up-Logik: Die Stufen sind ein Teleskop: Stufe k ist eine Platte,
+// die sich um eine Stufenhöhe über die Stufe darunter hebt; danach klappen ihre Setzstufe und ihre zwei Seitenwände
+// (innere Lagen unter der Platte) hoch
 // und rastet ein. Auf der Setzstufe stehen Jahr, Station und Zusatz wörtlich, auf der Trittstufe darüber steht das
 // Faltzeichen der Station. Der rote Faden klettert mit und erreicht die Oberkante jeder Setzstufe an ihrer Lesestelle.
 // Überschrift: Lettern „Werdegang“ stehen vor der Treppe aus dem Bogen auf (nach der Zeit seit dem Laden, wie der Name).
@@ -157,32 +158,25 @@ export default function (K) {
   // und tiefer (das Zeichen steht weit genug vor der nächsten Setzstufe, um sie bei 30° Neigung nicht zu verdecken).
   const W = N ? 3.0 : 7.2, H = N ? 1.2 : .95, D = N ? 2.2 : 1.9, Z1 = 4, X0 = -W / 2, X1 = W / 2, ZB = Z1 - 8 * D;
   const Zf = k => Z1 - (k - 1) * D;
-  // Zeitplan: Bastellinien b 0–.11, Wangen .11–.17, Stufe k ab B0 + (k − 1)·S (Platte, dann Setzstufe, dann Zeichen)
-  const B0 = .17, S = .095, sK = k => B0 + (k - 1) * S;
-  const HZ = Z1 + (N ? 2.6 : 2.3); // Grundlinie der Überschrift vor der Treppe
+  // Zeitplan: Bastellinien b 0–.11, Stufe k ab B0 + (k − 1)·S (Platte, dann Setzstufe und Seitenwände, dann Zeichen)
+  // (Korrektur nach Sichtprüfung: keine hohen Wangen mehr, die Seiten wachsen Stufe für Stufe mit)
+  const B0 = .12, S = .095, sK = k => B0 + (k - 1) * S;
+  // Überschrift rechts vorn neben der Treppe: an den Lesestellen liegt sie ganz außerhalb des Bildes und nie vor Text
+  const HZ = Z1 + (N ? .9 : .8);
 
   // ---------- Bogen ----------
-  const wingW = 8 * H;
-  K.sheet(X0 - wingW - .7, X1 + wingW + .7, ZB - .7, HZ + (N ? 1.6 : 1.3));
+  const HE = N ? .62 : .8;
+  const hm = K.measure(["Werdegang"], { font: "marke" }), HX = X1 + (N ? .5 : .7), HW = hm.tw * HE;
+  K.sheet(X0 - 2.6, HX + HW + 1.4, ZB - .7, HZ + (N ? 1.8 : 1.6));
 
   // ---------- Überschrift: Lettern stehen aus dem Bogen auf ----------
-  const HE = N ? .62 : .8;
-  const hm = K.measure(["Werdegang"], { font: "marke" });
   F.part("titel", -.02, .01);
-  const head = K.word(["Werdegang"], HE, -hm.tw * HE / 2, HZ, .15, .9, { font: "marke", foot: 1, imprint: IMPRINT });
-
-  // ---------- Wangen: Treppenprofil, liegen außen flach und klappen an der Treppenkante hoch ----------
-  F.part("wangen", .0, .06);
-  // sternförmig von der hinteren unteren Ecke aus (Fächer-Dreiecke liegen alle innerhalb)
-  const prof = [[8 * D, 0], [0, 0]];
-  for (let k = 1; k <= 8; k++) prof.push([(k - 1) * D, k * H], [k * D, k * H]);
-  for (const [x, sd] of [[X0, -1], [X1, 1]]) {
-    const wg = K.panel(R, [x, Z1], [x, ZB], [sd, 0], .11, .06, Q, { over: .035 });
-    K.P(wg, prof, WANGE, prof.map((_, i) => i === 0 ? .35 : .5));
-  }
+  const head = K.word(["Werdegang"], HE, HX, HZ, .15, .9, { font: "marke", foot: 1, imprint: IMPRINT });
+  // die Lettern blenden aus, während die Kamera in den Überblick steigt (b .06–.09), bevor sie aus dem Bildrand laufen
+  head.off = .06;
 
   // ---------- Text auf den Setzstufen ----------
-  const EY = .085, ES = N ? .19 : .2, ED = .12;
+  const EY = .085, ES = N ? .16 : .2, ED = .12;
   const lines = r => (N && r.n) || r.d;
   // Handy: gemeinsame linke Kante für alle Stufen, Block der breitesten Zeile mittig
   const wMax = Math.max(...ROWS.map(r => Math.max(K.measure([r.st], { font: "marke" }).tw * ES, K.measure(lines(r), {}).tw * ED, K.measure([r.yr], { track: .06 }).tw * EY)));
@@ -197,6 +191,10 @@ export default function (K) {
     // Setzstufe: innere Lage unter der Platte (ohne eigene Bastellinien), klappt hoch, sobald die Platte oben ist
     const riser = K.panel(par, [X0, z], [X1, z], [0, -1], s + .38 * S, .32 * S, Q, { nocut: 1, nofold: 1, over: .035, lv: par.lvl + 1 });
     K.rect(riser, 0, 0, W, H, RISER);
+    // Seitenwände: liegen innen unter der Platte (ohne Bastellinien), schließen die Seite zwischen den Platten
+    const sw = { nocut: 1, nofold: 1, over: .035, lv: par.lvl + 1 };
+    K.rect(K.panel(par, [X0, ZB], [X0, z], [1, 0], s + .4 * S, .3 * S, Q, sw), 0, 0, z - ZB, H, WANGE);
+    K.rect(K.panel(par, [X1, z], [X1, ZB], [-1, 0], s + .4 * S, .3 * S, Q, sw), 0, 0, z - ZB, H, WANGE);
     // Platte hebt sich um eine Stufenhöhe (Ausgleich der Lagen: Oberkante genau k·H)
     const L = F.lift(par, H - 2 * EPS, s, .45 * S, { over: .03, lv: par.lvl + 2 });
     F.poly(L, [[X0, z], [X1, z], [X1, ZB], [X0, ZB]], TREAD, .5);
@@ -308,10 +306,27 @@ export default function (K) {
   const XC = N ? 0 : (XL + EX + .72) / 2;
   const sxOf = (s, nar) => (Wp, Hp) => {
     const T = Math.tan((nar ? 44 : 32) * PI / 360), px = nar ? 16 : pxD(Wp, Hp), dep = s.e * Hp / (2 * T * px);
-    return (s.C.x - XC) / (T * (Wp / Hp) * dep);
+    // schmale Desktop-Fenster (4:3): die Textkante bleibt drin, das Zeichen darf rechts angeschnitten sein
+    const xc = nar ? XC : Math.min(XC, XL - .55 + Wp / 2 / (px / s.e));
+    return (s.C.x - xc) / (T * (Wp / Hp) * dep);
+  };
+  // Bildlage senkrecht (Desktop): Text dieser Stufe im oberen Teil, der Text der Stufe darunter ganz im Bild über der
+  // Entwurfsleiste, die Stufe darunter ganz draußen. Gerechnet je Fensterhöhe (Mitte des gültigen Bereichs, _pruefung/such.mjs)
+  const SYT = [[720, .47], [768, .43], [864, .31], [900, .27], [1024, .12], [1080, .08], [1200, 0], [1440, -.16]];
+  const SYN = [[667, .55], [740, .5], [844, .35], [915, .25]]; // Handy, gleiche Regel
+  const interp = (T, Hp) => {
+    if (Hp <= T[0][0]) return T[0][1];
+    for (let i = 1; i < T.length; i++) if (Hp <= T[i][0]) { const [h0, s0] = T[i - 1], [h1, s1] = T[i]; return s0 + (s1 - s0) * (Hp - h0) / (h1 - h0); }
+    return T[T.length - 1][1];
+  };
+  const syN = (Wp, Hp) => interp(SYN, Hp);
+  const syD = (Wp, Hp) => {
+    if (Hp <= SYT[0][0]) return SYT[0][1];
+    for (let i = 1; i < SYT.length; i++) if (Hp <= SYT[i][0]) { const [h0, s0] = SYT[i - 1], [h1, s1] = SYT[i]; return s0 + (s1 - s0) * (Hp - h0) / (h1 - h0); }
+    return SYT[SYT.length - 1][1];
   };
   const ST = steps.map(st => {
-    const s = { prints: st.prints, e0: ED, b: st.s + S, px: pxD, pitch: 20, yaw: -8 + (st.k - 1) * 1.6, sy: -.2, pxN: 16, npitch: 30, nyaw: 0, nsy: -.3 };
+    const s = { prints: st.prints, e0: ED, b: st.s + S, px: pxD, pitch: globalThis.WP ?? 32, yaw: -6 + (st.k - 1) * .8, sy: globalThis.WSY ?? syD, pxN: 16, npitch: globalThis.WNP ?? 32, nyaw: 0, nsy: globalThis.WNSY ?? syN };
     s.sx = sxOf(s, false); s.nsx = sxOf(s, true);
     return s;
   });
@@ -328,10 +343,10 @@ export default function (K) {
     stops: [SH, ...ST],
     keys: [
       { w: 0, stop: SH, noWarp: true },
-      // Bastellinien: Überblick über den Bogen (Wangen, acht Stufen, acht Zeichen)
-      key(.7, .11, T1, 50, -6, 31, V(0, 0, (Z1 + ZB) / 2 + 2), 56, -4, 34),
-      // Wangen stehen: Kamera senkt sich vor die Treppe
-      key(.5, .17, T2, 28, -14, 17, V(0, 1.6, Z1 - 1.5), 34, -8, 19),
+      // Bastellinien: Überblick über den Bogen (acht Stufen, acht Zeichen)
+      key(.7, .1, T1, 50, -6, 31, V(0, 0, (Z1 + ZB) / 2 + 2), 56, -4, 34),
+      // Kamera senkt sich vor die Treppe, Stufe 1 beginnt sich zu heben
+      key(.5, .12, T2, 28, -14, 17, V(0, 1.6, Z1 - 1.5), 34, -8, 19),
       ...ST.map((s, i) => ({ w: i ? .5 : .6, stop: s })),
       // Überblick: ganze Treppe mit allen Zeichen, der Faden liegt bis Gerwing
       key(.8, 1, TF, 24, -30, 31, V(0, 4 * H, (Z1 + ZB) / 2 + 1), 26, -24, 40)
