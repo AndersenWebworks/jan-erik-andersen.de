@@ -57,15 +57,15 @@ export default function (K) {
   K.sheet(...(N ? [-7, 7, -13.4, 9.8] : [-9.6, 6.4, -6.4, 7.2]));
 
   // ---------- Überschrift: Lettern stehen aus dem Bogen auf ----------
-  const HE = .85, HEAD = ["Modernisierung"], hw = K.measure(HEAD, { font: "serif" }).tw * HE;
+  const HE = N ? .76 : .85, HEAD = ["Modernisierung"], hw = K.measure(HEAD, { font: "serif" }).tw * HE;
   const HZ = N ? 8.6 : 6.2, HCX = N ? 0 : -1.1;
   const head = K.word(HEAD, HE, HCX - hw / 2, HZ, 0, .07, { font: "serif", foot: 1, clock: "b", on: .004, over: .05,
     imprint: { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2 } });
 
   // Die Überschrift gehört zum Anfang und zum Schluss: sie klappt zurück, bevor die Kamera dicht an die Geräte geht (sonst ragt sie angeschnitten
   // ins untere Bildfeld), im Bogen bleibt ihr Abdruck, und steht am Ende wieder auf.
-  head.node.dn = { t0: .21, d: .07 }; head.node.re = { t0: .93, d: .06 };
-  head.sched = b => (b < .5 ? sm((b - .004) / .01) * (1 - sm((b - .255) / .025)) : sm((b - .93) / .015));
+  head.node.dn = { t0: .12, d: .06 }; head.node.re = { t0: .96, d: .04 };
+  head.sched = b => (b < .5 ? sm((b - .004) / .01) * (1 - sm((b - .16) / .02)) : sm((b - .988) / .008));
 
   // ---------- Röhrenmonitor: Frontwand und Wände klappen hoch, der Deckel folgt ----------
   F.part("crt", .02, .1);
@@ -243,6 +243,8 @@ export default function (K) {
   };
   const blocks = [];
   const mkBlock = (key, t0, d, hover, rise) => {
+    // Handy: der Röhrenmonitor steht hinter dem Flachbildschirm; die Blöcke schwenken seitlich aus, damit sie nie vor dem Satz im Kinn des Röhrenmonitors fliegen
+    const side = N ? 2.2 : 0;
     const { w, h } = BLK[key];
     const A = K.decal(Math.round(w * BPX), Math.round(h * BPX), ART[key].old, w, h, -1);
     const B = K.decal(Math.round(w * BPX), Math.round(h * BPX), ART[key].neu, w, h, -1);
@@ -276,7 +278,7 @@ export default function (K) {
       // Bogenbahn: weg vom Bildschirm (Blickrichtung des Bildschirms) und etwas nach oben, endet vor dem Überschwingen
       nA.set(0, 0, 1).applyQuaternion(qa);
       const arc = Math.sin(Math.PI * ka);
-      p.addScaledVector(nA, hover * arc).y += rise * arc;
+      p.addScaledVector(nA, hover * arc).y += rise * arc; p.x += side * arc;
       g.position.copy(p); g.quaternion.copy(q);
       const sc = 1 + (S - 1) * kr; g.scale.set(sc, sc, 1);
     });
@@ -284,11 +286,11 @@ export default function (K) {
   };
   // Reihenfolge: Kopf, Bild, Text, Karten, zuletzt die Adresszeile (der Satz endet mit den Adressen)
   const FL = { kopf: .52, bild: .55, text: .575, karten: .6, bar: .635 }, FD = .09;
-  mkBlock("kopf", FL.kopf, FD, 1.1, .5);
-  mkBlock("bild", FL.bild, FD, 1.5, .9);
-  mkBlock("text", FL.text, FD, .9, .3);
-  mkBlock("karten", FL.karten, FD, 1.1, .2);
-  mkBlock("bar", FL.bar, FD, 1.2, .6);
+  mkBlock("kopf", FL.kopf, FD, .75, 1.3);
+  mkBlock("bild", FL.bild, FD, .8, 1.8);
+  mkBlock("text", FL.text, FD, .75, 1.1);
+  mkBlock("karten", FL.karten, FD, .75, 1.6);
+  mkBlock("bar", FL.bar, FD, .75, 1.4);
   const T_BAR = FL.bar + FD + .005;
 
   // Satz 2, Teil 2 auf der Adresszeile (liegt auf dem neuen Platz des Blocks, über dem Papierstück)
@@ -305,7 +307,7 @@ export default function (K) {
   const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
   const ST = {
     t1: { prints: [T1], px: pxD, fb: .5, pitch: 14, yaw: 16, sx: -.05, sy: -.1, npitch: 14, nyaw: 4, nsx: -.16, nsy: -.05 },
-    t2: { prints: [T2], px: pxD, fb: .5, pitch: 14, yaw: -10, sx: 0, sy: -.1, npitch: 14, nyaw: -10, nsx: 0, nsy: -.1 },
+    t2: { prints: [T2], px: pxD, fb: .5, pitch: 14, yaw: -10, sx: (W, H) => -clamp((W / H - 1.4) * 1.15, 0, .46), sy: -.1, npitch: 14, nyaw: -10, nsx: 0, nsy: -.1 },
     t3: { prints: [T3], px: pxD, fb: .8, pitch: 14, yaw: -8, sx: 0, sy: .6, npitch: 14, nyaw: -8, nsx: 0, nsy: .3 }
   };
   return {
@@ -317,21 +319,21 @@ export default function (K) {
     keys: [
       // Überblick über den ganzen Bogen (Überschrift, beide Geräte als Bastellinien): eingepasst mit tmp-Rechnung (fit.mjs),
       // Breitbild 1280 x 900 Rand 60 px, Hochkant 390 x 844 Rand 14 px
-      { w: 0, b: 0, cam: V(-1.26, 11.5, 15.52), tgt: V(-1.26, -.35, 1.41), camN: V(0, 15.24, 18.35), tgtN: V(0, -1.07, .24) },
-      { w: .55, b: .12, cam: V(-1.25, 11.01, 15.95), tgt: V(-1.25, -.36, 1.4), camN: V(0, 14.69, 19.02), tgtN: V(0, -1.1, .19) },
+      { w: 0, b: 0, cam: V(-1.26, 11.5, 15.52), tgt: V(-1.26, -.35, 1.41), camN: V(0, 14.35, 17.52), tgtN: V(0, -1.15, .31) },
+      { w: .55, b: .12, cam: V(-1.25, 11.01, 15.95), tgt: V(-1.25, -.36, 1.4), camN: V(0, 13.54, 17.86), tgtN: V(0, -1.21, .28) },
       // Röhrenmonitor klappt auf
       { w: .55, b: .27, cam: V(.43, 7.95, 14.11), tgt: V(-.03, .4, 1.04), camN: V(.31, 11.12, 15.3), tgtN: V(-.24, -.4, -.55) },
       { w: .9, stop: ST.t1 },
       // Flachbildschirm klappt hoch
-      { w: .7, b: .42, cam: V(.18, 7.79, 13.39), tgt: V(-.27, 1.45, .39), camN: V(.32, 11.02, 11.24), tgtN: V(-.12, .52, -1.26) },
+      { w: .7, b: .42, cam: V(.18, 6.59, 13.39), tgt: V(-.27, .25, .39), camN: V(.32, 11.02, 11.24), tgtN: V(-.12, .52, -1.26) },
       { w: .9, stop: ST.t2 },
       // Blöcke wandern
-      { w: 1.1, b: .6, cam: V(-.33, 7.81, 13.31), tgt: V(-.33, 1.49, .35), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
-      { w: .9, b: .72, cam: V(-.2, 7.7, 13.3), tgt: V(-.2, 1.5, .35), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
+      { w: 1.1, b: .6, cam: V(-.5, 7.17, 14.55), tgt: V(-.5, .29, .45), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
+      { w: .9, b: .72, cam: V(-.5, 7.17, 14.55), tgt: V(-.5, .29, .45), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
       { w: .9, stop: ST.t3 },
       // alter Monitor legt sich flach, Schlussbild
       { w: 1, b: .86, cam: V(-1.49, 9.4, 16.2), tgt: V(-1.49, .67, 1.08), camN: V(-.11, 13.79, 15.14), tgtN: V(-.11, 1.33, -2.02) },
-      { w: .8, b: 1, cam: V(-1.41, 10.96, 15.44), tgt: V(-1.41, -.17, 1.19), camN: V(0, 15.24, 18.35), tgtN: V(0, -1.08, .22) }
+      { w: .8, b: 1, cam: V(-1.41, 10.96, 15.44), tgt: V(-1.41, -.17, 1.19), camN: V(0, 14.35, 17.52), tgtN: V(0, -1.16, .3) }
     ]
   };
 }
