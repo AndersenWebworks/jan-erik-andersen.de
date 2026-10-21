@@ -126,6 +126,9 @@
   .n .fold { position: absolute; left: -.06em; right: -.06em; top: .775em; border-bottom: .014em dashed #8f8a80; }
   .n.s .fold { border-bottom-width: 1px; }
   .n.nf .fold { display: none; }
+  .n .dot { width: .17em; height: .17em; margin-left: .06em; }
+  .n i + .dot { margin-left: .01em; }
+  .n.s .dot, .n.nf .dot { width: .2em; height: .2em; }
 </style>
 </head>
 <body>
@@ -205,6 +208,8 @@ const fdot = (w, detail = true) => { const id = "fd" + (fdN++); return `<svg cla
 const favDot = (px) => fdot(px + "px", px >= 32);
 const kfav = (fam, wt, fs, y) => svg("0 0 32 32", () => `<text x="15" y="${y}" text-anchor="middle" font-family="${fam}" font-weight="${wt}" font-size="${fs}" fill="#303033">a</text><circle cx="25" cy="8" r="4" fill="#d40235"/>`);
 const nm = (it) => `Jan-Er<span class="idot">ı</span>k ${it ? "<i>Andersen</i>" : "Andersen"}<span class="fold"></span>`;
+const kfav2 = (fam, wt, fs, y) => svg("0 0 32 32", () => `<text x="13" y="${y}" text-anchor="middle" font-family="${fam}" font-weight="${wt}" font-size="${fs}" fill="#303033">a</text><circle cx="26" cy="${y - 3.5}" r="3.8" fill="#d40235"/>`);
+const nmE = (it) => `Jan-Erik ${it ? "<i>Andersen</i>" : "Andersen"}<span class="dot"></span><span class="fold"></span>`;
 const N = [
   { id: "N1", n: "A1 mit Punkt aus K und Falz aus B", w: "Der Name in der Serife von A1, der rote Punkt sitzt wie bei K auf dem i, und die Lettern stehen auf der gestrichelten Falz wie in B. Das Favicon ist das a mit Punkt aus K, gesetzt in der Schrift der Marke.",
     big: `<div class="n" style="font-size:66px">${nm(false)}</div>`,
@@ -215,7 +220,17 @@ const N = [
     big: `<div class="n" style="font-size:66px">${nm(true)}</div>`,
     small: `<div class="n s" style="font-size:20px">${nm(true)}</div>`,
     sig: `<div class="n nf" style="font-size:17px">${nm(true)}</div>`,
-    fav: kfav("Fraunces", 600, 30, 27) }
+    fav: kfav("Fraunces", 600, 30, 27) },
+  { id: "N3", n: "Wie N1, Punkt am Schluss", w: "Aufrechter Name auf der Falz, der rote Punkt beendet ihn wie einen Satz. Das Favicon ist das a mit dem Punkt unten rechts, also auch als Schlusspunkt.",
+    big: `<div class="n" style="font-size:66px">${nmE(false)}</div>`,
+    small: `<div class="n s" style="font-size:20px">${nmE(false)}</div>`,
+    sig: `<div class="n nf" style="font-size:17px">${nmE(false)}</div>`,
+    fav: kfav2("Newsreader", 480, 33, 26) },
+  { id: "N4", n: "Wie N2, Punkt am Schluss", w: "Kursives Andersen auf der Falz, der rote Punkt am Schluss. Favicon wie N3.",
+    big: `<div class="n" style="font-size:66px">${nmE(true)}</div>`,
+    small: `<div class="n s" style="font-size:20px">${nmE(true)}</div>`,
+    sig: `<div class="n nf" style="font-size:17px">${nmE(true)}</div>`,
+    fav: kfav2("Newsreader", 480, 33, 26) }
 ];
 const M = [
   { id: "M1", n: "Name, Punkt mit Eselsohr", w: "A1 mit dem Kreis aus J als Schlusspunkt. Klein ist es einfach ein roter Punkt, groß sieht man die umgeknickte Ecke von Webworks. Das Favicon ist der Punkt allein.",
