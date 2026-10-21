@@ -365,7 +365,8 @@ export function start(renderer, VARIANTS) {
     renderer.setSize(w, h, false);
     aspect = w / h;
     camera.aspect = aspect;
-    camera.fov = aspect < 1 ? 44 : 36;
+    // Sichtfeld je Variante (def.fov / def.fovN), sonst 36° Breitbild, 44° hochkant
+    camera.fov = aspect < 1 ? (cur && cur.fovN || 44) : (cur && cur.fov || 36);
     camera.updateProjectionMatrix();
     if (cur) buildPath(cur);
   }

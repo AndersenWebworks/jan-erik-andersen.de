@@ -116,23 +116,25 @@ export default function (K) {
   // ---------- Schreibtisch: Platte hebt sich, L-Beine und Zarge schwenken nach unten ----------
   F.part("tisch", .015, .08);
   const ZF = 1.7, ZB = -1.9, HT = 2.4, LW = .2, AP = .46;
-  const top = F.lift(R, HT, .2, .07, { over: .03 });
+  // Zeitplan (Kameradrehbuch in docs/FASSUNG-2026-11.md): Platte hebt sich ruhig über b .20–.33 (rund 0,4 Bildschirmhöhen),
+  // kleines Überschwingen; Beine schwenken erst, wenn die Platte rund neun Zehntel ihrer Höhe erreicht hat, die Zarge danach
+  const top = F.lift(R, HT, .2, .13, { over: .02 });
   F.poly(top, [[X0, ZF], [X0 + LW, ZF], [X1 - LW, ZF], [X1, ZF], [X1, ZF - LW], [X1, ZB + LW], [X1, ZB], [X1 - LW, ZB], [X0 + LW, ZB], [X0, ZB], [X0, ZB + LW], [X0, ZF - LW]], DESK, .5);
-  const down = { own: R, over: .05 };
+  const down = { own: R, over: .035 };
   // Beine: je Ecke eine Leiste von der Vorder- bzw. Hinterkante und eine von der Seitenkante (L-Profil)
   for (const [xa, xb] of [[X0, X0 + LW], [X1 - LW, X1]]) {
-    K.rect(K.panel(top, [xa, ZF], [xb, ZF], [0, 1], .25, .07, -Q, down), 0, 0, LW, HT, LEG);
-    K.rect(K.panel(top, [xa, ZB], [xb, ZB], [0, -1], .255, .07, -Q, down), 0, 0, LW, HT, LEG);
+    K.rect(K.panel(top, [xa, ZF], [xb, ZF], [0, 1], .27, .085, -Q, down), 0, 0, LW, HT, LEG);
+    K.rect(K.panel(top, [xa, ZB], [xb, ZB], [0, -1], .276, .085, -Q, down), 0, 0, LW, HT, LEG);
   }
   for (const [xs, sd] of [[X0, -1], [X1, 1]]) {
-    K.rect(K.panel(top, [xs, ZF], [xs, ZF - LW], [sd, 0], .252, .07, -Q, down), 0, 0, LW, HT, LEG);
-    K.rect(K.panel(top, [xs, ZB + LW], [xs, ZB], [sd, 0], .257, .07, -Q, down), 0, 0, LW, HT, LEG);
+    K.rect(K.panel(top, [xs, ZF], [xs, ZF - LW], [sd, 0], .273, .085, -Q, down), 0, 0, LW, HT, LEG);
+    K.rect(K.panel(top, [xs, ZB + LW], [xs, ZB], [sd, 0], .279, .085, -Q, down), 0, 0, LW, HT, LEG);
   }
-  const apron = K.panel(top, [X0 + LW, ZF], [X1 - LW, ZF], [0, 1], .265, .06, -Q, down);
+  const apron = K.panel(top, [X0 + LW, ZF], [X1 - LW, ZF], [0, 1], .29, .075, -Q, down);
   K.rect(apron, 0, 0, X1 - X0 - 2 * LW, AP, LEG);
-  K.rect(K.panel(top, [X0 + LW, ZB], [X1 - LW, ZB], [0, -1], .265, .06, -Q, down), 0, 0, X1 - X0 - 2 * LW, AP, LEG);
-  K.rect(K.panel(top, [X0, ZF - LW], [X0, ZB + LW], [-1, 0], .27, .06, -Q, down), 0, 0, ZF - ZB - 2 * LW, AP, LEG);
-  K.rect(K.panel(top, [X1, ZF - LW], [X1, ZB + LW], [1, 0], .27, .06, -Q, down), 0, 0, ZF - ZB - 2 * LW, AP, LEG);
+  K.rect(K.panel(top, [X0 + LW, ZB], [X1 - LW, ZB], [0, -1], .29, .075, -Q, down), 0, 0, X1 - X0 - 2 * LW, AP, LEG);
+  K.rect(K.panel(top, [X0, ZF - LW], [X0, ZB + LW], [-1, 0], .296, .075, -Q, down), 0, 0, ZF - ZB - 2 * LW, AP, LEG);
+  K.rect(K.panel(top, [X1, ZF - LW], [X1, ZB + LW], [1, 0], .296, .075, -Q, down), 0, 0, ZF - ZB - 2 * LW, AP, LEG);
   // Satz 2 auf der Zarge (Außenseite +1, oben = zum Scharnier), je Hälfte zweizeilig
   const so = { lh: 1.18, align: "center", track: .005 };
   const T4 = K.print(["Agenturen holen mich als", "Entwickler ins Projekt,"], .132, .72, so);
@@ -146,11 +148,11 @@ export default function (K) {
   // am Handy etwas schmalerer Bildschirm, damit er bei 16 px Kinnschrift ganz ins Hochkantbild passt
   const FW = 1.5, ZFB = -1.78, NH = .8, NW = .34, CH = .58, DX = N ? 2.56 : 3.2, DY = DX / 1.6, SW = DX + .3, SL = CH + DY + .1;
   // Fuß: flache Platte ohne Vorderwand (dort liegt in Ruhe das Bildschirmblatt an)
-  const foot = K.slab(top, -FW / 2, FW / 2, ZFB + NH, ZFB, .04, .33, .04, { col: METAL, top: METAL, walls: "lrb" });
+  const foot = K.slab(top, -FW / 2, FW / 2, ZFB + NH, ZFB, .04, .345, .04, { col: METAL, top: METAL, walls: "lrb" });
   // Hals: liegt auf dem Fuß, steht an dessen Hinterkante auf; seine Oberkante geht nahtlos in den Bildschirm über
-  const neck = K.panel(foot, [-NW / 2, ZFB], [NW / 2, ZFB], [0, 1], .36, .07, Q, { over: .04 });
+  const neck = K.panel(foot, [-NW / 2, ZFB], [NW / 2, ZFB], [0, 1], .37, .07, Q, { over: .04 });
   K.P(neck, [[0, 0], [NW, 0], [NW, NH], [0, NH]], METAL, [.5, .5, 0, .5]);
-  const scr = K.panel(neck, neck.uv(0, NH), neck.uv(NW, NH), [0, 1], .425, .04, .1, { own: top, over: .3 });
+  const scr = K.panel(neck, neck.uv(0, NH), neck.uv(NW, NH), [0, 1], .435, .04, .1, { own: top, over: .3 });
   const uL = -SW / 2 + NW / 2, uR = SW / 2 + NW / 2, U = x => x + NW / 2;
   K.P(scr, [[uL, 0], [0, 0], [NW, 0], [uR, 0], [uR, SL], [uL, SL]], FACE, [.5, 0, .5, .5, .5, .5]);
   // Skizze liegt lesbar von vorn auf dem Blatt (Seitenkopf hinten), zeichnet sich in Phase 1, geht beim Aufstehen
@@ -158,14 +160,14 @@ export default function (K) {
   const P = (x, y) => scr.uv(U(-DX / 2 + DX * x / 1000), D0 + DY * y / 625);
   // dy .004: Abstand zum Papier größer als dessen Tiefenversatz, sonst scheint die Skizze beim Aufstehen kopfüber nach vorn durch;
   // sie verblasst, bevor die Vorderseite zur Kamera dreht (rund 30° Aufstellwinkel)
-  F.sketch(scr, sketchSegs(P), .08, .1, { a: .58, dy: .004, fade: b => 1 - sm((b - .355) / .03) });
+  F.sketch(scr, sketchSegs(P), .08, .1, { a: .58, dy: .004, fade: b => 1 - sm((b - .365) / .03) });
   // Bildschirmseite (Unterseite, nach dem Aufstehen vorn): Rahmen und fertige Website, im Kinn Satzteil 1
   const PXU = 500;
   K.onPanel(scr, K.decal(SW * PXU, SL * PXU, (x, W, H) => {
     const bz = .055 * PXU, dx = (SW - DX) / 2 * PXU, dy = (SL - CH - DY) * PXU;
     x.fillStyle = ink(.84); rr(x, dx - bz, dy - bz, DX * PXU + 2 * bz, DY * PXU + 2 * bz, bz * .5); x.fill();
     x.save(); x.translate(dx, dy); x.beginPath(); x.rect(0, 0, DX * PXU, DY * PXU); x.clip(); webDraw(x, DX * PXU, DY * PXU); x.restore();
-  }, SW, SL, .395, .05), U(0), SL / 2, -1);
+  }, SW, SL, .405, .05), U(0), SL / 2, -1);
   const T1 = K.print(["Ich entwickle Websites", "und Onlineshops,"], .135, .5, { align: "center", lh: 1.18 });
   // Kinn: frei zwischen Unterkante und Rahmen (Rahmen reicht .055 ins Kinn), Text mittig darin
   K.onPanel(scr, T1, U(0), (CH - .055) / 2 - .01, -1);
@@ -173,7 +175,7 @@ export default function (K) {
   // ---------- Rechner: Mini-Tower neben dem Tisch auf dem Bogen ----------
   F.part("rechner", .1, .08);
   const PZ0 = .1, { W: TW, D: TD, H: TH } = TOWER;
-  const pc = K.box(R, PX0, PX0 + TW, PZ0, PZ0 - TD, TH, .3, .09, { col: CASE, fcol: FRONTC });
+  const pc = K.box(R, PX0, PX0 + TW, PZ0, PZ0 - TD, TH, .31, .09, { col: CASE, fcol: FRONTC });
   K.onPanel(pc.fr, K.decal(Math.round(TW * 700), Math.round(TH * 700), towerFront, TW, TH, .17), TW / 2, TH / 2, -1);
   // Satzteil 2 auf der rechten Seitenwand (zum Betrachter gedreht), Satzteil 3 auf dem Deckel
   const T2 = K.print(["binde sie an Ihre", "übrigen Systeme an"], .15, .57, { lh: 1.2 });
@@ -185,7 +187,7 @@ export default function (K) {
   // auf den Bogen fallend (von vorn sichtbar), über den Bogen zur linken Seitenwand des Rechners
   const ty = HT + .026, xe = X1 + .05, zd = -.6, gap = PX0 - xe;
   K.cable([V(0, 2.62, ZFB - .05), V(.15, ty, ZFB - .08), V(X1 * .5, ty, ZFB - .02), V(X1 * .82, ty, -1.25), V(X1 - .14, ty, zd - .12), V(X1 - .01, ty - .004, zd - .02),
-    V(xe, HT - .1, zd), V(xe + .02, 1.4, zd + .02), V(xe + .05, .3, zd + .03), V(xe + .22, .025, zd), V(xe + gap * .45, .025, zd - .12), V(PX0 - .3, .03, -.78), V(PX0 - .07, .12, -.8), V(PX0, .2, -.8)], .024, "#8e8981", .43, .05);
+    V(xe, HT - .1, zd), V(xe + .02, 1.4, zd + .02), V(xe + .05, .3, zd + .03), V(xe + .22, .025, zd), V(xe + gap * .45, .025, zd - .12), V(PX0 - .3, .03, -.78), V(PX0 - .07, .12, -.8), V(PX0, .2, -.8)], .024, "#8e8981", .44, .05);
 
   // ---------- Anriss des nächsten Abschnitts am Ende der Linie ----------
   F.part("gerwing", .9, .06);
@@ -201,7 +203,7 @@ export default function (K) {
   // niedrige Fenster zeigen bei gleicher Schriftgröße weniger Welt: Text dort tiefer setzen, damit der Monitor oben im Bild bleibt
   const syH = (lo, hi) => (W, H) => Math.min(hi, Math.max(lo, lo + (H - 720) / 180 * .15 * (hi > lo ? 1 : -1)));
   const S = {
-    name: { prints: [...mark.prints, kick], e0: mark.e, px: 150, fit: .56, pxN: 120, fitN: .84, pitch: 28, sy: -.26, npitch: 36, nsy: -.12, b: 0 },
+    name: { prints: [...mark.prints, kick], e0: mark.e, px: 150, fit: .56, pxN: 120, fitN: .84, pitch: 34, sy: -.26, npitch: 36, nsy: -.12, b: 0 },
     // t1: im Breitbild steht der Rechner ganz rechts mit im Bild (Text links der Mitte), sonst bleibt er ganz draußen, nie angeschnitten
     t1: { prints: [T1], px: pxD, pitch: 16, yaw: -14, sy: syH(-.18, .04), sx: (W, H) => W / H >= 1.68 ? -.4 : .03, npitch: 16, nyaw: -6, nsy: .14 },
     t2: { prints: [T2], px: pxD, pitch: 10, yaw: -30, sy: -.33, npitch: 10, nyaw: -30, nsy: -.3 },
@@ -211,16 +213,23 @@ export default function (K) {
     g: { prints: [g1, g2], e0: .5, px: 60, fit: .5, pxN: 40, fitN: .86, pitch: 50, sy: 0, npitch: 54, b: 1 }
   };
   return {
-    track: 720,
+    // Sichtfeld Breitbild 32° statt 36° (Kamera rund 12 % weiter weg, Bogen weniger trapezförmig verzerrt); hochkant 44° wie bisher
+    fov: 32, fovN: 44,
+    track: 750,
     thread: { pts: [LED, V(LED.x + .06, .8, LED.z), V(LED.x + .2, .004, PZ0 + .25), V(PX0 + 2.2, .004, .6), V(PX0 + 3.2, .004, -.2), V(PX0 + 3.25, .004, -2.6), V(PX0 + 2.2, .004, -5.0), V(5.0, .004, -9.2), V(-2.6, .004, -12.6), V(-4.0, .004, -13.6)], t0: .88, t1: 1 },
     stops: Object.values(S),
     keys: [
       { w: 0, stop: S.name },
-      // Bastellinien: von vorn oben auf Bogen, Name und den künftigen Bau (eingepasst: Modell im fertigen Zustand und Name im Rahmen
-      // 72 px unter der Oberkante bis 108 px über der Unterkante, Handy 70 / 104 px, el 48°, az −4° bzw. el 50°)
-      { w: 1, b: .2, cam: V(.48, 16.78, 14.97), tgt: V(1.44, 1.48, 1.23), camN: V(1.65, 21.23, 18.76), tgtN: V(1.65, 1.17, 1.93) },
-      // Hochklappen und Einrasten: tiefer (el 31°, az −6°; Handy el 34°), Monitor bleibt ganz im Bild, Name über der Leiste
-      { w: 1.2, b: .45, cam: V(-.49, 11.35, 17.44), tgt: V(1.22, 1.52, 1.18), camN: V(1.64, 15.75, 23.21), tgtN: V(1.64, 1.25, 1.71) },
+      // Bastellinien fertig, Tisch beginnt sich zu heben: Überblick über den Bogen (el 38°, az −4°, Abstand 22,7; Handy el 42°, 25,4).
+      // Eingepasst bei 1280 × 900: fertiges Modell, flach liegende Beine und Name 72 px unter der Oberkante bis 95 px über der Unterkante;
+      // Handy fertiges Modell und Name zwischen 185 und 637 px
+      { w: .8, b: .2, cam: V(.06, 15.3, 18.51), tgt: V(1.3, 1.3, .65), camN: V(1.64, 18.27, 20.8), tgtN: V(1.64, 1.3, 1.96) },
+      // Platte oben, Beine rasten ein: eigener Schlüssel, damit das Heben gleichmäßig über rund 0,4 Bildschirmhöhen läuft
+      // (el 33°, az −5°, Abstand 22,3; Handy el 36°, 25,2)
+      { w: 1, b: .34, cam: V(-.46, 13.43, 19.12), tgt: V(1.17, 1.3, .51), camN: V(1.63, 16.14, 22.29), tgtN: V(1.63, 1.3, 1.87) },
+      // Tisch steht, Monitor und Rechner fertig: Kamera ist mit dem Heben auf Augenhöhe eines Stehenden gesunken
+      // (el 28°, az −6°, Abstand 21,7; Handy el 30°, 25,2), Monitor-Oberkante ≥ 72 px, Name über der Leiste
+      { w: .8, b: .47, cam: V(-.89, 11.47, 19.37), tgt: V(1.11, 1.3, .34), camN: V(1.63, 13.92, 23.58), tgtN: V(1.63, 1.3, 1.73) },
       { w: .9, stop: S.t1 },
       { w: 1.1, stop: S.t2 },
       { w: .8, stop: S.t3 },
