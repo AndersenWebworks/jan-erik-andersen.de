@@ -16,6 +16,8 @@ Jede Entscheidung von Erik wird hier eingetragen, bevor gebaut wird.
 3. **Erst an der echten Eröffnungsszene testen (21.10.2026, Erik):** Fließtext, Netz-dann-Fläche und Bewegung werden am realen Einstieg aus dem Seitentext erprobt, nicht abstrakt entschieden.
 4. **Aushängeschild, keine Tech-Demo (21.10.2026, Erik):** Kundenorientiert denken. Die Gestaltung soll beeindrucken und zeigen, dass Erik gestalterisch etwas kann, als Gegensatz zu seinem sonst sehr technischen Profil. Sie dient dem Besucher, nicht dem Effekt. Für die Eröffnung werden drei Varianten mit unterschiedlichem Stil und Ansatz getestet.
 
+5. **Der Moment nach dem Klick aus der Mail (21.10.2026, Erik):** Die Seite begleitet Eriks Bewerbungen auf ausgeschriebene Projekte und Stellen und seine Initiativmails an Agenturen und Firmen. Sie muss überzeugen, sympathisch wirken und Erik als lohnenden Partner zeigen, auch für jemanden, der ihn noch nicht kennt und nur kurz reinklickt, oft am Handy. Daraus folgt: Name, Angebot und Niveau stehen im ersten Bild ohne Scrollen; Name und Text laden sofort, das 3D darf nachladen; ein Mensch ist zu sehen (Porträt, Ort klären); Belege früh (Gerwing direkt danach) und Kontakt von überall mit einem Klick. Die Marke muss auch in der Mailsignatur und im Browser-Tab tragen. Jede Szene wird gegen diesen Moment geprüft.
+
 ## Eröffnung: drei Varianten (21.10.2026, Erik)
 
 Erik hat „So bauen“ gewählt. Gebaut in `entwurf-2026-11/`, umschaltbar über `#v=a|b|c`, Zustände über `#p=0…1`. Echter Einstiegstext, der Name steht von Anfang an lesbar.

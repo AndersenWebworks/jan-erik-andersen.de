@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test Marke – Jan-Erik Andersen</title>
+<style>
+  @font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-VF.ttf"); font-weight: 200 800; }
+  @font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-Italic-VF.ttf"); font-weight: 200 800; font-style: italic; }
+  @font-face { font-family: "Schibsted"; src: url("fonts/SchibstedGrotesk-VF.ttf"); font-weight: 400 900; }
+  @font-face { font-family: "Mono"; src: url("fonts/JetBrainsMono.ttf"); font-weight: 100 800; }
+  @font-face { font-family: "Fraunces"; src: url("fonts/Fraunces.ttf"); font-weight: 100 900; }
+  @font-face { font-family: "Bodoni"; src: url("fonts/BodoniModa.ttf"); font-weight: 400 900; }
+  @font-face { font-family: "Archivo"; src: url("fonts/Archivo.ttf"); font-weight: 100 900; font-stretch: 62% 125%; }
+  @font-face { font-family: "Bricolage"; src: url("fonts/BricolageGrotesque.ttf"); font-weight: 200 800; font-stretch: 75% 100%; }
+  @font-face { font-family: "Instrument"; src: url("fonts/InstrumentSerif-Regular.ttf"); }
+  @font-face { font-family: "Instrument"; src: url("fonts/InstrumentSerif-Italic.ttf"); font-style: italic; }
+
+  :root { --ink: #303033; --red: #d40235; --muted: #77777b; --paper: #f4f2ed; --imprint: #e8e4db; --line: #b9b4aa; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #fff; color: var(--ink); font: 15px/1.5 "Schibsted", system-ui, sans-serif; padding: 36px 28px 80px; }
+  .intro { max-width: 1240px; margin: 0 auto 30px; color: var(--muted); }
+  .intro b { color: var(--ink); font-weight: 650; }
+  .grid { max-width: 1240px; margin: 0 auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+  .card { border: 1px solid #e4e1da; border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; }
+  .head { padding: 12px 18px; border-bottom: 1px solid #ece9e2; }
+  .head .t { display: flex; gap: 10px; align-items: baseline; }
+  .tag { font-weight: 700; font-size: 11px; letter-spacing: .08em; color: #fff; background: var(--ink); padding: 2px 7px; border-radius: 2px; }
+  .name { font-weight: 650; }
+  .what { color: var(--muted); font-size: 13.5px; margin-top: 3px; }
+  .stage { background: var(--paper); height: 250px; display: flex; justify-content: center; align-items: center; padding: 20px; overflow: hidden; }
+  .uses { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 18px; border-top: 1px solid #ece9e2; background: #fff; }
+  .uses nav { display: flex; gap: 16px; font-size: 13px; color: #444; }
+  .favs { display: flex; align-items: center; gap: 10px; }
+  .fav { display: grid; place-items: center; border: 1px solid #ddd; background: #fff; }
+  .fav svg { display: block; }
+  .f32 { width: 34px; height: 34px; } .f16 { width: 18px; height: 18px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } .uses nav { display: none; } }
+
+  .r { color: var(--red); }
+  .dot { display: inline-block; width: .17em; height: .17em; border-radius: 50%; background: var(--red); margin-left: .05em; }
+  .idot { position: relative; }
+  .idot::after { content: ""; position: absolute; left: 50%; top: var(--it, .02em); width: .15em; height: .15em; margin-left: -.075em; border-radius: 50%; background: var(--red); }
+  .nw { white-space: nowrap; line-height: 1; }
+
+  /* A */
+  .a { font-family: "Newsreader"; font-weight: 380; letter-spacing: -.018em; }
+  .a i { font-weight: 340; } .a .idot { --it: .1em; }
+  /* B Papierschnitt */
+  .b { position: relative; display: inline-block; font-family: "Newsreader"; font-weight: 420; letter-spacing: -.01em; line-height: 1; white-space: nowrap; padding-bottom: .36em; }
+  .b i { color: var(--red); font-weight: 360; }
+  .b .print, .b .print i { color: #ddd7cb; } .b .print { position: absolute; left: 0; top: 0; transform: translate(.035em, .05em); }
+  .b .fold { position: absolute; left: -.08em; right: -.08em; top: .78em; border-bottom: .012em dashed #8f8a80; }
+  .b.s { padding-bottom: .12em; } .b.s .print { display: none; }
+  /* C Monogramm */
+  .c { display: inline-flex; align-items: center; gap: .5em; }
+  .c .txt { font-family: "Schibsted"; font-weight: 560; letter-spacing: -.01em; line-height: 1.05; }
+  .c .txt span { display: block; }
+  .c.s .txt span { display: inline; } .c.s .txt span + span::before { content: " "; }
+  /* D Code gegen Serife */
+  .d { display: inline-flex; align-items: baseline; gap: .18em; white-space: nowrap; line-height: 1; }
+  .d .m { font-family: "Mono"; font-weight: 400; font-size: .34em; color: var(--muted); letter-spacing: -.01em; }
+  .d .m .cur { display: inline-block; width: .55em; height: 1.05em; background: var(--red); vertical-align: -.18em; margin-left: .12em; }
+  .d .s2 { font-family: "Bodoni"; font-style: italic; font-weight: 500; font-variation-settings: "opsz" 96; letter-spacing: -.02em; }
+  /* E Falz durch den Namen */
+  .e { position: relative; display: inline-block; font-family: "Fraunces"; font-weight: 640; font-variation-settings: "opsz" 144, "SOFT" 30, "WONK" 0; letter-spacing: -.025em; line-height: 1; white-space: nowrap;  }
+  .e .up, .e .dn { display: block; }
+  .e .up { clip-path: inset(0 0 48% 0); }
+  .e .dn { position: absolute; left: 0; top: 0; clip-path: inset(52% 0 0 0); color: #6e6c70; transform-origin: 50% 54%; transform: scaleY(.62) skewX(-8deg); }
+  .e .dn i, .e .up i { font-style: normal; }
+  .e .up i { color: var(--red); } .e .dn i { color: #9e0a2e; }
+  .e .line { position: absolute; left: -.1em; right: -.1em; top: 50%; border-top: .014em dashed #8f8a80; }
+  /* F Konstruktionszeichnung */
+  .f { position: relative; display: inline-block; font-family: "Instrument"; font-weight: 400; letter-spacing: -.01em; line-height: 1; white-space: nowrap; padding: .28em .5em .32em; }
+  .f .h { position: absolute; left: 0; right: 0; border-top: 1px solid rgba(48,48,51,.28); }
+  .f .h.base { top: 1.02em; } .f .h.x { top: .62em; } .f .h.cap { top: .36em; }
+  .f .v { position: absolute; top: 0; bottom: 0; border-left: 1px solid rgba(48,48,51,.28); }
+  .f .lbl { position: absolute; font-family: "Mono"; font-size: .085em; color: var(--muted); letter-spacing: .02em; }
+  .f .pt { position: absolute; width: .12em; height: .12em; border-radius: 50%; background: var(--red); transform: translate(-50%, -50%); }
+  .f.s { padding: 0 0 .22em; } .f.s .h:not(.base), .f.s .v, .f.s .lbl { display: none; } .f.s .h.base { top: 1.08em; left: -.2em; right: -.2em; }
+  /* G Plakatsatz */
+  .g { font-family: "Archivo"; font-stretch: 62%; font-weight: 860; text-transform: uppercase; line-height: .84; letter-spacing: -.01em; }
+  .g span { display: block; }
+  .g.s span { display: inline; } .g.s span + span::before { content: " "; }
+  /* H Breit und leise */
+  .h2 { font-family: "Archivo"; font-stretch: 125%; font-weight: 300; letter-spacing: .06em; text-transform: lowercase; white-space: nowrap; line-height: 1; }
+  .h2 .hy { display: inline-block; width: .42em; height: .09em; background: var(--red); vertical-align: .26em; margin: 0 .06em; }
+  /* I Roter Faden */
+  .ii { position: relative; display: inline-block; font-family: "Schibsted"; font-weight: 640; letter-spacing: -.02em; white-space: nowrap; line-height: 1; padding-bottom: .36em; }
+  .ii .th { position: absolute; left: 0; right: -.45em; bottom: .12em; height: .028em; background: var(--red); }
+  .ii .th::after { content: ""; position: absolute; right: -.07em; top: 50%; width: .17em; height: .17em; border-radius: 50%; background: var(--red); transform: translateY(-50%); }
+  /* J Stempel mit Eselsohr */
+  .j { display: inline-flex; align-items: center; gap: .45em; }
+  .j .txt { font-family: "Newsreader"; font-weight: 400; letter-spacing: -.015em; line-height: 1.02; }
+  .j .txt span { display: block; } .j .txt i { font-weight: 360; }
+  .j.s .txt span { display: inline; } .j.s .txt span + span::before { content: " "; }
+  /* K Fraunces warm */
+  .k { font-family: "Fraunces"; font-weight: 560; font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1; letter-spacing: -.03em; white-space: nowrap; line-height: 1; --it: .2em; }
+  /* L Bricolage */
+  .l { display: inline-block; line-height: .9; }
+  .l .top { display: block; font-family: "Mono"; font-size: .24em; font-weight: 500; letter-spacing: .02em; color: var(--muted); margin: 0 0 .25em .12em; }
+  .l .main { font-family: "Bricolage"; font-stretch: 75%; font-weight: 800; font-variation-settings: "opsz" 96; letter-spacing: -.035em; text-transform: lowercase; }
+  .l.s .top { display: inline; font-size: .62em; margin: 0 .35em 0 0; }
+</style>
+</head>
+<body>
+<p class="intro"><b>Minitest Marke.</b> Zwölf Richtungen, alle aus dem Material der neuen Seite: Papier, Falz, roter Punkt, rote Linie und Konstruktion. Jede ist groß auf Papier zu sehen, darunter im Header und als Favicon in 32 und 16 Pixeln. Die Schriften stehen unter offener Lizenz (OFL).</p>
+<div class="grid" id="grid"></div>
+
+<script>
+const fold = (sw) => `<polygon points="6,6 94,6 94,94" fill="#fff" stroke="#303033" stroke-width="${sw}" stroke-linejoin="round"/><polygon points="6,6 94,94 6,94" fill="#e8e4db" stroke="#303033" stroke-width="${sw}" stroke-linejoin="round"/>`;
+const JA = (fs) => `<text x="28" y="${50 + fs * .66}" text-anchor="middle" font-family="Newsreader" font-size="${fs}" fill="#303033">J</text><text x="70" y="${16 + fs * .66}" text-anchor="middle" font-family="Newsreader" font-size="${fs}" font-style="italic" fill="#d40235">A</text>`;
+const mono = `<svg viewBox="0 0 100 100" width="1em" height="1em" style="width:2.4em;height:2.4em">${fold(1.6)}<line x1="6" y1="6" x2="94" y2="94" stroke="#303033" stroke-width="1.4" stroke-dasharray="4 3"/>${JA(46)}</svg>`;
+const stamp = (w) => `<svg viewBox="0 0 100 100" style="width:${w};height:${w}"><defs><clipPath id="cp${w.replace(/\W/g,'')}"><circle cx="50" cy="50" r="46"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="#d40235"/><g clip-path="url(#cp${w.replace(/\W/g,'')})"><polygon points="62,0 100,0 100,38" fill="#f4f2ed"/><polygon points="62,0 100,38 70,30" fill="#a8022a"/></g><line x1="62" y1="4" x2="96" y2="38" stroke="#fff" stroke-width="1.2" stroke-dasharray="3 2.5"/><text x="47" y="66" text-anchor="middle" font-family="Archivo" font-stretch="62%" font-weight="860" font-size="44" fill="#fff" style="font-stretch:62%">JEA</text></svg>`;
+
+const svg = (vb, inner) => (px) => `<svg width="${px}" height="${px}" viewBox="${vb}">${inner(px)}</svg>`;
+const V = [
+  { id: "A1", n: "Name und Punkt am Schluss", w: "Der rote Punkt beendet den Namen wie einen Satz. Er ist derselbe Punkt, der auf der Seite als roter Faden läuft.",
+    big: `<div class="a nw" style="font-size:66px">Jan-Erik Andersen<span class="dot"></span></div>`,
+    small: `<div class="a nw" style="font-size:20px">Jan-Erik Andersen<span class="dot"></span></div>`,
+    fav: svg("0 0 32 32", () => `<circle cx="16" cy="16" r="9" fill="#d40235"/>`) },
+  { id: "A2", n: "Roter i-Punkt", w: "Der Punkt sitzt auf dem i von Erik, Andersen kursiv wie in der Eröffnung. Ruhig, merkt man sich trotzdem.",
+    big: `<div class="a nw" style="font-size:66px">Jan-Er<span class="idot">ı</span>k <i>Andersen</i></div>`,
+    small: `<div class="a nw" style="font-size:20px">Jan-Er<span class="idot">ı</span>k <i>Andersen</i></div>`,
+    fav: svg("0 0 32 32", () => `<rect x="13" y="13" width="6" height="15" rx="1" fill="#303033"/><circle cx="16" cy="7" r="4" fill="#d40235"/>`) },
+  { id: "B", n: "Papierschnitt", w: "Die Lettern stehen auf einer gestrichelten Falzlinie, so wie der Name in der Eröffnung aus dem Bogen aufsteht. Ohne Schatten, nur die Falz.",
+    big: `<div class="b" style="font-size:66px"><span>Jan-Erik <i>Andersen</i></span><span class="fold"></span></div>`,
+    small: `<div class="b s" style="font-size:20px"><span>Jan-Erik <i>Andersen</i></span><span class="fold"></span></div>`,
+    fav: svg("0 0 32 32", () => `<text x="16" y="24" text-anchor="middle" font-family="Newsreader" font-size="25" font-style="italic" fill="#d40235">A</text><line x1="4" y1="26.5" x2="28" y2="26.5" stroke="#8f8a80" stroke-width="1.2" stroke-dasharray="2 1.6"/>`) },
+  { id: "C", n: "Gefaltetes Monogramm", w: "Ein Quadrat mit diagonaler Falz, J auf der einen Seite, A auf der anderen. Daneben der Name in der Grotesk der Seite.",
+    big: `<div class="c" style="font-size:38px">${mono}<div class="txt"><span>Jan-Erik</span><span>Andersen</span></div></div>`,
+    small: `<div class="c s" style="font-size:15px"><svg viewBox="0 0 100 100" style="width:1.9em;height:1.9em">${fold(4)}${JA(50)}</svg><div class="txt"><span>Jan-Erik</span><span>Andersen</span></div></div>`,
+    fav: svg("0 0 100 100", () => `${fold(7)}${JA(58)}`) },
+  { id: "D", n: "Code gegen Serife", w: "Der Vorname klein in Code-Schrift mit rotem Cursor, der Nachname groß in einer Bodoni-Kursive. Technik und Gestaltung in einem Wort.",
+    big: `<div class="d" style="font-size:76px"><span class="m">jan-erik<span class="cur"></span></span><span class="s2">Andersen</span></div>`,
+    small: `<div class="d" style="font-size:30px"><span class="m" style="font-size:.5em">jan-erik<span class="cur"></span></span><span class="s2">Andersen</span></div>`,
+    fav: svg("0 0 32 32", () => `<text x="12" y="25" text-anchor="middle" font-family="Bodoni" font-style="italic" font-weight="600" font-size="27" fill="#303033">A</text><rect x="25" y="9" width="4.5" height="16" fill="#d40235"/>`) },
+  { id: "E", n: "Falz durch den Namen", w: "Eine Falz läuft quer durch die Lettern, die untere Hälfte ist nach hinten geknickt. Der Name ist selbst ein gefaltetes Blatt.",
+    big: `<div class="e" style="font-size:68px"><span class="up">Jan-Erik <i>Andersen</i></span><span class="dn">Jan-Erik <i>Andersen</i></span><span class="line"></span></div>`,
+    small: `<div class="e" style="font-size:22px"><span class="up">Jan-Erik <i>Andersen</i></span><span class="dn">Jan-Erik <i>Andersen</i></span></div>`,
+    fav: svg("0 0 32 32", () => `<clipPath id="eu"><rect x="0" y="0" width="32" height="15.5"/></clipPath><clipPath id="ed"><rect x="0" y="16.5" width="32" height="16"/></clipPath><text x="16" y="27" text-anchor="middle" font-family="Fraunces" font-weight="700" font-size="30" fill="#d40235" clip-path="url(#eu)">A</text><text x="16" y="25" text-anchor="middle" font-family="Fraunces" font-weight="700" font-size="30" fill="#9e0a2e" clip-path="url(#ed)" transform="translate(0 16) scale(1 .78) translate(0 -16)">A</text>`) },
+  { id: "F", n: "Konstruktionszeichnung", w: "Der Name mit Grundlinie, x-Höhe und Versalhöhe als Haarlinien, ohne Beschriftung. Am Schnittpunkt der rote Punkt. Klein bleibt nur die Grundlinie.",
+    big: `<div class="f" style="font-size:76px"><span class="h cap"></span><span class="h x"></span><span class="h base"></span><span class="v" style="left:.5em"></span><span class="pt" style="left:.5em;top:1.02em"></span>Jan-Erik <i>Andersen</i></div>`,
+    small: `<div class="f s" style="font-size:24px"><span class="h base"></span><span class="pt" style="left:-.2em;top:1.08em"></span>Jan-Erik <i>Andersen</i></div>`,
+    fav: svg("0 0 32 32", () => `<line x1="2" y1="25" x2="30" y2="25" stroke="#303033" stroke-opacity=".45" stroke-width="1"/><line x1="7" y1="3" x2="7" y2="30" stroke="#303033" stroke-opacity=".45" stroke-width="1"/><text x="18" y="25" text-anchor="middle" font-family="Instrument" font-style="italic" font-size="28" fill="#303033">A</text><circle cx="7" cy="25" r="3" fill="#d40235"/>`) },
+  { id: "G", n: "Plakatsatz", w: "Schmale, schwere Versalien eng gestapelt, der Bindestrich rot. Laut und sehr wiedererkennbar, das Gegenteil der ruhigen Serife.",
+    big: `<div class="g" style="font-size:88px"><span>Jan<span class="r" style="display:inline">-</span>Erik</span><span>Andersen</span></div>`,
+    small: `<div class="g s nw" style="font-size:22px"><span>Jan<span class="r" style="display:inline">-</span>Erik</span><span>Andersen</span></div>`,
+    fav: svg("0 0 32 32", () => `<text x="16" y="15" text-anchor="middle" font-family="Archivo" font-weight="860" font-size="17" style="font-stretch:62%" fill="#303033">JAN</text><text x="16" y="29.5" text-anchor="middle" font-family="Archivo" font-weight="860" font-size="17" style="font-stretch:62%" fill="#d40235">AND</text>`) },
+  { id: "H", n: "Breit und leise", w: "Eine sehr breite, leichte Grotesk in Kleinbuchstaben mit viel Luft. Der Bindestrich ist ein roter Strich. Wirkt wie ein Architekturbüro.",
+    big: `<div class="h2" style="font-size:46px">jan<span class="hy"></span>erik andersen</div>`,
+    small: `<div class="h2" style="font-size:16px">jan<span class="hy"></span>erik andersen</div>`,
+    fav: svg("0 0 32 32", () => `<text x="16" y="21" text-anchor="middle" font-family="Archivo" font-weight="300" font-size="17" style="font-stretch:125%" fill="#303033">ja</text><rect x="6" y="25" width="20" height="2" fill="#d40235"/>`) },
+  { id: "I", n: "Roter Faden", w: "Unter dem Namen läuft die rote Linie mit dem Punkt, wie auf der ganzen Seite. Im Header kann sie unter der Navigation weiterlaufen.",
+    big: `<div class="ii" style="font-size:54px">Jan-Erik Andersen<span class="th"></span></div>`,
+    small: `<div class="ii" style="font-size:19px;padding-bottom:.5em">Jan-Erik Andersen<span class="th" style="height:2px"></span></div>`,
+    fav: svg("0 0 32 32", () => `<rect x="3" y="15" width="18" height="2.4" fill="#d40235"/><circle cx="23" cy="16.2" r="6" fill="#d40235"/>`) },
+  { id: "J", n: "Stempel mit Eselsohr", w: "Der rote Kreis von Webworks bleibt, mit umgeknickter Ecke und den Initialen. Herkunft sichtbar, aber weitergefaltet.",
+    big: `<div class="j" style="font-size:44px">${stamp("2.6em")}<div class="txt"><span>Jan-Erik</span><span><i>Andersen</i></span></div></div>`,
+    small: `<div class="j s" style="font-size:18px">${stamp("1.7em")}<div class="txt"><span>Jan-Erik</span><span><i>Andersen</i></span></div></div>`,
+    fav: (px) => stamp(px + "px") },
+  { id: "K", n: "Warme Serife", w: "Fraunces mit weichen, leicht eigenwilligen Formen, dazu der rote i-Punkt. Persönlicher und handgemachter als die Zeitungsschrift.",
+    big: `<div class="k" style="font-size:70px">Jan-Er<span class="idot">ı</span>k Andersen</div>`,
+    small: `<div class="k" style="font-size:21px">Jan-Er<span class="idot">ı</span>k Andersen</div>`,
+    fav: svg("0 0 32 32", () => `<text x="16" y="27" text-anchor="middle" font-family="Fraunces" font-weight="600" font-size="30" fill="#303033">a</text><circle cx="25" cy="8" r="4" fill="#d40235"/>`) },
+  { id: "L", n: "Nachname als Zeichen", w: "„andersen.“ schmal, fett und klein geschrieben, mit rotem Punkt; der Vorname steht als Code-Zeile darüber. Kurz, kräftig, fast ein Logo.",
+    big: `<div class="l" style="font-size:110px"><span class="top">jan-erik</span><span class="main">andersen<span class="dot" style="width:.16em;height:.16em"></span></span></div>`,
+    small: `<div class="l s nw" style="font-size:26px"><span class="top">jan-erik</span><span class="main">andersen<span class="dot" style="width:.16em;height:.16em"></span></span></div>`,
+    fav: svg("0 0 32 32", () => `<text x="14" y="25" text-anchor="middle" font-family="Bricolage" font-weight="800" font-size="30" style="font-stretch:75%" fill="#303033">a</text><circle cx="26" cy="22.5" r="3.6" fill="#d40235"/>`) }
+];
+
+const nav = `<nav><span>Projekte</span><span>Leistungen</span><span>Kontakt</span></nav>`;
+const nur = new URLSearchParams(location.hash.slice(1)).get("nur"); const W = nur ? V.filter(v => nur.split(",").includes(v.id)) : V;
+document.getElementById("grid").innerHTML = W.map(v => `
+  <section class="card" id="${v.id}">
+    <div class="head"><div class="t"><span class="tag">${v.id}</span><span class="name">${v.n}</span></div><div class="what">${v.w}</div></div>
+    <div class="stage">${v.big}</div>
+    <div class="uses">${v.small}${nav}<div class="favs"><span class="fav f32">${v.fav(32)}</span><span class="fav f16">${v.fav(16)}</span></div></div>
+  </section>`).join("");
+</script>
+</body>
+</html>
