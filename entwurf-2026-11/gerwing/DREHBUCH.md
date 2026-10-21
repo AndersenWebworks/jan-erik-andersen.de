@@ -56,17 +56,17 @@ Blickhöhe / Gier / Abstand; Überblicksschläge aus den Teilegrenzen eingepasst
 |---|---|---|---|---|---|---|
 | 0 Start | 0 | 0 | 0 | 52° / 0° / 11,3 | 54° / 0° / 14,9 | Wand liegt flach, Kennzeile und Überschrift lesbar |
 | 1 Wand steht | 0,038 | 0,22 | 0,07 | 22° / −6° / 11,0 | 22° / −4° / 14,2 | Wand rastet ein |
-| L1 Satz 1 | 0,105 | 0,61 | 0,115 | 9° / −10° / 11,1 | 10° / −6° / 9,1 | Satz 1 an der Wand, Überschrift darüber |
-| L2 Quadratmeter | 0,211 | 1,23 | 0,165 | 58° / −6° / 10,3 | 60° / −4° / 9,0 | Satz 2a vor der Kontur, Steinlinien zeichnen sich |
-| 3 Steine | 0,307 | 1,78 | 0,30 | 40° / −8° / 9,2 | 46° / −4° / 12,7 | Reihen rasten ein |
-| L3 ganze Steine | 0,385 | 2,24 | 0,435 | 13° / −16° / 5,7 | 14° / −8° / 4,7 | Satz 2b auf den Stirnkanten, rechts die Terrasse im Anriss |
-| 4 Terrasse | 0,478 | 2,77 | 0,57 | 30° / −18° / 10,8 | 32° / −12° / 18,0 | Platte oben, Wände herab, Treppe faltet |
-| 5 Palette | 0,530 | 3,08 | 0,66 | 32° / −14° / 16,3 | 34° / −10° / 13,0 | Terrasse fertig, Palette schließt |
+| L1 Satz 1 | 0,105 | 0,61 | 0,115 | 9° / −10° / 11,1 | 10° / −6° / 13,1 | Satz 1 an der Wand, Überschrift darüber |
+| L2 Quadratmeter | 0,211 | 1,23 | 0,165 | 62° / −6° / 10,3 | 64° / −4° / 7,2 | Satz 2a vor der Kontur, Steinlinien zeichnen sich; Wand ganz oben aus dem Bild |
+| 3 Steine | 0,307 | 1,78 | 0,30 | 40° / −8° / 10,1 | 46° / −4° / 14,0 | Reihen rasten ein; Wand ganz im Bild |
+| L3 ganze Steine | 0,385 | 2,24 | 0,435 | 9° / −12° / 5,7 | 38° / 0° / 4,3 | Satz 2b auf den Stirnkanten (Desktop Text rechts der Mitte, Handy von oben mit Satz 2a darunter) |
+| 4 Terrasse | 0,478 | 2,77 | 0,57 | 30° / −22° / 8,6 | 32° / −12° / 18,0 | Platte oben, Wände herab, Treppe faltet |
+| 5 Palette | 0,530 | 3,08 | 0,66 | 32° / −22° / 13,0 | 34° / −10° / 13,0 | Terrasse fertig, Palette schließt |
 | L4 Gewicht | 0,607 | 3,52 | 0,715 | 58° / −8° / 9,0 | 60° / −6° / 7,5 | Satz 2c auf dem Deckel |
 | 6 Fracht | 0,690 | 4,00 | 0,83 | 40° / −10° / 17,3 | 44° / −6° / 23,7 | Hallen stehen, rote Linie läuft |
 | L5 Händler | 0,766 | 4,44 | 0,885 | 11° / −10° / 8,9 | 12° / −6° / 7,3 | Satz 2d an der zuständigen Halle |
-| 7 Laptop | 0,847 | 4,92 | 0,945 | 26° / −12° / 7,2 | 28° / −8° / 11,0 | Bildschirm klappt auf |
-| L6 Betreuung | 0,914 | 5,30 | 0,985 | 56° / −6° / 7,4 | 58° / −4° / 9,8 | Satz 3 unten, darüber der ganze Bildschirm |
+| 7 Laptop | 0,847 | 4,92 | 0,945 | 26° / −12° / 10,8 | 28° / −8° / 11,0 | Bildschirm klappt auf |
+| L6 Betreuung | 0,914 | 5,30 | 0,985 | 58° / −2° / 7,4 | 58° / −4° / 9,8 | Satz 3 unten, darüber der ganze Bildschirm |
 | Endbild | 1 | 5,80 | 1 | 28° / −20° / 19,4 | 34° / −14° / 29,0 | Palette, Weiche, Hallen, Laptop mit Shop; Terrasse links im Hintergrund |
 
 ## Nachgerechnet
@@ -77,6 +77,12 @@ Blickhöhe / Gier / Abstand; Überblicksschläge aus den Teilegrenzen eingepasst
 - **Bogen:** keine Überlappung von Teilen in Ruhe, keine Schnitt- oder Falzlinie durch fremde Teile, kein Punkt unter dem Bogen über den ganzen Bau (tiefster Punkt 0,0005). Die Kontur der Fläche liegt gewollt unter den Steinen (die Steine sind aus ihr geschnitten).
 - **Kamera** fährt nie durch Bauteile (Umgrenzung + 0,25), tiefste Kamerahöhe 1,6 (1366 × 768) bis 2,1.
 - **Textbreiten** mit den eingebetteten Schriften vermessen: alle Drucke passen auf ihre Bauteile (z. B. Überschrift 5,6 auf der Wand von 6,4, Satz 2b 1,41 breit und 0,10 hoch auf 0,12 hoher Stirnkante).
+
+## Korrektur nach Sichtprüfung (22.10.2026)
+
+Befund Clautz: bei `#p=0.31` (1280 × 900) ragte die Wand oben aus dem Bild, die Kennzeile lag halb unter dem Logo der Kopfzeile. Regel jetzt für alle Schläge: Jeder Textträger (Wand, alle Drucke) liegt ganz im Bild zwischen 64 px unter der Oberkante und 70 px über der Unterkante, oder ganz draußen. Rechnerisch geprüft über die projizierten Ecken aller sichtbaren Drucke und der Wand an allen 14 Schlägen, bei 1280 × 900, 1366 × 768, 1920 × 1080 und 390 × 844: überall 0 angeschnittene Träger. Die Werte kommen aus einer Suche nach der kleinsten Änderung von Neigung, Gier, Bildlage bzw. Blickhöhe, Gier, Abstand (alle Desktop-Größen zugleich), Gier bleibt überall ≤ 0.
+
+Geändert: Lesestellen L2, L3, L5 (Text 0,3 links der Mitte), L6 und Schläge 3, 4, 5, 7 (Tabelle oben). Am Handy: Wand 4,2 × 3,0 statt 4,6 × 2,75, Satz 1 auf der Wand 0,20 statt 0,14 (Kamera steht weiter weg, die ganze Wand passt ins Bild), Überschrift 0,40 statt 0,44; „Kunden geben ihre Quadratmeter ein,“ 0,12 statt 0,15 und mittig unter der Stirnkantenschrift. Schriftgrößen danach: Desktop 18,8–21,6 px, Handy 15,4–15,9 px. Der Laptop-Rahmen (kein Textträger) reicht an L6 bei 1280 × 900 bis 48 px, bei 1366 × 768 bis 41 px unter die Oberkante.
 
 ## Offen
 

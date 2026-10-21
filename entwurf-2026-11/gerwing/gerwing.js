@@ -34,7 +34,7 @@ export default function (K) {
 
   // ---------- Lage (Bogen x nach rechts, z zum Betrachter) ----------
   // Wand mit Überschrift
-  const WX0 = N ? -9.4 : -10.2, WW = N ? 4.6 : 6.4, ZW = -5.2, HW = N ? 2.75 : 1.9;
+  const WX0 = N ? -9.4 : -10.2, WW = N ? 4.2 : 6.4, ZW = -5.2, HW = N ? 3.0 : 1.9;
   // Pflasterfläche: Steine 0,6 × 0,3 (Verhältnis 25 × 15 cm wie im Shop), Kontur eine halbe Reihe kürzer als die ganzen Steine:
   // die letzte Reihe ragt halb über die Kontur. Desktop 9 Steine × 10 Reihen, Handy schmaler und tiefer (6 × 14)
   const CW = .6, RH = .3, NC = N ? 6 : 9, NR = N ? 14 : 10, PX0 = -9.4, PX1 = PX0 + NC * CW, PZB = -4.4, PZF = PZB + (NR - .5) * RH, SH = .12, G = .012;
@@ -63,8 +63,9 @@ export default function (K) {
   const S1L = N
     ? ["Für Gerwing habe ich 2023 einen", "WooCommerce-Shop gebaut, der", "Pflastersteine, Terrassenplatten", "und Stufen so verkauft, wie man", "sie bestellt: nach Fläche."]
     : ["Für Gerwing habe ich 2023 einen WooCommerce-Shop", "gebaut, der Pflastersteine, Terrassenplatten und", "Stufen so verkauft, wie man sie bestellt: nach Fläche."];
-  const T1 = sans(S1L, .14, .085, { lh: 1.32 });
-  const hd = K.print(N ? ["Pflaster nach Fläche", "bestellen"] : [TITEL], .44, -1, { font: "serif", lh: 1.08 });
+  // am Handy größer: bei 16 px steht die Kamera dann so weit weg, dass die ganze Wand ins Hochkantbild passt
+  const T1 = sans(S1L, N ? .2 : .14, .085, { lh: 1.32 });
+  const hd = K.print(N ? ["Pflaster nach Fläche", "bestellen"] : [TITEL], N ? .4 : .44, -1, { font: "serif", lh: 1.08 });
   const mt = K.print([META], .12, -1, { track: .03, col: MUTED });
   const v1 = .28 + T1.h / 2, v2 = v1 + T1.h / 2 + hd.h / 2 - .02, v3 = v2 + hd.h / 2 + mt.h / 2 - .02;
   K.onPanel(wall, T1, uL(T1, M0), v1, 1);
@@ -80,8 +81,9 @@ export default function (K) {
     ln([x + dx * .18, z], [x + dx * (.18 + tick), z]); ln([x, z + dz * .18], [x, z + dz * (.18 + tick)]);
   }
   F.sketch(R, cm, .105, .045, { a: .62 });
-  const T2 = sans(N ? ["Kunden geben ihre", "Quadratmeter ein,"] : ["Kunden geben ihre Quadratmeter ein,"], .15, .135, { lh: 1.25 });
-  K.onFlat(R, T2, uL(T2, PX0), PZF + .62 + (N ? .18 : 0));
+  const T2 = sans(N ? ["Kunden geben ihre", "Quadratmeter ein,"] : ["Kunden geben ihre Quadratmeter ein,"], N ? .12 : .15, .135, { lh: 1.25 });
+  // am Handy mittig unter der Stirnkantenschrift (x wie T3), damit beide zusammen ins Hochkantbild passen
+  K.onFlat(R, T2, N ? PX0 + 1.8 : uL(T2, PX0), PZF + .62 + (N ? .18 : 0));
 
   // ---------- 3 Ganze Steine im Läuferverband, Reihe für Reihe ----------
   // Stein: Platte hebt sich parallel, nur die Außenwände der Fläche schwenken hoch (innen liegen die Steine Fuge an Fuge,
@@ -250,12 +252,12 @@ export default function (K) {
   const pxF = (W, H) => pxD(W, H) * 1.15;
   const S = {
     t1: { prints: [T1], px: pxD, pitch: 9, yaw: -10, sy: -.18, npitch: 10, nyaw: -6, nsy: -.12 },
-    t2: { prints: [T2], px: pxF, pitch: 58, yaw: -6, sy: -.3, sx: -.05, pxN: 17.4, npitch: 60, nyaw: -4, nsy: -.28 },
-    t3: { prints: [T3], px: (W, H) => pxD(W, H) * 1.03, pitch: 13, yaw: -16, sy: -.3, sx: -.1, pxN: 16.6, npitch: 14, nyaw: -8, nsy: -.3 },
+    t2: { prints: [T2], px: pxF, pitch: 62, yaw: -6, sy: .19, sx: -.05, pxN: 17.4, npitch: 64, nyaw: -4, nsy: -.07 },
+    t3: { prints: [T3], px: (W, H) => pxD(W, H) * 1.03, pitch: 9, yaw: -12, sy: -.37, sx: .3, pxN: 17.9, npitch: 38, nyaw: 0, nsy: .26 },
     t4: { prints: [T4], px: pxF, pitch: 58, yaw: -8, sy: -.05, pxN: 18.2, npitch: 60, nyaw: -6, nsy: -.05 },
-    t5: { prints: [T5], px: pxD, pitch: 11, yaw: -10, sy: .1, npitch: 12, nyaw: -6, nsy: .05 },
+    t5: { prints: [T5], px: pxD, pitch: 11, yaw: -10, sy: .1, sx: -.3, npitch: 12, nyaw: -6, nsy: .05 },
     // Laptop: Text unten im Bild, darüber der ganze Bildschirm mit dem Shop
-    t6: { prints: [T6], px: (W, H) => pxD(W, H) * (H < 820 ? 1.06 : 1.15), pitch: 56, yaw: -6, sy: (W, H) => H < 820 ? -.62 : -.55, pxN: 17.6, npitch: 58, nyaw: -4, nsy: -.3 }
+    t6: { prints: [T6], px: (W, H) => pxD(W, H) * (H < 820 ? 1.06 : 1.15), pitch: 58, yaw: -2, sy: (W, H) => H < 820 ? -.54 : -.47, pxN: 17.6, npitch: 58, nyaw: -4, nsy: -.3 }
   };
 
   // Rote Linie: von der Palette über die Weiche zur zuständigen Halle
@@ -277,18 +279,18 @@ export default function (K) {
       { w: .9, stop: S.t1 },
       { w: 1.25, stop: S.t2 },
       // Steine heben sich Reihe für Reihe: Überblick über die Fläche
-      key(1.5, .30, V(-6.61, -.13, -2.66), 40, -8, 9.2, V(-7.49, -.2, -1.95), 46, -4, 12.7),
+      key(1.5, .30, V(-6.61, .87, -2.66), 40, -8, 10.1, V(-7.49, -.2, -1.95), 46, -4, 14.0),
       { w: 1.15, stop: S.t3 },
       // Terrasse hebt sich, Wände schwenken herab, Treppe faltet aus
-      key(1.45, .57, V(.51, .04, -2.11), 30, -18, 10.8, V(.42, .1, -2.2), 32, -12, 18.0),
+      key(1.45, .57, V(.51, .04, -2.11), 30, -22, 8.6, V(.42, .1, -2.2), 32, -12, 18.0),
       // Treppe fertig, Palette baut sich
-      key(1.1, .66, V(2.77, 1.1, -2.68), 32, -14, 16.3, V(6.2, 1.2, -2.82), 34, -10, 13.0),
+      key(1.1, .66, V(2.77, 1.1, -2.68), 32, -22, 13.0, V(6.2, 1.2, -2.82), 34, -10, 13.0),
       { w: 1.1, stop: S.t4 },
       // Fracht: Hallen stehen, rote Linie läuft über die Weiche
       key(1.25, .83, V(11.1, .4, -3.1), 40, -10, 17.3, V(13.06, .11, -3.04), 44, -6, 23.7),
       { w: 1.1, stop: S.t5 },
       // Laptop klappt auf
-      key(1.2, .945, V(15.35, .8, 2.6), 26, -12, 7.2, V(15.32, .78, 2.6), 28, -8, 11.0),
+      key(1.2, .945, V(15.35, .8, 2.6), 26, -12, 10.8, V(15.32, .78, 2.6), 28, -8, 11.0),
       { w: .9, stop: S.t6 },
       // Endbild: Palette, Händler und Laptop mit dem Shop, Terrasse links im Hintergrund
       key(1.3, 1, V(11.71, .05, -.32), 28, -20, 19.4, V(13.39, .35, -.52), 34, -14, 29.0)
