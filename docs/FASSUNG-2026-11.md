@@ -147,6 +147,7 @@ Umsetzung in `entwurf-2026-11/seite/` über den Zusammenbau-Chat.
 - Schnittstellen/WBG und Abschluss stehen als je zwei Ausschnitte in der Welt, weil der Seitentext Gestaltung bzw. Werdegang und Stimmen dazwischen setzt.
 - Sichtprüfung über den Webchat-Browser mit 26 Bildern (alle Szenen am Desktop, fünf Stellen am Handy, zwei Übergänge); dabei sechs Fehler gefunden und behoben (Vorbild bei Einstieg mitten auf der Seite, Raster an Lesestellen, durchscheinende Blatttitel, Linien durch die Navigation, Fadenende außerhalb des Umschlags, angeschnittene Kontaktkarten am Handy).
 - Offen: Länge, leere Übergänge mit Faden durch weißen Raum, Staffelei liest sich von vorn als Tafel, kopflastige Handybilder (Gerwing, Stimmen), Satzteile statt ganzer Sätze an einzelnen Lesestellen aus den Einzelszenen, Richtungswechsel an Szenengrenzen (siehe Drehbuch).
+- Zweite Korrekturrunde (22.10.): Kontakt-Schlussbild mit Überschrift und allen drei Kontaktwegen, Sprungziel und Label „Kontakt“; Gerwing-Satz ganz auf der Wand; Staffelei schräg gesehen mit gespreizten Beinen. Offen bleiben die Ablage der Staffelei als Kasten, kleine Kartenschrift und die Halbsätze im Stimmen-Zitat.
 
 ## Offen (in dieser Reihenfolge abfragen)
 

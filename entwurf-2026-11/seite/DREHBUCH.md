@@ -73,6 +73,13 @@ Rechenskripte in `tmp/seite-pruefung/` (git-ignoriert), Aufruf `node --import ./
 
 Sichtprüfung über den Webchat-Browser, 26 Bilder (`#p` an Lesestellen aller Szenen am Desktop 1280 × 900, Handy 390 × 844 an Startbild, Gerwing, Gestaltung, Stimmen und Schluss, zwei Übergänge). Rechenprüfung danach erneut: 63 bzw. 70 Lesestellen ohne Befund, keine frühere Szene im Vordergrund. Konsolenfehler lassen sich in der Vorschau nicht auslesen; geprüft sind `node --check` aller Module und ein fehlerfreier Lauf des echten Kerns in Node über alle Zustände.
 
+## Zweite Korrekturrunde (22.10.2026, nach Eriks Sichtprüfung am Desktop)
+
+- Kontakt: Neue Endstellung `all` in `abschluss.js` mit Überschrift (Neigung 44°, Zeilen getrennt) und Mail, Telefon, LinkedIn ganz im Bild; am Handy Karten gestaffelt untereinander, Überschrift dreizeilig darunter. `#s=kontakt` springt auf diese Stellung (p = 1). Das Label kam bisher aus dem festen Szenennamen „Für Agenturen“; jetzt `labels` in `folge.js` und `api.labelAt(p)` in `kern.js`, ab p ≈ 0,955 steht „Kontakt“.
+- Gerwing: Der Satz „Kunden geben ihre Quadratmeter ein, der Shop rechnet sie in ganze Steine um,“ stand zerteilt auf Boden und Stirnsteinen in umgekehrter Reihenfolge. Er steht jetzt ganz auf der Wand unter der Einleitung (Wand höher: 2,5 Desktop, 4,2 Handy), Lesestelle t3 fast frontal; Bodentext und seine Lesestelle entfallen, ihr Gewicht liegt auf dem Überblick, die p-Werte der späteren Szenen bleiben.
+- Staffelei: Lesestellen mit Gier (−20°, +20°, −20°; Handy ±14°) und zwei gespreizte vordere Beine, die mit der Stütze ausklappen; zusammen mit dem Stützbein ein Dreibein.
+- Gesehen (9 Bilder): Kontakt Desktop und Handy, Gerwing Desktop und Handy, Staffelei Desktop, Startbild und Stimmen am Handy.
+
 ## Bekannte Schwächen
 
 - Länge 73 Bildschirmhöhen; weiter kürzen geht nur über engere Lesefenster in den Einzelszenen.
@@ -82,6 +89,6 @@ Sichtprüfung über den Webchat-Browser, 26 Bilder (`#p` an Lesestellen aller Sz
 - Laden: HTML-Vorbild liegt kurz über den aufstehenden Lettern (Lage geschätzt); die übrigen Szenen bauen sich nach dem ersten Bild nacheinander auf.
 - Staffelei: oberste Blattkante rechnerisch bis 3,6 mm hinter dem Brett (Kopfleiste kaschiert); Blatttitel klein (14/12 px).
 - Übergänge: Zwischen zwei Szenen zieht der Faden durch leeren weißen Raum, das Bild ist dort fast leer.
-- Staffelei wirkt von vorn wie eine Tafel oder Wand, nicht wie eine Staffelei (Beine nur von der Seite sichtbar); hinter dem Brett steht oben der Bildschirm aus WBG wie aufgesetzt.
-- Handy: Gerwing und Stimmen kopflastig, untere Bildhälfte leer; im Schlussbild steht nur LinkedIn ganz im Bild (Mail und Telefon an den Lesestellen davor).
-- Satzketten über mehrere Träger aus den Einzelszenen (Modernisierung „Ich bringe sie …“, Agenturen „arbeite mich … ein / und halte mich …“) zeigen an einer Lesestelle nur einen Satzteil.
+- Staffelei: liest sich mit Schrägstellung und Beinen als Staffelei, die Ablage ist aber noch ein geschlossener Kasten; hinter dem Brett steht oben der Bildschirm aus WBG wie aufgesetzt. Ob der Wechsel der Gierrichtung zwischen den Lesestellen ruhig wirkt, ist nur in Bewegung beurteilbar.
+- Handy: Stimmen kopflastig, untere Bildhälfte leer. Kontaktkarten mit kleiner Schrift (15 px Desktop, 14 px Handy); Gerwing-Satz am Handy 15 px.
+- Satzketten über mehrere Träger aus den Einzelszenen (Modernisierung „Ich bringe sie …“, Agenturen „arbeite mich … ein / und halte mich …“) zeigen an einer Lesestelle nur einen Satzteil; ebenso das Zitat von ai-coustics in Stimmen (vier Halbsätze auf dem Band, Schluss auf der Fahne). Gerwing verteilt den langen Satz weiter auf Wand, Palette und Händler.
