@@ -126,6 +126,18 @@ Testszene `entwurf-2026-11-test-fliesstext/` (Gerwing-Terrasse aus dem Vorspann-
 - **B – Lesespalte:** sauber und am Handy am robustesten, aber das Modell steht daneben wie eine Illustration.
 - **Empfehlung Clautz: A** als Prinzip für alle Abschnitte. **Eriks Entscheidung steht noch aus** und ist die erste Frage der neuen Sitzung.
 
+## Inhalt: Antworten aus der Fragenkarte (22.10.2026, Erik)
+
+Maßstab für jede Formulierung: Was ergibt für Agenturen, Unternehmen und Leute, die eine Stelle besetzen, am meisten Sinn?
+
+- **Runden Group statt RPLC:** RPLC wird auf der Seite nicht genannt. Im Mittelpunkt steht die Runden Group als Mutterfirma, für die Erik viele Websites und Anwendungen betreut hat (RPLC war nur deren Tochter). Werdegang: „Runden Group“ mit „WBG Pooling und viele weitere Websites und Anwendungen der Firmengruppe“. WBG-Zeile: „2023 bis 2025 · für die Runden Group“. Gerwing steht ohne Bezug zu RPLC.
+- **Games-Stufe:** „2010 bis 2017“, Text „Spielprototypen in Flash und Haxe, danach Qualitätssicherung bei Goodgame Studios und Deep Silver FISHLABS“. Gamersunity entfällt in dieser Stufe (Spielejournalismus ab 2006). Für die Zielgruppe zählt die Qualitätssicherung (Wahl Clautz auf Eriks Bitte).
+- **Pixel Arrays:** Die Pixelkachel bleibt.
+- **Betreuung:** Erik sieht monatlich nach. Der Kalender blättert Monat für Monat um, nicht Tag für Tag.
+- **Kontakt:** kein Lebenslauf als PDF.
+
+Umsetzung in `entwurf-2026-11/seite/` über den Zusammenbau-Chat.
+
 ## Offen (in dieser Reihenfolge abfragen)
 
 1. Fließtext: A oder B (siehe oben)
