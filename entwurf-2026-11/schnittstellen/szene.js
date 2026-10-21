@@ -134,9 +134,19 @@ export default function (K) {
 
 
   // ---------- Bildschirm (Fuß-Hals-Schirm wie in der Eröffnung, nach hinten gefaltet) ----------
-  function monitor(cx, zh, T, name, page, chinLines) {
+  // Satz ganz auf das Kinn: Zeilenumbruch nur an Wortgrenzen, möglichst gleichmäßig lange Zeilen
+  function wrap(text, e, maxEm) {
+    const words = text.split(" "), count = m => { let n = 1, cur = ""; for (const w of words) { const t = cur ? cur + " " + w : w; if (cur && K.measure([t]).tw > m) { n++; cur = w; } else cur = t; } return n; };
+    const n0 = count(maxEm); let m = maxEm; while (count(m - .4) === n0 && m > 6) m -= .4;
+    const lines = []; let cur = "";
+    for (const w of words) { const t = cur ? cur + " " + w : w; if (cur && K.measure([t]).tw > m) { lines.push(cur); cur = w; } else cur = t; }
+    lines.push(cur); return lines;
+  }
+  const CE = .125;
+  function monitor(cx, zh, T, name, page, sentence) {
     F.part(name, T.line[0], T.line[1]);
-    const FW = 1.5, NW = .34, NH = .75, SW = N ? 3.0 : 3.4, DX = SW - .4, DY = DX / 1.6, CH = .55, SL = CH + DY + .1, PXU = 500;
+    const SW = N ? 2.8 : 3.6, chinLines = wrap(sentence, CE, (SW - .5) / CE);
+    const FW = 1.5, NW = .34, NH = .75, DX = SW - .4, DY = DX / 1.6, CH = ((chinLines.length - 1) * 1.18 + 1) * CE + .34, SL = CH + DY + .1, PXU = 500;
     const neck = K.panel(R, [cx - FW / 2, zh], [cx + FW / 2, zh], [0, -1], T.neck[0], T.neck[1], Q, { over: .04 });
     K.P(neck, [[0, 0], [FW, 0], [FW / 2 + NW / 2, NH], [FW / 2 - NW / 2, NH]], METAL, [.5, .5, 0, .5]);
     const scr = K.panel(neck, neck.uv(FW / 2 - NW / 2, NH), neck.uv(FW / 2 + NW / 2, NH), [0, -1], T.scr[0], T.scr[1], -.1, { over: .25 });
@@ -148,7 +158,7 @@ export default function (K) {
       x.save(); x.translate(dx, dy); x.beginPath(); x.rect(0, 0, DX * PXU, DY * PXU); x.clip(); page(x, DX * PXU, DY * PXU); x.restore();
     }, SW, SL, T.decal, .03);
     K.onPanel(scr, dec, NW / 2, SL / 2, 1);
-    const chin = K.print(chinLines, .135, T.text, { align: "center", lh: 1.18 });
+    const chin = K.print(chinLines, CE, T.text, { align: "center", lh: 1.18 });
     K.onPanel(scr, chin, NW / 2, (CH - .055) / 2 - .01, 1);
     return { neck, scr, chin, dec, cx, zh, top: NH + SL, SW };
   }
@@ -206,21 +216,19 @@ export default function (K) {
   const eH = N ? .5 : .62, H1 = K.word(["Schnittstellen und", "eigene Werkzeuge"], eH, N ? -4.6 : -5.4, 6.6, .15, .85, { font: "serif", foot: 1, imprint: { ...IMPRINT, close: .25, closeDur: .7 } });
 
   // Bildschirm mit Website
-  const m1 = monitor(M1X, 0, TT.m1, "m1", pageSite, ["Ich verbinde Websites und Shops"]);
+  const m1 = monitor(M1X, 0, TT.m1, "m1", pageSite, "Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen, bei WBG etwa mit Salesforce und Concludis.");
 
   // Drei Geräte: Texte der Fronten sind die Satzteile
   F.part("geraete", TT.dev.line[0], TT.dev.line[1]);
-  const crm = device(0, "CRM", [{ u: SOCK[0], kind: "rect" }, { u: SOCK[1], kind: "rect" }], TT.dev.fr[0], TT.dev.dk[0], TT.dev.fr[0] + TT.dev.dur, ["mit CRM-,"], .14);
-  const erp = device(1, "ERP", [{ u: SOCK[0], kind: "round" }, { u: SOCK[1], kind: "round" }], TT.dev.fr[1], TT.dev.dk[1], TT.dev.fr[1] + TT.dev.dur, ["ERP- und"], .14);
-  const bew = device(2, "Bewerbermanagement", [{ u: SOCK[0], kind: "rect" }, { u: SOCK[1], kind: "rect" }], TT.dev.fr[2], TT.dev.dk[2], TT.dev.fr[2] + TT.dev.dur, ["Bewerbermanagementsystemen,"], .14);
-  // Deckel: Rest des ersten Satzes (CRM, Bewerbermanagement) und der zweite Satz (ERP)
-  const lidO = { lh: 1.2, align: "center" };
-  const lidC = K.print(["bei WBG etwa", "mit Salesforce"], .17, TT.dev.dk[0] + TT.dev.durD + .03, lidO);
-  const lidB = K.print(["und Concludis."], .17, TT.dev.dk[2] + TT.dev.durD + .06, lidO);
-  const lidE = K.print(["Wo ein gekauftes", "Werkzeug nicht zu Ihren", "Abläufen passt,"], .165, .365, lidO);
-  K.onPanel(crm.dk, lidC, DW / 2, DD / 2, 1);
-  K.onPanel(bew.dk, lidB, DW / 2, DD / 2, 1);
+  const crm = device(0, "CRM", [{ u: SOCK[0], kind: "rect" }, { u: SOCK[1], kind: "rect" }], TT.dev.fr[0], TT.dev.dk[0], TT.dev.fr[0] + TT.dev.dur, ["CRM"], .2);
+  const erp = device(1, "ERP", [{ u: SOCK[0], kind: "round" }, { u: SOCK[1], kind: "round" }], TT.dev.fr[1], TT.dev.dk[1], TT.dev.fr[1] + TT.dev.dur, ["ERP"], .2);
+  const bew = device(2, "Bewerbermanagement", [{ u: SOCK[0], kind: "rect" }, { u: SOCK[1], kind: "rect" }], TT.dev.fr[2], TT.dev.dk[2], TT.dev.fr[2] + TT.dev.dur, ["Bewerbermanagement"], .17);
+  // Deckel des ERP trägt den ganzen zweiten Satz, sobald der Adapter einrastet; die Deckel von CRM und Bewerbermanagement bekommen in Szene 2 ihr Namensschild
+  const lidE = K.print(wrap("Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt.", .13, (DW - .5) / .13), .13, TT.ad.text, { lh: 1.25, align: "center" });
   K.onPanel(erp.dk, lidE, DW / 2, DD / 2, 1);
+  const sfL = K.print(["Salesforce"], .2, TT.cab2.sf[0] + .02, { align: "center" }), coL = K.print(["Concludis"], .2, TT.cab2.co[0] + .02, { align: "center" });
+  K.onPanel(crm.dk, sfL, DW / 2, DD / 2, 1);
+  K.onPanel(bew.dk, coL, DW / 2, DD / 2, 1);
 
   // Rotes Adapterstück: Front steht vor der Buchse auf (Vorderseite Unterseite), Deckel klappt zurück gegen das Gerät
   F.part("adapter", TT.ad.line[0], TT.ad.line[1]);
@@ -230,8 +238,6 @@ export default function (K) {
   const adD = K.panel(adF, adF.uv(0, AH), adF.uv(AW, AH), [0, 1], TT.ad.dk[0], TT.ad.dk[1], Q, { over: .06 });
   K.rect(adD, 0, 0, AW, AD, REDC);
   K.onPanel(adF, K.decal(Math.round(AW * 300), Math.round(AH * 300), (x, W, H) => adapterFront(x, W, H, AW, AH), AW, AH, TT.ad.decal), AW / 2, AH / 2, -1);
-  const adT = K.print(["entwickle ich eines,", "das passt."], .15, TT.ad.text, { align: "center", lh: 1.2, col: "#ffffff" });
-  K.onPanel(adD, adT, AW / 2, AD / 2, -1, [0, 1]);
 
   // Kabel: Anfang am Hals des Bildschirms, eigene Bahn je Gerät (das fernste außen), zuletzt gerade auf die Buchse
   const SY = .36, laneZ = [3.1, 4.1, 5.1];
@@ -270,7 +276,7 @@ export default function (K) {
   const kick = K.word(["Weitere Arbeit", "2023 bis 2025 · im Auftrag von RPLC"], N ? .15 : .13, hx + .05, hz + 1.8, TT.h2 + .01, .035, { foot: 1, clock: "b", on: TT.h2 + .006, noImprint: true, col: MUTED, lh: 1.5, track: .02 });
 
   // Bildschirm mit Portal
-  const m2 = monitor(M2X, ZR, TT.m2, "m2", pagePortal, ["Ein Industrie- und Vertriebsportal"]);
+  const m2 = monitor(M2X, ZR, TT.m2, "m2", pagePortal, "Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.");
 
   // Drehteller: Achteck, Wände stehen am Rand, Platte hebt sich, darauf faltet sich das Produkt und dreht sich beim Scrollen
   F.part("tt", TT.tt.line[0], TT.tt.line[1]);
@@ -295,7 +301,7 @@ export default function (K) {
     x.strokeStyle = RED; x.lineWidth = 12; x.beginPath(); x.moveTo(0, W * .405); x.lineTo(0, W * .47); x.stroke();
   }, 2 * (TR - .2), 2 * (TR - .2), TT.tt.plate[0] + TT.tt.plate[1], .02);
   K.onFlat(spin, scale, TX, TZ, .004);
-  const ttext = K.print(["mit 360-Grad-Produktansichten,"], .15, TT.tt.text);
+  const ttext = K.print(["360-Grad-Produktansichten"], .17, TT.tt.text);
   const ttp = etikett("e1", TT.tt.prodLine[0] - .03, .04, TX, TZ + TR + 2.0, ttext.w + .3, .8);
   K.onPanel(ttp, ttext, ttext.w / 2 + .15, .4, 1);
 
@@ -305,7 +311,7 @@ export default function (K) {
   const board = K.panel(R, [LGX - BW / 2, ZR], [LGX + BW / 2, ZR], [0, -1], TT.lg.rise[0], TT.lg.rise[1], Q, { over: .05 });
   K.rect(board, 0, 0, BW, BH, BOARD);
   K.onPanel(board, K.decal(Math.round(BW * 300), Math.round(BH * 300), (x, W, H) => loginFace(x, W, H, BW, BH), BW, BH, TT.lg.decal), BW / 2, BH / 2, 1);
-  const lgT = K.print(["einem geschützten Bereich", "für den Vertrieb"], .125, TT.lg.text, { align: "center", lh: 1.2 });
+  const lgT = K.print(["Vertrieb"], .2, TT.lg.text, { align: "center" });
   K.onPanel(board, lgT, BW / 2, .3, 1);
   // Bügel: eigenes Teil, rastet von oben in den Schlosskörper (Körper in der Tafel bei u = BW - .74, v = BH - .4 - 1.56 ... Mitte des Körpers)
   const SHW = .5, SHH = .5, shPr = K.decal(240, 240, shackleArt, SHW, SHH, TT.lg.decal), shG = new THREE.Group();
@@ -314,11 +320,6 @@ export default function (K) {
   F.attach(board, shG, board.uv(lockU, lockTop + SHH / 2 - .03), board.n, 1, .004);
   const shOpen = .3;
   K.anim(b => { shPr.mesh.position.y = shOpen * (1 - mech(win(b, TT.lg.shackle[0], TT.lg.shackle[1]), .12)); });
-
-  // Etikett für die Anbindungen
-  const anP = K.print(["und Anbindungen an Salesforce und Concludis."], .15, TT.an.text);
-  const anT = etikett("e2", TT.an.line[0], TT.an.line[1], 6.45, 6.7, anP.w + .3, .9);
-  K.onPanel(anT, anP, anP.w / 2 + .15, .45, 1);
 
   // Kabel Szene 2: vom Hals des Portal-Bildschirms zur zweiten Buchse von CRM (Salesforce) und Bewerbermanagement (Concludis)
   const ox = M2X, oz = ZR;
@@ -337,26 +338,17 @@ export default function (K) {
   // Handy übernimmt Lage und Einpassung des Desktops, solange nichts Eigenes (n…) angegeben ist; Schriftgröße dort immer 16 px
   const frontStop = (prints, o) => { const s = { prints, px: pxD, pitch: 14, yaw: 0, sx: 0, sy: 0, ...o }; s.nsx = o.nsx !== undefined ? o.nsx : s.sx; s.nsy = o.nsy !== undefined ? o.nsy : s.sy; s.fitN = o.fitN !== undefined ? o.fitN : s.fit; return s; };
   S.h1 = { prints: [H1], b: 0, px: 999, pxN: 999, fit: .72, fitN: .84, pitch: 12, sy: -.1, nsy: -.05, nsx: 0, sx: 0 };
-  S.t1 = frontStop([m1.chin, m1.dec], { b: TT.m1.text + .02, pitch: 16, yaw: -10, sy: -.1, e0: .135, fit: .96 });
-  S.fr = frontStop([crm.front, erp.front, bew.front, crm.dec, erp.dec, bew.dec], { b: .285, pitch: 16, yaw: 0, fit: .96, sy: .2, e0: .14 });
-  S.lids = frontStop([lidC, lidB], { b: .335, pitch: 52, yaw: 0, fit: .96, px: 22 });
-  S.erp = frontStop([lidE], { b: .385, pitch: 48, yaw: -8, px: 22 });
-  S.ad = frontStop([adT], { b: .53, pitch: 46, yaw: 0, px: 22 });
-  S.h2 = { prints: [h2w, kick], b: TT.h2 + .05, px: 999, pxN: 999, fit: .8, fitN: .9, pitch: 22, sy: -.05, nsy: -.05, sx: 0, nsx: 0 };
-  S.t2 = frontStop([m2.chin, m2.dec], { b: TT.m2.text + .02, pitch: 16, yaw: -10, sy: -.1, e0: .135, fit: .96 });
+  S.t1 = frontStop([m1.chin, m1.dec], { b: TT.m1.text + .02, pitch: 16, yaw: -10, nyaw: 0, sy: -.1, e0: CE, fit: .96 });
+  S.ad = frontStop([lidE], { b: .53, pitch: 46, yaw: 0, px: 22, sy: .12 });
+  S.h2 = { prints: [h2w, kick], b: TT.h2 + .05, px: 999, pxN: 999, fit: .66, fitN: .78, pitch: 22, sy: -.05, nsy: -.05, sx: 0, nsx: 0 };
+  S.t2 = frontStop([m2.chin, m2.dec], { b: TT.m2.text + .02, pitch: 16, yaw: -10, nyaw: 0, sy: -.1, e0: CE, fit: .96 });
   S.tt = frontStop([ttext], { b: .84, pitch: 48, yaw: 0, sy: -.45, px: 22, pxN: 14 });
   S.tt2 = frontStop([ttext], { b: .945, pitch: 48, yaw: 0, sy: -.45, px: 22, pxN: 14, noWarp: true });
-  S.lg = frontStop([lgT], { b: .975, pitch: 16, yaw: 12, sy: -.2 });
-  S.an = frontStop([anP], { b: 1, pitch: 46, yaw: 0, sy: -.5 });
-  // Handy: jede Front und jeder Deckel für sich (drei Texte nebeneinander passen nicht in 390 px)
-  S.fr1 = frontStop([crm.front, crm.dec], { b: .27, pitch: 16, e0: .14, fit: .96, sy: .2 });
-  S.fr2 = frontStop([erp.front, erp.dec], { b: .278, pitch: 16, e0: .14, fit: .96, sy: .2 });
-  S.fr3 = frontStop([bew.front, bew.dec], { b: .285, pitch: 16, e0: .14, fit: .96, sy: .2 });
-  S.l1 = frontStop([lidC], { b: .31, pitch: 52, px: 22 });
-  S.l2 = frontStop([lidB], { b: .335, pitch: 52, px: 22 });
+  S.lg = frontStop([lgT], { b: .975, pitch: 16, yaw: 12, sy: -.2, px: 32, pxN: 22 });
+  S.an = frontStop([sfL, coL], { b: 1, pitch: 40, yaw: 0, sy: .3, fit: .9, px: 22 });
+  S.an1 = frontStop([sfL], { b: .99, pitch: 40, px: 22, sy: .3 });
+  S.an2 = frontStop([coL], { b: 1, pitch: 40, px: 22, sy: .3 });
   const stops = Object.values(S);
-  const kFronts = N ? [{ w: 1.0, stop: S.fr1 }, { w: .55, stop: S.fr2 }, { w: .55, stop: S.fr3 }] : [{ w: 1.1, stop: S.fr }];
-  const kLids = N ? [{ w: .9, stop: S.l1 }, { w: .6, stop: S.l2 }] : [{ w: .9, stop: S.lids }];
 
   return {
     names: S, fov: 32, fovN: 44, track: 1000,
@@ -364,19 +356,20 @@ export default function (K) {
     keys: [
       { w: 0, stop: S.h1 },
       // Überblick über die Zeile: alle Bastellinien der Szene 1 stehen (el 40°, Abstand 21; Handy Abstand 46)
-      { w: .9, b: .115, cam: look(1.3, .3, -.5, 40, -3, 21), tgt: V(1.3, .3, -.5), camN: look(1.3, .3, -.5, 40, -3, 46), tgtN: V(1.3, .3, -.5) },
-      { w: 1.0, stop: S.t1 },
-      ...kFronts,
-      ...kLids,
-      { w: .9, stop: S.erp },
-      { w: 1.1, stop: S.ad },
-      { w: 1.1, stop: S.h2 },
+      { w: 1.0, b: .115, cam: look(1.3, .3, -.5, 40, -3, 21), tgt: V(1.3, .3, -.5), camN: look(1.3, .3, -.5, 40, -3, 46), tgtN: V(1.3, .3, -.5) },
+      { w: 1.2, stop: S.t1 },
+      // die drei Geräte mit Namen und den ankommenden Kabeln
+      { w: 1.1, b: .30, cam: look(3.8, .7, .5, 24, 0, 17), tgt: V(3.8, .7, .5), camN: look(3.8, .7, .5, 24, 0, 30), tgtN: V(3.8, .7, .5) },
+      // ERP: Stecker stößt an, Adapter entsteht
+      { w: 1.2, b: .365, cam: look(3.3, .4, 1.0, 32, -6, 9.5), tgt: V(3.3, .4, 1.0) },
+      { w: 2.0, stop: S.ad },
+      { w: 1.2, stop: S.h2 },
       { w: .9, b: .66, cam: look(7.0, 1.0, 10.2, 30, 0, 24), tgt: V(7.0, 1.0, 10.2) },
-      { w: 1.0, stop: S.t2 },
-      { w: 1.0, stop: S.tt },
-      { w: .9, stop: S.tt2 },
-      { w: .9, stop: S.lg },
-      { w: 1.0, stop: S.an }
+      { w: 1.2, stop: S.t2 },
+      { w: 1.1, stop: S.tt },
+      { w: 1.0, stop: S.tt2 },
+      { w: 1.0, stop: S.lg },
+      ...(N ? [{ w: .7, stop: S.an1 }, { w: .6, stop: S.an2 }] : [{ w: 1.0, stop: S.an }])
     ]
   };
 }

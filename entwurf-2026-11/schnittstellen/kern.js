@@ -335,6 +335,25 @@ export function start(renderer, VARIANTS) {
     camera.lookAt(tgt);
   }
 
+  // Anteil des Textträgers (Umgrenzung der vier Ecken), der im Rahmen [0, cw] × [64, ch - 70] liegt; hinter der Kamera 0
+  const _c = [V(), V(), V(), V()];
+  function clipFactor(pr, cw, ch) {
+    const m = pr.mesh.matrixWorld, hw = pr.w / 2, hh = pr.h / 2;
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    for (let i = 0; i < 4; i++) {
+      const v = _c[i].set(i === 0 || i === 3 ? -hw : hw, i < 2 ? -hh : hh, 0).applyMatrix4(m);
+      const q = v.clone().applyMatrix4(camera.matrixWorldInverse);
+      if (q.z > -.1) return 0;
+      v.project(camera);
+      const X = (v.x + 1) / 2 * cw, Y = (1 - v.y) / 2 * ch;
+      x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y);
+    }
+    const A = (x1 - x0) * (y1 - y0); if (A <= 0) return 0;
+    const ox = Math.max(0, Math.min(x1, cw) - Math.max(x0, 0)), oy = Math.max(0, Math.min(y1, ch - 70) - Math.max(y0, 64));
+    const f = ox * oy / A;
+    return sm((f - .985) / .014);
+  }
+
   // ---------- Fortschritt, Scrollen, Knöpfe ----------
   const bar = document.getElementById("bar"), hint = document.getElementById("hint");
   const links = [...document.querySelectorAll("[data-v]")];
@@ -397,10 +416,16 @@ export function start(renderer, VARIANTS) {
     rissMat.uniforms.uB.value = b;
     for (const m of bMats) { if (m.uniforms.uGB) m.uniforms.uGB.value = b; else m.uniforms.uB.value = b; }
     for (const a of anims) a(b, time);
+    // Kern-Änderung Schnittstellen: Text ist nur sichtbar, wenn der Textträger ganz im Bild liegt (oben ab 64 px, unten bis Höhe - 70 px)
+    // oder ganz draußen ist; angeschnittener Text blendet aus (Regel Clautz, gilt für alle Szenen)
+    camera.updateMatrixWorld();
+    const cw = VW(), ch = VH();
     for (const pr of prints) {
-      if (pr.on < 0 && pr.off === undefined && pr.tOff === undefined) continue;
-      let o = (pr.on < 0 ? 1 : sm((b - pr.on) / pr.fade)) * (pr.off === undefined ? 1 : 1 - sm((b - pr.off) / .03));
+      let o = pr.on < 0 ? 1 : sm((b - pr.on) / pr.fade);
+      if (pr.off !== undefined) o *= 1 - sm((b - pr.off) / .03);
       if (pr.tOff !== undefined) o *= 1 - sm((tl - pr.tOff) / pr.tDur);
+      if (o > .001 && pr.t && pr.t.rows) o *= clipFactor(pr, cw, ch);
+      if (pr.on < 0 && pr.off === undefined && pr.tOff === undefined && o === 1 && pr.mat.opacity === 1) continue;
       pr.mat.opacity = o; pr.mesh.visible = o > .001;
     }
     updateThread(b);
