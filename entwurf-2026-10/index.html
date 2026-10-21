@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Jan-Erik Andersen · Webentwicklung (Entwurf)</title>
+<style>
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-VF.ttf") format("truetype"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-Italic-VF.ttf") format("truetype"); font-weight: 200 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "Schibsted Grotesk"; src: url("fonts/SchibstedGrotesk-VF.ttf") format("truetype"); font-weight: 400 900; font-display: swap; }
+
+:root {
+  --paper: #f5f3ef;
+  --ink: #303033;
+  --muted: #6f6d72;
+  --rule: #d9d5ce;
+  --red: #d40235;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --pad: clamp(20px, 5vw, 72px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font: 400 18px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+::selection { background: var(--red); color: #fff; }
+
+.draft-note { position: fixed; z-index: 50; right: 14px; bottom: 14px; font: 500 12px/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 8px 12px; }
+.placeholder { color: var(--muted); background: repeating-linear-gradient(-45deg, transparent 0 6px, rgba(48,48,51,.05) 6px 12px); padding: 0 .25em; }
+
+/* Kopfzeile */
+.top { position: fixed; z-index: 20; inset: 0 0 auto 0; display: flex; justify-content: space-between; align-items: baseline; padding: 22px var(--pad); font: 500 14px/1 var(--sans); letter-spacing: .02em; mix-blend-mode: multiply; }
+.top nav { display: flex; gap: 28px; }
+.top a { text-decoration: none; }
+.top a:hover { color: var(--red); }
+.top .mark { font-weight: 700; }
+.top .mark span { color: var(--red); }
+
+/* Einstieg */
+.hero { position: relative; min-height: 100svh; display: grid; grid-template-rows: 1fr auto; }
+.hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.hero h1 { font: 380 clamp(64px, 13vw, 210px)/.9 var(--serif); letter-spacing: -.03em; padding: 22vh var(--pad) 0; }
+.hero h1 em { font-style: italic; color: var(--red); }
+.webgl .hero h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); padding: 0; }
+.hero-foot { position: relative; display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; align-items: end; padding: 0 var(--pad) 56px; }
+.hero-foot .kicker { font: 500 13px/1.4 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.hero-foot p { font-size: clamp(19px, 1.6vw, 24px); line-height: 1.5; max-width: 34em; }
+.hero-foot .links { margin-top: 22px; display: flex; gap: 28px; font-weight: 600; font-size: 16px; }
+.arrow { text-decoration: none; border-bottom: 2px solid var(--red); padding-bottom: 3px; }
+.arrow:hover { color: var(--red); }
+
+/* Kapitel */
+section.chapter { padding: clamp(96px, 14vw, 180px) var(--pad) 0; }
+.chapter-head { display: grid; grid-template-columns: 120px 1fr; gap: 24px; align-items: baseline; margin-bottom: clamp(40px, 6vw, 80px); }
+.num { font: 600 13px/1 var(--sans); letter-spacing: .16em; color: var(--red); }
+.chapter-head h2 { font: 360 clamp(40px, 6vw, 88px)/1 var(--serif); letter-spacing: -.02em; }
+.chapter-head h2 em { font-style: italic; }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+/* Gerwing */
+.case { display: grid; grid-template-columns: 1.45fr 1fr; gap: clamp(32px, 5vw, 80px); align-items: start; }
+.case figure { position: relative; }
+.case .shot { display: block; width: 100%; height: auto; box-shadow: 0 30px 60px -30px rgba(48,48,51,.35); }
+.case .shot-2 { position: absolute; width: 40%; right: -5%; bottom: -12%; height: auto; border: 6px solid var(--paper); box-shadow: 0 24px 50px -24px rgba(48,48,51,.45); }
+.case figcaption { margin-top: 18px; max-width: 55%; font-size: 13px; color: var(--muted); }
+.meta { font: 500 13px/1.5 var(--sans); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+.case h3 { font: 400 clamp(30px, 3vw, 44px)/1.1 var(--serif); margin-bottom: 22px; letter-spacing: -.01em; }
+.case p + p { margin-top: 1em; }
+.case .arrow { display: inline-block; margin-top: 28px; font-weight: 600; font-size: 16px; }
+
+/* Leistungen */
+.services { border-top: 1px solid var(--ink); }
+.service { display: grid; grid-template-columns: 120px 1fr 1.3fr; gap: 24px; padding: 36px 0 40px; border-bottom: 1px solid var(--rule); transition: background .3s; }
+.service:hover h3 { color: var(--red); }
+.service .n { font: 600 13px/2.6 var(--sans); color: var(--muted); letter-spacing: .1em; }
+.service h3 { font: 400 clamp(26px, 2.6vw, 38px)/1.1 var(--serif); transition: color .3s; }
+.service p { max-width: 36em; }
+.service .proof { display: block; margin-top: 12px; font-size: 15px; color: var(--muted); }
+
+/* Weitere Arbeit */
+.more { display: grid; grid-template-columns: 120px 1fr 1fr; gap: 24px; }
+.more .item h3 { font: 400 30px/1.15 var(--serif); margin-bottom: 10px; }
+.more .item .meta { margin-bottom: 12px; }
+.also { grid-column: 2 / 4; margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--rule); }
+
+/* Arbeitsweise */
+.prose { display: grid; grid-template-columns: 120px 1fr; gap: 24px; }
+.prose p { font: 400 clamp(24px, 2.3vw, 34px)/1.4 var(--serif); max-width: 30em; }
+
+/* Werdegang */
+.timeline { display: grid; grid-template-columns: 120px 1fr; gap: 24px; }
+.timeline ol { list-style: none; border-top: 1px solid var(--ink); }
+.timeline li { display: grid; grid-template-columns: 180px 1fr; gap: 24px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+.timeline .y { font: 500 15px/1.6 var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
+.timeline .s { font: 400 22px/1.35 var(--serif); }
+.timeline .s small { display: block; font: 400 15px/1.5 var(--sans); color: var(--muted); margin-top: 2px; }
+
+/* Stimmen */
+.quotes { display: grid; grid-template-columns: 120px 1fr 1fr; gap: 24px 56px; }
+.quotes blockquote p { font: italic 380 clamp(21px, 1.8vw, 26px)/1.45 var(--serif); }
+.quotes blockquote p::before { content: "„"; color: var(--red); }
+.quotes blockquote p::after { content: "“"; color: var(--red); }
+.quotes cite { display: block; margin-top: 18px; font: 500 14px/1.4 var(--sans); font-style: normal; color: var(--muted); }
+
+/* Agenturen */
+.agency { display: grid; grid-template-columns: 120px 1fr 1fr; gap: 24px 56px; }
+.agency p { font-size: 20px; }
+
+/* Kontakt */
+.contact { padding: clamp(120px, 16vw, 220px) var(--pad) 64px; margin-top: clamp(96px, 14vw, 180px); background: var(--ink); color: var(--paper); }
+.contact h2 { font: 360 clamp(48px, 8vw, 132px)/.98 var(--serif); letter-spacing: -.025em; max-width: 12em; }
+.contact h2 em { font-style: italic; color: #ff3d63; }
+.contact .lines { margin-top: 64px; display: grid; grid-template-columns: repeat(4, auto); justify-content: start; gap: 16px 56px; font-size: 18px; }
+.contact .lines span { display: block; font: 500 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: #9c9aa0; margin-bottom: 10px; }
+.contact a { text-decoration: none; border-bottom: 1px solid #ff3d63; }
+.contact a:hover { color: #ff3d63; }
+.contact footer { margin-top: 120px; display: flex; justify-content: space-between; font-size: 14px; color: #9c9aa0; }
+
+@media (max-width: 900px) {
+  .top nav { display: none; }
+  .hero-foot, .case, .service, .more, .prose, .timeline, .quotes, .agency, .chapter-head { grid-template-columns: 1fr; }
+  .chapter-head { gap: 12px; }
+  .service { gap: 10px; }
+  .also { grid-column: auto; }
+  .timeline li { grid-template-columns: 1fr; gap: 4px; }
+  .case .shot-2 { display: none; }
+  .hero-foot .kicker { display: none; }
+  .case figcaption { max-width: none; }
+  .contact .lines { grid-template-columns: 1fr 1fr; }
+  .spacer { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+<!-- Entwurf Oktober 2026, nicht öffentlich. Andersen Webworks. -->
+<div class="draft-note">Entwurf · nicht öffentlich</div>
+
+<header class="top">
+  <a class="mark" href="#">Jan-Erik Andersen<span>.</span></a>
+  <nav>
+    <a href="#arbeit">Arbeit</a>
+    <a href="#leistungen">Leistungen</a>
+    <a href="#werdegang">Werdegang</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero" id="start">
+  <canvas id="type" aria-hidden="true"></canvas>
+  <h1>Jan-Erik <em>Andersen</em></h1>
+  <div class="hero-foot">
+    <div class="kicker">Webentwicklung<br>Raum Plau am See · remote</div>
+    <div>
+      <p>Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p>
+      <div class="links"><a class="arrow" href="#arbeit">Projekte ansehen</a><a class="arrow" href="#kontakt">Kontakt</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="arbeit">
+  <div class="chapter-head reveal"><span class="num">01</span><h2>Gerwing</h2></div>
+  <div class="case">
+    <figure class="reveal">
+      <img class="shot" src="bilder/gerwing-produkt-ausschnitt.jpg" alt="Produktseite im Gerwing-Shop: Pflastersteine „Tosca Antik“ mit Farbauswahl">
+      <img class="shot-2" src="bilder/gerwing-bestellung.jpg" alt="" aria-hidden="true">
+      <figcaption>gerwing.de · Produktseite mit Farbwahl, Format und Musterbestellung</figcaption>
+    </figure>
+    <div class="reveal">
+      <div class="meta">WooCommerce · seit 2023</div>
+      <h3>Pflaster nach Fläche bestellen</h3>
+      <p>Für Gerwing habe ich 2023 einen WooCommerce-Shop gebaut, der Pflastersteine, Terrassenplatten und Stufen so verkauft, wie man sie bestellt: nach Fläche.</p>
+      <p>Kunden geben ihre Quadratmeter ein, der Shop rechnet sie in ganze Steine um, ermittelt Gewicht und Fracht nach Postleitzahl und leitet die Bestellung an den zuständigen Händler weiter. Seitdem betreue ich den Shop und entwickle ihn laufend weiter.</p>
+      <a class="arrow" href="#">Zur Projektgeschichte</a>
+    </div>
+  </div>
+</section>
+
+<section class="chapter" id="leistungen">
+  <div class="chapter-head reveal"><span class="num">02</span><h2>Was ich <em>mache</em></h2></div>
+  <div class="services">
+    <div class="service reveal"><span class="n">01</span><h3>Betreuung und Absicherung</h3><p>Zwischen dem Bekanntwerden einer Lücke in einem WordPress-Plugin und dem ersten Angriff vergehen oft nur Stunden. Ich halte Ihre Seite deshalb laufend aktuell und sehe regelmäßig nach, ob sie sauber läuft.</p></div>
+    <div class="service reveal"><span class="n">02</span><h3>Modernisierung</h3><p>Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen. Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.</p></div>
+    <div class="service reveal"><span class="n">03</span><h3>Shops und Shop-Wechsel</h3><p>Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.</p></div>
+    <div class="service reveal"><span class="n">04</span><h3>Schnittstellen und eigene Werkzeuge</h3><p>Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen, bei WBG etwa mit Salesforce und Concludis. Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt.</p></div>
+    <div class="service reveal"><span class="n">05</span><h3>Gestaltung</h3><p>Für mich gehört Gestaltung zur Entwicklung. Ich entwerfe Erscheinungsbilder und Oberflächen selbst oder setze vorhandene Entwürfe sorgfältig um.<span class="proof">Beispiele: <span class="placeholder">[Take the Gloves Off, nach Zustimmung]</span>, das NOVUM-Cover und das Ausstellungsmotiv „100 Jahre Audi“.</span></p></div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head reveal"><span class="num">03</span><h2>Weitere <em>Arbeit</em></h2></div>
+  <div class="more">
+    <span class="spacer"></span>
+    <div class="item reveal">
+      <div class="meta">2023 bis 2025 · im Auftrag von RPLC</div>
+      <h3>WBG Pooling</h3>
+      <p>Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.</p>
+    </div>
+    <div class="item reveal">
+      <div class="meta">Ehrenamtlich</div>
+      <h3>Take the Gloves Off</h3>
+      <p class="placeholder">[Ein Satz zum Erscheinungsbild, nach Abstimmung]</p>
+    </div>
+    <p class="also reveal">Außerdem: Onkologie Laatzen, Mindblossom und Soundhealing Hamburg, der digitale Wirkungsbericht für Seniorpartner in School, Bäckerei Behrens. <span class="placeholder">[je ein Satz nach erneuter Sichtung]</span></p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head reveal"><span class="num">04</span><h2>Wie ich <em>arbeite</em></h2></div>
+  <div class="prose reveal">
+    <span class="spacer"></span>
+    <p>Ich arbeite mit aktuellen KI-Werkzeugen und habe dafür eigene Abläufe entwickelt. Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge. Entscheidungen und Verantwortung bleiben bei mir, und ausgeliefert wird nur, was ich geprüft habe.</p>
+  </div>
+</section>
+
+<section class="chapter" id="werdegang">
+  <div class="chapter-head reveal"><span class="num">05</span><h2>Werdegang</h2></div>
+  <div class="timeline reveal">
+    <span class="spacer"></span>
+    <ol>
+      <li><span class="y">seit 2023</span><span class="s">Gerwing<small>Umsetzung und laufende Betreuung des Onlineshops</small></span></li>
+      <li><span class="y">2023 bis 2025</span><span class="s">Runden Group über RPLC<small>WBG Pooling und weitere Websites und Anwendungen</small></span></li>
+      <li><span class="y">2017 bis 2023</span><span class="s">Tangram Werbeagentur<small>Frontend-Entwicklung, unter anderem für Nissen, BIG Arbeitsschutz und EMPORE</small></span></li>
+      <li><span class="y">2017</span><span class="s">YOOtheme<small>Support Management</small></span></li>
+      <li><span class="y">seit 2010</span><span class="s">Freiberufliche Webprojekte<small>seit 2018 als Andersen Webworks</small></span></li>
+      <li><span class="y">2007 bis 2010</span><span class="s">HTK Hamburg<small>Zertifikat Multimedia Design</small></span></li>
+      <li><span class="y placeholder">[Jahre]</span><span class="s">Games<small>QA bei Goodgame Studios und Deep Silver FISHLABS, PahuPahu mit rund 25 Spielprototypen in Flash und Haxe, Gamersunity</small></span></li>
+      <li><span class="y">2000 bis 2006</span><span class="s">Pixel Arrays<small>erste Selbstständigkeit</small></span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head reveal"><span class="num">06</span><h2>Stimmen</h2></div>
+  <div class="quotes">
+    <span class="spacer"></span>
+    <blockquote class="reveal"><p>Seniorpartner in School (SiS) ist eine bundesweit agierende Sozialorganisation. Ein gut aufgestellter digitaler Wirkungsbericht ist für unsere Arbeit wichtig. Jan-Erik und die kompetente Texterin Annemarie haben das für uns neue Format professionell und barrierefreundlich aufgesetzt. Super Teamarbeit, verlässlich und engagiert. SiS sagt DANKE!</p><cite>Karin, Seniorpartner in School · Google-Bewertung</cite></blockquote>
+    <blockquote class="reveal"><p>Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich mit Andersen Webworks seit nun mehreren Jahren einen zuverlässigen Partner gefunden zu haben. Professionelles Webdesign das mich immer wieder überrascht, meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff, so setzt man sich von der Konkurrenz ab!</p><cite>Corvin Jädicke, ai-coustics · Google-Bewertung</cite></blockquote>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-head reveal"><span class="num">07</span><h2>Für <em>Agenturen</em></h2></div>
+  <div class="agency reveal">
+    <span class="spacer"></span>
+    <p>Ich steige in laufende Projekte ein, arbeite mich in bestehende Themes und Plugins ein und halte mich an Ihre Abläufe und Werkzeuge.</p>
+    <p>Konditionen und freie Kapazität nenne ich Ihnen auf Anfrage.</p>
+  </div>
+</section>
+</main>
+
+<section class="contact" id="kontakt">
+  <h2 class="reveal">Schreiben Sie mir, <em>worum es geht.</em></h2>
+  <div class="lines reveal">
+    <div><span>Mail</span><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a></div>
+    <div><span>Telefon</span><a href="tel:+4938733270015">+49 38733 270015</a></div>
+    <div><span>LinkedIn</span><a href="https://www.linkedin.com/in/andersen-erik/">andersen-erik</a></div>
+    <div><span>Lebenslauf</span><a href="#">PDF herunterladen</a></div>
+  </div>
+  <footer><span>Andersen Webworks · Jan-Erik Andersen</span><span>Impressum · Datenschutz</span></footer>
+</section>
+
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module">
+import * as THREE from "three";
+
+// Kapitel erscheinen beim Scrollen
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: .12 });
+document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+// Name im Raum: gestapelte Schriftebenen, rote Tiefe dahinter
+const canvas = document.getElementById("type");
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let renderer;
+try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true }); } catch (e) { renderer = null; }
+
+if (renderer) {
+  document.documentElement.classList.add("webgl");
+  await Promise.all([document.fonts.load('380 200px "Newsreader"'), document.fonts.load('italic 380 200px "Newsreader"')]);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(30, 1, .1, 100);
+  camera.position.z = 10;
+  const group = new THREE.Group();
+  scene.add(group);
+
+  // Schrift einmal in eine Textur zeichnen
+  const tc = document.createElement("canvas");
+  const ctx = tc.getContext("2d");
+  const texture = new THREE.CanvasTexture(tc);
+  texture.anisotropy = 8;
+  texture.colorSpace = THREE.SRGBColorSpace;
+
+  function drawText(narrow) {
+    const W = 2400, H = narrow ? 1500 : 640, M = 40;
+    tc.width = W; tc.height = H;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#fff";
+    ctx.textBaseline = "alphabetic";
+    const fit = (txt, style, max) => { let size = 600; ctx.font = `${style} ${size}px "Newsreader"`; size *= max / ctx.measureText(txt).width; return Math.min(size, 600); };
+    if (narrow) {
+      const s1 = fit("Andersen", "italic 380", W - 2 * M);
+      ctx.font = `380 ${s1}px "Newsreader"`; ctx.fillText("Jan-Erik", M, s1 * .95);
+      ctx.font = `italic 380 ${s1}px "Newsreader"`; ctx.fillText("Andersen", M, s1 * 2.0);
+    } else {
+      ctx.font = '380 300px "Newsreader"';
+      const wa = ctx.measureText("Jan-Erik ").width;
+      ctx.font = 'italic 380 300px "Newsreader"';
+      const wb = ctx.measureText("Andersen").width;
+      const k = (W - 2 * M) / (wa + wb), size = 300 * k;
+      ctx.font = `380 ${size}px "Newsreader"`; ctx.fillText("Jan-Erik ", M, H * .72);
+      ctx.font = `italic 380 ${size}px "Newsreader"`; ctx.fillText("Andersen", M + wa * k, H * .72);
+    }
+    texture.needsUpdate = true;
+    return W / H;
+  }
+
+  const LAYERS = 22;
+  const uniforms = { uTime: { value: 0 }, uMouse: { value: new THREE.Vector2(.5, .5) } };
+  const vert = `
+    uniform float uTime; uniform float uWave;
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      vec3 p = position;
+      p.z += sin(uv.x * 5.0 + uTime * .6) * uWave + cos(uv.y * 3.0 + uTime * .4) * uWave * .6;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
+    }`;
+  const frag = `
+    uniform sampler2D uMap; uniform vec3 uColor; uniform float uAlpha; uniform vec2 uMouse; uniform float uFront;
+    varying vec2 vUv;
+    void main() {
+      float a = texture2D(uMap, vUv).a;
+      if (a < .01) discard;
+      vec3 c = uColor;
+      // Lichtkante auf der vordersten Ebene, folgt der Maus
+      float d = distance(vUv, uMouse);
+      c = mix(c, vec3(.55, .54, .57), uFront * smoothstep(.35, 0.0, d) * .14);
+      gl_FragColor = vec4(c, a * uAlpha);
+      #include <colorspace_fragment>
+    }`;
+
+  const ink = new THREE.Color("#303033"), red = new THREE.Color("#d40235");
+  const layers = [];
+  for (let i = LAYERS - 1; i >= 0; i--) {
+    const t = i / (LAYERS - 1);
+    const mat = new THREE.ShaderMaterial({
+      uniforms: {
+        uMap: { value: texture }, uTime: uniforms.uTime, uMouse: uniforms.uMouse,
+        uColor: { value: i === 0 ? ink : red.clone().lerp(new THREE.Color("#a3022a"), t) },
+        uAlpha: { value: i === 0 ? 1 : (i === LAYERS - 1 ? .25 : .95) },
+        uFront: { value: i === 0 ? 1 : 0 },
+        uWave: { value: 0 }
+      },
+      vertexShader: vert, fragmentShader: frag, transparent: true, depthWrite: false
+    });
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1, 64, 16), mat);
+    mesh.userData.i = i;
+    mesh.renderOrder = LAYERS - i;
+    group.add(mesh);
+    layers.push(mesh);
+  }
+
+  let aspect = 1, narrow = false, baseY = 0;
+  function layout() {
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    narrow = w < 900;
+    aspect = drawText(narrow);
+    const vh = 2 * camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+    const vw = vh * camera.aspect;
+    const width = vw * (narrow ? .92 : .9);
+    const height = width / aspect;
+    layers.forEach(m => m.scale.set(width, height, 1));
+    baseY = narrow ? vh * .16 : vh * .1;
+    group.position.set(0, baseY, 0);
+  }
+  layout();
+  addEventListener("resize", layout);
+
+  const target = { x: 0, y: 0 }, cur = { x: 0, y: 0 };
+  addEventListener("pointermove", e => {
+    target.x = e.clientX / innerWidth - .5;
+    target.y = e.clientY / innerHeight - .5;
+  });
+
+  const clock = new THREE.Clock();
+  function frame() {
+    const t = clock.getElapsedTime();
+    const scroll = Math.min(scrollY / innerHeight, 1.2);
+    cur.x += (target.x - cur.x) * .05;
+    cur.y += (target.y - cur.y) * .05;
+    uniforms.uTime.value = t;
+    uniforms.uMouse.value.set(.5 + cur.x * .9, .5 - cur.y * 1.2);
+
+    // Beim Scrollen wird die Kante tiefer, der Name weicht nach oben zurück
+    const step = .0034 + scroll * .006;
+    layers.forEach(m => {
+      const i = m.userData.i;
+      m.position.z = -i * step;
+      m.position.x = i * step * .55;
+      m.position.y = -i * step * .55;
+      m.material.uniforms.uWave.value = .006 + scroll * .03;
+    });
+    group.rotation.y = cur.x * .16;
+    group.rotation.x = cur.y * .1 + scroll * .12;
+    group.position.y = baseY + scroll * 1.6;
+    group.position.z = -scroll * 1.2;
+    canvas.style.opacity = String(Math.max(0, 1 - scroll * 1.4));
+    renderer.render(scene, camera);
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  frame();
+  if (reduce) addEventListener("scroll", () => requestAnimationFrame(frame), { passive: true });
+}
+</script>
+</body>
+</html>

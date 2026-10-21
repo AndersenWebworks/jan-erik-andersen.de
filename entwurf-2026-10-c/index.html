@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Jan-Erik Andersen · Webentwicklung (Entwurf C)</title>
+<script>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
+<style>
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-VF.ttf") format("truetype"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-Italic-VF.ttf") format("truetype"); font-weight: 200 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "Schibsted Grotesk"; src: url("fonts/SchibstedGrotesk-VF.ttf") format("truetype"); font-weight: 400 900; font-display: swap; }
+
+:root {
+  --paper: #f4f2ee;
+  --ink: #303033;
+  --muted: #5f5d63;
+  --red: #d40235;
+  --red-lit: #ff5273;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --pad: clamp(16px, 3.2vw, 56px);
+  --gap: clamp(10px, 1.4vw, 24px);
+  --cols: 12;
+  --head: 58px;
+  --ease: cubic-bezier(.7, 0, .2, 1);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { overflow-x: clip; scroll-behavior: smooth; }
+body { background: var(--paper); color: var(--ink); font: 400 17px/1.55 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
+a { color: inherit; }
+::selection { background: var(--red); color: #fff; }
+em { font-family: var(--serif); font-style: italic; font-weight: 400; }
+section[id] { scroll-margin-top: var(--head); }
+
+/* Raster: 12 Spalten, sichtbar */
+.grid, .gridlines { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gap); padding: 0 var(--pad); pointer-events: none; }
+.grid { position: fixed; z-index: 0; }
+.grid i, .gridlines i { border-left: 1px solid rgba(48, 48, 51, .13); }
+.grid i:last-child, .gridlines i:last-child { border-right: 1px solid rgba(48, 48, 51, .13); }
+.gridlines { z-index: 0; }
+.gridlines.dark i { border-color: rgba(0, 0, 0, .2); }
+.gridlines.light i { border-color: rgba(255, 255, 255, .13); }
+.g { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gap); }
+
+.draft-note { position: fixed; z-index: 60; left: 50%; top: 19px; transform: translateX(-50%); font: 600 11px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; background: var(--ink); color: var(--paper); padding: 7px 10px; pointer-events: none; }
+.placeholder { color: var(--muted); background: repeating-linear-gradient(-45deg, transparent 0 6px, rgba(48, 48, 51, .08) 6px 12px); padding: 0 .25em; }
+
+/* Kopfzeile */
+.top { position: fixed; z-index: 50; inset: 0 0 auto 0; height: var(--head); display: flex; justify-content: space-between; align-items: center; padding: 0 var(--pad); background: var(--paper); border-bottom: 3px solid var(--ink); font: 600 14px/1 var(--sans); }
+.top nav { display: flex; gap: clamp(16px, 2.4vw, 36px); }
+.top a { text-decoration: none; }
+.top nav a:hover { color: var(--red); }
+.top .mark { font-weight: 800; letter-spacing: -.02em; font-size: 16px; }
+.top .mark span { color: var(--red); }
+
+/* Bühne: Einstieg bleibt stehen, das Rot schiebt sich darüber */
+.stage { position: relative; z-index: 1; }
+.hero { position: sticky; top: 0; z-index: 1; height: 100vh; height: 100svh; min-height: 560px; background: var(--paper); overflow: hidden; }
+.hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+.hero-in { position: relative; z-index: 1; height: 100%; padding: calc(var(--head) + 22px) var(--pad) 34px; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto; pointer-events: none; }
+.hero-in a, .hero-in p { pointer-events: auto; }
+.kick { font: 700 15px/1.35 var(--sans); letter-spacing: -.005em; display: inline-block; justify-self: start; border-left: 6px solid var(--red); padding-left: 10px; }
+.hero h1 { align-self: center; font: 800 var(--hs, 15vw)/.84 var(--sans); letter-spacing: -.055em; color: var(--ink); margin-bottom: .02em; }
+.ln { display: block; white-space: nowrap; }
+.l2 { text-align: right; }
+.w { display: inline-block; }
+em.w { font-size: 1.06em; font-weight: 400; letter-spacing: -.035em; color: var(--red); }
+.bl { display: inline-block; width: 0; height: 0; }
+.webgl .hero h1 .w { color: transparent; }
+.intro { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gap); align-items: end; }
+.intro p { grid-column: 1 / 8; font: 500 clamp(18px, 1.55vw, 24px)/1.4 var(--sans); letter-spacing: -.012em; }
+.links { grid-column: 9 / 13; display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; }
+.btn { display: inline-block; text-decoration: none; font: 700 16px/1 var(--sans); padding: 16px 22px; border: 3px solid var(--ink); background: var(--ink); color: var(--paper); transition: background .25s, color .25s, border-color .25s; }
+.btn.red { background: var(--red); border-color: var(--red); color: #fff; }
+.btn:hover { background: var(--paper); color: var(--ink); }
+.btn.red:hover { background: var(--paper); color: var(--red); }
+
+/* Gerwing: das große Farbfeld */
+.gerwing { position: relative; z-index: 2; background: var(--red); color: var(--paper); padding: clamp(70px, 9vw, 150px) var(--pad) clamp(90px, 10vw, 160px); clip-path: polygon(0 var(--sk, 0px), 100% 0, 100% 100%, 0 100%); }
+.gerwing h2 { font: 800 calc((100vw - 2 * var(--pad)) / 4.02)/.82 var(--sans); letter-spacing: -.06em; color: var(--paper); }
+.gerwing .gw-head { grid-template-columns: 1fr; }
+.fig { grid-column: 1 / -1; position: relative; margin-top: clamp(40px, 7.5vw, 124px); }
+.imgwrap { position: relative; line-height: 0; background: #a3022a; }
+.imgwrap .shot { display: block; width: 100%; height: auto; }
+.imgwrap canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.shot-2 { position: absolute; z-index: 3; width: 27%; right: 4%; bottom: -13%; height: auto; border: 8px solid var(--paper); box-shadow: 0 30px 50px -26px rgba(0, 0, 0, .55); }
+.fig figcaption { margin-top: 14px; max-width: 52%; font: 500 14px/1.4 var(--sans); color: var(--paper); }
+.gw-text { margin-top: clamp(40px, 6vw, 96px); align-items: start; row-gap: 20px; }
+.gw-text .lead { grid-column: 1 / 7; }
+.gw-text .body { grid-column: 8 / 13; }
+.meta { font: 700 13px/1.4 var(--sans); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
+.gw-text h3 { font: 800 clamp(34px, 4.4vw, 70px)/.96 var(--sans); letter-spacing: -.045em; }
+.gw-text .body p { font-size: 19px; }
+.gw-text .body p + p { margin-top: 1em; }
+.gw-text .arrow { display: inline-block; margin-top: 28px; }
+.arrow { font: 700 16px/1 var(--sans); text-decoration: none; padding: 15px 20px; border: 3px solid currentColor; transition: background .25s, color .25s; }
+.gerwing .arrow:hover { background: var(--paper); color: var(--red); }
+
+/* Abschnitte */
+.sec { position: relative; z-index: 1; padding: clamp(80px, 10vw, 170px) var(--pad) 0; }
+.sec h2 { font: 800 clamp(48px, 9.5vw, 156px)/.86 var(--sans); letter-spacing: -.055em; }
+.sec h2 em { font-size: 1.05em; letter-spacing: -.035em; }
+.sec .gridlines { display: none; }
+
+/* Leistungen */
+.services { margin-top: clamp(36px, 5vw, 80px); }
+.service { position: relative; isolation: isolate; display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gap); align-items: start; margin: 0 calc(var(--gap) * -1); padding: 26px var(--gap) 40px; border-top: 5px solid var(--ink); transition: color .3s; }
+.service::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--ink); transform: scaleY(0); transform-origin: bottom; transition: transform .5s var(--ease); }
+.service:last-child { border-bottom: 5px solid var(--ink); }
+.service .n { grid-column: 1 / 3; font: 800 clamp(46px, 6.6vw, 112px)/.8 var(--sans); letter-spacing: -.06em; color: var(--red); transition: color .3s; }
+.service h3 { grid-column: 3 / 8; font: 700 clamp(26px, 2.9vw, 46px)/1.02 var(--sans); letter-spacing: -.035em; }
+.service p { grid-column: 8 / 13; font-size: 17px; }
+.service .proof { display: block; margin-top: 14px; font-size: 15px; }
+.proof .placeholder { color: inherit; }
+@media (hover: hover) {
+  .service:hover { color: var(--paper); }
+  .service:hover::before { transform: scaleY(1); }
+  .service:hover .n { color: var(--red-lit); }
+  .service:hover .placeholder { background: rgba(255, 255, 255, .14); }
+}
+
+/* Weitere Arbeit */
+.tiles { margin-top: clamp(36px, 5vw, 80px); align-items: stretch; }
+.tile { padding: clamp(24px, 3vw, 48px); display: flex; flex-direction: column; justify-content: space-between; gap: 48px; min-height: 380px; }
+.tile.a { grid-column: 1 / 8; background: var(--ink); color: var(--paper); }
+.tile.b { grid-column: 8 / 13; border: 5px solid var(--ink); }
+.tile h3 { font: 800 clamp(38px, 5.2vw, 84px)/.9 var(--sans); letter-spacing: -.05em; margin-bottom: 18px; }
+.tile .meta { margin-bottom: 18px; }
+.tile.a .meta { color: var(--red-lit); }
+.tile p { font-size: 19px; max-width: 30em; }
+.also { grid-column: 3 / 13; margin-top: 44px; font: 600 clamp(19px, 1.7vw, 25px)/1.4 var(--sans); letter-spacing: -.015em; }
+
+/* Arbeitsweise */
+.how { align-items: start; }
+.how h2 { grid-column: 1 / 6; position: sticky; top: calc(var(--head) + 28px); }
+.how h2, .cv h2 { font-size: clamp(40px, 6.2vw, 100px); }
+.how p { grid-column: 6 / 13; font: 600 clamp(26px, 3.1vw, 50px)/1.1 var(--sans); letter-spacing: -.035em; }
+.how p em { font-size: 1.08em; letter-spacing: -.02em; color: var(--red); }
+
+/* Werdegang */
+.cv { align-items: start; }
+.cv h2 { grid-column: 1 / 6; position: sticky; top: calc(var(--head) + 28px); }
+.cv ol { grid-column: 6 / 13; list-style: none; border-top: 5px solid var(--ink); }
+.cv li { display: grid; grid-template-columns: minmax(120px, 28%) 1fr; column-gap: var(--gap); padding: 20px 0 22px; border-bottom: 2px solid var(--ink); }
+.cv .y { font: 800 clamp(18px, 1.7vw, 26px)/1.1 var(--sans); letter-spacing: -.03em; color: var(--red); padding-top: .25em; }
+.cv .s { font: 700 clamp(22px, 2.2vw, 34px)/1.05 var(--sans); letter-spacing: -.03em; }
+.cv .s small { display: block; font: 400 16px/1.45 var(--sans); letter-spacing: 0; margin-top: 8px; color: var(--muted); }
+
+/* Stimmen */
+.quotes { margin-top: clamp(36px, 5vw, 80px); align-items: start; }
+.quotes blockquote { border-top: 12px solid var(--red); padding-top: 24px; }
+.quotes blockquote:nth-of-type(1) { grid-column: 1 / 7; }
+.quotes blockquote:nth-of-type(2) { grid-column: 7 / 13; margin-top: clamp(40px, 8vw, 140px); border-top-color: var(--ink); }
+.quotes p { font: italic 400 clamp(21px, 1.95vw, 29px)/1.35 var(--serif); }
+.quotes p::before { content: "„"; color: var(--red); font-weight: 600; }
+.quotes p::after { content: "“"; color: var(--red); font-weight: 600; }
+.quotes cite { display: block; margin-top: 22px; font: 700 15px/1.4 var(--sans); font-style: normal; }
+
+/* Agenturen */
+.agency { align-items: start; }
+.agency h2 { grid-column: 1 / 8; }
+.agency .t { grid-column: 8 / 13; padding-top: .6em; }
+.agency p { font: 600 clamp(22px, 2.1vw, 32px)/1.2 var(--sans); letter-spacing: -.025em; }
+.agency p + p { margin-top: 1em; font-weight: 400; }
+
+/* Kontakt */
+.contact { position: relative; z-index: 1; background: var(--ink); color: var(--paper); margin-top: clamp(90px, 12vw, 200px); padding: clamp(80px, 10vw, 170px) var(--pad) 28px; overflow: hidden; }
+.contact h2 { position: relative; z-index: 1; font: 800 clamp(48px, 10.4vw, 172px)/.86 var(--sans); letter-spacing: -.058em; }
+.contact h2 em { color: var(--red-lit); font-size: 1.05em; letter-spacing: -.035em; }
+.contact .lines { margin-top: clamp(48px, 6vw, 96px); row-gap: 28px; }
+.contact .lines > div { grid-column: span 3; }
+.contact .lines span { display: block; font: 700 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: #aaa8ae; margin-bottom: 12px; }
+.contact .lines a { font: 700 clamp(17px, 1.35vw, 22px)/1.2 var(--sans); letter-spacing: -.02em; text-decoration: none; border-bottom: 3px solid var(--red-lit); overflow-wrap: anywhere; }
+.contact .lines a:hover { color: var(--red-lit); }
+.contact footer { position: relative; z-index: 1; margin-top: clamp(70px, 9vw, 140px); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 14px; color: #aaa8ae; }
+
+/* Einblendungen: Schrift schiebt sich aus der Maske, Blöcke fahren auf */
+.mk { overflow: hidden; padding: .1em 0 .24em; margin: -.1em 0 -.24em; }
+.mk > span { display: block; }
+.js .mk > span { transform: translateY(118%); transition: transform 1s var(--ease); transition-delay: var(--d, 0s); }
+.js .mk.in > span { transform: none; }
+.js .rv { clip-path: inset(-3% -3% 102% -3%); transform: translateY(26px); transition: clip-path 1s var(--ease), transform 1s var(--ease); transition-delay: var(--d, 0s); }
+.js .rv.in { clip-path: inset(-3% -3% -3% -3%); transform: none; }
+.js .rv.from-l { clip-path: inset(-3% 103% -3% -3%); transform: none; }
+.js .rv.from-r { clip-path: inset(-3% -3% -3% 103%); transform: none; }
+.js .rv.from-l.in, .js .rv.from-r.in { clip-path: inset(-3% -3% -3% -3%); }
+.js .hero-in .kick, .js .hero-in .intro { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s var(--ease); }
+.js.ready .hero-in .kick, .js.ready .hero-in .intro { opacity: 1; transform: none; }
+.js.ready .hero-in .intro { transition-delay: .5s; }
+.js:not(.webgl) .hero h1 .w { transform: translateY(0); }
+
+@media (max-width: 800px) {
+  :root { --cols: 4; --head: 52px; }
+  .grid i:nth-child(n+5), .gridlines i:nth-child(n+5) { display: none; }
+  .grid i:nth-child(4), .gridlines i:nth-child(4) { border-right: 1px solid rgba(48, 48, 51, .13); }
+  .gridlines.dark i:nth-child(4) { border-right-color: rgba(0, 0, 0, .2); }
+  .gridlines.light i:nth-child(4) { border-right-color: rgba(255, 255, 255, .13); }
+  .top nav a:not(:last-child) { display: none; }
+  .draft-note { left: auto; right: var(--pad); top: auto; bottom: 10px; transform: none; }
+  .hero { min-height: 600px; }
+  .hero-in { padding-bottom: 54px; }
+  .intro p { grid-column: 1 / -1; }
+  .links { grid-column: 1 / -1; justify-content: flex-start; margin-top: 18px; }
+  .gerwing h2 { font-size: calc((100vw - 2 * var(--pad)) / 3.95); }
+  .shot-2 { width: 38%; right: 3%; bottom: -16%; border-width: 5px; }
+  .fig figcaption { max-width: 56%; font-size: 13px; }
+  .gw-text { margin-top: 70px; }
+  .gw-text .lead, .gw-text .body { grid-column: 1 / -1; }
+  .service .n { grid-column: 1 / 2; }
+  .service h3 { grid-column: 2 / -1; }
+  .service p { grid-column: 1 / -1; margin-top: 14px; }
+  .tile.a, .tile.b { grid-column: 1 / -1; min-height: 300px; }
+  .tile.b { margin-top: 16px; }
+  .also { grid-column: 1 / -1; }
+  .how h2, .cv h2 { grid-column: 1 / -1; position: static; margin-bottom: 28px; }
+  .how p, .cv ol { grid-column: 1 / -1; }
+  .cv li { grid-template-columns: 1fr; row-gap: 4px; }
+  .quotes blockquote:nth-of-type(1), .quotes blockquote:nth-of-type(2) { grid-column: 1 / -1; }
+  .quotes blockquote:nth-of-type(2) { margin-top: 48px; }
+  .agency h2, .agency .t { grid-column: 1 / -1; }
+  .contact .lines > div { grid-column: span 2; }
+  .contact .lines > div:nth-child(1), .contact .lines > div:nth-child(2) { grid-column: 1 / -1; }
+  .contact h2 { font-size: clamp(44px, 14vw, 90px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; animation: none !important; }
+  .hero { position: relative; }
+  .gerwing { clip-path: none; }
+}
+</style>
+</head>
+<body>
+<!-- Entwurf C „Plakat und Linse“, Oktober 2026, nicht öffentlich. Andersen Webworks. -->
+<div class="draft-note">Entwurf · nicht öffentlich</div>
+<div class="grid" id="grid" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="mark" href="#start">Jan-Erik Andersen<span>.</span></a>
+  <nav>
+    <a href="#arbeit">Arbeit</a>
+    <a href="#leistungen">Leistungen</a>
+    <a href="#werdegang">Werdegang</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+</header>
+
+<main>
+<div class="stage">
+<section class="hero" id="start">
+  <canvas id="type" aria-hidden="true"></canvas>
+  <div class="hero-in">
+    <div class="kick">Webentwicklung<br>Raum Plau am See · remote</div>
+    <h1><span class="ln l1"><span class="w">Jan-<b class="bl"></b></span><em class="w">Erik<b class="bl"></b></em></span><span class="ln l2"><span class="w">Andersen<b class="bl"></b></span></span></h1>
+    <div class="intro">
+      <p>Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p>
+      <div class="links"><a class="btn red" href="#arbeit">Projekte ansehen</a><a class="btn" href="#kontakt">Kontakt</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="gerwing" id="arbeit">
+  <div class="gridlines dark" aria-hidden="true"></div>
+  <div class="g gw-head"><h2 class="mk"><span>Gerwing</span></h2></div>
+  <div class="g">
+    <figure class="fig rv">
+      <div class="imgwrap">
+        <img class="shot" id="shot" src="bilder/gerwing-produkt-ausschnitt.jpg" alt="Produktseite im Gerwing-Shop: Pflastersteine „Tosca Antik“ mit Farbauswahl">
+        <canvas id="lens2" aria-hidden="true"></canvas>
+      </div>
+      <img class="shot-2" src="bilder/gerwing-bestellung.jpg" alt="" aria-hidden="true">
+      <figcaption>gerwing.de · Produktseite mit Farbwahl, Format und Musterbestellung</figcaption>
+    </figure>
+  </div>
+  <div class="g gw-text">
+    <div class="lead rv">
+      <div class="meta">WooCommerce · seit 2023</div>
+      <h3>Pflaster nach Fläche bestellen</h3>
+    </div>
+    <div class="body rv" style="--d:.12s">
+      <p>Für Gerwing habe ich 2023 einen WooCommerce-Shop gebaut, der Pflastersteine, Terrassenplatten und Stufen so verkauft, wie man sie bestellt: nach Fläche.</p>
+      <p>Kunden geben ihre Quadratmeter ein, der Shop rechnet sie in ganze Steine um, ermittelt Gewicht und Fracht nach Postleitzahl und leitet die Bestellung an den zuständigen Händler weiter. Seitdem betreue ich den Shop und entwickle ihn laufend weiter.</p>
+      <a class="arrow" href="#">Zur Projektgeschichte</a>
+    </div>
+  </div>
+</section>
+</div>
+
+<section class="sec" id="leistungen">
+  <h2 class="mk"><span>Was ich <em>mache</em></span></h2>
+  <div class="services">
+    <div class="service rv"><span class="n">01</span><h3>Betreuung und Absicherung</h3><p>Zwischen dem Bekanntwerden einer Lücke in einem WordPress-Plugin und dem ersten Angriff vergehen oft nur Stunden. Ich halte Ihre Seite deshalb laufend aktuell und sehe regelmäßig nach, ob sie sauber läuft.</p></div>
+    <div class="service rv"><span class="n">02</span><h3>Modernisierung</h3><p>Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen. Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.</p></div>
+    <div class="service rv"><span class="n">03</span><h3>Shops und Shop-Wechsel</h3><p>Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.</p></div>
+    <div class="service rv"><span class="n">04</span><h3>Schnittstellen und eigene Werkzeuge</h3><p>Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen, bei WBG etwa mit Salesforce und Concludis. Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt.</p></div>
+    <div class="service rv"><span class="n">05</span><h3>Gestaltung</h3><p>Für mich gehört Gestaltung zur Entwicklung. Ich entwerfe Erscheinungsbilder und Oberflächen selbst oder setze vorhandene Entwürfe sorgfältig um.<span class="proof">Beispiele: <span class="placeholder">[Take the Gloves Off, nach Zustimmung]</span>, das NOVUM-Cover und das Ausstellungsmotiv „100 Jahre Audi“.</span></p></div>
+  </div>
+</section>
+
+<section class="sec">
+  <h2 class="mk"><span>Weitere <em>Arbeit</em></span></h2>
+  <div class="g tiles">
+    <div class="tile a rv from-l">
+      <div>
+        <div class="meta">2023 bis 2025 · im Auftrag von RPLC</div>
+        <h3>WBG Pooling</h3>
+      </div>
+      <p>Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.</p>
+    </div>
+    <div class="tile b rv from-r">
+      <div>
+        <div class="meta">Ehrenamtlich</div>
+        <h3>Take the Gloves Off</h3>
+      </div>
+      <p class="placeholder">[Ein Satz zum Erscheinungsbild, nach Abstimmung]</p>
+    </div>
+    <p class="also rv">Außerdem: Onkologie Laatzen, Mindblossom und Soundhealing Hamburg, der digitale Wirkungsbericht für Seniorpartner in School, Bäckerei Behrens. <span class="placeholder">[je ein Satz nach erneuter Sichtung]</span></p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="g how">
+    <h2 class="mk"><span>Wie ich <em>arbeite</em></span></h2>
+    <p class="rv">Ich arbeite mit aktuellen KI-Werkzeugen und habe dafür eigene Abläufe entwickelt. Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge. <em>Entscheidungen und Verantwortung bleiben bei mir,</em> und ausgeliefert wird nur, was ich geprüft habe.</p>
+  </div>
+</section>
+
+<section class="sec" id="werdegang">
+  <div class="g cv">
+    <h2 class="mk"><span>Werdegang</span></h2>
+    <ol class="rv">
+      <li><span class="y">seit 2023</span><span class="s">Gerwing<small>Umsetzung und laufende Betreuung des Onlineshops</small></span></li>
+      <li><span class="y">2023 bis 2025</span><span class="s">Runden Group über RPLC<small>WBG Pooling und weitere Websites und Anwendungen</small></span></li>
+      <li><span class="y">2017 bis 2023</span><span class="s">Tangram Werbeagentur<small>Frontend-Entwicklung, unter anderem für Nissen, BIG Arbeitsschutz und EMPORE</small></span></li>
+      <li><span class="y">2017</span><span class="s">YOOtheme<small>Support Management</small></span></li>
+      <li><span class="y">seit 2010</span><span class="s">Freiberufliche Webprojekte<small>seit 2018 als Andersen Webworks</small></span></li>
+      <li><span class="y">2007 bis 2010</span><span class="s">HTK Hamburg<small>Zertifikat Multimedia Design</small></span></li>
+      <li><span class="y"><span class="placeholder">[Jahre]</span></span><span class="s">Games<small>QA bei Goodgame Studios und Deep Silver FISHLABS, PahuPahu mit rund 25 Spielprototypen in Flash und Haxe, Gamersunity</small></span></li>
+      <li><span class="y">2000 bis 2006</span><span class="s">Pixel Arrays<small>erste Selbstständigkeit</small></span></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec">
+  <h2 class="mk"><span>Stimmen</span></h2>
+  <div class="g quotes">
+    <blockquote class="rv"><p>Seniorpartner in School (SiS) ist eine bundesweit agierende Sozialorganisation. Ein gut aufgestellter digitaler Wirkungsbericht ist für unsere Arbeit wichtig. Jan-Erik und die kompetente Texterin Annemarie haben das für uns neue Format professionell und barrierefreundlich aufgesetzt. Super Teamarbeit, verlässlich und engagiert. SiS sagt DANKE!</p><cite>Karin, Seniorpartner in School · Google-Bewertung</cite></blockquote>
+    <blockquote class="rv" style="--d:.12s"><p>Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich mit Andersen Webworks seit nun mehreren Jahren einen zuverlässigen Partner gefunden zu haben. Professionelles Webdesign das mich immer wieder überrascht, meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff, so setzt man sich von der Konkurrenz ab!</p><cite>Corvin Jädicke, ai-coustics · Google-Bewertung</cite></blockquote>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="g agency">
+    <h2 class="mk"><span>Für <em>Agenturen</em></span></h2>
+    <div class="t rv">
+      <p>Ich steige in laufende Projekte ein, arbeite mich in bestehende Themes und Plugins ein und halte mich an Ihre Abläufe und Werkzeuge.</p>
+      <p>Konditionen und freie Kapazität nenne ich Ihnen auf Anfrage.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<section class="contact" id="kontakt">
+  <div class="gridlines light" aria-hidden="true"></div>
+  <h2 class="mk"><span>Schreiben Sie mir, <em>worum es geht.</em></span></h2>
+  <div class="g lines rv">
+    <div><span>Mail</span><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a></div>
+    <div><span>Telefon</span><a href="tel:+4938733270015">+49 38733 270015</a></div>
+    <div><span>LinkedIn</span><a href="https://www.linkedin.com/in/andersen-erik/">andersen-erik</a></div>
+    <div><span>Lebenslauf</span><a href="#">PDF herunterladen</a></div>
+  </div>
+  <footer><span>Andersen Webworks · Jan-Erik Andersen</span><span>Impressum · Datenschutz</span></footer>
+</section>
+
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module">
+import * as THREE from "three";
+
+const $ = (s, r = document) => r.querySelector(s);
+const root = document.documentElement;
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+// Raster
+document.querySelectorAll(".grid, .gridlines").forEach(g => { for (let i = 0; i < 12; i++) g.appendChild(document.createElement("i")); });
+
+// Einblendungen
+if (!reduce) {
+  let pending = [...document.querySelectorAll(".mk, .rv")];
+  const check = () => {
+    pending = pending.filter(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < innerHeight * .92 && r.bottom > 0) { el.classList.add("in"); return false; }
+      return true;
+    });
+  };
+  check();
+  addEventListener("scroll", check, { passive: true });
+  addEventListener("resize", check);
+}
+
+// Gerwing: Das Rot schiebt sich mit schräger Kante über den Einstieg
+const gw = $(".gerwing");
+if (!reduce) {
+  const curtain = () => {
+    const p = Math.min(1, Math.max(0, gw.getBoundingClientRect().top / (innerHeight * .85)));
+    gw.style.setProperty("--sk", (Math.pow(p, 1.15) * Math.min(innerWidth * .2, 320)).toFixed(1) + "px");
+  };
+  curtain();
+  addEventListener("scroll", curtain, { passive: true });
+  addEventListener("resize", curtain);
+}
+
+// ---- Glaslinse -------------------------------------------------------
+const VERT = `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+const FRAG = `
+  uniform sampler2D uBase; uniform sampler2D uText; uniform float uTextOn;
+  uniform vec2 uSize; uniform vec2 uLens; uniform float uR; uniform float uStr; uniform float uCA;
+  uniform float uTime; uniform float uOn;
+  uniform float uSplit; uniform float uBot; uniform float uH0; uniform float uH1; uniform float uP0; uniform float uP1;
+  varying vec2 vUv;
+
+  vec3 scene(vec2 sp) {
+    vec2 uv = clamp(sp / uSize, 0.001, 0.999);
+    vec3 c = texture2D(uBase, uv).rgb;
+    if (uTextOn > 0.5) {
+      float yd = uSize.y - sp.y;
+      float ys = yd; float ok = 1.0;
+      if (yd < uSplit) { ys = yd + (1.0 - uP0) * uH0; if (ys >= uSplit) ok = 0.0; }
+      else { ys = yd + (1.0 - uP1) * uH1; if (ys >= uBot) ok = 0.0; }
+      vec4 t = texture2D(uText, vec2(uv.x, 1.0 - ys / uSize.y));
+      c = mix(c, t.rgb, t.a * ok);
+    }
+    return c;
+  }
+
+  void main() {
+    vec2 p = vUv * uSize;
+    vec2 d = p - uLens;
+    float ang = atan(d.y, d.x);
+    float R = uR * (1.0 + 0.04 * sin(ang * 3.0 + uTime * 0.9) + 0.025 * sin(ang * 5.0 - uTime * 1.3));
+    float r = length(d) / R;
+    float k = 1.0 - smoothstep(0.0, 1.0, r);
+    float ring = smoothstep(0.55, 0.93, r) * (1.0 - smoothstep(0.93, 1.0, r));
+    float on = uOn;
+    // Vergrößerung in der Mitte, Verdichtung am Rand wie dickes Glas
+    float s = 1.0 - uStr * k * k * on + 0.2 * ring * on;
+    float ch = uCA * (0.4 * k + 1.5 * ring) * on;
+    vec2 swirl = vec2(-d.y, d.x) / max(R, 1.0) * 0.02 * ring * on;
+    vec3 col;
+    col.r = scene(uLens + d * (s - ch) + swirl * R).r;
+    col.g = scene(uLens + d * s + swirl * R).g;
+    col.b = scene(uLens + d * (s + ch) + swirl * R).b;
+    float hl = pow(max(dot(normalize(d + 0.0001), normalize(vec2(-0.55, 0.83))), 0.0), 5.0);
+    col += vec3(1.0) * hl * ring * 0.10 * on;
+    col *= 1.0 - 0.05 * ring * on;
+    gl_FragColor = vec4(col, 1.0);
+    #include <colorspace_fragment>
+  }`;
+
+function makeLens(canvas, o) {
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: false, powerPreference: "low-power" });
+  const scene = new THREE.Scene();
+  const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  const u = {
+    uBase: { value: null }, uText: { value: null }, uTextOn: { value: 0 },
+    uSize: { value: new THREE.Vector2(1, 1) }, uLens: { value: new THREE.Vector2(-999, -999) },
+    uR: { value: 150 }, uStr: { value: o.str }, uCA: { value: o.ca }, uTime: { value: 0 }, uOn: { value: 0 },
+    uSplit: { value: 0 }, uBot: { value: 0 }, uH0: { value: 1 }, uH1: { value: 1 }, uP0: { value: 1 }, uP1: { value: 1 }
+  };
+  const mat = new THREE.ShaderMaterial({ uniforms: u, vertexShader: VERT, fragmentShader: FRAG, depthTest: false, depthWrite: false });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), mat);
+  mesh.frustumCulled = false;
+  scene.add(mesh);
+  return { canvas, renderer, scene, cam, u, o, pos: null, on: 0, ph: o.ph || 0, w: 1, h: 1 };
+}
+function tex(source) {
+  const t = new THREE.Texture(source);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.minFilter = THREE.LinearFilter; t.magFilter = THREE.LinearFilter; t.generateMipmaps = false;
+  t.needsUpdate = true;
+  return t;
+}
+function sizeLens(L) {
+  const r = L.canvas.getBoundingClientRect();
+  L.w = r.width; L.h = r.height;
+  L.dpr = Math.min(devicePixelRatio || 1, 2, 4096 / Math.max(L.w, 1));
+  L.renderer.setPixelRatio(L.dpr);
+  L.renderer.setSize(L.w, L.h, false);
+  L.u.uSize.value.set(L.w, L.h);
+  L.u.uR.value = L.o.radius(L.w, L.h);
+}
+
+// Zeiger
+const ptr = { x: 0, y: 0, seen: false };
+if (fine) addEventListener("pointermove", e => { if (e.pointerType === "mouse" || e.pointerType === "pen") { ptr.x = e.clientX; ptr.y = e.clientY; ptr.seen = true; } }, { passive: true });
+document.addEventListener("pointerleave", () => { ptr.seen = false; });
+
+const lenses = [];
+function stepLens(L, dt, t) {
+  const r = L.canvas.getBoundingClientRect();
+  L.visible = r.bottom > 0 && r.top < innerHeight && !(L.o.covered && L.o.covered());
+  if (!L.visible) return;
+  if (Math.abs(r.width - L.w) > 1 || Math.abs(r.height - L.h) > 1) { sizeLens(L); L.o.onResize && L.o.onResize(L); }
+  const inside = fine && ptr.seen && ptr.x >= r.left && ptr.x <= r.right && ptr.y >= r.top && ptr.y <= r.bottom;
+  let tx, ty, on;
+  if (inside) { tx = ptr.x - r.left; ty = ptr.y - r.top; on = 1; }
+  else {
+    const a = L.o.area(L);
+    tx = a.x + a.w * (.5 + .46 * Math.sin(t * .22 + L.ph));
+    ty = a.y + a.h * (.5 + .42 * Math.sin(t * .31 + 1.3 + L.ph));
+    on = fine ? L.o.idleOn : 1;
+  }
+  if (!L.pos) L.pos = { x: tx, y: ty };
+  const k = 1 - Math.exp(-dt * (inside ? 9 : 2.2));
+  L.pos.x += (tx - L.pos.x) * k; L.pos.y += (ty - L.pos.y) * k;
+  L.on += (on - L.on) * (1 - Math.exp(-dt * 4));
+  L.u.uLens.value.set(L.pos.x, L.h - L.pos.y);
+  L.u.uOn.value = L.on;
+  L.u.uTime.value = t;
+  L.renderer.render(L.scene, L.cam);
+}
+
+let heroLens = null, imgLens = null;
+let introStart = null;
+const ease = x => 1 - Math.pow(1 - Math.min(Math.max(x, 0), 1), 4);
+
+function tryGL(canvas, o) {
+  try { return makeLens(canvas, o); } catch (e) { return null; }
+}
+
+// ---- Einstieg: Schrift als Textur --------------------------------------
+const h1 = $(".hero h1"), heroCanvas = $("#type");
+function fitHero() {
+  h1.style.setProperty("--hs", "100px");
+  const w2 = $(".l2 .w", h1).getBoundingClientRect().width;
+  let fs = 100 * h1.clientWidth / w2 * 0.95;
+  if (innerWidth > 800) fs = Math.min(fs, (innerHeight - 58 - 22 - 34 - 190) / 1.68);
+  h1.style.setProperty("--hs", fs.toFixed(2) + "px");
+}
+function buildHeroTextures(L) {
+  const cr = heroCanvas.getBoundingClientRect();
+  const W = cr.width, H = cr.height, dpr = L.dpr;
+  const mk = () => { const c = document.createElement("canvas"); c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); const x = c.getContext("2d"); x.scale(dpr, dpr); return [c, x]; };
+  const [bc, bx] = mk(), [tc, tx] = mk();
+  bx.fillStyle = "#f4f2ee"; bx.fillRect(0, 0, W, H);
+  bx.fillStyle = "rgba(48,48,51,.13)";
+  const cols = [...document.querySelectorAll("#grid i")].filter(i => i.offsetParent !== null || getComputedStyle(i).display !== "none");
+  cols.forEach((i, n) => { const r = i.getBoundingClientRect(); bx.fillRect(Math.round(r.left), 0, 1, H); if (n === cols.length - 1) bx.fillRect(Math.round(r.right) - 1, 0, 1, H); });
+  h1.querySelectorAll(".w").forEach(w => {
+    const cs = getComputedStyle(w), r = w.getBoundingClientRect(), bl = w.querySelector(".bl").getBoundingClientRect();
+    tx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+    tx.letterSpacing = cs.letterSpacing;
+    tx.fillStyle = w.tagName === "EM" ? "#d40235" : "#303033";
+    tx.textBaseline = "alphabetic";
+    tx.fillText(w.textContent, r.left - cr.left, bl.bottom - cr.top);
+  });
+  if (L.u.uBase.value) { L.u.uBase.value.dispose(); L.u.uText.value.dispose(); }
+  L.u.uBase.value = tex(bc); L.u.uText.value = tex(tc); L.u.uTextOn.value = 1;
+  const l1 = $(".l1", h1).getBoundingClientRect(), l2 = $(".l2", h1).getBoundingClientRect();
+  const split = (l1.bottom + l2.top) / 2 - cr.top;
+  L.u.uSplit.value = split;
+  L.u.uBot.value = Math.min(H, l2.bottom - cr.top + (l2.bottom - l2.top) * .12);
+  L.u.uH0.value = split - (l1.top - cr.top) + (l1.bottom - l1.top) * .3;
+  L.u.uH1.value = L.u.uBot.value - split;
+  L.h1 = { x: l1.left - cr.left, y: l1.top - cr.top, w: l1.width, h: l2.bottom - l1.top };
+}
+
+(async () => {
+  if (reduce) return;
+  heroLens = tryGL(heroCanvas, {
+    str: .5, ca: .008, ph: 0, idleOn: 1,
+    radius: (w, h) => Math.min(Math.max(w * .15, 66), 250),
+    area: L => L.h1 || { x: 0, y: 0, w: L.w, h: L.h },
+    covered: () => gw.getBoundingClientRect().top <= 0,
+    onResize: L => { fitHero(); buildHeroTextures(L); }
+  });
+  if (heroLens) {
+    root.classList.add("webgl");
+    await Promise.all([document.fonts.load('800 100px "Schibsted Grotesk"'), document.fonts.load('italic 400 100px "Newsreader"')]);
+    sizeLens(heroLens); fitHero(); buildHeroTextures(heroLens);
+    heroLens.u.uP0.value = 0; heroLens.u.uP1.value = 0;
+    introStart = performance.now() + 150;
+  } else {
+    await document.fonts.ready; fitHero();
+  }
+  root.classList.add("ready");
+
+  // zweite Linse auf dem Gerwing-Bild
+  const img = $("#shot");
+  const setupImg = () => {
+    imgLens = tryGL($("#lens2"), {
+      str: .5, ca: .01, ph: 2.1, idleOn: 0,
+      radius: (w, h) => Math.min(h * .42, w * .22),
+      area: L => ({ x: L.w * .1, y: L.h * .1, w: L.w * .8, h: L.h * .8 })
+    });
+    if (!imgLens) return;
+    sizeLens(imgLens);
+    imgLens.u.uBase.value = tex(img);
+    lenses.push(imgLens);
+  };
+  if (img.complete && img.naturalWidth) setupImg(); else img.addEventListener("load", setupImg, { once: true });
+  if (heroLens) lenses.push(heroLens);
+
+  let last = performance.now();
+  const frame = now => {
+    const dt = Math.min((now - last) / 1000, .1); last = now;
+    if (heroLens && introStart !== null) {
+      heroLens.u.uP0.value = ease((now - introStart) / 1300);
+      heroLens.u.uP1.value = ease((now - introStart - 160) / 1300);
+    }
+    lenses.forEach(L => stepLens(L, dt, now / 1000));
+    requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+})();
+
+addEventListener("resize", () => { if (!heroLens) { fitHero(); } });
+if (reduce) document.fonts.ready.then(fitHero);
+</script>
+</body>
+</html>

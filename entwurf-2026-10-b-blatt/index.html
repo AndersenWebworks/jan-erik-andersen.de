@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>Jan-Erik Andersen · Webentwicklung (Entwurf B Blatt)</title>
+<style>
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-VF.ttf") format("truetype"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-Italic-VF.ttf") format("truetype"); font-weight: 200 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "Schibsted Grotesk"; src: url("fonts/SchibstedGrotesk-VF.ttf") format("truetype"); font-weight: 400 900; font-display: swap; }
+
+:root {
+  --bg: #ffffff; --ink: #303033; --muted: #66666a; --red: #d40235;
+  --serif: "Newsreader", Georgia, serif; --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --fs: 19px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); }
+body { background: var(--bg); color: var(--ink); font: 400 var(--fs)/1.62 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+::selection { background: var(--red); color: #fff; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* Raum: WebGL-Leinwand (Modelle, Blattschatten, roter Faden) und darüber die CSS3D-Ebene mit dem echten Text */
+#gl, #css { display: none; position: fixed; inset: 0; width: 100%; height: 100%; }
+.webgl #gl { display: block; z-index: 0; }
+.webgl #css { display: block; z-index: 1; pointer-events: none; }
+#scroll { display: none; }
+.webgl #scroll { display: block; width: 1px; pointer-events: none; }
+
+/* Kopfzeile: nur Name und Kontakt, außerhalb des Blatts */
+.top { position: fixed; z-index: 10; inset: 0 0 auto 0; display: flex; justify-content: space-between; align-items: baseline; padding: 22px 32px 0; font: 500 14px/1 var(--sans); letter-spacing: .02em; pointer-events: none; }
+.top a { pointer-events: auto; text-decoration: none; }
+.top a:hover { color: var(--red); }
+.top .mark { font-weight: 700; }
+.top .mark span { color: var(--red); }
+
+/* Slides */
+.slides { display: none; position: fixed; z-index: 10; right: 32px; bottom: 16px; align-items: center; gap: 10px; font: 500 13px/1.2 var(--sans); color: var(--ink); }
+.webgl .slides { display: flex; }
+.slides button { width: 44px; height: 44px; display: grid; place-items: center; background: #fff; color: var(--ink); border: 1px solid var(--ink); border-radius: 2px; cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent; }
+.slides button:hover:not(:disabled) { background: var(--ink); color: #fff; }
+.slides button:active:not(:disabled) { background: var(--red); border-color: var(--red); color: #fff; }
+.slides button:disabled { opacity: .3; cursor: default; }
+.slides svg { width: 18px; height: 18px; }
+.slides .lbl { min-width: 15em; text-align: center; white-space: nowrap; }
+.slides .lbl b { color: var(--red); font-weight: 600; }
+.note { display: none; position: fixed; z-index: 10; left: 32px; bottom: 28px; font: 500 11px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); pointer-events: none; }
+.webgl .note { display: block; }
+
+/* Blätter: Text als DOM, im Raum ausgerichtet (CSS3DRenderer) */
+.blatt { color: var(--ink); font-size: var(--fs); line-height: 1.62; }
+.webgl .blatt { display: flex; flex-direction: column; justify-content: center; user-select: text; -webkit-user-select: text; will-change: opacity; }
+.blatt h1, .blatt h2 { font-family: var(--serif); font-weight: 300; letter-spacing: -.025em; }
+.blatt h1 { font-size: calc(var(--fs) * 4.4); line-height: .95; margin-bottom: .22em; }
+.blatt h1 em { font-style: italic; color: var(--red); }
+.blatt h2.word { font-size: calc(var(--fs) * 2.7); line-height: 1; margin-bottom: .32em; }
+.blatt h2.sub { font-weight: 400; font-size: calc(var(--fs) * 1.75); line-height: 1.12; letter-spacing: -.01em; margin-bottom: .5em; }
+.blatt h3 { font: 400 calc(var(--fs) * 1.75)/1.12 var(--serif); letter-spacing: -.01em; margin-bottom: .5em; }
+.blatt p + p { margin-top: .9em; }
+.kicker { font: 500 calc(var(--fs) * .7)/1.5 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.4em; }
+.meta { font: 500 calc(var(--fs) * .63)/1.5 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: .9em; }
+.blatt .lead { font-size: calc(var(--fs) * 1.04); line-height: 1.58; }
+.arrow { display: inline-block; margin-top: 1.4em; font-weight: 600; font-size: calc(var(--fs) * .88); text-decoration: none; border-bottom: 2px solid var(--red); padding-bottom: 3px; }
+.arrow:hover { color: var(--red); }
+.links { display: flex; gap: 28px; flex-wrap: wrap; }
+.shots img { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.shots figcaption { margin-top: 1.5em; font-size: calc(var(--fs) * .72); line-height: 1.5; color: var(--muted); }
+
+/* Handy: Blatt hochkant, Modell oben, Text unten */
+.mobile .blatt { line-height: 1.5; }
+.mobile .blatt h1 { font-size: calc(var(--fs) * 3.7); }
+.mobile .blatt h2.word { font-size: calc(var(--fs) * 2.1); margin-bottom: .2em; }
+.mobile .blatt h3, .mobile .blatt h2.sub { font-size: calc(var(--fs) * 1.5); margin-bottom: .4em; }
+.mobile .meta { margin-bottom: .5em; }
+.mobile .kicker { margin-bottom: 1em; }
+.mobile .blatt p + p { margin-top: .7em; }
+.mobile .arrow { margin-top: 1em; }
+.mobile .shots figcaption { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.mobile .note { display: none; }
+.mobile .top { padding: 18px 20px 0; }
+.mobile .slides { right: 12px; left: 12px; justify-content: space-between; bottom: 10px; }
+.mobile .slides .lbl { min-width: 0; flex: 1; }
+
+/* Ohne WebGL: einfache Fassung, die Blätter stehen untereinander */
+html:not(.webgl) main { max-width: 760px; margin: 0 auto; padding: 96px 24px 64px; display: grid; gap: 120px; }
+html:not(.webgl) .top { position: static; padding-top: 22px; }
+</style>
+</head>
+<body>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div id="css"></div>
+<div id="scroll" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="mark" href="#start" id="home">Jan-Erik Andersen<span>.</span></a>
+  <a href="mailto:mail@andersen-webworks.de">Kontakt</a>
+</header>
+<div class="note">Entwurf · nicht öffentlich</div>
+<nav class="slides" aria-label="Themen">
+  <button type="button" id="sl-prev" aria-label="Vorheriges Thema"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+  <span class="lbl" id="sl-lbl" aria-live="polite"></span>
+  <button type="button" id="sl-next" aria-label="Nächstes Thema"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+</nav>
+
+<main id="blaetter">
+<section class="blatt" id="start" data-side="l" data-name="Einstieg">
+  <h1>Jan-Erik <em>Andersen</em></h1>
+  <div class="kicker">Webentwicklung<br>Raum Plau am See · remote</div>
+  <p class="lead">Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p>
+  <div class="links"><a class="arrow" href="#arbeit">Projekte ansehen</a><a class="arrow" href="mailto:mail@andersen-webworks.de">Kontakt</a></div>
+</section>
+
+<section class="blatt" id="arbeit" data-side="r" data-name="Gerwing">
+  <h2 class="word">Gerwing</h2>
+  <div class="meta">WooCommerce · seit 2023</div>
+  <h3>Pflaster nach Fläche bestellen</h3>
+  <p>Für Gerwing habe ich 2023 einen WooCommerce-Shop gebaut, der Pflastersteine, Terrassenplatten und Stufen so verkauft, wie man sie bestellt: nach Fläche.</p>
+  <p>Kunden geben ihre Quadratmeter ein, der Shop rechnet sie in ganze Steine um, ermittelt Gewicht und Fracht nach Postleitzahl und leitet die Bestellung an den zuständigen Händler weiter. Seitdem betreue ich den Shop und entwickle ihn laufend weiter.</p>
+  <div><a class="arrow" href="#">Zur Projektgeschichte</a></div>
+  <figure class="shots">
+    <img src="bilder/gerwing-produkt-ausschnitt.jpg" width="1905" height="880" alt="Produktseite im Gerwing-Shop: Pflastersteine „Tosca Antik“ mit Farbauswahl">
+    <img src="bilder/gerwing-bestellung.jpg" width="805" height="575" alt="" aria-hidden="true">
+    <figcaption>gerwing.de · Produktseite mit Farbwahl, Format und Musterbestellung</figcaption>
+  </figure>
+</section>
+
+<section class="blatt" id="shops" data-side="l" data-name="Shops und Shop-Wechsel">
+  <h2 class="sub">Shops und Shop-Wechsel</h2>
+  <p>Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.</p>
+</section>
+</main>
+
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module" src="./blatt.js"></script>
+</body>
+</html>

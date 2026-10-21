@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<title>Jan-Erik Andersen · Webentwicklung (Entwurf B Linie)</title>
+<style>
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-VF.ttf") format("truetype"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-Italic-VF.ttf") format("truetype"); font-weight: 200 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "Schibsted Grotesk"; src: url("fonts/SchibstedGrotesk-VF.ttf") format("truetype"); font-weight: 400 900; font-display: swap; }
+
+:root {
+  --bg: #ffffff;
+  --ink: #303033;
+  --muted: #66666a;
+  --red: #d40235;
+  --red-text: #d40235;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --pad: clamp(20px, 5vw, 72px);
+  --maxw: 1440px;
+  --gut: max(var(--pad), calc((100vw - var(--maxw)) / 2 + var(--pad)));
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; background: var(--bg); }
+body { background: var(--bg); color: var(--ink); font: 400 18px/1.65 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+::selection { background: var(--red); color: #fff; }
+:focus-visible { outline: 2px solid var(--red-text); outline-offset: 3px; }
+
+.draft-note { position: fixed; z-index: 50; right: 12px; bottom: 12px; font: 500 11px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; background: var(--ink); color: var(--bg); border: 1px solid var(--ink); padding: 7px 10px; border-radius: 2px; pointer-events: none; }
+
+/* Kopfzeile */
+.top { position: fixed; z-index: 40; inset: 0 0 auto 0; display: flex; justify-content: space-between; align-items: baseline; padding: 20px var(--gut) 36px; font: 500 14px/1 var(--sans); letter-spacing: .02em; background: linear-gradient(rgba(255,255,255,.97) 0%, rgba(255,255,255,.95) 55%, rgba(255,255,255,0) 100%); }
+.top nav { display: flex; gap: 28px; }
+.top a { text-decoration: none; }
+.top a:hover { color: var(--red-text); }
+.top .mark { font-weight: 700; }
+.top .mark span { color: var(--red-text); }
+
+/* Konstruktionsraster: scheint nur um die Stiftspitze auf */
+.grid { position: fixed; z-index: 0; top: 0; bottom: 0; left: 50%; width: min(100%, var(--maxw)); transform: translateX(-50%); pointer-events: none; opacity: 0; transition: opacity .5s;
+  background-image: linear-gradient(rgba(48,48,51,.10) 1px, transparent 1px), linear-gradient(90deg, rgba(48,48,51,.10) 1px, transparent 1px);
+  background-size: 48px 48px; background-position: 0 var(--gs, 0px);
+  -webkit-mask-image: radial-gradient(circle 280px at var(--gx, -999px) var(--gy, -999px), #000 0%, transparent 100%);
+  mask-image: radial-gradient(circle 280px at var(--gx, -999px) var(--gy, -999px), #000 0%, transparent 100%); }
+.has-line .grid { opacity: 1; }
+
+main { position: relative; z-index: 1; }
+
+/* Die Linie */
+#linie { position: absolute; left: 0; top: 0; pointer-events: none; overflow: visible; z-index: 2; }
+#linie .pen-line { fill: none; stroke: #303033; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+#linie .sat { fill: none; stroke: #303033; stroke-width: 1; stroke-linecap: round; stroke-linejoin: round; }
+#linie .sat.soft { stroke-opacity: .5; }
+#linie .sat.dim { stroke-width: .9; stroke-opacity: .8; }
+#linie .mk { opacity: 0; transition: opacity .45s; }
+#linie .mk.on { opacity: 1; }
+#linie text { font: 500 10.5px/1 var(--sans); fill: #303033; letter-spacing: .06em; }
+#linie text.num { font-size: 10px; fill: #66666a; letter-spacing: .1em; font-variant-numeric: tabular-nums; }
+#linie circle.bubble { fill: #fff; stroke: #303033; stroke-width: 1; }
+#linie .pen-dot { fill: #d40235; }
+#linie .pen-ring { fill: none; stroke: #d40235; stroke-width: .9; stroke-opacity: .45; }
+.rm #linie .mk { opacity: 1; transition: none; }
+.rm .grid { display: none; }
+
+/* Kapitel */
+.ch { position: relative; padding: 15vh var(--gut) 11vh; }
+.ch > h1, .ch > h2 { font: 300 clamp(48px, 9.5vw, 128px)/.95 var(--serif); letter-spacing: -.025em; margin-bottom: 8vh; max-width: 12em; }
+.ch > h1 em, .ch > h2 em { font-style: italic; color: var(--red-text); }
+
+.stage { display: flex; flex-direction: column; gap: 14vh; }
+.panel { width: min(100%, 40rem); }
+.panel.l { align-self: flex-start; }
+.panel.r { align-self: flex-end; }
+.panel.wl { align-self: flex-start; width: min(100%, 52rem); }
+.panel.wr { align-self: flex-end; width: min(100%, 52rem); }
+
+.meta { font: 500 12px/1.5 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+.panel h3 { font: 400 clamp(28px, 2.6vw, 38px)/1.12 var(--serif); letter-spacing: -.01em; margin-bottom: 16px; }
+.panel p + p { margin-top: 1em; }
+.arrow { display: inline-block; margin-top: 26px; font-weight: 600; font-size: 16px; text-decoration: none; border-bottom: 2px solid var(--red); padding-bottom: 3px; }
+.arrow:hover { color: var(--red-text); }
+.placeholder { color: var(--muted); border: 1px dashed rgba(48,48,51,.4); background: repeating-linear-gradient(135deg, rgba(48,48,51,.07) 0 3px, rgba(48,48,51,0) 3px 7px); padding: 0 .3em; border-radius: 2px; }
+.proof { display: block; margin-top: 12px; font-size: 15px; color: var(--muted); }
+
+/* Einstieg */
+.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding-top: 12vh; padding-bottom: 7vh; }
+.hero .stage { flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 24px; }
+.kicker { font: 500 13px/1.5 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.hero .panel p { font-size: clamp(18px, 1.5vw, 22px); line-height: 1.55; }
+.hero .links { margin-top: 22px; display: flex; gap: 28px; flex-wrap: wrap; }
+.hero .links .arrow { margin-top: 0; }
+
+/* Gerwing */
+.shots { margin-top: 64px; }
+.shots img { display: block; width: 100%; height: auto; border: 1px solid rgba(48,48,51,.16); background: #fff; }
+.shots img + img { margin-top: 14px; width: 55%; }
+.shots figcaption { margin-top: 28px; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+
+/* Wie ich arbeite */
+.big p { font: 400 clamp(23px, 2.1vw, 31px)/1.42 var(--serif); }
+
+/* Werdegang */
+.timeline { list-style: none; }
+.timeline li { display: grid; grid-template-columns: 9.5em 1fr; gap: 20px; padding: 13px 0; }
+.timeline li + li { border-top: 1px solid rgba(48,48,51,.14); }
+.timeline .y { font: 500 15px/1.6 var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
+.timeline .s { font: 400 21px/1.35 var(--serif); }
+.timeline .s small { display: block; font: 400 15px/1.5 var(--sans); color: var(--muted); margin-top: 2px; }
+
+/* Stimmen */
+blockquote p { font: italic 380 clamp(20px, 1.7vw, 24px)/1.5 var(--serif); }
+blockquote p::before { content: "„"; color: var(--red-text); }
+blockquote p::after { content: "“"; color: var(--red-text); }
+cite { display: block; margin-top: 16px; font: 500 14px/1.4 var(--sans); font-style: normal; color: var(--muted); }
+
+/* Agenturen */
+.agency p { font-size: 20px; }
+
+/* Kontakt */
+.contact { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 56px; }
+.contact .lines { display: grid; gap: 40px; font-size: 19px; }
+.contact .lines span { display: block; font: 500 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.contact .lines a { text-decoration: none; border-bottom: 1px solid var(--red); }
+.contact .lines a:hover { color: var(--red-text); }
+.contact footer { margin-top: 56px; padding-bottom: 28px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+
+@media (max-width: 800px) {
+  body { font-size: 17px; }
+  .top nav a:not(:last-child) { display: none; }
+  .ch { padding-top: 17vh; padding-bottom: 8vh; }
+  .hero { padding-top: 12vh; }
+  .stage { gap: 10vh; }
+  .hero .stage { flex-direction: column; align-items: stretch; gap: 18px; }
+  .panel, .panel.wl, .panel.wr { width: 100%; }
+  .timeline li { grid-template-columns: 1fr; gap: 2px; padding: 10px 0; }
+  .shots { margin-top: 34px; }
+  .shots img + img { width: 70%; }
+  .shots figcaption { margin-top: 20px; }
+  .contact .lines { gap: 32px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<!-- Entwurf B Linie, Oktober 2026, nicht öffentlich. Andersen Webworks. Eine Linie zeichnet sich beim Scrollen durch die Seite (SVG, ohne three.js). -->
+<div class="grid" aria-hidden="true"></div>
+<div class="draft-note">Entwurf · nicht öffentlich</div>
+
+<header class="top">
+  <a class="mark" href="#start">Jan-Erik Andersen<span>.</span></a>
+  <nav>
+    <a href="#arbeit">Arbeit</a>
+    <a href="#leistungen">Leistungen</a>
+    <a href="#werdegang">Werdegang</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+</header>
+
+<main>
+<section class="ch hero" id="start" data-side="r" data-name="Jan-Erik|Andersen">
+  <h1>Jan-Erik <em>Andersen</em></h1>
+  <div class="stage">
+    <div class="kicker">Webentwicklung<br>Raum Plau am See · remote</div>
+    <div class="panel r">
+      <p>Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p>
+      <div class="links"><a class="arrow" href="#arbeit">Projekte ansehen</a><a class="arrow" href="#kontakt">Kontakt</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="ch" id="arbeit" data-side="l">
+  <h2>Gerwing</h2>
+  <div class="stage">
+    <div class="panel l">
+      <div class="meta">WooCommerce · seit 2023</div>
+      <h3>Pflaster nach Fläche bestellen</h3>
+      <p>Für Gerwing habe ich 2023 einen WooCommerce-Shop gebaut, der Pflastersteine, Terrassenplatten und Stufen so verkauft, wie man sie bestellt: nach Fläche.</p>
+      <p>Kunden geben ihre Quadratmeter ein, der Shop rechnet sie in ganze Steine um, ermittelt Gewicht und Fracht nach Postleitzahl und leitet die Bestellung an den zuständigen Händler weiter. Seitdem betreue ich den Shop und entwickle ihn laufend weiter.</p>
+      <a class="arrow" href="#">Zur Projektgeschichte</a>
+      <figure class="shots">
+        <img id="img-a" src="bilder/gerwing-produkt-ausschnitt.jpg" width="1905" height="880" alt="Produktseite im Gerwing-Shop: Pflastersteine „Tosca Antik“ mit Farbauswahl">
+        <img id="img-b" src="bilder/gerwing-bestellung.jpg" width="805" height="575" alt="" aria-hidden="true">
+        <figcaption>gerwing.de · Produktseite mit Farbwahl, Format und Musterbestellung</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="ch" id="leistungen" data-side="r" data-name="Was ich|mache">
+  <h2>Was ich <em>mache</em></h2>
+  <div class="stage">
+    <article class="panel r"><h3>Betreuung und Absicherung</h3><p>Zwischen dem Bekanntwerden einer Lücke in einem WordPress-Plugin und dem ersten Angriff vergehen oft nur Stunden. Ich halte Ihre Seite deshalb laufend aktuell und sehe regelmäßig nach, ob sie sauber läuft.</p></article>
+    <article class="panel l"><h3>Modernisierung</h3><p>Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen. Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.</p></article>
+    <article class="panel r"><h3>Shops und Shop-Wechsel</h3><p>Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.</p></article>
+    <article class="panel l"><h3>Schnittstellen und eigene Werkzeuge</h3><p>Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen, bei WBG etwa mit Salesforce und Concludis. Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt.</p></article>
+    <article class="panel r"><h3>Gestaltung</h3><p>Für mich gehört Gestaltung zur Entwicklung. Ich entwerfe Erscheinungsbilder und Oberflächen selbst oder setze vorhandene Entwürfe sorgfältig um.<span class="proof">Beispiele: <span class="placeholder">[Take the Gloves Off, nach Zustimmung]</span>, das NOVUM-Cover und das Ausstellungsmotiv „100 Jahre Audi“.</span></p></article>
+  </div>
+</section>
+
+<section class="ch" id="weitere" data-side="l" data-name="Weitere|Arbeit">
+  <h2>Weitere <em>Arbeit</em></h2>
+  <div class="stage">
+    <div class="panel l">
+      <div class="meta">2023 bis 2025 · im Auftrag von RPLC</div>
+      <h3>WBG Pooling</h3>
+      <p>Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.</p>
+    </div>
+    <div class="panel r">
+      <div class="meta">Ehrenamtlich</div>
+      <h3>Take the Gloves Off</h3>
+      <p class="placeholder">[Ein Satz zum Erscheinungsbild, nach Abstimmung]</p>
+    </div>
+    <p class="panel l also">Außerdem: Onkologie Laatzen, Mindblossom und Soundhealing Hamburg, der digitale Wirkungsbericht für Seniorpartner in School, Bäckerei Behrens. <span class="placeholder">[je ein Satz nach erneuter Sichtung]</span></p>
+  </div>
+</section>
+
+<section class="ch" id="arbeitsweise" data-side="r" data-name="Wie ich|arbeite">
+  <h2>Wie ich <em>arbeite</em></h2>
+  <div class="stage">
+    <div class="panel r big">
+      <p>Ich arbeite mit aktuellen KI-Werkzeugen und habe dafür eigene Abläufe entwickelt. Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge. Entscheidungen und Verantwortung bleiben bei mir, und ausgeliefert wird nur, was ich geprüft habe.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ch" id="werdegang" data-side="l" data-name="Werdegang">
+  <h2>Werdegang</h2>
+  <div class="stage">
+    <div class="panel wl">
+      <ol class="timeline">
+        <li><span class="y">seit 2023</span><span class="s">Gerwing<small>Umsetzung und laufende Betreuung des Onlineshops</small></span></li>
+        <li><span class="y">2023 bis 2025</span><span class="s">Runden Group über RPLC<small>WBG Pooling und weitere Websites und Anwendungen</small></span></li>
+        <li><span class="y">2017 bis 2023</span><span class="s">Tangram Werbeagentur<small>Frontend-Entwicklung, unter anderem für Nissen, BIG Arbeitsschutz und EMPORE</small></span></li>
+        <li><span class="y">2017</span><span class="s">YOOtheme<small>Support Management</small></span></li>
+        <li><span class="y">seit 2010</span><span class="s">Freiberufliche Webprojekte<small>seit 2018 als Andersen Webworks</small></span></li>
+        <li><span class="y">2007 bis 2010</span><span class="s">HTK Hamburg<small>Zertifikat Multimedia Design</small></span></li>
+        <li><span class="y"><span class="placeholder">[Jahre]</span></span><span class="s">Games<small>QA bei Goodgame Studios und Deep Silver FISHLABS, PahuPahu mit rund 25 Spielprototypen in Flash und Haxe, Gamersunity</small></span></li>
+        <li><span class="y">2000 bis 2006</span><span class="s">Pixel Arrays<small>erste Selbstständigkeit</small></span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="ch" id="stimmen" data-side="r" data-name="Stimmen">
+  <h2>Stimmen</h2>
+  <div class="stage">
+    <blockquote class="panel r"><p>Seniorpartner in School (SiS) ist eine bundesweit agierende Sozialorganisation. Ein gut aufgestellter digitaler Wirkungsbericht ist für unsere Arbeit wichtig. Jan-Erik und die kompetente Texterin Annemarie haben das für uns neue Format professionell und barrierefreundlich aufgesetzt. Super Teamarbeit, verlässlich und engagiert. SiS sagt DANKE!</p><cite>Karin, Seniorpartner in School · Google-Bewertung</cite></blockquote>
+    <blockquote class="panel l"><p>Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich mit Andersen Webworks seit nun mehreren Jahren einen zuverlässigen Partner gefunden zu haben. Professionelles Webdesign das mich immer wieder überrascht, meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff, so setzt man sich von der Konkurrenz ab!</p><cite>Corvin Jädicke, ai-coustics · Google-Bewertung</cite></blockquote>
+  </div>
+</section>
+
+<section class="ch" id="agenturen" data-side="r" data-name="Für|Agenturen">
+  <h2>Für <em>Agenturen</em></h2>
+  <div class="stage">
+    <div class="panel r agency">
+      <p>Ich steige in laufende Projekte ein, arbeite mich in bestehende Themes und Plugins ein und halte mich an Ihre Abläufe und Werkzeuge.</p>
+      <p>Konditionen und freie Kapazität nenne ich Ihnen auf Anfrage.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ch contact" id="kontakt" data-side="r" data-name="Schreiben Sie mir,|worum es geht.">
+  <h2>Schreiben Sie mir, <em>worum es geht.</em></h2>
+  <div class="stage">
+    <div class="panel r">
+      <div class="lines">
+        <div><span>Mail</span><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a></div>
+        <div><span>Telefon</span><a href="tel:+4938733270015">+49 38733 270015</a></div>
+        <div><span>LinkedIn</span><a href="https://www.linkedin.com/in/andersen-erik/">andersen-erik</a></div>
+        <div><span>Lebenslauf</span><a href="#">PDF herunterladen</a></div>
+      </div>
+    </div>
+  </div>
+  <footer><span>Andersen Webworks · Jan-Erik Andersen</span><span>Impressum · Datenschutz</span></footer>
+</section>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  var main = document.querySelector("main");
+  var grid = document.querySelector(".grid");
+  var RM = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (RM) document.documentElement.classList.add("rm");
+  var LETTERS = "ABCDEFGHI";
+  var S = null; // aktueller Zustand
+  var raf = 0;
+
+  function el(name, attrs, parent) {
+    var e = document.createElementNS(NS, name);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
+
+  // Rechteck des tatsächlichen Textes (nicht der Box)
+  function textRect(node) {
+    var r = document.createRange();
+    r.selectNodeContents(node);
+    var rs = Array.prototype.filter.call(r.getClientRects(), function (x) { return x.width > 0 && x.height > 0; });
+    if (!rs.length) return node.getBoundingClientRect();
+    var o = { left: 1e9, top: 1e9, right: -1e9, bottom: -1e9 };
+    rs.forEach(function (x) {
+      o.left = Math.min(o.left, x.left); o.top = Math.min(o.top, x.top);
+      o.right = Math.max(o.right, x.right); o.bottom = Math.max(o.bottom, x.bottom);
+    });
+    return o;
+  }
+
+  // Polylinie mit ruhig gerundeten Ecken
+  function roundedPath(V, r) {
+    var d = "M" + V[0][0] + " " + V[0][1];
+    for (var i = 1; i < V.length - 1; i++) {
+      var a = V[i - 1], b = V[i], c = V[i + 1];
+      var l1 = Math.hypot(b[0] - a[0], b[1] - a[1]), l2 = Math.hypot(c[0] - b[0], c[1] - b[1]);
+      var rr = Math.min(r, l1 / 2, l2 / 2);
+      var p1 = [b[0] + (a[0] - b[0]) / l1 * rr, b[1] + (a[1] - b[1]) / l1 * rr];
+      var p2 = [b[0] + (c[0] - b[0]) / l2 * rr, b[1] + (c[1] - b[1]) / l2 * rr];
+      d += "L" + p1[0].toFixed(2) + " " + p1[1].toFixed(2) + "Q" + b[0] + " " + b[1] + " " + p2[0].toFixed(2) + " " + p2[1].toFixed(2);
+    }
+    var z = V[V.length - 1];
+    return d + "L" + z[0] + " " + z[1];
+  }
+
+  function build() {
+    if (S && S.svg) S.svg.remove();
+    var vh = window.innerHeight;
+    var mr = main.getBoundingClientRect();
+    var W = main.clientWidth, H = main.offsetHeight;
+    var mobile = W <= 800;
+    var scrollY = window.pageYOffset;
+    var mainTop = mr.top + scrollY; // Dokument-y des main
+    var O = { x: mr.left, y: mr.top };
+    function R(r) { return { l: r.left - O.x, r: r.right - O.x, t: r.top - O.y, b: r.bottom - O.y }; }
+
+    var svg = el("svg", { id: "linie", width: W, height: H, viewBox: "0 0 " + W + " " + H, "aria-hidden": "true", focusable: "false" });
+    main.insertBefore(svg, main.firstChild);
+    var gSat = el("g", {}, svg);
+    var gMain = el("g", {}, svg);
+    var gMk = el("g", {}, svg);
+    var gPen = el("g", {}, svg);
+
+    var sats = [], mks = [];
+    function sat(d, y, win, cls) {
+      var p = el("path", { d: d, "class": "sat" + (cls ? " " + cls : "") }, gSat);
+      var len = p.getTotalLength();
+      p.style.strokeDasharray = len + " " + (len + 2);
+      p.style.strokeDashoffset = len;
+      sats.push({ p: p, len: len, y: y, win: win });
+      return p;
+    }
+    function mk(g, y) { gMk.appendChild(g); g.setAttribute("class", "mk"); mks.push({ g: g, y: y }); }
+
+    var secs = Array.prototype.slice.call(main.querySelectorAll(":scope > section.ch"));
+    var gut = parseFloat(getComputedStyle(secs[0]).paddingLeft) || 20;
+    var xL = mobile ? 9 : Math.max(10, gut - 36);
+    var xR = W - xL;
+
+    var heads = secs.map(function (s) {
+      var h = s.querySelector("h1, h2");
+      var t = R(textRect(h));
+      var cs = parseFloat(getComputedStyle(h).fontSize);
+      return { t: t, y: t.b + cs * 0.02 + 4 };
+    });
+
+    var mail = R(main.querySelector('a[href^="mailto:"]').getBoundingClientRect());
+    var my = mail.b + (mobile ? 11 : 13);
+
+    var V = [];
+    if (!mobile) {
+      for (var i = 0; i < secs.length; i++) {
+        var fromL = (i % 2 === 0);
+        var xa = fromL ? xL : xR, xb = fromL ? xR : xL, y = heads[i].y;
+        if (i === 0) V.push([xa, y]); else V.push([xa, y]);
+        V.push([xb, y]);
+        if (i === 1) { // Gerwing: Rahmen um die Bilder, die linke Achse ist die vierte Seite
+          var a = R(document.getElementById("img-a").getBoundingClientRect());
+          var b = R(document.getElementById("img-b").getBoundingClientRect());
+          var fy1 = a.t - 12, fy2 = b.b + 12, fxa = a.r + 12, fxb = b.r + 12, fm = (a.b + b.t) / 2;
+          V.push([xL, fy1], [fxa, fy1], [fxa, fm], [fxb, fm], [fxb, fy2], [xL, fy2]);
+          // Maßlinie über dem Rahmen
+          var dy = a.t - 34;
+          sat("M" + a.l + " " + dy + "H" + a.r + "M" + a.l + " " + (dy - 6) + "V" + (dy + 6) + "M" + a.r + " " + (dy - 6) + "V" + (dy + 6) +
+              "M" + (a.l - 3) + " " + (dy + 3) + "L" + (a.l + 3) + " " + (dy - 3) + "M" + (a.r - 3) + " " + (dy + 3) + "L" + (a.r + 3) + " " + (dy - 3), dy, 60, "dim");
+        }
+      }
+      V.push([xR, my], [mail.l, my]);
+      // Maßlinie über dem Namen
+      var h0 = heads[0].t, dy0 = h0.t - 26;
+      sat("M" + h0.l + " " + dy0 + "H" + h0.r + "M" + h0.l + " " + (dy0 - 6) + "V" + (dy0 + 6) + "M" + h0.r + " " + (dy0 - 6) + "V" + (dy0 + 6) +
+          "M" + (h0.l - 3) + " " + (dy0 + 3) + "L" + (h0.l + 3) + " " + (dy0 - 3) + "M" + (h0.r - 3) + " " + (dy0 + 3) + "L" + (h0.r + 3) + " " + (dy0 - 3), dy0, 80, "dim");
+
+      // Achsenmarken (Kreise mit Buchstaben)
+      secs.forEach(function (s, k) {
+        var fromL = (k % 2 === 0), x = fromL ? xL : xR;
+        var cy = k === 0 ? heads[k].y : heads[k].y - 48;
+        var g = el("g", {});
+        el("circle", { cx: x, cy: cy, r: 10, "class": "bubble" }, g);
+        var t = el("text", { x: x, y: cy + 0.5, "text-anchor": "middle", "dominant-baseline": "central" }, g);
+        t.textContent = LETTERS[k];
+        mk(g, cy - 2);
+      });
+
+      // Führungslinien und Ziffern an den Zwischenüberschriften
+      [1, 2, 3].forEach(function (k) {
+        var onLeft = (k % 2 === 1); // Achse nach dem Kapitelbalken: ungerade links
+        var hs = secs[k].querySelectorAll(".panel h3");
+        Array.prototype.forEach.call(hs, function (h, n) {
+          var tr = R(textRect(h));
+          var y = Math.round(tr.t + (tr.b - tr.t) * 0.5) + 0.5;
+          var x1 = onLeft ? xL : xR;
+          var x2 = onLeft ? tr.l - 14 : tr.r + 14;
+          if (onLeft && x2 < x1 + 20) return;
+          if (!onLeft && x2 > x1 - 20) return;
+          sat("M" + x1 + " " + y + "H" + x2, y, 50, "soft");
+          var g = el("g", {});
+          el("path", { d: "M" + (x1 - 5) + " " + y + "H" + (x1 + 5), stroke: "#303033", "stroke-width": 1, fill: "none" }, g);
+          var t = el("text", { x: onLeft ? x1 + 9 : x1 - 9, y: y - 6, "text-anchor": onLeft ? "start" : "end", "class": "num" }, g);
+          t.textContent = (n < 9 ? "0" : "") + (n + 1);
+          mk(g, y - 20);
+        });
+      });
+
+      // Teilstriche an der Zeitachse
+      var items = secs[5].querySelectorAll(".timeline li");
+      Array.prototype.forEach.call(items, function (li) {
+        var r = R(li.getBoundingClientRect());
+        var y = Math.round(r.t) + 0.5;
+        sat("M" + xL + " " + y + "H" + (xL + 14), y, 40, "");
+      });
+    } else {
+      // Handy: eine Randlinie links, Abzweige unter den Überschriften
+      V.push([xL, heads[0].t.t - 6], [xL, my], [mail.r, my]);
+      secs.forEach(function (s, k) {
+        var hy = heads[k].y;
+        sat("M" + xL + " " + hy + "H" + (W - 20), hy, 90, "");
+        var g = el("g", {});
+        el("text", { x: 20, y: heads[k].t.t - 12 }, g).textContent = LETTERS[k];
+        mk(g, heads[k].t.t - 30);
+      });
+      var a = R(document.getElementById("img-a").getBoundingClientRect());
+      var b = R(document.getElementById("img-b").getBoundingClientRect());
+      var l = Math.min(a.l, b.l) - 7, r = Math.max(a.r, b.r) + 7, t = a.t - 7, bt = b.b + 7, q = 8;
+      sat("M" + (l + q) + " " + t + "H" + (r - q) + "Q" + r + " " + t + " " + r + " " + (t + q) + "V" + (bt - q) + "Q" + r + " " + bt + " " + (r - q) + " " + bt +
+          "H" + (l + q) + "Q" + l + " " + bt + " " + l + " " + (bt - q) + "V" + (t + q) + "Q" + l + " " + t + " " + (l + q) + " " + t, t, 140, "");
+    }
+
+    var d = roundedPath(V, mobile ? 8 : 12);
+    var path = el("path", { d: d, "class": "pen-line" }, gMain);
+    var total = path.getTotalLength();
+    path.style.strokeDasharray = total + " " + (total + 2);
+    path.style.strokeDashoffset = total;
+
+    // Knoten: Scroll-Position (t) -> Länge, horizontale Läufe bekommen ein eigenes Scrollfenster
+    var segs = [], geo = 0, i2;
+    for (i2 = 1; i2 < V.length; i2++) {
+      var dx = V[i2][0] - V[i2 - 1][0], dyy = V[i2][1] - V[i2 - 1][1];
+      var horiz = Math.abs(dyy) < 0.5;
+      var len = Math.abs(dx) + Math.abs(dyy);
+      segs.push({ horiz: horiz, len: len, y1: V[i2][1] });
+      geo += len;
+    }
+    var scale = total / geo;
+    var T = [], Lk = [];
+    var cursor, cum = 0;
+    function winOf(s) { return Math.min(vh * 0.2, s.len * 0.5); }
+    cursor = V[0][1] - (segs[0].horiz ? winOf(segs[0]) : 0);
+    T.push(cursor); Lk.push(0);
+    for (i2 = 0; i2 < segs.length; i2++) {
+      var s = segs[i2], tEnd;
+      if (s.horiz) tEnd = cursor + winOf(s);
+      else {
+        var nx = segs[i2 + 1];
+        tEnd = s.y1 - (nx && nx.horiz ? winOf(nx) : 0);
+        if (tEnd < cursor + 1) tEnd = cursor + 1;
+      }
+      cum += s.len; cursor = tEnd;
+      T.push(tEnd); Lk.push(cum * scale);
+    }
+
+    var pen = el("g", {}, gPen);
+    var ring = el("circle", { r: 8, "class": "pen-ring" }, pen);
+    var dot = el("circle", { r: 3.6, "class": "pen-dot" }, pen);
+
+    S = { svg: svg, path: path, total: total, T: T, Lk: Lk, sats: sats, mks: mks, pen: pen, mainTop: mainTop, O: O, W: W, H: H, vh: vh, mobile: mobile };
+    document.documentElement.classList.add("has-line");
+    update();
+  }
+
+  function lengthFor(t) {
+    var T = S.T, Lk = S.Lk;
+    if (t <= T[0]) return 0;
+    if (t >= T[T.length - 1]) return S.total;
+    var lo = 0, hi = T.length - 1;
+    while (hi - lo > 1) { var m = (lo + hi) >> 1; if (T[m] <= t) lo = m; else hi = m; }
+    var f = (t - T[lo]) / Math.max(1e-6, T[hi] - T[lo]);
+    return Lk[lo] + f * (Lk[hi] - Lk[lo]);
+  }
+
+  function update() {
+    raf = 0;
+    if (!S) return;
+    var s = window.pageYOffset, vh = window.innerHeight;
+    var max = Math.max(1, document.documentElement.scrollHeight - vh);
+    var t = s + vh * (0.7 + 0.2 * clamp(s / max, 0, 1)) - S.mainTop;
+    var L = RM ? S.total : lengthFor(t);
+    S.path.style.strokeDashoffset = S.total - L;
+    var pt = S.path.getPointAtLength(L);
+    S.pen.setAttribute("transform", "translate(" + pt.x.toFixed(1) + " " + pt.y.toFixed(1) + ")");
+    var py = RM ? 1e9 : pt.y;
+    S.sats.forEach(function (o) {
+      var p = RM ? 1 : clamp((py - (o.y - o.win)) / o.win, 0, 1);
+      o.p.style.strokeDashoffset = o.len * (1 - p);
+    });
+    S.mks.forEach(function (o) { o.g.classList.toggle("on", py >= o.y); });
+    if (!RM) {
+      var gr = grid.getBoundingClientRect();
+      grid.style.setProperty("--gx", (pt.x + S.O.x - gr.left).toFixed(0) + "px");
+      grid.style.setProperty("--gy", (pt.y + S.mainTop - s).toFixed(0) + "px");
+      grid.style.setProperty("--gs", (-s).toFixed(0) + "px");
+    }
+  }
+  function req() { if (!raf) raf = requestAnimationFrame(update); }
+
+  var rt = 0;
+  function rebuild() { clearTimeout(rt); rt = setTimeout(function () { try { build(); } catch (e) { console.error(e); } }, 80); }
+
+  window.addEventListener("scroll", req, { passive: true });
+  window.addEventListener("resize", rebuild);
+  window.addEventListener("load", rebuild);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(rebuild);
+  if (window.ResizeObserver) new ResizeObserver(rebuild).observe(main);
+  build();
+})();
+</script>
+</body>
+</html>

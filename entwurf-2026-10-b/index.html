@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<title>Jan-Erik Andersen · Webentwicklung (Entwurf B)</title>
+<style>
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-VF.ttf") format("truetype"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader"; src: url("fonts/Newsreader-Italic-VF.ttf") format("truetype"); font-weight: 200 800; font-style: italic; font-display: swap; }
+@font-face { font-family: "Schibsted Grotesk"; src: url("fonts/SchibstedGrotesk-VF.ttf") format("truetype"); font-weight: 400 900; font-display: swap; }
+
+:root {
+  --bg: #17171a;
+  --ink: #f2efe9;
+  --muted: #a9a59d;
+  --red: #d40235;
+  --red-text: #ff5473;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --pad: clamp(20px, 5vw, 72px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; background: var(--bg); }
+body { background: var(--bg); color: var(--ink); font: 400 18px/1.65 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+a { color: inherit; }
+::selection { background: var(--red); color: #fff; }
+:focus-visible { outline: 2px solid var(--red-text); outline-offset: 3px; }
+
+/* Raum (nur mit WebGL sichtbar) */
+#room { display: none; position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.webgl #room { display: block; }
+.vignette { display: none; position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 45%, rgba(23,23,26,0) 45%, rgba(8,8,10,.55) 100%); }
+.webgl .vignette { display: block; }
+
+.draft-note { position: fixed; z-index: 50; right: 12px; bottom: 12px; font: 500 11px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); background: rgba(23,23,26,.82); border: 1px solid rgba(242,239,233,.22); padding: 7px 10px; border-radius: 2px; pointer-events: none; }
+
+/* Kopfzeile */
+.top { position: fixed; z-index: 40; inset: 0 0 auto 0; display: flex; justify-content: space-between; align-items: baseline; padding: 20px var(--pad) 36px; font: 500 14px/1 var(--sans); letter-spacing: .02em; background: linear-gradient(rgba(23,23,26,.97) 0%, rgba(23,23,26,.95) 55%, rgba(23,23,26,0) 100%); }
+.top nav { display: flex; gap: 28px; }
+.top a { text-decoration: none; }
+.top a:hover { color: var(--red-text); }
+.top .mark { font-weight: 700; }
+.top .mark span { color: var(--red-text); }
+
+main { position: relative; z-index: 1; }
+
+/* Kapitel */
+.ch { position: relative; padding: 17vh var(--pad) 14vh; }
+.ch > h1, .ch > h2 { font: 300 clamp(52px, 9.5vw, 150px)/.95 var(--serif); letter-spacing: -.025em; margin-bottom: 8vh; max-width: 12em; }
+.ch > h1 em, .ch > h2 em { font-style: italic; color: var(--red-text); }
+.webgl .ch > h1, .webgl .ch > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; margin: 0; }
+
+.stage { display: flex; flex-direction: column; gap: 18vh; }
+.panel { width: min(100%, 40rem); }
+.panel.l { align-self: flex-start; }
+.panel.r { align-self: flex-end; }
+.panel.wl { align-self: flex-start; width: min(100%, 52rem); }
+.panel.wr { align-self: flex-end; width: min(100%, 52rem); }
+.webgl .panel, .webgl .kicker { position: relative; isolation: isolate; will-change: opacity, transform; }
+.webgl .panel::before { content: ""; position: absolute; z-index: -1; inset: -64px -80px; pointer-events: none; background: radial-gradient(closest-side, rgba(23,23,26,.8) 0%, rgba(23,23,26,.66) 62%, rgba(23,23,26,0) 100%); }
+
+.meta { font: 500 12px/1.5 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+.panel h3 { font: 400 clamp(28px, 2.6vw, 38px)/1.12 var(--serif); letter-spacing: -.01em; margin-bottom: 16px; }
+.panel p + p { margin-top: 1em; }
+.arrow { display: inline-block; margin-top: 26px; font-weight: 600; font-size: 16px; text-decoration: none; border-bottom: 2px solid var(--red); padding-bottom: 3px; }
+.arrow:hover { color: var(--red-text); }
+.placeholder { color: var(--muted); border: 1px dashed rgba(169,165,157,.55); padding: 0 .3em; border-radius: 2px; }
+.proof { display: block; margin-top: 12px; font-size: 15px; color: var(--muted); }
+
+/* Einstieg */
+.hero { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding-top: 12vh; padding-bottom: 7vh; }
+.hero .stage { flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 24px; }
+.kicker { font: 500 13px/1.5 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.hero .panel p { font-size: clamp(18px, 1.5vw, 22px); line-height: 1.55; }
+.hero .links { margin-top: 22px; display: flex; gap: 28px; flex-wrap: wrap; }
+.hero .links .arrow { margin-top: 0; }
+
+/* Gerwing */
+.shots { margin-top: 26px; }
+.shots img { display: block; width: 100%; height: auto; }
+.shots img + img { margin-top: 14px; width: 55%; }
+.shots figcaption { margin-top: 14px; font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.webgl .shots img { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.webgl .shots { margin-top: 24px; }
+#arbeit { padding-bottom: 24vh; }
+
+/* Wie ich arbeite */
+.big p { font: 400 clamp(23px, 2.1vw, 31px)/1.42 var(--serif); }
+
+/* Werdegang */
+.timeline { list-style: none; }
+.timeline li { display: grid; grid-template-columns: 9.5em 1fr; gap: 20px; padding: 13px 0; }
+.timeline li + li { border-top: 1px solid rgba(242,239,233,.1); }
+.timeline .y { font: 500 15px/1.6 var(--sans); color: var(--muted); font-variant-numeric: tabular-nums; }
+.timeline .s { font: 400 21px/1.35 var(--serif); }
+.timeline .s small { display: block; font: 400 15px/1.5 var(--sans); color: var(--muted); margin-top: 2px; }
+
+/* Stimmen */
+blockquote p { font: italic 380 clamp(20px, 1.7vw, 24px)/1.5 var(--serif); }
+blockquote p::before { content: "„"; color: var(--red-text); }
+blockquote p::after { content: "“"; color: var(--red-text); }
+cite { display: block; margin-top: 16px; font: 500 14px/1.4 var(--sans); font-style: normal; color: var(--muted); }
+
+/* Agenturen */
+.agency p { font-size: 20px; }
+
+/* Kontakt */
+.contact { min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 56px; }
+.contact .lines { display: grid; gap: 22px; font-size: 19px; }
+.contact .lines span { display: block; font: 500 12px/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+.contact .lines a { text-decoration: none; border-bottom: 1px solid var(--red); }
+.contact .lines a:hover { color: var(--red-text); }
+.contact footer { margin-top: 56px; padding-bottom: 28px; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+
+@media (max-width: 800px) {
+  body { font-size: 17px; }
+  .top nav a:not(:last-child) { display: none; }
+  .ch { padding-top: 38vh; padding-bottom: 10vh; }
+  #arbeit { padding-top: 54vh; padding-bottom: 22vh; }
+  .hero { padding-top: 12vh; }
+  .stage { gap: 16vh; }
+  .hero .stage { flex-direction: column; align-items: stretch; gap: 18px; }
+  .panel, .panel.wl, .panel.wr { width: 100%; }
+  .webgl .panel::before { inset: -40px -24px; }
+  .timeline li { grid-template-columns: 1fr; gap: 2px; padding: 10px 0; }
+  .shots img + img { width: 70%; }
+  .contact { padding-top: 38vh; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<!-- Entwurf B, Oktober 2026, nicht öffentlich. Andersen Webworks. -->
+<canvas id="room" aria-hidden="true"></canvas>
+<div class="vignette" aria-hidden="true"></div>
+<div class="draft-note">Entwurf · nicht öffentlich</div>
+
+<header class="top">
+  <a class="mark" href="#start">Jan-Erik Andersen<span>.</span></a>
+  <nav>
+    <a href="#arbeit">Arbeit</a>
+    <a href="#leistungen">Leistungen</a>
+    <a href="#werdegang">Werdegang</a>
+    <a href="#kontakt">Kontakt</a>
+  </nav>
+</header>
+
+<main>
+<section class="ch hero" id="start" data-side="r" data-name="Jan-Erik|Andersen">
+  <h1>Jan-Erik <em>Andersen</em></h1>
+  <div class="stage">
+    <div class="kicker">Webentwicklung<br>Raum Plau am See · remote</div>
+    <div class="panel r">
+      <p>Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p>
+      <div class="links"><a class="arrow" href="#arbeit">Projekte ansehen</a><a class="arrow" href="#kontakt">Kontakt</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="ch" id="arbeit" data-side="l">
+  <h2>Gerwing</h2>
+  <div class="stage">
+    <div class="panel l">
+      <div class="meta">WooCommerce · seit 2023</div>
+      <h3>Pflaster nach Fläche bestellen</h3>
+      <p>Für Gerwing habe ich 2023 einen WooCommerce-Shop gebaut, der Pflastersteine, Terrassenplatten und Stufen so verkauft, wie man sie bestellt: nach Fläche.</p>
+      <p>Kunden geben ihre Quadratmeter ein, der Shop rechnet sie in ganze Steine um, ermittelt Gewicht und Fracht nach Postleitzahl und leitet die Bestellung an den zuständigen Händler weiter. Seitdem betreue ich den Shop und entwickle ihn laufend weiter.</p>
+      <a class="arrow" href="#">Zur Projektgeschichte</a>
+      <figure class="shots">
+        <img id="img-a" src="bilder/gerwing-produkt-ausschnitt.jpg" width="1905" height="880" alt="Produktseite im Gerwing-Shop: Pflastersteine „Tosca Antik“ mit Farbauswahl">
+        <img id="img-b" src="bilder/gerwing-bestellung.jpg" width="805" height="575" alt="" aria-hidden="true">
+        <figcaption>gerwing.de · Produktseite mit Farbwahl, Format und Musterbestellung</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="ch" id="leistungen" data-side="r" data-name="Was ich|mache">
+  <h2>Was ich <em>mache</em></h2>
+  <div class="stage">
+    <article class="panel r"><h3>Betreuung und Absicherung</h3><p>Zwischen dem Bekanntwerden einer Lücke in einem WordPress-Plugin und dem ersten Angriff vergehen oft nur Stunden. Ich halte Ihre Seite deshalb laufend aktuell und sehe regelmäßig nach, ob sie sauber läuft.</p></article>
+    <article class="panel l"><h3>Modernisierung</h3><p>Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen. Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.</p></article>
+    <article class="panel r"><h3>Shops und Shop-Wechsel</h3><p>Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.</p></article>
+    <article class="panel l"><h3>Schnittstellen und eigene Werkzeuge</h3><p>Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen, bei WBG etwa mit Salesforce und Concludis. Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt.</p></article>
+    <article class="panel r"><h3>Gestaltung</h3><p>Für mich gehört Gestaltung zur Entwicklung. Ich entwerfe Erscheinungsbilder und Oberflächen selbst oder setze vorhandene Entwürfe sorgfältig um.<span class="proof">Beispiele: <span class="placeholder">[Take the Gloves Off, nach Zustimmung]</span>, das NOVUM-Cover und das Ausstellungsmotiv „100 Jahre Audi“.</span></p></article>
+  </div>
+</section>
+
+<section class="ch" id="weitere" data-side="l" data-name="Weitere|Arbeit">
+  <h2>Weitere <em>Arbeit</em></h2>
+  <div class="stage">
+    <div class="panel l">
+      <div class="meta">2023 bis 2025 · im Auftrag von RPLC</div>
+      <h3>WBG Pooling</h3>
+      <p>Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.</p>
+    </div>
+    <div class="panel r">
+      <div class="meta">Ehrenamtlich</div>
+      <h3>Take the Gloves Off</h3>
+      <p class="placeholder">[Ein Satz zum Erscheinungsbild, nach Abstimmung]</p>
+    </div>
+    <p class="panel l also">Außerdem: Onkologie Laatzen, Mindblossom und Soundhealing Hamburg, der digitale Wirkungsbericht für Seniorpartner in School, Bäckerei Behrens. <span class="placeholder">[je ein Satz nach erneuter Sichtung]</span></p>
+  </div>
+</section>
+
+<section class="ch" id="arbeitsweise" data-side="r" data-name="Wie ich|arbeite">
+  <h2>Wie ich <em>arbeite</em></h2>
+  <div class="stage">
+    <div class="panel r big">
+      <p>Ich arbeite mit aktuellen KI-Werkzeugen und habe dafür eigene Abläufe entwickelt. Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge. Entscheidungen und Verantwortung bleiben bei mir, und ausgeliefert wird nur, was ich geprüft habe.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ch" id="werdegang" data-side="l" data-name="Werdegang">
+  <h2>Werdegang</h2>
+  <div class="stage">
+    <div class="panel wl">
+      <ol class="timeline">
+        <li><span class="y">seit 2023</span><span class="s">Gerwing<small>Umsetzung und laufende Betreuung des Onlineshops</small></span></li>
+        <li><span class="y">2023 bis 2025</span><span class="s">Runden Group über RPLC<small>WBG Pooling und weitere Websites und Anwendungen</small></span></li>
+        <li><span class="y">2017 bis 2023</span><span class="s">Tangram Werbeagentur<small>Frontend-Entwicklung, unter anderem für Nissen, BIG Arbeitsschutz und EMPORE</small></span></li>
+        <li><span class="y">2017</span><span class="s">YOOtheme<small>Support Management</small></span></li>
+        <li><span class="y">seit 2010</span><span class="s">Freiberufliche Webprojekte<small>seit 2018 als Andersen Webworks</small></span></li>
+        <li><span class="y">2007 bis 2010</span><span class="s">HTK Hamburg<small>Zertifikat Multimedia Design</small></span></li>
+        <li><span class="y"><span class="placeholder">[Jahre]</span></span><span class="s">Games<small>QA bei Goodgame Studios und Deep Silver FISHLABS, PahuPahu mit rund 25 Spielprototypen in Flash und Haxe, Gamersunity</small></span></li>
+        <li><span class="y">2000 bis 2006</span><span class="s">Pixel Arrays<small>erste Selbstständigkeit</small></span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="ch" id="stimmen" data-side="r" data-name="Stimmen">
+  <h2>Stimmen</h2>
+  <div class="stage">
+    <blockquote class="panel r"><p>Seniorpartner in School (SiS) ist eine bundesweit agierende Sozialorganisation. Ein gut aufgestellter digitaler Wirkungsbericht ist für unsere Arbeit wichtig. Jan-Erik und die kompetente Texterin Annemarie haben das für uns neue Format professionell und barrierefreundlich aufgesetzt. Super Teamarbeit, verlässlich und engagiert. SiS sagt DANKE!</p><cite>Karin, Seniorpartner in School · Google-Bewertung</cite></blockquote>
+    <blockquote class="panel l"><p>Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich mit Andersen Webworks seit nun mehreren Jahren einen zuverlässigen Partner gefunden zu haben. Professionelles Webdesign das mich immer wieder überrascht, meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff, so setzt man sich von der Konkurrenz ab!</p><cite>Corvin Jädicke, ai-coustics · Google-Bewertung</cite></blockquote>
+  </div>
+</section>
+
+<section class="ch" id="agenturen" data-side="r" data-name="Für|Agenturen">
+  <h2>Für <em>Agenturen</em></h2>
+  <div class="stage">
+    <div class="panel r agency">
+      <p>Ich steige in laufende Projekte ein, arbeite mich in bestehende Themes und Plugins ein und halte mich an Ihre Abläufe und Werkzeuge.</p>
+      <p>Konditionen und freie Kapazität nenne ich Ihnen auf Anfrage.</p>
+    </div>
+  </div>
+</section>
+
+<section class="ch contact" id="kontakt" data-side="r" data-name="Schreiben Sie mir,|worum es geht.">
+  <h2>Schreiben Sie mir, <em>worum es geht.</em></h2>
+  <div class="stage">
+    <div class="panel r">
+      <div class="lines">
+        <div><span>Mail</span><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a></div>
+        <div><span>Telefon</span><a href="tel:+4938733270015">+49 38733 270015</a></div>
+        <div><span>LinkedIn</span><a href="https://www.linkedin.com/in/andersen-erik/">andersen-erik</a></div>
+        <div><span>Lebenslauf</span><a href="#">PDF herunterladen</a></div>
+      </div>
+    </div>
+  </div>
+  <footer><span>Andersen Webworks · Jan-Erik Andersen</span><span>Impressum · Datenschutz</span></footer>
+</section>
+</main>
+
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module">
+import * as THREE from "three";
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const canvas = document.getElementById("room");
+let renderer = null;
+const probe = document.createElement("canvas");
+const hasGL = !!(probe.getContext("webgl2") || probe.getContext("webgl"));
+if (!reduce && hasGL) {
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    if (!renderer.getContext()) renderer = null;
+  } catch (e) { renderer = null; }
+}
+if (renderer) start(renderer);
+
+async function start(renderer) {
+  const root = document.documentElement;
+  root.classList.add("webgl");
+  canvas.addEventListener("webglcontextlost", () => root.classList.remove("webgl"));
+
+  await Promise.all([
+    document.fonts.load('300 100px "Newsreader"'),
+    document.fonts.load('italic 300 100px "Newsreader"'),
+    document.fonts.load('400 18px "Schibsted Grotesk"')
+  ]);
+
+  const OFF = "#f2efe9", RED = "#d40235";
+  const FOV = 42, TAN = Math.tan(THREE.MathUtils.degToRad(FOV / 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(FOV, 1, .1, 200);
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+  // Der Weg durch den Raum: sanft geschwungen
+  const pathX = z => .5 * Math.sin(z * .15);
+  const pathY = z => .16 * Math.sin(z * .11 + 1);
+
+  // ---------- Gemeinsame Shader ----------
+  const VERT_PLANE = `
+    varying vec2 vUv; varying float vDepth;
+    void main() {
+      vUv = uv;
+      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      vDepth = -mv.z;
+      gl_Position = projectionMatrix * mv;
+    }`;
+  // Nahes wird unscharf und blendet aus, Fernes sinkt in den Raum
+  const FRAG_PLANE = `
+    uniform sampler2D uMap; uniform float uOpacity; uniform float uBlur; uniform float uAspect; uniform vec2 uNear;
+    varying vec2 vUv; varying float vDepth;
+    void main() {
+      float near = 1.0 - smoothstep(1.2, 6.0, vDepth);
+      float rad = near * uBlur;
+      vec4 acc = vec4(0.0);
+      for (int i = 0; i < 24; i++) {
+        float fi = float(i) + 0.5;
+        float r = sqrt(fi / 24.0);
+        float a = fi * 2.39996;
+        vec2 o = vec2(cos(a), sin(a) * uAspect) * r * rad;
+        vec4 s = texture2D(uMap, vUv + o, near * 4.0);
+        acc.rgb += s.rgb * s.a;
+        acc.a += s.a;
+      }
+      vec4 c = vec4(acc.rgb / max(acc.a, 1e-4), acc.a / 24.0);
+      float fadeNear = smoothstep(uNear.x, uNear.y, vDepth);
+      float fadeFar = 1.0 - smoothstep(7.0, 19.0, vDepth);
+      c.a *= uOpacity * fadeNear * fadeFar;
+      if (c.a < 0.004) discard;
+      gl_FragColor = c;
+      #include <colorspace_fragment>
+    }`;
+  const proj = { value: 1 };
+
+  function planeMaterial(tex, aspect, blur, opacity, near) {
+    return new THREE.ShaderMaterial({
+      uniforms: { uMap: { value: tex }, uOpacity: { value: opacity }, uBlur: { value: blur }, uAspect: { value: aspect }, uNear: { value: new THREE.Vector2(near[0], near[1]) } },
+      vertexShader: VERT_PLANE, fragmentShader: FRAG_PLANE, transparent: true, depthWrite: false
+    });
+  }
+  const planeGeo = new THREE.PlaneGeometry(1, 1);
+
+  // ---------- Kapitelwörter als Schrift-Texturen ----------
+  const sections = [...document.querySelectorAll("main > section.ch")];
+  const WORDS = [
+    { l: [["Jan-Erik", "300", OFF], ["Andersen", "italic 300", RED]] },
+    { l: [["Gerwing", "300", OFF]] },
+    { l: [["Was ich", "300", OFF], ["mache", "italic 300", RED]] },
+    { l: [["Weitere", "300", OFF], ["Arbeit", "italic 300", RED]] },
+    { l: [["Wie ich", "300", OFF], ["arbeite", "italic 300", RED]] },
+    { l: [["Werdegang", "300", OFF]] },
+    { l: [["Stimmen", "300", OFF]] },
+    { l: [["Für", "300", OFF], ["Agenturen", "italic 300", RED]] },
+    { l: [["Schreiben Sie mir,", "300", OFF], ["worum es geht.", "italic 300", RED]] }
+  ];
+  function makeWord(lines) {
+    const cv = document.createElement("canvas"), x = cv.getContext("2d");
+    let size = 360;
+    const measure = s => Math.max(...lines.map(([t, st]) => { x.font = `${st} ${s}px "Newsreader"`; return x.measureText(t).width; }));
+    const w0 = measure(size);
+    if (w0 > 2300) size = size * 2300 / w0;
+    const pad = size * .14, indent = lines.length > 1 ? size * .2 : 0, lh = size * 1.02;
+    cv.width = Math.ceil(measure(size) + indent + pad * 2);
+    cv.height = Math.ceil(lh * lines.length + pad * 1.1);
+    x.textBaseline = "alphabetic";
+    lines.forEach(([t, st, col], i) => {
+      x.font = `${st} ${size}px "Newsreader"`;
+      x.fillStyle = col;
+      x.fillText(t, pad + (i % 2) * indent, pad * .4 + lh * i + size * .84);
+    });
+    const tex = new THREE.CanvasTexture(cv);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 8;
+    return { tex, aspect: cv.width / cv.height };
+  }
+  const items = []; // alles, was im Raum schwebt: { mesh, ch, dist, narrow:{...}, wide:{...} }
+  const wordMeshes = WORDS.map((w, i) => {
+    const { tex, aspect } = makeWord(w.l);
+    const mesh = new THREE.Mesh(planeGeo, planeMaterial(tex, aspect, .04, 1, [4.8, 7.4]));
+    mesh.userData.aspect = aspect;
+    scene.add(mesh);
+    return mesh;
+  });
+
+  // ---------- Gerwing-Bilder ----------
+  const loader = new THREE.TextureLoader();
+  function imageMesh(url, aspect) {
+    const mesh = new THREE.Mesh(planeGeo, planeMaterial(null, aspect, .035, 1, [1.4, 3.8]));
+    mesh.userData.aspect = aspect;
+    mesh.visible = false;
+    scene.add(mesh);
+    loader.load(url, tex => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = 8;
+      mesh.material.uniforms.uMap.value = tex;
+      mesh.visible = true;
+    });
+    return mesh;
+  }
+  const imgA = imageMesh("bilder/gerwing-produkt-ausschnitt.jpg", 1905 / 880);
+  const imgB = imageMesh("bilder/gerwing-bestellung.jpg", 805 / 575);
+
+  // ---------- Der rote Faden ----------
+  const LINE_DY = -1.0, LINE_DX = -.32;
+  const red = new THREE.Color(RED);
+  const lineUniforms = { uLightZ: { value: 0 }, uColor: { value: red } };
+  const lineMat = new THREE.ShaderMaterial({
+    uniforms: lineUniforms,
+    vertexShader: `varying float vDepth; varying float vZ;
+      void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vDepth = -mv.z; vZ = position.z; gl_Position = projectionMatrix * mv; }`,
+    fragmentShader: `uniform vec3 uColor; uniform float uLightZ; varying float vDepth; varying float vZ;
+      void main() {
+        float a = smoothstep(1.0, 3.5, vDepth) * (1.0 - smoothstep(14.0, 46.0, vDepth));
+        float lit = mix(0.2, 1.0, smoothstep(uLightZ - 4.0, uLightZ + 1.0, vZ));
+        gl_FragColor = vec4(uColor, a * lit * 0.9);
+        #include <colorspace_fragment>
+      }`,
+    transparent: true, depthWrite: false
+  });
+  let line = null;
+  function buildLine(zEnd) {
+    if (line) { scene.remove(line); line.geometry.dispose(); }
+    const pts = [];
+    for (let z = 6; z >= zEnd; z -= .5) pts.push(new THREE.Vector3(pathX(z) + LINE_DX, pathY(z) + LINE_DY, z));
+    line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lineMat);
+    line.frustumCulled = false;
+    scene.add(line);
+  }
+
+  const glowVert = `
+    uniform float uProj; uniform float uSize;
+    attribute float aScale; varying float vDepth;
+    void main() {
+      vec4 mv = modelViewMatrix * vec4(position, 1.0);
+      vDepth = -mv.z;
+      gl_Position = projectionMatrix * mv;
+      gl_PointSize = clamp(uSize * aScale * uProj / max(vDepth, 0.2), 1.0, 700.0);
+    }`;
+  const glowFrag = `
+    uniform vec3 uColor; uniform float uAlpha; varying float vDepth;
+    void main() {
+      float d = length(gl_PointCoord - 0.5) * 2.0;
+      if (d > 1.0) discard;
+      float core = smoothstep(0.2, 0.0, d);
+      float halo = pow(1.0 - d, 2.8);
+      vec3 col = mix(uColor, vec3(1.0, 0.78, 0.82), core);
+      float a = clamp(halo * 0.85 + core, 0.0, 1.0) * uAlpha * smoothstep(0.6, 2.0, vDepth);
+      gl_FragColor = vec4(col, a);
+      #include <colorspace_fragment>
+    }`;
+  const glowMat = (size, alpha) => new THREE.ShaderMaterial({
+    uniforms: { uProj: proj, uSize: { value: size }, uColor: { value: red }, uAlpha: { value: alpha } },
+    vertexShader: glowVert, fragmentShader: glowFrag, transparent: true, depthWrite: false
+  });
+  const lightGeo = new THREE.BufferGeometry();
+  lightGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(3), 3));
+  lightGeo.setAttribute("aScale", new THREE.BufferAttribute(new Float32Array([1]), 1));
+  const light = new THREE.Points(lightGeo, glowMat(.55, 1));
+  light.frustumCulled = false;
+  scene.add(light);
+  let stations = null;
+
+  // ---------- Staub im Raum ----------
+  const dustUniforms = { uTime: { value: 0 }, uProj: proj };
+  let dust = null;
+  function buildDust(zEnd) {
+    if (dust) { scene.remove(dust); dust.geometry.dispose(); }
+    const N = 520, pos = new Float32Array(N * 3), size = new Float32Array(N), ph = new Float32Array(N);
+    for (let i = 0; i < N; i++) {
+      const z = 4 - Math.random() * (4 - zEnd + 8);
+      pos[i * 3] = pathX(z) + (Math.random() - .5) * 11;
+      pos[i * 3 + 1] = pathY(z) + (Math.random() - .5) * 6.5;
+      pos[i * 3 + 2] = z;
+      size[i] = .015 + Math.pow(Math.random(), 3) * .09;
+      ph[i] = Math.random() * 6.28;
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    g.setAttribute("aSize", new THREE.BufferAttribute(size, 1));
+    g.setAttribute("aPhase", new THREE.BufferAttribute(ph, 1));
+    dust = new THREE.Points(g, new THREE.ShaderMaterial({
+      uniforms: dustUniforms,
+      vertexShader: `uniform float uTime; uniform float uProj; attribute float aSize; attribute float aPhase; varying float vDepth; varying float vPx;
+        void main() {
+          vec3 p = position;
+          p.y += sin(uTime * .15 + aPhase) * .25;
+          p.x += cos(uTime * .11 + aPhase * 1.7) * .2;
+          vec4 mv = modelViewMatrix * vec4(p, 1.0);
+          vDepth = -mv.z;
+          gl_Position = projectionMatrix * mv;
+          vPx = clamp(aSize * uProj / max(vDepth, 0.2), 1.0, 160.0);
+          gl_PointSize = vPx;
+        }`,
+      fragmentShader: `varying float vDepth; varying float vPx;
+        void main() {
+          float d = length(gl_PointCoord - 0.5) * 2.0;
+          if (d > 1.0) discard;
+          float soft = smoothstep(1.0, 0.15, d);
+          float a = soft * 0.55 * smoothstep(0.8, 3.5, vDepth) * (1.0 - smoothstep(12.0, 42.0, vDepth));
+          a *= clamp(14.0 / vPx, 0.12, 1.0);
+          gl_FragColor = vec4(0.95, 0.92, 0.86, a);
+          #include <colorspace_fragment>
+        }`,
+      transparent: true, depthWrite: false
+    }));
+    dust.frustumCulled = false;
+    scene.add(dust);
+  }
+
+  // ---------- Anordnung: Kapitel -> Tiefe ----------
+  const A = [], H = [], zc = [];
+  let maxS = 1, narrow = false, aspect = 1, zEnd = -100;
+  const frustum = d => { const h = 2 * d * TAN; return [h * camera.aspect, h]; };
+  // Blickachse der Kamera an einer Stelle des Weges
+  const UP = new THREE.Vector3(0, 1, 0);
+  const B = { p: new THREE.Vector3(), F: new THREE.Vector3(), R: new THREE.Vector3(), U: new THREE.Vector3() };
+  function basis(z) {
+    B.p.set(pathX(z), pathY(z), z);
+    B.F.set(pathX(z - 8) - B.p.x, pathY(z - 8) - B.p.y, -8).normalize();
+    B.R.crossVectors(B.F, UP).normalize();
+    B.U.crossVectors(B.R, B.F);
+    return B;
+  }
+  const tmpM = new THREE.Matrix4(), tmpV = new THREE.Vector3();
+  // Bilder stehen fest im Raum, Kapitelwörter (attach) wandern mit dem Text
+  function put(mesh, i, dist, fx, fy, wFrac, yaw, attach) {
+    const [fw, fh] = frustum(dist);
+    const w = wFrac * fw;
+    mesh.scale.set(w, w / mesh.userData.aspect, 1);
+    if (attach) { Object.assign(mesh.userData, { i, d0: dist, x0: fx * fw, y0: fy * fh, yaw }); return; }
+    const b = basis(zc[i]);
+    mesh.position.copy(b.p).addScaledVector(b.F, dist).addScaledVector(b.R, fx * fw).addScaledVector(b.U, fy * fh);
+    tmpM.makeBasis(b.R, b.U, tmpV.copy(b.F).negate());
+    mesh.quaternion.setFromRotationMatrix(tmpM);
+    mesh.rotateY(yaw);
+  }
+  function placeWords(camZ, y) {
+    const vh = innerHeight;
+    for (const m of wordMeshes) {
+      const u = m.userData, b = basis(camZ);
+      const dist = camZ - (zc[u.i] - u.d0);
+      const sc = (y - A[u.i]) / vh;
+      m.position.copy(b.p).addScaledVector(b.F, dist).addScaledVector(b.R, u.x0).addScaledVector(b.U, u.y0 + sc * 2 * dist * TAN);
+      m.quaternion.copy(camera.quaternion);
+      m.rotateY(u.yaw);
+    }
+  }
+  function layout() {
+    const w = innerWidth, h = innerHeight;
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.75));
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    proj.value = renderer.domElement.height / (2 * TAN);
+    narrow = w < 800;
+
+    sections.forEach((s, i) => { const r = s.getBoundingClientRect(); A[i] = r.top + scrollY; H[i] = r.height; });
+    maxS = Math.max(1, document.documentElement.scrollHeight - h);
+    A[0] = 0;
+    const last = sections.length - 1;
+    A[last] = Math.min(A[last], maxS - 1);
+    zc[0] = 0;
+    for (let i = 0; i < last; i++) zc[i + 1] = zc[i] - clamp(H[i] / h * 6.5, 14, 28);
+    zEnd = zc[last] - 16;
+    buildLine(zEnd);
+    buildDust(zEnd);
+    if (stations) { scene.remove(stations); stations.geometry.dispose(); }
+    const sp = new Float32Array(sections.length * 3), ss = new Float32Array(sections.length).fill(.5);
+    sections.forEach((s, i) => { sp[i * 3] = pathX(zc[i]) + LINE_DX; sp[i * 3 + 1] = pathY(zc[i]) + LINE_DY; sp[i * 3 + 2] = zc[i]; });
+    const sg = new THREE.BufferGeometry();
+    sg.setAttribute("position", new THREE.BufferAttribute(sp, 3));
+    sg.setAttribute("aScale", new THREE.BufferAttribute(ss, 1));
+    stations = new THREE.Points(sg, glowMat(.22, .8));
+    stations.frustumCulled = false;
+    scene.add(stations);
+
+    // Kapitelwörter: Gegenseite zum Lesetext
+    wordMeshes.forEach((m, i) => {
+      const s = sections[i].dataset.side === "r" ? -1 : 1;
+      const two = WORDS[i].l.length > 1;
+      if (narrow) {
+        put(m, i, 8, 0, .27, i === 8 ? .86 : (two ? .74 : .84), 0, true);
+      } else if (i === 0) {
+        put(m, i, 8, -.12, .12, .66, .1, true);
+      } else if (i === 8) {
+        put(m, i, 8, -.15, .08, .5, .1, true);
+      } else {
+        put(m, i, 8, s * .2, .1, two ? .44 : .5, -s * .14, true);
+      }
+    });
+    // Gerwing-Bilder: schweben auf der Textgegenseite in zwei Tiefen
+    if (narrow) {
+      put(imgA, 1, 4.8, -.04, .17, .84, -.05);
+      put(imgB, 1, 6.6, .17, .08, .42, .08);
+      put(wordMeshes[1], 1, 8.5, 0, .38, .62, 0, true);
+    } else {
+      put(imgA, 1, 5.6, .27, -.08, .4, -.12);
+      put(imgB, 1, 8, -.04, -.3, .2, .08);
+      put(wordMeshes[1], 1, 8.5, .24, .3, .4, -.1, true);
+    }
+  }
+
+  function zAt(y) {
+    for (let i = 0; i < sections.length - 1; i++) {
+      if (y < A[i + 1]) { const t = clamp((y - A[i]) / Math.max(1, A[i + 1] - A[i]), 0, 1); return zc[i] + (zc[i + 1] - zc[i]) * t; }
+    }
+    const l = sections.length - 1, t = clamp((y - A[l]) / Math.max(1, maxS - A[l]), 0, 1);
+    return zc[l] - t * .5;
+  }
+
+  // ---------- Lesetext synchron zum Kapitel ----------
+  const panels = [...document.querySelectorAll(".panel, .kicker")];
+  function fadePanels() {
+    const vh = innerHeight, bottom = vh - 12;
+    for (const el of panels) {
+      const r = el.getBoundingClientRect();
+      const inn = clamp((bottom - r.top) / (vh * .12), 0, 1);
+      const out = clamp((r.bottom - vh * .1) / (vh * .12), 0, 1);
+      const o = Math.min(inn, out);
+      const v = (o * o * (3 - 2 * o));
+      const s = v.toFixed(3);
+      if (el._o !== s) { el._o = s; el.style.opacity = s; el.style.transform = `translate3d(0, ${((1 - v) * 18).toFixed(1)}px, 0)`; }
+    }
+  }
+
+  layout();
+  addEventListener("resize", layout);
+  addEventListener("load", layout);
+  document.fonts.ready.then(layout);
+  new ResizeObserver(() => { if (Math.abs(document.documentElement.scrollHeight - (maxS + innerHeight)) > 2) layout(); }).observe(document.body);
+
+  const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+  addEventListener("pointermove", e => { mouse.tx = e.clientX / innerWidth - .5; mouse.ty = e.clientY / innerHeight - .5; });
+
+  let camZ = zAt(scrollY), lightZ = camZ - 7;
+  let last = performance.now(), elapsed = 0;
+  const look = new THREE.Vector3();
+  function frame() {
+    const now = performance.now(), dt = Math.min((now - last) / 1000, .1); last = now; elapsed += dt; const t = elapsed;
+    camZ += (zAt(scrollY) - camZ) * (1 - Math.exp(-dt * 4));
+    mouse.x += (mouse.tx - mouse.x) * (1 - Math.exp(-dt * 3));
+    mouse.y += (mouse.ty - mouse.y) * (1 - Math.exp(-dt * 3));
+    camera.position.set(pathX(camZ) + mouse.x * .35, pathY(camZ) - mouse.y * .18 + Math.sin(t * .3) * .02, camZ);
+    look.set(pathX(camZ - 8), pathY(camZ - 8), camZ - 8);
+    camera.lookAt(look);
+
+    const target = Math.max(camZ - 7, zEnd);
+    lightZ += (target - lightZ) * (1 - Math.exp(-dt * 2.2));
+    const lp = lightGeo.attributes.position;
+    lp.setXYZ(0, pathX(lightZ) + LINE_DX, pathY(lightZ) + LINE_DY, lightZ);
+    lp.needsUpdate = true;
+    light.material.uniforms.uAlpha.value = .85 + Math.sin(t * 1.4) * .12;
+    lineUniforms.uLightZ.value = lightZ;
+    dustUniforms.uTime.value = t;
+
+    placeWords(camZ, scrollY);
+    fadePanels();
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  frame();
+}
+</script>
+</body>
+</html>
