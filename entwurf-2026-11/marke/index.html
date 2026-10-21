@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marke N4 – Jan-Erik Andersen</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root { --ink: #303033; --red: #d40235; --muted: #66666a; --paper: #f3f0e8; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #fff; color: var(--ink); font: 15px/1.55 system-ui, "Segoe UI", sans-serif; padding: 36px 28px 80px; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 650; margin-bottom: 6px; }
+  .lead { color: var(--muted); max-width: 70ch; margin-bottom: 28px; }
+  section { border: 1px solid #e4e1da; border-radius: 4px; margin-bottom: 22px; overflow: hidden; }
+  section h2 { font-size: 13px; font-weight: 650; padding: 10px 18px; border-bottom: 1px solid #ece9e2; background: #fbfaf8; }
+  section h2 code { font-weight: 400; color: var(--muted); margin-left: 8px; font-size: 12.5px; }
+  .stage { padding: 36px 24px; display: flex; align-items: center; justify-content: center; }
+  .paper { background: var(--paper); }
+  .stage img { display: block; max-width: 100%; height: auto; }
+  .big img { width: 100%; max-width: 900px; }
+  .head { display: flex; justify-content: space-between; align-items: center; padding: 18px 28px; background: #fff; }
+  .head img { height: 21px; width: auto; }
+  .head nav { display: flex; gap: 22px; font-size: 13px; font-weight: 500; }
+  .sig { padding: 18px 24px; font-size: 13px; color: #555; background: #fbfaf8; }
+  .sig img { display: block; width: 123px; height: auto; margin-top: 6px; }
+  .favs { display: flex; gap: 36px; align-items: flex-end; flex-wrap: wrap; }
+  .favs figure { display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+  .favs .box { border: 1px solid #ddd; background: #fff; display: grid; place-items: center; }
+  .zoom { image-rendering: pixelated; }
+  .notes { padding: 16px 18px 18px; color: #444; }
+  .notes ul { margin: 6px 0 0 18px; }
+  .notes li { margin: 3px 0; }
+  table { border-collapse: collapse; margin-top: 8px; font-size: 14px; }
+  td, th { text-align: left; padding: 5px 18px 5px 0; border-bottom: 1px solid #eee; }
+  th { font-weight: 650; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Marke N4 – Jan-Erik <i>Andersen</i>.</h1>
+  <p class="lead">Newsreader, aufrecht Gewicht 380, Andersen kursiv Gewicht 340, Laufweite −0,018 em, alles in Tinte #303033. Einziges Rot ist der runde Schlusspunkt #d40235 (0,17 em, in der Signatur 0,2 em) auf der Grundlinie. Die Lettern stehen auf der gestrichelten Falzlinie #8f8a80. Alle Texte sind in Pfade umgewandelt; die SVGs brauchen keine Schrift.</p>
+
+  <section>
+    <h2>Groß mit Falz <code>marke.svg</code></h2>
+    <div class="stage paper big"><img src="marke.svg" alt="Jan-Erik Andersen" width="900"></div>
+  </section>
+
+  <section>
+    <h2>Kopfzeile, Schriftgröße 20 px, Falz 1 px <code>marke-klein.svg</code></h2>
+    <div class="head"><img src="marke-klein.svg" alt="Jan-Erik Andersen"><nav><span>Projekte</span><span>Leistungen</span><span>Kontakt</span></nav></div>
+  </section>
+
+  <section>
+    <h2>Mailsignatur, ohne Falz, Punkt 0,2 em <code>marke-signatur.svg</code> · <code>marke-signatur.png</code> (2×)</h2>
+    <div class="sig">Mit freundlichen Grüßen
+      <img src="marke-signatur.png" alt="Jan-Erik Andersen" width="123">
+      <div style="margin-top:6px">Webentwicklung · Raum Plau am See · remote</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Favicon <code>favicon.svg</code> · <code>favicon-32.png</code> · <code>favicon-16.png</code> · <code>apple-touch-icon.png</code> (180)</h2>
+    <div class="stage">
+      <div class="favs">
+        <figure><div class="box" style="width:34px;height:34px"><img src="favicon-32.png" width="32" height="32" alt=""></div>32 px</figure>
+        <figure><div class="box" style="width:18px;height:18px"><img src="favicon-16.png" width="16" height="16" alt=""></div>16 px</figure>
+        <figure><div class="box" style="width:34px;height:34px"><img src="favicon.svg" width="32" height="32" alt=""></div>SVG</figure>
+        <figure><div class="box" style="width:130px;height:130px"><img class="zoom" src="favicon-16.png" width="128" height="128" alt=""></div>16 px, 8× vergrößert</figure>
+        <figure><div class="box" style="width:92px;height:92px;border-radius:20px;overflow:hidden"><img src="apple-touch-icon.png" width="90" height="90" alt=""></div>Apple Touch 180</figure>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Größenstufen</h2>
+    <div class="notes">
+      <table>
+        <tr><th>Schriftgröße</th><th>Falz</th><th>Punkt</th><th>Datei</th></tr>
+        <tr><td>ab 40 px (Plakat, Eröffnung, Titel)</td><td>ja, 0,014 em, gestrichelt</td><td>0,17 em</td><td>marke.svg</td></tr>
+        <tr><td>18 bis 40 px (Kopfzeile, 20 px)</td><td>ja, fest 1 px</td><td>0,17 em</td><td>marke-klein.svg</td></tr>
+        <tr><td>unter 18 px (Signatur, Fußzeile)</td><td>entfällt</td><td>0,2 em</td><td>marke-signatur.svg / .png</td></tr>
+        <tr><td>Tab, Lesezeichen (16 bis 32 px)</td><td>entfällt</td><td>Zeichen „a“ mit Punkt</td><td>favicon.svg / .png</td></tr>
+      </table>
+      <ul>
+        <li>Die Falz fällt unter etwa 18 px Schriftgröße weg: Ein 1-px-Strich gestrichelt ergibt dort nur Flimmern und sitzt den Buchstaben zu dicht auf.</li>
+        <li>Die Signatur-PNG ist 2× gerendert (Schrift 34 px für 17 px Anzeigegröße), transparenter Grund.</li>
+        <li>Der Apple-Touch-Icon-Grund ist weiß (iOS füllt Transparenz schwarz), das Zeichen steht mit 14 % Rand.</li>
+        <li>Die Optik der Schrift (opsz) ist je Datei auf die Größe abgestimmt: 72 groß, 20 Kopfzeile, 17 Signatur, 33 Favicon.</li>
+      </ul>
+    </div>
+  </section>
+</div>
+</body>
+</html>

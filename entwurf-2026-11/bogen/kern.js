@@ -19,6 +19,8 @@ async function loadFonts() {
     const ff = new FontFace(fam, bytes(SCHRIFTEN[key]), { style });
     await ff.load(); document.fonts.add(ff);
   }));
+  // Marke N4: variable Newsreader aus der Seite (@font-face "Newsreader N4"), Gewichte 380 / 340 im Canvas
+  await Promise.all(['380 120px "Newsreader N4"', 'italic 340 120px "Newsreader N4"'].map(f => document.fonts.load(f, "Jan-Erik Andersen"))).catch(() => {});
 }
 // Monotone kubische Interpolation (Fritsch–Carlson)
 function pchip(xs, ys) {
@@ -61,21 +63,30 @@ export function start(renderer, VARIANTS) {
   const texOf = cv => { const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; t.minFilter = THREE.LinearMipmapLinearFilter; return t; };
   function printTex(lines, opt = {}) {
     const em = PXEM, lh = (opt.lh || 1.3) * em;
-    const fam = opt.font === "serif" ? '"Newsreader"' : '"Schibsted Grotesk"';
-    const font = `${opt.italic ? "italic " : ""}${opt.font === "serif" ? 300 : 500} ${em}px ${fam}`;
+    // opt.font "marke": Wortmarke N4 (Newsreader variabel, aufrecht 380, kursiv 340, Laufweite -0,018 em)
+    const mk = opt.font === "marke";
+    const fam = mk ? '"Newsreader N4", "Newsreader", serif' : opt.font === "serif" ? '"Newsreader"' : '"Schibsted Grotesk"';
+    const font = `${opt.italic ? "italic " : ""}${mk ? (opt.italic ? 340 : 380) : opt.font === "serif" ? 300 : 500} ${em}px ${fam}`;
+    if (mk && opt.track === undefined) opt = { ...opt, track: -.018 };
     const cv = document.createElement("canvas"), x = cv.getContext("2d");
     const setF = () => { x.font = font; if (opt.track) x.letterSpacing = (opt.track * em) + "px"; };
     setF();
     const padX = .16 * em, padY = .1 * em;
-    const ws = lines.map(l => x.measureText(l).width), wMax = Math.max(...ws);
+    // opt.disc: Radius in em; statt Text eine Scheibe, deren Unterkante auf der Grundlinie sitzt (Schlusspunkt der Marke)
+    const ws = opt.disc ? [2 * opt.disc * em] : lines.map(l => x.measureText(l).width), wMax = Math.max(...ws);
     cv.width = Math.ceil(wMax + padX * 2);
     cv.height = Math.ceil(padY * 2 + (lines.length - 1) * lh + em * 1.18);
     setF(); x.fillStyle = opt.col || INK; x.textBaseline = "alphabetic";
     // opt.outline: nur die Kontur (Abdruck der Lettern als feine Schnittlinie im Bogen); mit opt.fillCol zuerst eine zarte Füllung
     if (opt.outline) { x.strokeStyle = opt.col || INK; x.lineWidth = opt.outline; x.lineJoin = "round"; }
     const at = i => [padX + (opt.align === "center" ? (wMax - ws[i]) / 2 : 0), padY + em * .94 + i * lh];
-    if (opt.outline && opt.fillCol) { x.fillStyle = opt.fillCol; lines.forEach((l, i) => x.fillText(l, ...at(i))); }
-    lines.forEach((l, i) => x[opt.outline ? "strokeText" : "fillText"](l, ...at(i)));
+    if (opt.disc) {
+      const [ax, ay] = at(0), r = opt.disc * em; x.beginPath(); x.arc(ax + r, ay - r, r, 0, 2 * PI);
+      if (opt.outline) { if (opt.fillCol) { x.fillStyle = opt.fillCol; x.fill(); } x.stroke(); } else x.fill();
+    } else {
+      if (opt.outline && opt.fillCol) { x.fillStyle = opt.fillCol; lines.forEach((l, i) => x.fillText(l, ...at(i))); }
+      lines.forEach((l, i) => x[opt.outline ? "strokeText" : "fillText"](l, ...at(i)));
+    }
     const h = cv.height / em;
     return { tex: texOf(cv), w: cv.width / em, h, padX: padX / em, tw: wMax / em, bfb: h - (padY / em + .94 + (lines.length - 1) * lh / em), rows: ws.map(v => v / em) };
   }
@@ -136,6 +147,11 @@ export function start(renderer, VARIANTS) {
         // io.close: der Abdruck schließt sich nach dem Aufstehen (Sekunden nach Ende der Bewegung), es bleibt der Schlitz an der Fußlinie
         if (io && im && io.close !== undefined) { im.tOff = t0 + d + io.close; im.tDur = io.closeDur || .7; }
         if (io && io.slit) F.line(opt.par || R, [x - .015, zb], [x + W + .015, zb], io.slit, COL.INK, .0009);
+        if (opt.fold) { // Falzlinie N4: gestrichelt, über Anfang und Ende hinaus, im Bogen auf der Fußlinie. fold: { x0, len, lw, dash, gap, col } in Welteinheiten
+          const f = opt.fold, wpx = 2400, hpx = 24, k = wpx / f.len;
+          const fd = mkDecal(wpx, hpx, (c, cw, ch) => { c.strokeStyle = f.col; c.lineWidth = f.lw * k; c.setLineDash([f.dash * k, f.gap * k]); c.beginPath(); c.moveTo(0, ch / 2); c.lineTo(cw, ch / 2); c.stroke(); }, f.len, f.len * hpx / wpx, -1);
+          F.attach(opt.par || R, fd.mesh, [x + f.x0 + f.len / 2, zb], [0, -1], 1, .0007);
+        }
         const L = K.panel(opt.par || R, [x, zb], [x + W, zb], [0, -1], t0, d, opt.ang || Q, { clock: "t", nocut: 1, nofold: 1, over: .07 });
         const u = (pr.w / 2 - pr.t.padX * e), v = base + (pr.h / 2 - pr.t.bfb * e);
         F.attach(L, pr.mesh, L.uv(u, v), [0, -1], 1, .0015);

@@ -5,8 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Jan-Erik Andersen · Webentwicklung (Entwurf Bogen)</title>
 <style>
+@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4.woff2") format("woff2"); font-weight: 200 800; font-style: normal; }
+@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4-Italic.woff2") format("woff2"); font-weight: 200 800; font-style: italic; }
 :root {
   --bg: #ffffff;
   --ink: #303033;
@@ -27,7 +33,15 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .track { height: 760vh; }
 
 .top { position: fixed; z-index: 2; inset: 0 0 auto 0; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 20px var(--pad); font: 500 13px/1.3 var(--sans); letter-spacing: .02em; }
-.top .mark { font-weight: 600; color: var(--ink); text-decoration: none; opacity: 0; transition: opacity .6s; }
+.top .mark { color: var(--ink); text-decoration: none; opacity: 0; transition: opacity .6s; }
+/* Marke N4: Newsreader 380, Andersen kursiv 340, roter Schlusspunkt, gestrichelte Falz */
+.n4 { position: relative; display: inline-block; font-family: "Newsreader N4", Georgia, serif; font-weight: 380; font-style: normal; letter-spacing: -.018em; line-height: 1; white-space: nowrap; padding-bottom: .14em; }
+.n4 i { font-weight: 340; }
+.n4 .dot { display: inline-block; width: .17em; height: .17em; margin-left: .01em; border-radius: 50%; background: var(--red); }
+.n4 .fold { position: absolute; left: -.06em; right: -.06em; top: .775em; border-bottom: .014em dashed #8f8a80; }
+.top .n4 { font-size: 20px; }
+.top .n4 .dot { width: .2em; height: .2em; }
+.top .n4 .fold { border-bottom-width: 1px; }
 .scrolled .top .mark { opacity: 1; }
 .top nav { display: flex; gap: 22px; }
 .top nav a { color: var(--ink); text-decoration: none; }
@@ -52,7 +66,7 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .draft a[aria-current="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 
 .fallback { display: none; position: fixed; inset: 0; align-items: center; padding: var(--pad); }
-.fallback h1 { font: 300 clamp(40px, 7vw, 88px)/1.04 var(--serif); }
+.fallback h1 { font-size: clamp(40px, 7vw, 88px); }
 .fallback p { max-width: 34em; margin-top: 1.2em; font-size: 18px; }
 .nogl .fallback { display: block; padding-top: 20vh; }
 .nogl #stage, .nogl .controls, .nogl .hint { display: none; }
@@ -69,7 +83,7 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 <body>
 <canvas id="stage" aria-hidden="true"></canvas>
 <header class="top">
-  <a class="mark" href="#">Jan-Erik Andersen</a>
+  <a class="mark n4" href="#" aria-label="Jan-Erik Andersen"><span aria-hidden="true">Jan-Erik <i>Andersen</i><span class="dot"></span><span class="fold"></span></span></a>
   <nav aria-label="Hauptnavigation"><a href="#">Projekte</a><a href="#">Leistungen</a><a href="#">Kontakt</a></nav>
 </header>
 <main class="sr">
@@ -78,7 +92,7 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
   <p>Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p>
 </main>
 <div class="track"></div>
-<div class="fallback"><h1>Jan-Erik Andersen</h1><p>Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p></div>
+<div class="fallback"><h1 class="n4" aria-label="Jan-Erik Andersen"><span aria-hidden="true">Jan-Erik <i>Andersen</i><span class="dot"></span><span class="fold"></span></span></h1><p>Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p></div>
 <div class="hint" id="hint">Scrollen</div>
 <div class="controls">
   <button id="prev" type="button" aria-label="Zurück"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 3 5 8l5 5"/></svg></button>
