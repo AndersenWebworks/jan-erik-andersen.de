@@ -101,10 +101,30 @@
   .l .top { display: block; font-family: "Mono"; font-size: .24em; font-weight: 500; letter-spacing: .02em; color: var(--muted); margin: 0 0 .25em .12em; }
   .l .main { font-family: "Bricolage"; font-stretch: 75%; font-weight: 800; font-variation-settings: "opsz" 96; letter-spacing: -.035em; text-transform: lowercase; }
   .l.s .top { display: inline; font-size: .62em; margin: 0 .35em 0 0; }
+  /* M Kombinationen */
+  .fd { display: inline-block; vertical-align: -.01em; margin-left: .04em; }
+  .m1 { font-family: "Newsreader"; font-weight: 380; letter-spacing: -.018em; white-space: nowrap; line-height: 1; }
+  .m2 { display: inline-block; line-height: .95; white-space: nowrap; }
+  .m2 .top { display: block; font-family: "Mono"; font-size: .26em; font-weight: 450; color: var(--muted); margin: 0 0 .32em .06em; }
+  .m2 .top .cur { display: inline-block; width: .5em; height: .1em; background: var(--ink); vertical-align: -.18em; margin-left: .12em; }
+  .m2 .main .fd { margin-left: -.03em; }
+  .m2 .main { font-family: "Newsreader"; font-style: italic; font-weight: 360; letter-spacing: -.025em; }
+  .m2.s .top { display: inline; font-size: .6em; margin: 0 .3em 0 0; } .m2.s .top .cur { display: none; }
+  .m3 { display: inline-block; line-height: .9; white-space: nowrap; }
+  .m3 .top { display: block; font-family: "Mono"; font-size: .24em; font-weight: 500; letter-spacing: .02em; color: var(--muted); margin: 0 0 .25em .12em; }
+  .m3 .main { font-family: "Bricolage"; font-stretch: 75%; font-weight: 800; font-variation-settings: "opsz" 96; letter-spacing: -.035em; text-transform: lowercase; }
+  .m3.s .top { display: inline; font-size: .62em; margin: 0 .35em 0 0; }
+  .sig { font: 13px/1.45 "Schibsted", sans-serif; color: #555; padding: 12px 18px 14px; border-top: 1px solid #ece9e2; background: #fbfaf8; }
+  .sig .lab { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: #999; margin-bottom: 6px; }
+  .sig .who { margin-bottom: 2px; }
+  .sep { max-width: 1240px; margin: 44px auto 18px; font-weight: 650; }
 </style>
 </head>
 <body>
 <p class="intro"><b>Minitest Marke.</b> Zwölf Richtungen, alle aus dem Material der neuen Seite: Papier, Falz, roter Punkt, rote Linie und Konstruktion. Jede ist groß auf Papier zu sehen, darunter im Header und als Favicon in 32 und 16 Pixeln. Die Schriften stehen unter offener Lizenz (OFL).</p>
+<p class="sep">Kombinationen aus A1, D, J und L</p>
+<div class="grid" id="kombi"></div>
+<p class="sep">Die zwölf Ausgangsrichtungen</p>
 <div class="grid" id="grid"></div>
 
 <script>
@@ -169,14 +189,40 @@ const V = [
     fav: svg("0 0 32 32", () => `<text x="14" y="25" text-anchor="middle" font-family="Bricolage" font-weight="800" font-size="30" style="font-stretch:75%" fill="#303033">a</text><circle cx="26" cy="22.5" r="3.6" fill="#d40235"/>`) }
 ];
 
+// Punkt mit Eselsohr: der Webworks-Kreis ohne Initialen, verkleinert zum Satzpunkt
+let fdN = 0;
+const fdot = (w, detail = true) => { const id = "fd" + (fdN++); return `<svg class="fd" viewBox="0 0 100 100" style="width:${w};height:${w}"><defs><clipPath id="${id}"><circle cx="50" cy="50" r="48"/></clipPath></defs><circle cx="50" cy="50" r="48" fill="#d40235"/><g clip-path="url(#${id})"><polygon points="42,0 100,0 100,58" fill="#f4f2ed"/><polygon points="42,0 100,58 42,58" fill="#8e0224"/></g>${detail ? `<line x1="44" y1="2" x2="98" y2="56" stroke="#fff" stroke-opacity=".6" stroke-width="2.4" stroke-dasharray="5 4"/>` : ""}</svg>`; };
+const favDot = (px) => fdot(px + "px", px >= 32);
+const M = [
+  { id: "M1", n: "Name, Punkt mit Eselsohr", w: "A1 mit dem Kreis aus J als Schlusspunkt. Klein ist es einfach ein roter Punkt, groß sieht man die umgeknickte Ecke von Webworks. Das Favicon ist der Punkt allein.",
+    big: `<div class="m1" style="font-size:66px">Jan-Erik Andersen${fdot(".3em")}</div>`,
+    small: `<div class="m1" style="font-size:20px">Jan-Erik Andersen${fdot(".26em", false)}</div>`,
+    sig: `<div class="m1" style="font-size:17px">Jan-Erik Andersen${fdot(".26em", false)}</div>`,
+    fav: favDot },
+  { id: "M2", n: "Code-Zeile über der Serife", w: "Aus D die Code-Zeile mit Cursor, aus L der Aufbau in zwei Ebenen, aus A1 und J der gefaltete Schlusspunkt. Andersen steht in der Kursive der Seite. Technik oben klein, Gestaltung unten groß.",
+    big: `<div class="m2" style="font-size:96px"><span class="top">jan-erik<span class="cur"></span></span><span class="main">Andersen${fdot(".24em")}</span></div>`,
+    small: `<div class="m2 s" style="font-size:26px"><span class="top">jan-erik</span><span class="main">Andersen${fdot(".24em", false)}</span></div>`,
+    sig: `<div class="m2 s" style="font-size:20px"><span class="top">jan-erik</span><span class="main">Andersen${fdot(".24em", false)}</span></div>`,
+    fav: favDot },
+  { id: "M3", n: "andersen. mit Eselsohr", w: "L unverändert in Schrift und Aufbau, nur der Punkt ist jetzt der gefaltete Kreis. Die lauteste der drei, am meisten Logo.",
+    big: `<div class="m3" style="font-size:110px"><span class="top">jan-erik</span><span class="main">andersen${fdot(".2em")}</span></div>`,
+    small: `<div class="m3 s" style="font-size:26px"><span class="top">jan-erik</span><span class="main">andersen${fdot(".2em", false)}</span></div>`,
+    sig: `<div class="m3 s" style="font-size:20px"><span class="top">jan-erik</span><span class="main">andersen${fdot(".2em", false)}</span></div>`,
+    fav: favDot }
+];
+
 const nav = `<nav><span>Projekte</span><span>Leistungen</span><span>Kontakt</span></nav>`;
-const nur = new URLSearchParams(location.hash.slice(1)).get("nur"); const W = nur ? V.filter(v => nur.split(",").includes(v.id)) : V;
-document.getElementById("grid").innerHTML = W.map(v => `
+const nur = new URLSearchParams(location.hash.slice(1)).get("nur");
+const card = (v) => `
   <section class="card" id="${v.id}">
     <div class="head"><div class="t"><span class="tag">${v.id}</span><span class="name">${v.n}</span></div><div class="what">${v.w}</div></div>
     <div class="stage">${v.big}</div>
     <div class="uses">${v.small}${nav}<div class="favs"><span class="fav f32">${v.fav(32)}</span><span class="fav f16">${v.fav(16)}</span></div></div>
-  </section>`).join("");
+    ${v.sig ? `<div class="sig"><div class="lab">Mailsignatur</div><div class="who">Mit freundlichen Grüßen</div>${v.sig}<div>Webentwicklung · Raum Plau am See · remote</div></div>` : ""}
+  </section>`;
+const pick = (list) => nur ? list.filter(v => nur.split(",").includes(v.id)) : list;
+document.getElementById("kombi").innerHTML = pick(M).map(card).join("");
+document.getElementById("grid").innerHTML = pick(V).map(card).join("");
 </script>
 </body>
 </html>
