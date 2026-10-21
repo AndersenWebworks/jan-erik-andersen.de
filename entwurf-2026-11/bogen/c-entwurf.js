@@ -103,15 +103,20 @@ export default function (K) {
   // Am Handy schmalerer Tisch und Rechner näher dran: das Hochkantbild ist sonst breitenbegrenzt und bleibt oben und unten leer
   const X1 = N ? 2.65 : 3.6, X0 = -X1, PX0 = N ? 5.1 : 6.2;
   // ---------- Bogen ----------
-  K.sheet(X0 - 2.9, PX0 + 3.7, -5.6, N ? 8.1 : 6.9);
+  // Der Bogen reicht nach vorn bis hinter die Unterzeile (KZ): Startkamera steht flach vor der Marke, die Unterzeile braucht davor ein Stück Papier
+  const KZ = N ? 23.8 : 12.4;
+  K.sheet(X0 - 2.9, PX0 + 3.7, -5.6, KZ + 1.0);
   K.sheet(-4.6, 4.6, -16.4, -11.2, undefined, .86);
 
   // ---------- Name (wortmarke.js) und Unterzeile ----------
   F.part("name", 0, .01);
-  const mark = wortmarke(K, { cx: 0, zb: 5.0, narrow: N });
+  // Name immer einzeilig: bei Augenhöhe kann eine zweite Zeile nicht davor liegen (würde die erste überdecken), auch am Handy
+  const mark = wortmarke(K, { cx: 0, zb: 5.0, narrow: false });
   const KT = N ? ["Webentwicklung", "Raum Plau am See · remote"] : ["Webentwicklung · Raum Plau am See · remote"];
-  const ko = { track: .05, col: "#66666a", noImprint: 1, foot: 1, align: "center", lh: 1.45 };
-  const ke = N ? .19 : .16, kick = K.word(KT, ke, -K.measure(KT, ko).tw * ke / 2, mark.front + (N ? .95 : .8), .65, .7, ko);
+  const ko = { track: .05, col: "#66666a", noImprint: 1, align: "center", lh: 1.45 };
+  // Unterzeile steht wie die Lettern auf (zweite Reihe, kleiner) und ganz vorn auf dem Bogen: bei Augenhöhe liegt sie dadurch
+  // unter der Marke im Bild (näher = tiefer), ohne sie zu überdecken. Startkamera siehe Schlüssel 0.
+  const ke = N ? .105 : .12, kick = K.word(KT, ke, -K.measure(KT, ko).tw * ke / 2, KZ, .65, .7, ko);
 
   // ---------- Schreibtisch: Platte hebt sich, L-Beine und Zarge schwenken nach unten ----------
   F.part("tisch", .015, .08);
@@ -203,7 +208,7 @@ export default function (K) {
   // niedrige Fenster zeigen bei gleicher Schriftgröße weniger Welt: Text dort tiefer setzen, damit der Monitor oben im Bild bleibt
   const syH = (lo, hi) => (W, H) => Math.min(hi, Math.max(lo, lo + (H - 720) / 180 * .15 * (hi > lo ? 1 : -1)));
   const S = {
-    name: { prints: [...mark.prints, kick], e0: mark.e, px: 150, fit: .56, pxN: 120, fitN: .84, pitch: 34, sy: -.26, npitch: 36, nsy: -.12, b: 0 },
+    name: { prints: [...mark.prints, kick], e0: mark.e, px: 150, fit: .95, pxN: 120, fitN: 1.12, pitch: .7, sy: .02, npitch: .7, nsy: 0, b: 0 },
     // t1: im Breitbild steht der Rechner ganz rechts mit im Bild (Text links der Mitte), sonst bleibt er ganz draußen, nie angeschnitten
     t1: { prints: [T1], px: pxD, pitch: 16, yaw: -14, sy: syH(-.18, .04), sx: (W, H) => W / H >= 1.68 ? -.4 : .03, npitch: 16, nyaw: -6, nsy: .14 },
     t2: { prints: [T2], px: pxD, pitch: 10, yaw: -30, sy: -.33, npitch: 10, nyaw: -30, nsy: -.3 },
@@ -220,10 +225,12 @@ export default function (K) {
     stops: Object.values(S),
     keys: [
       { w: 0, stop: S.name },
+      // Kamera hebt sich über den Bogen und gibt die Fläche frei, b bleibt 0 (noch keine Linien): Blickhöhe 2° -> 19°, Abstand rund 15 -> 19
+      { w: .4, b: 0, cam: V(.1, 6.6, 21.6), tgt: V(.6, .7, 3.5), camN: V(0, 9.6, 30.5), tgtN: V(0, .8, 4.4) },
       // Bastellinien fertig, Tisch beginnt sich zu heben: Überblick über den Bogen (el 38°, az −4°, Abstand 22,7; Handy el 42°, 25,4).
       // Eingepasst bei 1280 × 900: fertiges Modell, flach liegende Beine und Name 72 px unter der Oberkante bis 95 px über der Unterkante;
       // Handy fertiges Modell und Name zwischen 185 und 637 px
-      { w: .8, b: .2, cam: V(.06, 15.3, 18.51), tgt: V(1.3, 1.3, .65), camN: V(1.64, 18.27, 20.8), tgtN: V(1.64, 1.3, 1.96) },
+      { w: .5, b: .2, cam: V(.06, 15.3, 18.51), tgt: V(1.3, 1.3, .65), camN: V(1.1, 18.27, 20.8), tgtN: V(1.1, 1.3, 1.96) },
       // Platte oben, Beine rasten ein: eigener Schlüssel, damit das Heben gleichmäßig über rund 0,4 Bildschirmhöhen läuft
       // (el 33°, az −5°, Abstand 22,3; Handy el 36°, 25,2)
       { w: 1, b: .34, cam: V(-.46, 13.43, 19.12), tgt: V(1.17, 1.3, .51), camN: V(1.63, 16.14, 22.29), tgtN: V(1.63, 1.3, 1.87) },
