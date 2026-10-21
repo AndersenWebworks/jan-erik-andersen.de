@@ -30,6 +30,6 @@ else {
       onFirstFrame() { if (vorbild) setTimeout(() => vorbild.classList.add("weg"), 900); }
     });
     const lbl = document.getElementById("szene");
-    if (lbl) setInterval(() => { const st = api.state(); if (st) { const I = api.inst()[st.i]; lbl.textContent = (st.kind === "t" ? "→ " : "") + I.cfg.label; } }, 250);
+    if (lbl) setInterval(() => { const st = api.state(); if (st) { lbl.textContent = (st.kind === "t" ? "→ " : "") + api.labelAt(api.p()); } }, 250);
   }).catch(e => { console.error(e); document.documentElement.classList.add("nogl"); });
 }

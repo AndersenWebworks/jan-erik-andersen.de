@@ -72,8 +72,10 @@ export const SEQ = [
     clip: [8.5, 1e5, -1e5, 1e5],
     // kein Raster: die Lesestellen beginnen bei b .43, kurz nach dem Szenenanfang (b .37); Gerüst und Spur bleiben
     grid: false,
-    // „Kontakt“: Fahrt vom Teamtisch zum Umschlag (Schlüssel vor der Überschrift „Schreiben Sie mir“)
-    anchors: { kontakt: d => d.keys.findIndex(k => k.stop && k.stop.name === "h3") - 1 },
+    // „Kontakt“: Sprungziel ist die letzte Lesestelle (Überschrift und alle drei Karten ganz im Bild)
+    anchors: { kontakt: d => d.keys.findIndex(k => k.stop && k.stop.name === "all") },
+    // Abschnittsname im Label: ab der Überschrift „Schreiben Sie mir“ steht dort „Kontakt“
+    labels: [{ label: "Kontakt", ki: d => d.keys.findIndex(k => k.stop && k.stop.name === "h3") - 1 }],
     faden: () => ({ in: [9.0, 6.3], viaPre: [[9.0, 3.0], [20.6, 3.0]], ownFrom: 4 }) }
 ];
 

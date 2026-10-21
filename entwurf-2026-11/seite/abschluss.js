@@ -341,8 +341,8 @@ export default function (K) {
   const OX3 = 36;
   {
     const z = v => v;
-    const rows = [[{ t: "Schreiben Sie mir," }], [{ t: "worum es geht.", it: 1 }]];
-    const H3 = heading(rows, N ? .5 : .72, z(4.6), .715, "kopf3", OX3);
+    const rows = N ? [[{ t: "Schreiben" }], [{ t: "Sie mir," }], [{ t: "worum es geht.", it: 1 }]] : [[{ t: "Schreiben Sie mir," }], [{ t: "worum es geht.", it: 1 }]];
+    const H3 = heading(rows, N ? .36 : .72, z(4.6), .715, "kopf3", OX3);
 
     // Umschlag: der Körper liegt als Papier auf dem Bogen (die Karten stehen aus ihm auf), die Klappe liegt hinten und klappt auf
     const BW = 7.2, zF = z(1.9), zB = z(N ? -2.95 : -2.7), CX = N ? 2.1 : 1.6, ZBK = N ? -1.3 : -.95, ZFR = N ? 1.5 : 1.15;
@@ -355,9 +355,9 @@ export default function (K) {
     F.part("karten", .71, .06);
     const CW = 2.6, CHt = .95, DD = .5, EM = .115, LV = { over: .05 };
     const spots = [
-      { x: OX3 - CX, zh: z(ZBK), label: "Mail", val: "mail@andersen-webworks.de", href: "mailto:mail@andersen-webworks.de" },
-      { x: OX3 + CX, zh: z(ZBK), label: "Telefon", val: "+49 38733 270015", href: "tel:+4938733270015" },
-      { x: OX3, zh: z(ZFR), label: "LinkedIn", val: "andersen-erik", href: "https://www.linkedin.com/in/andersen-erik/" }
+      { x: N ? OX3 : OX3 - CX, zh: z(N ? -1.6 : ZBK), label: "Mail", val: "mail@andersen-webworks.de", href: "mailto:mail@andersen-webworks.de" },
+      { x: N ? OX3 : OX3 + CX, zh: z(N ? -.15 : ZBK), label: "Telefon", val: "+49 38733 270015", href: "tel:+4938733270015" },
+      { x: OX3, zh: z(N ? 1.2 : ZFR), label: "LinkedIn", val: "andersen-erik", href: "https://www.linkedin.com/in/andersen-erik/" }
     ];
     const faces = [];
     const decs = spots.map((s, i) => {
@@ -380,9 +380,9 @@ export default function (K) {
     F.spur({ tags: ["klappe", "karten"], quiet: [flap, ...faces], a: .3 });
 
     carriers.push({ n: "h3", nodes: [], prints: H3 });
-    stops.h3 = { prints: H3, pitch: 10, sy: 0, nsy: 0, px: (W, H) => H * .07, pxN: 34, fit: .74, fitN: .86, b: .77 };
-    if (!N) stops.all = { prints: decs, e0: EM, px: pxD, fit: .8, pitch: 30, yaw: 0, sy: -.05, b: 1 };
-    else spots.forEach((s, i) => { stops["c" + i] = { prints: [decs[i]], e0: EM, px: 16, pxN: 16, fitN: .94, pitch: 28, npitch: 28, nyaw: 0, nsy: -.05, b: .955 + .015 * i }; });
+    stops.h3 = { prints: H3, pitch: 44, sy: 0, nsy: 0, px: (W, H) => H * .07, pxN: 34, fit: .74, fitN: .86, b: .77 };
+    // Eine Kontakt-Lesestelle: Überschrift und alle drei Karten ganz im Bild (Handy: Karten untereinander)
+    stops.all = { prints: [...decs, ...H3], e0: EM, px: 15, pxN: 14, fit: .9, fitN: .95, pitch: 42, npitch: 48, yaw: 0, nyaw: 0, sy: .2, nsy: 0, b: 1 };
   }
 
   // ---------- Roter Faden: vom Statuspunkt des neuen Platzes zum Umschlag ----------
@@ -412,7 +412,8 @@ export default function (K) {
     // Szene 3: der Faden kommt an, die Klappe geht auf, die Karten stehen auf
     { w: 1, stop: S.h3 },
     { w: 1.8, slow: 1, b: .86, ...orbit(V(OX3, .8, -.5), 32, 0, 15, 20, 40) },
-    ...(N ? [S.c0, S.c1, S.c2].map(s => ({ w: 1.1, stop: s })) : [{ w: 1.4, slow: 1, b: .93, ...orbit(V(OX3, .8, -.5), 34, 10, 12) }, { w: 2, stop: S.all }])
+    { w: 1.4, slow: 1, b: .93, ...orbit(V(OX3, .8, -.5), 34, 10, 12) },
+    { w: 2, stop: S.all }
   ];
   Object.entries(S).forEach(([k, v]) => { v.name = k; });
   // Raster (seite/) für „Wie ich arbeite“; „Für Agenturen“ setzt in der Szenenfolge ein eigenes Zeitfenster

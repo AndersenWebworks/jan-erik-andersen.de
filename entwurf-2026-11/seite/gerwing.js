@@ -36,7 +36,7 @@ export default function (K) {
 
   // ---------- Lage (Bogen x nach rechts, z zum Betrachter) ----------
   // Wand mit Überschrift
-  const WX0 = N ? -9.4 : -10.2, WW = N ? 4.2 : 6.4, ZW = -5.2, HW = N ? 3.0 : 1.9;
+  const WX0 = N ? -9.4 : -10.2, WW = N ? 4.2 : 6.4, ZW = -5.2, HW = N ? 4.2 : 2.5;
   // Pflasterfläche: Steine 0,6 × 0,3 (Verhältnis 25 × 15 cm wie im Shop), Kontur eine halbe Reihe kürzer als die ganzen Steine:
   // die letzte Reihe ragt halb über die Kontur. Desktop 9 Steine × 10 Reihen, Handy schmaler und tiefer (6 × 14)
   const CW = .6, RH = .3, NC = N ? 6 : 9, NR = N ? 14 : 10, PX0 = -9.4, PX1 = PX0 + NC * CW, PZB = -4.4, PZF = PZB + (NR - .5) * RH, SH = .12, G = .012;
@@ -69,8 +69,11 @@ export default function (K) {
   const T1 = sans(S1L, N ? .2 : .14, .085, { lh: 1.32 });
   const hd = K.print(N ? ["Pflaster nach Fläche", "bestellen"] : [TITEL], N ? .4 : .44, -1, { font: "serif", lh: 1.08 });
   const mt = K.print([META], .12, -1, { track: .03, col: MUTED });
-  const v1 = .28 + T1.h / 2, v2 = v1 + T1.h / 2 + hd.h / 2 - .02, v3 = v2 + hd.h / 2 + mt.h / 2 - .02;
+  // Satz 2 (T3) steht unten auf der Wand, unter dem Einleitungsdruck T1; er erscheint erst nach T1 (b .405)
+  const T3 = sans(N ? ["Kunden geben ihre", "Quadratmeter ein, der Shop", "rechnet sie in ganze", "Steine um,"] : ["Kunden geben ihre Quadratmeter ein,", "der Shop rechnet sie in ganze Steine um,"], N ? .2 : .14, .405, { lh: 1.3 });
+  const vT3 = .24 + T3.h / 2, v1 = vT3 + T3.h / 2 + .14 + T1.h / 2, v2 = v1 + T1.h / 2 + hd.h / 2 - .02, v3 = v2 + hd.h / 2 + mt.h / 2 - .02;
   K.onPanel(wall, T1, uL(T1, M0), v1, 1);
+  K.onPanel(wall, T3, uL(T3, M0), vT3, 1);
   K.onPanel(wall, hd, uL(hd, M0 - .03), v2, 1);
   K.onPanel(wall, mt, uL(mt, M0), v3, 1);
 
@@ -83,10 +86,6 @@ export default function (K) {
     ln([x + dx * .18, z], [x + dx * (.18 + tick), z]); ln([x, z + dz * .18], [x, z + dz * (.18 + tick)]);
   }
   F.sketch(R, cm, .105, .045, { a: .62 });
-  const T2 = sans(N ? ["Kunden geben ihre", "Quadratmeter ein,"] : ["Kunden geben ihre Quadratmeter ein,"], N ? .12 : .15, .135, { lh: 1.25 });
-  // am Handy mittig unter der Stirnkantenschrift (x wie T3), damit beide zusammen ins Hochkantbild passen
-  K.onFlat(R, T2, N ? PX0 + 1.8 : uL(T2, PX0), PZF + .62 + (N ? .18 : 0));
-
   // ---------- 3 Ganze Steine im Läuferverband, Reihe für Reihe ----------
   // Stein: Platte hebt sich parallel, nur die Außenwände der Fläche schwenken hoch (innen liegen die Steine Fuge an Fuge,
   // ihre Wände hätten in Ruhe keinen Platz im Bogen)
@@ -116,13 +115,6 @@ export default function (K) {
       if (r === NR - 1) front.push({ s, xa: xa + G / 2, xb: xb - G / 2 });
     }
   }
-  // Satz 2b auf den Stirnkanten der vordersten Reihe (eine Zeile über mehrere Steine)
-  const T3 = sans(["der Shop rechnet sie in ganze Steine um,"], .074, .405, { lh: 1 });
-  {
-    const cx = PX0 + (N ? 1.8 : 2.55), st = front.find(f => cx >= f.xa && cx <= f.xb) || front[4];
-    K.onPanel(st.s.fr, T3, cx - st.xa, SH / 2, -1);
-  }
-
   // ---------- 4 Terrasse mit Platten und Treppe ----------
   F.part("terrasse", .37, .06);
   const top = F.lift(R, TH, .44, .07, { over: .02 });
@@ -263,8 +255,7 @@ export default function (K) {
   const pxF = (W, H) => pxD(W, H) * 1.15;
   const S = {
     t1: { prints: [T1], px: pxD, pitch: 9, yaw: -10, sy: -.18, npitch: 10, nyaw: -6, nsy: -.12 },
-    t2: { prints: [T2], px: pxF, pitch: 62, yaw: -6, sy: .19, sx: -.05, pxN: 17.4, npitch: 64, nyaw: -4, nsy: -.07 },
-    t3: { prints: [T3], px: (W, H) => pxD(W, H) * 1.03, pitch: 9, yaw: -12, sy: -.37, sx: .3, pxN: 17.9, npitch: 38, nyaw: 0, nsy: .26 },
+    t3: { prints: [T3], px: (W, H) => pxD(W, H) * 1.05, pitch: 20, yaw: -8, sy: -.3, sx: -.2, nsx: -.13, pxN: 15.4, npitch: 22, nyaw: -4, nsy: -.3 },
     t4: { prints: [T4], px: pxF, pitch: 58, yaw: -8, sy: -.05, pxN: 18.2, npitch: 60, nyaw: -6, nsy: -.05 },
     t5: { prints: [T5], px: pxD, pitch: 11, yaw: -10, sy: .1, sx: -.3, npitch: 12, nyaw: -6, nsy: .05 },
     // Laptop: Text unten im Bild, darüber der ganze Bildschirm mit dem Shop
@@ -290,9 +281,8 @@ export default function (K) {
       // Wand steht auf und rastet ein, Kamera sinkt auf 22°
       key(.8, .07, V(-7.1, .86, -5.17), 22, -6, 11.0, V(-7.13, 1.09, -5.08), 22, -4, 14.2),
       { w: .9, stop: S.t1 },
-      { w: 1.25, stop: S.t2 },
       // Steine heben sich Reihe für Reihe: Überblick über die Fläche
-      key(1.5, .30, V(-6.61, .87, -2.66), 40, -8, 10.1, V(-7.49, -.2, -1.95), 46, -4, 14.0),
+      key(2.75, .30, V(-6.61, .87, -2.66), 40, -8, 10.1, V(-7.49, -.2, -1.95), 46, -4, 14.0),
       { w: 1.15, stop: S.t3 },
       // Terrasse hebt sich, Wände schwenken herab, Treppe faltet aus
       key(1.45, .57, V(.51, .04, -2.11), 30, -22, 8.6, V(.42, .1, -2.2), 32, -12, 18.0),

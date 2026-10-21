@@ -100,6 +100,30 @@ export default function (K, o = {}) {
   const leg = K.panel(board, board.uv((BW - LEGW) / 2, LB), board.uv((BW + LEGW) / 2, LB), [0, -1], T(.34), D(.09), -(FB + FRr), { over: 0, lv: 1 });
   K.rect(leg, 0, 0, LEGW, LEGL, LEG, .5);
 
+  // Vordere Beine: zwei schmale Streifen an den Brettkanten, wie die Stütze nach hinten zum Boden geklappt, aber mit schräg gestelltem Scharnier
+  // (THS = 12°); dadurch spreizen die Füße nach außen (rund 0,6 neben die Brettkante). Länge je Ecke gerechnet: Fuß genau auf dem Bogen (y = 0).
+  {
+    const THS = 12 * PI / 180, HL = .3, XR = BW / 2, cs = Math.cos(THS), sn = Math.sin(THS), sF = Math.sin(FB), cF = Math.cos(FB);
+    const b3 = (x, z) => { const v = ZB - z; return [x, v * sF, ZB - v * cF]; };           // Punkt der Brettebene (Faltplan x, z) im Stand
+    const rot = (w, k, ph) => {                                                            // Rodrigues: w um die Einheitsachse k um ph
+      const c = Math.cos(ph), s2 = Math.sin(ph), d = w[0] * k[0] + w[1] * k[1] + w[2] * k[2];
+      const x = [k[1] * w[2] - k[2] * w[1], k[2] * w[0] - k[0] * w[2], k[0] * w[1] - k[1] * w[0]];
+      return [0, 1, 2].map(i => w[i] * c + x[i] * s2 + k[i] * d * (1 - c));
+    };
+    for (const sd of [1, -1]) {
+      // Scharnier in Faltplan-Koordinaten (x, z) auf dem Brett; n zeigt zum Bogen hinter dem Kamm (z kleiner)
+      const A = sd > 0 ? [XR - HL * cs, ZR + HL * sn] : [-XR, ZR], B = sd > 0 ? [XR, ZR] : [-XR + HL * cs, ZR + HL * sn];
+      const n = sd > 0 ? [-sn, -cs] : [sn, -cs];
+      const el = Math.hypot(B[0] - A[0], B[1] - A[1]);
+      const k3 = w => [w[0], -w[1] * sF, w[1] * cF];                                       // Faltplanrichtung (dx, dz) -> 3D in der Brettebene
+      const kv = k3([(B[0] - A[0]) / el, (B[1] - A[1]) / el]);
+      const dir = rot(k3(n), kv, -(FB + FRr));                                              // Beinrichtung nach dem Klappen
+      const len = p => -b3(p[0], p[1])[1] / dir[1];
+      const lg = K.panel(board, board.uv(A[0] + BW / 2, ZB - A[1]), board.uv(B[0] + BW / 2, ZB - B[1]), n, T(.34), D(.09), -(FB + FRr), { over: 0, lv: 1 });
+      K.P(lg, [[0, 0], [el, 0], [el, len(B)], [0, len(A)]], LEG, .5);
+    }
+  }
+
   // Kopfleiste: dunkler Streifen am Kamm des Bretts; die Blätter hängen dahinter (ihre obersten Zentimeter liegen rechnerisch bis 4 mm hinter der Brettfläche)
   const RAIL = .1;
   K.onPanel(board, K.decal(300, Math.round(300 * RAIL / BW), (x, W, H) => { x.fillStyle = ink(.5); x.fillRect(0, 0, W, H); }, BW, RAIL, -1), BW / 2, LB - RAIL / 2, 1, null, .0003);
@@ -159,9 +183,9 @@ export default function (K, o = {}) {
   const stopOf = (prints, b, v) => ({ prints, px: pxD, b: T(b), ...v });
   const S = {
     // Plakat: Ablage-Text und Titel des ersten Blatts; Kamera blickt rechtwinklig auf das Brett (14° geneigt)
-    g1: stopOf([t1, t2, titles[0], notes[0]], .585, { pitch: 14, yaw: -8, sy: -.34, sx: 0, npitch: 14, nyaw: 0, nsy: -.2, nsx: 0 }),
-    g2: stopOf([t1, t2, titles[1]], .765, { pitch: 14, yaw: 0, sy: -.34, sx: 0, npitch: 14, nyaw: 0, nsy: -.2, nsx: 0 }),
-    g3: stopOf([t1, t2, titles[2], notes[2]], .92, { pitch: 14, yaw: 8, sy: -.34, sx: 0, npitch: 14, nyaw: 0, nsy: -.2, nsx: 0 })
+    g1: stopOf([t1, t2, titles[0], notes[0]], .585, { pitch: 14, yaw: -20, sy: -.34, sx: 0, npitch: 14, nyaw: -14, nsy: -.2, nsx: 0 }),
+    g2: stopOf([t1, t2, titles[1]], .765, { pitch: 14, yaw: 20, sy: -.34, sx: 0, npitch: 14, nyaw: 14, nsy: -.2, nsx: 0 }),
+    g3: stopOf([t1, t2, titles[2], notes[2]], .92, { pitch: 14, yaw: -20, sy: -.34, sx: 0, npitch: 14, nyaw: -14, nsy: -.2, nsx: 0 })
   };
   const look = (tx, ty, tz, el, az, dist) => { const e = el * PI / 180, a = az * PI / 180; return P3(tx + dist * Math.cos(e) * Math.sin(a), ty + dist * Math.sin(e), tz + dist * Math.cos(e) * Math.cos(a)); };
   const tg = (x, y, z) => P3(x, y, z);

@@ -782,6 +782,7 @@ export function seite(renderer, SEQ, opt = {}) {
   // Prüfhilfe (nur Entwurf): Zustände ohne Atem setzen, Lesestellen und Abschnitte als p
   const api = {
     THREE, scene, camera, frameFrac, readingPose, stateAt, poseOf, bOf, ensure,
+    labelAt: pp => { const st = stateAt(pp), I = INST[st.i]; if (st.kind === "b" && I.cfg.labels) { ensure(I.idx); let lb = I.cfg.label; for (const L of I.cfg.labels) { const ki = typeof L.ki === "function" ? L.ki(I.def) : L.ki, kk = I.def.keys[ki]; if (kk && pp >= I.body.p0 + I.def.pOfU(kk.u) * (I.body.p1 - I.body.p0)) lb = L.label; } return lb; } return I.cfg.label; },
     inst: () => INST, segs: () => SEGS, total: () => TOTAL, anchors: () => ANCH.map(a => ({ name: a.name, p: anchorP(a) })),
     setP(v) { jumpTo(v); },
     // Zustand bei p ohne Atem anwenden (für Rechnungen), liefert den Zustand
