@@ -21,8 +21,8 @@ Ein kleines Lager aus dem Bogen (Vorbild für Modelle und Reihenfolge: `entwurf-
 | Überschrift | Lagerschild auf zwei Stützen hinter den Regalen | liegt beim Start flach und lesbar im Bogen, steht als erstes Teil auf |
 | S1 (WooCommerce, kein Standardformular, Fläche, Gewicht, Entfernung) | Regal nach Maß rechts, Satz auf seiner Blende oben | Böden in drei Höhen nach dem Gut: unten schwerer Block mit Gewichtszeichen (Gewicht), Mitte flaches breites Fach mit Plattenstapel (Fläche), oben freier Platz. Daneben auf dem Bogen ein Paket, von dem eine gestrichelte Strecke zu einer Fahne läuft (Entfernung) |
 | S2 (Shopify, wachsender Umsatz, immer höhere Gebühren, kann wechseln) | Standardregal links mit gleichförmigen Fächern (3 × 3), Satz auf seiner Blende; links daneben Preisschild und Gebührenstapel | Gebührenstapel wächst während der Lesestelle Stufe für Stufe (vier Säulen, eine nach der anderen) |
-| S3a „Ich rechne vorher durch, ob sich das lohnt,“ | Waage vorn in der Mitte, Satz auf der Vorderseite ihres Sockels | Waagebalken pendelt sich während der Lesestelle ein (links Gebührenstapel Shopify, rechts ein Block WooCommerce) |
-| S3b „und ziehe Produkte, Kunden und Bestellungen um.“ | Brücke zwischen den Regalen, Satz auf ihrer Blende | drei Pakete (Zeichen: Produkt, Kunde, Bestellliste) fahren nacheinander aus dem Standardregal über die Brücke ins Regal nach Maß und rasten ein; im Standardregal bleibt ihr Abdruck |
+| S3a „Ich rechne vorher durch, ob sich das lohnt,“ | Waage vorn in der Mitte (hochkant weiter vorn), Satz auf der Vorderseite ihres Sockels | Waagebalken pendelt während der Lesestelle nach beiden Seiten und kommt waagerecht zur Ruhe, ohne Ergebnis anzudeuten (Entscheidung Clautz, 22.10.2026) |
+| S3b „und ziehe Produkte, Kunden und Bestellungen um.“ | Brücke zwischen den Regalen, Satz auf ihrer Blende | drei Pakete (Zeichen: Produkt, Kunde, Bestellliste) fahren als Zug aus dem Standardregal über die Brücke ins Regal nach Maß und rasten ein; an der Lesestelle stehen alle drei mittig auf und an der Brücke; im Standardregal bleibt ihr Abdruck |
 
 Kein Gerät mit Shopbild: Der Absatz nennt keinen bestimmten Shop (das Gerwing-Bild gehört zum Gerwing-Abschnitt).
 
@@ -40,8 +40,8 @@ Scrollstelle in Bildschirmhöhen (BH) ab Seitenanfang, gerechnet mit `_pruefung/
 | 0,36 – 0,45 | 1,3 – 1,7 | Sockel der Waage hebt sich, Waage steht auf; Pakete falten sich aus dem obersten Boden des Standardregals |
 | 0,44 – 0,53 | 1,7 – 2,2 | Inhalt Regal nach Maß (schwerer Block, Plattenstapel), Paket, Strecke, Fahne; S1 erscheint bei 0,47 (1,93 BH) |
 | 0,52 – 0,68 | 2,1 – 3,5 | Preisschild; Gebührenstapel Stufe für Stufe ab 0,575 (2,88 BH), fertig 0,68 (3,51 BH); S2 erscheint bei 0,55 |
-| 0,70 – 0,80 | 3,59 – 4,21 | Waage pendelt sich ein (zweimal über die Endlage hinaus, kippt zur Gebührenseite, Endneigung rund 8°); S3a erscheint bei 0,69 |
-| 0,84 – 0,95 | 4,34 – 5,00 | die drei Pakete fahren nacheinander über die Brücke (das der Brücke nächste zuerst) und rasten ein; S3b erscheint bei 0,82 |
+| 0,70 – 0,80 | 3,59 – 4,21 | Waage pendelt (erst rund 6° zur einen, dann rund 2° zur anderen Seite) und kommt waagerecht zur Ruhe; S3a erscheint bei 0,69 |
+| 0,866 – 0,956 | 4,5 – 5,05 | die drei Pakete fahren gemeinsam über die Brücke und rasten ein (bei b 0,9 mittig auf der Brücke); S3b erscheint bei 0,82 |
 
 ## Kamera (gerechnet)
 
@@ -69,3 +69,9 @@ Richtung der Fahrt: Überblick Mitte, S1 rechts, S2 links (ein halber Schwenk ü
 - Keine Schnitt- oder Falzlinie durch ein fremdes Teil.
 - Kein Teil taucht während des Baus unter den Bogen (tiefster Punkt −0,002, die Ruhelage selbst).
 - Pakete am Ende x 1,67 bis 3,73, y 1,45 bis 1,73: zwischen den Stützen (z 0 und −1,3), unter dem oberen Boden (y 2,0).
+
+## Lagerschild an den Lesestellen (gerechnet mit `_pruefung/schild.mjs`)
+
+Regel (Clautz, 22.10.2026): An Lesestellen ist die Tafel ganz im Bild (unterhalb der Kopfzeile, oberste 64 px frei) oder ganz draußen, nie angeschnitten. Dafür stehen die Stützen höher (Desktop 4,6, hochkant 5,6 statt 3,3), die Tafel liegt an S1 bis S3b über dem oberen Bildrand; S3b ist steiler (Neigung 21° statt 15°). Ergebnis für 1280 × 900, 390 × 844, 1366 × 768 und 1920 × 1080: an der Überschrift ganz im Bild (Oberkante 186 bis 283 px), an S1, S2, S3a, S3b ganz draußen.
+
+An S3b (b 0,9) stehen die drei Pakete auf und an der Brücke: Desktop 461 bis 867 px, Handy 50 bis 378 px. Die Waage liegt am Handy hinter der Kamera dieser Lesestelle (0 von 52 Ecken im Bild), am Desktop unter der Brücke im Vordergrund, ohne sie zu kreuzen.

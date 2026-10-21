@@ -28,11 +28,13 @@ export default function (K) {
   }
 
   // ---------- Bogen ----------
-  K.sheet(-7.9, 7.9, -8.2, 5.25);
+  K.sheet(-7.9, 7.9, N ? -10.5 : -9.5, N ? 9.6 : 5.25);
 
   // ---------- Lagerschild mit Überschrift (zwei Stützen, eine Tafel), steht als erstes auf ----------
   F.part("schild", 0, .07);
-  const SZ = -3.6, LH = 3.3, BH = .85, so = { over: .03 };
+  // Stützen so hoch, dass die Tafel an allen Lesestellen außer der eigenen ganz über dem Bild liegt (gerechnet, _pruefung/schild.mjs);
+  // hochkant ist das Bild steiler, dort höher
+  const SZ = -3.6, LH = N ? 5.6 : 4.6, BH = .85, so = { over: .03 };
   const legL = K.panel(R, [-2.6, SZ], [-2.4, SZ], [0, -1], .18, .08, Q, so);
   const legR = K.panel(R, [2.4, SZ], [2.6, SZ], [0, -1], .18, .08, Q, so);
   K.P(legL, [[0, 0], [.2, 0], [.2, LH], [0, LH]], SIGN, [.5, .5, 0, .5]);
@@ -86,14 +88,16 @@ export default function (K) {
 
   // ---------- Waage vorn: Sockel mit Satzteil S3a, Säule, Balken und Schalen ----------
   F.part("waage", .1, .08);
-  const plat = block(R, -1.55, 1.55, 4.3, 2.6, .42, .36, .05, { col: SIGN, scol: SIGN });
-  const PZh = 2.75;
+  // Hochkant steht sie weiter vorn, hinter der Kamera der Lesestelle S3b (sonst läge der Balken quer vor der Brücke)
+  const WZ = N ? 4.4 : 0;
+  const plat = block(R, -1.55, 1.55, 4.3 + WZ, 2.6 + WZ, .42, .36, .05, { col: SIGN, scol: SIGN });
+  const PZh = 2.75 + WZ;
   const pil = K.panel(plat.L, [-.35, PZh], [.35, PZh], [0, 1], .40, .05, Q, { over: .04 });
   K.P(pil, [[0, 0], [.7, 0], [.55, .1], [.15, .1]], METAL);
   K.P(pil, [[.29, .1], [.41, .1], [.40, 1.15], [.30, 1.15]], METAL);
-  // Pendeln: anfahren, zweimal über das Gleichgewicht hinaus, einpendeln
-  const swing = x => 1 - Math.cos(3 * Math.PI * x) * (1 - x) * (1 - x);
-  const TH = -.14, TW0 = .70, TWD = .10;
+  // Pendeln beim Durchrechnen: schlägt nach beiden Seiten aus, wird ruhiger und kommt waagerecht zur Ruhe (kein Ergebnis vorweg)
+  const swing = x => Math.sin(3 * Math.PI * x) * (1 - x) * (1 - x);
+  const TH = -.16, TW0 = .70, TWD = .10;
   const piv = pil.uv(.35, 1.2);
   const beam = F.spin(pil, piv, TH, TW0, TWD, { ease: swing });
   F.poly(beam, [pil.uv(-.7, 1.17), pil.uv(1.4, 1.17), pil.uv(1.4, 1.23), pil.uv(-.7, 1.23)], DARK, .5);
@@ -139,8 +143,9 @@ export default function (K) {
   const packs = [];
   for (let i = 0; i < 3; i++) {
     const cx = SX0 + (i + .5) * cw;
-    // das der Brücke nächste fährt zuerst
-    const sl = F.slide(std.boards[2], [PT[i] - cx, 0, 0], .84 + (2 - i) * .025, .06, { over: .012, fresh: 1 });
+    // alle drei fahren gemeinsam als Zug los (gleicher Lauf, die Abstände ziehen sich von 1,13 auf 0,75 zusammen);
+    // an der Lesestelle S3b (b .9) stehen sie mittig auf und an der Brücke
+    const sl = F.slide(std.boards[2], [PT[i] - cx, 0, 0], .866, .09, { over: .012, fresh: 1 });
     const pk = block(sl, cx - PKW / 2, cx + PKW / 2, -.45, -.85, PKH, .40 + i * .012, .04, { col: BOX, scol: BOX2 });
     icon[i](pk.fr, PKW / 2);
     F.line(pk.L, [cx, -.45], [cx, -.85], .6, DARK);
@@ -196,7 +201,7 @@ export default function (K) {
     s2: { prints: [T2], b: .64, px: pxD, pitch: 14, yaw: 10, sx: .2, sy: .42, npitch: 14, nyaw: 0, nsy: .5 },
     // tief im Bild liegende Drucke erscheinen durch die Neigung etwas kleiner: Sollgröße dort angehoben (gerechnet 19–20 bzw. 16 px)
     s3a: { prints: [T3], b: .76, px: (W, H) => pxD(W, H) * 1.1, pxN: 17.8, pitch: 18, sy: -.5, npitch: 18, nsy: -.45 },
-    s3b: { prints: [T4], b: .9, px: (W, H) => pxD(W, H) * 1.05, pxN: 17, pitch: 15, sy: -.25, npitch: 16, nsy: -.25 }
+    s3b: { prints: [T4], b: .9, px: (W, H) => pxD(W, H) * 1.1, pxN: 17, pitch: 21, sy: -.25, npitch: 16, nsy: -.25 }
   };
   return {
     fov: 32, fovN: 44,
@@ -204,10 +209,10 @@ export default function (K) {
     stops: Object.values(S),
     keys: [
       // Start: über dem flach liegenden Schild, Überschrift lesbar im Bogen (Blickhöhe 55°)
-      { w: 0, b: 0, cam: V(0, 10.65, .13), tgt: V(0, 0, -7.33), camN: V(0, 11.88, 1.0), tgtN: V(0, 0, -7.33) },
+      { w: 0, b: 0, cam: V(0, 10.65, -1.17), tgt: V(0, 0, -8.63), camN: V(0, 11.88, -1.3), tgtN: V(0, 0, -9.63) },
       // Bastellinien fertig: Überblick über den Bogen
       // eingepasst (_pruefung/fit.mjs): Desktop alle Teile 70 bis 810 px, Handy Regale, Brücke, Waage, Gebühren 6 bis 384 px breit
-      { w: .6, b: .18, cam: V(.12, 18.89, 10.88), tgt: V(.12, -.46, -.75), camN: V(-.75, 24.77, 15.99), tgtN: V(-.75, -.2, .99) },
+      { w: .6, b: .18, cam: V(.11, 20.85, 11.52), tgt: V(.11, -.51, -1.31), camN: V(-.75, 23.62, 17.92), tgtN: V(-.75, -.38, 3.5) },
       { w: .8, stop: S.head },
       // Aufbau fertig: das ganze Lager, Blickhöhe 28°
       // Desktop: ganzes Lager (Blickhöhe 22°, eingepasst 30 bis 1250 px); Handy: Regal nach Maß und Brücke (Blickhöhe 20°), sonst wäre der Anflug auf S1 zu steil
@@ -217,7 +222,7 @@ export default function (K) {
       { w: .7, stop: S.s3a },
       { w: .7, stop: S.s3b },
       // Schluss: Überblick
-      { w: .6, b: 1, cam: V(2.07, 9.22, 17.86), tgt: V(.56, 1.5, .58), camN: V(.62, 13.53, 26.82), tgtN: V(-.7, 1.23, 1.63) }
+      { w: .6, b: 1, cam: V(2.05, 9.72, 17.63), tgt: V(.56, 2.11, .59), camN: V(.65, 12.37, 27.43), tgtN: V(-.58, .92, 3.98) }
     ]
   };
 }
