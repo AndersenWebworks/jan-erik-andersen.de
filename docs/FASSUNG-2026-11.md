@@ -138,6 +138,16 @@ Maßstab für jede Formulierung: Was ergibt für Agenturen, Unternehmen und Leut
 
 Umsetzung in `entwurf-2026-11/seite/` über den Zusammenbau-Chat.
 
+## Stand: Prototyp ganze Seite (22.10.2026)
+
+`entwurf-2026-11/seite/` (Drehbuch: `seite/DREHBUCH.md`): alle Szenen auf einer Kamerabahn von der Eröffnung (Variante C mit Podest) bis zum Kontakt, gemeinsamer Baukasten (`kern.js`, `falt.js`) aus allen Szenen-Kopien mit Konstruktionsphase in allen Szenen, roter Faden durchgehend, Marke N4 im Header, Favicons aus `marke/`, HTML-Vorbild für Name und Text im ersten Bild, Fallback ohne WebGL mit ganzem Seitentext. Neu: Gestaltung als Staffelei (leere Blätter in den Formaten der drei Arbeiten), Platzhalter für Take the Gloves Off und „Außerdem“. Die Inhaltsantworten vom 22.10. sind eingearbeitet.
+
+- Länge: 73 Bildschirmhöhen am Desktop, 74 am Handy (je Szene im Drehbuch).
+- Rechnerisch geprüft: alle Lesestellen ganz im Rahmen bei 1280 × 900 und 390 × 844, nie eine frühere Szene im Bild.
+- Schnittstellen/WBG und Abschluss stehen als je zwei Ausschnitte in der Welt, weil der Seitentext Gestaltung bzw. Werdegang und Stimmen dazwischen setzt.
+- Sichtprüfung über den Webchat-Browser mit 26 Bildern (alle Szenen am Desktop, fünf Stellen am Handy, zwei Übergänge); dabei sechs Fehler gefunden und behoben (Vorbild bei Einstieg mitten auf der Seite, Raster an Lesestellen, durchscheinende Blatttitel, Linien durch die Navigation, Fadenende außerhalb des Umschlags, angeschnittene Kontaktkarten am Handy).
+- Offen: Länge, leere Übergänge mit Faden durch weißen Raum, Staffelei liest sich von vorn als Tafel, kopflastige Handybilder (Gerwing, Stimmen), Satzteile statt ganzer Sätze an einzelnen Lesestellen aus den Einzelszenen, Richtungswechsel an Szenengrenzen (siehe Drehbuch).
+
 ## Offen (in dieser Reihenfolge abfragen)
 
 1. Fließtext: A oder B (siehe oben)

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Jan-Erik Andersen · Webentwicklung (Entwurf Seite)</title>
+<style>
+@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4.woff2") format("woff2"); font-weight: 200 800; font-style: normal; }
+@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4-Italic.woff2") format("woff2"); font-weight: 200 800; font-style: italic; }
+:root {
+  --bg: #ffffff;
+  --ink: #303033;
+  --muted: #66666a;
+  --red: #d40235;
+  --serif: "Newsreader", Georgia, serif;
+  --sans: "Schibsted Grotesk", system-ui, sans-serif;
+  --pad: clamp(18px, 4vw, 56px);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); }
+body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
+::selection { background: var(--red); color: #fff; }
+:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+.track { height: 6000vh; }
+
+.top { position: fixed; z-index: 2; inset: 0 0 auto 0; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 20px var(--pad); font: 500 13px/1.3 var(--sans); letter-spacing: .02em; }
+.top .mark { color: var(--ink); text-decoration: none; opacity: 0; transition: opacity .6s; }
+/* Lichthof um Marke und Navigation: Bauteile und Linien der Szenen laufen nie durch die Schrift */
+.top .mark, .top nav a { text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 10px #fff, 0 0 14px #fff; }
+/* Marke N4: Newsreader 380, Andersen kursiv 340, roter Schlusspunkt, gestrichelte Falz */
+.n4 { position: relative; display: inline-block; font-family: "Newsreader N4", Georgia, serif; font-weight: 380; font-style: normal; letter-spacing: -.018em; line-height: 1; white-space: nowrap; padding-bottom: .14em; }
+.n4 i { font-weight: 340; }
+.n4 .dot { display: inline-block; width: .17em; height: .17em; margin-left: .01em; border-radius: 50%; background: var(--red); }
+.n4 .fold { position: absolute; left: -.06em; right: -.06em; top: .775em; border-bottom: .014em dashed #8f8a80; }
+.top .n4 { font-size: 20px; }
+.top .n4 .dot { width: .2em; height: .2em; }
+.top .n4 .fold { border-bottom-width: 1px; }
+.scrolled .top .mark { opacity: 1; }
+.top nav { display: flex; gap: 22px; }
+.top nav a { color: var(--ink); text-decoration: none; }
+.top nav a:hover { color: var(--red); }
+
+/* Vorbild: Name und Unterzeile stehen sofort, bis die Lettern im Bild aufgestanden sind (Lage wie im Startbild: Stufenkante = Bildmitte) */
+.vorbild { position: fixed; z-index: 1; left: 0; right: 0; top: 0; height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; pointer-events: none; transition: opacity .45s; }
+.vorbild .n4 { font-size: min(15.3vh, 9.6vw); padding-bottom: 0; }
+.vorbild p { position: absolute; top: 100%; margin-top: 2.6vh; font: 500 min(2.4vh, 1.7vw)/1.4 var(--sans); letter-spacing: .05em; color: var(--muted); text-align: center; }
+.vorbild .zl { display: inline; }
+.vorbild.weg { opacity: 0; }
+.nogl .vorbild { display: none; }
+@media (max-aspect-ratio: 1/1) {
+  .vorbild { height: 47vh; }
+  .vorbild .n4 { font-size: min(9vh, 19vw); line-height: 1.15; text-align: center; white-space: normal; }
+  .vorbild .zl { display: block; }
+  .vorbild p { font-size: 4.1vw; }
+}
+
+.hint { position: fixed; z-index: 2; left: 50%; bottom: 76px; transform: translateX(-50%); font: 500 12px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); transition: opacity .5s; pointer-events: none; white-space: nowrap; }
+.hint::after { content: ""; display: block; width: 1px; height: 26px; margin: 10px auto 0; background: var(--ink); opacity: .5; }
+.hint.off { opacity: 0; }
+
+.controls { position: fixed; z-index: 3; right: var(--pad); bottom: 22px; display: flex; gap: 8px; }
+.controls button { appearance: none; width: 42px; height: 42px; display: grid; place-items: center; background: #fff; border: 1px solid var(--ink); border-radius: 2px; color: var(--ink); cursor: pointer; }
+.controls button:hover { color: var(--red); border-color: var(--red); }
+.controls svg { width: 16px; height: 16px; }
+
+.bar { position: fixed; z-index: 2; left: var(--pad); right: var(--pad); bottom: 0; height: 1px; background: rgba(48,48,51,.15); }
+.bar i { display: block; height: 100%; width: 0; background: var(--ink); }
+
+.draft { position: fixed; z-index: 3; left: var(--pad); bottom: 22px; display: flex; gap: 14px; align-items: center; font: 500 12px/1 var(--sans); color: var(--muted); }
+.draft b { font-weight: 500; letter-spacing: .08em; text-transform: uppercase; font-size: 11px; background: var(--ink); color: #fff; padding: 7px 10px; border-radius: 2px; }
+
+/* Ohne WebGL: der ganze Seitentext als normale Seite, Kontaktwege als Links */
+.nogl main.sr { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; padding: 16vh var(--pad) 2rem; max-width: 42em; }
+.nogl main.sr h1 { font: 380 clamp(40px, 7vw, 88px)/1.05 "Newsreader N4", Georgia, serif; letter-spacing: -.018em; }
+.nogl main.sr h1 i { font-weight: 340; }
+.nogl main.sr h2 { font: 400 clamp(30px, 4.6vw, 52px)/1.1 "Newsreader N4", Georgia, serif; margin: 2em 0 .5em; }
+.nogl main.sr h3 { font: 400 clamp(22px, 2.6vw, 28px)/1.2 "Newsreader N4", Georgia, serif; margin: 1.4em 0 .3em; }
+.nogl main.sr p, .nogl main.sr li, .nogl main.sr blockquote { font-size: 18px; margin-top: .7em; }
+.nogl main.sr .meta, .nogl main.sr cite, .nogl main.sr .y { display: block; font-size: 14px; color: var(--muted); font-style: normal; letter-spacing: .03em; }
+.nogl main.sr ol { list-style: none; }
+.nogl main.sr li small { display: block; font-size: 16px; }
+.nogl main.sr footer { margin-top: 3em; font-size: 14px; color: var(--muted); }
+.nogl #stage, .nogl .controls, .nogl .hint, .nogl .track, .nogl .bar { display: none; }
+/* Kontaktwege als echte Links: im Bild klickbar (Raycast), im Dokument als Links für Tastatur und Screenreader */
+.kontaktwege { position: fixed; z-index: 5; left: 0; bottom: 0; }
+.kontaktwege a { position: absolute; left: var(--pad); bottom: 78px; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; color: var(--ink); text-decoration: none; }
+.kontaktwege a:focus-visible { width: auto; height: auto; overflow: visible; clip: auto; background: #fff; border: 1px solid var(--ink); padding: 10px 14px; font: 500 15px/1.2 var(--sans); }
+.nogl .kontaktwege { position: static; padding: 0 var(--pad) 5rem; max-width: 42em; }
+.nogl .kontaktwege a { position: static; display: block; width: auto; height: auto; overflow: visible; clip: auto; padding: .35em 0; font-size: 18px; text-decoration: underline; text-underline-offset: 3px; }
+.nogl .draft { position: static; padding: 0 var(--pad) 2rem; }
+
+@media (max-width: 560px) {
+  .top { font-size: 12px; padding-top: 16px; }
+  .top nav { gap: 14px; }
+  .draft b { display: none; }
+  .draft { gap: 10px; bottom: 34px; }
+  .hint { bottom: 86px; }
+}
+</style>
+</head>
+<body>
+<canvas id="stage" aria-hidden="true"></canvas>
+<header class="top">
+  <a class="mark n4" href="#start" data-scene="eroeffnung" aria-label="Jan-Erik Andersen"><span aria-hidden="true">Jan-Erik <i>Andersen</i><span class="dot"></span><span class="fold"></span></span></a>
+  <nav aria-label="Hauptnavigation"><a href="#arbeit" data-scene="gerwing">Projekte</a><a href="#leistungen" data-scene="betreuung">Leistungen</a><a href="#kontakt" data-scene="kontakt">Kontakt</a></nav>
+</header>
+<div class="vorbild" aria-hidden="true"><span class="n4"><span class="zl">Jan-Erik </span><span class="zl"><i>Andersen</i><span class="dot"></span></span></span><p>Webentwicklung · Raum Plau am See · remote</p></div>
+<script src="./vorbild.js"></script>
+<main class="sr">
+  <section id="start">
+    <h1>Jan-Erik <i>Andersen</i></h1>
+    <p class="meta">Webentwicklung · Raum Plau am See · remote</p>
+    <p>Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p>
+  </section>
+  <section id="arbeit">
+    <h2>Gerwing</h2>
+    <p class="meta">WooCommerce · seit 2023</p>
+    <h3>Pflaster nach Fläche bestellen</h3>
+    <p>Für Gerwing habe ich 2023 einen WooCommerce-Shop gebaut, der Pflastersteine, Terrassenplatten und Stufen so verkauft, wie man sie bestellt: nach Fläche.</p>
+    <p>Kunden geben ihre Quadratmeter ein, der Shop rechnet sie in ganze Steine um, ermittelt Gewicht und Fracht nach Postleitzahl und leitet die Bestellung an den zuständigen Händler weiter. Seitdem betreue ich den Shop und entwickle ihn laufend weiter.</p>
+  </section>
+  <section id="leistungen">
+    <h2>Was ich <i>mache</i></h2>
+    <h3>Betreuung und Absicherung</h3>
+    <p>Zwischen dem Bekanntwerden einer Lücke in einem WordPress-Plugin und dem ersten Angriff vergehen oft nur Stunden. Ich halte Ihre Seite deshalb laufend aktuell und sehe regelmäßig nach, ob sie sauber läuft.</p>
+    <h3>Modernisierung</h3>
+    <p>Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen. Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.</p>
+    <h3>Shops und Shop-Wechsel</h3>
+    <p>Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.</p>
+    <h3>Schnittstellen und eigene Werkzeuge</h3>
+    <p>Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen, bei WBG etwa mit Salesforce und Concludis. Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt.</p>
+    <h3>Gestaltung</h3>
+    <p>Für mich gehört Gestaltung zur Entwicklung. Ich entwerfe Erscheinungsbilder und Oberflächen selbst oder setze vorhandene Entwürfe sorgfältig um. Beispiele: [Take the Gloves Off, nach Zustimmung], das NOVUM-Cover und das Ausstellungsmotiv „100 Jahre Audi“.</p>
+  </section>
+  <section id="weitere">
+    <h2>Weitere <i>Arbeit</i></h2>
+    <p class="meta">2023 bis 2025 · für die Runden Group</p>
+    <h3>WBG Pooling</h3>
+    <p>Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.</p>
+    <p class="meta">Ehrenamtlich</p>
+    <h3>Take the Gloves Off</h3>
+    <p>[Ein Satz zum Erscheinungsbild, nach Abstimmung]</p>
+    <p>Außerdem: Onkologie Laatzen, Mindblossom und Soundhealing Hamburg, der digitale Wirkungsbericht für Seniorpartner in School, Bäckerei Behrens. [je ein Satz nach erneuter Sichtung]</p>
+  </section>
+  <section id="arbeitsweise">
+    <h2>Wie ich <i>arbeite</i></h2>
+    <p>Ich arbeite mit aktuellen KI-Werkzeugen und habe dafür eigene Abläufe entwickelt. Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge. Entscheidungen und Verantwortung bleiben bei mir, und ausgeliefert wird nur, was ich geprüft habe.</p>
+  </section>
+  <section id="werdegang">
+    <h2>Werdegang</h2>
+    <ol>
+      <li><span class="y">seit 2023</span>Gerwing<small>Umsetzung und laufende Betreuung des Onlineshops</small></li>
+      <li><span class="y">2023 bis 2025</span>Runden Group<small>WBG Pooling und viele weitere Websites und Anwendungen der Firmengruppe</small></li>
+      <li><span class="y">2017 bis 2023</span>Tangram Werbeagentur<small>Frontend-Entwicklung, unter anderem für Nissen, BIG Arbeitsschutz und EMPORE</small></li>
+      <li><span class="y">2017</span>YOOtheme<small>Support Management</small></li>
+      <li><span class="y">seit 2010</span>Freiberufliche Webprojekte<small>seit 2018 als Andersen Webworks</small></li>
+      <li><span class="y">2007 bis 2010</span>HTK Hamburg<small>Zertifikat Multimedia Design</small></li>
+      <li><span class="y">2010 bis 2017</span>Games<small>Spielprototypen in Flash und Haxe, danach Qualitätssicherung bei Goodgame Studios und Deep Silver FISHLABS</small></li>
+      <li><span class="y">2000 bis 2006</span>Pixel Arrays<small>erste Selbstständigkeit</small></li>
+    </ol>
+  </section>
+  <section id="stimmen">
+    <h2>Stimmen</h2>
+    <blockquote><p>Seniorpartner in School (SiS) ist eine bundesweit agierende Sozialorganisation. Ein gut aufgestellter digitaler Wirkungsbericht ist für unsere Arbeit wichtig. Jan-Erik und die kompetente Texterin Annemarie haben das für uns neue Format professionell und barrierefreundlich aufgesetzt. Super Teamarbeit, verlässlich und engagiert. SiS sagt DANKE!</p><cite>Karin, Seniorpartner in School · Google-Bewertung</cite></blockquote>
+    <blockquote><p>Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich mit Andersen Webworks seit nun mehreren Jahren einen zuverlässigen Partner gefunden zu haben. Professionelles Webdesign das mich immer wieder überrascht, meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff, so setzt man sich von der Konkurrenz ab!</p><cite>Corvin Jädicke, ai-coustics · Google-Bewertung</cite></blockquote>
+  </section>
+  <section id="agenturen">
+    <h2>Für <i>Agenturen</i></h2>
+    <p>Ich steige in laufende Projekte ein, arbeite mich in bestehende Themes und Plugins ein und halte mich an Ihre Abläufe und Werkzeuge.</p>
+    <p>Konditionen und freie Kapazität nenne ich Ihnen auf Anfrage.</p>
+  </section>
+  <section id="kontakt">
+    <h2>Schreiben Sie mir, <i>worum es geht.</i></h2>
+  </section>
+</main>
+<nav class="kontaktwege" aria-label="Kontakt">
+  <a href="mailto:mail@andersen-webworks.de">Mail: mail@andersen-webworks.de</a>
+  <a href="tel:+4938733270015">Telefon: +49 38733 270015</a>
+  <a href="https://www.linkedin.com/in/andersen-erik/">LinkedIn: andersen-erik</a>
+</nav>
+<div class="track"></div>
+<div class="hint" id="hint">Scrollen</div>
+<div class="controls">
+  <button id="prev" type="button" aria-label="Vorige Szene"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 3 5 8l5 5"/></svg></button>
+  <button id="next" type="button" aria-label="Nächste Szene"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m6 3 5 5-5 5"/></svg></button>
+</div>
+<div class="draft"><b>Entwurf Seite</b><span id="szene" aria-hidden="true"></span></div>
+<div class="bar"><i id="bar"></i></div>
+
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module" src="./main.js"></script>
+</body>
+</html>
