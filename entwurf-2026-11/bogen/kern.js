@@ -71,9 +71,11 @@ export function start(renderer, VARIANTS) {
     cv.width = Math.ceil(wMax + padX * 2);
     cv.height = Math.ceil(padY * 2 + (lines.length - 1) * lh + em * 1.18);
     setF(); x.fillStyle = opt.col || INK; x.textBaseline = "alphabetic";
-    // opt.outline: nur die Kontur (Abdruck der Lettern als feine Schnittlinie im Bogen)
+    // opt.outline: nur die Kontur (Abdruck der Lettern als feine Schnittlinie im Bogen); mit opt.fillCol zuerst eine zarte Füllung
     if (opt.outline) { x.strokeStyle = opt.col || INK; x.lineWidth = opt.outline; x.lineJoin = "round"; }
-    lines.forEach((l, i) => x[opt.outline ? "strokeText" : "fillText"](l, padX + (opt.align === "center" ? (wMax - ws[i]) / 2 : 0), padY + em * .94 + i * lh));
+    const at = i => [padX + (opt.align === "center" ? (wMax - ws[i]) / 2 : 0), padY + em * .94 + i * lh];
+    if (opt.outline && opt.fillCol) { x.fillStyle = opt.fillCol; lines.forEach((l, i) => x.fillText(l, ...at(i))); }
+    lines.forEach((l, i) => x[opt.outline ? "strokeText" : "fillText"](l, ...at(i)));
     const h = cv.height / em;
     return { tex: texOf(cv), w: cv.width / em, h, padX: padX / em, tw: wMax / em, bfb: h - (padY / em + .94 + (lines.length - 1) * lh / em), rows: ws.map(v => v / em) };
   }
@@ -123,9 +125,17 @@ export function start(renderer, VARIANTS) {
       onFlat(nd, pr, x, z, lift = .002) { F.attach(nd, pr.mesh, [x, z], [0, -1], 1, lift); return pr; },
       // Lettern: Zeile steht aus dem Bogen auf (Scharnier an der Grundlinie), im Bogen bleibt ihr Abdruck.
       // x: linke Kante der Schrift, zb: Grundlinie im Bogen. Läuft nach der Zeit seit dem Laden (Name sofort lesbar).
+      // opt.foot: Grundlinie genau auf dem Scharnier (Fuß der Lettern = Vorderkante des Abdrucks);
+      // opt.imprint { fill, col, line }: Abdruck als zarte Schnittkante statt gefüllter Fläche (ohne beides: wie bisher, Variante A)
       word(lines, e, x, zb, t0, d, opt = {}) {
-        const pr = mkPrint(lines, e, -1, opt), im = opt.noImprint ? null : mkPrint(lines, e, -1, { ...opt, col: IMPRINT });
-        const W = pr.t.tw * e, base = .2 * e;
+        const io = opt.imprint;
+        const pr = mkPrint(lines, e, -1, opt), im = opt.noImprint ? null : mkPrint(lines, e, -1, io ? { ...opt, col: io.col, fillCol: io.fill, outline: io.line } : { ...opt, col: IMPRINT });
+        // heller Abdruck: Textur vormultipliert, sonst mischen die transparenten (schwarzen) Randpixel beim Verkleinern dunkle Säume ein
+        if (io && im) { im.t.tex.premultiplyAlpha = true; Object.assign(im.mat, { blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor }); }
+        const W = pr.t.tw * e, base = opt.foot ? 0 : .2 * e;
+        // io.close: der Abdruck schließt sich nach dem Aufstehen (Sekunden nach Ende der Bewegung), es bleibt der Schlitz an der Fußlinie
+        if (io && im && io.close !== undefined) { im.tOff = t0 + d + io.close; im.tDur = io.closeDur || .7; }
+        if (io && io.slit) F.line(opt.par || R, [x - .015, zb], [x + W + .015, zb], io.slit, COL.INK, .0009);
         const L = K.panel(opt.par || R, [x, zb], [x + W, zb], [0, -1], t0, d, opt.ang || Q, { clock: "t", nocut: 1, nofold: 1, over: .07 });
         const u = (pr.w / 2 - pr.t.padX * e), v = base + (pr.h / 2 - pr.t.bfb * e);
         F.attach(L, pr.mesh, L.uv(u, v), [0, -1], 1, .0015);
@@ -267,7 +277,9 @@ export function start(renderer, VARIANTS) {
     if (fit) px = Math.min(px, fit * W / (s.wm / s.e));
     const depth = s.e * H / (2 * TAN * px);
     const yaw = (nar && s.nyaw !== undefined ? s.nyaw : s.yaw || 0) * PI / 180, pitch = (nar && s.npitch !== undefined ? s.npitch : s.pitch) * PI / 180;
-    const sx = nar ? (s.nsx || 0) : (s.sx || 0), sy = nar ? (s.nsy || 0) : (s.sy || 0);
+    // sx/sy dürfen auch Funktionen (W, H) sein (Bildaufteilung je Seitenverhältnis)
+    const fv = v => typeof v === "function" ? v(W, H) : v || 0;
+    const sx = nar ? fv(s.nsx) : fv(s.sx), sy = nar ? fv(s.nsy) : fv(s.sy);
     const h = Math.abs(s.N.y) > .7 ? s.Y.clone() : s.N.clone().negate(); h.y = 0; h.normalize();
     const c = Math.cos(yaw), sn = Math.sin(yaw); h.set(h.x * c + h.z * sn, 0, -h.x * sn + h.z * c);
     const Fw = h.clone().multiplyScalar(Math.cos(pitch)).add(V(0, -Math.sin(pitch), 0)).normalize();
@@ -361,8 +373,9 @@ export function start(renderer, VARIANTS) {
     rissMat.uniforms.uB.value = b;
     for (const a of anims) a(b, time);
     for (const pr of prints) {
-      if (pr.on < 0 && pr.off === undefined) continue;
-      const o = (pr.on < 0 ? 1 : sm((b - pr.on) / pr.fade)) * (pr.off === undefined ? 1 : 1 - sm((b - pr.off) / .03));
+      if (pr.on < 0 && pr.off === undefined && pr.tOff === undefined) continue;
+      let o = (pr.on < 0 ? 1 : sm((b - pr.on) / pr.fade)) * (pr.off === undefined ? 1 : 1 - sm((b - pr.off) / .03));
+      if (pr.tOff !== undefined) o *= 1 - sm((tl - pr.tOff) / pr.tDur);
       pr.mat.opacity = o; pr.mesh.visible = o > .001;
     }
     updateThread(b);
