@@ -18,19 +18,16 @@ import abschluss from "./abschluss.js";
 // an einer Lesestelle am Szenenanfang bzw. -ende (kern.js). Übergang tr: Fahrt in die Szene (siehe TR).
 // Gerechnet mit tmp/seite-pruefung/rechnen.mjs, fenster.mjs und tmp/grundstueck/fahrt.mjs (nicht im Repo).
 // Tempo (Erik, 22.10.): „man kommt gar nicht zum Ansehen und Genießen“. Alle Szenenlängen und Übergänge sind länger gestreckt: LEN für den Scrollweg
-// jeder Szene (Aufklapp- und Bauanimationen laufen in Fenstern von b, sie dehnen sich mit), TRF für die Flüge zwischen den Parzellen.
+// jeder Szene (Aufklapp- und Bauanimationen laufen in Fenstern von b, sie dehnen sich mit),.
 // Lesestellen und Bahnen bleiben, nur ihr Scrollweg wächst (kein Bremsen, kein Scroll-Lock).
-const LEN = 1.4, TRF = 1.3;
+const LEN = 1.4;
 const L = (d, n = d) => ({ d: Math.round(d * LEN), n: Math.round(n * LEN) });
-const Lr = (d, n = d) => ({ d: Math.round(d * TRF), n: Math.round(n * TRF) });
-// Übergang tr (Fahrt in die Szene): 38 vh + 0,5 vh je Einheit Weglänge der Fahrt (Aufstieg zur Überblickspose, Gleiten, Absinken), 50 … 96 vh.
-// Weglängen aus tmp/grundstueck/fahrt.mjs (Anordnung in kern.js layout(), frühere Überblicksflüge).
-// Seit der Verfolgungsfahrt (kern.js chaseTrack, Erik 22.10.: Kamera folgt dem roten Punkt) kommt als dritter und vierter Wert die Länge des Weges des Punktes
-// in Einheiten (d, n; gemessen mit tmp/verfolgung/len.mjs): der Flug dauert mindestens Weg / 0,5 Einheiten je vh (höchstens 200 vh), damit der Punkt nie schneller läuft
-const TR = (ld, ln = ld, pd = 0, pn = pd) => {
-  const b = Lr(Math.min(96, Math.max(50, 38 + .5 * ld)), Math.min(96, Math.max(50, 38 + .5 * ln))), f = (v, w) => Math.max(v, Math.min(200, Math.round(w / .5)));
-  return { d: f(b.d, pd), n: f(b.n, pn) };
-};
+// Übergang tr (Fahrt in die Szene): Die Kamera folgt dem roten Punkt (kern.js chaseTrack, Erik 22.10.: Kamera folgt dem roten Punkt); die Fahrt dauert so
+// lange, dass der Punkt höchstens mit 0,45 Einheiten je vh läuft (Weg des Punktes in Einheiten, d: Breitbild, n: hochkant, gemessen mit
+// tmp/verfolgung/len.mjs auf dem Raster), mindestens 85 und höchstens 220 vh. Eine Wende zwischen zwei Bahnen ist der längste Weg, ein Schritt in der Bahn der kürzeste.
+const SPEED = .45;
+const tr1 = w => Math.round(Math.min(220, Math.max(85, w / SPEED)));
+const TR = (pd, pn = pd) => ({ d: tr1(pd), n: tr1(pn) });
 
 // Faden je Szene (Szenenkoordinaten x, z bzw. x, y, z): Eingang an der Vorderkante, Ausgang an der Hinterkante, Umwege um Bauteile
 const lane = (I, dx = .35) => {
@@ -39,40 +36,40 @@ const lane = (I, dx = .35) => {
   return { in: [x0 + dx, z1 - .2], out: [x0 + dx, z0 + .2] };
 };
 
-// Anordnung der Parzellen auf dem Tisch (kern.js layout()): dir = Blickrichtung der Bahn ab dieser Szene (N, E, S, W; je Breitbild d und hochkant n,
-// fehlt sie, gilt die der vorigen Szene), lane = Breite der Bahn an deren erster Szene (größte Parzellenbreite, Ausrichtung mittig auf der Achse).
-// Zwischen zwei Bahnen steht eine Eckparzelle quer (Breitbild: Shops, Wie ich arbeite; hochkant: Gestaltung). short = Name auf der Karte.
-// Breitbild: drei Reihen (Eröffnung … Modernisierung | Schnittstellen … Außerdem | Werdegang … Kontakt), hochkant: zwei Bahnen.
+// Anordnung der Parzellen (kern.js layout(), slotOf()): Raster wie ein Setzkasten, gleich große Parzellen in der Reihenfolge dieser Liste, Schlangenlinie
+// durch das Raster (Breitbild: vier Spalten zu drei Feldern, hochkant: vier Reihen zu drei Feldern, das letzte Feld bleibt frei). Richtung und Lage ergeben
+// sich aus dem Platz, nicht aus der Szene. short = Name auf der Karte. faden: Eingang (Vorderkante) und Ausgang (Hinterkante) des Fadens in Szenenkoordinaten,
+// kern.js legt sie in die Parzelle (Zuschnitt auf den Rand) und verbindet sie mit geraden Strecken und runden Ecken.
 export const SEQ = [
-  { name: "eroeffnung", label: "Eröffnung", short: "Eröffnung", dir: { d: "E", n: "S" }, lane: { d: 32, n: 40 }, mod: eroeffnung, len: L(590), tr: L(0),
+  { name: "eroeffnung", label: "Eröffnung", short: "Eröffnung", mod: eroeffnung, len: L(590), tr: L(0),
     faden: () => ({}) },
-  { name: "gerwing", label: "Gerwing", short: "Gerwing", mod: gerwing, len: L(640), tr: TR(103.8, 156.3, 27.5, 31.7),
+  { name: "gerwing", label: "Gerwing", short: "Gerwing", mod: gerwing, len: L(1000), tr: TR(44.6, 44.5),
     // Eingang und Ausgang kommen aus der Szene selbst (gerwing.js: Eingang von vorn zum Laptop, Ausgang hinten rechts neben dem Haus als Ende von thread.post)
     faden: d => d.faden },
-  { name: "betreuung", label: "Betreuung und Absicherung", short: "Betreuung", mod: betreuung, len: L(440 * .8), tr: TR(85.7, 140.5, 33.5, 31.4),
+  { name: "betreuung", label: "Betreuung und Absicherung", short: "Betreuung", mod: betreuung, len: L(440 * .8), tr: TR(42.6, 52.4),
     faden: (d, I) => ({ in: [-5.3, I.K.narrow ? 4.4 : 3.8], out: [-5.3, -3.4] }) },
-  { name: "modernisierung", label: "Modernisierung", short: "Modernisierung", mod: modernisierung, len: L(440 * .9 * 1.8), tr: TR(51.0, 62.2, 19, 19),
+  { name: "modernisierung", label: "Modernisierung", short: "Modernisierung", mod: modernisierung, len: L(440 * .9 * 1.8), tr: TR(93.0, 53.2),
     faden: (d, I) => I.K.narrow ? { in: [-6.6, 9.6], out: [-6.6, -13.2] } : { in: [-9.2, 7.0], out: [-9.2, -6.2] } },
-  { name: "shop", label: "Shops und Shop-Wechsel", short: "Shops", dir: { d: "N" }, mod: shop, len: L(520), tr: TR(92.6, 98.2, 52.9, 38.3),
+  { name: "shop", label: "Shops und Shop-Wechsel", short: "Shops", mod: shop, len: L(520), tr: TR(52.9, 106.6),
     faden: (d, I) => ({ in: [-7.75, I.K.narrow ? 9.4 : 5.05], out: [-7.75, I.K.narrow ? -10.3 : -9.3] }) },
   // Schnittstellen und WBG Pooling: eine durchgehende Szene (b 0 … 1), WBG Pooling als Beleg; #s=wbg zeigt auf die Lesestelle c (WBG-Satz)
-  { name: "schnittstellen", label: "Schnittstellen und eigene Werkzeuge", short: "Schnittstellen", dir: { d: "W" }, lane: { d: 33 }, mod: schnittstellen, len: L(650, 760), tr: TR(117.0, 132.9, 106.7, 35.5), lead: 1,
+  { name: "schnittstellen", label: "Schnittstellen und eigene Werkzeuge", short: "Schnittstellen", mod: schnittstellen, len: L(650, 760), tr: TR(42.5, 58.7), lead: 1,
     anchors: { wbg: d => d.keys.findIndex(k => k.stop && k.stop === d.names.c) },
     faden: () => ({ in: [-9.1, 18.8], out: [-9.1, -6.8] }) },
-  { name: "gestaltung", label: "Gestaltung", short: "Gestaltung", dir: { n: "E" }, optional: "./staffelei.js", pick: m => m.default, len: L(480), tr: TR(99.7, 196.8, 45.4, 73.3),
+  { name: "gestaltung", label: "Gestaltung", short: "Gestaltung", optional: "./staffelei.js", pick: m => m.default, len: L(480), tr: TR(115.5, 56.2),
     faden: (d, I) => lane(I) },
-  { name: "ausserdem", label: "Außerdem", short: "Außerdem", dir: { n: "N" }, lane: { n: 48 }, optional: "./platzhalter.js", pick: m => m.ausserdem, len: L(760, 860), tr: TR(74.9, 136.6, 34.2, 68.7),
+  { name: "ausserdem", label: "Außerdem", short: "Außerdem", optional: "./platzhalter.js", pick: m => m.ausserdem, len: L(760, 860), tr: TR(48.6, 46.1),
     faden: (d, I) => lane(I) },
   // Abschluss ist ein Modul mit zwei Szenen auf einem langen Bogen: „Wie ich arbeite“ hier, „Zusammenarbeit“ am Schluss
-  { name: "arbeitsweise", label: "Wie ich arbeite", short: "Wie ich arbeite", dir: { d: "N" }, mod: abschluss, len: L(1150 * 4.75 / 17.45 + 30, 1150 * 4.75 / 18.45 + 30), tr: TR(105.6, 66.8, 59.6, 27.1), tail: 1,
+  { name: "arbeitsweise", label: "Wie ich arbeite", short: "Wie ich arbeite", mod: abschluss, len: L(1150 * 4.75 / 17.45 + 30, 1150 * 4.75 / 18.45 + 30), tr: TR(50.3, 99.7), tail: 1,
     keys: d => d.keys.slice(0, 7), bMax: .36, clip: [-1e5, 8.5, -1e5, 1e5], ownThread: false,
     faden: () => ({ in: [-9.1, 6.3], out: [-9.1, -12.7] }) },
-  { name: "werdegang", label: "Werdegang", short: "Werdegang", dir: { d: "E" }, lane: { d: 48 }, mod: werdegang, len: L(460 + 30), tr: TR(128.7, 96.6, 64.6, 40.6), lead: 1,
+  { name: "werdegang", label: "Werdegang", short: "Werdegang", mod: werdegang, len: L(460 + 30), tr: TR(79.7, 48.2), lead: 1,
     faden: d => {
       const P = d.thread.pts, a = P[0], z = P[P.length - 1], ZB = z.z - .45;
       return { in: [a.x, a.z + 1.05], out: [z.x, ZB - .6], viaPost: [[z.x, z.y, ZB + .03], [z.x, z.y - .04, ZB - .03], [z.x, .06, ZB - .03]] };
     } },
-  { name: "agenturen", label: "Zusammenarbeit", short: "Zusammenarbeit", mod: abschluss, len: L(1150 * 5.0 / 17.45, 1150 * 5.2 / 18.45), tr: TR(119.4, 221.8, 27.1, 31.5), tail: 1,
+  { name: "agenturen", label: "Zusammenarbeit", short: "Zusammenarbeit", mod: abschluss, len: L(1150 * 5.0 / 17.45, 1150 * 5.2 / 18.45), tr: TR(37.5, 41.9), tail: 1,
     keys: d => [{ w: 0, b: .37, fromStop: d.stops.find(s => s.name === "h2"), back: 1.6, up: 1.5 }, ...d.keys.slice(8)],
     clip: [8.5, 26, -1e5, 1e5],
     // kein Raster: die Lesestellen beginnen bei b .43, kurz nach dem Szenenanfang (b .37); Gerüst und Spur bleiben

@@ -1,11 +1,11 @@
 // Durchgehende Startseite jan-erik-andersen.de, Fassung 2026-11 (entwurf-2026-11/seite/). Gemeinsamer Kern für alle Szenen.
 // Grundlage: entwurf-2026-11/bogen/kern.js. Jede Szene ist ein Modul im bisherigen Format (default (K) => { keys, stops, track, … }),
-// sie wird als Parzelle auf einen gemeinsamen Tisch gestellt: gedreht um y (Blickrichtung N, E, S, W) und verschoben, Bahnen mit Eckparzellen
-// als Reihen (siehe layout(), Richtungen in folge.js). In einer Bahn liegt jede Szene hinter der vorigen (die Kamerastellungen der späteren
-// vor dem hintersten Punkt der früheren). Eine gemeinsame Kamerabahn läuft durch alle Szenen: in der Szene ihre eigene Bahn (Zeitverzerrung,
-// Lesestellungen aus readingPose()), zwischen zwei Szenen eine stetige Fahrt (kubische Hermite-Kurve mit den Geschwindigkeiten an beiden Enden,
-// bei Kurven ein Viertelbogen mit mitdrehendem Blick). Am Ende zoomt die Kamera aus dem Kontakt zur halb isometrischen Karte des Tisches
-// (Segment "z"), dort sind die Parzellen anklickbar; der Knopf „Übersicht“ öffnet dieselbe Karte an jeder Stelle (M, blendMap()).
+// sie wird als Parzelle auf einen gemeinsamen Tisch gestellt (Raster wie ein Setzkasten: gleich große Parzellen mit gleichen Abständen, Schlangenlinie durch das
+// Raster, siehe layout() und slotOf()). Die Kamera folgt zwischen zwei Szenen dem roten Punkt am Faden (chaseTrack(), eine stetige Verfolgungsfahrt ohne Überblick);
+// in der Szene läuft ihre eigene Bahn (Zeitverzerrung, Lesestellungen aus readingPose()). Am Ende zoomt die Kamera aus der letzten Szene weit heraus zur Karte des
+// Tisches von oben (Segment "z"), dort sind die Parzellen anklickbar; der Knopf „Übersicht“ öffnet dieselbe Karte an jeder Stelle (M, blendMap()).
+// Boden: sehr großer Bogen mit zartem Raster, der zum Horizont in den Dunst ausläuft; weiche Schatten der Modelle (Tiefenkarte, shadowPass()); Farben von Dunst,
+// Schatten und Licht an einer Stelle (PAL).
 // Ein roter Faden mit Punkt läuft von der Eröffnung durch alle Szenen bis zum Kontakt-Umschlag.
 //
 // Zusammengeführt aus den Kern-Kopien der Szenen (Herkunft in Klammern):
@@ -61,12 +61,58 @@ export function seite(renderer, SEQ, opt = {}) {
   const canvas = renderer.domElement;
   renderer.setClearColor(0xffffff, 1);
   renderer.localClippingEnabled = true;
+  // ---------- Farben von Dunst, Schatten und Licht: alle an dieser einen Stelle (Palette „Mirror's Edge mit Papier“, Erik 22.10.) ----------
+  // Die Papier- und Bauteilfarben selbst setzt nicht dieser Kern (falt.js, die Szenen); hier nur, was im Kern entsteht: Boden, Parzellenbogen, Raster, Dunst,
+  // Hintergrund, Schatten und die Richtung des Lichts für die Schatten.
+  const PAL = {
+    hazeStart: "#ffffff",         // Dunst und Hintergrund am Startbild (wie das HTML-Vorbild)
+    hazeNear: "#f6f9fc",          // Dunst der mittleren Ferne (ab den ersten Scrollschritten)
+    hazeFar: "#d8ecfb",           // Dunst am Horizont, zugleich Hintergrundfarbe: sehr helles Himmelblau, kein Himmel, keine Wolken
+    shadow: "#dde6f1",            // Schattenfarbe (bläulich): das Papier wird im Schatten mit ihr multipliziert
+    shadowStrength: .85,          // Mischung zur Schattenfarbe im vollen Schatten (0 … 1)
+    ground: "#efebe3",            // Boden (Tisch) unter den Parzellen
+    plate: "#faf8f3",             // Bogen jeder Parzelle
+    gridInk: "#303033",           // Linienfarbe des Rasters am Boden
+    gridMinor: .075, gridMajor: .15,      // Deckkraft der feinen Linien (alle 2 Einheiten) und der kräftigen (alle 10)
+    light: [-.45, .8, .5]         // Richtung zum Licht (Welt), bestimmt die Richtung der Schatten
+  };
+  // Gemeinsame Uniforms aller Papier-Shader. uHaze/uHazeF: Dunstfarbe nah und fern, uSM/uSMM/uSMP: Schattenkarte (Tiefe aus Richtung des Lichts), ihre Matrix
+  // Welt → Licht und (an, Texelgröße, Stärke, Bias), uShC: Schattenfarbe.
+  const WHITE = new THREE.Color(PAL.hazeStart), hazeN = new THREE.Color(PAL.hazeNear), hazeF = new THREE.Color(PAL.hazeFar), hazeC = new THREE.Color(), hazeCF = new THREE.Color();
+  const U = { haze: { value: new THREE.Vector3(1, 1, 1) }, hazeF: { value: new THREE.Vector3(1, 1, 1) }, sm: { value: null }, smm: { value: new THREE.Matrix4() },
+    smp: { value: new THREE.Vector4(0, 1 / 1024, PAL.shadowStrength, .03) }, shc: { value: new THREE.Vector3() } };
+  { const c = new THREE.Color(PAL.shadow); U.shc.value.set(c.r, c.g, c.b); }
+  const SHADOW_GLSL = `
+    uniform vec3 uHaze; uniform vec3 uHazeF; uniform vec3 uShC; uniform sampler2D uSM; uniform mat4 uSMM; uniform vec4 uSMP;
+    // Dunstfarbe je Anteil f der Ferne (0 nah … 1 ganz im Dunst): von uHaze zu uHazeF
+    vec3 hazeAt(float f) { return mix(uHaze, uHazeF, smoothstep(.45, 1.0, f)); }
+    // weicher Schatten (Anteil 0 … 1) auf waagerechten Flächen: 12 gedrehte Proben der Tiefenkarte, Radius rund 5 Texel
+    float shadowAmt(vec3 wp, vec3 n) {
+      if (uSMP.x < .5 || n.y < .6) return 0.0;
+      vec4 sp = uSMM * vec4(wp, 1.0); vec3 sc = sp.xyz / sp.w * .5 + .5;
+      float e = min(min(sc.x, 1.0 - sc.x), min(sc.y, 1.0 - sc.y));
+      if (e <= 0.0 || sc.z >= 1.0) return 0.0;
+      float rot = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715)))) * 6.2831853, s = 0.0;
+      for (int i = 0; i < 12; i++) {
+        float r = sqrt((float(i) + .5) / 12.0), a = float(i) * 2.399963 + rot;
+        float d = texture2D(uSM, sc.xy + vec2(cos(a), sin(a)) * r * 5.0 * uSMP.y).r;
+        s += step(d, sc.z - uSMP.w);
+      }
+      return s / 12.0 * smoothstep(0.0, .06, e) * smoothstep(.2, .6, n.y);
+    }
+    // Farbe im Schatten: das Papier mal Schattenfarbe, gemischt nach Schattenanteil und Stärke
+    vec3 shaded(vec3 c, float s) { return mix(c, c * uShC, s * uSMP.z); }`;
+  // Papier-Shader der Szenen (falt.js) auf Dunstfarbe und Schatten umstellen: statt Weiß mischt die Ferne zu uHaze, Schatten dunkeln waagerechte Flächen ab
+  function patchPaper(m) {
+    if (!m || !m.isShaderMaterial || !m.fragmentShader || m.userData.hazed || m.fragmentShader.indexOf("mix(vec3(1.0), c, k)") < 0 || !m.uniforms || !m.uniforms.uFar) return;
+    m.fragmentShader = SHADOW_GLSL + m.fragmentShader.replace("vec3 c = vCol * sh * ao;", "vec3 c = vCol * sh * ao;\n    c = shaded(c, shadowAmt(vW, n));").replace("mix(vec3(1.0), c, k)", "mix(hazeAt(1.0 - k), c, k)");
+    m.uniforms.uHaze = U.haze; m.uniforms.uHazeF = U.hazeF; m.uniforms.uShC = U.shc; m.uniforms.uSM = U.sm; m.uniforms.uSMM = U.smm; m.uniforms.uSMP = U.smp;
+    m.userData.hazed = true; m.needsUpdate = true;
+  }
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, .1, 300);
   const maxAniso = renderer.capabilities.getMaxAnisotropy();
   const INK = "#303033", RED = "#d40235", IMPRINT = "#e8e4db";
-  // Abstand zwischen zwei Szenen (Welteinheiten) zusätzlich zur Kameraeinpassung
-  const GAP = opt.gap || 3;
 
   // ---------- Druck (Canvas-Textur auf der Fläche) ----------
   // Auflösung der Drucke: buildScale 1 = volle Pixeldichte, kleiner = Canvas von Anfang an klein gezeichnet (Zeichnen unter ctx.scale, die Maße
@@ -126,7 +172,7 @@ export function seite(renderer, SEQ, opt = {}) {
   const links3 = [];
   let INST = [], SEGS = [], ANCH = [], TOTAL = 1, thread = null, ZSEG = null;
   // Länge des Schluss-Zooms in vh (Breitbild, hochkant)
-  const ZOOM = { d: 190, n: 200 };
+  const ZOOM = { d: 320, n: 320 };
 
   function newInstance(cfg, idx) {
     return { cfg, idx, name: cfg.name, built: false, O: V(), rot: 0, M4: new THREE.Matrix4(), R4: new THREE.Matrix4(), fp: null, tStart: undefined, parked: false, lastKey: "" };
@@ -268,22 +314,27 @@ export function seite(renderer, SEQ, opt = {}) {
     I.bMax = cfg.bMax !== undefined ? cfg.bMax : 1;
     // Ausschnitt: Szenen, die nur einen Teil eines Bogens zeigen (abschluss), oder deren Bogen weit nach hinten reicht (stimmen)
     I.clip = cfg.clip || null;
+    I.fcfg = cfg.faden ? cfg.faden(def, I) : null;                      // Eingang und Ausgang des Fadens (Szenenkoordinaten), vor dem Zuschnitt der Bögen gerechnet
     layout(I);
     group.position.copy(I.O); group.rotation.y = I.rot; group.updateMatrixWorld(true);
+    I.boxes = partBoxes(I);
+    laneArrival(I);
     // Ausschnitt für Materialien ohne eigenen Shader: Ebenen in Szenenkoordinaten, mit der Gruppe in die Welt gedreht
     const planes = I.clip ? [
       new THREE.Plane(V(1, 0, 0), -I.clip[0]), new THREE.Plane(V(-1, 0, 0), I.clip[1]),
       new THREE.Plane(V(0, 0, 1), -I.clip[2]), new THREE.Plane(V(0, 0, -1), I.clip[3])].map(pl => pl.applyMatrix4(group.matrixWorld)) : null;
     group.traverse(o => {
       const ms = o.material ? (Array.isArray(o.material) ? o.material : [o.material]) : [];
-      for (const m of ms) { if (!frameOn(m, I.O, I.clip, I.rot) && planes) m.clippingPlanes = planes; }
+      for (const m of ms) { if (!frameOn(m, I.O, I.clip, I.rot) && planes) m.clippingPlanes = planes; patchPaper(m); }
     });
+    I.shadowPlanes = planes;
+    I.mesh = mesh; mesh.layers.enable(1 + I.idx);                             // Schattenwerfer: das Modell der Szene (Ebene 1 + Nummer der Szene, siehe shadowPass())
+    fitSheets(I, group, sheets, sheetBox);
     // Dunst je Szene: eigene Grenzen (I.far), damit Nachbarszenen aus dem Dunst auftauchen und nicht im Hintergrund stehen (applyState)
     I.far = new THREE.Vector2(FAR.x, FAR.y); I.farS = new THREE.Vector2(FAR.x, FAR.y);       // farS: die Bögen (Karten) bleiben länger sichtbar als stehende Teile
     group.traverse(o => { const ms = o.material ? (Array.isArray(o.material) ? o.material : [o.material]) : []; for (const m of ms) if (m.uniforms && m.uniforms.uFar) m.uniforms.uFar = { value: I.far }; });
     for (const sh of sheets) if (sh.material.uniforms && sh.material.uniforms.uFar) sh.material.uniforms.uFar = { value: I.farS };
     buildThreadFor(I);
-    I.boxes = partBoxes(I);
     I.M.update(I.b0, 0); I.curB = I.b0; I.curT = 0;
     dbg("Szene " + (I.idx + 1) + " " + I.name + " gebaut");
     try { updateTable(); } catch (e) { mapFail(e); }
@@ -431,15 +482,18 @@ export function seite(renderer, SEQ, opt = {}) {
   }
 
   // ---------- Lage der Szenen in der Welt ----------
-  // Parzellen auf einem gemeinsamen Tisch. Jede Szene ist eine Gruppe, gedreht um y (Blickrichtung der Szene N, E, S, W, cfg.dir; fehlt sie,
-  // gilt die der vorigen Szene) und verschoben um O; Welt = R · Szene + O. Die Kamera fährt in jeder Szene von vorn (+z) nach hinten (−z), also
-  // in Blickrichtung. Geradeaus: Szene B liegt ganz hinter A (jede Kamerastellung von B liegt vor dem hintersten Punkt von A minus GAP) und
-  // steht mit der Kante der Gasse bündig an A. Kurve (Blickrichtung ändert sich um ±90°): B wird gesucht, so dass die Fahrt als Viertelbogen
-  // aus A hinaus- und in B hineinläuft und B (samt Anfahrtsstück) keine andere Parzelle berührt.
+  // Raster wie ein Setzkasten (Erik, 22.10.2026): alle Parzellen sind gleich groß (cl quer zur Bahn, cf entlang der Bahn) und stehen in einem Raster mit
+  // gleichen Abständen (gl quer, gf längs). Je Bahn (eine Spalte) stehen per Szenen hintereinander, die Bahnen wechseln die Richtung
+  // (Schlangenlinie): Bahn 0 läuft nach S, Bahn 1 zurück nach N, und so fort; elf Szenen füllen Breitbild 4 × 3, hochkant 3 × 4 Felder, das letzte bleibt frei.
+  // Jede Szene ist eine Gruppe, gedreht um y (Blickrichtung der Bahn) und verschoben um O; Welt = R · Szene + O. Die Kamera fährt in jeder Szene von vorn (+z)
+  // nach hinten (−z), also in Blickrichtung der Bahn. Die Parzelle ist ein Papierbogen in Einheitsgröße (Mitte auf der Mitte des Inhalts der Szene);
+  // die Bögen der Szenen selbst werden auf diese Fläche zugeschnitten (Bauteile, Lesestellen und Kamerabahnen bleiben, wie sie sind).
+  // Maße gerechnet mit tmp/raster/inhalt.mjs (größter Inhalt aller Szenen plus Rand PAD). Hinweis: gf deckt den Anlauf der Kamera vor der nächsten Parzelle ab (die erste Stellung von Zusammenarbeit steht bis 24 Einheiten vor der Parzelle).
+  const GRID = { d: { cl: 34, cf: 22, gl: 12, gf: 24, per: 3 }, n: { cl: 34, cf: 26, gl: 12, gf: 24, per: 4 } };
+  const PAD = 1.2;                // Rand zwischen Inhalt und Kante der Parzelle
+  const BRIDGE_R = 8;             // Radius der Ecken des Fadens zwischen zwei Parzellen einer Bahn (Versatz)
+  const U_R = 9, U_E = 21;        // Wende zwischen zwei Bahnen: Radius der Ecken und Länge des Auslaufs über die Parzelle hinaus
   const HEAD = { N: 0, E: -PI / 2, S: PI, W: PI / 2 };
-  const PITCH_LEAD = 12;           // so weit darf die Kamera vor einer Parzelle über dem Rücken der vorigen stehen (hoch über dem Tisch), Rest wird nicht freigehalten
-  const GASSE = 2.8;              // freier Streifen zwischen zwei Parzellen (Weg des Fadens)
-  const LEAD_MAX = 9;             // Anfahrtsstück vor dem Körper, das die Parzelle für die Anordnung freihält (die Kamera fährt dort hoch über dem Tisch)
   const headOf = I => V(-Math.sin(I.rot), 0, -Math.cos(I.rot));
   const setXf = I => { I.R4.makeRotationY(I.rot); I.M4.copy(I.R4).setPosition(I.O); };
   function extentOf(I) {
@@ -463,10 +517,45 @@ export function seite(renderer, SEQ, opt = {}) {
     for (let i = 0; i <= 400; i++) { localPose(I, i / 400, c, t); zmax = Math.max(zmax, c.z); xmin = Math.min(xmin, c.x); xmax = Math.max(xmax, c.x); }
     return { zmax, xmin, xmax };
   }
-  // Fläche, die die Parzelle für sich braucht (Szenenkoordinaten x0, x1, z0, z1): Körper samt Bauteilen und Anfahrtsstück der Kamera
-  function localFoot(I) {
-    const e = I.ext, c = I.cext;
-    return [Math.min(e.min.x, Math.max(c.xmin, e.min.x - 6)), Math.max(e.max.x, Math.min(c.xmax, e.max.x + 6)), e.min.z, Math.max(e.max.z, Math.min(c.zmax, e.max.z + LEAD_MAX))];
+  // Inhalt der Szene (Szenenkoordinaten x0, x1, z0, z1): alle Teile (ohne die Wurzel) in mehreren Zuständen, alle Drucke, im Ausschnitt der Szene
+  function contentRect(I) {
+    const cl = I.clip || [-1e5, 1e5, -1e5, 1e5], r = [1e9, -1e9, 1e9, -1e9], v = V();
+    const add = (x, z) => { r[0] = Math.min(r[0], x); r[1] = Math.max(r[1], x); r[2] = Math.min(r[2], z); r[3] = Math.max(r[3], z); };
+    const nB = 8;
+    for (let k = 0; k <= nB; k++) {
+      const bb = I.b0 + (I.bMax - I.b0) * k / nB;
+      I.M.update(bb, 1e9);
+      const { posT, nT, nodes } = I.M.dbg;
+      for (let j = 0; j < nT.length; j++) {
+        if (nodes[nT[j]] === nodes[0]) continue;
+        v.set(posT[j * 3], posT[j * 3 + 1], posT[j * 3 + 2]);
+        if (v.x < cl[0] || v.x > cl[1] || v.z < cl[2] || v.z > cl[3]) continue;
+        add(v.x, v.z);
+      }
+      for (const pr of I.prints) {
+        const xs = [], zs = [];
+        for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { v.set(sx * pr.w / 2, sy * pr.h / 2, 0).applyMatrix4(pr.mesh.matrix); xs.push(v.x); zs.push(v.z); }
+        const a = Math.max(Math.min(...xs), cl[0]), b = Math.min(Math.max(...xs), cl[1]), c = Math.max(Math.min(...zs), cl[2]), d = Math.min(Math.max(...zs), cl[3]);
+        if (b > a && d > c) { add(a, c); add(b, d); }
+      }
+    }
+    I.M.update(I.b0, 0);
+    return r;
+  }
+  const ptX = a => a.isVector3 ? a.x : a[0], ptZ = a => a.isVector3 ? a.z : a.length === 3 ? a[2] : a[1];
+  // Parzelle der Szene (Szenenkoordinaten): Einheitsgröße, Mitte auf der Mitte von Inhalt samt Eingang und Ausgang des Fadens
+  function cellOf(I) {
+    const G = GRID[narrow ? "n" : "d"], c = contentRect(I), f = I.fcfg;
+    const [x0, x1, z0, z1] = c;
+    const ends = f ? [f.in, f.out].filter(Boolean) : [];
+    let lo = z0, hi = z1, xl = x0, xh = x1;
+    for (const a of ends) { lo = Math.min(lo, ptZ(a)); hi = Math.max(hi, ptZ(a)); xl = Math.min(xl, ptX(a)); xh = Math.max(xh, ptX(a)); }
+    if (hi - lo > G.cf - 2 * PAD) { lo = z0; hi = z1; }                 // Eingang oder Ausgang liegen weiter draußen (Anlauf): der Inhalt hat Vorrang, die Enden werden an die Kante gelegt
+    if (xh - xl > G.cl - 2 * PAD) { xl = x0; xh = x1; }
+    if (hi - lo > G.cf - 2 * PAD + .01 || xh - xl > G.cl - 2 * PAD + .01) console.warn("Parzelle zu klein für", I.name, (xh - xl).toFixed(1), "x", (hi - lo).toFixed(1));
+    const cx = (xl + xh) / 2, cz = (lo + hi) / 2;
+    I.content = c;
+    return [cx - G.cl / 2, cx + G.cl / 2, cz - G.cf / 2, cz + G.cf / 2];
   }
   // lokales Rechteck → Rechteck der Welt (x0, x1, z0, z1) für Ursprung O und Drehung rot
   function worldRect(lr, O, rot) {
@@ -476,73 +565,82 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     return out;
   }
-  const hit = (a, b, m) => a[0] < b[1] + m && a[1] > b[0] - m && a[2] < b[3] + m && a[3] > b[2] - m;
-  const freeRect = (r, I, m = GASSE) => !INST.some(X => X.idx < I.idx && X.fp && hit(r, X.fp, m));
-  function dirOf(I) {
-    for (let k = I.idx; k >= 0; k--) { const d = INST[k].cfg.dir; if (d && d[narrow ? "n" : "d"]) return d[narrow ? "n" : "d"]; }
-    return "N";
+  // Platz im Raster: Bahn t (Spalte), Platz j in der Bahn; gerade Bahnen laufen nach S, ungerade zurück nach N (Breitbild: vier Spalten zu drei Feldern, hochkant: drei Spalten zu vier Feldern)
+  function slotOf(idx) {
+    const G = GRID[narrow ? "n" : "d"], per = G.per, nL = Math.ceil(INST.length / per), t = Math.floor(idx / per), j = idx % per, fw = t % 2 === 0;
+    const PL = G.cl + G.gl, PF = G.cf + G.gf, a = (fw ? j - (per - 1) / 2 : (per - 1) / 2 - j) * PF, l = (t - (nL - 1) / 2) * PL;
+    return { rot: fw ? HEAD.S : HEAD.N, P: V(l, 0, a) };
   }
-  const modeV = v => v ? v[narrow ? "n" : "d"] : undefined;
-  const rightOf = I => V(Math.cos(I.rot), 0, -Math.sin(I.rot));
-  const latOf = I => V((I.lf[0] + I.lf[1]) / 2, 0, 0).applyMatrix4(I.M4);          // Mitte der Parzelle quer zur Bahn (Weltpunkt)
-  // Anordnung. Eine Bahn läuft geradeaus: Parzellen mittig auf der Bahnachse, Abstand wie bisher. Zwischen zwei Bahnen entgegengesetzter
-  // Richtung steht eine Eckparzelle quer zu beiden: Bahn → Ecke → Bahn (zwei Kurven gleichen Drehsinns, jede als Viertelbogen). Die Achse der
-  // nächsten Bahn liegt um die halben Breiten beider Bahnen (cfg.lane an der ersten Parzelle der Bahn) plus Gasse neben der der letzten.
   function layout(I) {
     buildPath(I);
     I.ext = extentOf(I); I.cext = camExtent(I);
     const c = V(), t = V();
     localPose(I, 0, c, t); I.camStart = c.clone(); I.tgtStart = t.clone();
     localPose(I, 1, c, t); I.camEnd = c.clone(); I.tgtEnd = t.clone();
-    I.rot = HEAD[dirOf(I)];
-    I.lf = localFoot(I);
-    I.arc = null; I.corner = false; I.axisPt = null;
-    const rotM = new THREE.Matrix4().makeRotationY(I.rot);
-    if (I.idx === 0) { I.O.set(0, 0, 0); I.laneW = modeV(I.cfg.lane) || 0; setXf(I); I.axisPt = latOf(I); }
-    else {
-      const A = INST[I.idx - 1];
-      if (Math.abs(I.rot - A.rot) < 1e-6) {
-        // geradeaus: hinter A, Mitte auf der Achse
-        I.laneW = A.laneW;
-        const dz = A.ext.min.z - GAP - Math.min(Math.max(I.cext.zmax, I.ext.max.z), I.ext.max.z + PITCH_LEAD) - (I.cfg.gapExtra ? modeV(I.cfg.gapExtra) : 0);
-        I.O.copy(A.O).add(V((A.lf[0] + A.lf[1]) / 2 - (I.lf[0] + I.lf[1]) / 2, 0, dz).applyMatrix4(A.R4));
-        setXf(I); I.axisPt = latOf(I);
-      } else {
-        const hA = headOf(A), hB = headOf(I), turn = hA.x * hB.z - hA.z * hB.x > 0 ? 1 : -1;
-        const cE = A.camEnd.clone().applyMatrix4(A.M4), cs = I.camStart.clone().applyMatrix4(rotM);
-        const fMin = Math.max(10, .5 * (A.camEnd.z - A.ext.min.z) + 4);      // der Bogen beginnt erst nach dem größten Teil der Parzelle (die Kamera ist dort hoch)
-        const place = (f, s) => V(cE.x + f * hA.x + s * hB.x - cs.x, 0, cE.z + f * hA.z + s * hB.z - cs.z);
-        if (!A.corner) {
-          // erste Kurve: I ist die Eckparzelle (Blickrichtung hB quer zur Bahn). Länge s1 so, dass der zweite Bogen etwa gleich lang wird
-          I.corner = true; I.turn = turn;
-          const C = INST[I.idx + 1], thA = A.laneW, thC = (C && modeV(C.cfg.lane)) || thA;
-          const sep = thA / 2 + thC / 2 + GASSE;
-          const adv = I.camStart.z - I.camEnd.z;                              // Fahrt in der Ecke längs hB (negativ: Kamera endet vorn)
-          const fE = Math.max(10, .5 * (I.camEnd.z - I.ext.min.z) + 4);        // zweiter Bogen beginnt erst nach dem größten Teil der Ecke
-          let Q = A.axisPt.dot(hB) + sep - cE.dot(hB);                         // Querlage der nächsten Achse längs hB, gemessen ab cE
-          // zweiter Bogen nominal fE + 8 lang (Spielraum für die Lage der Kamera in der nächsten Parzelle), der Rest ist s1
-          let R = Q - adv; if (R < 14 + fE + 10) { Q += 14 + fE + 10 - R; R = 14 + fE + 10; }
-          const s1 = Math.max(14, Math.min(R - fE - 10, R / 2));
-          let best = null;
-          for (let f = fMin; f < fMin + 160 && !best; f += .5) { const O = place(f, s1); if (freeRect(worldRect(I.lf, O, I.rot), I)) best = { f, s: s1, O }; }
-          if (!best) { best = { f: fMin, s: s1, O: place(fMin, s1) }; console.warn("Anordnung: keine freie Lage für", I.name); }
-          I.O.copy(best.O); I.arc = { f: best.f, s: best.s }; I.Q = Q; I.adv = adv; I.fE = fE; I.laneW = 0;
-          setXf(I);
-        } else {
-          // zweite Kurve: I ist die erste Parzelle der nächsten Bahn, ihre Mitte liegt genau auf deren Achse
-          I.turn = turn;
-          const uC = rightOf(I), cx = (I.lf[0] + I.lf[1]) / 2;
-          const f = A.Q - A.arc.s - A.adv + turn * (cx - I.camStart.x);        // Herleitung: Querlage der Mitte = Achse, siehe oben
-          if (f < A.fE - .01) console.warn("Anordnung: Bogen zu kurz vor", I.name, f.toFixed(1), "<", A.fE.toFixed(1));
-          let best = null;
-          for (let s = 14; s < 200 && !best; s += .5) { const O = place(f, s); if (freeRect(worldRect(I.lf, O, I.rot), I)) best = { f, s, O }; }
-          if (!best) { best = { f, s: 14, O: place(f, 14) }; console.warn("Anordnung: keine freie Lage für", I.name); }
-          I.O.copy(best.O); I.arc = { f: best.f, s: best.s }; I.laneW = modeV(I.cfg.lane) || INST[I.idx - 2].laneW;
-          setXf(I); I.axisPt = latOf(I);
-        }
+    const sl = slotOf(I.idx);
+    I.rot = sl.rot;
+    I.cell = cellOf(I); I.lf = I.cell;
+    const cc = V((I.cell[0] + I.cell[1]) / 2, 0, (I.cell[2] + I.cell[3]) / 2);
+    I.O.copy(sl.P).sub(cc.applyMatrix4(new THREE.Matrix4().makeRotationY(I.rot)));
+    setXf(I);
+    I.fp = worldRect(I.cell, I.O, I.rot);
+  }
+  // Parzelle als Papierbogen unter dem Bogen der Szene; die Bögen der Szene werden auf die Parzelle zugeschnitten (Skalierung der Platte, Haarkante aus)
+  function fitSheets(I, group, sheets, sheetBox) {
+    const [x0, x1, z0, z1] = I.cell;
+    sheets.forEach((g, i) => {
+      const s = sheetBox[i], a = Math.max(s[0], x0), b = Math.min(s[1], x1), c = Math.max(s[2], z0), d = Math.min(s[3], z1);
+      if (g.children[0]) g.children[0].visible = false;
+      if (b > a && d > c) { g.scale.set((b - a) / (s[1] - s[0]), 1, (d - c) / (s[3] - s[2])); g.position.x = (a + b) / 2; g.position.z = (c + d) / 2; sheetBox[i] = [a, b, c, d]; }
+      else { g.scale.set(1e-4, 1, 1e-4); sheetBox[i] = [s[0], s[0], s[2], s[2]]; }
+    });
+    const pl = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, .03, z1 - z0), paperMaterial(PAL.plate));
+    pl.position.set((x0 + x1) / 2, -.0192, (z0 + z1) / 2);
+    pl.add(new THREE.LineSegments(new THREE.EdgesGeometry(pl.geometry), new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: .32, depthWrite: false })));
+    group.add(pl); sheets.push(pl);
+    frameOn(pl.material, I.O, null, I.rot); patchPaper(pl.material);
+    return pl;
+  }
+
+
+  // Ankunft des Fadens in der Parzelle (Szenen ohne eigenen Faden: der Faden läuft als gerade Bahn vom Eingang zum Ausgang): die erste Stellung der Kamera
+  // zeigt meist nur die Überschrift auf dem Papier, die Bahn am Rand der Parzelle läge außerhalb des Bildes. Die Bahn rückt deshalb so weit zur Mitte, bis
+  // sie in der ersten Stellung im Bild steht (|x| ≤ ARR_X), und der Punkt kommt erst dort an, wo sie ins Bild tritt (I.arrive = z der Ankunft, y im Bild ≥ ARR_Y):
+  // so bleibt er bis zum Ende des Flugs im Bild.
+  const ARR_X = .9, ARR_Y = -.62;
+  function laneArrival(I) {
+    const f = I.fcfg, own = I.cfg.ownThread === false ? null : I.def.thread;
+    I.arrive = null;
+    if (I.idx === 0 || !f || own || !f.in || !f.out || f.in.length !== 2 || f.out.length !== 2 || f.via) return;
+    const pc = new THREE.PerspectiveCamera(fovOf(I), aspect, .1, 300);
+    pc.position.copy(I.camStart); pc.lookAt(I.tgtStart); pc.updateMatrixWorld(); pc.updateProjectionMatrix();
+    const zf = I.cell[3] - .2, zb = I.cell[2] + .2, p = V();
+    const firstVisible = x => {
+      for (let z = zf; z >= zb; z -= .25) { p.set(x, .02, z).project(pc); if (p.z < 1 && p.y >= ARR_Y && p.y <= .6 && Math.abs(p.x) <= ARR_X) return z; }
+      return null;
+    };
+    // Bahn möglichst frei von Bauteilen (Faden läuft um sie herum, nicht durch sie): Abstand zu den Kanten aller Bauteile über 5 cm Höhe
+    const inv = I.M4.clone().invert(), bx = I.boxes.map(b => b.clone().applyMatrix4(inv)).filter(b => b.max.y > .1);
+    const free = x => !bx.some(b => x > b.min.x - .35 && x < b.max.x + .35 && b.max.z > zb && b.min.z < zf);
+    // Seite der Bahn: wo die Kamera am Ende der Szene steht (mehr als 4 Einheiten neben der Mitte des Inhalts), dort läuft auch die Bahn, damit der Punkt beim Abflug
+    // nicht hinter den Bauteilen der Szene verschwindet; sonst bleibt sie, wo sie war (gespiegelt an der Mitte des Inhalts)
+    const mid = (I.content[0] + I.content[1]) / 2, side = I.camEnd.x - mid > 4 ? 1 : I.camEnd.x - mid < -4 ? -1 : 0;
+    let xo = f.in[0]; if (side && Math.sign(xo - mid) !== side) xo = 2 * mid - xo;
+    const x0 = clamp(xo, I.cell[0] + .4, I.cell[1] - .4);
+    let best = null, fallback = null;
+    for (let k = 0; k <= 160 && !best; k++) {
+      for (const sg of k ? [-1, 1] : [1]) {
+        const x = x0 + sg * k * .25; if (x < I.cell[0] + .4 || x > I.cell[1] - .4) continue;
+        const z = firstVisible(x); if (z === null) continue;
+        if (free(x)) { best = { x, z }; break; }
+        if (!fallback) fallback = { x, z };
       }
     }
-    I.fp = worldRect(I.lf, I.O, I.rot);
+    const pick = best || fallback; if (!pick) return;
+    const x = pick.x, zA = pick.z;
+    if (!best) dbg("Bahn " + I.name + " liegt in der ersten Stellung nur an Bauteilen im Bild");
+    f.in = [x, f.in[1]]; f.out = [x, f.out[1]];
+    I.arrive = zA < zf - .05 ? zA : null;
   }
 
   // Umgrenzungen der Teile (je Knoten) im Anfangs- und im Endzustand und der eigenen Objekte (Kabel usw.), Welt
@@ -648,10 +746,11 @@ export function seite(renderer, SEQ, opt = {}) {
   // Idealstellung wie kritisch gedämpfte Federn (Zeitkonstante in vh Scrollweg), gerechnet über die Bogenlänge vorab als Spur, damit die Stellung bei jedem
   // p gilt; sie starten an der letzten Stellung der verlassenen Szene. Eine weiche Nachführung hält den Punkt im Bild, die Höhe weicht Bauteilen aus.
   // Im letzten Teil blendet die Spur zur ersten Stellung der kommenden Szene (Winkel und Logarithmus des Abstands, kein Schnitt, kein Knick).
-  const CHASE = { back: 8.5, hgt: 3.2, ahead: 12, tauC: 14, tauT: 12 };
-  const CHASE_N = { back: 9.5, hgt: 3.8, ahead: 15, tauC: 14, tauT: 12 };       // hochkant: etwas weiter zurück, Blick weiter voraus
+  const CHASE = { back: 8.5, hgt: 3.2, ahead: 12, tauC: 8, tauT: 7 };
+  const CHASE_N = { back: 9.5, hgt: 3.8, ahead: 15, tauC: 8, tauT: 7 };       // hochkant: etwas weiter zurück, Blick weiter voraus
   const CHASE_MAXH = 14;                                                // höchste Kamerahöhe der Verfolgung (Sicht über Bauteile)
-  const CHASE_END = .3;                                                 // letzter Anteil des Flugs: Blende zur ersten Stellung der kommenden Szene
+  const CHASE_I0 = 18, CHASE_I1 = 4;                                      // Weg (Einheiten) vor dem Ende, in dem die Idealstellung zur ersten Stellung der kommenden Szene läuft (ab I0 bis I1)
+const CHASE_END = 8;                                                  // letztes Stück des Weges (Einheiten): Blende zur ersten Stellung der kommenden Szene
   const threadPieces = B => pieces.filter(pc => pc.time.tr === B.idx);
   // Zeitfenster der Fadenstücke eines Übergangs nach Bogenlänge (gleichmäßige Geschwindigkeit des Punktes über den ganzen Flug).
   // Stücke der verlassenen Szene, die am Ende ihrer Bahn noch nicht fertig gezeichnet sind (b läuft im Übergang weiter), laufen in den Übergang hinein
@@ -727,11 +826,27 @@ export function seite(renderer, SEQ, opt = {}) {
       }
       need[j] = m;
     }
+    // Länge des Weges, auf dem die Idealstellung zur ersten Stellung läuft: je weiter diese von der Stellung hinter dem letzten Punkt des Weges entfernt ist,
+    // desto früher beginnt es (die Kamera bewegt sich dann höchstens etwa so schnell wie der Punkt), nie früher als bei 80 % des Weges
+    at(L - K.back, ci); at(L + K.ahead, ti); ti.y = pts[last].y + .2;
+    const dEnd = ci.distanceTo(P1), dAng = Math.acos(clamp(ti.clone().sub(ci).normalize().dot(T1.clone().sub(P1).normalize()), -1, 1)) * 180 / PI;
+    const i0 = clamp(1.3 * dEnd + CHASE_I1 + 2, CHASE_I0, .8 * L), endW = clamp(.2 * dAng, CHASE_END, 2 * CHASE_END), i0o = clamp(i0 + .5 * dAng, i0, .9 * L);       // i0o: der Blick dreht schon früher (weniger Drehung je Weg), der Punkt bleibt durch die Nachführung im Bild
+    const D1v = T1.clone().sub(P1), y1 = yawOf(D1v), p1 = pitchOf(D1v);
+    // Steht der Punkt am Ende in der ersten Stellung im Bild? Dann hält die Nachführung ihn bis kurz vor dem Ende dort, sonst lässt sie früher los (der Blick dreht sich dann
+    // über einen längeren Weg zur ersten Stellung, statt in den letzten Schritten)
+    const vc = new THREE.PerspectiveCamera(fovOf(B), aspect, .1, 300); vc.position.copy(P1); vc.lookAt(T1); vc.updateMatrixWorld(); vc.updateProjectionMatrix();
+    at(L, ci); ci.y = Math.max(ci.y, THREAD_Y); ci.project(vc);
+    const endSeen = ci.z < 1 && Math.abs(ci.x) <= .95 && Math.abs(ci.y) <= .95;
     const hw = Math.ceil(Math.max(K.back, 3 * K.tauC * upv) / ds), hmin = new Float32Array(n + 1);
     for (let j = 0; j <= n; j++) { let m = 0; for (let i = Math.max(0, j - hw); i <= Math.min(n, j + hw); i++) m = Math.max(m, need[i]); hmin[j] = m; }
     for (let j = 0; j <= n; j++) {
       // Idealstellung auf dem Faden: Kamera um K.back hinter dem Punkt auf dem Weg (nie über ihm, auch nicht in Haarnadeln), Blick auf die Stelle K.ahead davor
       const s = j * ds; at(s, D); at(s - K.back, ci); ci.y = Math.max(D.y + K.hgt, hmin[j]); at(s + K.ahead, ti); ti.y = D.y + .2;
+      // gegen Ende wandert schon die Idealstellung zur ersten Stellung der kommenden Szene (CHASE_I0 … CHASE_I1 des Weges): die gedämpfte Kamera kommt so
+      // ohne weiten Sprung dort an, der Rest der Blende (CHASE_END) ist kurz
+      const wI = smoother(win(s, L - i0, i0 - CHASE_I1)); if (wI > 0) mixPose(ci.clone(), ti.clone(), P1, T1, wI, ci, ti);
+      const wO = smoother(win(s, L - i0o, i0o - CHASE_I1)) * (1 - wI);
+      if (wO > 0) { const Dd = ti.clone().sub(ci), dl = Math.max(.5, Dd.length()), yy = yawOf(Dd), pp = pitchOf(Dd); dirAng(yy + wrapPi(y1 - yy) * wO, pp + (p1 - pp) * wO, _c0); ti.copy(ci).addScaledVector(_c0, dl); }
       // Der Punkt bleibt im Bild (unteres Drittel bis Mitte): läuft die gedämpfte Blickrichtung zu weit hinter ihm her, wird sie weich (tanh) so nachgeführt,
       // dass er höchstens bis zu einer Grenze aus der Mitte wandert (Gier 45 % der halben Bildbreite, Neigung zwischen etwa 8 % und 68 % der halben Bildhöhe)
       const hV = (fovOf(A) + (fovOf(B) - fovOf(A)) * sm(j / n)) * PI / 360, hH = Math.atan(Math.tan(hV) * aspect), ly = .45 * hH, lp = .3 * hV, cp = .38 * hV;
@@ -746,7 +861,7 @@ export function seite(renderer, SEQ, opt = {}) {
         tv.addScaledVector(_nn.copy(ti).sub(t).multiplyScalar(wt * wt), hs).multiplyScalar(1 - 2 * wt * hs); t.addScaledVector(tv, hs);
       }
     }
-    return { cams, tgts, n, L, P1, T1 };
+    return { cams, tgts, n, L, P1, T1, endW, at, endSeen };
   }
   // Catmull-Rom durch vier Stützwerte
   const cr = (p0, p1, p2, p3, u, out) => out.set(0, 0, 0).addScaledVector(p0, -.5 * u + u * u - .5 * u * u * u).addScaledVector(p1, 1 - 2.5 * u * u + 1.5 * u * u * u).addScaledVector(p2, .5 * u + 2 * u * u - 1.5 * u * u * u).addScaledVector(p3, -.5 * u * u + .5 * u * u * u);
@@ -760,9 +875,22 @@ export function seite(renderer, SEQ, opt = {}) {
     const tr = B.trVel, q = clamp(st.q, 0, 1), u = q * tr.n, i = Math.min(tr.n - 1, Math.floor(u)), f = u - i, g = k => clamp(k, 0, tr.n);
     cr(tr.cams[g(i - 1)], tr.cams[i], tr.cams[i + 1], tr.cams[g(i + 2)], f, cam);
     cr(tr.tgts[g(i - 1)], tr.tgts[i], tr.tgts[i + 1], tr.tgts[g(i + 2)], f, tgt);
-    const wo = smoother(win(q, 1 - CHASE_END, CHASE_END));
+    const wo = smoother(win(q * tr.L, tr.L - tr.endW, tr.endW));
     if (wo > 0) mixPose(cam.clone(), tgt.clone(), tr.P1, tr.T1, wo, cam, tgt);
     const fovP = fovOf(A) + (fovOf(B) - fovOf(A)) * sm(q);
+    // Der Punkt bleibt im Bild, auch in der Blende zur ersten Stellung: steht er außerhalb der Grenze (Gier 50 %, Neigung 75 % der halben Bildbreite bzw. -höhe),
+    // wird der Blick weich (tanh) so nachgeführt, dass er an der Grenze bleibt; die Führung läuft in den letzten 10 % des Flugs aus (die Stellung am Ende ist die der Szene)
+    const qa = tr.endSeen ? .9 : .55, pw = 1 - smoother(win(q, qa, 1 - qa));
+    if (pw > 0) {
+      tr.at(q * tr.L, _t2); if (_t2.y < THREAD_Y) _t2.y = THREAD_Y;
+      const Dv = tgt.clone().sub(cam), Dd = _t2.clone().sub(cam), yv = yawOf(Dv), pv = pitchOf(Dv), yd = yawOf(Dd), pd = pitchOf(Dd), ey = wrapPi(yd - yv), ep = pd - pv;
+      if (Math.abs(ey) < 1.9 && Dd.length() > .5) {
+        const hV = fovP * PI / 360, hH = Math.atan(Math.tan(hV) * aspect), ly = .5 * hH, lp = .75 * hV;
+        const wy = pw * (1 - smoother(win(Math.abs(pd), 1, .5)));
+        dirAng(yv + (ey - ly * Math.tanh(ey / ly)) * wy, pv + (ep - lp * Math.tanh(ep / lp)) * pw, _c0);
+        tgt.copy(cam).addScaledVector(_c0, Dv.length());
+      }
+    }
     return fovP;
   }
 
@@ -810,46 +938,73 @@ export function seite(renderer, SEQ, opt = {}) {
     if (pts.length < 2) return;
     const r = ribbon(pts); r.time = time; r.I = I; r.end = pts[pts.length - 1].clone(); pieces.push(r);
   }
-  // Weg des Fadens über den Tisch von der Hinterkante von A zur Vorderkante von I: in Blickrichtung von A hinaus, bei einer Kurve rechtwinklig
-  // mit gerundeter Ecke in Blickrichtung von I hinein (der Faden läuft in der Gasse zwischen den Parzellen)
+  // Weg des Fadens über den Tisch von der Hinterkante von A zur Vorderkante von I (wie bei einem U-Bahn-Plan: gerade Strecken, Ecken als Kreisbögen).
+  // Gleiche Richtung (Parzellen einer Bahn): aus A gerade hinaus, in der Mitte der Gasse quer (Versatz), gerade in I hinein. Gegenrichtung (Wende zwischen
+  // zwei Bahnen): aus A gerade hinaus, über die Parzellen hinaus (U_E) quer zur Nachbarbahn, gerade zurück in I hinein; Ecken mit Radius U_R, keine Schleifen.
+  const along = (r, h) => { let mx = -1e9, mn = 1e9; for (const [x, z] of [[r[0], r[2]], [r[1], r[2]], [r[1], r[3]], [r[0], r[3]]]) { const d = x * h.x + z * h.z; mx = Math.max(mx, d); mn = Math.min(mn, d); } return [mn, mx]; };
   function bridge(A, I) {
-    const e0 = A.exit.clone(), e1 = I.entry.clone(), hA = headOf(A), hB = headOf(I), dv = e1.clone().sub(e0);
-    const a = dv.dot(hA), b = dv.dot(hB);
-    if (Math.abs(I.rot - A.rot) > 1e-6 && b > 6) {
-      // Kurve: Weg in der Gasse mit gerundeten Ecken. Koordinaten (u längs hA, v längs hB) ab dem Austritt: erst in Blickrichtung von A hinaus,
-      // dann quer, dann (liegt der Eintritt hinter dem Austritt, a < 6) ein Stück zurück und in Blickrichtung von I hinein zum Eintritt
-      const v1 = clamp(b * .5, 3, b - 3);
-      // kaum Versatz längs hA (a < 4): fast gerade Verbindung, ein Knick wäre schärfer als der Versatz
-      if (a > -2 && a < 4) return [e0, e0.clone().lerp(e1, .33), e0.clone().lerp(e1, .66), e1];
-      const wp = a >= 4 ? [[0, 0], [a, 0], [a, b]] : [[0, 0], [8, 0], [8, v1], [a, v1], [a, b]];
-      const W = wp.map(([u, v]) => e0.clone().addScaledVector(hA, u).addScaledVector(hB, v));
-      W[W.length - 1].copy(e1); for (const w of W) w.y = .004; W[0].copy(e0);
-      return roundPath(W, 4.5);
+    const e0 = A.exit.clone().setY(.004), e1 = I.entry.clone().setY(.004), hA = headOf(A), hB = headOf(I), pa = V(-hA.z, 0, hA.x);
+    const f0 = e0.dot(hA), f1 = e1.dot(hA), lat = e1.clone().sub(e0).dot(pa);
+    const [, backA] = along(A.fp, hA);
+    const pt = (f, base, ref) => base.clone().addScaledVector(hA, f - ref);       // Punkt auf der Längslinie von base bei Längskoordinate f
+    if (hA.dot(hB) > .9) {
+      // gerade hinaus, schräg über die Gasse (Versatz), gerade hinein: Ecken als Bögen, kein rechtwinkliger Zickzack
+      if (Math.abs(lat) < .3 || f1 - f0 < 4) return fillet([e0, e0.clone().lerp(e1, .5), e1], BRIDGE_R);
+      const stub = clamp((f1 - f0) * .3, 2, 7), P1 = pt(f0 + stub, e0, f0), P2 = pt(f1 - stub, e1, f1);
+      return fillet([e0, P1, P2, e1], BRIDGE_R);
     }
-    // geradeaus (auch mit seitlichem Versatz): S-Kurve, die in Blickrichtung ausläuft und einläuft
-    if (a < 6) return [e0, e0.clone().lerp(e1, .5), e1];
-    const k = Math.min(8, Math.max(2, a / 3)), p1 = e0.clone().addScaledVector(hA, k), p2 = e1.clone().addScaledVector(hA, -k);
-    return [e0, p1, e0.clone().lerp(e1, .5), p2, e1];
+    if (hA.dot(hB) < -.9) {
+      const fu = backA + U_E, W1 = pt(fu, e0, f0), W2 = pt(fu, e1, f1);
+      return fillet([e0, W1, W2, e1], U_R);
+    }
+    return fillet([e0, e0.clone().lerp(e1, .5), e1], BRIDGE_R);
   }
-  // Polygonzug mit gerundeten Ecken: je Ecke zwei Punkte im Abstand r (höchstens 40 % der Schenkel) und eine abgeschnittene Mitte
-  function roundPath(W, r) {
-    const out = [W[0]];
+  // Polygonzug mit Ecken als Kreisbögen (Radius r, bei kurzen Schenkeln kleiner): je Ecke Anfang und Ende des Bogens und Zwischenpunkte
+  function fillet(W, r) {
+    const out = [W[0].clone()];
     for (let i = 1; i < W.length - 1; i++) {
-      const c = W[i], din = c.clone().sub(W[i - 1]), dout = W[i + 1].clone().sub(c), li = din.length(), lo = dout.length();
+      const a = W[i - 1], c = W[i], b = W[i + 1], din = c.clone().sub(a), dout = b.clone().sub(c), li = din.length(), lo = dout.length();
       din.normalize(); dout.normalize();
-      const rr = Math.min(r, .48 * li, .48 * lo), p0 = c.clone().addScaledVector(din, -rr), p1 = c.clone().addScaledVector(dout, rr);
-      const bez = t => p0.clone().multiplyScalar((1 - t) * (1 - t)).addScaledVector(c, 2 * t * (1 - t)).addScaledVector(p1, t * t);   // Viertelbogen als quadratische Kurve
-      out.push(out[out.length - 1].clone().lerp(p0, .5), p0, bez(.25), bez(.5), bez(.75), p1);
+      const th = Math.acos(clamp(din.dot(dout), -1, 1));
+      if (th < 1e-3 || li < 1e-6 || lo < 1e-6) { out.push(c.clone()); continue; }
+      const tl = Math.tan(th / 2), tmax = Math.min(i === 1 ? .98 * li : .5 * li, i === W.length - 2 ? .98 * lo : .5 * lo), rr = Math.min(r, tmax / tl), t = rr * tl;
+      const p0 = c.clone().addScaledVector(din, -t), p1 = c.clone().addScaledVector(dout, t);
+      const ctr = c.clone().addScaledVector(dout.clone().sub(din).normalize(), rr / Math.cos(th / 2));
+      const v0 = p0.clone().sub(ctr), v1 = p1.clone().sub(ctr), n = Math.max(6, Math.ceil(th / (PI / 20)));
+      out.push(p0);
+      for (let k = 1; k < n; k++) { const u = k / n; out.push(ctr.clone().addScaledVector(v0, Math.sin((1 - u) * th) / Math.sin(th)).addScaledVector(v1, Math.sin(u * th) / Math.sin(th))); }
+      out.push(p1);
     }
-    out.push(out[out.length - 1].clone().lerp(W[W.length - 1], .5), W[W.length - 1]);
+    out.push(W[W.length - 1].clone());
     return out;
+  }
+  // Ankunft auf einem Zulauf (Weltpunkte): erster Punkt, der in der ersten Stellung der Szene im Bild steht (|x| ≤ ARR_X, y von ARR_Y bis .6), sonst null;
+  // steht schon der Anfang im Bild (oder erst gar nichts), ebenfalls null. Ergebnis: Zulauf bis zur Ankunft (head) und der Rest ab dort (tail, kann fehlen).
+  function preArrival(I, pre) {
+    if (I.idx === 0) return null;
+    const pc = new THREE.PerspectiveCamera(fovOf(I), aspect, .1, 300), P1 = I.camStart.clone().applyMatrix4(I.M4), T1 = I.tgtStart.clone().applyMatrix4(I.M4);
+    pc.position.copy(P1); pc.lookAt(T1); pc.updateMatrixWorld(); pc.updateProjectionMatrix();
+    const seen = p => { const q = p.clone().project(pc); return q.z < 1 && q.y >= ARR_Y && q.y <= .6 && Math.abs(q.x) <= ARR_X + .06; };
+    if (seen(pre[0])) return null;
+    for (let i = 0; i < pre.length - 1; i++) {
+      const a = pre[i], b = pre[i + 1], len = a.distanceTo(b), n = Math.max(1, Math.ceil(len / .25));
+      for (let k = 1; k <= n; k++) {
+        const p = a.clone().lerp(b, k / n); if (!seen(p)) continue;
+        const head = [...pre.slice(0, i + 1), p], tail = k / n < 1 || i + 1 < pre.length - 1 ? [p, ...pre.slice(i + 1)] : null;
+        return { head, tail: tail && tail.length > 1 && tail[0].distanceTo(tail[tail.length - 1]) > .05 ? tail : null };
+      }
+    }
+    return null;
   }
   function buildThreadFor(I) {
     if (!dot) {
       dot = new THREE.Mesh(new THREE.CircleGeometry(1, 40), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 })); dot.renderOrder = 6; dot.visible = false; scene.add(dot);
       const ring = new THREE.Mesh(new THREE.RingGeometry(1.6, 1.95, 48), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, depthWrite: false, transparent: true, opacity: .75, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 })); ring.renderOrder = 6; ring.visible = false; dot.add(ring); dot.userData.ring = ring;
     }
-    const f = I.cfg.faden ? I.cfg.faden(I.def, I) : null; if (!f) return;
+    const f = I.fcfg; if (!f) return;
+    // Eingang und Ausgang liegen innerhalb der Parzelle (Anlauf vor der Kante entfällt), sonst bliebe der Faden außerhalb des Bogens
+    const [cx0, cx1, cz0, cz1] = I.cell, inCell = a => a && !a.isVector3 && a.length === 2 ? [clamp(a[0], cx0 + .4, cx1 - .4), clamp(a[1], cz0 + .2, cz1 - .2)] : a;
+    f.in = inCell(f.in); f.out = inCell(f.out);
     const own = I.cfg.ownThread === false ? null : I.def.thread;
     const ownPts = own ? own.pts.slice(f.ownFrom || 0).map(p => p.clone().applyMatrix4(I.M4)) : null;
     I.entry = f.in ? wpt(I, f.in) : (ownPts ? ownPts[0] : null);
@@ -862,13 +1017,22 @@ export function seite(renderer, SEQ, opt = {}) {
     const outTime = (b1) => b1 + .06 <= I.bMax ? { I, b0: b1, b1: b1 + .06 } : { tr: I.idx + 1, s0: 0, s1: .3 };
     if (ownPts) {
       const t0 = Math.max(own.t0, I.b0), t1 = Math.max(own.t1, t0 + .01);
-      if (f.in) addPiece(I, [I.entry, ...(f.viaPre || []).map(a => wpt(I, a)), ownPts[0]], { I, b0: Math.max(I.b0, t0 - .05), b1: t0 });
+      if (f.in) {
+        // Zulauf zum eigenen Faden: steht sein Anfang nicht im Bild der ersten Stellung, kommt der Punkt im Flug bis dorthin, wo der Zulauf ins Bild tritt (Rest in der Szene)
+        const pre = [I.entry, ...(f.viaPre || []).map(a => wpt(I, a)), ownPts[0]], cut = preArrival(I, pre), tm = { I, b0: Math.max(I.b0, t0 - .05), b1: t0 };
+        if (cut) { addPiece(I, cut.head, { tr: I.idx, s0: .3, s1: 1 }); if (cut.tail) addPiece(I, cut.tail, tm); } else addPiece(I, pre, tm);
+      }
       addPiece(I, ownPts, { I, b0: t0, b1: Math.min(t1, I.bMax), lin: !!own.lin });
       if (own.arms) for (const a of own.arms) addPiece(I, a.pts.map(p => p.clone().applyMatrix4(I.M4)), { I, b0: a.t0, b1: a.t1, lin: !!a.lin });
       if (postPts) addPiece(I, postPts, { I, b0: own.post.t0, b1: own.post.t1, lin: !!own.post.lin });
       if (f.out) addPiece(I, [ownPts[ownPts.length - 1], ...(f.viaPost || []).map(a => wpt(I, a)), I.exit], outTime(Math.min(t1, I.bMax)));
     } else if (I.entry && I.exit) {
-      addPiece(I, [I.entry, ...(f.via || []).map(a => wpt(I, a)), I.exit], { tr: I.idx + 1, s0: 0, s1: .3 });
+      // Bahn durch die Parzelle: bis zur Ankunft (zeigt die erste Stellung) im Flug in diese Szene, der Rest im Flug aus ihr heraus
+      if (I.arrive !== null && I.arrive !== undefined) {
+        const A = wpt(I, [f.in[0], I.arrive]);
+        addPiece(I, [I.entry, A], { tr: I.idx, s0: .3, s1: 1 });
+        addPiece(I, [A, ...(f.via || []).map(a => wpt(I, a)), I.exit], { tr: I.idx + 1, s0: 0, s1: .3 });
+      } else addPiece(I, [I.entry, ...(f.via || []).map(a => wpt(I, a)), I.exit], { tr: I.idx + 1, s0: 0, s1: .3 });
     }
     linkTimes(I);       // Punkt im Übergang in diese Szene: gleichmäßig nach Bogenlänge über den ganzen Flug
   }
@@ -946,40 +1110,59 @@ export function seite(renderer, SEQ, opt = {}) {
     try { const b = document.getElementById("uebersicht"); if (b && b.style) b.style.display = "none"; const k = document.getElementById("karte"); if (k && k.style) k.style.display = "none"; } catch (e2) { /* nichts */ }
   }
   const TM = 5.5;                                                       // Rand des Tisches um die Parzellen (der Faden läuft nirgends näher an der Kante)
-  const KARTE = { d: { pitch: 40, yaw: 16, fov: 25 }, n: { pitch: 60, yaw: 0, fov: 30 } };
+  const KARTE = { d: { pitch: 48, yaw: 0, fov: 25 }, n: { pitch: 60, yaw: 0, fov: 30 } };
+  // Fläche des Rasters samt Wenden des Fadens (Welt): aus den Plätzen aller Szenen, auch solange erst ein Teil gebaut ist
   function tableRect() {
+    const G = GRID[narrow ? "n" : "d"];
     let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9, h = 0;
-    for (const I of INST) if (I.built && I.fp) { x0 = Math.min(x0, I.fp[0]); x1 = Math.max(x1, I.fp[1]); z0 = Math.min(z0, I.fp[2]); z1 = Math.max(z1, I.fp[3]); h = Math.max(h, I.ext.max.y); }
-    x0 -= TM; x1 += TM; z0 -= TM; z1 += TM;
-    // der Faden hält mindestens 5 Einheiten Abstand zur Tischkante
-    for (const pc of pieces) for (const pt of pc.curve.getPoints(12)) { x0 = Math.min(x0, pt.x - 5); x1 = Math.max(x1, pt.x + 5); z0 = Math.min(z0, pt.z - 5); z1 = Math.max(z1, pt.z + 5); }
+    for (let i = 0; i < INST.length; i++) {
+      const P = slotOf(i).P; x0 = Math.min(x0, P.x - G.cl / 2); x1 = Math.max(x1, P.x + G.cl / 2); z0 = Math.min(z0, P.z - G.cf / 2); z1 = Math.max(z1, P.z + G.cf / 2);
+    }
+    x0 -= TM; x1 += TM; z0 -= TM + U_E; z1 += TM + U_E;                  // oben und unten laufen die Wenden aus
+    for (const I of INST) if (I.built) h = Math.max(h, I.ext.max.y);
+    for (const pc of pieces) for (const pt of pc.curve.getPoints(40)) { x0 = Math.min(x0, pt.x - 5); x1 = Math.max(x1, pt.x + 5); z0 = Math.min(z0, pt.z - 5); z1 = Math.max(z1, pt.z + 5); }
     return { x0, x1, z0, z1, h };
   }
+  // Der Tisch ist der Boden unter allen Parzellen: ein sehr großer Bogen im Papierton mit zartem Raster (Schneidematte; Linien alle 2 Einheiten, kräftiger alle 10, die
+  // Parzellen sitzen genau auf Linien), der außerhalb des Rasters und zum Horizont weich in den Dunst ausläuft (keine Kante, kein Weiß). Mit Schatten wie das Papier der Szenen.
+  const GROUND_FRAG = `
+    uniform vec3 uPaper; uniform vec3 uInk; uniform vec2 uGW; uniform vec2 uFar; uniform vec2 uC; uniform vec2 uH; uniform vec2 uGO; uniform vec2 uFade;
+    varying vec3 vW; varying float vDepth;
+    float gridLine(vec2 q) {
+      vec2 fw = max(fwidth(q), vec2(1e-4));
+      vec2 d = abs(fract(q - 0.5) - 0.5) / fw;
+      return (1.0 - min(min(d.x, d.y), 1.0)) * (1.0 - smoothstep(.2, .45, max(fw.x, fw.y)));
+    }
+    void main() {
+      vec2 p = vW.xz - uC;
+      float dd = length(max(abs(p) - uH + vec2(14.0), 0.0)) - 14.0;
+      vec2 q = (vW.xz - uGO) / 2.0;
+      float gl = max(gridLine(q) * uGW.x, gridLine(q / 5.0) * uGW.y);
+      vec3 c = mix(uPaper, uInk, gl);
+      c = shaded(c, shadowAmt(vW, vec3(0.0, 1.0, 0.0)));
+      float k = 1.0 - smoothstep(uFar.x, uFar.y, vDepth);
+      c = mix(hazeAt(1.0 - k), c, k);
+      c = mix(c, hazeAt(1.0), smoothstep(uFade.x, uFade.y, dd));
+      gl_FragColor = vec4(c, 1.0);
+      #include <colorspace_fragment>
+    }`;
   function updateTable() {
     const R = tableRect(); if (R.x0 > R.x1) return;
     if (!table) {
-      const g = new THREE.Group(), geo = new THREE.BoxGeometry(1, 1, 1);
-      const body = new THREE.Mesh(geo, paperMaterial("#efebe3"));
-      body.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: .3, depthWrite: false })));
-      const sh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1).rotateX(-PI / 2), new THREE.ShaderMaterial({
-        uniforms: { uSize: { value: new THREE.Vector2(1, 1) }, uHalf: { value: new THREE.Vector2(1, 1) }, uOff: { value: new THREE.Vector2(3.5, 4.5) }, uM: { value: 26 } },
-        vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }",
-        fragmentShader: "uniform vec2 uSize; uniform vec2 uHalf; uniform vec2 uOff; uniform float uM; varying vec2 vUv;\n" +
-          "void main(){\n" +
-          "  vec2 p = (vUv - 0.5) * uSize - uOff;\n" +
-          "  float d = length(max(abs(p) - uHalf + vec2(8.0), 0.0)) - 8.0;\n" +
-          "  float a = pow(1.0 - smoothstep(-4.0, uM, d), 1.8) * 0.22;\n" +
-          "  if (a < 0.002) discard;\n" +
-          "  gl_FragColor = vec4(0.19, 0.19, 0.2, a);\n" +
-          "  #include <colorspace_fragment>\n" +
-          "}", transparent: true, depthWrite: false }));
-      sh.renderOrder = -2; sh.frustumCulled = false; body.frustumCulled = false;
-      g.add(body, sh); scene.add(g); table = { g, body, sh };
+      const mat = new THREE.ShaderMaterial({
+        uniforms: { uPaper: { value: new THREE.Color(PAL.ground) }, uInk: { value: new THREE.Color(PAL.gridInk) }, uGW: { value: new THREE.Vector2(PAL.gridMinor, PAL.gridMajor) }, uFar: { value: new THREE.Vector2(160, 1100) }, uC: { value: new THREE.Vector2() }, uH: { value: new THREE.Vector2(1, 1) }, uGO: { value: new THREE.Vector2() }, uFade: { value: new THREE.Vector2(4, 90) },
+          uHaze: U.haze, uHazeF: U.hazeF, uShC: U.shc, uSM: U.sm, uSMM: U.smm, uSMP: U.smp },
+        vertexShader: "varying vec3 vW; varying float vDepth; void main() { vec4 wp = modelMatrix * vec4(position, 1.0); vW = wp.xyz; vec4 mv = viewMatrix * wp; vDepth = -mv.z; gl_Position = projectionMatrix * mv; }",
+        fragmentShader: SHADOW_GLSL + GROUND_FRAG, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 4
+      });
+      const ground = new THREE.Mesh(new THREE.PlaneGeometry(1, 1).rotateX(-PI / 2), mat);
+      ground.frustumCulled = false; ground.renderOrder = -3; ground.position.y = -.04; ground.scale.set(6000, 1, 6000);
+      scene.add(ground); table = { ground, mat };
     }
-    const w = R.x1 - R.x0, d = R.z1 - R.z0, cx = (R.x0 + R.x1) / 2, cz = (R.z0 + R.z1) / 2;
-    table.body.scale.set(w, .05, d); table.body.position.set(cx, -.065, cz);
-    table.sh.scale.set(w + 80, 1, d + 80); table.sh.position.set(cx, -.2, cz);
-    table.sh.material.uniforms.uSize.value.set(w + 80, d + 80); table.sh.material.uniforms.uHalf.value.set(w / 2, d / 2);
+    const cx = (R.x0 + R.x1) / 2, cz = (R.z0 + R.z1) / 2, u = table.mat.uniforms;
+    u.uC.value.set(cx, cz); u.uH.value.set((R.x1 - R.x0) / 2, (R.z1 - R.z0) / 2);
+    // Raster liegt auf den Kanten der Parzellen (die erste Parzelle als Ursprung; die Maße der Raster sind Vielfache von 2)
+    const o = slotOf(0).P, G = GRID[narrow ? "n" : "d"]; u.uGO.value.set(o.x - G.cl / 2, o.z - G.cf / 2);
     MAP = null;
   }
   // Kartenstellung: Blickrichtung fest (Neigung, Drehung um y), Abstand so, dass der ganze Tisch samt Bauteilen im Rahmen steht
@@ -1064,13 +1247,10 @@ export function seite(renderer, SEQ, opt = {}) {
       cards.push({ I, a, poly, txt, rect, tw: 0, twW: 0 });
     });
   }
-  // Fläche der Parzelle (Bogen, beschnitten) als Viereck der Welt
+  // Fläche der Parzelle (Einheitsgröße) als Viereck der Welt
   function cardCorners(I) {
     if (I.card) return I.card;
-    let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9;
-    const cl = I.clip || [-1e5, 1e5, -1e5, 1e5];
-    for (const s of I.sheetBox) { const a = Math.max(s[0], cl[0]), b = Math.min(s[1], cl[1]), c = Math.max(s[2], cl[2]), d = Math.min(s[3], cl[3]); if (b > a && d > c) { x0 = Math.min(x0, a); x1 = Math.max(x1, b); z0 = Math.min(z0, c); z1 = Math.max(z1, d); } }
-    if (x0 > x1) { x0 = I.ext.min.x; x1 = I.ext.max.x; z0 = I.ext.min.z; z1 = I.ext.max.z; }
+    const [x0, x1, z0, z1] = I.cell;
     return I.card = [[x0, z0], [x1, z0], [x1, z1], [x0, z1]].map(([x, z]) => V(x, 0, z).applyMatrix4(I.M4));
   }
   function updateCards(M, active) {
@@ -1082,10 +1262,10 @@ export function seite(renderer, SEQ, opt = {}) {
       if (!c.I.built) continue;
       const pts = cardCorners(c.I).map(p => { const v = p.clone().project(camera); return [(v.x + 1) / 2 * W, (1 - v.y) / 2 * H]; });
       c.poly.setAttribute("points", pts.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" "));
-      // Beschriftung als kleine Papier-Pille vor der Vorderkante (unter der Parzelle), nie auf der Miniatur
-      const cx = pts.reduce((a, p) => a + p[0], 0) / 4, yb = Math.max(...pts.map(p => p[1])), ph = W < 560 ? 17 : 21;
+      // Beschriftung als kleine Papier-Pille an der Vorderkante der Parzelle (untere Kante im Bild, mittig, bei allen im gleichen Abstand), nie auf der Miniatur
+      const low = pts.slice().sort((p, q) => q[1] - p[1]).slice(0, 2), cx = (low[0][0] + low[1][0]) / 2, yb = (low[0][1] + low[1][1]) / 2, ph = W < 560 ? 17 : 21;
       if (!c.tw || c.twW !== W) { c.twW = W; c.tw = c.txt.getComputedTextLength ? c.txt.getComputedTextLength() : c.txt.textContent.length * 6.5; if (!c.tw) c.tw = c.txt.textContent.length * 6.5; }
-      const ly = Math.min(yb + 4 + ph / 2, H - 80), lx = clamp(cx, c.tw / 2 + 12, W - c.tw / 2 - 12), bw = c.tw + 14;
+      const ly = Math.min(yb + 5 + ph / 2, H - 80), lx = clamp(cx, c.tw / 2 + 12, W - c.tw / 2 - 12), bw = c.tw + 14;
       c.txt.setAttribute("x", lx.toFixed(1)); c.txt.setAttribute("y", (ly + .5).toFixed(1));
       c.rect.setAttribute("x", (lx - bw / 2).toFixed(1)); c.rect.setAttribute("y", (ly - ph / 2).toFixed(1)); c.rect.setAttribute("width", bw.toFixed(1)); c.rect.setAttribute("height", ph);
       c.a.setAttribute("tabindex", active ? "0" : "-1");
@@ -1151,12 +1331,17 @@ export function seite(renderer, SEQ, opt = {}) {
     if (mapOn) { try { fov = blendMap(camera.position, _t, fov, M); } catch (e) { mapFail(e); } }
     // Dunst der Ferne und Nahebene folgen der Karte (aus der Karte heraus: Vorgabe)
     const hz = smoother(win(M, 0, .5)); FAR.set(70 + 830 * hz, 140 + 1660 * hz);
-    const nearV = .1 + 2.9 * smoother(win(M, .1, .6));
+    if (table) table.mat.uniforms.uFar.value.set(160 + 740 * hz, 1100 + 1300 * hz);                  // der Boden läuft viel weiter aus als die Papiere der Szenen
+    // Dunstfarbe: am Startbild weiß (wie das HTML-Vorbild), mit den ersten Scrollschritten zu den Farben der Palette (PAL); die Ferne ist zugleich die Hintergrundfarbe
+    { const hk = st.kind === "b" && st.i === 0 ? smoother(win(st.q, .02, .25)) : 1;
+      hazeC.copy(WHITE).lerp(hazeN, hk); hazeCF.copy(WHITE).lerp(hazeF, hk);
+      U.haze.value.set(hazeC.r, hazeC.g, hazeC.b); U.hazeF.value.set(hazeCF.r, hazeCF.g, hazeCF.b); renderer.setClearColor(hazeCF, 1); }
+    // Nahebene: in der Karte weit weg vom Tisch (Abstand mindestens 300, die Tiefengenauigkeit bleibt sonst bei großem Tisch zu grob, der Schatten unter dem Tisch flimmert)
+    let nearV = .1 + 2.9 * smoother(win(M, .1, .6));
+    if (mapOn) { try { nearV = .1 + (Math.max(3, mapPose().dist * .3) - .1) * smoother(win(M, .1, .6)); } catch (e) { mapFail(e); } }
     if (camera.fov !== fov || camera.near !== nearV || camera.far !== 1500) { camera.fov = fov; camera.near = nearV; camera.far = 1500; camera.updateProjectionMatrix(); }
     // Kein Atem: die Kamera bewegt sich nur, wenn gescrollt wird (Erik: „sinnloses Kamerageeier“)
     camera.lookAt(_t);
-    // Haarkante des Tisches (Rand des gemeinsamen Bogens) liegt in Startblickhöhe als Linie auf dem Horizont durch die Grundlinie der Marke: erst ab Blickhöhe 2,5 sichtbar
-    if (table) table.body.children[0].visible = camera.position.y > 2.5;
     camera.updateMatrixWorld();
     const cw = VW(), ch = VH();
     for (const I of visible) {
@@ -1213,6 +1398,45 @@ export function seite(renderer, SEQ, opt = {}) {
     updateThread(st);
     try { updateCards(M, M > .92); } catch (e) { mapFail(e); }
     state = st;
+  }
+
+  // ---------- Schatten ----------
+  // Eine Tiefenkarte aus Richtung des Lichts (orthografisch), nur die Modelle der sichtbaren Szenen (Ebene 1 + Nummer der Szene, je Szene ein eigener Durchgang mit deren
+  // Ausschnitt). Bereich: in der Karte der ganze Tisch (2048 px), sonst die Parzelle der Szene (im Übergang beide Parzellen) mit Rand (1024 px). Empfangen wird im
+  // Papier-Shader auf waagerechten Flächen (weiche Probenmuster). Hochkant (Handy) ohne Schatten.
+  const SM = { rt: null, size: 0, cam: null, mat: null, off: false };
+  const LIGHT_DIR = V(...PAL.light).normalize();
+  function shadowPass(st) {
+    const on = !SM.off && !narrow && aspect >= 1 && INST[0].built;
+    if (!on) { U.smp.value.x = 0; return; }
+    let x0, x1, z0, z1;
+    if (Mcur > .5) { const R = tableRect(); [x0, x1, z0, z1] = [R.x0, R.x1, R.z0, R.z1]; }
+    else {
+      const ids = st.kind === "t" ? [st.i - 1, st.i] : [st.i]; x0 = z0 = 1e9; x1 = z1 = -1e9;
+      for (const i of ids) { const fp = INST[i].fp; x0 = Math.min(x0, fp[0] - 12); x1 = Math.max(x1, fp[1] + 12); z0 = Math.min(z0, fp[2] - 12); z1 = Math.max(z1, fp[3] + 12); }
+    }
+    const R = Math.hypot(x1 - x0, z1 - z0) / 2, size = R > 60 ? 2048 : 1024;
+    if (!SM.rt || SM.size !== size) {
+      if (SM.rt) { SM.rt.dispose(); if (SM.rt.depthTexture) SM.rt.depthTexture.dispose(); }
+      const dt = new THREE.DepthTexture(size, size); dt.type = THREE.UnsignedIntType; dt.minFilter = dt.magFilter = THREE.NearestFilter;
+      SM.rt = new THREE.WebGLRenderTarget(size, size, { depthTexture: dt, depthBuffer: true, generateMipmaps: false }); SM.size = size;
+      SM.cam = SM.cam || new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 600);
+      SM.mat = SM.mat || new THREE.MeshDepthMaterial({ side: THREE.DoubleSide, colorWrite: false });
+    }
+    const cam = SM.cam, ctr = V((x0 + x1) / 2, 0, (z0 + z1) / 2);
+    cam.left = -R; cam.right = R; cam.top = R; cam.bottom = -R; cam.updateProjectionMatrix();
+    cam.position.copy(ctr).addScaledVector(LIGHT_DIR, 300); cam.lookAt(ctr); cam.updateMatrixWorld(true);
+    U.smm.value.copy(cam.projectionMatrix).multiply(cam.matrixWorldInverse);
+    const ac = renderer.autoClear; renderer.autoClear = false;
+    renderer.setRenderTarget(SM.rt); renderer.clear();
+    scene.overrideMaterial = SM.mat;
+    for (const I of visible) {
+      if (!I.mesh || !I.mesh.visible) continue;
+      SM.mat.clippingPlanes = I.shadowPlanes || null;
+      cam.layers.set(1 + I.idx); renderer.render(scene, cam);
+    }
+    scene.overrideMaterial = null; renderer.setRenderTarget(null); renderer.autoClear = ac;
+    U.sm.value = SM.rt.depthTexture; U.smp.value.set(1, 1 / size, PAL.shadowStrength, .3 / 599);
   }
 
   // ---------- Fortschritt, Scrollen, Knöpfe ----------
@@ -1347,7 +1571,7 @@ export function seite(renderer, SEQ, opt = {}) {
     for (const I of INST) if (I.built) { scene.remove(I.group); I.group.traverse(o => { if (o.geometry) o.geometry.dispose(); }); }
     for (const pc of pieces) { scene.remove(pc.mesh); pc.g.dispose(); }
     pieces.length = 0; links3.length = 0;
-    if (table) { scene.remove(table.g); table = null; }
+    if (table) { scene.remove(table.ground); table.ground.geometry.dispose(); table.mat.dispose(); table = null; }
     MAP = null; Muser = 0; Mextra = 0;
     aspect = VW() / VH(); narrow = aspect < 1;
     INST = SEQ.map((cfg, i) => newInstance(cfg, i));
@@ -1393,6 +1617,7 @@ export function seite(renderer, SEQ, opt = {}) {
     if (mNow(st) >= .9999 && key === drawKey && INST.every(I => I.built && I.lodSmall === true && !I.easing) && revealN >= INST.length) return;
     drawKey = key;
     applyState(st, now);
+    try { shadowPass(st); } catch (e) { console.error("Schatten abgeschaltet:", e); SM.off = true; U.smp.value.x = 0; scene.overrideMaterial = null; renderer.setRenderTarget(null); }
     renderer.render(scene, camera);
     if (first) dbg("erster Frame gezeichnet");
     if (first) {
@@ -1432,7 +1657,7 @@ export function seite(renderer, SEQ, opt = {}) {
     },
     pieces: () => pieces,
     // Anordnung und Karte (Prüfung): Bahn, Parzellen, Tisch, Kartenstellung, Segment der Karte
-    layout: () => INST.map(I => ({ name: I.name, rot: Math.round(I.rot * 180 / PI), O: I.O.toArray(), fp: I.fp, lf: I.lf, arc: I.arc, corner: I.corner })),
+    layout: () => INST.map(I => ({ name: I.name, rot: Math.round(I.rot * 180 / PI), O: I.O.toArray(), fp: I.fp, cell: I.cell, content: I.content })),
     cards: () => INST.map(I => { const c = cardCorners(I); return [Math.min(...c.map(v => v.x)), Math.max(...c.map(v => v.x)), Math.min(...c.map(v => v.z)), Math.max(...c.map(v => v.z))]; }),
     table: () => tableRect(), mapPose: () => { ensure(INST.length - 1); return mapPose(); }, zseg: () => ZSEG, mAt: pp => mNow(stateAt(pp)),
     openMap(v) { Muser = v ? 1 : 0; Mextra = Muser; }
