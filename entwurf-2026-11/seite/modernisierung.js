@@ -65,7 +65,7 @@ export default function (K) {
   const HE = N ? .76 : .85, HEAD = ["Modernisierung"], hw = K.measure(HEAD, { font: "serif" }).tw * HE;
   const HZ = N ? 8.6 : 6.2, HCX = N ? 0 : -1.1;
   const head = K.word(HEAD, HE, HCX - hw / 2, HZ, 0, .07, { font: "serif", foot: 1, clock: "b", on: .004, over: .05,
-    imprint: { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2 } });
+    imprint: { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, closeB: .01 } });
 
   // Die Überschrift gehört zum Anfang und zum Schluss: sie klappt zurück, bevor die Kamera dicht an die Geräte geht (sonst ragt sie angeschnitten
   // ins untere Bildfeld), im Bogen bleibt ihr Abdruck, und steht am Ende wieder auf.
@@ -123,7 +123,7 @@ export default function (K) {
   }, CW, crt.topL, -1);
   K.onPanel(crt.top, vent, CW / 2, crt.topL / 2, -1);
   // Zurückklappen: Deckel zuerst, dann Seiten, Front, Rückwand
-  const DN = .78;
+  const DN = .795;
   crt.top.dn = { t0: DN, d: .06 }; crt.lf.dn = { t0: DN + .04, d: .06 }; crt.rt.dn = { t0: DN + .045, d: .06 };
   crt.fr.dn = { t0: DN + .07, d: .07 }; crt.bk.dn = { t0: DN + .09, d: .06 };
 
@@ -275,7 +275,7 @@ export default function (K) {
       A.mat.opacity = B.mat.opacity = on;
       for (const c of g.children) if (c.material && c.isLine) c.material.opacity = .42 * on;
       poseA.matrix.decompose(pa, qa, s1); poseB.matrix.decompose(pb, qb, s2);
-      const k = win(b, t0, d), e = mech(k, .02), ka = clamp(k / .8, 0, 1);
+      const k = win(b, t0, d), e = mech(k, .01), ka = clamp(k / .8, 0, 1);
       // Wendung (Mitte der Bahn), Maßstab wächst mit
       const kr = sm(clamp((k - .08) / .62, 0, 1));
       q.copy(qa).slerp(qb.clone().multiply(flipY), kr);
@@ -290,8 +290,9 @@ export default function (K) {
     return blk;
   };
   // Reihenfolge: Kopf, Bild, Text, Karten, zuletzt die Adresszeile
-  // Tempo (Erik, 22.10.): Blöcke wandern langsamer (Flugdauer .115 statt .09 von b, Überschwingen .02 statt .035) und weicher gestaffelt; die Szene hat dazu mehr Scrollweg (folge.js)
-  const FL = { kopf: .515, bild: .545, text: .575, karten: .605, bar: .64 }, FD = .115;
+  // Tempo (Erik, 22.10.): Blöcke wandern nacheinander statt gedrängt (Abstand .06 von b, Flug .07, davor Ruhe nach dem Hochklappen des Flachbildschirms bei .46),
+  // Ende bei .78 vor dem Umlegen des Monitors (DN .795), Überschwingen nur noch .01; die Szene hat dazu mehr Scrollweg (folge.js)
+  const FL = { kopf: .47, bild: .53, text: .59, karten: .65, bar: .71 }, FD = .07;
   mkBlock("kopf", FL.kopf, FD, .75, 1.3);
   mkBlock("bild", FL.bild, FD, .8, 1.8);
   mkBlock("text", FL.text, FD, .75, 1.1);
@@ -316,16 +317,13 @@ export default function (K) {
     keys: [
       // Überblick über den ganzen Bogen (Überschrift, beide Geräte als Bastellinien): eingepasst mit tmp-Rechnung (fit.mjs),
       // Breitbild 1280 x 900 Rand 60 px, Hochkant 390 x 844 Rand 14 px
+      // Ruhige Kamera (Erik, 22.10.: „eiert durch die Gegend“): eine einzige Fahrt in eine Richtung, ohne Schwenk zur Seite (x bleibt), ohne Heranzoomen:
+      // der Blick richtet sich Schritt für Schritt steiler auf (40 -> 68 Grad), bis er auf dem flachgelegten Monitor in die Lesestelle (87 Grad) mündet.
+      // Auf- und Zuklappen, Blöcke und Umlegen laufen alle unter derselben stetigen Fahrt.
       { w: 0, b: 0, cam: V(-1.26, 11.5, 15.52), tgt: V(-1.26, -.35, 1.41), camN: V(0, 14.35, 17.52), tgtN: V(0, -1.15, .31) },
-      { w: .55, b: .12, cam: V(-1.25, 11.01, 15.95), tgt: V(-1.25, -.36, 1.4), camN: V(0, 13.54, 17.86), tgtN: V(0, -1.21, .28) },
-      // Röhrenmonitor klappt auf
-      { w: .55, b: .27, cam: V(.43, 7.95, 14.11), tgt: V(-.03, .4, 1.04), camN: V(.31, 11.12, 15.3), tgtN: V(-.24, -.4, -.55) },
-      // Flachbildschirm klappt hoch
-      { w: .7, b: .42, cam: V(.18, 6.59, 13.39), tgt: V(-.27, .25, .39), camN: V(.32, 11.02, 11.24), tgtN: V(-.12, .52, -1.26) },
-      // Blöcke wandern
-      { w: 2.0, b: .72, cam: V(-.5, 7.17, 14.55), tgt: V(-.5, .29, .45), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
-      // alter Monitor legt sich flach, Lesestelle auf der Fläche, Schlussbild
-      { w: 1, b: .86, cam: V(-1.49, 9.4, 16.2), tgt: V(-1.49, .67, 1.08), camN: V(-.11, 13.79, 15.14), tgtN: V(-.11, 1.33, -2.02) },
+      { w: 1.0, b: .42, cam: V(-0.70, 14.57, 13.21), tgt: V(-0.70, 0.90, 0.90), camN: V(-0.02, 14.81, 11.91), tgtN: V(-0.02, -0.49, -1.01) },
+      { w: 1.6, b: .72, cam: V(-0.70, 15.83, 9.93), tgt: V(-0.70, 0.90, 0.20), camN: V(-0.04, 15.25, 6.58), tgtN: V(-0.04, 0.14, -2.27) },
+      { w: 1, b: .86, cam: V(-0.90, 15.43, 7.19), tgt: V(-0.90, 0.60, -0.30), camN: V(-0.05, 15.50, 3.50), tgtN: V(-0.05, 0.50, -3.00) },
       { w: 1.1, stop: ST.tx },
       { w: .8, b: 1, cam: V(-1.41, 10.96, 15.44), tgt: V(-1.41, -.17, 1.19), camN: V(0, 14.35, 17.52), tgtN: V(0, -1.16, .3) }
     ]
