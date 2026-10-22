@@ -149,6 +149,22 @@ Umsetzung in `entwurf-2026-11/seite/` über den Zusammenbau-Chat.
 - Offen: Länge, leere Übergänge mit Faden durch weißen Raum, Staffelei liest sich von vorn als Tafel, kopflastige Handybilder (Gerwing, Stimmen), Satzteile statt ganzer Sätze an einzelnen Lesestellen aus den Einzelszenen, Richtungswechsel an Szenengrenzen (siehe Drehbuch).
 - Zweite Korrekturrunde (22.10.): Kontakt-Schlussbild mit Überschrift und allen drei Kontaktwegen, Sprungziel und Label „Kontakt“; Gerwing-Satz ganz auf der Wand; Staffelei schräg gesehen mit gespreizten Beinen. Offen bleiben die Ablage der Staffelei als Kasten, kleine Kartenschrift und die Halbsätze im Stimmen-Zitat.
 
+## Erkenntnisse vom 22.10.2026: Lesebahn statt Text auf Geräten
+
+Aus Eriks Sichtung des Prototyps der ganzen Seite:
+
+- **Was am besten liest:** die Treppe im Werdegang und das aufklappende Leporello bei den Stimmen. Dort ist der Text selbst das Bauteil; jede Stufe oder Seite trägt einen ganzen Satz, steht dem Leser zugewandt, und die Kamera fährt gleichmäßig in eine Richtung. Lesereihenfolge = Raumordnung.
+- **Was unruhig wirkt:** Sätze auf Rechnern, Bildschirmen und Schnittstellen-Kästen (auch Shop, Gerwing), weil die Kamera für jeden Satz dreht und heran- oder wegzoomt.
+- **Roter Faden:** verbindet bisher nur Szenen, liest aber nicht mit; in vielen Szenen wartet der Punkt am Eingang, zwischen Szenen läuft er durch leeres Weiß.
+- **Ziel:** ein kleiner Film, durch den man in einem Zug fliegt und trotzdem die Inhalte mitbekommt, denn sonst liest niemand die Texte. Fahrt, kurzer Halt, Fahrt; ein Satz in zwei bis drei Sekunden erfassbar; je Szene eine Kernaussage zuerst und groß. Gesamtlänge Richtwert 40 bis 50 Bildschirmhöhen (heute 73).
+- **Konzept „Der Faden ist die Lesebahn“:** Jeder Satz steht ganz auf einem eigenen Papierträger am roten Faden; der Punkt hält an jedem Satz; die Kamera fährt stetig nach rechts ohne Drehen und Zoomen und bremst an Lesestellen weich. Konstrukte stehen als Szenerie dahinter und zeigen, was der Satz gerade sagt, tragen aber keinen Satz mehr.
+- **Trägerformen variieren** (Eriks ausdrücklicher Wunsch, keine Zettelparade): je Szene eine zum Thema passende Form, etwa Lieferschein, Kalenderblätter, Karteikarten, Drehscheibe, Klappe, Tunnelbuch-Ebenen, Treppe, Leporello, Fähnchen, Schieber. Die Regeln bleiben gleich.
+- **Feste Strecke statt Verzweigung:** Scrollen ist eine Richtung, die Zielgruppe überfliegt statt zu wählen, und die Reihenfolge erzählt. Gezieltes Springen bleibt über die Navigation; denkbar ist eine kleine Karte des Fadens.
+- **Inhalt und Struktur dürfen neu gedacht werden,** wenn Text-Bild-Konsistenz und Flow besser werden; neue Formulierungen sind als Vorschlag zu kennzeichnen.
+- **Weitere Befunde:** Die Eröffnung wirkt in Textur und Material fertiger als die übrigen Szenen; das wird Standard für alle. Die Eröffnung überlagert sich beim Laden doppelt (HTML-Startbild und 3D). Handy bleibt bei jeder Änderung Teil der Abnahme.
+- **Test Lesebahn** (`entwurf-2026-11/lesebahn/`, Schnittstellen): Ruhe und Lesbarkeit tragen, die Drehrate der Kamera sank von 0,86 auf 0,04 °/vh, das Höchsttempo halbierte sich. Schwach waren die schildhaften Fahnen, der Faden lief unter dem Satz vorbei statt ihn zu tragen, und es blieb viel Leerraum zwischen Satz und Szenerie.
+- **Arbeitsstand:** Der Umbau aller Szenen läuft in `lesebahn/` (Baukasten `LESEBAHN-BAUKASTEN.md`, Drehbuch `DREHBUCH-LESEBAHN.md`); `seite/` bleibt als Vergleich unverändert.
+
 ## Offen (in dieser Reihenfolge abfragen)
 
 1. Fließtext: A oder B (siehe oben)
