@@ -261,6 +261,12 @@ Reihenfolge nach Gewicht; je Punkt eine Frage an Erik, Entscheidung hier eintrag
 - Erik: Wird vor dem Start gebaut („das schaffst du mit effizienter Orchestrierung“).
 - Erik: „ich will halt das das Grundstück toll aussieht und die Flüge logisch, was auch immer dafür nötig ist finde ich gut auch wenn's aufwendiger sein sollte“. Damit ist die Spalten-Anordnung keine Vorgabe; erlaubt ist eine echte Schleife mit gedrehten Parzellen, Licht und Raster drehen mit. Logische Flüge: Jede Fahrt verlässt eine Parzelle in Blickrichtung und kommt an der Vorderseite der nächsten an, kein Flug durch Parzellen oder Bauteile, ruhige Drehung.
 
+## Weg auf main (22.10.2026, Erik)
+
+- Entwurfsordner liegen nur auf `entwuerfe-2026-10`, nie in main zusammenführen. Eigener Zweig `veroeffentlichung` von main: Inhalt von `entwurf-2026-11/seite/` ins Hauptverzeichnis (`index.html` wird Startseite), angepasste `de/datenschutz.html` mit, Schild „Entwurf Seite“ raus, alter Kopf mit Dunkelmodus-Schalter auf `de/impressum.html` und `de/datenschutz.html` raus.
+- Erik: „Weiterleiten auf die Startseite“. Alte Unterseiten (Leistungen, Preise, FAQ, Über, Projekte, Kontakt) und die ganze englische Fassung werden zu Weiterleitungen auf `/`, bis die englische Fassung kommt. Impressum und Datenschutz bleiben. Sitemap und `llms.txt` ziehen mit.
+- Der Kopiervorgang ist wiederholbar (`docs/weg-auf-main.sh`), weil `seite/` bis zum Start noch Szenen bekommt. Push auf main nur nach Eriks Klick.
+
 ## Später (nicht für die zeigbare Fassung heute)
 
 - Zeile „Impressum · Datenschutz“ in 3D: Abstand zu Etikett und Szenenknöpfen nur rund 8 px, auf 16–20 px vergrößern; Kontrast leicht anheben. Handy noch nicht angesehen.
