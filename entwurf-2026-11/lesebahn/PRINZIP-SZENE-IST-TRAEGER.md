@@ -34,6 +34,11 @@ Ersetzt die Regel „Konstrukte sind Szenerie ohne Text, Sätze stehen auf Träg
 | Für Agenturen | Einsteckschiene nur behalten, wenn der Satz auf dem eingesteckten Teil selbst steht; sonst neu ableiten | |
 | Kontakt | Umschlag mit Siegel und drei klickbaren Karten, wie er ist | trägt schon |
 
+## Eröffnung (Nachtrag Erik, 22.10.)
+
+1. **Auf 27 Zoll zu groß und unscharf.** Ursache: Lettern sind Canvas-Texturen mit fester Auflösung (`kern.js`, `PXEM = 120` px je em), der Name skaliert aber mit der Bildhöhe ohne Obergrenze (HTML-Startbild `index.html`: `min(15.3vh, 9.6vw)`). Auf 2560 × 1440 sind das rund 220 CSS-px, bei Pixelratio 2 rund 440 Gerätepixel, die Textur wird zwei- bis vierfach hochgezogen. Abhilfe: Texturauflösung aus Bildschirmgröße × `devicePixelRatio` ableiten (mindestens Marke und große Köpfe, Grenze `maxTextureSize`), Namensgröße deckeln (Desktop etwa 150–170 CSS-px, HTML-Startbild gleich, Ablösung bleibt deckungsgleich). Prüfen auch mit `#p=0&w=2560&h=1440`.
+2. **Start nur mit Schrift.** Das Podest ist anfangs in den Boden gefahren und aus dem Kamerawinkel nicht zu sehen; man sieht nur die Wortmarke N4. Erst mit dem ersten Scrollen fährt das Podest hoch, danach läuft die Eröffnung wie bisher. Das HTML-Startbild zeigt ebenfalls nur die Schrift.
+
 ## Arbeitsweise (Erik, 22.10.)
 
 Parallelisieren, wo es geht: Sonnet-Helfer (`clautz-worker`) und Haiku-Scout (`clautz-scout`), wo sinnvoll, Opus (`clautz-worker` mit model opus), wenn etwas partout nicht schick werden will oder zu Ende gedacht werden muss (etwa die Neuableitung von WBG, Wie ich arbeite und Für Agenturen, oder eine Szene, die nach zwei Runden noch nicht trägt).

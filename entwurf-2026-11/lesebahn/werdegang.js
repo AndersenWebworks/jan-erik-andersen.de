@@ -159,11 +159,11 @@ export default function (K) {
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
   const TREAD = c3("#ece6d9"), RISER = c3("#fbfaf6"), CARD = c3("#f8f6f1"), GREY = c3("#dcd7cd"),
     WOOD = c3("#e3d6bd"), STONE = c3("#dad4c9"), DARK = c3("#cfc9bf");
-  const EV = K.EV, UP = Q - K.lean, halfW = K.halfW;
+  const EV = K.EC, LEAN = K.lean, UP = Q - K.lean, halfW = K.halfW;
 
   // ---------- Schrift ----------
   // Setzstufen stehen senkrecht: alle Größen mit K.EV (gleicht die Verkürzung aus). Jahr klein in Grotesk (Kicker), Station in Newsreader groß, Zusatz als Lesetext.
-  const eY = .62 * EV, eS = (N ? 1.15 : 1.3) * EV, eD = EV, eH = (N ? 2.4 : 2.9) * EV;
+  const eY = .62 * EV, eS = (N ? 1.15 : 1.3) * EV, eD = EV, eH = (N ? 2.7 : 3.2) * EV;
   const WT = N ? 3.5 : 4.2;                              // größte Breite eines Eintrags (Welt)
   const twOf = p => p.t.tw * p.e;
   const stLines = name => {                              // Handy: lange Stationsnamen auf zwei Zeilen
@@ -191,13 +191,15 @@ export default function (K) {
   const n = items.length;
   items.forEach(it => { it.w = Math.max(...it.pr.map(twOf)); it.blk = it.pr.reduce((s, p) => s + p.h, 0); });
   const gapT = .3, gapB = .25;
-  const H = Math.max(N ? 2.2 : 1.7, Math.max(...items.map(i => i.blk)) + gapT + gapB);     // Stufenhöhe (alle gleich)
+  const Hb = Math.max(N ? 2.2 : 1.7, Math.max(...items.map(i => i.blk)) + gapT + gapB);     // Länge der Setzstufe (schräg, um K.lean zurückgelehnt)
+  const H = Hb * Math.cos(LEAN);   // Stufenhöhe (senkrecht) und Rücksprung der Setzstufe
+  const sB = H * Math.tan(LEAN);                         // Rücksprung: Fuß der Setzstufe liegt sB vor ihrer Oberkante
   const Y = k => (k + 1) * H;                            // Oberkante von Stufe k (Setzstufe von Y(k − 1) bis Y(k), Tritt auf Y(k))
   const HT = n * H;                                      // Höhe der Treppe = rise.h
 
   // ---------- Maße, Lage ----------
   const CL = N ? .8 : 1.0, M = CL + .2;                  // Steigung des Fadens am linken Rand der Setzstufe, Rand bis zum Text
-  const DT = N ? 22 : 17;                                // Tiefe der Tritte (hinter der Setzstufe liegt der Tritt, darauf das Zeichen)
+  const DT = 6;                                // Tiefe der Tritte (hinter der Setzstufe liegt der Tritt, darauf das Zeichen)
   const SC = N ? 1.05 : 1.3, s = SC;                     // Größe der Zeichen
   const SW = [0, .8, 1, 1.25, 1.2, 1.24, .82, 1.7, 1.46];                 // nominale Breite des Zeichens je Stufe
   const SA = [0, -.4, -.5, -.625, -.6, -.62, -.41, -.85, -.74];          // linke Kante des Zeichens bei Mitte c: c + SA[k] * s
@@ -214,7 +216,7 @@ export default function (K) {
   const dE = 1 / (xe - xsS);                              // b je Welteinheit Weg
 
   // ---------- Anstieg der Bahn (def.rise): die Kamera steigt gleichmäßig mit, passend zur Treppe ----------
-  const xm = k => cF(k) - Dk[k] / 2, yc = k => Y(k) - gapT - items[k].blk / 2;
+  const xm = k => cF(k) - Dk[k] / 2, yc = k => Y(k) - (gapT + items[k].blk / 2) * Math.cos(LEAN);
   // Suche: Beginn x0 und Ende x1 des Anstiegs so, dass der Eintrag in jeder Stufe etwa gleich zum Lesepunkt liegt (Abweichung e);
   // der Anstieg darf kurz vor der Szene beginnen (höchstens 0,3 E Höhe am Szenenanfang) und soll am Ende der Szene fast oben sein.
   let fit = null;
@@ -225,6 +227,9 @@ export default function (K) {
     const sc = e + .5 * short + 4 * Math.max(0, lead - .3);
     if (!fit || sc < fit.sc) fit = { sc, e, x0, x1, lead, short };
   }
+
+  // Tiefe der Textmitte (Szenen-z): dort liegt die Leselinie
+  const LZ = items.reduce((a, it) => a + sB - (Hb - gapT - it.blk / 2) * Math.sin(LEAN) , 0) / n;
 
   // ---------- Bogen ----------
   K.sheet(xl(0) - 4, XE + 3, -DT - 2, 3.4);
@@ -307,12 +312,12 @@ export default function (K) {
     L.rl = "plate";
     const next = S === frame ? L : F.lift(frame, H - 2 * EPS, tF, dF, { over: .03, lv: frame.lvl + 2 });
     // Setzstufe: innere Lage unter der Platte (ohne eigene Bastellinien), klappt hoch, sobald die Platte oben ist
-    const band = K.panel(S, [x0, 0], [x1, 0], [0, -1], tB, dB, Q, { nocut: 1, nofold: 1, over: .035, lv: S.lvl + 1 });
-    K.rect(band, 0, 0, x1 - x0, H, RISER);
+    const band = K.panel(S, [x0, sB], [x1, sB], [0, -1], tB, dB, Q - LEAN, { nocut: 1, nofold: 1, over: .035, lv: S.lvl + 1 });
+    K.rect(band, 0, 0, x1 - x0, Hb, RISER);
     band.rl = "band";
     bands.push(band);
     // Text von oben nach unten, links bündig
-    let v = H - gapT;
+    let v = Hb - gapT;
     for (const p of it.pr) { K.onPanel(band, p, M + p.w / 2 - p.t.padX * p.e, v - p.h / 2, 1); p.on = tOn; p.fade = .012; v -= p.h; }
     if (k) SIGN[k - 1](L, x0 + M - SA[k] * s, -.9, tZ, dZ);
     const bEnd = T.D > 0 ? Math.min(bIn + 4.2 * dE, T.bA - 1e-4) : bIn + 4.2 * dE;
@@ -324,19 +329,19 @@ export default function (K) {
   // ---------- Roter Faden ----------
   // Er läuft vor den Setzstufen an ihrer Oberkante und steigt am linken Rand jeder Setzstufe (in Startlage) schräg zur nächsten.
   // Am Handy gleitet die Stufe unter dem Faden hindurch an ihren Platz (die Schnur ist ihre Schiene).
-  const FZ = .012, pts = [V(xl(0) - 3.4, .004, .9), V(xl(0) - 1.6, .004, .5), V(xl(0) - .4, .004, FZ + .06)];
+  const FZ = .012, zc = (y0, y1, y) => sB * (1 - (y - y0) / (y1 - y0)) + FZ;     // z der Faden-Linie auf der schrägen Setzstufe in Höhe y
+  const pts = [V(xl(0) - 3.4, .004, LZ + .9), V(xl(0) - 1.6, .004, LZ + .5), V(xl(0) - .5, .004, sB + FZ + .05)];
   for (let k = 0; k < n; k++) {
-    const x = xl(k), y0 = k ? Y(k - 1) + .006 : .004, dy = Y(k) - y0;
-    if (k) pts.push(V(x - .3, y0, FZ));
-    pts.push(V(x, y0 + .02, FZ), V(x + CL * .25, y0 + dy * .1, FZ), V(x + CL * .5, y0 + dy * .5, FZ), V(x + CL * .75, y0 + dy * .9, FZ), V(x + CL, Y(k) + .006, FZ), V(x + CL + .3, Y(k) + .006, FZ));
-    const nx = k < n - 1 ? xl(k + 1) - .6 : XE - .3;
-    for (let q = x + CL + 1.6; q < nx - .8; q += 1.6) pts.push(V(q, Y(k) + .006, FZ));
-    if (nx > x + CL + .4) pts.push(V(nx, Y(k) + .006, FZ));
+    const x = xl(k), y0 = k ? Y(k - 1) + .006 : .004, y1 = Y(k) + .006, dy = y1 - y0, c = f => zc(y0, y1, y0 + dy * f);
+    if (k) pts.push(V(x - .3, y0, FZ + sB * .5), V(x - .05, y0, sB + FZ));
+    pts.push(V(x, y0 + .02, c(.02)), V(x + CL * .25, y0 + dy * .1, c(.1)), V(x + CL * .5, y0 + dy * .5, c(.5)), V(x + CL * .75, y0 + dy * .9, c(.9)), V(x + CL, y1, FZ), V(x + CL + .3, y1, FZ));
+    const nx = k < n - 1 ? xl(k + 1) - .8 : XE - .3;
+    for (let q = x + CL + 1.6; q < nx - .8; q += 1.6) pts.push(V(q, y1, FZ));
+    if (nx > x + CL + .4) pts.push(V(nx, y1, FZ));
   }
 
-
   return {
-    strecke: [xsS, xe], lineZ: 0,
+    strecke: [xsS, xe], lineZ: LZ,
     rise: { x0: fit.x0, x1: fit.x1, h: HT },
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: bIns[0] + 3.5 * dE },
     faden: pts,

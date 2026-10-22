@@ -265,6 +265,7 @@ Reihenfolge nach Gewicht; je Punkt eine Frage an Erik, Entscheidung hier eintrag
 
 - Entwurfsordner liegen nur auf `entwuerfe-2026-10`, nie in main zusammenführen. Eigener Zweig `veroeffentlichung` von main: Inhalt von `entwurf-2026-11/seite/` ins Hauptverzeichnis (`index.html` wird Startseite), angepasste `de/datenschutz.html` mit, Schild „Entwurf Seite“ raus, alter Kopf mit Dunkelmodus-Schalter auf `de/impressum.html` und `de/datenschutz.html` raus.
 - Erik: „Weiterleiten auf die Startseite“. Alte Unterseiten (Leistungen, Preise, FAQ, Über, Projekte, Kontakt) und die ganze englische Fassung werden zu Weiterleitungen auf `/`, bis die englische Fassung kommt. Impressum und Datenschutz bleiben. Sitemap und `llms.txt` ziehen mit.
+- Erik: „Beide von main nehmen“. `standalone/` (alte Entwürfe) und `ai/` (KI-Spiegel der alten Seite mit Preisen) fallen weg, ebenso der Workflow `ai-readable-mirrors.yml` und der Verweis in `robots.txt`.
 - Der Kopiervorgang ist wiederholbar (`docs/weg-auf-main.sh`), weil `seite/` bis zum Start noch Szenen bekommt. Push auf main nur nach Eriks Klick.
 
 ## Später (nicht für die zeigbare Fassung heute)

@@ -33,7 +33,7 @@ export const TEXT = {
 
 export default function (K) {
   const { F, R, V, COL, PI, Q, THREE, narrow: N } = K;
-  const EV = K.EV, HW = K.halfW, DEG = PI / 180, sm = K.sm;
+  const EV = K.EC, HW = K.halfW, DEG = PI / 180, sm = K.sm;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
   const rnd = (i, k) => { const v = Math.sin(i * 12.9898 + k * 78.233) * 43758.5453; return v - Math.floor(v); };
 
@@ -49,7 +49,7 @@ export default function (K) {
   const NO = 9;
   const satz = (t, e, W, o = {}) => K.satz(t, { e, maxEm: (W - 2 * MX) / e, on: NO, fade: .012, ...o });
   const Z = TEXT.sis.map((t, i) => satz(t, i === 4 ? EV * 1.3 : EV, LW));
-  const qE = EV * .95, NB = " ";
+  const qE = EV * 1.0, NB = " ";
   const quelle = (t, W) => {
     const pr = satz(t.replace(" · ", NB + "· "), qE, W, { col: MUTED });
     pr.text = t; return pr;
@@ -128,7 +128,7 @@ export default function (K) {
     const d0 = [cs, -sn], eb = [-sn, -cs];
     const lp = (u, v) => [A0[0] + d0[0] * u + eb[0] * v, A0[1] + d0[1] * u + eb[1] * v];
     F.part(tag, part[0], part[1], { lift: .014 });
-    const p0 = K.panel(par, lp(0, 0), lp(W, 0), eb, rise[0], rise[1], Q, { over: .05, lv: 1 });
+    const p0 = K.panel(par, lp(0, 0), lp(W, 0), eb, rise[0], rise[1], Q - K.lean, { over: .05, lv: 1 });
     K.rect(p0, 0, 0, W, H, PG[0], .5);
     const pg = [p0], rect = [[0, 0], [W, 0], [W, H], [0, H]].map(q => p0.uv(q[0], q[1]));
     for (let k = 1; k < n; k++) {
