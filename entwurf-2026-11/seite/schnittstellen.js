@@ -1,13 +1,16 @@
-// Schnittstellen und eigene Werkzeuge (Katalog 5) + WBG Pooling (Katalog 7), zwei Szenen auf einer Kamerabahn, Bogen + Bastellinien.
-// Szene 1 (b 0 … .54): Ein Bildschirm mit Website steht auf (das Kinn bleibt leer), daneben hebt sich ein flaches Gerätebrett (Platte mit Zarge, Vorbild: die Tischplatte
-//   der Eröffnung); auf dem Brett stehen drei Geräte (CRM, ERP, Bewerbermanagement) mit leeren Buchsen. Auf der Zarge an der Vorderkante steht der erste Satz in einem Stück.
-//   Kabel mit Stecker laufen vom Bildschirm über die linke Brettkante, auf dem Brett als Bündel entlang der Zarge und dann gerade auf die Buchsen. Beim ERP passt der Stecker nicht (runde Buchse):
-//   der Stecker stößt an, zieht sich zurück, ein rotes Adapterstück faltet sich aus dem Bogen dazwischen und rastet ein, dann steckt der Stecker. Der Adapter faltet sich auf dem Brett aus.
-// Szene 2 (b .55 … 1): Dieselben Geräte, weiter auf dem Brett. Davor ein Bildschirm mit Portal, ein Drehteller mit Produkt (dreht sich beim Scrollen),
-//   eine Login-Tafel mit Schloss (der Bügel rastet ein) und zwei Kabel zur zweiten Buchse von CRM (Salesforce) und Bewerbermanagement (Concludis).
-// Alle Texte wörtlich aus entwurf-2026-10-b-raumtext-2/index.html, Satz für Satz an dem Bauteil, von dem er handelt.
-// Kopie von entwurf-2026-11/schnittstellen/szene.js für die durchgehende Seite (entwurf-2026-11/seite/). Die Seite zeigt das Modul zweimal:
-// als Szene „Schnittstellen“ (b 0 … .55) und, nach „Gestaltung“, als Szene „WBG Pooling“ (b .556 … 1, dieselben Geräte stehen schon).
+// Schnittstellen und eigene Werkzeuge mit WBG Pooling als Beleg: eine durchgehende Szene (b 0 … 1) auf einer Kamerabahn, Bogen + Bastellinien.
+// Ein Bildschirm mit Website steht auf (das Kinn bleibt leer), daneben hebt sich ein flaches Gerätebrett (Platte mit Zarge, Vorbild: die Tischplatte
+//   der Eröffnung); auf dem Brett stehen drei Geräte (CRM, ERP, Bewerbermanagement) mit leeren Buchsen. Kabel mit Stecker laufen vom Bildschirm über die
+//   linke Brettkante, auf dem Brett als Bündel entlang der Zarge und dann gerade auf die Buchsen. Beim ERP passt der Stecker nicht (runde Buchse):
+//   der Stecker stößt an, zieht sich zurück, ein rotes Adapterstück faltet sich aus dem Bogen dazwischen und rastet ein, dann steckt der Stecker.
+//   Danach WBG Pooling: ein Bildschirm mit Portal, ein Drehteller mit Produkt (dreht sich beim Scrollen), eine Login-Tafel mit Schloss (der Bügel
+//   rastet ein) und zwei Kabel, die vorn über die Zarge laufen und in die zweiten Buchsen von CRM (Salesforce) und Bewerbermanagement (Concludis) stecken.
+// Alle Texte stehen wörtlich (entwurf-2026-10-b-raumtext-2/index.html) auf der Zarge des Bretts, nacheinander von links nach rechts wie die Stufen der
+//   Werdegang-Treppe, und werden von der Kamera an der Brettkante entlang gelesen: (a) Schnittstellen-Satz, (b) „Wo ein gekauftes Werkzeug …“ (erscheint,
+//   wenn der Adapter eingerastet ist), (c) Kopf „WBG Pooling“ (klein, grau, gesperrt wie eine Jahreszahl der Treppe) mit dem WBG-Satz unter Portal, Drehteller
+//   und Schloss. Kein Text auf Bildschirmkinn, Gerätedeckeln oder Tafeln. Die Zarge ist dafür nach rechts verlängert.
+// Kopie von entwurf-2026-11/schnittstellen/szene.js für die durchgehende Seite (entwurf-2026-11/seite/). Vorher zeigte die Seite das Modul zweimal
+// (Szene „Schnittstellen“ b 0 … .55, nach „Gestaltung“ Szene „WBG Pooling“ b .556 … 1); jetzt eine Szene, Sprungziel #s=wbg zeigt auf die Lesestelle c.
 // Ergänzt: Konstruktionsphase (Raster, Gerüst je Bauabschnitt, Bleistiftspur).
 
 const ink = a => `rgba(48,48,51,${a})`;
@@ -112,34 +115,11 @@ function shackleArt(x, W, H) {
 export default function (K) {
   const { F, R, V, COL, Q, sm, mech, win, clamp, THREE, narrow: N } = K;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const METAL = c3("#dcd7cd"), FACE = c3("#f8f6f1"), DEV = c3("#e4e0d6"), DECK = c3("#f0ede6"), REDC = c3("#d40235"), TAG = c3("#f6f3ec"), PLATE = c3("#e9e4d8");
+  const METAL = c3("#dcd7cd"), FACE = c3("#f8f6f1"), DEV = c3("#e4e0d6"), DECK = c3("#f0ede6"), REDC = c3("#d40235"), PLATE = c3("#e9e4d8");
   const WALL = c3("#e1dccf"), PROD = c3("#efe9dc"), PRODT = c3("#f7f3ea"), BOARD = c3("#f8f6f1");
 
-  // ---------- Lage ----------
-  const M1X = -4.0, DW = 2.4, DH = 1.5, DD = 1.5, DEVX = [-.8, 2.6, 6.0];
-  const SOCK = [.26, .74];                                   // erste Buchse (Szene 1), zweite Buchse (Szene 2) als Anteil der Breite
-  const ZR = 12.5, M2X = 1.4, TX = 5.9, TZ = 9.9, TR = 2.3, LGX = 11.2;
-  const sockX = (i, k) => DEVX[i] + DW * SOCK[k];
-  K.sheet(-9.5, 17, -7, 19);
-
-  // ---------- Zeitplan (b) ----------
-  const TT = {
-    m1: { line: [.01, .05], neck: [.085, .05], scr: [.125, .045], decal: .168, text: .178 },
-    bd: { line: [.06, .04], lift: [.10, .045], text: .148 },
-    dev: { line: [.03, .09], fr: [.150, .170, .190], dk: [.185, .205, .225], dur: .05, durD: .04 },
-    cab1: { crm: [.275, .31], bew: [.295, .34], erp1: [.31, .35], erpBack: [.352, .372], erp2: [.49, .53] },
-    ad: { line: [.375, .04], fr: [.405, .05], dk: [.445, .045], decal: .452, text: .495 },
-    h2: .56,
-    m2: { line: [.575, .045], neck: [.615, .04], scr: [.65, .04], decal: .69, text: .70 },
-    tt: { line: [.60, .06], walls: .655, plate: [.69, .045], prodLine: [.725, .035], prod: [.76, .77, .78, .795], spin: [.85, .10], text: .735 },
-    lg: { line: [.78, .05], rise: [.86, .045], decal: .91, text: .915, shackle: [.965, .03] },
-    cab2: { sf: [.955, .99], co: [.965, 1.0] },
-    an: { line: [.93, .02], text: .975 }
-  };
-
-
-  // ---------- Bildschirm (Fuß-Hals-Schirm wie in der Eröffnung, nach hinten gefaltet) ----------
-  // Satz ganz auf das Kinn: Zeilenumbruch nur an Wortgrenzen, möglichst gleichmäßig lange Zeilen
+  // ---------- Sätze auf der Zarge (wörtlich aus index.html) ----------
+  // Zeilenumbruch nur an Wortgrenzen, möglichst gleichmäßig lange Zeilen
   function wrap(text, e, maxEm) {
     const words = text.split(" "), count = m => { let n = 1, cur = ""; for (const w of words) { const t = cur ? cur + " " + w : w; if (cur && K.measure([t]).tw > m) { n++; cur = w; } else cur = t; } return n; };
     const n0 = count(maxEm); let m = maxEm; while (count(m - .4) === n0 && m > 6) m -= .4;
@@ -147,13 +127,52 @@ export default function (K) {
     for (const w of words) { const t = cur ? cur + " " + w : w; if (cur && K.measure([t]).tw > m) { lines.push(cur); cur = w; } else cur = t; }
     lines.push(cur); return lines;
   }
-  const CE = .125;
-  function monitor(cx, zh, T, name, page, sentence) {
+  const TXA = "Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen, bei WBG etwa mit Salesforce und Concludis.";
+  const TXB = "Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt.";
+  const HDC = "WBG Pooling · 2023 bis 2025 · für die Runden Group";
+  const TXC = "Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.";
+  const BE = N ? .39 : .2, EH = N ? .27 : .14;                // Schriftgröße (em) der Sätze bzw. des kleinen Kopfs (Verhältnis wie Jahreszahl zu Zusatz der Treppe)
+  const LA = wrap(TXA, BE, (N ? 8.2 : 4.9) / BE), LB = wrap(TXB, BE, (N ? 8.2 : 4.7) / BE), LC = wrap(TXC, BE, (N ? 8.2 : 6.0) / BE);
+  const twid = L => K.measure(L).tw * BE;
+  const GAPX = N ? 1.2 : 1.4;                                 // Abstand zwischen den Sätzen
+  // linke Kanten der Sätze a, b, c auf der Zarge; links von a bleibt die Zarge frei, dort laufen die Kabel von WBG darüber
+  const XA0 = N ? 2.9 : 2.0, XB0 = XA0 + twid(LA) + GAPX, XC0 = XB0 + twid(LB) + GAPX;
+  const HW = K.measure([HDC], { track: .06 }).tw * EH;
+
+  // ---------- Lage ----------
+  const M1X = -4.0, DW = 2.4, DH = 1.5, DD = 1.5, DEVX = [-.8, 2.6, 6.0];
+  const SOCK = [.26, .74];                                   // erste Buchse (Kabel vom Bildschirm links), zweite Buchse (WBG) als Anteil der Breite
+  // Brett: von DEVX[0] − .5 bis hinter den Satz c (nach rechts verlängert); die WBG-Teile (Portal, Drehteller, Login) stehen vor Satz c
+  // WBG-Teile stehen auf dem Brett hinter Satz c: Portal-Bildschirm hinten links (z −2,2), Login-Tafel hinten rechts (z −2,0), der Drehteller davor (z 0,8)
+  const SWM = N ? 2.8 : 3.6, TR = 2.3, LBW = 2.4;
+  const BZF = 3.3, BZB = -3.0;
+  const ZR = -2.2, ZL = -2.0, TZ = .8, M2X = XC0 + SWM / 2 + .1, TX = XC0 + (N ? 2.5 : 3.3), LGX = TX + 3.0;
+  const BX0 = DEVX[0] - .5, BX1 = Math.max(DEVX[2] + DW + .5, XC0 + Math.max(twid(LC), HW) + .5, LGX + LBW / 2 + .5), BW = BX1 - BX0;
+  const sockX = (i, k) => DEVX[i] + DW * SOCK[k];
+  K.sheet(-9.5, Math.max(17, BX1 + 1.8), -7, 19);
+
+  // ---------- Zeitplan (b) ----------
+  const TT = {
+    m1: { line: [.01, .05], neck: [.085, .05], scr: [.125, .045], decal: .168 },
+    bd: { line: [.06, .04], lift: [.10, .045], text: .148 },
+    dev: { line: [.03, .09], fr: [.150, .170, .190], dk: [.185, .205, .225], dur: .05, durD: .04 },
+    cab1: { crm: [.275, .31], bew: [.295, .34], erp1: [.31, .35], erpBack: [.352, .372], erp2: [.49, .53] },
+    ad: { line: [.375, .04], fr: [.405, .05], dk: [.445, .045], decal: .452, text: .495 },
+    m2: { line: [.575, .045], neck: [.615, .04], scr: [.65, .04], decal: .69 },
+    tt: { line: [.60, .06], walls: .655, plate: [.69, .045], prodLine: [.725, .035], prod: [.76, .77, .78, .795], spin: [.85, .10] },
+    lg: { line: [.78, .05], rise: [.86, .045], decal: .91, shackle: [.965, .03] },
+    cab2: { sf: [.955, .99], co: [.965, 1.0] },
+    wbg: { text: .66 }
+  };
+
+
+  // ---------- Bildschirm (Fuß-Hals-Schirm wie in der Eröffnung, nach hinten gefaltet) ----------
+  function monitor(cx, zh, T, name, page, par) {
     F.part(name, T.line[0], T.line[1]);
-    // sentence null: normales Kinn ohne Text (Bildschirm der Szene 1, der Satz steht auf der Zarge des Gerätebretts)
-    const SW = N ? 2.8 : 3.6, chinLines = sentence ? wrap(sentence, CE, (SW - .5) / CE) : null;
-    const FW = 1.5, NW = .34, NH = .75, DX = SW - .4, DY = DX / 1.6, CH = chinLines ? ((chinLines.length - 1) * 1.18 + 1) * CE + .34 : .58, SL = CH + DY + .1, PXU = 500;
-    const neck = K.panel(R, [cx - FW / 2, zh], [cx + FW / 2, zh], [0, -1], T.neck[0], T.neck[1], Q, { over: .04 });
+    // Kinn ohne Text: alle Sätze stehen auf der Zarge des Gerätebretts
+    const SW = N ? 2.8 : 3.6;
+    const FW = 1.5, NW = .34, NH = .75, DX = SW - .4, DY = DX / 1.6, CH = .58, SL = CH + DY + .1, PXU = 500;
+    const neck = K.panel(par, [cx - FW / 2, zh], [cx + FW / 2, zh], [0, -1], T.neck[0], T.neck[1], Q, { over: .04 });
     K.P(neck, [[0, 0], [FW, 0], [FW / 2 + NW / 2, NH], [FW / 2 - NW / 2, NH]], METAL, [.5, .5, 0, .5]);
     const scr = K.panel(neck, neck.uv(FW / 2 - NW / 2, NH), neck.uv(FW / 2 + NW / 2, NH), [0, -1], T.scr[0], T.scr[1], -.1, { over: .25 });
     const uL = -(SW - NW) / 2, uR = NW + (SW - NW) / 2;
@@ -164,18 +183,17 @@ export default function (K) {
       x.save(); x.translate(dx, dy); x.beginPath(); x.rect(0, 0, DX * PXU, DY * PXU); x.clip(); page(x, DX * PXU, DY * PXU); x.restore();
     }, SW, SL, T.decal, .03);
     K.onPanel(scr, dec, NW / 2, SL / 2, 1);
-    let chin = null;
-    if (chinLines) { chin = K.print(chinLines, CE, T.text, { align: "center", lh: 1.18 }); K.onPanel(scr, chin, NW / 2, (CH - .055) / 2 - .01, 1); }
-    return { neck, scr, chin, dec, cx, zh, top: NH + SL, SW };
+    return { neck, scr, dec, cx, zh, top: NH + SL, SW };
   }
 
   // ---------- Gerätebrett: flache Platte mit Zarge, hebt sich parallel aus dem Bogen (wie die Tischplatte der Eröffnung) ----------
-  // Maße: Breite von DEVX[0] − .5 bis DEVX[2] + DW + .5; hinten bis zur Tiefe der Deckel (DD), vorn so tief, dass der Adapter (Auffaltung bis z 1,55)
-  // und das Kabelbündel samt Rückzug des ERP-Steckers (Stecker zurück bis z 2,32, Kurve ab 2,5) noch auf dem Brett liegen. Höhe: Zarge nimmt den Satz auf.
-  const BX0 = DEVX[0] - .5, BX1 = DEVX[2] + DW + .5, BZF = 3.3, BZB = -DD, BW = BX1 - BX0;
-  const BE = N ? .39 : .2;                                   // Schriftgröße (em) des Satzes auf der Zarge
-  const BLINES = N ? ["Ich verbinde Websites und Shops", "mit CRM-, ERP- und", "Bewerbermanagementsystemen,", "bei WBG etwa mit Salesforce und Concludis."] : ["Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen,", "bei WBG etwa mit Salesforce und Concludis."];
-  const BH = ((BLINES.length - 1) * 1.18 + 1) * BE + .34;
+  // Maße: Breite von DEVX[0] − .5 bis hinter den Satz c, hinten bis zur Tiefe der Deckel (DD), vorn so tief, dass der Adapter (Auffaltung bis z 1,55)
+  // und das Kabelbündel samt Rückzug des ERP-Steckers (Stecker zurück bis z 2,32, Kurve ab 2,5) noch auf dem Brett liegen. Höhe: Zarge nimmt die Sätze auf.
+  // Die Sätze a, b, c stehen linksbündig nacheinander auf der Außenseite der Zarge (wie Jahr, Station und Zusatz auf den Setzstufen der Werdegang-Treppe).
+  const aP = K.print(LA, BE, TT.bd.text, { lh: 1.2 }), bP = K.print(LB, BE, TT.ad.text, { lh: 1.2 });
+  const cH = K.print([HDC], EH, TT.wbg.text, { track: .06, col: MUTED }), cS = K.print(LC, BE, TT.wbg.text + .01, { lh: 1.2 });
+  const cHB = cH.h + cS.h - .05;
+  const BH = Math.max(aP.h, bP.h, cHB) + .26;
   const BRDC = c3("#e6e0d2"), ZARC = c3("#e1d9c9");
   F.part("brett", TT.bd.line[0], TT.bd.line[1]);
   const bOp = { over: .04 }, bt0 = TT.bd.lift[0], bd0 = TT.bd.lift[1];
@@ -186,22 +204,23 @@ export default function (K) {
   K.rect(K.panel(R, [BX1, BZF], [BX1, BZB], [1, 0], bt0, bd0, Q, bOp), 0, 0, BZF - BZB, BH, ZARC);
   const BOARD_T = F.lift(R, BH, bt0, bd0, { over: .04 });
   F.poly(BOARD_T, [[BX0, BZF], [BX1, BZF], [BX1, BZB], [BX0, BZB]], BRDC, .5);
-  // Satz in einem Stück auf der Zarge (Außenseite −1, wie die Vorderwand einer Platte in gerwing)
-  const bdText = K.print(BLINES, BE, TT.bd.text, { align: "center", lh: 1.18 });
-  K.onPanel(zarge, bdText, BW / 2, BH / 2, -1);
+  // Sätze auf der Zarge (Außenseite −1, wie die Vorderwand einer Platte in gerwing); linke Schriftkante bei x, Mitte in der Höhe bei v
+  const onZarge = (pr, x, v) => K.onPanel(zarge, pr, x - BX0 + pr.w / 2 - pr.t.padX * pr.e, v, -1);
+  onZarge(aP, XA0, BH / 2);
+  onZarge(bP, XB0, BH / 2);
+  { let v = (BH + cHB) / 2; onZarge(cH, XC0, v - cH.h / 2); v -= cH.h; onZarge(cS, XC0, v - cS.h / 2 + .035); }
 
   // ---------- Gerät: Front steht auf, Deckel klappt nach hinten ----------
   function device(i, label, socks, tFr, tDk, tFront, textLines, e) {
     const x0 = DEVX[i];
-    const fr = K.panel(BOARD_T, [x0, 0], [x0 + DW, 0], [0, -1], tFr, TT.dev.dur, Q, { over: .05 });
-    K.rect(fr, 0, 0, DW, DH, DEV);
-    const dk = K.panel(fr, fr.uv(0, DH), fr.uv(DW, DH), [0, -1], tDk, TT.dev.durD, -Q, { over: .05 });
-    K.rect(dk, 0, 0, DW, DD, DECK);
+    // geschlossene Box (Front, Rückwand, Seiten, Deckel an der Rückwand) wie der Rechner der Eröffnung
+    const bx = K.box(BOARD_T, x0, x0 + DW, 0, -DD, DH, tFr, tDk + TT.dev.durD - tFr, { col: DEV, roof: DECK, over: .05 });
+    const fr = bx.fr;
     const dec = K.decal(Math.round(DW * 300), Math.round(DH * 300), (x, W, H) => deviceFront(socks)(x, W, H, DW, DH), DW, DH, tFront);
-    K.onPanel(fr, dec, DW / 2, DH / 2, 1);
+    K.onPanel(fr, dec, DW / 2, DH / 2, -1);
     const front = K.print(textLines, e, tFront + .01, { align: "center", lh: 1.15 });
-    K.onPanel(fr, front, DW / 2, DH * .56, 1);
-    return { fr, dk, front, dec, x0 };
+    K.onPanel(fr, front, DW / 2, DH * .56, -1);
+    return { fr, dk: bx.top, front, dec, x0 };
   }
 
   // ---------- Kabel mit Stecker, der vorn mitläuft ----------
@@ -243,33 +262,27 @@ export default function (K) {
   const eH = N ? .5 : .62, H1 = K.word(["Schnittstellen und", "eigene Werkzeuge"], eH, N ? -4.6 : -5.4, 6.6, .15, .85, { font: "serif", foot: 1, imprint: { ...IMPRINT, close: .25, closeDur: .7 } });
 
   // Bildschirm mit Website
-  const m1 = monitor(M1X, 0, TT.m1, "m1", pageSite, null);
+  const m1 = monitor(M1X, 0, TT.m1, "m1", pageSite, R);
 
   // Drei Geräte: Texte der Fronten sind die Satzteile
   F.part("geraete", TT.dev.line[0], TT.dev.line[1]);
   const crm = device(0, "CRM", [{ u: SOCK[0], kind: "rect" }, { u: SOCK[1], kind: "rect" }], TT.dev.fr[0], TT.dev.dk[0], TT.dev.fr[0] + TT.dev.dur, ["CRM"], .2);
   const erp = device(1, "ERP", [{ u: SOCK[0], kind: "round" }, { u: SOCK[1], kind: "round" }], TT.dev.fr[1], TT.dev.dk[1], TT.dev.fr[1] + TT.dev.dur, ["ERP"], .2);
   const bew = device(2, "Bewerbermanagement", [{ u: SOCK[0], kind: "rect" }, { u: SOCK[1], kind: "rect" }], TT.dev.fr[2], TT.dev.dk[2], TT.dev.fr[2] + TT.dev.dur, ["Bewerbermanagement"], .17);
-  // Deckel des ERP trägt den ganzen zweiten Satz, sobald der Adapter einrastet; die Deckel von CRM und Bewerbermanagement bekommen in Szene 2 ihr Namensschild
-  const lidE = K.print(wrap("Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt.", .13, (DW - .5) / .13), .13, TT.ad.text, { lh: 1.25, align: "center" });
-  K.onPanel(erp.dk, lidE, DW / 2, DD / 2, 1);
-  // seite/: kürzere Blende, sonst steht „Concludis“ am Ende der Bahn (b = 1) nur mit 84 % Deckkraft
-  const sfL = K.print(["Salesforce"], .2, TT.cab2.sf[0] + .02, { align: "center", fade: .012 }), coL = K.print(["Concludis"], .2, TT.cab2.co[0] + .02, { align: "center", fade: .012 });
-  K.onPanel(crm.dk, sfL, DW / 2, DD / 2, 1);
-  K.onPanel(bew.dk, coL, DW / 2, DD / 2, 1);
-
   // Rotes Adapterstück: Front steht vor der Buchse auf (Vorderseite Unterseite), Deckel klappt zurück gegen das Gerät
   F.part("adapter", TT.ad.line[0], TT.ad.line[1]);
   const AW = 1.5, AH = .85, AD = .7, ax = sockX(1, 0);
   const adF = K.panel(BOARD_T, [ax - AW / 2, AD], [ax + AW / 2, AD], [0, 1], TT.ad.fr[0], TT.ad.fr[1], Q, { over: .06 });
   K.rect(adF, 0, 0, AW, AH, REDC);
-  const adD = K.panel(adF, adF.uv(0, AH), adF.uv(AW, AH), [0, 1], TT.ad.dk[0], TT.ad.dk[1], Q, { over: .06 });
+  const adD = K.panel(adF, adF.uv(0, AH), adF.uv(AW, AH), [0, 1], TT.ad.dk[0], TT.ad.dk[1], Q, { over: 0 });
   K.rect(adD, 0, 0, AW, AD, REDC);
   K.onPanel(adF, K.decal(Math.round(AW * 300), Math.round(AH * 300), (x, W, H) => adapterFront(x, W, H, AW, AH), AW, AH, TT.ad.decal), AW / 2, AH / 2, -1);
 
   // Kabel: Anfang am Hals des Bildschirms, über die linke Brettkante, auf dem Brett als Bündel (je Kabel eine Höhe, das fernste oben) entlang der
   // Zarge in der Bahn z = LZ, vor dem Gerät im Bogen gerade auf die Buchse. Die Kurve beginnt bei z 2,5, damit der ERP-Stecker bis z 2,32 zurückfahren kann.
-  const SY = .36, SYB = BH + SY, LZ = 3.0, hyL = [.10, .26, .42], gzL = [2.4, 3.0, 3.6];
+  // Drei Höhen übereinander (hyL): CRM, ERP, Bewerbermanagement; darüber (YCO) läuft später das Kabel von WBG zum Bewerbermanagement. Alle Kabel liegen hinter
+  // der Zarge, die Sätze auf ihr bleiben frei.
+  const SY = .36, SYB = BH + SY, LZ = 3.0, hyL = [.06, .17, .28], gzL = [2.4, 3.0, 3.6];
   function path1(i, zEnd) {
     const xs = sockX(i, 0), ox = M1X, yL = BH + hyL[i], gz = gzL[i];
     return [V(ox + .2, .36, .05), V(ox + .3, .14, .35), V(ox + .62, .04, .85), V(ox + 1.3, .03, gz * .55), V(-3.1, .06, gz), V(-2.55, .1, gz), V(-1.95, BH * .4 + .12, (gz + LZ) / 2), V(BX0 - .1, yL + .05, LZ),
@@ -290,23 +303,10 @@ export default function (K) {
   })();
 
   // ===================================================================================================
-  // SZENE 2
+  // WBG POOLING (ab b .56): Portal, Drehteller, Login-Tafel vor dem Satz c, Kabel zu Salesforce und Concludis
   // ===================================================================================================
-  const eW = N ? .55 : .7, hx = N ? -4.4 : -4.2, hz = 15.6;
-  const h2w = K.word(["WBG Pooling"], eW, hx, hz, TT.h2, .035, { font: "serif", foot: 1, clock: "b", on: TT.h2 - .004, imprint: { ...IMPRINT, close: 1 } });
-  // Etikett (flach, kleiner Streifen auf dem Bogen); liefert den Knoten
-  function etikett(name, t0, d, cx, z, w, h) {
-    const x = cx - w / 2;
-    F.part(name, t0, d);
-    const nd = K.panel(R, [x, z], [x + w, z], [0, -1], t0 + d * .6, d * .5, 0, { nofold: true, over: 0 });
-    K.rect(nd, 0, 0, w, h, TAG);
-    return nd;
-  }
-  // Kicker und Angabe stehen als kleine Lettern vor der Überschrift (Kamera blickt von oben genug, um die Überschrift nicht zu verdecken)
-  const kick = K.word(["Weitere Arbeit", "2023 bis 2025 · für die Runden Group"], N ? .15 : .13, hx + .05, hz + 1.8, TT.h2 + .01, .035, { foot: 1, clock: "b", on: TT.h2 + .006, noImprint: true, col: MUTED, lh: 1.5, track: .02 });
-
-  // Bildschirm mit Portal
-  const m2 = monitor(M2X, ZR, TT.m2, "m2", pagePortal, "Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.");
+  // Bildschirm mit Portal (Kinn ohne Text)
+  const m2 = monitor(M2X, ZR, TT.m2, "m2", pagePortal, BOARD_T);
 
   // Drehteller: Achteck, Wände stehen am Rand, Platte hebt sich, darauf faltet sich das Produkt und dreht sich beim Scrollen
   F.part("tt", TT.tt.line[0], TT.tt.line[1]);
@@ -314,10 +314,12 @@ export default function (K) {
   const TH = .5;
   oct.forEach((p, k) => {
     const q = oct[(k + 1) % 8], mx = (p[0] + q[0]) / 2 - TX, mz = (p[1] + q[1]) / 2 - TZ, ml = Math.hypot(mx, mz);
-    const wl = K.panel(R, p, q, [mx / ml, mz / ml], TT.tt.walls + k * .003, .05, Q, { over: .03 });
-    K.rect(wl, 0, 0, Math.hypot(q[0] - p[0], q[1] - p[1]), TH, WALL);
+    const wl = K.panel(BOARD_T, p, q, [mx / ml, mz / ml], TT.tt.walls + k * .003, .05, Q, { over: .03 });
+    // Trapez: die Außenkante ist an beiden Enden um TH·tan 22,5° kürzer, benachbarte Streifen überlappen in Ruhe nicht
+    const Lw = Math.hypot(q[0] - p[0], q[1] - p[1]), cut = TH * Math.tan(22.5 * PI / 180);
+    K.P(wl, [[0, 0], [Lw, 0], [Lw - cut, TH], [cut, TH]], WALL);
   });
-  const plate = F.lift(R, TH, TT.tt.plate[0], TT.tt.plate[1], { over: .04 });
+  const plate = F.lift(BOARD_T, TH, TT.tt.plate[0], TT.tt.plate[1], { over: .04 });
   F.poly(plate, oct, PLATE, .5);
   const spin = F.spin(plate, [TX, TZ], 2 * PI, TT.tt.spin[0], TT.tt.spin[1], { lin: true });
   F.part("produkt", TT.tt.prodLine[0], TT.tt.prodLine[1]);
@@ -331,18 +333,13 @@ export default function (K) {
     x.strokeStyle = RED; x.lineWidth = 12; x.beginPath(); x.moveTo(0, W * .405); x.lineTo(0, W * .47); x.stroke();
   }, 2 * (TR - .2), 2 * (TR - .2), TT.tt.plate[0] + TT.tt.plate[1], .02);
   K.onFlat(spin, scale, TX, TZ, .004);
-  const ttext = K.print(["360-Grad-Produktansichten"], .17, TT.tt.text);
-  const ttp = etikett("e1", TT.tt.prodLine[0] - .03, .04, TX, TZ + TR + 2.0, ttext.w + .3, .8);
-  K.onPanel(ttp, ttext, ttext.w / 2 + .15, .4, 1);
 
   // Login-Tafel mit Schloss
   F.part("login", TT.lg.line[0], TT.lg.line[1]);
-  const LBW = 2.4, LBH = 2.5;
-  const board = K.panel(R, [LGX - LBW / 2, ZR], [LGX + LBW / 2, ZR], [0, -1], TT.lg.rise[0], TT.lg.rise[1], Q, { over: .05 });
+  const LBH = 2.5;
+  const board = K.panel(BOARD_T, [LGX - LBW / 2, ZL], [LGX + LBW / 2, ZL], [0, -1], TT.lg.rise[0], TT.lg.rise[1], Q, { over: .05 });
   K.rect(board, 0, 0, LBW, LBH, BOARD);
   K.onPanel(board, K.decal(Math.round(LBW * 300), Math.round(LBH * 300), (x, W, H) => loginFace(x, W, H, LBW, LBH), LBW, LBH, TT.lg.decal), LBW / 2, LBH / 2, 1);
-  const lgT = K.print(["Vertrieb"], .2, TT.lg.text, { align: "center" });
-  K.onPanel(board, lgT, LBW / 2, .3, 1);
   // Bügel: eigenes Teil, rastet von oben in den Schlosskörper (Körper in der Tafel bei u = LBW - .74, v = LBH - .4 - 1.56 ... Mitte des Körpers)
   const SHW = .5, SHH = .5, shPr = K.decal(240, 240, shackleArt, SHW, SHH, TT.lg.decal), shG = new THREE.Group();
   shG.add(shPr.mesh); K.add(shG);
@@ -351,13 +348,18 @@ export default function (K) {
   const shOpen = .3;
   K.anim(b => { shPr.mesh.position.y = shOpen * (1 - mech(win(b, TT.lg.shackle[0], TT.lg.shackle[1]), .12)); });
 
-  // Kabel Szene 2: vom Hals des Portal-Bildschirms zur zweiten Buchse von CRM (Salesforce) und Bewerbermanagement (Concludis)
-  const ox = M2X, oz = ZR;
-  const startP = [V(ox + .2, .36, oz + .05), V(ox + .5, .12, oz + .5), V(ox + 1.05, .03, oz + .2), V(ox + 1.05, .03, oz - .6)];
-  const pSF = startP.concat([V(2.2, .06, 9.4), V(1.5, .2, 7.4), V(1.1, SY, 5.8), V(sockX(0, 1), SYB, 4.4), V(sockX(0, 1), SYB, PLUGL + 1.0), V(sockX(0, 1), SYB, PLUGL)]);
-  const pCO = startP.concat([V(2.6, .06, 9.6), V(3.0, .2, 7.6), V(3.4, SY, 6.0), V(4.4, SY + BH * .5, 5.5), V(sockX(2, 1) - .5, SYB, 5.5), V(sockX(2, 1), SYB, 4.7), V(sockX(2, 1), SYB, PLUGL + 1.0), V(sockX(2, 1), SYB, PLUGL)]);
-  cable(pSF, [{ b0: TT.cab2.sf[0], b1: TT.cab2.sf[1], k0: 0, k1: 1, over: .03 }]);
-  cable(pCO, [{ b0: TT.cab2.co[0], b1: TT.cab2.co[1], k0: 0, k1: 1, over: .03 }]);
+  // Kabel von WBG: vom Hals des Portal-Bildschirms links um den Fuß, auf dem Brett nach links bis vor den Drehteller und vorn in die Bahn z = LZ hinter der Zarge,
+  // dann als oberste Kabel des Bündels (Höhen YSF, YCO über der Platte) von rechts bis vor die zweite Buchse des CRM (Salesforce) bzw. des Bewerbermanagements
+  // (Concludis). Alle Kabel liegen hinter der Zarge, kein Satz wird gequert.
+  const YSF = .58, YCO = .43;
+  function pathW(sdx, off, yl, xs) {
+    const ox = M2X, oz = ZR, y0 = BH + .04;
+    return [V(ox + sdx, BH + .36, oz + .05), V(ox + sdx - .3, BH + .12, oz + .55), V(ox - 1.1 - off, y0, oz + .3), V(XC0 - .2 - off, y0, oz + 1.3), V(XC0 - .9 - off, y0, .4), V(XC0 - 1.2 - off, BH + .1, 1.8),
+      V(XC0 - 1.8 - off, BH + yl, LZ), V((XC0 + xs) / 2, BH + yl, LZ), V(xs + .9, BH + yl, LZ), V(xs + .4, BH + yl, LZ), V(xs + .12, BH + yl + (SY - yl) * .45, LZ - .22),
+      V(xs, SYB, LZ - .5), V(xs, SYB, PLUGL + 1.0), V(xs, SYB, PLUGL)];
+  }
+  cable(pathW(-.15, 0, YSF, sockX(0, 1)), [{ b0: TT.cab2.sf[0], b1: TT.cab2.sf[1], k0: 0, k1: 1, over: .03 }]);
+  cable(pathW(.1, .35, YCO, sockX(2, 1)), [{ b0: TT.cab2.co[0], b1: TT.cab2.co[1], k0: 0, k1: 1, over: .03 }]);
 
   // ---------- Konstruktionsphase (seite/): Gerüst je Bauabschnitt kurz vor dem Hochklappen, Bleistiftspur auf den Flächen ----------
   // Ohne Produkt (dreht sich) und Etikett (liegt flach).
@@ -379,39 +381,33 @@ export default function (K) {
   // Handy übernimmt Lage und Einpassung des Desktops, solange nichts Eigenes (n…) angegeben ist; Schriftgröße dort immer 16 px
   const frontStop = (prints, o) => { const s = { prints, px: pxD, pitch: 14, yaw: 0, sx: 0, sy: 0, ...o }; s.nsx = o.nsx !== undefined ? o.nsx : s.sx; s.nsy = o.nsy !== undefined ? o.nsy : s.sy; s.fitN = o.fitN !== undefined ? o.fitN : s.fit; return s; };
   S.h1 = { prints: [H1], b: 0, px: 999, pxN: 999, fit: .72, fitN: .84, pitch: 12, sy: -.1, nsy: -.05, nsx: 0, sx: 0 };
-  // Brett-Satz: Blick auf Zarge, Geräte und Kabelbündel zugleich (Schrift Desktop 19 bis 21 px, Handy 16 px); b nach dem Einstecken von CRM und Bewerbermanagement
-  S.bd = frontStop([bdText], { b: .345, pitch: 22, yaw: 0, sy: -.3, fit: .94 });
-  S.ad = frontStop([lidE], { b: .53, pitch: 46, yaw: 0, px: 22, sy: .12 });
-  S.h2 = { prints: [h2w, kick], b: TT.h2 + .05, px: 999, pxN: 999, fit: .66, fitN: .78, pitch: 22, sy: -.05, nsy: -.05, sx: 0, nsx: 0 };
-  S.t2 = frontStop([m2.chin, m2.dec], { b: TT.m2.text + .02, pitch: 16, yaw: -10, nyaw: 0, sy: -.1, e0: CE, fit: .96 });
-  S.tt = frontStop([ttext], { b: .84, pitch: 48, yaw: 0, sy: -.45, px: 22, pxN: 14 });
-  S.lg = frontStop([lgT], { b: .975, pitch: 16, yaw: 12, sy: -.2, px: 32, pxN: 22 });
-  S.an = frontStop([sfL, coL], { b: 1, pitch: 40, yaw: 0, sy: .3, fit: .9, px: 22 });
-  S.an1 = frontStop([sfL], { b: .99, pitch: 40, px: 22, sy: .3 });
-  S.an2 = frontStop([coL], { b: 1, pitch: 40, px: 22, sy: .3 });
+  // Die drei Lesestellen stehen an der Zarge, die Kamera fährt an der Brettkante von links nach rechts (Blick von vorn oben auf die Zarge, darüber das Brett)
+  // a: nach dem Einstecken von CRM und Bewerbermanagement; b: Adapter ist eingerastet; c: Portal, Drehteller und Login-Tafel stehen
+  S.a = frontStop([aP], { b: .345, pitch: 24, yaw: 0, sx: -.25, nsx: 0, sy: -.35, fit: .94 });
+  S.b = frontStop([bP], { b: .565, pitch: 24, yaw: 0, sx: .07, nsx: 0, sy: -.35, fit: .94 });
+  S.c = frontStop([cH, cS], { b: .93, pitch: 34, yaw: 0, sx: -.14, nsx: 0, sy: -.5, nsy: -.62, fit: .94 });
+  const OVX = XC0 / 2 + 5.8, GX = XC0 + 3.8;                // Mitte des Gesamtüberblicks (Desktop) bzw. der WBG-Gruppe (Handy)
   const stops = Object.values(S);
 
   return {
     names: S, fov: 32, fovN: 44, track: 1000,
-    // Raster (seite/) für den ersten Teil; „WBG Pooling“ setzt in der Szenenfolge ein eigenes Zeitfenster
+    // Raster (seite/) in den Bastellinien
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .13 },
     stops,
     keys: [
       { w: 0, stop: S.h1 },
-      // Überblick über die Zeile: alle Bastellinien der Szene 1 stehen (el 40°, Abstand 21; Handy Abstand 46)
-      { w: 1.0, b: .115, cam: look(1.3, .3 + BH / 2, .5, 40, -3, 22), tgt: V(1.3, .3 + BH / 2, .5), camN: look(1.3, .3 + BH / 2, .5, 40, -3, 46), tgtN: V(1.3, .3 + BH / 2, .5) },
-      // Brett hebt sich, die Geräte stehen auf
-      { w: 1.1, b: .22, cam: look(3.8, BH + .6, .7, 28, 0, 19), tgt: V(3.8, BH + .6, .7), camN: look(3.8, BH + .6, .7, 28, 0, 32), tgtN: V(3.8, BH + .6, .7) },
-      { w: 1.2, stop: S.bd },
-      // ERP: Stecker stößt an, Adapter entsteht
-      { w: 1.2, b: .365, cam: look(3.3, BH + .4, 1.0, 32, -6, 9.5), tgt: V(3.3, BH + .4, 1.0) },
-      { w: 2.0, stop: S.ad },
-      { w: 1.2, stop: S.h2 },
-      { w: .9, b: .66, cam: look(7.0, 1.0, 10.2, 30, 0, 24), tgt: V(7.0, 1.0, 10.2) },
-      { w: 1.2, stop: S.t2 },
-      { w: 1.1, stop: S.tt },
-      { w: 2.0, stop: S.lg },
-      ...(N ? [{ w: .7, stop: S.an1 }, { w: .6, stop: S.an2 }] : [{ w: 1.0, stop: S.an }])
+      // Überblick über die Zeile: alle Bastellinien der ersten Hälfte stehen (el 40°, Abstand 22; Handy Abstand 46)
+      { w: 1.0, b: .115, cam: look(2.2, .3 + BH / 2, .5, 40, -3, 22), tgt: V(2.2, .3 + BH / 2, .5), camN: look(1.3, .3 + BH / 2, .5, 40, -3, 46), tgtN: V(1.3, .3 + BH / 2, .5) },
+      // Satz a, dann an der Zarge entlang zu Satz b (Brett steht, Geräte, Kabel, Adapter werden darüber sichtbar)
+      { w: 1.5, stop: S.a },
+      // der Adapter entsteht: Blick von weiter oben auf Geräte, Adapter und Kabelbündel (Abstand 20, nicht näher als beim Lesen der Sätze; Handy 28)
+      { w: 1.2, b: .445, cam: look(6.0, BH + .5, 1.0, 40, 0, 20), tgt: V(6.0, BH + .5, 1.0), camN: look(5.4, BH + .5, 1.0, 40, 0, 28), tgtN: V(5.4, BH + .5, 1.0) },
+      { w: 1.6, stop: S.b },
+      // WBG Pooling baut sich auf: Überblick über Brett, Geräte und die WBG-Teile (nichts angeschnitten außer dem Brett; Handy Gruppe vor dem Brett)
+      { w: 1.2, b: .72, cam: look(OVX, 1.5, 0.5, 36, 0, 31), tgt: V(OVX, 1.5, .5), camN: look(GX, 1.5, 0.5, 38, 0, 34), tgtN: V(GX, 1.5, .5) },
+      { w: 1.3, stop: S.c },
+      // Schluss: alles steht, beide Kabel stecken
+      { w: 1.0, b: 1, cam: look(OVX, 1.5, 0.5, 36, 0, 31), tgt: V(OVX, 1.5, .5), camN: look(GX, 1.5, 0.5, 38, 0, 34), tgtN: V(GX, 1.5, .5) }
     ]
   };
 }

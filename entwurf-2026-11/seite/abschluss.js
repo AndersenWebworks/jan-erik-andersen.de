@@ -103,7 +103,7 @@ export default function (K) {
   const PI = Math.PI;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
   const DESK = c3("#e8e1d2"), LEG = c3("#e1d9c9"), METAL = c3("#dcd7cd"), SIGN = c3("#f6f3ec"), FRAMEC = c3("#e4dccb"),
-    ARM = c3("#dcd7cd"), ARM2 = c3("#d6d1c7"), BODY = c3("#efe6d2"), FLAPC = c3("#e8dcc4"), CARD = c3("#f8f6f1"), DECK = c3("#ece8de"), LIGHT = c3("#f8f6f1");
+    ARM = c3("#dcd7cd"), ARM2 = c3("#d6d1c7"), BODY = c3("#efe6d2"), FLAPC = c3("#e8dcc4"), CARD = c3("#f8f6f1"), LIGHT = c3("#f8f6f1");
   const IMP = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, closeB: .03 }, IMP_T = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, close: .25, closeDur: .7 };
   // Kamera auf der Kugel um das Ziel (Blickhöhe el, Gier az, Abstand dist); Handy: eigener Abstand und eigene Blickhöhe (sonst würde die Breitbild-Stellung gestreckt)
   const ring = (tgt, el, az, dist) => { const e = el * PI / 180, a = az * PI / 180; return tgt.clone().add(V(Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e)).multiplyScalar(dist)); };
@@ -358,14 +358,14 @@ export default function (K) {
 
     // Umschlag: der Körper liegt als Papier auf dem Bogen (die Karten stehen aus ihm auf), die Klappe liegt hinten und klappt auf
     const BW = 7.2, zF = z(1.9), zB = z(N ? -2.95 : -2.7), CX = N ? 2.1 : 1.85, ZBK = N ? -1.3 : -.95, ZFR = N ? 1.5 : 1.15;
-    F.poly(R, [[OX3 - BW / 2, zF], [OX3 + BW / 2, zF], [OX3 + BW / 2, zB], [OX3 - BW / 2, zB]], BODY, .5, .01);
+    F.poly(R, [[OX3 - BW / 2, zF], [OX3 + BW / 2, zF], [OX3 + BW / 2, zB], [OX3 - BW / 2, zB]], BODY, .5, .0004);
     F.part("klappe", .70, .05);
     const FH = 3.2, flap = K.panel(R, [OX3 - BW / 2, zB], [OX3 + BW / 2, zB], [0, -1], .83, .06, Q + .3, { over: .04 });
     K.P(flap, [[0, 0], [BW, 0], [BW / 2, FH]], FLAPC, [.5, .5, .5]);
     K.onPanel(flap, K.decal(1440, Math.round(1440 * FH / BW), liningDraw, BW, FH, .86, .03), BW / 2, FH / 2, 1);
 
     F.part("karten", .71, .06);
-    const CW = N ? 2.6 : 3.0, CHt = N ? .95 : 1.05, DD = .5, EM = N ? .155 : .15, LV = { over: .05 };
+    const CW = N ? 2.6 : 3.0, CHt = N ? .95 : 1.05, EM = N ? .155 : .15, LV = { over: .05 };
     const spots = [
       { x: N ? OX3 : OX3 - CX, zh: z(N ? -1.6 : ZBK), label: "Mail", val: "mail@andersen-webworks.de", href: "mailto:mail@andersen-webworks.de" },
       { x: N ? OX3 : OX3 + CX, zh: z(N ? -.15 : ZBK), label: "Telefon", val: "+49 38733 270015", href: "tel:+4938733270015" },
@@ -376,8 +376,6 @@ export default function (K) {
       const t = .88 + .014 * i;
       const face = K.panel(R, [s.x - CW / 2, s.zh], [s.x + CW / 2, s.zh], [0, -1], t, .04, Q, LV); faces.push(face);
       K.rect(face, 0, 0, CW, CHt, CARD);
-      const deck = K.panel(face, face.uv(0, CHt), face.uv(CW, CHt), [0, -1], t + .025, .035, -Q, LV);
-      K.rect(deck, 0, 0, CW, DD, DECK);
       const c = cardDraw(s.label, s.val, CW, CHt, EM);
       const dec = K.decal(c.wpx, c.hpx, c.draw, CW, CHt, .93 + .01 * i, .02);
       K.onPanel(face, dec, CW / 2, CHt / 2, 1);

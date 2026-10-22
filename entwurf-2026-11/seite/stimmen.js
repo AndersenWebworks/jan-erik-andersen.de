@@ -101,16 +101,6 @@ export default function (K) {
   const E3 = .26, E4 = .32;
   sT[3] = block(pg[3], LW, wrap(TEXT.sis[3], (LW - 2 * MX) / E3 - .3), E3, ON[3], MX, topY, -1, {}, eb);
   sT[4] = block(pg[4], LW, wrap(TEXT.sis[4], (LW - 2 * MX) / E4 - .3), E4, ON[4], MX, topY, 1, {}, eb);
-  // Wirkungsgrafik auf Seite 2: fünf Balken, der letzte kräftig (Schmuck, keine Zahlen)
-  {
-    const gw = 1.8, gh = .7, PXU = 300;
-    const chart = K.decal(Math.round(gw * PXU), Math.round(gh * PXU), (x, W, H) => {
-      const n = 5, bw = W / (n * 1.6), gap = (W - n * bw) / (n - 1), hs = [.28, .4, .52, .68, .92];
-      x.strokeStyle = "rgba(48,48,51,.5)"; x.lineWidth = 3; x.beginPath(); x.moveTo(0, H - 2); x.lineTo(W, H - 2); x.stroke();
-      hs.forEach((v, i) => { x.fillStyle = i === n - 1 ? "rgba(48,48,51,.62)" : "rgba(48,48,51,.2)"; x.fillRect(i * (bw + gap), H - 2 - v * (H - 8), bw, v * (H - 8)); });
-    }, gw, gh, ON[1] + .02, .03);
-    K.onPanel(pg[1], chart, LW - (MX + gw / 2), .45, -1, eb);
-  }
   // Quelle auf der letzten Seite, mit rotem Punkt
   const qE = .18, qTop = 1.0;
   const sQ = block(pg[4], LW, TEXT.sisQuelle, qE, ON[4] + .02, MX, qTop, 1, { col: MUTED, fade: .03 }, eb);
@@ -128,7 +118,7 @@ export default function (K) {
   const teeth = [];
   for (let i = 0; i < NT; i++) {
     const u0 = i * BWT, ht = i % 2 ? .35 + .45 * rnd(i, 1) : .85 + .6 * rnd(i, 1);   // abwechselnd kurz und lang: gezackt
-    const t = K.panel(B, B.uv(u0, CB), B.uv(u0 + BWT, CB), [0, -1], TF0 + (TF1 - TF0) * i / (NT - 1), TFD, -(PI - .3), { over: .035 });
+    const t = K.panel(B, B.uv(u0, CB), B.uv(u0 + BWT, CB), [0, -1], TF0 + (TF1 - TF0) * i / (NT - 1), TFD, -(PI - .02), { over: .035 });
     K.P(t, [[0, 0], [BWT, 0], [BWT / 2, ht]], TOOTH, [.5, .5, .5]);
     teeth.push({ nd: t, ht });
   }

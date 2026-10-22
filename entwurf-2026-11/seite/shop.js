@@ -86,7 +86,7 @@ export default function (K) {
 
   // ---------- Karton (Shopify) rechts: trägt die Pakete, hinten das Schild mit den beiden Sätzen des Wechsels ----------
   F.part("karton", .03, .08);
-  const kasten = block(R, KX0, KX1, ZF, ZB, 1.45, .24, .06, { col: BOX, scol: BOX2, over: .03 });
+  const kasten = block(R, KX0, KX1, ZF, ZB, 1.45, .24, .06, { col: BOX, scol: BOX2, over: .03, noLeft: 1 });   // zur Brücke offen: die linke Wand läge sonst flach über Brücke und Regal
   // Schild hinter den Paketen: steht auf der Hinterkante der Deckfläche auf (wie die Stützen des Lagerschilds, Vorderseite zum Betrachter)
   const KSH = N ? 1.55 : 1.2;
   const ksign = K.panel(kasten.L, [KX0, ZB], [KX1, ZB], [0, -1], .31, .05, Q, { own: R, over: .04 });
@@ -95,15 +95,15 @@ export default function (K) {
   // ---------- Gebühren: Preisschild und Stapel rechts vom Karton ----------
   F.part("gebuehr", .11, .07);
   // Breitbild: rechts neben dem Karton. Hochkant: vor dem Karton (sonst bei 16 px Schrift außerhalb des Bildes)
-  const CWD = .45, GX = N ? 1.25 : 4.35, GZ0 = N ? 1.75 : -.35, GZ1 = N ? 1.1 : -1.0, TX = N ? 1.4 : 3.9, TZ = N ? .6 : .55;
-  const tag = K.panel(R, [TX, TZ], [TX + .95, TZ], [0, 1], .52, .03, Q, { over: .05 });
-  K.P(tag, [[0, 0], [.95, 0], [.95, .55], [0, .55], [-.25, .275]], TAG);
-  F.poly(tag, circ(tag.uv(-.06, .275)[0], tag.uv(-.06, .275)[1], .045, 14), DARK, 0, OUT);
-  [.55, .5, .32].forEach((l, k) => F.line(tag, tag.uv(.12, .4 - k * .12), tag.uv(.12 + l, .4 - k * .12), .55, INK, OUT));
+  const CWD = N ? .23 : .3, GX = N ? 1.45 : 4.1, GZ0 = N ? 2.25 : 1.0, GZ1 = N ? 1.6 : .35, TX = N ? 2.6 : 3.2, TZ = N ? 1.6 : 1.7, TS = N ? .65 : 1;   // Breitbild: Stapel rechts neben dem Karton (z > 0, außerhalb der Kartonwände), Schild davor; Hochkant schmaler, alles in einem Bild
+  const tag = K.panel(R, [TX, TZ], [TX + .95 * TS, TZ], [0, 1], .52, .03, Q, { over: .05 });
+  K.P(tag, [[0, 0], [.95, 0], [.95, .55], [0, .55], [-.25, .275]].map(p => [p[0] * TS, p[1] * TS]), TAG);
+  F.poly(tag, circ(tag.uv(-.06 * TS, .275 * TS)[0], tag.uv(-.06 * TS, .275 * TS)[1], .045 * TS, 14), DARK, 0, OUT);
+  [.55, .5, .32].forEach((l, k) => F.line(tag, tag.uv(.12 * TS, (.4 - k * .12) * TS), tag.uv((.12 + l) * TS, (.4 - k * .12) * TS), .55, INK, OUT));
   const fees = [];
   for (let k = 0; k < 4; k++) {
     const h = .35 * (k + 1), x0 = GX + k * CWD;
-    const b = block(R, x0, x0 + CWD, GZ0, GZ1, h, .575 + k * .02, .045, { col: FEE, sideNocut: 1, noRight: 1, over: .05 });
+    const b = block(R, x0, x0 + CWD, GZ0, GZ1, h, .575 + k * .02, .045, { col: FEE, sideNocut: 1, noRight: 1, noLeft: 1, over: .05 });
     for (let j = 1; j < (k + 1) * 2; j++) F.line(b.fr, b.fr.uv(0, j * .175), b.fr.uv(CWD, j * .175), .35, DARK, OUT);
     fees.push(b);
   }

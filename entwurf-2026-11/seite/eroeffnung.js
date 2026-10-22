@@ -5,7 +5,7 @@
 // einem Mini-Tower mit Laufwerk, Einschalter und tickendem Statuspunkt (betreuen).
 // Der Kernsatz („Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen.“) steht
 // als ein Druck, dreizeilig, auf der Vorderseite des Podests unter der Unterzeile; Lesestelle 1 (kern) zeigt Name und Kernsatz zusammen.
-// Satz zwei steht auf der Zarge an der Vorderkante der Tischplatte (Lesestellen t4, t5). Monitor, Rechnerseite und Deckel tragen keinen Text.
+// Satz zwei steht in drei Sätzen auf den drei Armen des roten Fadens, der sich vor dem Tisch verzweigt (Lesestelle „faden“). Zarge, Monitor, Rechnerseite und Deckel tragen keinen Text.
 // Pop-up-Logik: Die Tischplatte hebt sich parallel, Beine (L-Profil) und Zarge schwenken von ihren Kanten nach unten;
 // Fuß, Hals und Bildschirm sind aus der Tischplatte geschnitten. Im Bogen bleibt der Abdruck.
 // Der Name kommt aus wortmarke.js (eine Stelle, später tauschbar).
@@ -206,16 +206,7 @@ export default function (K) {
   K.rect(K.panel(top, [X0 + LW, ZB], [X1 - LW, ZB], [0, -1], .29, .075, -Q, down), 0, 0, X1 - X0 - 2 * LW, AP, LEG);
   K.rect(K.panel(top, [X0, ZF - LW], [X0, ZB + LW], [-1, 0], .296, .075, -Q, down), 0, 0, ZF - ZB - 2 * LW, AP, LEG);
   K.rect(K.panel(top, [X1, ZF - LW], [X1, ZB + LW], [1, 0], .296, .075, -Q, down), 0, 0, ZF - ZB - 2 * LW, AP, LEG);
-  // Satz 2 auf der Zarge (Außenseite +1, oben = zum Scharnier), je Hälfte zweizeilig
-  const so = { lh: 1.18, align: "center", track: .005 };
-  // zweite Hälfte: „Unternehmen arbeiten direkt mit mir / oder holen mich auf Zeit ins eigene Team.“ (längste Zeile rund 19,8 em: Desktop 2,61 von 3,4,
-  // Handy mit e .115 rund 2,27 von 2,45 Halbbreite der Zarge; am Handy 16 px Schrift, Zeile rund 322 px von 390)
-  const se = N ? .115 : .132;
-  const T4 = K.print(["Agenturen holen mich als", "Entwickler ins Projekt,"], se, .72, so);
-  const T5 = K.print(["Unternehmen arbeiten direkt mit mir", "oder holen mich auf Zeit ins eigene Team."], se, .79, so);
-  const xh = (X1 - LW) / 2;
-  K.onPanel(apron, T4, -xh - (X0 + LW), AP / 2, 1, [0, -1]);
-  K.onPanel(apron, T5, xh - (X0 + LW), AP / 2, 1, [0, -1]);
+  // Satz 2 liegt nicht mehr auf der Zarge (sie trägt keinen Text), sondern auf den drei Armen des roten Fadens (siehe unten, „Faden verzweigt sich“)
 
   // ---------- Skizzenblatt, das zum Bildschirm wird: Fuß, Hals, Bildschirm ----------
   F.part("blatt", .05, .06);
@@ -256,16 +247,62 @@ export default function (K) {
   K.cable([V(0, 2.62, ZFB - .05), V(.15, ty, ZFB - .08), V(X1 * .5, ty, ZFB - .02), V(X1 * .82, ty, -1.25), V(X1 - .14, ty, zd - .12), V(X1 - .01, ty - .004, zd - .02),
     V(xe, HT - .1, zd), V(xe + .02, 1.4, zd + .02), V(xe + .05, .3, zd + .03), V(xe + .22, .025, zd), V(xe + gap * .45, .025, zd - .12), V(PX0 - .3, .03, -.78), V(PX0 - .07, .12, -.8), V(PX0, .2, -.8)], .024, "#8e8981", .44, .05);
 
+  // ---------- Roter Faden verzweigt sich: Satz 2 in drei Sätzen auf drei Armen ----------
+  // Der Faden läuft vom Statuspunkt über den Bogen an der Vorderseite des Tisches vorbei (außen um die Abdrücke der liegenden Vorderbeine herum)
+  // und teilt sich rechts vor dem Tisch in drei Arme (gleicher Faden, gleiche Stärke und Farbe). Die Arme laufen nach links; jeder hat ein gerades
+  // Stück, über dem sein Satz auf dem Papier liegt (Schrift parallel zur Linie, ungebogen). Links laufen die Arme wieder zusammen, der Faden geht
+  // außen um die Tischbeine herum, hinter dem Tisch entlang und weiter zum Ausgang Richtung Gerwing (wie bisher). Er kreuzt weder Beine noch
+  // Kabel noch Rechner. Stücke und Zeiten laufen über def.thread (kern.js: pts = Anfang bis zur Teilung, arms = drei Arme, post = Rest bis zum Ausgang).
+  // Statuspunkt in Weltkoordinaten (Front z = PZ0)
+  const LED = V(PX0 + TOWER.led[0], TOWER.led[1], PZ0 + .012);
+  const AY = .004;
+  const sa = N ? .13 : .125, sOpt = { lh: 1.22, track: .005, align: "center" };
+  const SENT = N
+    ? [["Agenturen holen mich", "als Entwickler ins Projekt."], ["Unternehmen arbeiten", "direkt mit mir."], ["Auf Wunsch arbeite ich auch", "befristet im Team mit."]]
+    : [["Agenturen holen mich als Entwickler ins Projekt."], ["Unternehmen arbeiten direkt mit mir."], ["Auf Wunsch arbeite ich auch befristet im Team mit."]];
+  // Zeiten (b): Anfang .50–.60, Arme gestaffelt .60 … .73 (Satz erscheint, sobald der gerade Teil sich zeichnet), Rest .84–1
+  const AT = [[.60, .68], [.63, .705], [.66, .73]], armOn = i => AT[i][0] + .5 * (AT[i][1] - AT[i][0]);
+  const TA = SENT.map((ln, i) => K.print(ln, sa, armOn(i), { ...sOpt, fade: .035 }));
+  // gerades Stück: halbe Textbreite plus .45 (Handy .3), damit kein Bogen in die Zeile ragt; Arme .7 (Handy .85) auseinander, ganz auf der hellen Fläche (mind. .4 Luft zur Kante bei z 2,15); Teilung/Vereinigung .8 weiter außen (zwischen den Beinen, deren Abdrücke bei ±3,4 liegen)
+  const XS = Math.max(...TA.map(pr => pr.w - 2 * pr.t.padX * pr.e)) / 2 + (N ? .3 : .45), XE = -XS, FX = XS + .8;
+  const ZR = N ? [2.45, 3.3, 4.15] : [2.8, 3.5, 4.2], ZM = ZR[1];
+  const smooth = t => t * t * (3 - 2 * t);
+  // Arm von der Teilung F (FX, ZM) über sanfte S-Kurve zum geraden Stück XS … XE bei z, dann zur Vereinigung J (-FX, ZM)
+  const armPts = z => {
+    const out = [], n = 7;
+    for (let i = 0; i <= n; i++) { const t = i / n; out.push(V(FX + (XS - FX) * t, AY, ZM + (z - ZM) * smooth(t))); }
+    out.push(V(0, AY, z));
+    for (let i = 0; i <= n; i++) { const t = i / n; out.push(V(XE + (-FX - XE) * t, AY, z + (ZM - z) * smooth(t))); }
+    return out;
+  };
+  TA.forEach((pr, i) => {
+    // mittig auf dem geraden Stück, Grundlinie eine Schrifthöhe (sa) plus .02 über der Linie (nach hinten, -z), bei allen drei gleich
+    K.onFlat(R, pr, 0, ZR[i] - sa * 1.02 - (pr.h / 2 - pr.t.bfb * pr.e));
+  });
+  const ARMS = ZR.map((z, i) => ({ pts: armPts(z), t0: AT[i][0], t1: AT[i][1], lin: true }));
+  const lx = LED.x, lz = LED.z;
+  const THR = {
+    // Anfang: vom Statuspunkt auf den Bogen, in einem Zug nach vorn links, außen um das Ende des rechten Beinabdrucks (x 3,4 … 3,6, bis z 4,1) herum
+    pts: N
+      ? [LED, V(lx + .06, .8, lz), V(lx + .2, AY, PZ0 + .25), V(lx - .25, AY, 2.0), V(lx - 1.0, AY, 3.4), V(3.4, AY, 4.5), V(2.85, AY, 4.5), V(FX + .1, AY, 3.95), V(FX, AY, ZM)]
+      : [LED, V(lx + .06, .8, lz), V(lx + .2, AY, PZ0 + .25), V(lx - .55, AY, 1.9), V(lx - 1.6, AY, 3.4), V(4.7, AY, 4.5), V(3.9, AY, 4.5), V(FX + .1, AY, 3.9), V(FX, AY, ZM)],
+    t0: .50, t1: .60, lin: true,
+    arms: ARMS,
+    // Ende: links um die Beinabdrücke (z > 4,2), außen am Tisch nach hinten, hinter Tisch und Rechner entlang zum Ausgang (wie bisher)
+    post: { pts: N
+      ? [V(-FX, AY, ZM), V(-FX - .1, AY, 3.95), V(-2.85, AY, 4.5), V(-3.4, AY, 4.5), V(-3.9, AY, 3.0), V(-3.9, AY, 0), V(-3.8, AY, -3.2), V(-3.4, AY, -5.0), V(-2.2, AY, -5.4), V(0, AY, -5.4), V(PX0 + 2.0, AY, -5.45)]
+      : [V(-FX, AY, ZM), V(-FX - .1, AY, 3.9), V(-3.9, AY, 4.5), V(-4.6, AY, 4.5), V(-4.9, AY, 3.0), V(-4.9, AY, 0), V(-4.8, AY, -3.2), V(-4.3, AY, -5.0), V(-3.0, AY, -5.4), V(0, AY, -5.4), V(4, AY, -5.4), V(PX0 + 2.0, AY, -5.45)],
+      t0: .84, t1: 1, lin: true }
+  };
+
   // ---------- Konstruktionsphase (Drehbuch „Konstruktionsphase“ in docs/FASSUNG-2026-11.md) ----------
   // Gerüst: die Kanten von Tisch, Bildschirm und Rechner im Endzustand (aus dem Faltplan gerechnet) zeichnen sich über b .09–.25
   // Strich für Strich als Welle von links nach rechts im Raum, mit Überständen über die Ecken und zwei bis drei versetzten Strichen;
   // die Teile klappen hinein, beim Einrasten zieht sich der Überstand zurück und die Linie blendet aus.
   F.geruest({ tags: ["tisch", "blatt", "rechner"], t0: .09, t1: .25, du: .03, a: .5 });
   // Bleistiftspur: Eckmarken und zarte Konstruktionskanten auf den Flächen, bleibt stehen; auf Flächen mit Text nur Eckmarken
-  F.spur({ tags: ["tisch", "blatt", "rechner"], quiet: [apron, scr, pc.fr], a: .3 });
+  F.spur({ tags: ["tisch", "blatt", "rechner"], quiet: [scr, pc.fr], a: .3 });
 
-  // Statuspunkt in Weltkoordinaten (Front z = PZ0)
-  const LED = V(PX0 + TOWER.led[0], TOWER.led[1], PZ0 + .012);
   // Fließtext Desktop 19–21 px je nach Höhe, Handy 16 px
   const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
   // niedrige Fenster zeigen bei gleicher Schriftgröße weniger Welt: Text dort tiefer setzen, damit der Monitor oben im Bild bleibt
@@ -297,8 +334,8 @@ export default function (K) {
     // t1: im Breitbild steht der Rechner ganz rechts mit im Bild (Text links der Mitte), sonst bleibt er ganz draußen, nie angeschnitten
     // kern: Name und Kernsatz auf dem Podest (Podest ist hochgefahren: Desktop b = PB, Handy b .004); Schriftgröße nach dem Kernsatz (e0)
     kern: { prints: N ? [...mark.prints, kick, KS] : [...mark.prints, KS], e0: ks, b: N ? .004 : PB, px: pxD, pitch: 6, npitch: 8, sx: 0, nsx: 0, sy: 0, nsy: -.06 },
-    t4: { prints: [T4], px: pxD, pitch: 16, yaw: -16, sy: syH(-.64, -.4), sx: (W, H) => W / H >= 1.55 ? -.35 : .08, npitch: 18, nyaw: 4, nsy: -.28 },
-    t5: { prints: [T5], px: pxD, pitch: 16, yaw: -4, sy: syH(-.64, -.4), sx: -.12, npitch: 18, nyaw: -4, nsy: -.28 }
+    // Faden verzweigt sich: alle drei Arme mit ihren Sätzen von schräg oben in einem Blick (Neigung wie die Treppenstellen in werdegang.js)
+    faden: { prints: TA, e0: sa, b: .78, px: N ? 16 : 21, pitch: 40, npitch: 48, yaw: 0, nyaw: 0, sx: 0, nsx: 0, sy: -.3, nsy: -.35 }
   };
   return {
     // Sichtfeld Breitbild 32° statt 36° (Kamera rund 12 % weiter weg, Bogen weniger trapezförmig verzerrt); hochkant 44° wie bisher
@@ -307,7 +344,7 @@ export default function (K) {
     // Raster wie auf einer Schneidematte, auf den Bogen gedruckt: Teilung 0,5, jede fünfte Linie kräftiger; zieht als Welle von links
     // nach rechts mit den Bastellinien ein (b ab .004, voll bis rund .085), geht auf den Teilen weg, sobald sie hochklappen, verblasst b .40–.46
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: N ? .004 : PB + .002, wave: .0025, d: .04, out: .40 },
-    thread: { pts: [LED, V(LED.x + .06, .8, LED.z), V(LED.x + .2, .004, PZ0 + .25), V(PX0 + 2.2, .004, .6), V(PX0 + 3.2, .004, -.2), V(PX0 + 3.25, .004, -2.6), V(PX0 + 2.2, .004, -5.0), V(PX0 + 2.0, .004, -5.45)], t0: .88, t1: 1 },
+    thread: THR,
     stops: Object.values(S),
     keys: [
       { w: 0, stop: S.name },
@@ -325,8 +362,7 @@ export default function (K) {
       // Tisch steht, Monitor und Rechner fertig: Kamera ist mit dem Heben auf Augenhöhe eines Stehenden gesunken
       // (el 28°, az −6°, Abstand 22,2; Handy el 30°, 26,8), Monitor-Oberkante ≥ 72 px, Name und Podest über der Leiste
       { w: .8, b: .47, cam: V(-1.64, 11.72, 20.19), tgt: V(.41, 1.3, .69), camN: V(.93, 14.71, 27.45), tgtN: V(.93, 1.3, 4.23) },
-      { w: 1.1, stop: S.t4 },
-      { w: .9, stop: S.t5 },
+      { w: 1.6, stop: S.faden },
       // Überblick, bevor der Punkt losläuft (el 42°, az 6°; Handy el 40°)
       { w: 1, b: .89, cam: V(2.86, 15.1, 16.01), tgt: V(1.29, 1.62, 1.12), camN: V(1.64, 17.93, 21.73), tgtN: V(1.64, 1.2, 1.79) },
       { w: 1, b: .945, cam: V(13, 7, 2), tgt: V(5, 0, -7), camN: V(11, 10, 4), tgtN: V(4, 0, -8) }

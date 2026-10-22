@@ -243,7 +243,7 @@ export default function (K) {
     // 1 Pixel Arrays: Kachel mit Pixel-Mauszeiger
     (L, zf, t0, d) => card(L, EX - .4, EX + .4, zf, .8, t0, d, { draw: drawPixel }),
     // 2 HTK: Urkunde, leicht zurückgelehnt
-    (L, zf, t0, d) => card(L, EX - .5, EX + .5, zf, .72, t0, d, { ang: Q - .2, draw: drawCert }),
+    (L, zf, t0, d) => card(L, EX - .5, EX + .5, zf, .72, t0, d, { ang: Q, draw: drawCert }),
     // 3 Games: Gamepad als Silhouette (Körper, zwei Griffe; innere Kanten ohne Linie)
     (L, zf, t0, d) => {
       const body = [[.15, .62], [1.1, .62], [1.23, .45], [1.15, .22], [.89, .22], [.36, .22], [.1, .22], [.02, .45]];

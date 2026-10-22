@@ -206,8 +206,8 @@ export default function (K) {
       x.drawImage(im, ix, iy + bar + .03 * SPX, dw, Math.min(dh, ih - bar - .03 * SPX));
     }
   }, LW, SHT, .48), LW / 2, SHT / 2, 1);
-  // Handy: steht daneben, lehnt deutlich zurück (rund 29° aus der Senkrechten), mit der Bestellung (gerwing-bestellung.jpg, ganzes Bild in Displaybreite)
-  const ph = K.panel(top, [PHX0, PHZ - .3], [PHX0 + PWD, PHZ - .3], [0, -1], .475, .045, Q - .5, { over: .05 });
+  // Handy: steht daneben, steht senkrecht, mit der Bestellung (gerwing-bestellung.jpg, ganzes Bild in Displaybreite)
+  const ph = K.panel(top, [PHX0, PHZ - .3], [PHX0 + PWD, PHZ - .3], [0, -1], .475, .045, Q, { over: .05 });
   K.rect(ph, 0, 0, PWD, PHG, SCRC);
   const PPX = 560;
   K.onPanel(ph, K.decal(Math.round(PWD * PPX), Math.round(PHG * PPX), (x, W, H) => {

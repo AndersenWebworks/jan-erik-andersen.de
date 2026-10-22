@@ -15,8 +15,8 @@
 // - Knotenoptionen lin (gleichmäßiger Lauf, schnittstellen), ease(x) (eigener Lauf, shop), fresh / mvOwn (Teil erbt den
 //   Bewegungszustand der Elternfläche nicht; shop „fresh“ = schnittstellen „mvOwn“), ang0 (Startwinkel, stimmen)
 // - mvo: Bewegung relativ zur eigenen Fläche für Haarkanten und Bastellinien, eingeschaltet mit F.edgeOwn(true) (werdegang)
-// Neu für die Seite: Ursprung uOrg und Ausschnitt uClip je Szene in allen Shadern (Szenen liegen als Gruppen hintereinander,
-// Raster und Ausschnitt rechnen in Szenenkoordinaten); Kanten-, Bastel- und Gerüstlinien rechnen mit modelMatrix.
+// Neu für die Seite: Ursprung uOrg, Drehung uRot (um y) und Ausschnitt uClip je Szene in allen Shadern (Szenen liegen als Gruppen im Raum,
+// Raster und Ausschnitt rechnen in Szenenkoordinaten, vL = uRot · (Welt − uOrg)); Kanten-, Bastel- und Gerüstlinien rechnen mit modelMatrix.
 // Knoten mit clock "t" laufen nach der Zeit seit dem Eintreffen der Szene (Lettern), alle anderen nach b.
 import * as THREE from "three";
 
@@ -59,7 +59,7 @@ const NOCLIP = () => new THREE.Vector4(-1e5, 1e5, -1e5, 1e5);
 // Ausschnitt in Szenenkoordinaten (x0, x1, z0, z1); alles außerhalb wird verworfen
 const CLIP_GLSL = `if (vL.x < uClip.x || vL.x > uClip.y || vL.z < uClip.z || vL.z > uClip.w) discard;`;
 const PAPER_VERT = `
-  uniform vec3 uOrg;
+  uniform vec3 uOrg; uniform mat3 uRot;
   #ifdef UCOL
   uniform vec3 uCol;
   #else
@@ -79,7 +79,7 @@ const PAPER_VERT = `
     vCol = aCol;
     #endif
     vec4 wp = modelMatrix * vec4(position, 1.0);
-    vW = wp.xyz; vL = wp.xyz - uOrg;
+    vW = wp.xyz; vL = uRot * (wp.xyz - uOrg);
     #ifdef GRID
     #ifdef GRIDA
     vR = aRest; vG = aG;
@@ -131,13 +131,13 @@ const PAPER_FRAG = `
     #include <colorspace_fragment>
   }`;
 const EDGE_VERT = `
-  uniform vec3 uOrg;
+  uniform vec3 uOrg; uniform mat3 uRot;
   attribute vec4 aCol;
   varying vec4 vC; varying float vDepth; varying vec3 vL;
   void main() {
     vC = aCol;
     vec4 wp = modelMatrix * vec4(position, 1.0);
-    vL = wp.xyz - uOrg;
+    vL = uRot * (wp.xyz - uOrg);
     vec4 mv = viewMatrix * wp;
     vDepth = -mv.z;
     gl_Position = projectionMatrix * mv;
@@ -154,10 +154,10 @@ const EDGE_FRAG = `
   }`;
 // Bastellinien: aP = (Start in b, Dauer in b, Lauf 0…1 entlang der Linie, Länge in m; negativ = gestrichelt)
 const RISS_VERT = `
-  uniform vec3 uOrg;
+  uniform vec3 uOrg; uniform mat3 uRot;
   attribute vec4 aCol; attribute vec4 aP;
   varying vec4 vC; varying vec4 vP; varying vec3 vL;
-  void main() { vC = aCol; vP = aP; vec4 wp = modelMatrix * vec4(position, 1.0); vL = wp.xyz - uOrg; gl_Position = projectionMatrix * viewMatrix * wp; }`;
+  void main() { vC = aCol; vP = aP; vec4 wp = modelMatrix * vec4(position, 1.0); vL = uRot * (wp.xyz - uOrg); gl_Position = projectionMatrix * viewMatrix * wp; }`;
 const RISS_FRAG = `
   uniform float uB; uniform vec4 uClip;
   varying vec4 vC; varying vec4 vP; varying vec3 vL;
@@ -172,7 +172,7 @@ const RISS_FRAG = `
     gl_FragColor = vec4(vC.rgb, min(a, 1.0));
     #include <colorspace_fragment>
   }`;
-const frameUniforms = () => ({ uOrg: { value: new THREE.Vector3() }, uClip: { value: NOCLIP() } });
+const frameUniforms = () => ({ uOrg: { value: new THREE.Vector3() }, uRot: { value: new THREE.Matrix3() }, uClip: { value: NOCLIP() } });
 export function paperMaterial(col) {
   const m = new THREE.ShaderMaterial({
     uniforms: { uL: { value: LIGHT }, uFar: { value: FAR }, uNear: { value: NEAR }, uCol: { value: col ? new THREE.Color(col) : new THREE.Color() },
@@ -184,9 +184,11 @@ export function paperMaterial(col) {
   return m;
 }
 // Ursprung und Ausschnitt einer Szene in ein Material des Kerns schreiben (andere Materialien: clippingPlanes, siehe kern.js)
-export function frameOn(mat, org, clip) {
+export function frameOn(mat, org, clip, rot = 0) {
   if (!mat || !mat.uniforms || !mat.uniforms.uOrg) return false;
   mat.uniforms.uOrg.value.copy(org);
+  // Drehung der Szene um y (Welt = R · Szene + Ursprung): vL = Rᵀ · (Welt − Ursprung) liefert wieder Szenenkoordinaten für Ausschnitt und Raster
+  mat.uniforms.uRot.value.setFromMatrix4(new THREE.Matrix4().makeRotationY(-rot));
   if (clip) mat.uniforms.uClip.value.set(clip[0], clip[1], clip[2], clip[3]);
   return true;
 }
@@ -201,7 +203,7 @@ export function gridOn(mat, attr, g) {
 }
 // Gerüst: Haarlinien des Endzustands im Raum. aP = (Start in b, Dauer, Lauf 0…1, Ausblenden ab b), aO: Überstand (Richtung × Länge)
 const GER_VERT = `
-  uniform float uB; uniform vec3 uOrg;
+  uniform float uB; uniform vec3 uOrg; uniform mat3 uRot;
   attribute vec4 aCol; attribute vec4 aP; attribute vec3 aO;
   varying vec4 vC; varying vec4 vP; varying float vF; varying vec3 vL;
   void main() {
@@ -210,7 +212,7 @@ const GER_VERT = `
     float r = 1.0 - smoothstep(aP.w - .04, aP.w - .005, uB);
     vF = 1.0 - smoothstep(aP.w - .01, aP.w + .02, uB);
     vec4 wp = modelMatrix * vec4(position + aO * r, 1.0);
-    vL = wp.xyz - uOrg;
+    vL = uRot * (wp.xyz - uOrg);
     gl_Position = projectionMatrix * viewMatrix * wp;
   }`;
 const GER_FRAG = `

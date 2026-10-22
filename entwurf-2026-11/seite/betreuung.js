@@ -118,7 +118,7 @@ export default function (K) {
   F.part("luecke", .5, .01);
   const B_KNOWN = .44, B_OPEN = .465, B_PATCH = .6, D_PATCH = .06;
   const hw = hu1 - hu0, hh = hv1 - hv0;
-  const flap = K.panel(scr, scr.uv(hu0, hv0), scr.uv(hu1, hv0), [0, 1], B_OPEN, .055, 1.1, { nocut: 1, nofold: 1, over: .05 });
+  const flap = K.panel(scr, scr.uv(hu0, hv0), scr.uv(hu1, hv0), [0, 1], B_OPEN, .055, Q, { nocut: 1, nofold: 1, over: .05 });
   K.rect(flap, 0, 0, hw, hh, FACE, .5);
   K.onPanel(flap, K.decal(Math.round(hw * PXU), Math.round(hh * PXU), (x) => { x.translate(-HOLE.x0 * PXU, -HOLE.y0 * PXU); drawList(x, PXU); }, hw, hh, .29, .04), hw / 2, hh / 2, -1);
   K.onPanel(flap, K.decal(64, 16, (x, W, H) => { x.fillStyle = RED; x.fillRect(0, 0, W, H); }, hw, hh, B_KNOWN + .005, .02), hw / 2, hh / 2, -1, null, .003);
@@ -133,7 +133,7 @@ export default function (K) {
   // Ebene −2: nach beiden Drehungen liegt der Flicken 0,0075 vor dem Bildschirm (Ebene des Endzustands = Höhe des Scharniers A).
   F.part("flicken", .05, .05);
   const TM = .11, tv0 = vOf(ROWS[GR] + RH) - TM, tv1 = vOf(ROWS[GR]) + TM, GW = SW / 2 - (HOLE.x0 - DX / 2 - .1);
-  const tA = K.panel(scr, scr.uv(uR, tv0), scr.uv(uR, tv1), [1, 0], .31, .06, -Q, { own: R, lv: -2, over: .04 });
+  const tA = K.panel(scr, scr.uv(uR, tv0), scr.uv(uR, tv1), [1, 0], B_PATCH - .03, .03, -Q, { own: R, lv: -2, over: .04 });
   const tab = K.panel(tA, scr.uv(uR, tv0), scr.uv(uR, tv1), [1, 0], B_PATCH, D_PATCH, -Q, { own: R, lv: -2, nofold: 1, bounce: .045 });
   K.rect(tab, 0, 0, tv1 - tv0, GW, FACE, [0, .5, .5, .5]);
 
