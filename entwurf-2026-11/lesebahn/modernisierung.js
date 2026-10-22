@@ -1,17 +1,17 @@
-// Szene Modernisierung (Fassung 2026-11, Bogen + Bastellinien): Röhrenmonitor wird zum Flachbildschirm.
-// Text (wörtlich aus entwurf-2026-10-b-raumtext-2/index.html, #leistungen, Abschnitt Modernisierung):
-//   Überschrift  Modernisierung  (Lettern stehen aus dem Bogen auf)
-//   Satz 1       Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen.   -> Kinn des Röhrenmonitors
-//   Satz 2, Teil 1  Ich bringe sie technisch und gestalterisch auf den heutigen Stand                          -> Kinn des Flachbildschirms
-//   Satz 2, Teil 2  und achte darauf, dass Inhalte und Adressen erhalten bleiben.                               -> auf der Adresszeile
-// Ablauf (b): Überschrift steht auf, Bastellinien beider Geräte zeichnen sich, der Röhrenmonitor (Keilgehäuse, Frontwand = Bildschirm) klappt auf
-// und zeigt eine alte Seite; der Flachbildschirm (Fuß, Hals, Bildschirm) klappt daneben hoch; die Blöcke der alten Seite und die Adresszeile
-// heben sich ab, drehen sich um (alte Gestaltung -> neue Gestaltung), wandern hinüber und rasten in ihre Felder im neuen Layout ein;
+// Szene Modernisierung als Lesebahn (Fassung 2026-11, Bogen + Bastellinien). Drehbuch: DREHBUCH-LESEBAHN.md, Abschnitt 7.
+// Trägerform: Schieber mit Lasche (schieberform.js). Auf dem roten Faden stehen drei Taschen, aus jeder gleitet ein Papierstreifen mit Lasche,
+// der einen ganzen Satz trägt (die Satzkette „Ich bringe sie …“ über mehrere Träger ist aufgelöst); der Streifen altert von Satz zu Satz zu neu:
+//   M1 „Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen.“ (Kernaussage, größer)  -> Szenerie: der alte Röhrenmonitor mit der alten Seite
+//   M2 „Ich bringe sie technisch und gestalterisch auf den heutigen Stand.“                                                 -> Szenerie: die Blöcke wandern hinüber in den Flachbildschirm
+//   M3 „Dabei achte ich darauf, dass Inhalte und Adressen erhalten bleiben.“                                                 -> Szenerie: die Adresszeile bleibt, der alte Monitor legt sich flach
+// Die Geräte stehen wie zuvor als Szenerie hinter der Bahn, jetzt ohne Text, und zeigen im Moment der Lesestelle, was der Satz sagt:
+// Röhrenmonitor (Keilgehäuse, Frontwand = Bildschirm) klappt auf und zeigt eine alte Seite; der Flachbildschirm (Fuß, Hals, Bildschirm) klappt daneben hoch;
+// die Blöcke der alten Seite und die Adresszeile heben sich ab, drehen sich um (alte Gestaltung -> neue Gestaltung), wandern hinüber und rasten ein;
 // zuletzt legt sich der alte Monitor wieder flach in den Bogen (Schnitt- und Falzlinien kehren zurück).
-// Technik: Gerät = Faltmodell aus falt.js (kit.box, kit.panel, kit.slab); Blöcke = freie Papierstücke, deren Anfangs- und Endlage
-// aus Ankerobjekten an der alten Frontwand bzw. am neuen Bildschirm folgen (F.attach), dazwischen Bogenbahn, Wendung, kleines Überschwingen.
-// Kopie von entwurf-2026-11/modernisierung/m-modernisierung.js für die durchgehende Seite (entwurf-2026-11/seite/), unverändert
-// (Raster, Gerüst und Bleistiftspur hatte die Szene schon).
+// Technik: Gerät = Faltmodell aus falt.js (kit.box, kit.panel, kit.slab); Blöcke = freie Papierstücke, deren Anfangs- und Endlage aus Ankerobjekten an der
+// alten Frontwand bzw. am neuen Bildschirm folgen (F.attach), dazwischen Bogenbahn, Wendung, kleines Überschwingen.
+import { schieber } from "./schieberform.js";
+
 const ink = a => `rgba(48,48,51,${a})`;
 const RED = "#d40235";
 function rr(x, X, Y, w, h, r) { x.beginPath(); x.roundRect(X, Y, w, h, r); }
@@ -21,19 +21,43 @@ export default function (K) {
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
   const BODY = c3("#e2dac8"), FRONTC = c3("#d9d0bc"), FACE = c3("#f8f6f1"), METAL = c3("#dcd7cd");
 
+  // ---------- Lage der Bahn: eine Linie vor der Szenerie (vorderste Kante: Fuß des Flachbildschirms bei z 1,8), Überschrift links davon ----------
+  const PITCH = 26, LEAN = PITCH * Math.PI / 180, ZB = 3.7, XL1 = -3.4, eH = N ? .5 : .62;
+  F.part("titel", 0, .01);
+  const HEAD = ["Modernisierung"], titleW = K.measure(HEAD, { font: "serif" }).tw * eH, titleX = XL1 - .7 - titleW;
+  const head = K.word(HEAD, eH, titleX, ZB, .15, .85,
+    { font: "serif", foot: 1, imprint: { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, close: .25, closeDur: .7 }, ang: Q - LEAN });
+  // ---------- Drei Schieber, je ein ganzer Satz (Zeiten b: Schnittlinien, Aufklappen, Text; Lesestelle b) ----------
+  // Lesestellen: M1, wenn der Röhrenmonitor mit der alten Seite steht (.33); M2 mitten im Wandern der Blöcke (.52 … .725); M3, wenn alles eingerastet ist
+  const SATZ1 = "Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen.";
+  const SATZ2 = "Ich bringe sie technisch und gestalterisch auf den heutigen Stand.";
+  const SATZ3 = "Dabei achte ich darauf, dass Inhalte und Adressen erhalten bleiben.";
+  const BA = K.bahn({
+    prefix: "m", form: schieber([
+      { col: c3("#e6dfd1"), frame: .5, double: true, fase: true },     // alt: gealtertes Papier, doppelter Rahmen, Fase
+      { col: c3("#f1ece1"), frame: .3 },                                // dazwischen
+      { col: c3("#fbfaf7"), frame: 0 }                                  // neu: klares Papier, kein Rahmen
+    ]), x0: XL1, z: ZB, gap: .5, pitch: PITCH, sy: -.34, nsy: -.3,
+    head: { prints: [head], e0: eH, b: 0, fit: .72, fitN: .72, x: titleX, w: titleW },
+    sentences: [
+      { text: SATZ1, t: [.17, .21, .315], b: .385, big: 1.2, w: 4.2 },
+      { text: SATZ2, t: [.44, .48, .585], b: .63 },
+      { text: SATZ3, t: [.69, .73, .835], b: .87, w: 3.2 }
+    ]
+  });
+  const bc = BA.items.map(it => it.x0 + it.w / 2);
   // ---------- Maße ----------
-  // Röhrenmonitor (links): Keilgehäuse, vorn hoch, hinten niedrig. Frontwand = Bildschirm mit Kinn.
-  // Breitbild: Röhrenmonitor links, Flachbildschirm rechts. Hochkant (Handy): hintereinander, Röhrenmonitor hinten, Flachbildschirm vorn,
-  // so füllt die Szene das Hochkantbild (nebeneinander wäre sie dort nur ein schmaler Streifen).
-  const CW = N ? 3.2 : 3.5, CHT = N ? 3.0 : 2.9, HB = 1.5, DEP = 2.4, ZF = N ? -6 : 1.2, CX = N ? 0 : -3.4, X0 = CX - CW / 2, X1 = CX + CW / 2;
-  const ISX = .36, TOPI = .22, CHIN = N ? .9 : .76, DW = CW - 2 * ISX, DH = CHT - TOPI - CHIN;
-  // Flachbildschirm (rechts): Fuß, Hals, Bildschirm mit Kinn, 16:10
-  const XN = N ? 0 : 2.55, ZFB = N ? 2.6 : 1.0, NH = .8, NW = .34, FW = 1.5, DX = 3.7, DY = DX / 1.6, CH = N ? .8 : .62, BZ = .055, SW = DX + .2, SL = CH + DY + .08;
+  // Röhrenmonitor (links): Keilgehäuse, vorn hoch, hinten niedrig. Frontwand = Bildschirm mit Kinn. Beide Geräte stehen nebeneinander hinter der Bahn:
+  // der Röhrenmonitor über Satz 1, der Flachbildschirm zwischen Satz 2 und 3 (Handy: weiter rechts, damit er bei Satz 2 ganz und bei Satz 3 zum Teil im Bild steht).
+  const CW = 3.5, CHT = 2.9, HB = 1.5, DEP = 2.4, ZF = 1.2, CX = N ? bc[0] : bc[0] - .4, X0 = CX - CW / 2, X1 = CX + CW / 2;
+  const ISX = .36, TOPI = .22, CHIN = .76, DW = CW - 2 * ISX, DH = CHT - TOPI - CHIN;
+  // Flachbildschirm: Fuß, Hals, Bildschirm mit Kinn, 16:10
+  const XN = N ? bc[1] + 1.0 : bc[1] + .5, ZFB = 1.0, NH = .8, NW = .34, FW = 1.5, DX = 3.7, DY = DX / 1.6, CH = .62, BZ = .055, SW = DX + .2, SL = CH + DY + .08;
   const U = x => x + NW / 2;
   // ---------- Blöcke der Seite: Größe in der alten Fassung, im neuen Layout 12 % größer ----------
   const S = 1.12, M0 = .07, G0 = .05, CW0 = DW - 2 * M0;
   const BLK = {
-    bar: { w: CW0, h: N ? .36 : .30 }, kopf: { w: CW0, h: .26 }, bild: { w: (CW0 - G0) * .505, h: .66 }, text: { w: (CW0 - G0) * .495, h: .66 }, karten: { w: CW0, h: .34 }
+    bar: { w: CW0, h: .30 }, kopf: { w: CW0, h: .26 }, bild: { w: (CW0 - G0) * .505, h: .66 }, text: { w: (CW0 - G0) * .495, h: .66 }, karten: { w: CW0, h: .34 }
   };
   // alte Mitten (x von links, v von unten im Display), von oben nach unten gestapelt: Adresszeile, Kopf, Bild | Text, Karten
   let yTop = M0;
@@ -56,18 +80,7 @@ export default function (K) {
   });
 
   // ---------- Bogen ----------
-  K.sheet(...(N ? [-7, 7, -13.4, 9.8] : [-9.6, 6.4, -6.4, 7.2]));
-
-  // ---------- Überschrift: Lettern stehen aus dem Bogen auf ----------
-  const HE = N ? .76 : .85, HEAD = ["Modernisierung"], hw = K.measure(HEAD, { font: "serif" }).tw * HE;
-  const HZ = N ? 8.6 : 6.2, HCX = N ? 0 : -1.1;
-  const head = K.word(HEAD, HE, HCX - hw / 2, HZ, 0, .07, { font: "serif", foot: 1, clock: "b", on: .004, over: .05,
-    imprint: { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2 } });
-
-  // Die Überschrift gehört zum Anfang und zum Schluss: sie klappt zurück, bevor die Kamera dicht an die Geräte geht (sonst ragt sie angeschnitten
-  // ins untere Bildfeld), im Bogen bleibt ihr Abdruck, und steht am Ende wieder auf.
-  head.node.dn = { t0: .12, d: .06 }; head.node.re = { t0: .96, d: .04 };
-  head.sched = b => (b < .5 ? sm((b - .004) / .01) * (1 - sm((b - .16) / .02)) : sm((b - .988) / .008));
+  K.sheet(titleX - 1.2, BA.endX + 4.2, -3.4, ZB + .46 + 1.3);
 
   // ---------- Röhrenmonitor: Frontwand und Wände klappen hoch, der Deckel folgt ----------
   F.part("crt", .02, .1);
@@ -124,11 +137,6 @@ export default function (K) {
   crt.top.dn = { t0: DN, d: .06 }; crt.lf.dn = { t0: DN + .04, d: .06 }; crt.rt.dn = { t0: DN + .045, d: .06 };
   crt.fr.dn = { t0: DN + .07, d: .07 }; crt.bk.dn = { t0: DN + .09, d: .06 };
 
-  // Satz 1 im Kinn des Röhrenmonitors
-  const T1lines = N ? ["Viele WordPress-Seiten", "laufen seit Jahren auf", "veralteten Themes, Plugins", "und PHP-Versionen."] : ["Viele WordPress-Seiten laufen", "seit Jahren auf veralteten Themes,", "Plugins und PHP-Versionen."];
-  const T1 = K.print(T1lines, N ? .15 : .125, T_ON, { lh: 1.2 });
-  K.onPanel(crt.fr, T1, .32 - T1.t.padX * T1.e + T1.w / 2, CHIN / 2, -1);
-
   // ---------- Flachbildschirm: Fuß, Hals, Bildschirm ----------
   F.part("neu", .05, .1);
   const foot = K.slab(R, XN - FW / 2, XN + FW / 2, ZFB + NH, ZFB, .04, .33, .04, { col: METAL, top: METAL, walls: "lrb" });
@@ -152,9 +160,6 @@ export default function (K) {
     x.setLineDash([]);
   }, SW, SL, T_NEU - .02, .03);
   K.onPanel(scr, newScr, U(0), SL / 2, -1);
-  const T2lines = N ? ["Ich bringe sie technisch", "und gestalterisch auf", "den heutigen Stand"] : ["Ich bringe sie technisch und gestalterisch", "auf den heutigen Stand"];
-  const T2 = K.print(T2lines, N ? .16 : .125, T_NEU, { align: "center", lh: 1.2 });
-  K.onPanel(scr, T2, U(0), (CH - BZ) / 2 - .01, -1);
 
   // ---------- Blöcke: heben ab, drehen sich, wandern, rasten ein ----------
   const LIFT = .03, BPX = 300;
@@ -245,8 +250,7 @@ export default function (K) {
   };
   const blocks = [];
   const mkBlock = (key, t0, d, hover, rise) => {
-    // Handy: der Röhrenmonitor steht hinter dem Flachbildschirm; die Blöcke schwenken seitlich aus, damit sie nie vor dem Satz im Kinn des Röhrenmonitors fliegen
-    const side = N ? 2.2 : 0;
+    const side = 0;
     const { w, h } = BLK[key];
     const A = K.decal(Math.round(w * BPX), Math.round(h * BPX), ART[key].old, w, h, -1);
     const B = K.decal(Math.round(w * BPX), Math.round(h * BPX), ART[key].neu, w, h, -1);
@@ -295,47 +299,20 @@ export default function (K) {
   mkBlock("bar", FL.bar, FD, .75, 1.4);
   const T_BAR = FL.bar + FD + .005;
 
-  // Satz 2, Teil 2 auf der Adresszeile (liegt auf dem neuen Platz des Blocks, über dem Papierstück)
-  const bw = BLK.bar.w * S, bh = BLK.bar.h * S;
-  const T3lines = ["und achte darauf, dass Inhalte", "und Adressen erhalten bleiben."];
-  const T3 = K.print(T3lines, N ? .14 : .105, T_BAR, { align: "center", lh: 1.15 });
-  K.onPanel(scr, T3, U(-DX / 2 + newC.bar[0]), CH + newC.bar[1], -1, null, .06);
-
   // ---------- Konstruktionsphase: Gerüst im Raum, Bleistiftspur auf den Flächen ----------
   F.geruest({ tags: ["crt", "neu"], t0: .09, t1: .27, du: .03, a: .5, bAt: .62 });
   F.spur({ tags: ["crt", "neu"], quiet: [crt.fr, scr], a: .3 });
 
-  // ---------- Lesestellen und Kamera ----------
-  const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
-  const ST = {
-    t1: { prints: [T1], px: pxD, fb: .5, pitch: 14, yaw: 16, sx: -.05, sy: -.1, npitch: 14, nyaw: 4, nsx: -.16, nsy: -.05 },
-    t2: { prints: [T2], px: pxD, fb: .5, pitch: 14, yaw: -10, sx: (W, H) => -clamp((W / H - 1.4) * 1.15, 0, .46), sy: -.1, npitch: 14, nyaw: -10, nsx: 0, nsy: -.1 },
-    t3: { prints: [T3], px: pxD, fb: .8, pitch: 14, yaw: -8, sx: 0, sy: .6, npitch: 14, nyaw: -8, nsx: 0, nsy: .3 }
-  };
+  // ---------- Kamera und Faden: die Bahn (Überschrift, drei Taschen, Auslauf nach rechts); Gier 0, gleiche Neigung ----------
+  const BEND = .98, SHX0 = titleX - 1.2, SHZ1 = ZB + .46 + 1.3;
   return {
-    info: { head: { cx: HCX, z: HZ, w: hw, h: .8 } },
-    fov: 32, fovN: 44,
-    track: 540,
+    fov: 32, fovN: 44, smooth: true,
+    track: 400,
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .29 },
-    stops: Object.values(ST),
-    keys: [
-      // Überblick über den ganzen Bogen (Überschrift, beide Geräte als Bastellinien): eingepasst mit tmp-Rechnung (fit.mjs),
-      // Breitbild 1280 x 900 Rand 60 px, Hochkant 390 x 844 Rand 14 px
-      { w: 0, b: 0, cam: V(-1.26, 11.5, 15.52), tgt: V(-1.26, -.35, 1.41), camN: V(0, 14.35, 17.52), tgtN: V(0, -1.15, .31) },
-      { w: .55, b: .12, cam: V(-1.25, 11.01, 15.95), tgt: V(-1.25, -.36, 1.4), camN: V(0, 13.54, 17.86), tgtN: V(0, -1.21, .28) },
-      // Röhrenmonitor klappt auf
-      { w: .55, b: .27, cam: V(.43, 7.95, 14.11), tgt: V(-.03, .4, 1.04), camN: V(.31, 11.12, 15.3), tgtN: V(-.24, -.4, -.55) },
-      { w: .9, stop: ST.t1 },
-      // Flachbildschirm klappt hoch
-      { w: .7, b: .42, cam: V(.18, 6.59, 13.39), tgt: V(-.27, .25, .39), camN: V(.32, 11.02, 11.24), tgtN: V(-.12, .52, -1.26) },
-      { w: .9, stop: ST.t2 },
-      // Blöcke wandern
-      { w: 1.1, b: .6, cam: V(-.5, 7.17, 14.55), tgt: V(-.5, .29, .45), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
-      { w: .9, b: .72, cam: V(-.5, 7.17, 14.55), tgt: V(-.5, .29, .45), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
-      { w: .9, stop: ST.t3 },
-      // alter Monitor legt sich flach, Schlussbild
-      { w: 1, b: .86, cam: V(-1.49, 9.4, 16.2), tgt: V(-1.49, .67, 1.08), camN: V(-.11, 13.79, 15.14), tgtN: V(-.11, 1.33, -2.02) },
-      { w: .8, b: 1, cam: V(-1.41, 10.96, 15.44), tgt: V(-1.41, -.17, 1.19), camN: V(0, 14.35, 17.52), tgtN: V(0, -1.16, .3) }
-    ]
+    stops: BA.stops, names: BA.names,
+    keys: BA.keys({ b: BEND, shift: 1.8, w: 1 }),
+    thread: BA.thread({ hold: .04, depart: .10, bEnd: BEND, startX: titleX - .1 }),
+    // Ein- und Ausgang des Fadens für folge.js: Vorderkante des Bogens links, Hinterkante rechts hinter dem Ende der Bahn
+    fadenIO: BA.faden({ inn: [SHX0 + .4, SHZ1 - .2], out: [BA.endX + 3.0, -3.2] })
   };
 }

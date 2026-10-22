@@ -31,14 +31,18 @@ const lane = (I, dx = .35) => {
 export const SEQ = [
   { name: "eroeffnung", label: "Eröffnung", mod: eroeffnung, len: L(590), tr: L(0),
     faden: () => ({}) },
-  { name: "gerwing", label: "Gerwing", mod: gerwing, len: L(580), tr: TR(25.4, 32.7),
-    // Eingang rechts neben dem Abdruck der Palette vorbei zum Anfang des eigenen Fadens (Palette → Weiche → Halle), danach zwischen
-    // den Hallen nach hinten
-    faden: () => ({ in: [6.6, 4.7], viaPre: [[8.15, -.4]], viaPost: [[13.6, -1.3], [13.65, -3.5]], out: [13.65, -9.4] }) },
-  { name: "betreuung", label: "Betreuung und Absicherung", mod: betreuung, len: L(440 * .8), tr: TR(35.3, 38.7),
-    faden: (d, I) => ({ in: [-5.3, I.K.narrow ? 4.4 : 3.8], out: [-5.3, -3.4] }) },
-  { name: "modernisierung", label: "Modernisierung", mod: modernisierung, len: L(440 * .9), tr: TR(25.1, 21.4),
-    faden: (d, I) => I.K.narrow ? { in: [-6.6, 9.6], out: [-6.6, -13.2] } : { in: [-9.2, 7.0], out: [-9.2, -6.2] } },
+  { name: "gerwing", label: "Gerwing", mod: gerwing, len: L(390, 540), tr: TR(11.2, 12.6), lead: 1, leadShift: [-2.2, 0, 0], leadW: 1.1,
+    // Lesebahn: Lieferschein-Bons am Faden (gerwing.js, bon.js, Baukasten bahn.js); Ein- und Ausgang des Fadens liefert die Bahn (d.fadenIO)
+    bMax: .97,
+    faden: d => d.fadenIO },
+  { name: "betreuung", label: "Betreuung und Absicherung", mod: betreuung, len: L(330, 380), tr: TR(27.2, 25.1), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
+    // Lesebahn: Abreißkalender am Faden (betreuung.js, kalenderform.js); Ein- und Ausgang des Fadens liefert die Bahn (d.fadenIO)
+    bMax: .98,
+    faden: d => d.fadenIO },
+  { name: "modernisierung", label: "Modernisierung", mod: modernisierung, len: L(330, 400), tr: TR(23.1, 21.0), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
+    // Lesebahn: Schieber mit Lasche am Faden (modernisierung.js, schieberform.js); Ein- und Ausgang des Fadens liefert die Bahn (d.fadenIO)
+    bMax: .98,
+    faden: d => d.fadenIO },
   { name: "shop", label: "Shops und Shop-Wechsel", mod: shop, len: L(520), tr: TR(44.9, 62.7),
     faden: (d, I) => ({ in: [-7.75, I.K.narrow ? 9.4 : 5.05], out: [-7.75, I.K.narrow ? -10.3 : -9.3] }) },
   // Schnittstellen und WBG Pooling sind ein Modul: hier der erste Teil (b 0 … .55), WBG folgt nach „Gestaltung“
@@ -66,8 +70,9 @@ export const SEQ = [
       const P = d.thread.pts, a = P[0], z = P[P.length - 1], ZB = z.z - .45;
       return { in: [a.x, a.z + 1.05], out: [z.x, ZB - .6], viaPost: [[z.x, z.y, ZB + .03], [z.x, z.y - .04, ZB - .03], [z.x, .06, ZB - .03]] };
     } },
-  { name: "stimmen", label: "Stimmen", mod: stimmen, len: L(500 + 60), tr: TR(44.7, 50.3), lead: 1, tail: 1, clip: [-1e5, 1e5, -14, 1e5],
-    faden: () => ({ in: [5.5, 7.8], viaPost: [[12.0, -3.2]], out: [12.0, -13.6] }) },
+  // Lesebahn: zwei Leporellos (SiS, ai-coustics), der Faden läuft am Falz entlang, der Punkt hält an jeder Seite (stimmen.js, halt.js)
+  { name: "stimmen", label: "Stimmen", mod: stimmen, len: L(430, 500), tr: TR(44.7, 50.3), lead: 1, tail: 1,
+    faden: d => d.fadenIO },
   { name: "agenturen", label: "Für Agenturen", mod: abschluss, len: L(1150 * 12.15 / 17.45, 1150 * 13.15 / 18.45), tr: TR(32.6, 29.9),
     keys: d => [{ w: 0, b: .37, fromStop: d.stops.find(s => s.name === "h2"), back: 1.6, up: 1.5 }, ...d.keys.slice(9)],
     clip: [8.5, 1e5, -1e5, 1e5],

@@ -600,8 +600,10 @@ export function seite(renderer, SEQ, opt = {}) {
     if (ownPts) {
       const t0 = Math.max(own.t0, I.b0), t1 = Math.max(own.t1, t0 + .01);
       if (f.in) addPiece(I, [I.entry, ...(f.viaPre || []).map(a => wpt(I, a)), ownPts[0]], f.preTr ? { tr: I.idx, s0: f.preTr[0], s1: f.preTr[1] } : { I, b0: Math.max(I.b0, t0 - .05), b1: t0 });
-      addPiece(I, ownPts, { I, b0: t0, b1: Math.min(t1, I.bMax), lin: !!own.lin, map: own.map });
+      addPiece(I, ownPts, { I, b0: t0, b1: Math.min(t1, I.bMax), lin: !!own.lin, map: own.map, draw: own.draw });
       if (f.out) addPiece(I, [ownPts[ownPts.length - 1], ...(f.viaPost || []).map(a => wpt(I, a)), I.exit], outTime(Math.min(t1, I.bMax)));
+      // own.post (Lesebahn): das Ausgangsstück wird beim letzten Träger schon vor dem Abgang gezeichnet (durch die weiteren Ösen), der Punkt bleibt an der ersten
+      if (f.out && own.post) pieces[pieces.length - 1].time.pre = { I, ...own.post };
     } else if (I.entry && I.exit) {
       addPiece(I, [I.entry, ...(f.via || []).map(a => wpt(I, a)), I.exit], { tr: I.idx + 1, s0: 0, s1: .3 });
     }
@@ -613,8 +615,12 @@ export function seite(renderer, SEQ, opt = {}) {
       if (tm.tr !== undefined) k = tm.tr >= INST.length ? 0 : sm(win(sInto(tm.tr, st), tm.s0, tm.s1 - tm.s0));
       else if (tm.map) k = clamp(tm.map(bOf(tm.I, st)), 0, 1);
       else { const b = bOf(tm.I, st), w0 = win(b, tm.b0, Math.max(1e-4, tm.b1 - tm.b0)); k = tm.lin ? w0 : sm(w0); }
-      pc.mesh.visible = k > 0;
-      pc.g.setDrawRange(0, Math.floor(k * pc.N) * 6);
+      // gezeichnete Länge kd: der Faden darf dem Punkt vorauseilen (tm.draw: durch die weiteren Ösen eines Trägers; tm.pre: Vorzeichnen des Ausgangsstücks)
+      let kd = k;
+      if (tm.draw) kd = Math.max(kd, clamp(tm.draw(bOf(tm.I, st)), 0, 1));
+      if (tm.pre) kd = Math.max(kd, clamp(tm.pre.len / pc.curve.getLength(), 0, 1) * sm(win(bOf(tm.pre.I, st), tm.pre.b0, Math.max(1e-4, tm.pre.b1 - tm.pre.b0))));
+      pc.mesh.visible = kd > 0;
+      pc.g.setDrawRange(0, Math.floor(kd * pc.N) * 6);
       if (k > 0) last = { pc, k };
     }
     dot.visible = !!last;

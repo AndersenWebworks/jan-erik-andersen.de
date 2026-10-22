@@ -71,6 +71,9 @@ const anhaenger = {
       x2.strokeStyle = "rgba(255,255,255,.7)"; x2.lineWidth = r * .06; x2.beginPath(); x2.arc(0, 0, r * .7, PI * 1.05, PI * 1.45); x2.stroke();
     };
     for (const u of [u1, u2]) K.onPanel(foot, K.decal(256, 256, eyelet, od, od, t.rise), u, FD / 2, 1);
+    // Unterkante der Fußlasche: gedruckte Linie über die ganze Breite (die Haarkante allein verschwindet auf dem weißen Bogen), mit zwei Ösenkerben
+    const fw = Math.max(256, Math.round(Wc * 220)), fh = 10;
+    K.onPanel(foot, K.decal(fw, fh, (x2, w, h) => { x2.strokeStyle = ink(.5); x2.lineWidth = 3.2; x2.lineCap = "round"; x2.beginPath(); x2.moveTo(2, h / 2); x2.lineTo(w - 2, h / 2); x2.stroke(); }, Wc, Wc * fh / fw, t.line + .03), Wc / 2, .02, 1);
     const pr = K.print(lines, e, t.text, { lh: c.lh });
     K.onPanel(nd, pr, mx - pr.t.padX * e + pr.w / 2, Hc - mt + .34 * e - pr.h / 2, 1);
     const zA = z + FD / 2;
@@ -97,7 +100,7 @@ export function bahn(K, o) {
   const form0 = o.form || FORMEN.anhaenger, pitch = o.pitch === undefined ? 26 : o.pitch, lean = pitch * PI / 180;
   const z = o.z !== undefined ? o.z : o.front + (o.gapZ === undefined ? 6 : o.gapZ);
   const gap = o.gap === undefined ? 1.1 : o.gap, prefix = o.prefix || "s";
-  const items = []; let x = o.x0;
+  const items = []; let x = o.x0, runT;
   o.sentences.forEach((s, i) => {
     const form = s.form || form0, big = s.big || 1, e = EC * big;
     const maxEm = s.maxEm || form.maxEm(N) * (N && big > 1 ? .72 : 1);
@@ -105,7 +108,7 @@ export function bahn(K, o) {
     const tag = prefix + (i + 1) + "t", t = { line: s.t[0], rise: s.t[1], text: s.t[2] };
     F.part(tag, t.line, .04);
     const it = form.build({ K, x, z, lines, e, lh: LH, tw, th, i, tag, t, lean, narrow: N, text: s.text, col: s.col || o.col });
-    F.geruest({ tags: [tag], t0: t.rise - .035, t1: t.rise, du: .02, a: .5 });
+    F.geruest({ tags: [tag], t0: t.rise - .035, t1: t.rise, du: .02, a: .5, filter: it.gerFilter });
     Object.assign(it, { i, tag, x0: x, e, lines, b: s.b !== undefined ? s.b : t.text + .03, wKey: s.w || 2.0 });
     items.push(it); x += it.w + gap + (it.side || 0) * 2;
   });
@@ -158,15 +161,27 @@ export function bahn(K, o) {
         return fr[hp.length - 1];
       };
       const bEnd = to.bEnd !== undefined ? to.bEnd : dep[dep.length - 1];
-      return { pts, t0: Math.min(dep[0], arr[1]) - .04, t1: bEnd, map, dbg: { fr, dep, arr } };
+      // Faden durch beide Ösen: Der Punkt hält an der ersten Öse (Haltepunkt), der Faden selbst läuft schon weiter durch die weiteren Ösen des Trägers
+      // (draw: Länge des gezeichneten Fadens, eilt dem Punkt voraus). Beim letzten Träger zeichnet das Ausgangsstück (post) die Strecke bis über die letzte Öse hinaus vor.
+      runT = to.run === undefined ? 1.4 : to.run;
+      const ext = items.map((it, j) => { const a0 = it.anchors[0][0], a1 = it.anchors[it.anchors.length - 1][0]; return { fr: (a1 - x0) / (xe - x0), k: j + 1, on: a1 > a0 + 1e-6 }; });
+      const draw = b => {
+        let k = map(b);
+        for (let j = 0; j < items.length - 1; j++) { const e = ext[j]; if (e.on) k = Math.max(k, e.fr * smooth((b - arr[e.k]) / Math.max(1e-4, hp[e.k].b - arr[e.k]))); }
+        return k;
+      };
+      const L = items[items.length - 1], post = { b0: arr[hp.length - 1], b1: hp[hp.length - 1].b, len: L.anchors[L.anchors.length - 1][0] + runT - L.anchors[0][0] };
+      return { pts, t0: Math.min(dep[0], arr[1]) - .04, t1: bEnd, map, draw, post, dbg: { fr, dep, arr } };
     },
     // Ein- und Ausgang des Fadens für die Szenenfolge (folge.js: faden: () => B.faden({...})): setzt die Bahn stetig fort.
     // Der Faden kommt aus dem Eingang (inn: [x, z], Vorderkante des Bogens) und biegt vor dem Beginn der Bahn in ihre Richtung (+x) ein;
     // am Ende läuft er noch ein Stück geradeaus (gleiche Höhe und Richtung, über die letzte Öse hinaus) und biegt dann zum Ausgang (out: [x, z]) ab.
     faden(fo = {}) {
-      const zT = items[0].anchor[2], last = items[items.length - 1], xr = last.anchors[last.anchors.length - 1][0] + (fo.run === undefined ? 1.4 : fo.run);
+      const zT = items[0].anchor[2], last = items[items.length - 1], run = fo.run === undefined ? (runT === undefined ? 1.4 : runT) : fo.run, xr = last.anchors[last.anchors.length - 1][0] + run;
       const x0 = fo.startX !== undefined ? fo.startX : head && o.head.x !== undefined ? o.head.x - .4 : items[0].anchor[0] - 2.4;
-      return { in: fo.inn, viaPre: fo.inn ? [[x0 - 2.0, zT + 2.4], [x0 - 1.1, zT + .8], [x0 - .5, zT + .1]] : [], viaPost: [[xr, zT], [xr + (fo.turn === undefined ? 1.6 : fo.turn), zT - (fo.back === undefined ? 1.4 : fo.back)]], out: fo.out, bridge: [.25, .6], preTr: [.6, 1] };
+      // weitere Ösen des letzten Trägers liegen auf dem Weg des Ausgangsstücks (der eigene Faden endet an der ersten Öse)
+      const more = last.anchors.slice(1).map(a => [a[0], a[2]]);
+      return { in: fo.inn, viaPre: fo.inn ? [[x0 - 2.0, zT + 2.4], [x0 - 1.1, zT + .8], [x0 - .5, zT + .1]] : [], viaPost: [...more, [xr, zT], [xr + (fo.turn === undefined ? 1.6 : fo.turn), zT - (fo.back === undefined ? 1.4 : fo.back)]], out: fo.out, bridge: [.25, .6], preTr: [.6, 1] };
     }
   };
   return B;
