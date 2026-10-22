@@ -141,13 +141,13 @@ export default function (K) {
   }
   // Schnitt- und Falzlinien des Podests: Handy stehen schon (es ist beim Laden aufgestanden); Desktop zeichnen sie sich erst beim Hochfahren
   // (b ab .003), flach bei Kamerahöhe 0 lägen sie sonst als Linien auf dem Horizont durch die Grundlinie der Marke
-  F.part("podest", N ? -.02 : .003, .01);
+  F.part("podest", -.02, .01);
   // Desktop (Erik, 22.10.): im Startbild liegt das Podest noch flach im Bogen, man sieht nur die Marke; es fährt mit dem ersten Scrollen
   // hoch (Uhr b, Fenster 0 bis PB, siehe Schlüssel 1). Handy: zwei Stufen, flach lägen beide Zeilen hintereinander, daher wie bisher beim Laden.
   const PB = .012;
   // Handy: die Stufenflächen stehen im Papierton des Bogens (#faf8f3 bei 0,967 Licht); senkrechte Flächen bekommen im Shader nur 0,927,
   // daher hellere Grundfarbe, sonst steht „Andersen“ auf einem grauen Band („Etikett“), während „Jan-Erik“ auf Weiß steht
-  const STEP = N ? c3("#fffdf7") : c3("#f6f3ec"), PL = 2 * PW, pt = N ? { clock: "t", over: .04 } : { clock: "b", over: .04 }, PT0 = 0, PD = N ? .75 : PB;
+  const STEP = N ? c3("#fffdf7") : c3("#f6f3ec"), PL = 2 * PW, pt = { clock: "t", over: .04 }, PT0 = 0, PD = .75;
   const face1 = K.panel(R, [-PW, PZ], [PW, PZ], [0, -1], PT0, PD, Q, pt);
   K.P(face1, [[0, 0], [PL, 0], [PL, H1], [0, H1]], STEP, [.35, .5, 0, .5]);
   const deck1 = K.panel(face1, face1.uv(0, H1), face1.uv(PL, H1), [0, -1], PT0, PD, -Q, pt);
@@ -171,12 +171,9 @@ export default function (K) {
   // Handy: die Lettern stehen 0,02 Welteinheiten vor der Stufenfläche (Ebene von Setzstufe bzw. Vorderseite), sonst fällt der Fuß mit ihr zusammen und
   // Überhang und J-Haken unter der Grundlinie verschwinden in der Fläche
   const LF = .02;
-  const mark = N ? wortmarke(K, { cx: 0, narrow: true, par: deck2, zb: PZ - D1 - H2 + LF, par2: deck1, zb2: PZ - H1 + LF, k1: K1 })
-    : wortmarke(K, { cx: 0, zb: PZ - H1, narrow: false, par: deck1 });
-  // die gestrichelte Falz läuft über die Stufenkante auf die Oberkante der Vorderseite (frontal ist nur diese zu sehen)
-  const [fA, fB] = mark.folds;
-  if (N) { faltkante(K, riser, fA, fA.x + PW, H2 - H1 - fA.f.lw / 2); faltkante(K, face1, fB, fB.x + PW, H1 - fB.f.lw / 2); }
-  else faltkante(K, face1, fA, fA.x + PW, H1 - fA.f.lw / 2);
+  const mark = N ? wortmarke(K, { cx: 0, narrow: true, par: deck2, zb: PZ - D1 - H2 + LF, par2: deck1, zb2: PZ - H1 + LF, k1: K1, falz: false })
+    : wortmarke(K, { cx: 0, zb: PZ - H1, narrow: false, par: deck1, falz: false });
+  // keine gestrichelte Falz unter dem Namen: das Podest steht beim Laden fertig da (falz: false)
   const KT = N ? ["Webentwicklung", "Raum Plau am See · remote"] : ["Webentwicklung · Raum Plau am See · remote"];
   const ko = { track: .05, col: "#66666a", align: "center", lh: 1.45, grp: "kern" };
   // gedruckt, mittig auf der Vorderseite (Mitte des Drucks = Mitte des Versalblocks)
@@ -292,7 +289,7 @@ export default function (K) {
   const syH = (lo, hi) => (W, H) => Math.min(hi, Math.max(lo, lo + (H - 720) / 180 * .15 * (hi > lo ? 1 : -1)));
   // Abstand D der Startkamera zur Ebene der Lettern (z = PZ). Desktop: Name rund 70 % der Breite, Schrift höchstens H/6, und das Podest
   // reicht seitlich über das Bild hinaus (sonst sähe man daneben den Bogen). Handy: zweizeiliger Name rund 70 % der Breite.
-  const NAME_MAX = 1000, Y0 = N ? H1 : 0;
+  const NAME_MAX = 1000, Y0 = H1;
   const tanS = () => Math.tan((N ? 44 : 32) * Math.PI / 360);
   const startD = (W, H) => {
     const T = tanS(), f = H / (2 * T);
@@ -302,7 +299,7 @@ export default function (K) {
     // Desktop: das Podest liegt im Startbild flach, also keine Obergrenze durch seine Breite; der Name ist höchstens NAME_MAX px breit
     // (27 Zoll: sonst über 1800 px), dazu passt im HTML-Vorbild font-size min(…, 137px)
     // Das flache Podest verschiebt die Marke im Startbild um H1 nach hinten; die Rechnung (und das HTML-Vorbild, vorbild.js) gilt für H1 = .5, daher ausgleichen
-    return Math.max(3 * mark.e / T, mark.w * f / Math.min(.7 * W, NAME_MAX)) + (.5 - H1);
+    return Math.max(3 * mark.e / T, mark.w * f / Math.min(.7 * W, NAME_MAX)) + .5; // Podest steht beim Laden: Name auf z = PZ, Abstand wie im HTML-Vorbild (vorbild.js)
   };
   // readingPose() übersetzt: Tiefe bis zur Mitte der Drucke, daraus Schriftgröße und Verschiebung so, dass die Kamera bei (0, H1, PZ + D) steht
   const dep = (W, H) => PZ + startD(W, H) - S.name.C.z;
