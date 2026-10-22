@@ -581,6 +581,8 @@ export function Model() {
         for (let j = 0; j < nL.length; j += 2) {
           const nd = nodes[nL[j]];
           if (nd === root || nd.clock === "t" || !o.tags.includes(nd.tag) || !(baseL[j * 4 + 3] > 0) || (o.filter && !o.filter(nd))) continue;
+          // Teile unter einem Schiebeknoten (Mitfahrt, K.trage) haben kein Raumgerüst: es stünde an der Endlage, während das Teil noch unterwegs ist
+          { let a = nd, sl = false; while (a) { if (a.slide) { sl = true; break; } a = a.par; } if (sl) continue; }
           const A = new THREE.Vector3(fin[j * 3], fin[j * 3 + 1], fin[j * 3 + 2]), B = new THREE.Vector3(fin[j * 3 + 3], fin[j * 3 + 4], fin[j * 3 + 5]);
           if (A.distanceTo(B) < .03) continue;
           raw.push({ A, B, f: done(nd) });

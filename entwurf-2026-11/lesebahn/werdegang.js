@@ -1,33 +1,27 @@
-// Szene Werdegang (Katalog 11/12): Treppe aus dem Bogen, acht Stufen, neueste oben (Drehbuch: DREHBUCH.md).
-// Pop-up-Logik: Die Stufen sind ein Teleskop: Stufe k ist eine Platte,
-// die sich um eine Stufenhöhe über die Stufe darunter hebt; danach klappen ihre Setzstufe und ihre zwei Seitenwände
-// (innere Lagen unter der Platte) hoch
-// und rastet ein. Auf der Setzstufe stehen Jahr, Station und Zusatz wörtlich, auf der Trittstufe darüber steht das
-// Faltzeichen der Station. Der rote Faden klettert mit und erreicht die Oberkante jeder Setzstufe an ihrer Lesestelle.
-// Überschrift: Lettern „Werdegang“ stehen vor der Treppe aus dem Bogen auf (nach der Zeit seit dem Laden, wie der Name).
-// Kopie von entwurf-2026-11/werdegang/werdegang.js für die durchgehende Seite (entwurf-2026-11/seite/). Geändert: Haarkanten und
-// Bastellinien relativ zur eigenen Fläche über F.edgeOwn(true) (in der Szenenkopie war das eine Änderung im Faltkern),
-// Konstruktionsphase ergänzt (Raster, Gerüst je Stufe kurz vor ihrem Heben, Bleistiftspur).
+// Szene Werdegang (Lesebahn, gleichmäßige Fahrt): die Treppe ist das Ding, ihre Setzstufen sind der Text („Text ist das Bauteil“).
+// Aufbau: Eine Treppe steigt in Fahrtrichtung (+x) auf. Jede Stufe ist eine Platte, die sich um eine Stufenhöhe über die Stufe davor hebt
+// (Teleskop); danach klappt ihre Setzstufe (die Vorderwand, senkrecht) hoch. Auf der Setzstufe stehen Jahr (Grotesk, klein), Station
+// (Newsreader, groß) und Zusatz (Lesetext); auf dem Tritt dahinter steht das Faltzeichen der Station. Die Bahn steigt mit (def.rise),
+// die Kamera mit; nach der Treppe läuft die oberste Platte als Ebene weiter (die folgenden Szenen liegen um rise.h höher).
+// Der rote Faden klettert die Treppe hinauf: er läuft vor den Setzstufen an ihrer Oberkante und steigt am linken Rand jeder Setzstufe schräg zur nächsten.
+// Handy: die Stufe schiebt sich teleskopartig aus der vorigen heraus und fährt dabei mit der Kamera mit (K.trage), bis sie einrastet.
+// Die Zeichen auf den Tritten stammen aus der früheren Fassung (entwurf-2026-11/werdegang/werdegang.js), HTK steht jetzt vor Games.
 
 const ink = a => `rgba(48,48,51,${a})`;
 function rr(x, X, Y, w, h, r) { x.beginPath(); x.roundRect(X, Y, w, h, r); }
 
-// Text wörtlich aus entwurf-2026-10-b-raumtext-2/index.html, Section #werdegang, von unten (älteste) nach oben (neueste).
-// d: Zeilen am Desktop, n: Zeilen am Handy (nur Umbruch, kein anderer Wortlaut)
+// Einträge wörtlich nach DREHBUCH-LESEBAHN.md, Abschnitt 14 (R1 bis R8), von unten (älteste) nach oben (neueste)
 const ROWS = [
-  { yr: "2000 bis 2006", st: "Pixel Arrays", d: ["erste Selbstständigkeit"] },
-  { yr: "2010 bis 2017", st: "Games", d: ["Spielprototypen in Flash und Haxe, danach Qualitätssicherung", "bei Goodgame Studios und Deep Silver FISHLABS"],
-    n: ["Spielprototypen in Flash", "und Haxe, danach Qualitäts-", "sicherung bei Goodgame Studios", "und Deep Silver FISHLABS"] },
-  { yr: "2007 bis 2010", st: "HTK Hamburg", d: ["Zertifikat Multimedia Design"] },
-  { yr: "seit 2010", st: "Freiberufliche Webprojekte", d: ["seit 2018 als Andersen Webworks"] },
-  { yr: "2017", st: "YOOtheme", d: ["Support Management"] },
-  { yr: "2017 bis 2023", st: "Tangram Werbeagentur", d: ["Frontend-Entwicklung, unter anderem für Nissen,", "BIG Arbeitsschutz und EMPORE"],
-    n: ["Frontend-Entwicklung, unter", "anderem für Nissen, BIG", "Arbeitsschutz und EMPORE"] },
-  { yr: "2023 bis 2025", st: "Runden Group", d: ["WBG Pooling und viele weitere Websites und", "Anwendungen der Firmengruppe"],
-    n: ["WBG Pooling und viele weitere", "Websites und Anwendungen", "der Firmengruppe"] },
-  { yr: "seit 2023", st: "Gerwing", d: ["Umsetzung und laufende Betreuung des Onlineshops"],
-    n: ["Umsetzung und laufende", "Betreuung des Onlineshops"] }
+  { yr: "2000 bis 2006", st: "Pixel Arrays", ds: "erste Selbstständigkeit" },
+  { yr: "2007 bis 2010", st: "HTK Hamburg", ds: "Zertifikat Multimedia Design" },
+  { yr: "2010 bis 2017", st: "Games", ds: "Spielprototypen in Flash und Haxe, danach Qualitätssicherung bei Goodgame Studios und Deep Silver FISHLABS" },
+  { yr: "seit 2010", st: "Freiberufliche Webprojekte", ds: "seit 2018 als Andersen Webworks" },
+  { yr: "2017", st: "YOOtheme", ds: "Support Management" },
+  { yr: "2017 bis 2023", st: "Tangram Werbeagentur", ds: "Frontend-Entwicklung, unter anderem für Nissen, BIG Arbeitsschutz und EMPORE" },
+  { yr: "2023 bis 2025", st: "Runden Group", ds: "WBG Pooling und viele weitere Websites und Anwendungen der Firmengruppe" },
+  { yr: "seit 2023", st: "Gerwing", ds: "Umsetzung und laufende Betreuung des Onlineshops" }
 ];
+const KICKER = "Acht Stationen, die jüngste oben", KOPF = "Werdegang";
 
 // ---------- Drucke der Zeichen (Canvas, oben = Oberkante des Teils) ----------
 // Stufe 1, Pixel Arrays: Kachel mit feinem Raster und einem Mauszeiger aus Pixeln
@@ -148,79 +142,97 @@ function drawShop(x, W, H) {
   drawSite(x, bz, bz * 1.6, W - 2 * bz, H - 3.2 * bz, { shop: 1 });
 }
 
-const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, close: .25, closeDur: .7 };
+// Stufe 7, Runden Group: viele Fenster (Raster aus kleinen Browserfenstern) auf einer Fläche
+function drawWindowGrid(x, W, H) {
+  x.fillStyle = ink(.06); rr(x, 0, 0, W, H, W * .02); x.fill();
+  const cols = 3, rows = 2, gx = W * .04, gy = H * .06, cw = (W - gx * (cols + 1)) / cols, ch = (H - gy * (rows + 1)) / rows;
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const X = gx + c * (cw + gx), Y = gy + r * (ch + gy);
+    x.save(); x.translate(X, Y); x.beginPath(); x.rect(0, 0, cw, ch); x.clip();
+    drawWindow(x, cw, ch); x.restore();
+  }
+}
 
 export default function (K) {
-  const { F, R, V, Q, PI, EPS, THREE, narrow: N } = K;
+  const { F, R, V, Q, EPS, THREE, sm, narrow: N } = K;
   F.edgeOwn(true);
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const TREAD = c3("#ece6d9"), RISER = c3("#fbfaf6"), WANGE = c3("#e3dccd"), CARD = c3("#f8f6f1"), GREY = c3("#dcd7cd"),
+  const TREAD = c3("#ece6d9"), RISER = c3("#fbfaf6"), CARD = c3("#f8f6f1"), GREY = c3("#dcd7cd"),
     WOOD = c3("#e3d6bd"), STONE = c3("#dad4c9"), DARK = c3("#cfc9bf");
+  const EV = K.EV, UP = Q - K.lean, halfW = K.halfW;
 
-  // ---------- Maße ----------
-  // W Breite, H Stufenhöhe, D Auftritt. Am Handy schmaler (Text mittig, Zeichen dahinter), höher (bis vier Zeilen Zusatz)
-  // und tiefer (das Zeichen steht weit genug vor der nächsten Setzstufe, um sie bei 30° Neigung nicht zu verdecken).
-  const W = N ? 3.0 : 7.2, H = N ? 1.2 : .95, D = N ? 2.2 : 1.9, Z1 = 4, X0 = -W / 2, X1 = W / 2, ZB = Z1 - 8 * D;
-  const Zf = k => Z1 - (k - 1) * D;
-  // Zeitplan: Bastellinien b 0–.11, Stufe k ab B0 + (k − 1)·S (Platte, dann Setzstufe und Seitenwände, dann Zeichen)
-  // (Korrektur nach Sichtprüfung: keine hohen Wangen mehr, die Seiten wachsen Stufe für Stufe mit)
-  const B0 = .12, S = .095, sK = k => B0 + (k - 1) * S;
-  // Überschrift rechts vorn neben der Treppe: an den Lesestellen liegt sie ganz außerhalb des Bildes und nie vor Text
-  const HZ = Z1 + (N ? .9 : .8);
+  // ---------- Schrift ----------
+  // Setzstufen stehen senkrecht: alle Größen mit K.EV (gleicht die Verkürzung aus). Jahr klein in Grotesk (Kicker), Station in Newsreader groß, Zusatz als Lesetext.
+  const eY = .62 * EV, eS = (N ? 1.15 : 1.3) * EV, eD = EV, eH = (N ? 1.7 : 2.0) * EV;
+  const WT = N ? 3.5 : 4.2;                              // größte Breite eines Eintrags (Welt)
+  const twOf = p => p.t.tw * p.e;
+  const stLines = name => {                              // Handy: lange Stationsnamen auf zwei Zeilen
+    if (!N || K.measure([name], { font: "kopf" }).tw * eS <= WT) return [name];
+    const ws = name.split(" "); let best = null;
+    for (let i = 1; i < ws.length; i++) {
+      const l = [ws.slice(0, i).join(" "), ws.slice(i).join(" ")], m = Math.max(...l.map(s => K.measure([s], { font: "kopf" }).tw));
+      if (!best || m < best.m) best = { m, l };
+    }
+    return best ? best.l : [name];
+  };
+  // Eintrag 0 ist der Kopf (auf dem Fuß der Treppe), Einträge 1 bis 8 die Stationen. pr: Drucke von oben nach unten, stop: in Lesereihenfolge
+  const items = [];
+  {
+    const k = K.print([KICKER], eY, 0, { font: "kicker", col: "#5f5f63", text: KICKER });
+    const h = K.print([KOPF], eH, 0, { font: "kopf", lh: 1.12, text: KOPF });
+    items.push({ pr: [k, h], stop: [k, h] });
+  }
+  for (const r of ROWS) {
+    const yr = K.print([r.yr], eY, 0, { font: "kicker", col: "#5f5f63", text: r.yr });
+    const st = K.print(stLines(r.st), eS, 0, { font: "kopf", lh: 1.12, text: r.st });
+    const ds = K.satz(r.ds, { e: eD, maxEm: WT / eD, on: 0 });
+    items.push({ pr: [yr, st, ds], stop: [ds, st, yr] });
+  }
+  const n = items.length;
+  items.forEach(it => { it.w = Math.max(...it.pr.map(twOf)); it.blk = it.pr.reduce((s, p) => s + p.h, 0); });
+  const gapT = .3, gapB = .25;
+  const H = Math.max(N ? 2.2 : 1.7, Math.max(...items.map(i => i.blk)) + gapT + gapB);     // Stufenhöhe (alle gleich)
+  const Y = k => (k + 1) * H;                            // Oberkante von Stufe k (Setzstufe von Y(k − 1) bis Y(k), Tritt auf Y(k))
+  const HT = n * H;                                      // Höhe der Treppe = rise.h
 
-  // ---------- Bogen ----------
-  const HE = N ? .62 : .8;
-  const hm = K.measure(["Werdegang"], { font: "marke" }), HX = X1 + (N ? .5 : .7), HW = hm.tw * HE;
-  K.sheet(X0 - 2.6, HX + HW + 1.4, ZB - .7, HZ + (N ? 1.8 : 1.6));
+  // ---------- Maße, Lage ----------
+  const CL = N ? .8 : 1.0, M = CL + .2;                  // Steigung des Fadens am linken Rand der Setzstufe, Rand bis zum Text
+  const DT = N ? 7 : 8.5;                                // Tiefe der Tritte (hinter der Setzstufe liegt der Tritt, darauf das Zeichen)
+  const SC = N ? 1.05 : 1.3, s = SC;                     // Größe der Zeichen
+  const SW = [0, .8, 1, 1.25, 1.2, 1.24, .82, 1.7, 1.46];                 // nominale Breite des Zeichens je Stufe
+  const SA = [0, -.4, -.5, -.625, -.6, -.62, -.41, -.85, -.74];          // linke Kante des Zeichens bei Mitte c: c + SA[k] * s
+  const Dk = items.map(it => K.trage(0, it.w, {}).D);     // Mitfahrt je Stufe (Handy)
+  // Teilung der Texte: Stufe k + 1 beginnt (in Startlage) rechts vom Zeichen der Stufe k
+  let Pmin = 0;
+  for (let k = 0; k < n - 1; k++) Pmin = Math.max(Pmin, Dk[k + 1] + items[k + 1].w / 2 + M - items[k].w / 2 + SW[k] * s + .3);
+  const P = Math.max(Pmin, N ? 0 : 4.9);
+  const cF = k => k * P;                                  // Mitte des Eintrags k in Ruhe (Endlage)
+  const xl = k => cF(k) - Dk[k] - items[k].w / 2 - M;     // linke Kante der Stufe in Startlage
+  const xe = cF(n - 1), xsS = xl(0) - halfW;
+  const XE = xe + halfW + .8;                             // Ende der Platten in Ruhe (die Ebene oben läuft bis zum Ende der Szene)
+  K.strecke(xsS, xe);
+  const dE = 1 / (xe - xsS);                              // b je Welteinheit Weg
 
-  // ---------- Überschrift: Lettern stehen aus dem Bogen auf ----------
-  F.part("titel", -.02, .01);
-  const head = K.word(["Werdegang"], HE, HX, HZ, .15, .9, { font: "marke", foot: 1, imprint: IMPRINT });
-  // die Lettern blenden aus, während die Kamera in den Überblick steigt (b .06–.09), bevor sie aus dem Bildrand laufen
-  head.off = .06;
-
-  // ---------- Text auf den Setzstufen ----------
-  const EY = .085, ES = N ? .16 : .2, ED = .12;
-  const lines = r => (N && r.n) || r.d;
-  // Handy: gemeinsame linke Kante für alle Stufen, Block der breitesten Zeile mittig
-  const wMax = Math.max(...ROWS.map(r => Math.max(K.measure([r.st], { font: "marke" }).tw * ES, K.measure(lines(r), {}).tw * ED, K.measure([r.yr], { track: .06 }).tw * EY)));
-  const XL = N ? -wMax / 2 : X0 + .34;
-
-  // ---------- Stufen ----------
-  let par = R;
-  const steps = [];
-  for (let k = 1; k <= 8; k++) {
-    const s = sK(k), z = Zf(k), r = ROWS[k - 1];
-    F.part("stufe" + k, .012 + k * .007, .035);
-    // Setzstufe: innere Lage unter der Platte (ohne eigene Bastellinien), klappt hoch, sobald die Platte oben ist
-    const riser = K.panel(par, [X0, z], [X1, z], [0, -1], s + .38 * S, .32 * S, Q, { nocut: 1, nofold: 1, over: .035, lv: par.lvl + 1 });
-    K.rect(riser, 0, 0, W, H, RISER);
-    // Seitenwände: liegen innen unter der Platte (ohne Bastellinien), schließen die Seite zwischen den Platten
-    const sw = { nocut: 1, nofold: 1, over: .035, lv: par.lvl + 1 };
-    K.rect(K.panel(par, [X0, ZB], [X0, z], [1, 0], s + .4 * S, .3 * S, Q, sw), 0, 0, z - ZB, H, WANGE);
-    K.rect(K.panel(par, [X1, z], [X1, ZB], [-1, 0], s + .4 * S, .3 * S, Q, sw), 0, 0, z - ZB, H, WANGE);
-    // Platte hebt sich um eine Stufenhöhe (Ausgleich der Lagen: Oberkante genau k·H)
-    const L = F.lift(par, H - 2 * EPS, s, .45 * S, { over: .03, lv: par.lvl + 2 });
-    F.poly(L, [[X0, z], [X1, z], [X1, ZB], [X0, ZB]], TREAD, .5);
-    // Jahr (Grotesk, gesperrt, grau), Station (Marke), Zusatz (Grotesk), als Block senkrecht mittig auf der Setzstufe
-    const on = s + .66 * S;
-    const yr = K.print([r.yr], EY, on, { track: .06, col: "#66666a" });
-    const st = K.print([r.st], ES, on, { font: "marke" });
-    const ds = K.print(lines(r), ED, on + .01, { lh: 1.25 });
-    const hb = yr.h + st.h + ds.h - .05;
-    let v = (H + hb) / 2;
-    const put = (pr, dv = 0) => { K.onPanel(riser, pr, XL - X0 + pr.w / 2 - pr.t.padX * pr.e, v - pr.h / 2 + dv, 1); v -= pr.h; };
-    put(yr); put(st, .015); put(ds, .035);
-    steps.push({ k, s, z, riser, L, prints: [ds, st, yr] });
-    par = L;
+  // ---------- Anstieg der Bahn (def.rise): die Kamera steigt gleichmäßig mit, passend zur Treppe ----------
+  const xm = k => cF(k) - Dk[k] / 2, yc = k => Y(k) - gapT - items[k].blk / 2;
+  let fit = null;
+  for (let ia = 0; ia <= 48; ia++) for (let ib = 0; ib <= 48; ib++) {
+    const a = ia / 48 * 3 * P, b = (.6 + ib / 48 * 1.6) * P, x0 = Math.max(xsS, xm(0) - a), x1 = xm(n - 1) + b;
+    let e = 0; for (let k = 0; k < n; k++) e = Math.max(e, Math.abs(K.YL + HT * sm((xm(k) - x0) / (x1 - x0)) - yc(k) - .6));
+    const sc = e + .5 * HT * (1 - sm((xe + 6 - x0) / (x1 - x0)));
+    if (!fit || sc < fit.sc) fit = { sc, e, x0, x1 };
   }
 
-  // ---------- Zeichen auf den Trittstufen ----------
-  const PX = 600; // Pixel je Einheit der Drucke
+  // ---------- Bogen ----------
+  K.sheet(xl(0) - 4, XE + 3, -DT - 2, 3.4);
+
+  // ---------- Zeichen auf den Tritten (aus der früheren Fassung, größer; stehen der Kamera zugewandt) ----------
+  const PX = 600;
   const decal = (nd, draw, w, h, u, v, on, side = 1) => K.onPanel(nd, K.decal(Math.round(w * PX), Math.round(h * PX), draw, w, h, on, .02), u, v, side);
-  // stehendes Teil: liegt in Ruhe hinter seinem Scharnier (zh) auf der Trittstufe und klappt hoch; shape: Polygone in (u, v), sonst Rechteck
+  const sc2 = pts => pts.map(p => [p[0] * s, p[1] * s]);
+  // stehendes Teil: liegt in Ruhe hinter seinem Scharnier (zh) auf dem Tritt und klappt hoch; shape: Polygone in (u, v), sonst Rechteck
   function card(par, x0, x1, zh, h, t0, d, o = {}) {
-    const nd = K.panel(par, [x0, zh], [x1, zh], [0, -1], t0, d, o.ang || Q, { over: o.over !== undefined ? o.over : .05 });
+    const nd = K.panel(par, [x0, zh], [x1, zh], [0, -1], t0, d, o.ang || UP, { over: o.over !== undefined ? o.over : .05 });
     if (o.shape) for (const sh of o.shape) K.P(nd, sh[0], o.col || CARD, sh[1] || .5);
     else K.rect(nd, 0, 0, x1 - x0, h, o.col || CARD);
     if (o.draw) decal(nd, o.draw, o.dw || x1 - x0, o.dh || h, o.du !== undefined ? o.du : (x1 - x0) / 2, o.dv !== undefined ? o.dv : h / 2, t0 + d * .45);
@@ -236,130 +248,94 @@ export default function (K) {
     if (ws.includes("r")) { r.r = K.panel(par, [x1, z0], [x1, z1], [-1, 0], tw, dw, Q, wo); K.rect(r.r, 0, 0, z0 - z1, h, col); }
     return r;
   }
-  const EX = N ? 0 : X1 - 1.05; // Mitte der Zeichen
-  const zeichen = [
+  // Zeichen je Stufe 1 bis 8: (Tritt, Mitte x, Scharnier z, t0, d); Maße im nominalen Maßstab, mal SC
+  const SIGN = [
     // 1 Pixel Arrays: Kachel mit Pixel-Mauszeiger
-    (L, zf, t0, d) => card(L, EX - .4, EX + .4, zf, .8, t0, d, { draw: drawPixel }),
-    // 2 Games: Gamepad als Silhouette (Körper, zwei Griffe; innere Kanten ohne Linie)
-    (L, zf, t0, d) => {
-      const body = [[.15, .62], [1.1, .62], [1.23, .45], [1.15, .22], [.89, .22], [.36, .22], [.1, .22], [.02, .45]];
-      const gl = [[.1, .22], [.36, .22], [.24, 0], [.06, 0]], gr = [[.89, .22], [1.15, .22], [1.19, 0], [1.01, 0]];
-      return card(L, EX - .625, EX + .625, zf, .62, t0, d, { col: GREY, shape: [[body, [.5, .5, .5, 0, .5, 0, .5, .5]], [gl, [0, .5, .5, .5]], [gr, [0, .5, .5, .5]]], draw: drawPad });
+    (L, c, zf, t0, d) => card(L, c - .4 * s, c + .4 * s, zf, .8 * s, t0, d, { draw: drawPixel }),
+    // 2 HTK: Urkunde (Rahmen, Titelzeilen, Unterschrift, Siegel)
+    (L, c, zf, t0, d) => card(L, c - .5 * s, c + .5 * s, zf, .72 * s, t0, d, { draw: drawCert }),
+    // 3 Games: Gamepad als Silhouette (Körper, zwei Griffe; innere Kanten ohne Linie)
+    (L, c, zf, t0, d) => {
+      const body = sc2([[.15, .62], [1.1, .62], [1.23, .45], [1.15, .22], [.89, .22], [.36, .22], [.1, .22], [.02, .45]]);
+      const gl = sc2([[.1, .22], [.36, .22], [.24, 0], [.06, 0]]), gr = sc2([[.89, .22], [1.15, .22], [1.19, 0], [1.01, 0]]);
+      return card(L, c - .625 * s, c + .625 * s, zf, .62 * s, t0, d, { col: GREY, shape: [[body, [.5, .5, .5, 0, .5, 0, .5, .5]], [gl, [0, .5, .5, .5]], [gr, [0, .5, .5, .5]]], draw: drawPad });
     },
-    // 3 HTK: Urkunde, leicht zurückgelehnt
-    (L, zf, t0, d) => card(L, EX - .5, EX + .5, zf, .72, t0, d, { ang: Q - .2, draw: drawCert }),
     // 4 Freiberuflich: Laptop, Grundplatte hebt sich, Bildschirm klappt auf
-    (L, zf, t0, d) => {
-      const z1 = zf - .78, b = block(L, EX - .6, EX + .6, zf, z1, .06, t0, d * .5, { col: GREY });
-      K.onFlat(b.L, K.decal(Math.round(1.2 * PX), Math.round(.78 * PX), drawKeys, 1.2, .78, t0 + d * .3, .02), EX, zf - .39);
-      return card(b.L, EX - .6, EX + .6, z1, .76, t0 + d * .4, d * .6, { ang: Q - .3, col: GREY, draw: drawScreen });
+    (L, c, zf, t0, d) => {
+      const z1 = zf - .78 * s, b = block(L, c - .6 * s, c + .6 * s, zf, z1, .06 * s, t0, d * .5, { col: GREY });
+      K.onFlat(b.L, K.decal(Math.round(1.2 * s * PX), Math.round(.78 * s * PX), drawKeys, 1.2 * s, .78 * s, t0 + d * .3, .02), c, zf - .39 * s);
+      return card(b.L, c - .6 * s, c + .6 * s, z1, .76 * s, t0 + d * .4, d * .6, { ang: Q - .3, col: GREY, draw: drawScreen });
     },
     // 5 YOOtheme Support: zwei Sprechblasen, die Frage vorn links, die Antwort dahinter rechts
-    (L, zf, t0, d) => {
-      const b1 = [[.16, .16], [.2, .16], [.38, .16], [.94, .16], [1.0, .22], [1.0, .56], [.94, .62], [.16, .62], [.1, .56], [.1, .22]];
-      card(L, EX - .62, EX + .38, zf, .62, t0, d * .8, { shape: [[b1, [.5, 0, .5, .5, .5, .5, .5, .5, .5, .5]], [[[.2, .16], [.38, .16], [.1, 0]], [0, .5, .5]]], draw: drawBubble1 });
-      const b2 = [[.06, .16], [.34, .16], [.52, .16], [.66, .16], [.72, .22], [.72, .44], [.66, .5], [.06, .5], [0, .44], [0, .22]];
-      return card(L, EX - .1, EX + .62, zf - .74, .5, t0 + d * .2, d * .8, { col: GREY, shape: [[b2, [.5, 0, .5, .5, .5, .5, .5, .5, .5, .5]], [[[.34, .16], [.52, .16], [.62, 0]], [0, .5, .5]]], draw: drawBubble2 });
+    (L, c, zf, t0, d) => {
+      const b1 = sc2([[.16, .16], [.2, .16], [.38, .16], [.94, .16], [1.0, .22], [1.0, .56], [.94, .62], [.16, .62], [.1, .56], [.1, .22]]);
+      card(L, c - .62 * s, c + .38 * s, zf, .62 * s, t0, d * .8, { shape: [[b1, [.5, 0, .5, .5, .5, .5, .5, .5, .5, .5]], [sc2([[.2, .16], [.38, .16], [.1, 0]]), [0, .5, .5]]], draw: drawBubble1 });
+      const b2 = sc2([[.06, .16], [.34, .16], [.52, .16], [.66, .16], [.72, .22], [.72, .44], [.66, .5], [.06, .5], [0, .44], [0, .22]]);
+      return card(L, c - .1 * s, c + .62 * s, zf - .74 * s, .5 * s, t0 + d * .2, d * .8, { col: GREY, shape: [[b2, [.5, 0, .5, .5, .5, .5, .5, .5, .5, .5]], [sc2([[.34, .16], [.52, .16], [.62, 0]]), [0, .5, .5]]], draw: drawBubble2 });
     },
     // 6 Tangram: Quadrat aus sieben Teilen
-    (L, zf, t0, d) => card(L, EX - .41, EX + .41, zf, .82, t0, d, { draw: drawTangram }),
-    // 7 Runden Group: zwei gestaffelte Browserfenster
-    (L, zf, t0, d) => {
-      card(L, EX - .7, EX + .2, zf, .6, t0, d * .8, { draw: drawWindow });
-      return card(L, EX - .2, EX + .7, zf - .7, .72, t0 + d * .2, d * .8, { draw: drawWindow });
-    },
+    (L, c, zf, t0, d) => card(L, c - .41 * s, c + .41 * s, zf, .82 * s, t0, d, { draw: drawTangram }),
+    // 7 Runden Group: Raster aus kleinen Browserfenstern, das größte Zeichen (Mutterfirma, viele Websites und Anwendungen)
+    (L, c, zf, t0, d) => card(L, c - .85 * s, c + .85 * s, zf, 1.05 * s, t0, d, { draw: drawWindowGrid }),
     // 8 Gerwing: Palette mit einem Stapel Pflastersteine, daneben der Shop
-    (L, zf, t0, d) => {
-      const pal = block(L, EX - .74, EX + .1, zf, zf - .7, .1, t0, d * .5, { col: WOOD });
-      decal(pal.f, drawPallet, .84, .1, .42, .05, t0 + d * .3);
-      const st = block(pal.L, EX - .68, EX + .04, zf - .05, zf - .64, .38, t0 + d * .25, d * .55, { col: STONE });
-      decal(st.f, drawPavers(4, 4), .72, .38, .36, .19, t0 + d * .6);
-      decal(st.r, drawPavers(4, 3), .59, .38, .295, .19, t0 + d * .6);
-      K.onFlat(st.L, K.decal(Math.round(.72 * PX), Math.round(.59 * PX), drawPavers(3, 4), .72, .59, t0 + d * .5, .02), EX - .32, zf - .345);
-      return card(L, EX + .28, EX + .72, zf - .05, .66, t0 + d * .45, d * .55, { col: DARK, draw: drawShop });
+    (L, c, zf, t0, d) => {
+      const pal = block(L, c - .74 * s, c + .1 * s, zf, zf - .7 * s, .1 * s, t0, d * .5, { col: WOOD });
+      decal(pal.f, drawPallet, .84 * s, .1 * s, .42 * s, .05 * s, t0 + d * .3);
+      const st = block(pal.L, c - .68 * s, c + .04 * s, zf - .05 * s, zf - .64 * s, .38 * s, t0 + d * .25, d * .55, { col: STONE });
+      decal(st.f, drawPavers(4, 4), .72 * s, .38 * s, .36 * s, .19 * s, t0 + d * .6);
+      decal(st.r, drawPavers(4, 3), .59 * s, .38 * s, .295 * s, .19 * s, t0 + d * .6);
+      K.onFlat(st.L, K.decal(Math.round(.72 * s * PX), Math.round(.59 * s * PX), drawPavers(3, 4), .72 * s, .59 * s, t0 + d * .5, .02), c - .32 * s, zf - .345 * s);
+      return card(L, c + .28 * s, c + .72 * s, zf - .05 * s, .66 * s, t0 + d * .45, d * .55, { col: DARK, draw: drawShop });
     }
   ];
-  steps.forEach((st, i) => {
-    F.part("zeichen" + st.k, .02 + st.k * .008, .04);
-    zeichen[i](st.L, st.z - .12, st.s + .6 * S, .32 * S);
+
+  // ---------- Stufen ----------
+  const tags = [], bands = [], bIns = [];
+  let frame = R;
+  items.forEach((it, k) => {
+    const T = K.trage(cF(k), it.w, {}), x0 = xl(k), x1 = XE - T.D, tag = "stufe" + k;
+    const bIn = K.sicht(x0).in, tF = bIn + 1.0 * dE, dF = 1.4 * dE, tB = bIn + 1.9 * dE, dB = 1.3 * dE, tZ = bIn + 2.6 * dE, dZ = 1.3 * dE, tOn = bIn + 3.3 * dE;
+    tags.push(tag); bIns.push(bIn);
+    F.part(tag, bIn - .1 * dE, 1.3 * dE);
+    const S = T.node(frame);
+    // Platte (Tritt): hebt sich um eine Stufenhöhe über die Stufe davor; ihr unsichtbarer Zwilling trägt die nächste Stufe an der Endlage
+    const L = F.lift(S, H - 2 * EPS, tF, dF, { over: .03, lv: S.lvl + 2 });
+    F.poly(L, [[x0, 0], [x1, 0], [x1, -DT], [x0, -DT]], TREAD, .5);
+    const next = S === frame ? L : F.lift(frame, H - 2 * EPS, tF, dF, { over: .03, lv: frame.lvl + 2 });
+    // Setzstufe: innere Lage unter der Platte (ohne eigene Bastellinien), klappt hoch, sobald die Platte oben ist
+    const band = K.panel(S, [x0, 0], [x1, 0], [0, -1], tB, dB, Q, { nocut: 1, nofold: 1, over: .035, lv: S.lvl + 1 });
+    K.rect(band, 0, 0, x1 - x0, H, RISER);
+    bands.push(band);
+    // Text von oben nach unten, links bündig
+    let v = H - gapT;
+    for (const p of it.pr) { K.onPanel(band, p, M + p.w / 2 - p.t.padX * p.e, v - p.h / 2, 1); p.on = tOn; p.fade = .012; v -= p.h; }
+    if (k) SIGN[k - 1](L, x0 + M - SA[k] * s, -.9, tZ, dZ);
+    const bEnd = T.D > 0 ? Math.min(bIn + 4.2 * dE, T.bA - 1e-4) : bIn + 4.2 * dE;
+    F.geruest({ tags: [tag], t0: bIn - .05 * dE, t1: tF, du: .02, a: .5, bAt: bEnd });
+    frame = next;
   });
+  F.spur({ tags, quiet: bands, a: .3 });
 
-  // ---------- Konstruktionsphase (seite/): Gerüst je Stufe kurz bevor sie sich hebt, Bleistiftspur (auf den Setzstufen nur Eckmarken) ----------
-  steps.forEach(st => F.geruest({ tags: ["stufe" + st.k], t0: st.s - .05, t1: st.s, du: .02, a: .5 }));
-  F.spur({ tags: steps.map(st => "stufe" + st.k), quiet: steps.map(st => st.riser), a: .3 });
-
-  // ---------- Roter Faden: klettert an der linken Textkante die Stufen hinauf ----------
-  // Abstand zur Fläche 0,012 (Setzstufe) bzw. 0,01 (Trittstufe): die Kurve weicht an den Knicken um wenige Tausendstel ab
-  const xt = XL - .16, OZ = .012, OY = .01, pts = [V(xt, .004, Z1 + 1.1), V(xt, .004, Z1 + .25), V(xt, .004, Z1 + .05), V(xt, .05, Z1 + OZ), V(xt, .2, Z1 + OZ)];
-  const tops = [];
-  for (let k = 1; k <= 8; k++) {
-    const z = Zf(k) + OZ;
-    // je Knick ein naher und ein ferner Stützpunkt, damit die Kurve nicht über die Kante hinausschwingt
-    if (k > 1) pts.push(V(xt, (k - 1) * H + OY + .04, z), V(xt, (k - 1) * H + OY + .2, z));
-    pts.push(V(xt, k * H - .2, z), V(xt, k * H - .04, z)); tops.push(pts.length - 1);
-    pts.push(V(xt, k * H + OY, z - .05), V(xt, k * H + OY, z - .25));
-    if (k < 8) pts.push(V(xt, k * H + OY, Zf(k + 1) + OZ + .25), V(xt, k * H + OY, Zf(k + 1) + OZ + .05));
-    else pts.push(V(xt, k * H + OY, ZB + .45));
+  // ---------- Roter Faden ----------
+  // Er läuft vor den Setzstufen an ihrer Oberkante und steigt am linken Rand jeder Setzstufe (in Startlage) schräg zur nächsten.
+  // Am Handy gleitet die Stufe unter dem Faden hindurch an ihren Platz (die Schnur ist ihre Schiene).
+  const FZ = .012, pts = [V(xl(0) - 3.4, .004, .9), V(xl(0) - 1.6, .004, .5), V(xl(0) - .4, .004, FZ + .06)];
+  for (let k = 0; k < n; k++) {
+    const x = xl(k), y0 = k ? Y(k - 1) + .006 : .004, dy = Y(k) - y0;
+    if (k) pts.push(V(x - .3, y0, FZ));
+    pts.push(V(x, y0 + .02, FZ), V(x + CL * .25, y0 + dy * .1, FZ), V(x + CL * .5, y0 + dy * .5, FZ), V(x + CL * .75, y0 + dy * .9, FZ), V(x + CL, Y(k) + .006, FZ), V(x + CL + .3, Y(k) + .006, FZ));
+    const nx = k < n - 1 ? xl(k + 1) - .6 : XE - .3;
+    for (let q = x + CL + 1.6; q < nx - .8; q += 1.6) pts.push(V(q, Y(k) + .006, FZ));
+    if (nx > x + CL + .4) pts.push(V(nx, Y(k) + .006, FZ));
   }
-  // Länge entlang des Polygonzugs: der Punkt erreicht die Oberkante der Setzstufe k bei b = sK(k) + S (ihre Lesestelle)
-  const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + pts[i].distanceTo(pts[i - 1]));
-  const LT = cum[cum.length - 1], f1 = cum[tops[0]] / LT, f8 = cum[tops[7]] / LT;
-  const span = (sK(8) - sK(1)) / (f8 - f1), tt0 = sK(1) + S - f1 * span, tt1 = tt0 + span;
 
-  // ---------- Lesestellen ----------
-  const pxD = (Wp, Hp) => Math.min(21, Math.max(19, 19 + (Hp - 700) / 500 * 2));
-  const SH = { prints: [head], e0: HE, b: 0, px: 130, fit: .5, pxN: 90, fitN: .72, pitch: 14, npitch: 16, sy: -.12, nsy: -.1 };
-  // Waagerechte Bildlage: nicht der Text, sondern die Stufe steht mittig (Desktop: Text links, Zeichen rechts, beide ganz im Bild;
-  // Handy: gemeinsame Textkante, der Block der breitesten Zeile mittig). sx aus der Tiefe der Lesestellung zurückgerechnet.
-  const XC = N ? 0 : (XL + EX + .72) / 2;
-  const sxOf = (s, nar) => (Wp, Hp) => {
-    const T = Math.tan((nar ? 44 : 32) * PI / 360), px = nar ? 16 : pxD(Wp, Hp), dep = s.e * Hp / (2 * T * px);
-    // schmale Desktop-Fenster (4:3): die Textkante bleibt drin, das Zeichen darf rechts angeschnitten sein
-    const xc = nar ? XC : Math.min(XC, XL - .55 + Wp / 2 / (px / s.e));
-    return (s.C.x - xc) / (T * (Wp / Hp) * dep);
-  };
-  // Bildlage senkrecht (Desktop): Text dieser Stufe im oberen Teil, der Text der Stufe darunter ganz im Bild über der
-  // Entwurfsleiste, die Stufe darunter ganz draußen. Gerechnet je Fensterhöhe (Mitte des gültigen Bereichs, _pruefung/such.mjs)
-  const SYT = [[720, .47], [768, .43], [864, .31], [900, .27], [1024, .12], [1080, .08], [1200, 0], [1440, -.16]];
-  const SYN = [[667, .55], [740, .5], [844, .35], [915, .25]]; // Handy, gleiche Regel
-  const interp = (T, Hp) => {
-    if (Hp <= T[0][0]) return T[0][1];
-    for (let i = 1; i < T.length; i++) if (Hp <= T[i][0]) { const [h0, s0] = T[i - 1], [h1, s1] = T[i]; return s0 + (s1 - s0) * (Hp - h0) / (h1 - h0); }
-    return T[T.length - 1][1];
-  };
-  const syN = (Wp, Hp) => interp(SYN, Hp);
-  const syD = (Wp, Hp) => {
-    if (Hp <= SYT[0][0]) return SYT[0][1];
-    for (let i = 1; i < SYT.length; i++) if (Hp <= SYT[i][0]) { const [h0, s0] = SYT[i - 1], [h1, s1] = SYT[i]; return s0 + (s1 - s0) * (Hp - h0) / (h1 - h0); }
-    return SYT[SYT.length - 1][1];
-  };
-  const ST = steps.map(st => {
-    const s = { prints: st.prints, e0: ED, b: st.s + S, px: pxD, pitch: globalThis.WP ?? 32, yaw: -6 + (st.k - 1) * .8, sy: globalThis.WSY ?? syD, pxN: 16, npitch: globalThis.WNP ?? 32, nyaw: 0, nsy: globalThis.WNSY ?? syN };
-    s.sx = sxOf(s, false); s.nsx = sxOf(s, true);
-    return s;
-  });
-
-  // ---------- Kamera zwischen den Lesestellen ----------
-  const orbit = (t, el, az, d) => { const e = el * PI / 180, a = az * PI / 180; return t.clone().add(V(Math.cos(e) * Math.sin(a) * d, Math.sin(e) * d, Math.cos(e) * Math.cos(a) * d)); };
-  const T1 = V(0, 0, (Z1 + ZB) / 2 + 1.5), T2 = V(-.4, 1.4, Z1 - 1.2), TF = V(0, 3.2 * H, (Z1 + ZB) / 2 + .5);
-  const key = (w, b, t, el, az, d, tN, elN, azN, dN) => ({ w, b, tgt: t, cam: orbit(t, el, az, d), tgtN: tN, camN: orbit(tN, elN, azN, dN) });
+  if (globalThis.WD) console.log("werdegang", JSON.stringify({ N, H: +H.toFixed(2), P: +P.toFixed(2), Pmin: +Pmin.toFixed(2), Dk: Dk.map(v => +v.toFixed(2)), w: items.map(i => +i.w.toFixed(2)), blk: items.map(i => +i.blk.toFixed(2)), fit: { e: +fit.e.toFixed(2), x0: +(fit.x0 - xsS).toFixed(1), x1: +(fit.x1 - xe).toFixed(1) }, len: +(xe - xsS).toFixed(1) }));
 
   return {
-    fov: 32, fovN: 44,
-    track: 560,
-    // Raster (seite/): mit den Bastellinien, weg bevor die erste Stufe steht
-    grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .1 },
-    thread: { pts, t0: tt0, t1: tt1, lin: true },
-    stops: [SH, ...ST],
-    keys: [
-      { w: 0, stop: SH, noWarp: true },
-      // Bastellinien: Überblick über den Bogen (acht Stufen, acht Zeichen)
-      key(.7, .1, T1, 50, -6, 31, V(0, 0, (Z1 + ZB) / 2 + 2), 56, -4, 34),
-      // Kamera senkt sich vor die Treppe, Stufe 1 beginnt sich zu heben
-      key(.5, .12, T2, 28, -14, 17, V(0, 1.6, Z1 - 1.5), 34, -8, 19),
-      ...ST.map((s, i) => ({ w: i ? .5 : .6, stop: s })),
-      // Überblick: ganze Treppe mit allen Zeichen, der Faden liegt bis Gerwing
-      key(.8, 1, TF, 24, -30, 31, V(0, 4 * H, (Z1 + ZB) / 2 + 1), 26, -24, 40)
-    ]
+    strecke: [xsS, xe], lineZ: 0,
+    rise: { x0: fit.x0, x1: fit.x1, h: HT },
+    grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: bIns[0] + 3.5 * dE },
+    faden: pts,
+    stops: items.map((it, k) => ({ name: "r" + k, prints: it.stop }))
   };
 }

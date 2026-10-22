@@ -223,11 +223,12 @@ export function seite(renderer, SEQ, opt = {}) {
         return mesh;
       },
       // Bogen: dünne Papierplatte, Oberseite y = 0, feine Haarkante
+      // Der Bogen geht nach hinten (−z) ohne Kante in die Papierbahn über (kern.js, baseSheet): er reicht bis z −40, Haarkanten hat er keine
       sheet(x0, x1, z0, z1, col = "#faf8f3", from = -1) {
-        const g = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, .03, z1 - z0), paperMaterial(col));
-        g.position.set((x0 + x1) / 2, -.0152, (z0 + z1) / 2);
-        const e = new THREE.LineSegments(new THREE.EdgesGeometry(g.geometry), dunst(new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: .32, depthWrite: false })));
-        g.add(e); add(g); sheets.push(g); sheetBox.push([Math.min(x0, x1), Math.max(x0, x1), Math.min(z0, z1), Math.max(z0, z1)]);
+        const za = Math.max(z0, z1), zb = Math.min(-40, Math.min(z0, z1));
+        const g = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, .03, za - zb), paperMaterial(col));
+        g.position.set((x0 + x1) / 2, -.0152, (za + zb) / 2);
+        add(g); sheets.push(g); sheetBox.push([Math.min(x0, x1), Math.max(x0, x1), Math.min(z0, z1), Math.max(z0, z1)]);
         if (from >= 0) anims.push(b => { g.visible = b >= from; });
         return g;
       }
@@ -615,7 +616,7 @@ export function seite(renderer, SEQ, opt = {}) {
     if (base) { scene.remove(base); base.geometry.dispose(); }
     const x0 = (INST[0] ? INST[0].wbox.min.x : 0) - 60, x1 = (INST.length ? INST[INST.length - 1].wbox.max.x : 0) + 60;
     let ymax = 0; for (const I of INST) ymax = Math.max(ymax, I.O.y + (I.def.rise ? I.def.rise.h : 0));
-    base = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, 260), dunst(new THREE.MeshBasicMaterial({ color: 0xf4f2ec, toneMapped: false })));
+    base = new THREE.Mesh(new THREE.PlaneGeometry(x1 - x0, 260), paperMaterial("#faf8f3"));   // derselbe Papier-Shader wie die Bögen: kein Farbsprung an deren Rändern
     base.rotation.x = -Math.PI / 2; base.position.set((x0 + x1) / 2, -.035, -110); base.renderOrder = -1;
     scene.add(base);
   }

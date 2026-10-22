@@ -11,7 +11,7 @@ export const PITCH = 30;            // Neigung der Kamera auf der ganzen Bahn (G
 export const EC = .2;               // Bezugsgröße der Schrift: 1 em = EC Welteinheiten; die Kamera rechnet daraus den Abstand (kern.js, rigOf)
 export const YL = .62;              // Höhe des Lesepunkts über der Bahn (Mitte einer Satzzeile, die in Bildmitte steht)
 export const LH = 1.36;             // Zeilenhöhe der Sätze
-export const READ_VH = 34;          // Mindestdauer, die ein Satz ruhig und ganz im Bild steht (vh Scrollweg)
+export const READ_VH = 38;          // Mindestdauer (mit Reserve für Rampen und Rand; geprüft wird ≥ 30), die ein Satz ruhig und ganz im Bild steht (vh Scrollweg)
 
 const S5 = t => t * t * t - t * t * t * t / 2;   // Integral von smoothstep (0 … 1/2)
 

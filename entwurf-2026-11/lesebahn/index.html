@@ -97,7 +97,8 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .nogl main.sr p { margin-top: .8em; }
 .nogl main.sr p:first-child { margin-top: 0; }
 .nogl main.sr em { font-style: italic; font-weight: 480; }
-.nogl main.sr .meta { font: 500 12px/1.4 var(--sans); text-transform: uppercase; letter-spacing: .12em; color: #66666a; hyphens: manual; margin: 0 0 1.1em; }
+.nogl .top .mark { opacity: 1; }
+.nogl main.sr .meta { font: 500 13px/1.4 var(--sans); text-transform: uppercase; letter-spacing: .12em; color: #66666a; hyphens: manual; margin: 0 0 1.1em; }
 .nogl main.sr h1 + .meta { margin: 1.3em 0 1.6em; }
 .nogl main.sr ol { list-style: none; max-width: 34em; margin-top: 1.4em; border-top: 1px solid rgba(48,48,51,.18); }
 .nogl main.sr li { display: grid; grid-template-columns: 8.5em 1fr; column-gap: 1.2em; padding: .75em 0; border-bottom: 1px solid rgba(48,48,51,.18); }
@@ -127,7 +128,7 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .kontaktwege a:focus-visible { width: auto; height: auto; overflow: visible; clip: auto; background: #fff; border: 1px solid var(--ink); padding: 10px 14px; font: 500 15px/1.2 var(--sans); }
 .nogl .kontaktwege { position: static; padding: 0 var(--pad) 5rem; max-width: 42em; }
 .nogl .kontaktwege a { position: static; display: block; width: auto; height: auto; overflow: visible; clip: auto; padding: .35em 0; font-size: 18px; text-decoration: underline; text-underline-offset: 3px; }
-.nogl .draft { position: static; padding: 0 var(--pad) 2rem; }
+.nogl .draft { display: none; }
 
 @media (max-width: 560px) {
   .top { font-size: 12px; padding-top: 16px; }
@@ -231,7 +232,7 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
   <button id="prev" type="button" aria-label="Vorige Szene"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 3 5 8l5 5"/></svg></button>
   <button id="next" type="button" aria-label="Nächste Szene"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m6 3 5 5-5 5"/></svg></button>
 </div>
-<div class="draft"><b>Entwurf Seite</b><span id="szene" aria-hidden="true"></span></div>
+<div class="draft"><span id="szene" aria-hidden="true"></span></div>
 <div class="bar"><i id="bar"></i></div>
 
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>

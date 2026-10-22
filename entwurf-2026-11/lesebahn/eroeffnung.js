@@ -100,7 +100,8 @@ export default function (K) {
   const T1 = K.satz("Ich entwickle *Websites und Onlineshops*.", { e: e1, maxEm: N ? 7.6 : 9.4, on: .3 });
   const T2 = K.satz("Ich binde sie an Ihre *übrigen Systeme* an und betreue sie, solange sie laufen.", { e: K.EV, maxEm: N ? 12 : 14.5, on: 0 });
   const T3 = K.satz("*Agenturen* holen mich als Entwickler ins Projekt, *Unternehmen* arbeiten direkt mit mir.", { maxEm: N ? 14 : 16.5, on: 0 });
-  const MW = T3.tw + 1.0, MX0f = RX0f + RW + (N ? 1.2 : 1.6);          // Mappe: Breite, linke Kante in Endlage
+  // Mappe: Breite, Mitfahrt (der Faden holt sie ins Bild), linke Kante in Endlage: ihre Startlage liegt mit Abstand rechts vom Schrank
+  const MW = T3.tw + 1.0, MD = K.trage(0, T3.tw, { minD: N ? 0 : 2.6, R: 38 }).D, MX0f = RX0f + RW + (N ? .9 : 1.1) + MD;
   const PHX = MX0f + MW + (N ? .9 : 1.2);                               // Telefon
   const XE = PHX + (N ? .4 : 1.0);
   K.strecke(XS, XE, BI);
@@ -187,9 +188,8 @@ export default function (K) {
   K.onPanel(scr, T1, MX + SWd * .05 + T1.w / 2 - T1.t.padX * e1, MY + SHd * (1 - 235 / 640), 1, [0, -1]);
 
   // ---------- Rechnerschrank (übrige Systeme): Kasten mit Front, Satz auf der Blindplatte, Statuspunkt ----------
-  const rackIn = sicht(RX0f).in;
   const RT = K.trage(RX0f + RW / 2, T2.tw, {});
-  const RX0 = RT.c0 - RW / 2;
+  const RX0 = RT.c0 - RW / 2, rackIn = sicht(RX0).in;    // der Schrank taucht in seiner Startlage auf
   F.part("rechner", Math.max(.06, rackIn - .02), .05);
   const rpar = RT.node(R);
   const tR = Math.max(.2, rackIn + .015);

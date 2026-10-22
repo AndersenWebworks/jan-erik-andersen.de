@@ -34,6 +34,10 @@ Ersetzt die Regel „Konstrukte sind Szenerie ohne Text, Sätze stehen auf Träg
 | Für Agenturen | Einsteckschiene nur behalten, wenn der Satz auf dem eingesteckten Teil selbst steht; sonst neu ableiten | |
 | Kontakt | Umschlag mit Siegel und drei klickbaren Karten, wie er ist | trägt schon |
 
+## Arbeitsweise (Erik, 22.10.)
+
+Parallelisieren, wo es geht: Sonnet-Helfer (`clautz-worker`) und Haiku-Scout (`clautz-scout`), wo sinnvoll, Opus (`clautz-worker` mit model opus), wenn etwas partout nicht schick werden will oder zu Ende gedacht werden muss (etwa die Neuableitung von WBG, Wie ich arbeite und Für Agenturen, oder eine Szene, die nach zwei Runden noch nicht trägt).
+
 ## Fließtext-Typografie
 
 Schick, ruhig, gut lesbar am Desktop (1280 × 900) und am Handy (390 × 844). Vorhanden: Newsreader (Serif, auch kursiv, variabel; Marke N4) und Schibsted Grotesk. Ziel: Fließtext in Newsreader in Lesegewicht (nicht zu dünn, 300 ist auf Papierflächen zu blass), angemessene Zeilenhöhe und Zeilenlänge, saubere Silbentrennung/Umbruch ohne Hurenkinder; Köpfe/Kicker klar abgesetzt (Grotesk, Versalien gesperrt oder Serif groß); Schlüsselgruppen als Durchflieger-Spur hervorheben (Kursiv oder höheres Gewicht, nicht Rot). Kontrast auf Papierton ausreichend; Mindestgröße Fließtext Desktop 20 px, Handy 17 px.
