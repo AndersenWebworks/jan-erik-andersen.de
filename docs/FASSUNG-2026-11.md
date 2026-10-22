@@ -261,6 +261,33 @@ Reihenfolge nach Gewicht; je Punkt eine Frage an Erik, Entscheidung hier eintrag
 - Erik: Wird vor dem Start gebaut („das schaffst du mit effizienter Orchestrierung“).
 - Erik: „ich will halt das das Grundstück toll aussieht und die Flüge logisch, was auch immer dafür nötig ist finde ich gut auch wenn's aufwendiger sein sollte“. Damit ist die Spalten-Anordnung keine Vorgabe; erlaubt ist eine echte Schleife mit gedrehten Parzellen, Licht und Raster drehen mit. Logische Flüge: Jede Fahrt verlässt eine Parzelle in Blickrichtung und kommt an der Vorderseite der nächsten an, kein Flug durch Parzellen oder Bauteile, ruhige Drehung.
 
+## Grundregel Text in Bewegung (22.10.2026, Erik)
+
+- „name und text verschwinden auf einmal beim scrollen, sowas sollte generell nicht passieren.“ Text auf einem Bauteil bleibt sichtbar, solange das Bauteil im Bild ist; muss er weg, blendet er weich aus, nie schlagartig, nie teilweise. Gilt für alle Szenen.
+
+## Flüge zwischen den Szenen (22.10.2026, Erik)
+
+- „sprünge auf die karte sind viel zu hart … kein harter wechsel in oben drauf sicht, zwischen den szenen muss man ja auch nicht zwingend schon die ganze karte sehen, dafür gibts ja den map button bzw das ende … wenn sich die karte schonmal andeutet ist das cool, aber primär smooooth“. Flüge bleiben nah und flach, stetige Kurven ohne Knicke, Nachbarparzellen dürfen am Rand erscheinen; Draufsicht nur am Schluss und über „Übersicht“.
+- Erik: „das gibts TOTAL OFT dass die kamera zu hart ist und zu schnell und die animationen auch generell, man kommt ja gar nicht zum ansehen und genießen und es kommt kein flow gefühl auf“. Global: gedämpftes Nachziehen zwischen Scrollen und Kamera, mehr Scrollweg je Szene und Animation, weiche Kurven, keine harten Schwünge; Modernisierung ausdrücklich ruhiger.
+- Eröffnung: Erik möchte die drei Sätze auf Dingen auf dem Schreibtisch statt am Faden am Boden, Kamera zoomt heran, Tisch bekommt Leben/Deko. Erik: „schreibtablet auf dem der text geschrieben wird, kaffeetasse, kleine pflanze, maus tastatur und falls dir noch was passendes einfällt“. Die drei Sätze (Agenturen, Unternehmen, Team auf Zeit) werden beim Heranfahren nacheinander mit dem Stift aufs Grafiktablett geschrieben, gut lesbar gesetzt, nicht als Handschrift. Ergänzt: Schreibtischlampe, Stiftebecher. Ohne die Sätze verzweigt sich der Faden nicht mehr, er läuft als eine Linie weiter zu Gerwing.
+
+## Gerwing: Abfolge umgestellt (22.10.2026, Erik)
+
+- Erik: Ergebnis (Haus mit Terrasse) gehört ans Ende, am Anfang die Bestellung im Shop; Zoom auf den Laptop mit dem Shop; Palette und Fracht klarer, Gebäude anders angeordnet. „NUR VERBESSERN ODER UMPLATZIEREN NICHT NEU BAUEN“. Kamera weicher, keine flackernden oder verschwindenden Texte, Punkt nicht durchs Gebäude.
+- Reihenfolge: Wand mit Text → Laptop mit Shop → Fläche, ganze Steine, Palette mit Gewicht und Fracht, Weiche zu den Händlern → Haus mit fertiger Terrasse.
+
+## Betreuung: Kalenderblatt (22.10.2026, Erik)
+
+- Monatsnamen der Blätter flackern übereinander; jedes Blatt bekommt unter dem Monat ein Raster der Monatstage wie ein echtes Kalenderblatt (Mo bis So, Tageszahlen).
+
+## Gestaltung: Qualität (22.10.2026, Erik)
+
+- „die szene sieht sehr sehr unfertig aus, das muss deutlich besser. das ist alpha state maximal.“ Befund: Mast vor dem Deckblatt schneidet den Text, Fenster frei stehend ohne Wand, schwebende Platte, Faltreste am Boden, grober Baum. Überarbeitung der vorhandenen Teile auf das Niveau von Treppe und Leporello (Opus, nach zwei Sonnet-Durchgängen ohne tragfähiges Ergebnis).
+
+## Außerdem: Wand aus Geräten (22.10.2026, Erik)
+
+- Erik: „den außerdem bereich würd ich stark ausbauen und viel cooler machen - da fehlen screenshots der ganzen seiten … links fehlen eh überall wo sie möglich wären! live projekte sind viel wert!“ Gewählt: „Wand aus Geräten“. Monitor, Laptop, Tablet und Handy aus Papier zeigen echte Bildschirmfotos der Live-Projekte; unter jedem Gerät auf einem Sockel Name, ein Satz und Link. Kamera gleitet an der Wand entlang. Links zu Live-Projekten überall, wo ein Projekt genannt wird (3D anklickbar und im Text ohne 3D).
+
 ## Weg auf main (22.10.2026, Erik)
 
 - Entwurfsordner liegen nur auf `entwuerfe-2026-10`, nie in main zusammenführen. Eigener Zweig `veroeffentlichung` von main: Inhalt von `entwurf-2026-11/seite/` ins Hauptverzeichnis (`index.html` wird Startseite), angepasste `de/datenschutz.html` mit, Schild „Entwurf Seite“ raus, alter Kopf mit Dunkelmodus-Schalter auf `de/impressum.html` und `de/datenschutz.html` raus.

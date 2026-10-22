@@ -275,7 +275,7 @@ export default function (K) {
       A.mat.opacity = B.mat.opacity = on;
       for (const c of g.children) if (c.material && c.isLine) c.material.opacity = .42 * on;
       poseA.matrix.decompose(pa, qa, s1); poseB.matrix.decompose(pb, qb, s2);
-      const k = win(b, t0, d), e = mech(k, .035), ka = clamp(k / .8, 0, 1);
+      const k = win(b, t0, d), e = mech(k, .02), ka = clamp(k / .8, 0, 1);
       // Wendung (Mitte der Bahn), Maßstab wächst mit
       const kr = sm(clamp((k - .08) / .62, 0, 1));
       q.copy(qa).slerp(qb.clone().multiply(flipY), kr);
@@ -290,7 +290,8 @@ export default function (K) {
     return blk;
   };
   // Reihenfolge: Kopf, Bild, Text, Karten, zuletzt die Adresszeile
-  const FL = { kopf: .52, bild: .55, text: .575, karten: .6, bar: .635 }, FD = .09;
+  // Tempo (Erik, 22.10.): Blöcke wandern langsamer (Flugdauer .115 statt .09 von b, Überschwingen .02 statt .035) und weicher gestaffelt; die Szene hat dazu mehr Scrollweg (folge.js)
+  const FL = { kopf: .515, bild: .545, text: .575, karten: .605, bar: .64 }, FD = .115;
   mkBlock("kopf", FL.kopf, FD, .75, 1.3);
   mkBlock("bild", FL.bild, FD, .8, 1.8);
   mkBlock("text", FL.text, FD, .75, 1.1);

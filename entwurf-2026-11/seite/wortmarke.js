@@ -21,7 +21,8 @@ export function wortmarke(K, { cx = 0, zb, narrow, par, zb2, par2, k1 = 1 }) {
   const w1 = K.measure(["Jan-Erik"], up).tw * e, w2 = K.measure(["Andersen"], it).tw * e;
   const sp = (K.measure(["x x"], up).tw - K.measure(["xx"], up).tw) * e;   // Wortzwischenraum wie im Satz (Leerzeichen + Laufweite)
   const dw = .01 * e, dd = 2 * DOT * e;                                     // Abstand und Breite des Schlusspunkts
-  const o = { foot: 1, imprint: IMPRINT };
+  // grp: alle Drucke der Marke (Lettern, Abdrücke, Schlusspunkt) blenden im Kern gemeinsam aus, wenn sie den Rahmen verlassen: der Name steht ganz oder gar nicht
+  const o = { foot: 1, imprint: IMPRINT, grp: "marke" };
   const fold = (len, ee = e) => ({ x0: -.06 * ee, len: len + .12 * ee, lw: .014 * ee, dash: .045 * ee, gap: .035 * ee, col: "#8f8a80" });
   const dot = (x, z, t0, p) => K.word([""], e, x, z, t0, .7, { ...o, font: "marke", disc: DOT, col: RED, par: p });
   const folds = [];

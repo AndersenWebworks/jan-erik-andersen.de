@@ -1,17 +1,19 @@
 // Gerwing – Pflaster nach Fläche bestellen. Szene im Stil Bogen + Bastellinien (Faltkern falt.js, Gerüst kern.js).
-// Umbau 22.10.2026 nach Eriks Entscheidung („Seite plus Haus aus Raumtext 2, Ablaufweg eher wie Blatt, Kamera wie seite“):
-//   EINE Lesestelle: der ganze Gerwing-Text steht auf einer großen Wand (Giebelwand des Hauses links) – „Gerwing“ in großen
-//   Serif-Lettern, Kennzeile „WooCommerce · seit 2023“, Überschrift „Pflaster nach Fläche bestellen“, beide Absätze wörtlich.
-//   Danach keine Lesehalte mehr; die Kamera (Augenhöhe bis 20–45°, keine Draufsicht) fährt gleichmäßig durch den Weg der Bestellung:
-//   Fläche → ganze Steine im Läuferverband (Reihe für Reihe, letzte Reihe ragt über die Kontur) → Gartenterrasse am Haus
-//   (Hauswand mit Glastüren als Rückwand, Treppe, Laptop und Handy mit dem echten Shop, ohne Text) → Palette mit Steinstapel
-//   (Gewicht; Lagen setzen sich nacheinander) → durch das Lager: Zufahrt mit Weiche, drei Händlerhallen, die rote Linie läuft
-//   über die Weiche in die zuständige Halle (Rolltor fährt hoch) und hinten wieder hinaus.
-// Aus Raumtext 2: Hauswand mit Glastüren hinter der Terrasse (Hauswinkel aus Giebelwand mit Text und Hauswand), Text ganz auf einer
-// Wand, Laptop und Handy mit echtem Shopbild auf der Terrasse, Steinstapel auf Palette. Aus Blatt: Palette mit Lattung und Klötzen,
-// Steinstapel auf der Palette, drei Händlerhallen mit Rolltoren, Weiche mit Haarlinien zu den beiden anderen und rot zum
+// Umbau 22.10.2026 (zweite Fassung, Erik: „ist nicht die ganze abfolge falsch? … am anfang die bestellung shop, am ende haus mit terasse“):
+//   Reihenfolge entlang der Kamerafahrt, von links nach rechts: 1 Wand mit dem ganzen Gerwing-Text (eine Lesestelle) → 2 Zoom auf den
+//   Laptop mit dem echten Shop (die Bestellung; Handy daneben, beide stehen auf dem Bogen vor der Wand) → 3 Fläche, ganze Steine im
+//   Läuferverband → Palette mit Steinstapel (Gewicht, Fracht) → Weiche zu drei Händlerhallen, Rolltor der zuständigen fährt hoch →
+//   4 Ergebnis beim Kunden: Haus mit Glastüren und fertig gepflasterter Terrasse mit Treppe, hinten rechts hinter den Hallen.
+//   Nichts neu gebaut: dieselben Bauteile, nur umgestellt (Laptop und Handy vom Terrassenboden auf den Bogen, Haus und Terrasse ans Ende,
+//   Fläche und Palette nach rechts, Palette und Hallen auf eine Lieferlinie z = −2,1) und zeitlich neu gelegt.
+// Der rote Faden läuft vom Laptop vor der Fläche und der Palette vorbei über die Weiche bis vor das Rolltor, dann vor den Hallen und
+// rechts an ihnen vorbei (nie durch ein Gebäude) nach hinten und rechts am Haus vorbei hinaus.
+// Das Haus: Hauswand mit Glastüren, Seitenwände und Dach klappen an ihr nach hinten; die Terrasse liegt niedrig und bündig davor.
+// Aus Raumtext 2: Hauswand mit Glastüren, Text ganz auf einer Wand, Laptop und Handy mit echtem Shopbild, Steinstapel auf Palette.
+// Aus Blatt: Palette mit Lattung und Klötzen, drei Händlerhallen mit Rolltoren, Weiche mit Haarlinien zu den beiden anderen und rot zum
 // zuständigen Händler, Knoten an der Weiche. Mechanik, Kamera, Bastellinien, Konstruktionsphase: seite/ (Bogen, Faltkern).
 // Keine Zahlen auf Bauteilen, keine erfundenen Inhalte, keine Texte außer dem Gerwing-Text auf der Wand.
+// Drucke und Abdrücke liegen mit 4 bis 6 mm Abstand über ihrer Fläche (vorher 2 mm, bei Abstand 15 bis 27 nahe der Tiefenauflösung).
 import { keyboard } from "./zeichnungen.js";
 
 // Shopbilder (ImageBitmap), vor dem Aufbau in main.js aus bilder/bilder.js dekodiert
@@ -50,35 +52,36 @@ export default function (K) {
   const gw = K.print(["Gerwing"], N ? .64 : .78, -1, { font: "serif", lh: 1 });
   const mt = K.print([META], N ? .15 : .12, -1, { track: .03, col: MUTED });
   const hd = K.print(N ? ["Pflaster nach Fläche", "bestellen"] : [TITEL], N ? .36 : .3, -1, { font: "serif", lh: 1.08 });
-  const t1 = sans(N ? P1N : P1, eB, .085, { lh: 1.36 });
-  const t2 = sans(N ? P2N : P2, eB, .098, { lh: 1.36 });
+  const t1 = sans(N ? P1N : P1, eB, .085, { lh: 1.36, fade: .05 });
+  const t2 = sans(N ? P2N : P2, eB, .098, { lh: 1.36, fade: .05 });
   // von oben nach unten gestapelt (Abstand vor dem Druck), daraus die Höhe der Wand
   const stack = [[gw, 0], [mt, N ? -.1 : -.13], [hd, .02], [t1, .1], [t2, .14]];
   const MT = .36, MB = .44;
   let ys = 0; const yc = stack.map(([pr, g]) => { ys += g; const c = ys + pr.h / 2; ys += pr.h; return c; });
 
   // ---------- Lage (Bogen x nach rechts, z zum Betrachter) ----------
-  // Giebelwand mit dem Text; rechts davon schließt die Hauswand mit den Glastüren an (Hauswinkel aus Raumtext 2)
+  // Giebelwand mit dem Text links; davor rechts daneben Laptop und Handy; dann Fläche, Palette, Weiche, Hallen; hinten rechts das Haus
   const WX0 = N ? -9.4 : -9.8, WW = N ? 4.2 : 5.2, ZW = -5.2, HW = Math.round((MT + ys + MB) * 20) / 20;
-  const HX0 = WX0 + WW;
   // Pflasterfläche: Steine 0,6 × 0,3 (Verhältnis 25 × 15 cm wie im Shop), Kontur eine halbe Reihe kürzer als die ganzen Steine:
   // die letzte Reihe ragt halb über die Kontur. Desktop 9 Steine × 10 Reihen, Handy schmaler und tiefer (6 × 14)
-  const CW = .6, RH = .3, NC = N ? 6 : 9, NR = N ? 14 : 10, PX0 = -9.4, PX1 = PX0 + NC * CW, PZB = -4.4, PZF = PZB + (NR - .5) * RH, SH = .12, G = .012;
-  // Terrasse am Haus mit Treppe; die Hauswand steht auf der Linie ZW und ist die Rückwand der Terrasse
-  const TX0 = -2.4, TX1 = 2.8, TZB = ZW, TZF = -2.0, TH = .9, SX0 = .1, SX1 = 1.7, NS = 4, RS = TH / NS, TS = .36;
-  const HX1 = TX1 + .5, HHS = 3.35;
-  // Laptop und Handy auf der Terrasse (links der Treppe)
-  const LW = N ? 1.5 : 1.7, LD = 1.0, LH = .07, SHT = N ? .93 : 1.05, LX0 = -1.95, LZF = -2.85;
-  const PWD = .5, PHG = .94, PHX0 = .95, PHZ = -3.2;
-  // Palette mit Steinstapel
-  const AX0 = 5.4, AX1 = 7.8, AZ0 = -2.2, AZ1 = -3.6, AH = 1.42, AP = .3, NL = 8;
-  // Lager: Zufahrt hinter den Gleisen der Fracht (z = −1), Händlerhallen dahinter [x0, z0 (Front), Breite, Tiefe, Höhe]; zuständig ist HL[1]
-  const HL = [[10.5, -2.1, 2.2, 1.2, .8], [13.3, -2.1, 2.4, 1.2, .95], [16.3, -2.1, 2.2, 1.2, .8]];
+  const CW = .6, RH = .3, NC = N ? 6 : 9, NR = N ? 14 : 10, PX0 = -.2, PX1 = PX0 + NC * CW, PZB = N ? -4.8 : -4.4, PZF = PZB + (NR - .5) * RH, SH = .12, G = .012;
+  const LAN = PZF + .85;                                  // Bahn des Fadens vor der Fläche
+  // Haus mit Terrasse hinten rechts (Ergebnis); die Hauswand steht auf der Linie ZH und ist die Rückwand der Terrasse
+  const ZH = -10.4, TX0 = 14.3, TX1 = 19.5, TZB = ZH, TZF = ZH + 3.2, TH = .24, SX0 = TX0 + 2.5, SX1 = TX0 + 4.1, NS = 2, RS = TH / NS, TS = .36;
+  const HX0 = TX0 - 2.2, HX1 = TX1 + .5, HHS = 3.35, HD = 1.8;     // HD: Tiefe der Seitenwände und des Dachs hinter der Hauswand
+  // Laptop und Handy stehen auf dem Bogen rechts neben der Wand (vor der Wand ausgerichtet, Blick nach vorn)
+  const LW = N ? 1.5 : 1.7, LD = 1.0, LH = .07, SHT = N ? .93 : 1.05, LX0 = -3.55, LZF = -3.2;
+  const PWD = .5, PHG = .94, PHX0 = -1.65, PHZ = -3.2;
+  // Palette mit Steinstapel; ihre Vorderkante steht auf der Lieferlinie z = −2,1 wie die Fronten der Hallen
+  const AX0 = 6.7, AX1 = 9.1, AZ0 = -2.1, AZ1 = -3.5, AH = 1.42, AP = .3, NL = 8;
+  // Lager: Hallen [x0, z0 (Front), Breite, Tiefe, Höhe]; zuständig ist HL[1]; zwischen zweiter und dritter Halle bleibt 1,0 für den Faden
+  const HL = [[11.9, -2.1, 2.2, 1.2, .8], [14.7, -2.1, 2.4, 1.2, .95], [18.1, -2.1, 2.2, 1.2, .8]];
   const gate = i => HL[i][0] + HL[i][2] / 2, GZ = HL[0][1];
-  const WJ = [9.5, -1.0], LA = -1.38, LC = -.62;
+  const WJ = [AX1 + 1.8, -1.0], LA = -1.38, LC = -.62;
+  const ZBACK = Math.min(ZW - HW, ZH - HHS - HD) - .4;
 
   // ---------- Bogen ----------
-  K.sheet(-11.6, 19.6, ZW - HW - .4, 3.4);
+  K.sheet(-11.6, 24, ZBACK, 3.4);
 
   // ---------- 1 Wand mit Gerwing-Text: liegt flach (Name, Kennzeile, Überschrift lesbar), steht auf, rastet ein ----------
   F.part("wand", 0, .03);
@@ -86,7 +89,7 @@ export default function (K) {
   K.rect(wall, 0, 0, WW, HW, WALLC);
   stack.forEach(([pr], i) => {
     const off = pr === gw ? -.05 : pr === hd ? -.03 : 0;
-    K.onPanel(wall, pr, uL(pr, M0 + off), HW - MT - yc[i], 1);
+    K.onPanel(wall, pr, uL(pr, M0 + off), HW - MT - yc[i], 1, null, .006);
   });
 
   // ---------- 2 Fläche: Kontur mit Eckmarken (Quadratmeter) ----------
@@ -97,7 +100,7 @@ export default function (K) {
   for (const [x, z, dx, dz] of [[PX0, PZB, -1, -1], [PX1, PZB, 1, -1], [PX0, PZF, -1, 1], [PX1, PZF, 1, 1]]) {
     ln([x + dx * .18, z], [x + dx * (.18 + tick), z]); ln([x, z + dz * .18], [x, z + dz * (.18 + tick)]);
   }
-  F.sketch(R, cm, .135, .045, { a: .62 });
+  F.sketch(R, cm, .22, .045, { a: .62 });
   // ---------- 3 Ganze Steine im Läuferverband, Reihe für Reihe ----------
   // Stein: Platte hebt sich parallel, nur die Außenwände der Fläche schwenken hoch (innen liegen die Steine Fuge an Fuge,
   // ihre Wände hätten in Ruhe keinen Platz im Bogen)
@@ -113,7 +116,7 @@ export default function (K) {
     return r;
   }
   for (let r = 0; r < NR; r++) {
-    F.part("reihe" + r, .15 + r * .06 / (NR - 1), .028);
+    F.part("reihe" + r, .27 + r * .07 / (NR - 1), .028);
     const za = PZB + r * RH, zf = za + RH, odd = r % 2 === 1;
     const xs = [PX0]; let x = PX0 + (odd ? CW / 2 : CW);
     while (x < PX1 - 1e-6) { xs.push(x); x += CW; }
@@ -122,13 +125,13 @@ export default function (K) {
       const xa = xs[k], xb = xs[k + 1];
       const walls = (r === 0 ? "b" : "") + (r === NR - 1 ? "f" : "") + (k === 0 ? "l" : "") + (k === xs.length - 2 ? "r" : "");
       const col = (r * 3 + k) % 5 === 0 ? OLD : (r * 7 + k) % 4 === 0 ? STONE2 : STONE;
-      slab(R, xa + G / 2, xb - G / 2, zf - G / 2, za + G / 2, SH, .2 + r * .1 / (NR - 1) + (xa - PX0) * .0013, .05, { walls, col, over: .06 });
+      slab(R, xa + G / 2, xb - G / 2, zf - G / 2, za + G / 2, SH, .335 + r * .1 / (NR - 1) + (xa - PX0) * .0013, .05, { walls, col, over: .06 });
     }
   }
 
-  // ---------- 4 Hauswand mit Glastüren (Rückwand der Terrasse) ----------
-  F.part("haus", .335, .05);
-  const HWL = HX1 - HX0, house = K.panel(R, [HX0, ZW], [HX1, ZW], [0, -1], .365, .07, Q, { over: .04 });
+  // ---------- 4 Hauswand mit Glastüren (Rückwand der Terrasse), am Ende hinten rechts ----------
+  F.part("haus", .795, .05);
+  const HWL = HX1 - HX0, house = K.panel(R, [HX0, ZH], [HX1, ZH], [0, -1], .825, .07, Q, { over: .04 });
   K.rect(house, 0, 0, HWL, HHS, HOUSEC);
   const houseFace = (x, W, H) => {
     const s = W / HWL, Y = v => H - v * s, line = Math.max(1.5, .012 * s);
@@ -152,16 +155,23 @@ export default function (K) {
     const wd = Math.min(.9, (TX0 - HX0 - .5) / 2 - .1);
     for (let i = 0; i < 2; i++) { const a = .3 + i * (wd + .2); if (a + wd < TX0 - HX0 - .1) glass(a, a + wd, 1.5, 2.65); }
   };
-  K.onPanel(house, K.decal(Math.round(HWL * 280), Math.round(HHS * 280), houseFace, HWL, HHS, .375), HWL / 2, HHS / 2, 1);
+  // Seitenwände und Dach hängen an der Hauswand und klappen nach hinten (Unterseite): das Haus bekommt Tiefe und Dachkante
+  {
+    const sd = { own: R, over: .03 };
+    K.rect(K.panel(house, [HX0, ZH], [HX0, ZH - HHS], [-1, 0], .88, .05, -Q, sd), 0, 0, HHS, HD, HOUSEC);
+    K.rect(K.panel(house, [HX1, ZH], [HX1, ZH - HHS], [1, 0], .88, .05, -Q, sd), 0, 0, HHS, HD, HOUSEC);
+    K.rect(K.panel(house, [HX0, ZH - HHS], [HX1, ZH - HHS], [0, -1], .9, .05, -Q, sd), 0, 0, HWL, HD, ROOFC);
+  }
+  K.onPanel(house, K.decal(Math.round(HWL * 280), Math.round(HHS * 280), houseFace, HWL, HHS, .835), HWL / 2, HHS / 2, 1, null, .005);
 
   // ---------- 5 Terrasse mit Platten und Treppe (vor der Hauswand) ----------
-  const T0 = .34;
+  const T0 = .8;
   F.part("terrasse", T0 - .005, .06);
   const top = F.lift(R, TH, T0, .07, { over: .02 });
   F.poly(top, [[TX0, TZF], [SX0, TZF], [SX1, TZF], [TX1, TZF], [TX1, TZB], [TX0, TZB]], TERRTOP, .5);
-  // Terrassenplatten 0,6 × 0,6 als Fugen
-  for (let x = TX0 + .58; x < TX1 - .1; x += .58) F.line(top, [x, TZF], [x, TZB], .22);
-  for (let z = TZF - .58; z > TZB + .1; z -= .58) F.line(top, [TX0, z], [TX1, z], .22);
+  // verlegte Steine 0,6 × 0,3 im Läuferverband (wie die Fläche): Reihenfugen und versetzte Stoßfugen
+  for (let z = TZF - .3; z > TZB + .05; z -= .3) F.line(top, [TX0, z], [TX1, z], .22);
+  for (let r = 0, z = TZF; z > TZB + .05; r++, z -= .3) for (let x = TX0 + (r % 2 ? .3 : .6); x < TX1 - .05; x += .6) F.line(top, [x, z], [x, Math.max(TZB, z - .3)], .22);
   // Seitenwände klappen nach unten, hinten steht die Hauswand
   const down = { own: R, over: .03 };
   K.rect(K.panel(top, [TX0, TZF], [TX0, TZB], [-1, 0], T0 + .045, .06, -Q, down), 0, 0, TZF - TZB, TH, TERR);
@@ -183,13 +193,13 @@ export default function (K) {
     }
   }
 
-  // ---------- 6 Laptop und Handy auf der Terrasse: nur der echte Shop, ohne Text ----------
-  F.part("laptop", .44, .05);
+  // ---------- 2 Laptop und Handy auf dem Bogen vor der Wand: nur der echte Shop, ohne Text ----------
+  F.part("laptop", .115, .05);
   const LX1 = LX0 + LW, LZB = LZF - LD;
-  const base = slab(top, LX0, LX1, LZF, LZB, LH, .45, .035, { walls: "flr", col: LAPC, over: .03 });
+  const base = slab(R, LX0, LX1, LZF, LZB, LH, .125, .035, { walls: "flr", col: LAPC, over: .03 });
   const KBD = .55;
-  K.onFlat(base.top, K.decal(1000, Math.round(1000 * KBD / (LW - .2)), keyboard, LW - .2, KBD, .465), LX0 + LW / 2, LZB + .08 + KBD / 2, .002);
-  const scr = K.panel(base.top, [LX0, LZB], [LX1, LZB], [0, -1], .465, .05, Q - .2, { over: .05 });
+  K.onFlat(base.top, K.decal(1000, Math.round(1000 * KBD / (LW - .2)), keyboard, LW - .2, KBD, .14), LX0 + LW / 2, LZB + .08 + KBD / 2, .004);
+  const scr = K.panel(base.top, [LX0, LZB], [LX1, LZB], [0, -1], .14, .05, Q - .2, { over: .05 });
   K.rect(scr, 0, 0, LW, SHT, SCRC);
   // Bildschirm: Rahmen, Browserleiste, echte Produktseite (gerwing-produkt-ausschnitt.jpg)
   const SPX = 560;
@@ -205,9 +215,9 @@ export default function (K) {
       const dw = iw, dh = dw * im.height / im.width;
       x.drawImage(im, ix, iy + bar + .03 * SPX, dw, Math.min(dh, ih - bar - .03 * SPX));
     }
-  }, LW, SHT, .48), LW / 2, SHT / 2, 1);
+  }, LW, SHT, .155), LW / 2, SHT / 2, 1, null, .004);
   // Handy: steht daneben, steht senkrecht, mit der Bestellung (gerwing-bestellung.jpg, ganzes Bild in Displaybreite)
-  const ph = K.panel(top, [PHX0, PHZ - .3], [PHX0 + PWD, PHZ - .3], [0, -1], .475, .045, Q, { over: .05 });
+  const ph = K.panel(R, [PHX0, PHZ - .3], [PHX0 + PWD, PHZ - .3], [0, -1], .15, .045, Q, { over: .05 });
   K.rect(ph, 0, 0, PWD, PHG, SCRC);
   const PPX = 560;
   K.onPanel(ph, K.decal(Math.round(PWD * PPX), Math.round(PHG * PPX), (x, W, H) => {
@@ -217,11 +227,11 @@ export default function (K) {
     // ganzes Bild (Abmessungen, Warenkorb, Muster) in voller Breite, mittig im Display: alle Knöpfe ganz
     const im = BMP.order;
     if (im) { const dh = iw * im.height / im.width; x.drawImage(im, ix, iy + Math.max(0, (ih - dh) / 2), iw, Math.min(dh, ih)); }
-  }, PWD, PHG, .495), PWD / 2, PHG / 2, 1);
+  }, PWD, PHG, .17), PWD / 2, PHG / 2, 1, null, .004);
 
   // ---------- 7 Steinstapel auf Palette mit Lattung (Gewicht): Lagen setzen sich nacheinander ----------
-  F.part("palette", .56, .05);
-  const pal = slab(R, AX0, AX1, AZ0, AZ1, AH, .585, .075, { walls: "flrb", col: PALC, over: .04 });
+  F.part("palette", .51, .05);
+  const pal = slab(R, AX0, AX1, AZ0, AZ1, AH, .535, .075, { walls: "flrb", col: PALC, over: .04 });
   const PXU = 420, LHT = (AH - AP) / NL;
   // unten die Palette mit Lattung und Klotzöffnungen (sofort), darüber Lage für Lage ganze Steine im Läuferverband
   const palFace = Wm => (x, W, H) => {
@@ -242,8 +252,8 @@ export default function (K) {
   };
   const faceW = AX1 - AX0, faceD = AZ0 - AZ1;
   for (const [nd, Wm, cwm, mine] of [[pal.fr, faceW, .6], [pal.lf, faceD, .3], [pal.rt, faceD, .3]]) {
-    K.onPanel(nd, K.decal(Math.round(Wm * PXU), Math.round(AP * PXU), palFace(Wm), Wm, AP, .625), Wm / 2, AP / 2, -1);
-    for (let k = 0; k < NL; k++) K.onPanel(nd, K.decal(Math.round(Wm * PXU), Math.round(LHT * PXU), rowFace(Wm, cwm, k), Wm, LHT, .635 + k * .0085, .012), Wm / 2, AP + (k + .5) * LHT, -1);
+    K.onPanel(nd, K.decal(Math.round(Wm * PXU), Math.round(AP * PXU), palFace(Wm), Wm, AP, .575), Wm / 2, AP / 2, -1, null, .004);
+    for (let k = 0; k < NL; k++) K.onPanel(nd, K.decal(Math.round(Wm * PXU), Math.round(LHT * PXU), rowFace(Wm, cwm, k), Wm, LHT, .585 + k * .0085, .012), Wm / 2, AP + (k + .5) * LHT, -1, null, .004);
   }
   // oberste Lage: Steinfugen
   K.onFlat(pal.top, K.decal(Math.round(faceW * PXU), Math.round(faceD * PXU), (x, W, H) => {
@@ -252,10 +262,10 @@ export default function (K) {
     x.strokeStyle = ink(.2); x.lineWidth = Math.max(1.5, .01 * s);
     for (let y = rh; y < H - 2; y += rh) { x.beginPath(); x.moveTo(0, y); x.lineTo(W, y); x.stroke(); }
     for (let r = 0; r * rh < H; r++) for (let X = (r % 2 ? cw / 2 : cw); X < W - 2; X += cw) { x.beginPath(); x.moveTo(X, r * rh); x.lineTo(X, Math.min(H, (r + 1) * rh)); x.stroke(); }
-  }, faceW, faceD, .71), (AX0 + AX1) / 2, (AZ0 + AZ1) / 2, .0015);
+  }, faceW, faceD, .66), (AX0 + AX1) / 2, (AZ0 + AZ1) / 2, .004);
 
   // ---------- 8 Lager: drei Händlerhallen hinter der Zufahrt, Weiche, rote Linie zum zuständigen Händler ----------
-  F.part("haendler", .70, .06);
+  F.part("haendler", .665, .06);
   // Rolltor (zu): Lamellen; offen: dunkle Öffnung mit hochgefahrenem Tor an der Oberkante
   const gateDraw = open => (Wm, Hm) => (x, W, H) => {
     const s = W / Wm, gw0 = 1.15 * s, gh = Math.min(.58 * s, H * .72), X = (W - gw0) / 2, Y = H - gh;
@@ -272,10 +282,10 @@ export default function (K) {
     x.fillStyle = ink(.12); x.fillRect(.18 * s, .08 * s, W - .36 * s, .1 * s);
   };
   const halls = HL.map(([x0, z0, w, d, h], i) => {
-    const hl = slab(R, x0, x0 + w, z0, z0 - d, h, [.725, .715, .745][i], .065, { walls: "flrb", col: HALLC, top: ROOFC, over: .03 });
-    const on = [.76, .75, .78][i], dc = K.decal(Math.round(w * 360), Math.round(h * 360), gateDraw(false)(w, h), w, h, on);
-    K.onPanel(hl.fr, dc, w / 2, h / 2, -1);
-    if (i === 1) { dc.off = .9; K.onPanel(hl.fr, K.decal(Math.round(w * 360), Math.round(h * 360), gateDraw(true)(w, h), w, h, .9, .025), w / 2, h / 2, -1, null, .0025); }
+    const hl = slab(R, x0, x0 + w, z0, z0 - d, h, [.69, .68, .71][i], .065, { walls: "flrb", col: HALLC, top: ROOFC, over: .03 });
+    const on = [.725, .715, .745][i], dc = K.decal(Math.round(w * 360), Math.round(h * 360), gateDraw(false)(w, h), w, h, on);
+    K.onPanel(hl.fr, dc, w / 2, h / 2, -1, null, .004);
+    if (i === 1) { dc.off = .8; K.onPanel(hl.fr, K.decal(Math.round(w * 360), Math.round(h * 360), gateDraw(true)(w, h), w, h, .8, .03), w / 2, h / 2, -1, null, .0075); }
     return hl;
   });
   // Zufahrt: Haarlinien zu den beiden anderen Händlern (hinterm Rolltor), rot (Faden) zum zuständigen
@@ -283,17 +293,17 @@ export default function (K) {
   F.sketch(R, [
     [WJ, [WJ[0] + .5, LA]], [[WJ[0] + .5, LA], [g0 - .35, LA]], [[g0 - .35, LA], [g0, LA + .1]], [[g0, LA + .1], [g0, GZ]],
     [WJ, [WJ[0] + .5, LC]], [[WJ[0] + .5, LC], [g2 - .35, LC]], [[g2 - .35, LC], [g2, LC - .1]], [[g2, LC - .1], [g2, GZ + .2]], [[g2, GZ + .2], [g2, GZ]]
-  ], .79, .045, { a: .55 });
-  const knot = F.lift(R, 0, .82, .01);
+  ], .70, .045, { a: .55 });
+  const knot = F.lift(R, 0, .68, .01);
   F.poly(knot, Array.from({ length: 16 }, (_, i) => [WJ[0] + Math.cos(i / 16 * 2 * PI) * .09, WJ[1] + Math.sin(i / 16 * 2 * PI) * .09]), RED, 0, .006);
 
   // ---------- Konstruktionsphase (seite/): Gerüst je Bauabschnitt kurz vor dem Hochklappen, Bleistiftspur auf den Flächen ----------
   // Steine und Wand ohne Gerüst: die Wand steht schon am Anfang auf (ihr Gerüst läge über der liegenden Überschrift), die 90 Steine
   // hätten ein Linienfeld über der Fläche ergeben; dort zeichnet die Kontur mit Eckmarken schon vor.
-  F.geruest({ tags: ["haus", "terrasse"], t0: .33, t1: .385, du: .03, a: .5 });
-  F.geruest({ tags: ["laptop"], t0: .43, t1: .475, du: .03, a: .5 });
-  F.geruest({ tags: ["palette"], t0: .555, t1: .6, du: .03, a: .5 });
-  F.geruest({ tags: ["haendler"], t0: .69, t1: .74, du: .03, a: .5 });
+  F.geruest({ tags: ["laptop"], t0: .105, t1: .15, du: .03, a: .5 });
+  F.geruest({ tags: ["palette"], t0: .505, t1: .55, du: .03, a: .5 });
+  F.geruest({ tags: ["haendler"], t0: .655, t1: .705, du: .03, a: .5 });
+  F.geruest({ tags: ["haus", "terrasse"], t0: .79, t1: .845, du: .03, a: .5 });
   F.spur({ tags: ["haus", "terrasse", "laptop", "palette", "haendler"], quiet: [house, scr, ph, pal.fr, pal.lf, pal.rt, base.top, ...halls.map(h => h.fr)], a: .3 });
 
   // ---------- Lesestelle: genau eine, die Wand ----------
@@ -303,17 +313,26 @@ export default function (K) {
     wand: { name: "wand", prints: [gw, mt, hd, t1, t2], e0: eB, px: pxD, pitch: 8, yaw: -6, sy: .04, sx: -.05, pxN: 18.5, fitN: .9, npitch: 10, nyaw: -4, nsy: .18, nsx: -.056 }
   };
 
-  // Rote Linie: von der Palette über die Weiche und die Zufahrt in die zuständige Halle und hinten wieder hinaus (unter der Halle verdeckt)
-  const thread = { pts: [V(AX1 + .05, .004, AZ0 + .05), V(8.25, .004, -1.45), V(8.85, .004, -1.08), V(WJ[0], .004, WJ[1]), V(12.0, .004, WJ[1]), V(g1 - .35, .004, WJ[1]),
-    V(g1 - .07, .004, -1.14), V(g1, .004, -1.5), V(g1, .004, GZ - .05), V(g1, .004, GZ - 1.5)], t0: .83, t1: .925 };
+  // Rote Linie (Zeiten in b): Laptop → vor der Fläche und der Palette vorbei (own, .22 … .60) → über die Weiche vor das Rolltor der zuständigen Halle
+  // (arms, .62 … .80) → vor den Hallenfronten weiter nach rechts an der dritten Halle vorbei und hinten am Haus vorbei hinaus (post, .81 … .93).
+  // Der Faden läuft nirgends durch ein Gebäude: vor den Fronten, rechts neben den Hallen und neben dem Haus; die Hauswand verdeckt ihn dahinter.
+  const XR = 21.2, Y = .004;
+  const thread = {
+    pts: [V(-2.7, Y, -2.75), V(-2.0, Y, -1.95), V(-1.2, Y, LAN - .1), V(PX0 + .1, Y, LAN), V(PX1 + .2, Y, LAN), V(AX0 + .6, Y, -1.35), V(AX0 + 1.2, Y, -1.45)], t0: .22, t1: .60,
+    arms: [{ pts: [V(AX0 + 1.2, Y, -1.45), V(AX1 + .3, Y, -1.25), V(WJ[0], Y, WJ[1]), V(12.4, Y, WJ[1]), V(g1 - .55, Y, WJ[1]), V(g1 - .12, Y, -1.3), V(g1, Y, -1.7), V(g1, Y, GZ + .2)], t0: .62, t1: .80 }],
+    post: { pts: [V(g1, Y, GZ + .2), V(g1 + .45, Y, -1.45), V(g1 + 2.2, Y, -1.45), V(g1 + 4.2, Y, -1.45), V(XR - .4, Y, -1.5), V(XR, Y, -2.2), V(XR, Y, -4.5), V(XR, Y, TZB + 1.5), V(XR, Y, ZBACK + 2.0), V(XR, Y, ZBACK + .2)], t0: .81, t1: .93 }
+  };
 
-  // ---------- Kamera (Drehbuch: DREHBUCH.md). Gleichmäßige Fahrt: Wand → Fläche → Terrasse → Palette → Zufahrt → Halle ----------
+  // ---------- Kamera (Drehbuch: DREHBUCH.md). Eine stetige Bahn, links nach rechts: Wand → Laptop-Zoom → Fläche → Palette → Weiche → Halle → Haus ----------
+  // Zwischen zwei Schlüsseln ändern sich Blickhöhe höchstens um rund 12° und Gier um rund 6°; die Zielpunkte wandern (Fahrt), die Kamera dreht nicht
   return {
     fov: 32, fovN: 44,
     track: 680,
     // Raster (seite/): zieht mit den ersten Bastellinien ein und ist weg, bevor der Text gelesen wird
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .055 },
     thread,
+    // Eingang des Fadens (Szenenkoordinaten): von vorn zum Laptop; Ausgang ist das Ende von thread.post (hinten rechts)
+    faden: { in: [-3.2, 3.2], viaPre: [[-3.2, -1.5]] },
     stops: [S.wand],
     keys: [
       // Start: Wand liegt flach im Bogen, Name, Kennzeile und Überschrift lesbar
@@ -321,24 +340,26 @@ export default function (K) {
       // Wand steht auf und rastet ein, Kamera sinkt
       key(.8, .07, V(-7.2, 1.7, ZW), 24, -6, 11.0, V(-7.3, 2.6, ZW), 24, -4, 15.0),
       { w: .9, stop: S.wand },
-      // Steine heben sich Reihe für Reihe: Überblick über die Fläche
-      key(2.4, .27, V(-6.7, .4, -2.9), 40, -8, 10.4, V(-7.5, -.2, -1.95), 46, -4, 14.0),
-      // Hauswand steht auf, Terrasse hebt sich, Treppe faltet aus
-      key(1.6, .40, V(-.5, 1.3, -3.7), 28, -16, 11.8, V(-.3, 1.3, -3.7), 28, -8, 20.0),
-      // Laptop und Handy klappen auf
-      key(1.2, .535, V(-.4, 1.4, -3.4), 24, -12, 7.4, V(-.4, 1.4, -3.4), 24, -6, 12.0),
-      // Palette baut sich
-      key(1.1, .63, V(5.0, .9, -3.0), 30, -20, 10.6, V(5.4, .9, -3.0), 30, -10, 15.0),
-      // Stapel Lage für Lage
-      key(1.0, .72, V(6.6, .9, -2.9), 24, -18, 8.4, V(6.6, .9, -2.9), 26, -10, 13.0),
-      // Zufahrt: Hallen stehen, Haarlinien und Weiche
-      key(1.2, .80, V(9.4, .4, -1.7), 24, -16, 9.5, V(9.8, .4, -1.9), 26, -8, 14.5),
-      // rote Linie läuft über die Weiche an der ersten Halle vorbei
-      key(1.1, .87, V(11.6, .45, -1.7), 24, -12, 9.0, V(12.0, .5, -1.9), 26, -8, 14.0),
-      // Rolltor der zuständigen Halle fährt hoch, die Linie läuft hinein
-      key(1.0, .925, V(14.5, .5, -2.0), 26, -10, 8.0, V(14.5, .5, -2.0), 28, -6, 12.5),
-      // Endbild: Palette, Zufahrt und Hallen, Terrasse links im Hintergrund
-      key(1.2, 1, V(11.6, .3, -2.2), 30, -16, 17.0, V(11.8, .4, -2.4), 34, -12, 27.0)
+      // Kamera gleitet vor der Wand nach rechts, näher heran (Laptop und Handy klappen dabei auf)
+      key(1.0, .165, V(-5.0, 1.3, -3.8), 20, -8, 8.5, V(-5.0, 1.4, -3.6), 20, -6, 11.0),
+      // Zoom auf den Laptop mit dem Shop und dem Handy daneben: die Bestellung, Quadratmeter rein. Höhere Blickhöhe: Bogen füllt das Bild
+      key(1.3, .22, V(-2.35, .3, -3.95), 28, -10, 4.3, V(-2.35, .4, -3.9), 26, -8, 8.0),
+      // weiter am Laptop und Handy vorbei, zieht sich auf
+      key(1.0, .27, V(-1.3, .5, -3.8), 26, -8, 6.0, V(-1.3, .6, -3.6), 26, -8, 8.5),
+      // Fläche: Überblick, Steine heben sich Reihe für Reihe
+      key(1.5, .34, V(.6, .3, -3.0), 32, -10, 10.5, V(.2, .3, -2.8), 36, -8, 12.5),
+      key(1.4, .44, V(4.2, .3, -2.9), 32, -10, 10.5, V(3.0, .3, -2.6), 34, -8, 12.5),
+      // Palette mit Steinstapel (fertig bei b .66)
+      key(1.5, .665, V(7.9, .8, -2.8), 26, -14, 9.0, V(7.9, .8, -2.8), 28, -12, 8.6),
+      // Weiche und Hallen: die rote Linie läuft nach rechts zu den Händlern
+      key(1.0, .715, V(10.0, .6, -2.5), 25, -12, 8.8, V(9.8, .6, -2.5), 26, -10, 9.6),
+      key(1.2, .76, V(12.6, .4, -1.9), 26, -12, 9.5, V(12.0, .4, -1.9), 26, -10, 10.5),
+      // Rolltor der zuständigen Halle fährt hoch, der Faden endet davor
+      key(1.1, .81, V(15.0, .5, -2.2), 26, -10, 8.5, V(15.2, .5, -2.1), 26, -8, 10.0),
+      // Kamera hebt sich über die Hallen, das Haus steht auf, Seitenwände und Dach klappen nach hinten
+      key(1.3, .87, V(15.5, 1.2, -8.6), 30, -6, 14.0, V(15.8, 1.3, -7.6), 30, -4, 20.0),
+      // Endbild: Haus mit Glastüren, Dach und fertiger Terrasse mittig und frei, die Hallen unten im Bild
+      key(1.6, 1, V(17.0, 1.2, -10.3), 33, -3, 17.5, V(17.0, 1.5, -9.2), 32, -2, 27.0)
     ]
   };
 }

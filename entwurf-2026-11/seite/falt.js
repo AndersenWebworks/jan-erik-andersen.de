@@ -35,10 +35,11 @@ export const sm5 = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * x * (x * (x * 6 - 15) 
 export function mech(x, over = .05) {
   if (x <= 0) return 0;
   if (x >= 1) return 1;
-  const w = .74;
-  if (x < w) { const u = x / w; return (1 + over) * sm5(u); }
+  // Tempo (Erik, 22.10.: keine Schnapp-Bewegungen): längerer Anlauf (w .82 statt .74, das Einrasten braucht weniger vom Fenster) und ein Viertel weniger Überschwingen
+  const w = .82, ov = over * .75;
+  if (x < w) { const u = x / w; return (1 + ov) * sm5(u); }
   const t = (x - w) / (1 - w);
-  return 1 + over * Math.cos(t * PI * 2.5) * (1 - t) * (1 - t);
+  return 1 + ov * Math.cos(t * PI * 2.5) * (1 - t) * (1 - t);
 }
 // Rückprall (betreuung): anfahren, abbremsen, anschlagen, kurz zurückfedern, liegen bleiben; nie über 1
 export function bounce(x, k = .03) {

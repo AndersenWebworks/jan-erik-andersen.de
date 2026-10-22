@@ -17,7 +17,7 @@
 // - Lesestellen am Zustand s.fb (modernisierung), s.face: vorgegebene Blickrichtung (stimmen)
 // - Schlüssel mit slow: 1 bremsen wie Lesestellen (abschluss)
 // - Faden mit lin: gleichmäßiger Lauf (werdegang)
-// - Text blendet aus, solange sein Träger angeschnitten ist: ganz im Bild (oben ab 64 px, unten bis H − 70 px) oder ganz draußen (schnittstellen)
+// - Text läuft am Bildrand hinaus und blendet erst unter einem Viertel sichtbarer Fläche weich aus (schnittstellen); Gruppen (pr.grp) gemeinsam
 // - Vorgabeszene „erste Variante“ (betreuung, gerwing, shop, werdegang) entfällt: die Seite hat keine Varianten mehr.
 // Zustände: #p=0…1 (ganze Seite), #s=<szene> (Szenenanfang), Handy-Ausschnitt #…&w=390&h=844 (Prüfhilfe).
 import * as THREE from "three";
@@ -116,7 +116,7 @@ export function seite(renderer, SEQ, opt = {}) {
       lines.forEach((l, i) => x[o.outline ? "strokeText" : "fillText"](l, ...at(i)));
     }
     const h = cvH / em;
-    return { tex: texOf(cv), w: cvW / em, h, padX: padX / em, tw: wMax / em, bfb: h - (padY / em + .94 + (lines.length - 1) * lh / em), rows: ws.map(v => v / em), lines };
+    return { tex: texOf(cv), w: cvW / em, h, padX: padX / em, padY: padY / em, tw: wMax / em, bfb: h - (padY / em + .94 + (lines.length - 1) * lh / em), rows: ws.map(v => v / em), lines };
   }
 
   // ---------- Ansicht ----------
@@ -132,7 +132,7 @@ export function seite(renderer, SEQ, opt = {}) {
   const links3 = [];
   let INST = [], SEGS = [], ANCH = [], TOTAL = 1, thread = null, ZSEG = null;
   // Länge des Schluss-Zooms in vh (Breitbild, hochkant)
-  const ZOOM = { d: 110, n: 120 };
+  const ZOOM = { d: 190, n: 200 };
 
   function newInstance(cfg, idx) {
     return { cfg, idx, name: cfg.name, built: false, O: V(), rot: 0, M4: new THREE.Matrix4(), R4: new THREE.Matrix4(), fp: null, tStart: undefined, parked: false, lastKey: "" };
@@ -151,7 +151,7 @@ export function seite(renderer, SEQ, opt = {}) {
       const w = t.w * e, h = t.h * e;
       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
       mesh.renderOrder = 3; mesh.frustumCulled = false; group.add(mesh);
-      const pr = { mesh, mat, on, e, w, h, t, map: t.tex, sc, mk: sx => printTex(lines, { ...o, scale: sx }).tex.image, fade: o.fade || .02, off: o.off, I };
+      const pr = { mesh, mat, on, e, w, h, t, map: t.tex, sc, mk: sx => printTex(lines, { ...o, scale: sx }).tex.image, fade: o.fade || .02, off: o.off, grp: o.grp, I };
       prints.push(pr); return pr;
     }
     function mkDecal(wpx, hpx, draw, w, h, on, fade = .025) {
@@ -190,7 +190,7 @@ export function seite(renderer, SEQ, opt = {}) {
         const pr = mkPrint(lines, e, on0, o), im = o.noImprint ? null : mkPrint(lines, e, on0, io ? { ...o, col: io.col, fillCol: io.fill, outline: io.line } : { ...o, col: IMPRINT });
         // heller Abdruck: Textur vormultipliert, sonst mischen die transparenten (schwarzen) Randpixel beim Verkleinern dunkle Säume ein
         if (io && im) { im.t.tex.premultiplyAlpha = true; Object.assign(im.mat, { blending: THREE.CustomBlending, blendSrc: THREE.OneFactor, blendDst: THREE.OneMinusSrcAlphaFactor }); }
-        const W = pr.t.tw * e, base = o.foot ? 0 : .2 * e;
+        const W = pr.t.tw * e, base = o.base !== undefined ? o.base : o.foot ? 0 : .2 * e;     // o.base: Abstand der Grundlinie über dem Scharnier (Unterlängen bleiben über dem Papier)
         if (io && im) {
           if (ck === "t") { if (io.close !== undefined) { im.tOff = t0 + d + io.close; im.tDur = io.closeDur || .7; } }
           else if (io.closeB !== undefined) im.off = t0 + d + io.closeB;
@@ -665,6 +665,7 @@ export function seite(renderer, SEQ, opt = {}) {
   // Überblickspose eines Übergangs: Kamera, die die Inhalte (ext: Bogen und Bauteile) der verlassenen und der kommenden Parzelle gemeinsam mittig fasst;
   // Neigung 42°, Blick quer zur Achse der beiden (A unten/B oben im Bild wäre schmal), Abstand per Projektion so, dass beide etwa 70 % des Rahmens füllen
   const _fp = { cam: V(), yaw: 0, pitch: 0, dist: 1, fov: 36, set(f, dr) { this.cam.copy(f.cam).addScaledVector(f.shift, dr); this.yaw = f.yaw; this.pitch = f.pitch; this.dist = f.dist; this.fov = f.fov; return this; } };
+  const FLIGHT_FIT = .3;                                                // Anteil der Überblickspose (0 = nur die Bahn der Szenen, 1 = ganze Draufsicht) in der Mitte eines Flugs
   const FIT = { pitch: 44, fov: 50, fovN: 62, w: .65, wN: .84, h: .85 };       // Überblick im Flug: Neigung, Sichtfeld, Anteil der Rahmenbreite (hochkant breiter)
   function fitPair(A, B, chord, yaw0, yaw1) {
     const pts = [];
@@ -747,7 +748,9 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     // Überblick: Plateau in der Mitte (Anteil wFit), sonst die Bahn der Szenen; Kamera, Ziel und Sichtfeld blenden zur Überblickspose
     // Die Überblickspose wandert dabei langsam von der verlassenen zur kommenden Parzelle (±12 % ihres Abstands), die Fahrt steht nie
-    const fit = tv.fit, wFit = smoother(Math.pow(Math.sin(PI * st.q), .75)), dr = .12 * (2 * st.q - 1);
+    // Der Flug bleibt nah und flach (Erik: „kein harter Wechsel in die Draufsicht, primär smooth“): höchstens FLIGHT_FIT der Überblickspose,
+    // in einer Glockenkurve (stetig mit stetiger Ableitung an beiden Enden, sin²), die Nachbarparzelle deutet sich am Rand an
+    const fit = tv.fit, wFit = FLIGHT_FIT * Math.pow(Math.sin(PI * st.q), 2), dr = .12 * (2 * st.q - 1);
     const fovP = fovOf(A) + (fovOf(B) - fovOf(A)) * sm(st.q);
     const ap = Math.max(B.cfg.apex || 0, B.apex || 0); if (ap) cam.y += ap * q16;   // Mindesthöhe über Bauteilen (clearance), ohne Knick an den Enden
     return wFit > 0 ? blendPose(cam, tgt, fovP, _fp.set(fit, dr), wFit) : fovP;
@@ -761,17 +764,27 @@ export function seite(renderer, SEQ, opt = {}) {
   const tmat = new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 });
   const THREAD_HW = .022;
   let threadHW = THREAD_HW;
-  function ribbon(pts) {
+  // Faden und Punkt liegen immer über jeder flachen Bodenfläche: Teile und Abdrücke liegen auf Ebenen y = Ebene · EPS (bis etwa .01), der
+  // Bogen auf 0; Stützpunkte darunter werden auf THREAD_Y angehoben (Stehende Teile verdecken den Faden weiterhin über die Tiefe)
+  const THREAD_Y = .02;
+  function ribbon(pts0) {
+    const pts = pts0.map(p => p.y < THREAD_Y ? V(p.x, THREAD_Y, p.z) : p);
     const curve = new THREE.CatmullRomCurve3(pts, false, "centripetal", .5);
     const len = curve.getLength(), N = Math.round(clamp(len * 18, 24, 1400)), sp = curve.getSpacedPoints(N);
+    // Catmull-Rom schwingt zwischen steilem Abstieg und flachem Lauf unter die Stützpunkte (am Rechner bis y −0,08: Lücke unter dem Bogen): nie unter THREAD_Y
+    for (const q of sp) if (q.y < THREAD_Y) q.y = THREAD_Y;
     const pos = new Float32Array((N + 1) * 6), idx = [];
     // fill(hw): Halbbreite des Bandes neu schreiben (in der Karte wächst sie mit dem Abstand, damit der Faden ~2,5 px breit bleibt)
     const fill = hw => {
+      let prev = null;
       for (let i = 0; i <= N; i++) {
         const p = sp[i], q = sp[Math.min(N, i + 1)], r = sp[Math.max(0, i - 1)];
         const d = V().subVectors(q, r); const vert = Math.abs(d.y) > .5 * d.length();
         let sd;
         if (vert) sd = V(hw, 0, 0); else { d.y = 0; d.normalize(); sd = V().crossVectors(d, UP).multiplyScalar(hw); }
+        // Seite des Bandes stetig halten: beim Übergang von steil zu flach kehrte sich sonst die Seite um, das Band verdrehte sich (Schleife, Lücke)
+        if (prev && sd.dot(prev) < 0) sd.negate();
+        prev = sd;
         pos.set([p.x - sd.x, p.y, p.z - sd.z, p.x + sd.x, p.y, p.z + sd.z], i * 6);
       }
     };
@@ -823,8 +836,8 @@ export function seite(renderer, SEQ, opt = {}) {
   }
   function buildThreadFor(I) {
     if (!dot) {
-      dot = new THREE.Mesh(new THREE.CircleGeometry(1, 40), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, depthTest: false })); dot.renderOrder = 6; dot.visible = false; scene.add(dot);
-      const ring = new THREE.Mesh(new THREE.RingGeometry(1.6, 1.95, 48), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, depthTest: false, transparent: true, opacity: .75 })); ring.renderOrder = 6; ring.visible = false; dot.add(ring); dot.userData.ring = ring;
+      dot = new THREE.Mesh(new THREE.CircleGeometry(1, 40), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 })); dot.renderOrder = 6; dot.visible = false; scene.add(dot);
+      const ring = new THREE.Mesh(new THREE.RingGeometry(1.6, 1.95, 48), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, depthWrite: false, transparent: true, opacity: .75, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 })); ring.renderOrder = 6; ring.visible = false; dot.add(ring); dot.userData.ring = ring;
     }
     const f = I.cfg.faden ? I.cfg.faden(I.def, I) : null; if (!f) return;
     const own = I.cfg.ownThread === false ? null : I.def.thread;
@@ -867,31 +880,42 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     dot.visible = !!last;
     if (last) {
-      last.pc.curve.getPointAt(last.k, dot.position);
+      last.pc.curve.getPointAt(last.k, dot.position); if (dot.position.y < THREAD_Y) dot.position.y = THREAD_Y;
       dot.quaternion.copy(camera.quaternion);
       const dd = camera.position.distanceTo(dot.position), rN = Math.max(.05, dd * .0065), rM = 7 * 2 * Math.tan(camera.fov * PI / 360) * dd / VH();
       dot.scale.setScalar(rN + (rM - rN) * kk); if (dot.userData.ring) dot.userData.ring.visible = kk > .3;
+      // Tiefentest wie beim Faden (Bauteile verdecken den Punkt); die Scheibe steht senkrecht zum Blick und würde zur Hälfte im Boden stecken:
+      // entlang des Sehstrahls um ihren Ring-Radius nach vorn (die Lage im Bild ändert sich dabei nicht), nie über die halbe Entfernung
+      dot.position.addScaledVector(_nn.copy(camera.position).sub(dot.position).normalize(), Math.min(dot.scale.x * 2.1, dd * .5));
     }
     return last;
   }
 
   // ---------- Text ganz im Bild oder ganz draußen ----------
-  // Anteil des Textträgers (Umgrenzung der vier Ecken), der im Rahmen [0, cw] × [64, ch - 70] liegt; hinter der Kamera 0
+  // Anteil des Textträgers (Umgrenzung der vier Ecken), der im Rahmen [0, cw] × [BAND_TOP, ch - BAND_BOT] liegt; hinter der Kamera 0
   const _q = [V(), V(), V(), V()];
   function frameFrac(pr, cw, ch) {
-    const m = pr.mesh.matrixWorld, hw = pr.w / 2, hh = pr.h / 2;
+    // Tintenfläche: der Textträger ohne den Rand der Textur (sonst schaltet der leere Rand den Text ab, obwohl die Schrift noch ganz im Bild steht)
+    const m = pr.mesh.matrixWorld, hw = pr.w / 2 - (pr.t ? pr.t.padX * pr.e : 0), hh = pr.h / 2 - (pr.t && pr.t.padY ? pr.t.padY * pr.e : 0);
+    // Ecken in Blickkoordinaten, an der Nahebene (z = −.1) abgeschnitten (Sutherland–Hodgman): so ändert sich der Anteil stetig, wenn die Fläche an der Kamera vorbeigeht
+    let poly = [];
+    for (let i = 0; i < 4; i++) poly.push(_q[i].set(i === 0 || i === 3 ? -hw : hw, i < 2 ? -hh : hh, 0).applyMatrix4(m).applyMatrix4(camera.matrixWorldInverse).clone());
+    const NZ = -.1, cut = [];
+    for (let i = 0; i < poly.length; i++) {
+      const a = poly[i], c = poly[(i + 1) % poly.length], ia = a.z < NZ, ic = c.z < NZ;
+      if (ia) cut.push(a);
+      if (ia !== ic) cut.push(a.clone().lerp(c, (NZ - a.z) / (c.z - a.z)));
+    }
+    if (cut.length < 3) return { f: 0, r: null, a: 0, ia: 0 };
     let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
-    for (let i = 0; i < 4; i++) {
-      const v = _q[i].set(i === 0 || i === 3 ? -hw : hw, i < 2 ? -hh : hh, 0).applyMatrix4(m);
-      const q = v.clone().applyMatrix4(camera.matrixWorldInverse);
-      if (q.z > -.1) return { f: 0, r: null };
-      v.project(camera);
+    for (const v of cut) {
+      v.applyMatrix4(camera.projectionMatrix);
       const X = (v.x + 1) / 2 * cw, Y = (1 - v.y) / 2 * ch;
       x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y);
     }
-    const A = (x1 - x0) * (y1 - y0); if (A <= 0) return { f: 0, r: [x0, y0, x1, y1] };
-    const ox = Math.max(0, Math.min(x1, cw) - Math.max(x0, 0)), oy = Math.max(0, Math.min(y1, ch - 70) - Math.max(y0, 64));
-    return { f: ox * oy / A, r: [x0, y0, x1, y1] };
+    const A = (x1 - x0) * (y1 - y0); if (A <= 0) return { f: 0, r: [x0, y0, x1, y1], a: 0, ia: 0 };
+    const ox = Math.max(0, Math.min(x1, cw) - Math.max(x0, 0)), oy = Math.max(0, Math.min(y1, ch - BAND_BOT) - Math.max(y0, BAND_TOP));
+    return { f: ox * oy / A, r: [x0, y0, x1, y1], a: A, ia: ox * oy };
   }
 
   // ---------- Tisch und Karte ----------
@@ -900,7 +924,7 @@ export function seite(renderer, SEQ, opt = {}) {
   // Zoom (Segment "z", an p gebunden) oder aus dem Knopf „Übersicht“ (Mextra, zeitlich geglättet); die Kamera blendet von ihrer Stellung zur
   // Kartenstellung (zuerst hoch, dann seitlich, die Blickrichtung dreht ruhig über die Mitte).
   let Muser = 0, Mextra = 0, MAP = null, table = null;
-  const mSeg = st => st.kind === "z" ? smoother(win(st.q, 0, .8)) : 0;
+  const mSeg = st => st.kind === "z" ? smoother(win(st.q, 0, .88)) : 0;
   let mapOK = true, revealN = 0, lowRatio = false;                       // lowRatio: in der Karte geringere Pixeldichte (weniger Füllrate)                                        // mapOK: bricht ein Teil der Karte, bleibt die Seite ohne Karte nutzbar
   const mNow = st => mapOK ? Math.max(mSeg(st), Mextra) : 0;
   function mapFail(e) {
@@ -1061,12 +1085,30 @@ export function seite(renderer, SEQ, opt = {}) {
   const visible = new Set(), _pp = V(), _nn = V(), _vv = V();
   const FOREIGN_S = [70, 140], FOREIGN = [70, 140];                    // Dunst der Nachbarszenen (wie FAR: Nachbarparzellen bleiben klar sichtbar, nur Schrift von hinten fällt weg)
   let state = null, Mcur = 0, lastApply = 0;
-  // Text (nicht Bilder) nur ganz im Bild oder gar nicht; in der Karte zusätzlich erst ab ein paar Pixeln Höhe (sonst flimmert die Schrift)
-  const textFactor = (pr, cw, ch, M) => {
-    const fr = frameFrac(pr, cw, ch); let o = sm((fr.f - .985) / .014);
+  // Text (nicht Bilder) steht, solange sein Träger im Bild ist, und läuft am Bildrand natürlich hinaus (Anschnitt wie bei jedem Inhalt der Seite);
+  // erst wenn weniger als rund ein Viertel seiner Fläche im Bild steht, blendet er weich aus (voll ab 25 %, null bei 1 %). Drucke einer Gruppe
+  // (pr.grp, z. B. die Wortmarke) bemessen sich an ihrer gemeinsamen Fläche und blenden zusammen aus: ein Name steht ganz oder gar nicht.
+  // Früher: ganz im Bild (56 px oben, 48 px unten Rand) oder gar nicht, Übergang über 1,4 % der Fläche: Wörter schalteten einzeln und schlagartig ab.
+  // In der Karte zusätzlich erst ab ein paar Pixeln Höhe (sonst flimmert die Schrift)
+  const FADE_T = .3;                                                    // Sekunden, kürzeste Dauer jedes Ein- und Ausblendens von Drucken
+  const FR0 = .01, FR1 = .24, BAND_TOP = 0, BAND_BOT = 0;
+  const textFactor = (pr, cw, ch, M, gf) => {
+    const fr = frameFrac(pr, cw, ch), f = gf !== undefined ? gf : fr.f; let o = sm((f - FR0) / FR1);
     if (M > .02 && fr.r) o *= sm((fr.r[3] - fr.r[1] - 3) / 5);
     return o;
   };
+  const isText = pr => (pr.t && pr.t.rows) || pr.textual;
+  // Anteil im Rahmen je Gruppe (Summe der sichtbaren Flächen durch Summe der Flächen)
+  function groupFrac(I, cw, ch) {
+    let g = null;
+    for (const pr of I.prints) {
+      if (!pr.grp || !isText(pr)) continue;
+      const fr = frameFrac(pr, cw, ch); g = g || new Map();
+      const e = g.get(pr.grp) || { a: 0, ia: 0 }; e.a += fr.a; e.ia += fr.ia; g.set(pr.grp, e);
+    }
+    if (g) for (const e of g.values()) e.f = e.a > 0 ? e.ia / e.a : 0;
+    return g;
+  }
   function applyState(st, now, opts = {}) {
     // Karte: M > 0 zeigt alle Parzellen; sonst sichtbar: aktuelle Szene und ihre Nachbarn (im Übergang beide Szenen und die davor)
     const M = opts.M !== undefined ? opts.M : mNow(st), mapOn = M > .001;
@@ -1079,7 +1121,7 @@ export function seite(renderer, SEQ, opt = {}) {
     for (const I of INST) {
       if (!I.built) continue;
       const on = mapOn ? (I.idx === st.i || I.idx < revealN) : want.has(I.idx);
-      I.group.visible = on; if (on) visible.add(I);
+      I.group.visible = on; if (on) visible.add(I); else I.fadeReady = false;
     }
     if (!opts.still) {
       // volle Auflösung nur für die Szene der Kamera (im Übergang beide Enden, kurz vor dem Übergang schon die nächste)
@@ -1133,6 +1175,7 @@ export function seite(renderer, SEQ, opt = {}) {
       if (I.def.linesFrom !== undefined) I.lines.visible = b >= I.def.linesFrom;
       for (const a of I.anims) a(b, time);
       I.group.updateMatrixWorld(true);
+      const gfr = groupFrac(I, cw, ch);
       for (const pr of I.prints) {
         let o;
         if (pr.sched) o = pr.sched(b);
@@ -1142,17 +1185,23 @@ export function seite(renderer, SEQ, opt = {}) {
           if (pr.tOff !== undefined) o *= 1 - sm((tl - pr.tOff) / pr.tDur);
         }
         // Text (nicht Bilder) nur ganz im Bild oder gar nicht; Decals mit Text (Kontaktkarten) tragen pr.textual
-        if (o > .001 && ((pr.t && pr.t.rows) || pr.textual)) o *= textFactor(pr, cw, ch, M);
+        if (o > .001 && isText(pr)) o *= textFactor(pr, cw, ch, M, pr.grp && gfr ? gfr.get(pr.grp).f : undefined);
         // Dunst auch auf den Drucken; fremde Schrift nur von vorn (nie von hinten gelesen)
         if (o > .001) {
           _pp.setFromMatrixPosition(pr.mesh.matrixWorld);
           const dd = camera.position.distanceTo(_pp); o *= 1 - sm((dd - I.far.x) / Math.max(1, I.far.y - I.far.x));
           if (wI < 1 && o > .001 && ((pr.t && pr.t.rows) || pr.textual)) { _nn.set(0, 0, 1).transformDirection(pr.mesh.matrixWorld); _vv.copy(camera.position).sub(_pp).normalize(); o *= sm(_nn.dot(_vv) / .25); }
         }
+        // Nie schlagartig: die Deckkraft folgt ihrem Ziel höchstens mit 1/FADE_T je Sekunde (jedes Ein- und Ausblenden dauert mindestens FADE_T,
+        // auch wenn Fenster in b, Bildrand, Dunst oder Gruppe das Ziel springen lassen). Sprünge der Seite (Anker, Karte, Prüfstand: still) und
+        // das erste Bild einer Szene setzen direkt.
+        if (!opts.still && I.fadeReady && pr.oS !== undefined) { const mx = dtS / FADE_T; o = pr.oS + clamp(o - pr.oS, -mx, mx); }
+        pr.oS = o;
         if (pr.mat.opacity !== o) pr.mat.opacity = o;
         pr.mesh.visible = o > .001;
       }
     }
+    for (const I of visible) I.fadeReady = true;
     // Haarkanten der Bögen (LineBasicMaterial, ohne eigenen Shader) folgen dem Dunst ihrer Szene
     for (const I of visible) for (const sh of I.sheets) { const e = sh.children[0]; if (e && e.material) { _pp.setFromMatrixPosition(sh.matrixWorld); e.material.opacity = .32 * (1 - sm((camera.position.distanceTo(_pp) - I.farS.x) / Math.max(1, I.farS.y - I.farS.x))); } }
     updateThread(st);
@@ -1163,13 +1212,14 @@ export function seite(renderer, SEQ, opt = {}) {
   // ---------- Fortschritt, Scrollen, Knöpfe ----------
   const bar = document.getElementById("bar"), hint = document.getElementById("hint");
   const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - innerHeight);
-  let target = 0, p = 0, hold = false;
+  let target = 0, p = 0, pVel = 0, hold = false;
+  const SMOOTH_W = 4.2;                                                  // 1/s: Zeitkonstante der Feder rund 0,24 s, 90 % des Weges nach rund 0,9 s
   function jumpTo(pp, instant) {
     pp = clamp(pp, 0, 1);
     const st = stateAt(pp); ensure(st.i);
     // Sprung: frühere Szenen stehen schon fertig da (Lettern nach der Zeit eingeschlossen), die aktuelle auch, wenn p > 0
     for (const I of INST) if (I.built && (I.idx < st.i || (I.idx === st.i && pp > 0))) I.tStart = -1e9;
-    target = p = pp; hold = true;
+    target = p = pp; pVel = 0; hold = true;
     scrollTo(0, pp * maxScroll());
   }
   // Sprung beim Laden weit nach hinten: erst vorn malen, dann Szene für Szene bauen (zwischen den Schritten wird gemalt), dann springen; liegt das Ziel in der
@@ -1178,7 +1228,7 @@ export function seite(renderer, SEQ, opt = {}) {
   function jumpAny(pp) {
     const st = stateAt(clamp(pp, 0, 1));
     if (!initPhase || st.i <= 1 || INST[st.i].built) { jumpTo(pp); return; }
-    pendingJump = pp; target = p = 0; dbg("Sprung zu p=" + pp.toFixed(4) + " gestaffelt (Szene " + (st.i + 1) + ")");
+    pendingJump = pp; target = p = 0; pVel = 0; dbg("Sprung zu p=" + pp.toFixed(4) + " gestaffelt (Szene " + (st.i + 1) + ")");
     const step = () => {
       if (pendingJump === null) return;
       if (!INST[st.i].built) { build(INST.find(I => !I.built)); setTimeout(step, 30); return; }
@@ -1308,7 +1358,7 @@ export function seite(renderer, SEQ, opt = {}) {
     if (n !== narrow) { const keep = target; init(); jumpTo(keep); } else resize();
     if (hold) scrollTo(0, target * maxScroll());
   });
-  if (!applyHash()) { target = p = clamp(scrollY / maxScroll(), 0, 1); }
+  if (!applyHash()) { target = p = clamp(scrollY / maxScroll(), 0, 1); pVel = 0; }
   initPhase = false;
   // übrige Szenen im Hintergrund nacheinander bauen, erst nach dem ersten Bild (das Startbild steht vorher)
   function more() { const n = INST.find(I => !I.built); if (!n) return; build(n); setTimeout(more, 40); }
@@ -1316,8 +1366,13 @@ export function seite(renderer, SEQ, opt = {}) {
   let last = performance.now(), first = true, drawKey = "";
   function frameStep(now) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
-    p += (target - p) * (1 - Math.exp(-dt * 3.0));
-    if (Math.abs(target - p) < 1e-5) p = target;
+    // Dargestellter Fortschritt folgt dem Scrollfortschritt wie eine kritisch gedämpfte Feder (Eigenfrequenz SMOOTH_W, bildratenunabhängig,
+    // ohne Überschwingen aus der Ruhe): Mausrad-Sprünge und schnelles Wischen werden weich, Beschleunigung und Abbremsen sind stetig
+    {
+      const x = p - target, ex = Math.exp(-SMOOTH_W * dt), tm = (pVel + SMOOTH_W * x) * dt;
+      pVel = (pVel - SMOOTH_W * tm) * ex; p = clamp(target + (x + tm) * ex, 0, 1);
+      if (Math.abs(target - p) < 1e-5 && Math.abs(pVel) < 1e-4) { p = target; pVel = 0; }
+    }
     // Übersicht per Knopf: M läuft zeitlich (ruhig an und aus), unabhängig vom Scrollen
     Mextra += (Muser - Mextra) * (1 - Math.exp(-dt * 3.2)); if (Math.abs(Muser - Mextra) < .002) Mextra = Muser;
     const st = stateAt(p);

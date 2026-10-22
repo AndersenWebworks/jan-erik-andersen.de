@@ -117,7 +117,7 @@ export default function (K) {
 
   // ---------- Überschrift als Teil des Modells ----------
   // rows: Zeilen aus Wörtern {t, it}; Zeilen stehen hintereinander (hinterste zuerst), jedes Wort steht an seiner Fußlinie aus dem Bogen auf
-  function heading(rows, e, zb, t0, tag, xo = 0, clk = "b") {
+  function heading(rows, e, zb, t0, tag, xo = 0, clk = "b", base) {
     F.part(tag, -.02, .01);
     const up = { font: "marke" }, it = { font: "marke", italic: 1 };
     const wd = w => K.measure([w.t], w.it ? it : up).tw * e;
@@ -129,7 +129,7 @@ export default function (K) {
       row.forEach((w, wi) => {
         const n = prints.length;
         prints.push(clk === "t" ? K.word([w.t], e, x, z, .15 + .23 * n, .85, { ...(w.it ? it : up), foot: 1, imprint: IMP_T })
-          : K.word([w.t], e, x, z, t0 + .005 * (ri + wi), .04, { ...(w.it ? it : up), foot: 1, clock: "b", imprint: IMP }));
+          : K.word([w.t], e, x, z, t0 + .005 * (ri + wi), .04, { ...(w.it ? it : up), foot: 1, base, clock: "b", imprint: IMP }));
         x += wd(w) + sp;
       });
     });
@@ -354,7 +354,8 @@ export default function (K) {
   {
     const z = v => v;
     const rows = N ? [[{ t: "Schreiben" }], [{ t: "Sie mir," }], [{ t: "worum es geht.", it: 1 }]] : [[{ t: "Schreiben Sie mir," }], [{ t: "worum es geht.", it: 1 }]];
-    const H3 = heading(rows, N ? .36 : .72, z(4.6), .715, "kopf3", OX3);
+    // base: Grundlinie .11 em über dem Scharnier, sonst beschneidet das Papier das g in „geht“ und das Komma
+    const H3 = heading(rows, N ? .36 : .72, z(4.6), .715, "kopf3", OX3, "b", .11 * (N ? .36 : .72));
 
     // Umschlag: der Körper liegt als Papier auf dem Bogen (die Karten stehen aus ihm auf), die Klappe liegt hinten und klappt auf
     const BW = 7.2, zF = z(1.9), zB = z(N ? -2.95 : -2.7), CX = N ? 2.1 : 1.85, ZBK = N ? -1.3 : -.95, ZFR = N ? 1.5 : 1.15;

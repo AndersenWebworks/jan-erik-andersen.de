@@ -95,8 +95,8 @@ export default function (K) {
   // Die ersten beiden Seiten verlieren ihren Text, wenn die Lesestelle weitergezogen ist (sonst stünde am linken Rand breiter Bildschirme halber Text)
   // Sätze 1 und 2 (Satz 2 trägt zusätzlich eine Wirkungsgrafik ohne Zahlen)
   const sT = [];
-  sT[0] = block(pg[0], LW, wrap(TEXT.sis[0], tw), E0, ON[0], MX, topY, 1, { off: .46 }, eb);
-  sT[1] = block(pg[1], LW, wrap(TEXT.sis[1], tw), E0, ON[1], MX, topY, -1, { off: .46 }, eb);
+  sT[0] = block(pg[0], LW, wrap(TEXT.sis[0], tw), E0, ON[0], MX, topY, 1, { off: .50 }, eb);
+  sT[1] = block(pg[1], LW, wrap(TEXT.sis[1], tw), E0, ON[1], MX, topY, -1, { off: .50 }, eb);
   sT[2] = block(pg[2], LW, wrap(TEXT.sis[2], tw), E0, ON[2], MX, topY, 1, {}, eb);
   const E3 = .26, E4 = .32;
   sT[3] = block(pg[3], LW, wrap(TEXT.sis[3], (LW - 2 * MX) / E3 - .3), E3, ON[3], MX, topY, -1, {}, eb);
@@ -166,7 +166,9 @@ export default function (K) {
   const stopD = (arr, o = {}) => ({ face: FACE, pitch: 10, npitch: 9, px: pxD, pxN: pxN(17), yaw: -4, nyaw: -3, sx: 0, sy: -.06, nsx: 0, nsy: -.05, ...o, prints: arr });
   const keys = [{ w: 0, stop: S.head }];
   if (!N) {
-    S.l1 = stopD([sT[0], sT[1], sT[2]], { b: ON[2] + .03, pitch: 18, px: pxL, sy: LSY });
+    // Lesestelle 1 erst, wenn Seite 3 (Start TP[2], Dauer DP) ganz aufgeschlagen ist: bei b .39 stand sie mitten im Aufschlagen schräg vor dem Zitat
+    // auf Seite 3 und verdeckte es fast ganz (p 0,8013 in der Länge vom 22.10.); die Texte der Seiten 1 und 2 bleiben dafür bis b .50 stehen (off)
+    S.l1 = stopD([sT[0], sT[1], sT[2]], { b: TP[2] + DP + .015, pitch: 18, px: pxL, sy: LSY });
     S.l2 = stopD([sT[2], sT[3], sT[4], sQ], { b: ON[4] + .05, pitch: 18, px: pxL, sy: LSY, sx: .14 });
     S.w1 = stopD([bT[0], bT[1], bT[2]], { b: .81, sy: -.12, pitch: 15 });
     S.w2 = stopD([bT[2], bT[3], fT, aQ], { b: 1, sy: -.2, sx: .06, pitch: 15 });

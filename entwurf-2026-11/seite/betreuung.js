@@ -12,7 +12,7 @@
 //   Satz 2 „Ich halte Ihre Seite deshalb laufend aktuell und sehe regelmäßig nach, ob sie sauber läuft.“ in vier Zeilen auf dem Fuß der
 //   Vorderseite, unterhalb der umschlagenden Blätter (Lesestelle 2, nachdem der Flicken eingerastet ist).
 // Lesestellen: genau zwei, Uhr, dann Kalender.
-// Rot nur an der Lücke. Keine Ziffern, keine Daten, keine Jahreszahlen (nur Monatsnamen-Abkürzungen auf den Kalenderblättern).
+// Rot an der Lücke und sparsam bei den Sonntagen im Kalenderraster. Keine Jahreszahl (Kalenderblätter: Monatsname-Abkürzung, Raster der Tage 2026).
 // Kopie von entwurf-2026-11/betreuung/betreuung.js für die durchgehende Seite (entwurf-2026-11/seite/). Ergänzt: Bleistiftspur
 // (Raster und Gerüst hatte die Szene schon).
 
@@ -176,24 +176,43 @@ export default function (K) {
   F.part("blaetter", .5, .01);
   const NP = 6, PU0 = .1, PWc = CW - .2, PL = 1.3, PA = PI + 2 * AL - .06, PF0 = .75, PFS = .035, PFD = .05;
   const MON = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun"];
+  // Kalenderblatt (Hochformat PWc × PL, Ursprung oben links): Haken oben, darunter der Monatsname mit dem Haken des Nachsehens rechts daneben,
+  // darunter das Raster der Monatstage (Kopfzeile Mo bis So, Tageszahlen 2026, Sonntage in Rot). Jeder Monat nach echtem Kalender: Wochentag des Ersten
+  // und Länge des Monats kommen aus Date, bis zu sechs Zeilen.
+  const GRID = { x0: .17, x1: PWc - .17, yH: .565, y1: .64, dy: .1 };
   const pageBase = k => (x, W, H) => {
-    const s = W / PWc;
+    const s = W / PWc, fam = '"Schibsted Grotesk", sans-serif';
     x.fillStyle = ink(.8); x.fillRect(0, 0, W, .17 * s);
     x.fillStyle = "#ffffff"; for (const u of [.42, PWc - .42]) { x.beginPath(); x.arc(u * s, .085 * s, .035 * s, 0, 2 * Math.PI); x.fill(); }
     // Monatsname unter dem Haken (Abkürzung, keine Jahreszahl)
-    x.fillStyle = ink(.7); x.font = `600 ${.25 * s}px "Schibsted Grotesk", sans-serif`; x.textAlign = "center"; x.textBaseline = "alphabetic";
-    x.fillText(MON[k].toUpperCase(), PWc / 2 * s, 1.2 * s);
+    x.fillStyle = ink(.96); x.font = `700 ${.22 * s}px ${fam}`; x.textAlign = "left"; x.textBaseline = "alphabetic";
+    x.fillText(MON[k].toUpperCase(), GRID.x0 * s, .42 * s);
+    // Raster der Monatstage
+    const cw = (GRID.x1 - GRID.x0) / 7, lead = (new Date(2026, k, 1).getDay() + 6) % 7, nd = new Date(2026, k + 1, 0).getDate();
+    x.textAlign = "center";
+    x.fillStyle = ink(.3); x.fillRect(GRID.x0 * s, (GRID.yH + .035) * s, (GRID.x1 - GRID.x0) * s, .008 * s);
+    x.font = `600 ${.066 * s}px ${fam}`; if ("letterSpacing" in x) x.letterSpacing = (.012 * s) + "px";
+    ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"].forEach((d, i) => { x.fillStyle = i === 6 ? RED : ink(.66); x.fillText(d, (GRID.x0 + (i + .5) * cw) * s, GRID.yH * s); });
+    if ("letterSpacing" in x) x.letterSpacing = "0px";
+    x.font = `500 ${.09 * s}px ${fam}`;
+    for (let d = 1; d <= nd; d++) {
+      const c = (lead + d - 1) % 7, r = Math.floor((lead + d - 1) / 7);
+      x.fillStyle = c === 6 ? RED : ink(.9); x.fillText(String(d), (GRID.x0 + (c + .5) * cw) * s, (GRID.y1 + r * GRID.dy + .085) * s);
+    }
   };
+  // Haken des Nachsehens: rechts neben dem Monatsnamen
   const pageCheck = (x, W, H) => {
-    const s = W / PWc; x.strokeStyle = ink(.86); x.lineWidth = .075 * s; x.lineCap = "round"; x.lineJoin = "round";
-    const c = PWc / 2; x.beginPath(); x.moveTo((c - .36) * s, .62 * s); x.lineTo((c - .1) * s, .86 * s); x.lineTo((c + .36) * s, .34 * s); x.stroke();
+    const s = W / PWc; x.strokeStyle = ink(.86); x.lineWidth = .05 * s; x.lineCap = "round"; x.lineJoin = "round";
+    const c = PWc - .5; x.beginPath(); x.moveTo((c - .15) * s, .27 * s); x.lineTo((c - .04) * s, .37 * s); x.lineTo((c + .17) * s, .15 * s); x.stroke();
   };
   const pages = [];
   for (let k = 0; k < NP; k++) {
     const last = k === NP - 1, t0 = last ? 9 : PF0 + k * PFS;
     const pg = K.panel(cf, cf.uv(PU0, L), cf.uv(PU0 + PWc, L), [0, 1], t0, PFD, PA, { nocut: 1, nofold: 1, lv: cf.lvl + 2 * (NP - k), bounce: .03 });
     K.rect(pg, 0, 0, PWc, PL, PAGE, .5);
-    const base = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageBase(k), PWc, PL, .35, .03);
+    // Blatt k > 0 liegt unter Blatt k − 1: sein Druck erscheint erst, wenn das Blatt darüber umgeschlagen ist (vorher schien er durch das Papier
+    // darüber: Monatsnamen übereinander, „MAI“ verwaschen)
+    const base = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageBase(k), PWc, PL, k === 0 ? .35 : PF0 + (k - 1) * PFS + .6 * PFD, .02);
     const chk = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageCheck, PWc, PL, k === 0 ? .7 : PF0 + (k - 1) * PFS + .7 * PFD, .015);
     chk.mesh.renderOrder = 4;
     K.onPanel(pg, base, PWc / 2, PL / 2, 1, [0, -1], .001);
