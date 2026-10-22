@@ -350,8 +350,8 @@ export default function (K) {
   // Bewerbermanagement: die Reihenfolge, in der die Kabel vom Bildschirm kommen, bleibt bis zu den Buchsen gleich, daher kreuzt sich nichts), vor dem Gerät im
   // Bogen gerade auf die Buchse. Die Kurve beginnt beim ERP bei z 2,4, damit der ERP-Stecker bis z 2,32 zurückfahren kann. Die Kabel von WBG laufen später als
   // vordere Spuren darüber (Salesforce ganz vorn, Concludis in der Spur des Bewerbermanagements rechts von dessen Buchse).
-  const xvL = [-3.15, -3.35, -3.55];                          // Senkrechte Läufe am Bildschirmfuß: der Weiteste (Bewerbermanagement) liegt außen, so überschneiden sich die Kabel dort nicht
-  const SY = .36, SYB = BH + SY, LZL = [2.4, 2.8, 3.2], hyL = [.2, .2, .2], gzL = [2.4, 3.0, 3.6];
+  const xvL = [-3.3, -3.45, -3.6];                          // Senkrechte Läufe am Bildschirmfuß: der Weiteste (Bewerbermanagement) liegt außen, so überschneiden sich die Kabel dort nicht
+  const SY = .36, SYB = BH + SY, LZL = [2.4, 2.8, 3.2], hyL = [.2, .2, .2], gzL = [2.4, 2.8, 3.2];
   function path1(i, zEnd) {
     const xs = sockX(i, 0), ox = M1X, yL = BH + hyL[i], gz = gzL[i], LZ = LZL[i], bz = i === 1 ? .4 : .5, xv = xvL[i];
     return [V(ox + .2, .36, .05), V(ox + .3, .14, .35), V(xv, .04, .85), V(xv, .04, gz - .7), V(xv + .45, .05, gz), V(-2.4, .08, gz), V(-1.95, BH * .4 + .12, (gz + LZ) / 2), V(BX0 - .1, yL + .05, LZ),
@@ -411,6 +411,7 @@ export default function (K) {
   K.onPanel(board, K.decal(Math.round(LBW * 300), Math.round(LBH * 300), (x, W, H) => loginFace(x, W, H, LBW, LBH), LBW, LBH, TT.lg.decal), LBW / 2, LBH / 2, 1);
   // Bügel: eigenes Teil, rastet von oben in den Schlosskörper (Körper in der Tafel bei u = LBW - .74, v = LBH - .4 - 1.56 ... Mitte des Körpers)
   const SHW = .5, SHH = .5, shPr = K.decal(240, 240, shackleArt, SHW, SHH, TT.lg.decal), shG = new THREE.Group();
+  shPr.mesh.renderOrder = 2.5;                              // nach der Tafel zeichnen, sonst übermalt deren weiße Fläche den eingerasteten Bügel
   shG.add(shPr.mesh); K.add(shG);
   const lockU = LBW - .74, lockTop = LBH - 1.56 + 0;       // Oberkante des Körpers in v (die Zeichnung zählt von oben)
   F.attach(board, shG, board.uv(lockU, lockTop + SHH / 2 - .03), board.n, 1, .004);
@@ -456,10 +457,10 @@ export default function (K) {
   // a: nach dem Einstecken von CRM und Bewerbermanagement; b: Adapter ist eingerastet, Seite 2 steht; c: Portal, Drehteller und Login-Tafel stehen, Seite 3 steht
   const LOOK = V(0, 0, -1);
   const pxP = (W, H, s) => pxD(W, H) * s.e / .2, pxPN = (W, H, s) => 16 * Math.max(1, W / 390) * s.e / .2;
-  const pageStop = (pr, b, yaw) => frontStop(pr, { face: LOOK, b, px: pxP, pxN: pxPN, pitch: 22, yaw, nyaw: yaw, sx: 0, sy: -.34 });   // yaw: Blick fast senkrecht auf die Seite (Seiten stehen ±16° im Zickzack)
-  S.a = pageStop([prA], .345, 12);
-  S.b = pageStop([prB], .575, -12);
-  S.c = pageStop([prH, prC], .93, 12);
+  const pageStop = (pr, b, yaw) => frontStop(pr, { face: LOOK, b, px: pxP, pxN: pxPN, pitch: 22, yaw, nyaw: yaw, sx: 0, sy: -.34 });   // yaw 0 bei allen: kein Pendeln zwischen den Seiten (sie stehen ±16° im Zickzack)
+  S.a = pageStop([prA], .345, 0);
+  S.b = pageStop([prB], .575, 0);
+  S.c = pageStop([prH, prC], .93, 0);
   const OVX = (BX0 + BX1) / 2 - 1.2, GX = XC0 + 3.8;                // Mitte des Gesamtüberblicks (Desktop) bzw. der WBG-Gruppe (Handy)
   const stops = Object.values(S);
 
@@ -469,19 +470,13 @@ export default function (K) {
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .13 },
     stops,
     keys: [
+      // Eine ruhige Fahrt in eine Richtung: Titel, Satz a, Satz b, Satz c, dann der Überblick. Alle Lesestellen blicken gleich (yaw 0, pitch 22), keine Überblicke dazwischen.
       { w: 0, stop: S.h1 },
-      // Überblick über die Zeile: alle Bastellinien der ersten Hälfte stehen (el 40°, Abstand 22; Handy Abstand 46)
-      { w: 1.0, b: .115, cam: look(2.2, .3 + BH / 2, .5, 40, -3, 22), tgt: V(2.2, .3 + BH / 2, .5), camN: look(1.3, .3 + BH / 2, .5, 40, -3, 46), tgtN: V(1.3, .3 + BH / 2, .5) },
-      // Satz a, dann an der Zarge entlang zu Satz b (Brett steht, Geräte, Kabel, Adapter werden darüber sichtbar)
-      { w: 1.5, stop: S.a },
-      // der Adapter entsteht: Blick von weiter oben auf Geräte, Adapter und Kabelbündel (Abstand 20, nicht näher als beim Lesen der Sätze; Handy 28)
-      { w: 1.2, b: .445, cam: look(6.0, BH + .5, 1.0, 40, 0, 20), tgt: V(6.0, BH + .5, 1.0), camN: look(5.4, BH + .5, 1.0, 40, 0, 28), tgtN: V(5.4, BH + .5, 1.0) },
+      { w: 1.6, stop: S.a },
       { w: 1.6, stop: S.b },
-      // WBG Pooling baut sich auf: Überblick über Brett, Geräte und die WBG-Teile (nichts angeschnitten außer dem Brett; Handy Gruppe vor dem Brett)
-      { w: 1.2, b: .72, cam: look(OVX, 1.5, 0.5, 36, 0, 31), tgt: V(OVX, 1.5, .5), camN: look(GX, 1.5, 0.5, 38, 0, 34), tgtN: V(GX, 1.5, .5) },
-      { w: 1.3, stop: S.c },
-      // Schluss: alles steht, beide Kabel stecken
-      { w: 1.0, b: 1, cam: look(OVX, 1.5, 0.5, 36, 0, 31), tgt: V(OVX, 1.5, .5), camN: look(GX, 1.5, 0.5, 38, 0, 34), tgtN: V(GX, 1.5, .5) }
+      { w: 1.8, stop: S.c },
+      // Schluss: alles steht, beide Kabel stecken, der Bügel sitzt; die Kamera tritt von Lesestelle c geradeaus zurück (kein Schwenk zur Mitte)
+      { w: 1.2, b: 1, fromStop: S.c, back: 1.8, up: 1.8 }
     ]
   };
 }
