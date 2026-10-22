@@ -268,4 +268,12 @@ s = re.sub(r"\n{3,}", "\n\n", "\n".join(llms))
 open(wt + "/llms.txt", "w", encoding="utf-8", newline="\n").write(s)
 PY
 
+# ---------- g) Alte Entwürfe und KI-Spiegel der alten Seite raus (Erik, 22.10.2026) ----------
+# standalone/ (alte Entwürfe) und ai/ (Spiegel der alten Seite mit Preisen) fallen weg, der Spiegel-Workflow ebenso,
+# robots.txt verliert den Verweis auf /ai/manifest.json. Nur versionierte Pfade im Worktree, per git rm.
+for p in standalone ai .github/workflows/ai-readable-mirrors.yml; do
+    if [ -n "$(git -C "$WT" ls-files -- "$p")" ]; then git -C "$WT" rm -r -q -- "$p" && echo "entfernt: $p"; fi
+done
+sed -i '/^# AI-Manifest/d; /\/ai\/manifest\.json/d' "$WT/robots.txt"
+
 echo "Fertig. Worktree: $WT (nichts committet, nichts gepusht)."
