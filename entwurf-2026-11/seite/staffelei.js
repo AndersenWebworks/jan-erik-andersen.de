@@ -158,7 +158,7 @@ export default function (K, o = {}) {
   let head = null;
   if (o.heading !== false) {
     const he = N ? .5 : .42, w = K.measure(["Gestaltung"], { font: "marke" }).tw * he;
-    head = K.word(["Gestaltung"], he, -w / 2 + ox, (N ? 6.0 : 5.4) + oz, T(.004), D(.045), { font: "marke", clock: "b", foot: 1, imprint: IMPRINT });
+    head = K.word(["Gestaltung"], he, -w / 2 + ox, (N ? 6.0 : 5.4) + oz, T(.004), D(.045), { font: "marke", clock: "b", foot: 1, imprint: { ...IMPRINT, closeB: .01 } });
     head.off = T(.31);                                   // die Lettern blenden aus, bevor die Kamera auf Leseblick geht
   }
 
@@ -388,10 +388,10 @@ export default function (K, o = {}) {
   const viewDeck = N ? view : { ...view, bx: -.16 };
   const stopOf = (prints, b, v) => ({ prints, b: T(b), ...v });
   const S = {
-    g0: stopOf(deckTxt, STOPB[0], { ...lay(0, e1, viewDeck), pitch: 14, yaw: -4, npitch: 14, nyaw: -3 }),
-    g1: stopOf(sheetPrints[1].slice(0, 2), STOPB[1], { ...lay(1, eT, view), pitch: 14, yaw: -1, npitch: 14, nyaw: -1 }),
-    g2: stopOf(sheetPrints[2].slice(0, 2), STOPB[2], { ...lay(2, eT, view), pitch: 14, yaw: 1, npitch: 14, nyaw: .5 }),
-    g3: stopOf(sheetPrints[3].slice(0, 2), STOPB[3], { ...lay(3, eT, view), pitch: 14, yaw: 2.5, npitch: 14, nyaw: 1.5 })
+    g0: stopOf(deckTxt, STOPB[0], { ...lay(0, e1, viewDeck), pitch: 14, yaw: 0, npitch: 14, nyaw: 0 }),
+    g1: stopOf(sheetPrints[1].slice(0, 2), STOPB[1], { ...lay(1, eT, view), pitch: 14, yaw: 0, npitch: 14, nyaw: 0 }),
+    g2: stopOf(sheetPrints[2].slice(0, 2), STOPB[2], { ...lay(2, eT, view), pitch: 14, yaw: 0, npitch: 14, nyaw: 0 }),
+    g3: stopOf(sheetPrints[3].slice(0, 2), STOPB[3], { ...lay(3, eT, view), pitch: 14, yaw: 0, npitch: 14, nyaw: 0 })
   };
   const look = (tx, ty, tz, el, az, dist) => { const e = el * PI / 180, a = az * PI / 180; return P3(tx + dist * Math.cos(e) * Math.sin(a), ty + dist * Math.sin(e), tz + dist * Math.cos(e) * Math.cos(a)); };
   const tg = (x, y, z) => P3(x, y, z);
@@ -405,16 +405,16 @@ export default function (K, o = {}) {
     keys: [
       key(0, 0, [.8, .3, -1.6], 40, 0, 26, [.5, .3, -1.6], 30),
       key(.9, .2, [.8, 1.7, -.9], 30, 0, 22, [.5, 1.9, -.9], 27),
-      key(1, .45, [1.0, 2.5, -.7], 22, -4, 19.5, [.6, 2.7, -.7], 25),
+      key(1, .45, [1.0, 2.5, -.7], 22, 0, 19.5, [.6, 2.7, -.7], 25),
       { w: 1, stop: S.g0 },
-      // zwischen zwei Tafeln tritt die Kamera ruhig zurück und etwas höher, die nächste Tafel klappt ganz im Bild über die Klemme
-      { w: 1, b: T(FL[1].a + FL[1].d * .5), fromStop: S.g1, back: 1.4, up: .6 },
-      { w: 1, stop: S.g1 },
-      { w: 1, b: T(FL[2].a + FL[2].d * .5), fromStop: S.g2, back: 1.4, up: .6 },
-      { w: 1, stop: S.g2 },
-      { w: 1, b: T(FL[3].a + FL[3].d * .5), fromStop: S.g3, back: 1.4, up: .6 },
-      { w: 1, stop: S.g3 },
-      key(.9, 1, [.7, 2.6, -.3], 20, 5, 18.5, [.3, 2.8, -.3], 24)
+      // Kamera ruhig: von Stellung zu Stellung frontal, ohne Schwenk (Yaw 0) und ohne Zurücktreten zwischen den Tafeln (die Zwischenstellung steht nur 6 % vor der Lesestellung und gibt der Klappe Zeit); die nächste Tafel klappt im Lesebild über die Klemme
+      { w: 3, b: T(FL[1].a + FL[1].d * .5), fromStop: S.g1, back: 1.06, up: .1 },
+      { w: 2, stop: S.g1 },
+      { w: 3, b: T(FL[2].a + FL[2].d * .5), fromStop: S.g2, back: 1.06, up: .1 },
+      { w: 2, stop: S.g2 },
+      { w: 3, b: T(FL[3].a + FL[3].d * .5), fromStop: S.g3, back: 1.06, up: .1 },
+      { w: 2, stop: S.g3 },
+      key(.9, 1, [.7, 2.6, -.3], 20, 0, 18.5, [.3, 2.8, -.3], 24)
     ]
   };
 }
