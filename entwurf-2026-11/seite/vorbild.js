@@ -11,8 +11,11 @@
     var W = innerWidth, H = innerHeight;
     if (W < H) { v.style.removeProperty("--vf"); return; }
     var Wn = Math.min(.7 * W, 1000);
-    v.style.setProperty("--vf", Math.min(1 / (7.389 / Wn + .3 / H), .1587 * H).toFixed(2) + "px");
+    // 0,9817: gemessen (1440 × 900 und 2560 × 1440): die 3D-Marke steht um diesen Faktor kleiner als die Rechnung; so deckt das Vorbild die Marke bis auf 1 px
+    v.style.setProperty("--vf", (Math.min(1 / (7.389 / Wn + .3 / H), .1587 * H) * .9817).toFixed(2) + "px");
   }
+  // am Handy gehört die Unterzeile (Ortszeile) nicht zum Startbild: beim Laden steht nur der Name, die Ortszeile kommt mit dem Scrollen auf dem Podest
+  var pz = v.querySelector("p"); if (pz) pz.style.display = "none";
   groesse(); addEventListener("resize", groesse);
   if (mitten()) v.classList.add("weg");
   else addEventListener("load", function () { if (mitten()) v.classList.add("weg"); }, { once: true });

@@ -19,6 +19,16 @@ async function bilder() {
   }));
   return out;
 }
+// Kontaktblatt: Menüpunkt „Kontakt“ öffnet ein kleines Blatt mit Mail, Telefon und LinkedIn (schließt per Klick daneben, Esc oder erneut auf den Menüpunkt)
+{
+  const knopf = document.getElementById("kontaktknopf"), blatt = document.getElementById("kontaktblatt");
+  if (knopf && blatt) {
+    const setze = auf => { blatt.hidden = !auf; knopf.setAttribute("aria-expanded", String(auf)); };
+    knopf.addEventListener("click", ev => { ev.stopPropagation(); setze(blatt.hidden); });
+    document.addEventListener("click", ev => { if (!blatt.hidden && !blatt.contains(ev.target)) setze(false); });
+    document.addEventListener("keydown", ev => { if (ev.key === "Escape" && !blatt.hidden) { setze(false); knopf.focus(); } });
+  }
+}
 const canvas = document.getElementById("stage");
 let renderer = null;
 try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); if (!renderer.getContext()) renderer = null; } catch (e) { renderer = null; }

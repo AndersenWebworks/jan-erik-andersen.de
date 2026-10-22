@@ -35,7 +35,7 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .top { position: fixed; z-index: 2; inset: 0 0 auto 0; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 20px var(--pad); font: 500 13px/1.3 var(--sans); letter-spacing: .02em; }
 .top .mark { color: var(--ink); text-decoration: none; opacity: 0; transition: opacity .6s; }
 /* Lichthof um Marke und Navigation: Bauteile und Linien der Szenen laufen nie durch die Schrift */
-.top .mark, .top nav a { text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 10px #fff, 0 0 14px #fff; }
+.top .mark, .top nav a, .top nav .kontaktknopf { text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 10px #fff, 0 0 14px #fff; }
 /* Marke N4: Newsreader 380, Andersen kursiv 340, roter Schlusspunkt, gestrichelte Falz */
 .n4 { position: relative; display: inline-block; font-family: "Newsreader N4", Georgia, serif; font-weight: 380; font-style: normal; letter-spacing: -.018em; line-height: 1; white-space: nowrap; padding-bottom: .14em; }
 .n4 i { font-weight: 340; }
@@ -47,7 +47,17 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .scrolled .top .mark { opacity: 1; }
 .top nav { display: flex; gap: 22px; }
 .top nav a { color: var(--ink); text-decoration: none; }
-.top nav a:hover { color: var(--red); }
+.top nav a:hover, .top nav .kontaktknopf:hover, .top nav .kontaktknopf[aria-expanded="true"] { color: var(--red); }
+.top nav .kontaktknopf { appearance: none; background: none; border: 0; padding: 0; font: inherit; letter-spacing: inherit; color: var(--ink); cursor: pointer; }
+/* Kontaktblatt: kleines Papierblatt unter dem Menüpunkt, Mail, Telefon und LinkedIn */
+.kontaktblatt { position: fixed; z-index: 6; top: 54px; right: var(--pad); width: min(340px, calc(100vw - 2 * var(--pad))); padding: 18px 22px 16px; background: #faf8f3; border: 1px solid rgba(48,48,51,.5); border-radius: 2px; box-shadow: 0 10px 28px rgba(48,48,51,.14); }
+.kontaktblatt[hidden] { display: none; }
+.kontaktblatt h2 { font: 380 21px/1.15 "Newsreader N4", Georgia, serif; letter-spacing: -.012em; margin-bottom: 12px; }
+.kontaktblatt h2 i { font-weight: 340; }
+.kontaktblatt p { display: grid; grid-template-columns: 76px 1fr; align-items: baseline; padding: 6px 0; border-top: 1px solid rgba(48,48,51,.14); font: 500 15px/1.35 var(--sans); }
+.kontaktblatt p span { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.kontaktblatt a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--red); text-underline-offset: 3px; overflow-wrap: anywhere; }
+.kontaktblatt a:hover { color: var(--red); }
 
 /* Vorbild: der Name steht sofort, bis die Lettern im Bild aufgestanden sind. Lage und Größe wie im Startbild (Stufenkante = Bildmitte = Grundlinie):
    Schriftgröße am Desktop aus vorbild.js (--vf, gerechnet wie startD() in eroeffnung.js, Name höchstens 1000 px), am Handy 17vw (gerechnet:
@@ -115,12 +125,6 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 .nogl main.sr dd { font-size: 18px; margin: .1em 0 0; }
 .nogl main.sr footer { margin-top: 3em; font-size: 14px; color: var(--muted); }
 .nogl #stage, .nogl .controls, .nogl .hint, .nogl .track, .nogl .bar, .nogl .karte, .nogl .kartenhinweis { display: none; }
-/* Kontaktwege als echte Links: im Bild klickbar (Raycast), im Dokument als Links für Tastatur und Screenreader */
-.kontaktwege { position: fixed; z-index: 5; left: 0; bottom: 0; }
-.kontaktwege a { position: absolute; left: var(--pad); bottom: 78px; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; color: var(--ink); text-decoration: none; }
-.kontaktwege a:focus-visible { width: auto; height: auto; overflow: visible; clip: auto; background: #fff; border: 1px solid var(--ink); padding: 10px 14px; font: 500 15px/1.2 var(--sans); }
-.nogl .kontaktwege { position: static; padding: 0 var(--pad) 5rem; max-width: 42em; }
-.nogl .kontaktwege a { position: static; display: block; width: auto; height: auto; overflow: visible; clip: auto; padding: .35em 0; font-size: 18px; text-decoration: underline; text-underline-offset: 3px; }
 .nogl .draft { position: static; padding: 0 var(--pad) 2rem; }
 
 /* Rechtliche Links: dauerhaft, dezent am unteren Rand (3D-Ansicht), im Fallback am Ende der Seite */
@@ -148,8 +152,14 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 <svg id="karte" class="karte" role="group" aria-label="Übersicht der Seite: Parzellen anklicken" aria-hidden="true"></svg>
 <header class="top">
   <a class="mark n4" href="#start" data-scene="eroeffnung" aria-label="Jan-Erik Andersen"><span aria-hidden="true">Jan-Erik <i>Andersen</i><span class="dot"></span><span class="fold"></span></span></a>
-  <nav aria-label="Hauptnavigation"><a href="#arbeit" data-scene="gerwing">Projekte</a><a href="#leistungen" data-scene="betreuung">Leistungen</a><a href="#kontakt" data-scene="kontakt">Kontakt</a></nav>
+  <nav aria-label="Hauptnavigation"><a href="#arbeit" data-scene="gerwing">Projekte</a><a href="#leistungen" data-scene="betreuung">Leistungen</a><button type="button" class="kontaktknopf" id="kontaktknopf" aria-expanded="false" aria-controls="kontaktblatt">Kontakt</button></nav>
 </header>
+<div class="kontaktblatt" id="kontaktblatt" role="region" aria-label="Kontakt" hidden>
+  <h2>Schreiben Sie mir, <i>worum es geht.</i></h2>
+  <p><span>Mail</span><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a></p>
+  <p><span>Telefon</span><a href="tel:+4938733270015">+49 38733 270015</a></p>
+  <p><span>LinkedIn</span><a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">andersen-erik</a></p>
+</div>
 <div class="vorbild" aria-hidden="true"><span class="n4"><span class="zl">Jan-Erik </span><span class="zl"><i>Andersen</i><span class="dot"></span></span></span><p><span>Webentwicklung</span><span class="sep"> · </span><span>Raum Plau am See · remote</span></p></div>
 <script src="./vorbild.js"></script>
 <main class="sr">
@@ -225,13 +235,11 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
   </section>
   <section id="kontakt">
     <h2>Schreiben Sie mir, <i>worum es geht.</i></h2>
+    <p><a href="mailto:mail@andersen-webworks.de">Mail: mail@andersen-webworks.de</a></p>
+    <p><a href="tel:+4938733270015">Telefon: +49 38733 270015</a></p>
+    <p><a href="https://www.linkedin.com/in/andersen-erik/">LinkedIn: andersen-erik</a></p>
   </section>
 </main>
-<nav class="kontaktwege" aria-label="Kontakt">
-  <a href="mailto:mail@andersen-webworks.de">Mail: mail@andersen-webworks.de</a>
-  <a href="tel:+4938733270015">Telefon: +49 38733 270015</a>
-  <a href="https://www.linkedin.com/in/andersen-erik/">LinkedIn: andersen-erik</a>
-</nav>
 <div class="track"></div>
 <div class="hint" id="hint">Scrollen</div>
 <div class="controls">
@@ -242,7 +250,7 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 <p class="kartenhinweis" id="kartenhinweis" aria-hidden="true">Parzelle anklicken</p>
 <div class="draft"><b>Entwurf Seite</b><span id="szene" aria-hidden="true"></span></div>
 <div class="bar"><i id="bar"></i></div>
-<nav class="rechtlich" aria-label="Rechtliches"><a href="/de/impressum.html">Impressum</a><span aria-hidden="true">·</span><a href="/de/datenschutz.html">Datenschutz</a></nav>
+<nav class="rechtlich" aria-label="Kontakt und Rechtliches"><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a><span aria-hidden="true">·</span><a href="tel:+4938733270015">+49 38733 270015</a><span aria-hidden="true">·</span><a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">LinkedIn</a><span aria-hidden="true">·</span><a href="/de/impressum.html">Impressum</a><span aria-hidden="true">·</span><a href="/de/datenschutz.html">Datenschutz</a></nav>
 
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
 <script type="module" src="./main.js"></script>

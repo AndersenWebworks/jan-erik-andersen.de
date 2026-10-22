@@ -15,8 +15,10 @@ const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, close: .25, closeD
 // Podest (C): opt.par / opt.par2 sind die Deckflächen, auf deren Vorderkante die Zeilen stehen (zb / zb2 in deren Ruhelage).
 // Zweizeilig steht „Jan-Erik“ auf der hinteren, höheren Stufe; k1 gleicht aus, dass sie im Startbild weiter weg steht
 // (gleiche scheinbare Größe beider Zeilen). folds: Lage der Falzlinien, damit die Szene dieselbe Strichelung an der Stufenkante fortsetzt.
+// steht: true lässt die Lettern beim Laden fertig stehen (kein Aufstehen, keine Einblendung; sonst läge unter dem HTML-Vorbild eine zweite Animation)
 // falz: false lässt die gestrichelte Falzlinie weg (Podest: der Name steht fertig da, keine Linie unter den Lettern)
-export function wortmarke(K, { cx = 0, zb, narrow, par, zb2, par2, k1 = 1, falz = true }) {
+export function wortmarke(K, { cx = 0, zb, narrow, par, zb2, par2, k1 = 1, falz = true, steht = false }) {
+  const T = (a) => steht ? -5 : a, TD = (d) => steht ? .01 : d;
   const e = .95, RED = "#d40235", DOT = .085; // Punkt: Radius in em (Durchmesser 0,17 em)
   const up = { font: "marke", hi: 1 }, it = { font: "marke", italic: 1, hi: 1 };
   const w1 = K.measure(["Jan-Erik"], up).tw * e, w2 = K.measure(["Andersen"], it).tw * e;
@@ -25,23 +27,23 @@ export function wortmarke(K, { cx = 0, zb, narrow, par, zb2, par2, k1 = 1, falz 
   // grp: alle Drucke der Marke (Lettern, Abdrücke, Schlusspunkt) blenden im Kern gemeinsam aus, wenn sie den Rahmen verlassen: der Name steht ganz oder gar nicht
   const o = { foot: 1, imprint: IMPRINT, grp: "marke" };
   const fold = (len, ee = e) => ({ x0: -.06 * ee, len: len + .12 * ee, lw: .014 * ee, dash: .045 * ee, gap: .035 * ee, col: "#8f8a80" });
-  const dot = (x, z, t0, p) => K.word([""], e, x, z, t0, .7, { ...o, font: "marke", disc: DOT, col: RED, par: p });
+  const dot = (x, z, t0, p) => K.word([""], e, x, z, T(t0), TD(.7), { ...o, font: "marke", disc: DOT, col: RED, par: p });
   const folds = [];
   const fl = (x, z, p, f) => { folds.push({ x: x + f.x0, z, par: p, f }); return f; };
   let n1, n2, n3, front, tot;
   if (!narrow) {
     tot = w1 + sp + w2 + dw + dd;
     const x0 = cx - tot / 2;
-    n1 = K.word(["Jan-Erik"], e, x0, zb, .15, .85, { ...up, ...o, par, ...(falz ? { fold: fl(x0, zb, par, fold(tot)) } : {}) });
-    n2 = K.word(["Andersen"], e, x0 + w1 + sp, zb, .38, .85, { ...it, ...o, par });
+    n1 = K.word(["Jan-Erik"], e, x0, zb, T(.15), TD(.85), { ...up, ...o, par, ...(falz ? { fold: fl(x0, zb, par, fold(tot)) } : {}) });
+    n2 = K.word(["Andersen"], e, x0 + w1 + sp, zb, T(.38), TD(.85), { ...it, ...o, par });
     n3 = dot(x0 + w1 + sp + w2 + dw, zb, .5, par);
     front = zb;
   } else {
     // zweizeilig: Jan-Erik oben, darunter Andersen mit dem Punkt dahinter
     const e1 = e * k1, v1 = w1 * k1, l2 = w2 + dw + dd, xa = cx + .2 - l2 / 2, x1 = cx - .2 - v1 / 2;
     const z2 = zb2 !== undefined ? zb2 : zb + 1.35, p2 = par2 || par;
-    n1 = K.word(["Jan-Erik"], e1, x1, zb, .15, .85, { ...up, ...o, par, ...(falz ? { fold: fl(x1, zb, par, fold(v1, e1)) } : {}) });
-    n2 = K.word(["Andersen"], e, xa, z2, .38, .85, { ...it, ...o, par: p2, ...(falz ? { fold: fl(xa, z2, p2, fold(l2)) } : {}) });
+    n1 = K.word(["Jan-Erik"], e1, x1, zb, T(.15), TD(.85), { ...up, ...o, par, ...(falz ? { fold: fl(x1, zb, par, fold(v1, e1)) } : {}) });
+    n2 = K.word(["Andersen"], e, xa, z2, T(.38), TD(.85), { ...it, ...o, par: p2, ...(falz ? { fold: fl(xa, z2, p2, fold(l2)) } : {}) });
     n3 = dot(xa + w2 + dw, z2, .5, p2);
     front = z2; tot = Math.max(v1, l2) + .4;
   }

@@ -55,12 +55,6 @@ function pchip(xs, ys) {
     return (2 * t3 - 3 * t2 + 1) * ys[i] + (t3 - 2 * t2 + t) * h * m[i] + (-2 * t3 + 3 * t2) * ys[i + 1] + (t3 - t2) * h * m[i + 1];
   };
 }
-// kubische Hermite-Kurve: Punkte p0, p1, Tangenten m0, m1 (je Einheit s), s 0 … 1
-function hermite(p0, m0, p1, m1, s, out) {
-  const s2 = s * s, s3 = s2 * s, h00 = 2 * s3 - 3 * s2 + 1, h10 = s3 - 2 * s2 + s, h01 = -2 * s3 + 3 * s2, h11 = s3 - s2;
-  return out.set(0, 0, 0).addScaledVector(p0, h00).addScaledVector(m0, h10).addScaledVector(p1, h01).addScaledVector(m1, h11);
-}
-
 export function seite(renderer, SEQ, opt = {}) {
   const dbg = m => { if (typeof window !== "undefined" && window.__dbg) window.__dbg(m); };       // Diagnose (Hash "dbg"), siehe index.html
   dbg("Kern gestartet");
@@ -290,7 +284,6 @@ export function seite(renderer, SEQ, opt = {}) {
     for (const sh of sheets) if (sh.material.uniforms && sh.material.uniforms.uFar) sh.material.uniforms.uFar = { value: I.farS };
     buildThreadFor(I);
     I.boxes = partBoxes(I);
-    if (I.idx) I.apex = clearance(I);
     I.M.update(I.b0, 0); I.curB = I.b0; I.curT = 0;
     dbg("Szene " + (I.idx + 1) + " " + I.name + " gebaut");
     try { updateTable(); } catch (e) { mapFail(e); }
@@ -402,6 +395,18 @@ export function seite(renderer, SEQ, opt = {}) {
     const P = s.C.clone().addScaledVector(D, -depth / D.dot(Fw));
     return { cam: P, tgt: P.clone().addScaledVector(Fw, depth), px };
   }
+  // Bahn durch die Schlüssel ohne Überschwingen (statt Catmull-Rom von Ort und Ziel getrennt, deren Blickrichtung zwischen den Schlüsseln pendelte):
+  // Ort je Achse, Blickrichtung (Gier, Neigung) und Abstand (Logarithmus) monoton kubisch (pchip) durch die Schlüssel; zwischen zwei Schlüsseln
+  // kehrt keine dieser Größen ihre Richtung um, wenn sie es an den Schlüsseln nicht tut. t = 0 … 1 gleichmäßig über die Schlüssel.
+  function monoPath(cams, tgts) {
+    const n = cams.length, xs = cams.map((_, i) => i / (n - 1)), D = tgts.map((t, i) => t.clone().sub(cams[i]));
+    const yaw = []; D.forEach((d, i) => yaw.push(i ? yaw[i - 1] + wrapPi(yawOf(d) - yaw[i - 1]) : yawOf(d)));
+    const fx = pchip(xs, cams.map(c => c.x)), fy = pchip(xs, cams.map(c => c.y)), fz = pchip(xs, cams.map(c => c.z));
+    const fw = pchip(xs, yaw), fp = pchip(xs, D.map(pitchOf)), fl = pchip(xs, D.map(d => Math.log(Math.max(.01, d.length()))));
+    const cam = (t, out) => out.set(fx(t), fy(t), fz(t));
+    const tgt = (t, out) => { cam(t, out); return out.addScaledVector(dirAng(fw(t), fp(t), _c0), Math.exp(fl(t))); };
+    return { cam, tgt };
+  }
   function buildPath(I) {
     const def = I.def, k = aspect < 1.25 ? Math.pow(1.25 / aspect, .55) : 1, nar = aspect < 1;
     const cams = [], tgts = [];
@@ -414,8 +419,7 @@ export function seite(renderer, SEQ, opt = {}) {
       cams.push(key.tgt.clone().addScaledVector(off, k)); tgts.push(key.tgt.clone());
     }
     if (cams.length === 1) { cams.push(cams[0].clone()); tgts.push(tgts[0].clone()); }
-    I.camC = new THREE.CatmullRomCurve3(cams, false, "centripetal");
-    I.tgtC = new THREE.CatmullRomCurve3(tgts, false, "centripetal");
+    const mp = monoPath(cams, tgts); I.camC = { getPoint: mp.cam }; I.tgtC = { getPoint: mp.tgt };
     I.nK = def.keys.length;
     retime(I);
   }
@@ -564,26 +568,6 @@ export function seite(renderer, SEQ, opt = {}) {
     I.M.update(I.b0, 0);
     return out;
   }
-  // Fahrt in Szene B: so weit anheben, dass die Kamera über Bauteile von A und B mindestens 2 Einheiten hinweggeht
-  // (nur im mittleren Teil der Fahrt; an den Enden stehen die Stellungen der Szenen selbst)
-  function clearance(B) {
-    const A = INST[B.idx - 1]; if (!A || !A.boxes || !B.trIn) return 0;
-    const keep = B.apex; B.apex = 0;
-    const st = { kind: "t", i: B.idx, k: SEGS.indexOf(B.trIn), sg: B.trIn, q: 0 };
-    let need = 0; const c = V(), t = V();
-    const all = []; for (const X of INST) if (X.boxes && X.idx <= B.idx) all.push(...X.boxes);
-    for (let k = 1; k < 60; k++) {
-      st.q = k / 60; poseOf(st, c, t);
-      const bump = 16 * st.q * st.q * (1 - st.q) * (1 - st.q); if (bump < .25) continue;
-      for (const bx of all) {
-        if (c.x < bx.min.x - 1 || c.x > bx.max.x + 1 || c.z < bx.min.z - 1 || c.z > bx.max.z + 1) continue;
-        need = Math.max(need, (bx.max.y + 2 - c.y) / bump + ((B.trVel && B.trVel.lift) || 0));
-      }
-    }
-    B.apex = keep;
-    return Math.max(0, need);
-  }
-
   // ---------- Abschnitte der Seite: Szene, Übergang, Szene, … ----------
   // Längen in vh aus der Szenenfolge (cfg.len, cfg.tr), fest, damit #p-Werte schon vor dem Bau aller Szenen gelten
   function makeSegments() {
@@ -655,105 +639,131 @@ export function seite(renderer, SEQ, opt = {}) {
   const wrapPi = a => { a = (a + PI) % (2 * PI); if (a < 0) a += 2 * PI; return a - PI; };
   const yawOf = v => Math.atan2(v.x, -v.z), pitchOf = v => Math.atan2(-v.y, Math.hypot(v.x, v.z));
   const dirAng = (yaw, pitch, out) => out.set(Math.sin(yaw) * Math.cos(pitch), -Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch));
-  // Ableitung der Hermite-Kurve nach s (Fahrtrichtung)
-  function hermiteD(p0, m0, p1, m1, s, out) {
-    const s2 = s * s;
-    return out.set(0, 0, 0).addScaledVector(p0, 6 * s2 - 6 * s).addScaledVector(m0, 3 * s2 - 4 * s + 1).addScaledVector(p1, 6 * s - 6 * s2).addScaledVector(m1, 3 * s2 - 2 * s);
-  }
   const smoother = x => { x = clamp(x, 0, 1); return x * x * x * (x * (x * 6 - 15) + 10); };
-  const _d = V(), _c0 = V();
-  // Überblickspose eines Übergangs: Kamera, die die Inhalte (ext: Bogen und Bauteile) der verlassenen und der kommenden Parzelle gemeinsam mittig fasst;
-  // Neigung 42°, Blick quer zur Achse der beiden (A unten/B oben im Bild wäre schmal), Abstand per Projektion so, dass beide etwa 70 % des Rahmens füllen
-  const _fp = { cam: V(), yaw: 0, pitch: 0, dist: 1, fov: 36, set(f, dr) { this.cam.copy(f.cam).addScaledVector(f.shift, dr); this.yaw = f.yaw; this.pitch = f.pitch; this.dist = f.dist; this.fov = f.fov; return this; } };
-  const FLIGHT_FIT = .3;                                                // Anteil der Überblickspose (0 = nur die Bahn der Szenen, 1 = ganze Draufsicht) in der Mitte eines Flugs
-  const FIT = { pitch: 44, fov: 50, fovN: 62, w: .65, wN: .84, h: .85 };       // Überblick im Flug: Neigung, Sichtfeld, Anteil der Rahmenbreite (hochkant breiter)
-  function fitPair(A, B, chord, yaw0, yaw1) {
-    const pts = [];
-    for (const S of [A, B]) for (const x of [S.ext.min.x, S.ext.max.x]) for (const y of [S.ext.min.y, S.ext.max.y]) for (const z of [S.ext.min.z, S.ext.max.z]) pts.push(V(x, y, z).applyMatrix4(S.M4));
-    const bb = new THREE.Box3().setFromPoints(pts), ctr = bb.getCenter(V());
-    const cA = A.ext.getCenter(V()).applyMatrix4(A.M4), cB = B.ext.getCenter(V()).applyMatrix4(B.M4), ax = cB.clone().sub(cA).setY(0);
-    const yaw = yaw0 + wrapPi(yaw1 - yaw0) * .5;                  // Blickrichtung in der Mitte zwischen Anfang und Ende der Fahrt: die Drehung bleibt gleichmäßig
-    const pitch = FIT.pitch * PI / 180, fov = Math.max(narrow ? FIT.fovN : FIT.fov, (fovOf(A) + fovOf(B)) / 2), W = VW(), H = VH(), fwd = dirAng(yaw, pitch, V());
-    const tc = new THREE.PerspectiveCamera(fov, W / H, .1, 3000), c0 = ctr.clone();
-    const place = (c, d) => { tc.position.copy(c).addScaledVector(fwd, -d); tc.lookAt(c); tc.updateMatrixWorld(); tc.updateProjectionMatrix(); };
-    const box = () => { let a = 1e9, b = -1e9, c = 1e9, e = -1e9; for (const p of pts) { const v = p.clone().project(tc); a = Math.min(a, v.x); b = Math.max(b, v.x); c = Math.min(c, v.y); e = Math.max(e, v.y); } return [a, b, c, e]; };
-    // Rahmen wie die Lesestellen (oben 64 px, unten 70 px); Breite und Höhe der Inhalte höchstens 70 % des Rahmens
-    const fh = (H - 134) / H, fits = d => { place(c0, d); const [a, b, c, e] = box(); return (b - a) <= 2 * (narrow ? FIT.wN : FIT.w) && (e - c) <= 2 * fh * FIT.h; };
-    let d = 40;
-    for (let it = 0; it < 3; it++) {
-      let lo = 8, hi = 800; for (let k = 0; k < 30; k++) { const m = (lo + hi) / 2; if (fits(m)) hi = m; else lo = m; }
-      d = hi; place(c0, d); const [a, b, c, e] = box();
-      const ty = (64 - 70) / H, ox = (a + b) / 2, oy = (c + e) / 2 - ty, hh = d * Math.tan(fov * PI / 360), ww = hh * (W / H);
-      c0.addScaledVector(V().setFromMatrixColumn(tc.matrixWorld, 0), ox * ww).addScaledVector(V().setFromMatrixColumn(tc.matrixWorld, 1), oy * hh);
+  const _c0 = V();
+  // ---------- Verfolgungsfahrt zwischen den Szenen ----------
+  // Zwischen zwei Szenen läuft der rote Punkt am Faden von der verlassenen zur kommenden Parzelle (Teil des Fadens der Szene, falls er erst im Übergang
+  // gezeichnet wird, danach die Brücke), gleichmäßig nach Bogenlänge an den Scrollweg des Flugs gebunden (linkTimes). Die Kamera folgt ihm nah und flach:
+  // auf dem Faden hinter und über dem Punkt (nie über ihm, auch nicht in Haarnadeln), Blick auf die Stelle vor ihm. Position und Blickpunkt folgen dieser
+  // Idealstellung wie kritisch gedämpfte Federn (Zeitkonstante in vh Scrollweg), gerechnet über die Bogenlänge vorab als Spur, damit die Stellung bei jedem
+  // p gilt; sie starten an der letzten Stellung der verlassenen Szene. Eine weiche Nachführung hält den Punkt im Bild, die Höhe weicht Bauteilen aus.
+  // Im letzten Teil blendet die Spur zur ersten Stellung der kommenden Szene (Winkel und Logarithmus des Abstands, kein Schnitt, kein Knick).
+  const CHASE = { back: 8.5, hgt: 3.2, ahead: 12, tauC: 14, tauT: 12 };
+  const CHASE_N = { back: 9.5, hgt: 3.8, ahead: 15, tauC: 14, tauT: 12 };       // hochkant: etwas weiter zurück, Blick weiter voraus
+  const CHASE_MAXH = 14;                                                // höchste Kamerahöhe der Verfolgung (Sicht über Bauteile)
+  const CHASE_END = .3;                                                 // letzter Anteil des Flugs: Blende zur ersten Stellung der kommenden Szene
+  const threadPieces = B => pieces.filter(pc => pc.time.tr === B.idx);
+  // Zeitfenster der Fadenstücke eines Übergangs nach Bogenlänge (gleichmäßige Geschwindigkeit des Punktes über den ganzen Flug).
+  // Stücke der verlassenen Szene, die am Ende ihrer Bahn noch nicht fertig gezeichnet sind (b läuft im Übergang weiter), laufen in den Übergang hinein
+  // (time.k0: Anteil bei Beginn, time.lin0: Verlauf in der Szene selbst), sonst spränge der Punkt beim Losfahren auf das Stück des Übergangs
+  function linkTimes(B) {
+    const A = INST[B.idx - 1];
+    if (A && A.built) {
+      let end = null;
+      for (const pc of pieces) {
+        const tm = pc.time; if (tm.I !== A || tm.tr !== undefined || tm.b1 <= A.bLast + 1e-6) continue;
+        if (end && pc.curve.getPointAt(0).distanceTo(end) > .5) break;
+        const w0 = win(A.bLast, tm.b0, Math.max(1e-4, tm.b1 - tm.b0));
+        tm.lin0 = !!tm.lin; tm.k0 = tm.lin ? w0 : sm(w0); tm.tr = B.idx; tm.s0 = 0; tm.s1 = 1; end = pc.curve.getPointAt(1);
+      }
     }
-    return { tgt: c0.clone(), cam: c0.clone().addScaledVector(fwd, -d), fov, yaw, pitch, dist: d, shift: cB.clone().sub(cA).setY(0) };
+    const pcs = threadPieces(B); if (!pcs.length) return;
+    const len = pcs.map(pc => pc.curve.getLength() * (1 - (pc.time.k0 || 0))), tot = len.reduce((a, b) => a + b, 0); if (tot < 1e-3) return;
+    let a = 0; pcs.forEach((pc, i) => { pc.time.s0 = a / tot; a += len[i]; pc.time.s1 = a / tot; pc.time.lin = true; });
   }
+  // Weg des Punktes im Übergang als Polygonzug
+  function dotPath(A, B) {
+    const pts = [];
+    for (const pc of threadPieces(B)) {
+      const k0 = pc.time.k0 || 0, L = pc.curve.getLength() * (1 - k0), n = Math.max(8, Math.ceil(L * 4));
+      for (let i = 0; i <= n; i++) { const r = pc.curve.getPointAt(k0 + (1 - k0) * i / n); if (r.y < THREAD_Y) r.y = THREAD_Y; if (!pts.length || r.distanceTo(pts[pts.length - 1]) > 1e-4) pts.push(r); }
+    }
+    if (pts.length < 2) { pts.length = 0; pts.push(A.exit ? A.exit.clone() : V(), B.entry ? B.entry.clone() : V(1, 0, 1)); }
+    return pts;
+  }
+  function mixPose(c0, t0, c1, t1, w, cOut, tOut) {
+    const D0 = t0.clone().sub(c0), D1 = t1.clone().sub(c1), y0 = yawOf(D0), p0 = pitchOf(D0), d0 = Math.max(.5, D0.length()), d1 = Math.max(.5, D1.length());
+    cOut.copy(c0).lerp(c1, w);
+    // zuerst dreht sich der Blick (flach, Gier), dann erst neigt er sich (steil gerechnet wird die Gierrichtung unruhig)
+    dirAng(y0 + wrapPi(yawOf(D1) - y0) * smoother(w * 1.6), p0 + (pitchOf(D1) - p0) * smoother((w - .4) / .6), _c0);
+    tOut.copy(cOut).addScaledVector(_c0, Math.exp(Math.log(d0) + (Math.log(d1) - Math.log(d0)) * w));
+  }
+  function chaseTrack(A, B) {
+    const K = narrow ? CHASE_N : CHASE, pts = dotPath(A, B), cum = [0];
+    for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + pts[i].distanceTo(pts[i - 1]));
+    const L = Math.max(1e-3, cum[cum.length - 1]);
+    // Punkt bei Bogenlänge s; vor dem Anfang und hinter dem Ende geradeaus in Richtung des ersten bzw. letzten Stücks verlängert
+    const last = pts.length - 1, f0 = V(), f1 = V();
+    { let j = 1; while (j < last && cum[j] < .5) j++; f0.copy(pts[j]).sub(pts[0]).setY(0).normalize(); j = last - 1; while (j > 0 && L - cum[j] < .5) j--; f1.copy(pts[last]).sub(pts[j]).setY(0).normalize(); }
+    const at = (s, out) => {
+      if (s <= 0) return out.copy(pts[0]).addScaledVector(f0, s);
+      if (s >= L) return out.copy(pts[last]).addScaledVector(f1, s - L);
+      let lo = 0, hi = last; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (cum[m] <= s) lo = m; else hi = m; }
+      return out.copy(pts[lo]).lerp(pts[hi], (s - cum[lo]) / Math.max(1e-9, cum[hi] - cum[lo]));
+    };
+    const n = Math.round(clamp(L * 6, 90, 900)), ds = L / n, sub = 4, hs = ds / sub;
+    const P1 = B.camStart.clone().applyMatrix4(B.M4), T1 = B.tgtStart.clone().applyMatrix4(B.M4);
+    const c = A.camEnd.clone().applyMatrix4(A.M4), t = A.tgtEnd.clone().applyMatrix4(A.M4), cv = V(), tv = V();
+    const cams = [], tgts = [], D = V(), a = V(), b = V(), ci = V(), ti = V();
+    const vh = Math.max(1, B.trIn.v1 - B.trIn.v0), upv = L / vh;                      // Einheiten Bogenlänge je vh Scrollweg
+    const wc = 1 / (K.tauC * upv), wt = 1 / (K.tauT * upv);                         // Zeitkonstanten in vh Scrollweg
+    // Mindesthöhe der Kamera über Bauteilen der Parzellen (Kamera nie in einem Bauteil): je Stelle des Weges die Oberkante der Bauteile unter der Kamera plus Abstand,
+    // über ein Fenster vor und hinter der Stelle aufgeweitet, damit die gedämpfte Kamera schon vor dem Bauteil steigt und erst danach sinkt
+    const need = new Float32Array(n + 1), boxes = []; for (const X of INST) if (X.boxes) boxes.push(...X.boxes);
+    for (let j = 0; j <= n; j++) {
+      at(j * ds - K.back, ci); let m = 0;
+      for (const bx of boxes) if (ci.x > bx.min.x - 1.5 && ci.x < bx.max.x + 1.5 && ci.z > bx.min.z - 1.5 && ci.z < bx.max.z + 1.5) m = Math.max(m, bx.max.y + 1.8);
+      // Sicht auf den Punkt: steht ein Bauteil zwischen der Idealkamera und dem Punkt, muss die Kamera so hoch stehen, dass der Blick über seine Oberkante geht
+      at(j * ds, D);
+      for (const bx of boxes) {
+        if (bx.max.y < D.y + .1) continue;
+        let t0 = 0, t1 = 1, ok = true;
+        for (const ax of ["x", "z"]) {
+          const d = ci[ax] - D[ax];
+          if (Math.abs(d) < 1e-9) { if (D[ax] < bx.min[ax] || D[ax] > bx.max[ax]) ok = false; continue; }
+          const u = (bx.min[ax] - D[ax]) / d, w = (bx.max[ax] - D[ax]) / d; t0 = Math.max(t0, Math.min(u, w)); t1 = Math.min(t1, Math.max(u, w));
+        }
+        if (ok && t0 > 1e-3 && t0 < t1) m = Math.max(m, Math.min(CHASE_MAXH, D.y + (bx.max.y + .4 - D.y) / t0));
+      }
+      need[j] = m;
+    }
+    const hw = Math.ceil(Math.max(K.back, 3 * K.tauC * upv) / ds), hmin = new Float32Array(n + 1);
+    for (let j = 0; j <= n; j++) { let m = 0; for (let i = Math.max(0, j - hw); i <= Math.min(n, j + hw); i++) m = Math.max(m, need[i]); hmin[j] = m; }
+    for (let j = 0; j <= n; j++) {
+      // Idealstellung auf dem Faden: Kamera um K.back hinter dem Punkt auf dem Weg (nie über ihm, auch nicht in Haarnadeln), Blick auf die Stelle K.ahead davor
+      const s = j * ds; at(s, D); at(s - K.back, ci); ci.y = Math.max(D.y + K.hgt, hmin[j]); at(s + K.ahead, ti); ti.y = D.y + .2;
+      // Der Punkt bleibt im Bild (unteres Drittel bis Mitte): läuft die gedämpfte Blickrichtung zu weit hinter ihm her, wird sie weich (tanh) so nachgeführt,
+      // dass er höchstens bis zu einer Grenze aus der Mitte wandert (Gier 45 % der halben Bildbreite, Neigung zwischen etwa 8 % und 68 % der halben Bildhöhe)
+      const hV = (fovOf(A) + (fovOf(B) - fovOf(A)) * sm(j / n)) * PI / 360, hH = Math.atan(Math.tan(hV) * aspect), ly = .45 * hH, lp = .3 * hV, cp = .38 * hV;
+      a.copy(t).sub(c); b.copy(D).sub(c);
+      const dl = Math.max(.5, a.length()), yd = yawOf(b), pd = pitchOf(b), ey = wrapPi(yd - yawOf(a)), ep = pd - pitchOf(a);
+      // (die Gier-Nachführung entfällt, wenn der Punkt fast senkrecht unter der Kamera liegt: dort ist seine Richtung unbestimmt)
+      const wk = smoother(win(s / L, 0, .2));                           // am Anfang gilt noch die Stellung der verlassenen Szene (kein Sprung), dann greift die Nachführung
+      dirAng(yd - (ey + (ly * Math.tanh(ey / ly) - ey) * wk * (1 - smoother(win(pd, 1, .5)))), pd - (ep + (cp + lp * Math.tanh((ep - cp) / lp) - ep) * wk), a);
+      cams.push(c.clone()); tgts.push(c.clone().addScaledVector(a, dl));
+      for (let k = 0; k < sub; k++) {
+        cv.addScaledVector(_nn.copy(ci).sub(c).multiplyScalar(wc * wc), hs).multiplyScalar(1 - 2 * wc * hs); c.addScaledVector(cv, hs);
+        tv.addScaledVector(_nn.copy(ti).sub(t).multiplyScalar(wt * wt), hs).multiplyScalar(1 - 2 * wt * hs); t.addScaledVector(tv, hs);
+      }
+    }
+    return { cams, tgts, n, L, P1, T1 };
+  }
+  // Catmull-Rom durch vier Stützwerte
+  const cr = (p0, p1, p2, p3, u, out) => out.set(0, 0, 0).addScaledVector(p0, -.5 * u + u * u - .5 * u * u * u).addScaledVector(p1, 1 - 2.5 * u * u + 1.5 * u * u * u).addScaledVector(p2, .5 * u + 2 * u * u - 1.5 * u * u * u).addScaledVector(p3, -.5 * u * u + .5 * u * u * u);
   function poseOf(st, cam, tgt) {
     const I = INST[st.i];
     if (st.kind === "b") { localPose(I, st.q, cam, tgt); cam.applyMatrix4(I.M4); tgt.applyMatrix4(I.M4); return fovOf(I); }
     // nach der letzten Szene (Schluss-Zoom, Karte): die Kamera startet an der letzten Stellung der letzten Szene, die Karte blendet kern (blendMap)
     if (st.kind === "z") { localPose(I, 1, cam, tgt); cam.applyMatrix4(I.M4); tgt.applyMatrix4(I.M4); return fovOf(I); }
-    const A = INST[st.i - 1], B = I, tr = B.trIn, Lt = tr.p1 - tr.p0;
-    const d = 1e-3;
-    const turn = Math.abs(B.rot - A.rot) > 1e-6 && !!B.arc;
-    const toW = (S, v) => v.clone().applyMatrix4(S.M4);
-    // Enden und Geschwindigkeiten (je Einheit p der ganzen Seite) aus den Bahnen der beiden Szenen, in Weltrichtung
-    const vel = (S, q0, q1) => { const a = V(), at = V(), b = V(), bt = V(); localPose(S, q0, a, at); localPose(S, q1, b, bt); a.applyMatrix4(S.M4); at.applyMatrix4(S.M4); b.applyMatrix4(S.M4); bt.applyMatrix4(S.M4); const k = Lt / ((S.body.p1 - S.body.p0) * (q1 - q0)); return [b.sub(a).multiplyScalar(k), bt.sub(at).multiplyScalar(k)]; };
-    const P0 = toW(A, A.camEnd), T0 = toW(A, A.tgtEnd), P1 = toW(B, B.camStart), T1 = toW(B, B.tgtStart);
-    if (!B.trVel || B.trVelKey !== aspect) {
-      const [m0, n0] = vel(A, 1 - d, 1), [m1, n1] = vel(B, 0, d), ch = P1.clone().sub(P0);
-      if (!turn) {
-        // Tangenten zähmen: nichts gegen die Fahrtrichtung (sonst schlägt die Kurve eine Schleife oder taucht unter den Bogen),
-        // höchstens 0,6 der Sehne. Wo gezähmt wird, ändert sich die Richtung an der Szenengrenze ein wenig (Geschwindigkeit dort klein:
-        // Anfang und Ende jeder Szene sind langsam)
-        const tame = (m, c) => { const L = c.length(), u = c.clone().normalize(), a = m.dot(u); if (a < 0) m.addScaledVector(u, -a); if (m.length() > .6 * L) m.setLength(.6 * L); return m; };
-        tame(m0, ch); tame(m1, ch); tame(n0, T1.clone().sub(T0)); tame(n1, T1.clone().sub(T0));
-        B.trVel = { m0, n0, m1, n1, lift: 0 };
-      } else {
-        // Kurve: Viertelbogen aus A hinaus (Länge f in Blickrichtung von A) und in B hinein (Länge s in Blickrichtung von B); Blick folgt der Fahrtrichtung
-        const hA = headOf(A), hB = headOf(B), f = Math.max(2, ch.dot(hA)), s = Math.max(2, ch.dot(hB));
-        m0.x = hA.x * 1.657 * f; m0.z = hA.z * 1.657 * f; m1.x = hB.x * 1.657 * s; m1.z = hB.z * 1.657 * s;
-        const my = 1.2 * Math.abs(ch.y); m0.y = clamp(m0.y, -my, my); m1.y = clamp(m1.y, -my, my);
-        const D0 = T0.clone().sub(P0), D1 = T1.clone().sub(P1), psi0 = yawOf(hA), psi1 = psi0 + wrapPi(yawOf(hB) - psi0);
-        const y0 = yawOf(D0), y1 = yawOf(D1);
-        B.trVel = { m0, n0, m1, n1, lift: 0, psi0, psi1,
-          off0: wrapPi(y0 - psi0), off1: wrapPi(y1 - psi1), p0: pitchOf(D0), p1: pitchOf(D1), d0: D0.length(), d1: D1.length() };
-        // Bogenlänge: die Fahrt läuft gleichmäßig auf dem Bogen (Hermite-Parameter allein bündelt die Drehung am engen Ende)
-        const cum = new Float32Array(65), a0 = V(), a1 = V(); hermite(P0, m0, P1, m1, 0, a0);
-        for (let k = 1; k <= 64; k++) { hermite(P0, m0, P1, m1, k / 64, a1); cum[k] = cum[k - 1] + a1.distanceTo(a0); a0.copy(a1); }
-        B.trVel.cum = cum;
-      }
-      // Überblick in jedem Übergang: in der Mitte steht die Kamera so (Neigung 42°, Blick quer zur Achse der beiden Parzellen), dass die Inhalte der
-      // verlassenen und der kommenden Parzelle (ext: Bogen und Bauteile) zusammen mittig etwa 70 % der Bildbreite einnehmen (fitPair); dorthin blendet der Flug
-      const tvn = B.trVel; tvn.cA = A.ext.getCenter(V()).applyMatrix4(A.M4); tvn.cB = B.ext.getCenter(V()).applyMatrix4(B.M4);
-      tvn.lift = 0; tvn.back = 0; tvn.fit = fitPair(A, B, P1.clone().sub(P0), yawOf(T0.clone().sub(P0)), yawOf(T1.clone().sub(P1)));
-      B.trVelKey = aspect;
-    }
-    // Kurven: sanfter Anlauf und Auslauf (Tempo am Rand 60 %, in der Mitte 140 % des mittleren), sonst springt das Tempo an der Szenengrenze
-    const tv = B.trVel;
-    let q = turn ? st.q - .4 * Math.sin(2 * PI * st.q) / (2 * PI) : st.q;
-    if (turn && tv.cum) {                                                // Anteil der Bogenlänge → Hermite-Parameter
-      const cum = tv.cum, target = q * cum[64]; let lo = 0, hi = 64; while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (cum[mid] <= target) lo = mid; else hi = mid; }
-      q = (lo + (target - cum[lo]) / Math.max(1e-6, cum[hi] - cum[lo])) / 64;
-    }
-    const q16 = 16 * q * q * (1 - q) * (1 - q);
-    hermite(P0, tv.m0, P1, tv.m1, q, cam);
-    if (!turn) hermite(T0, tv.n0, T1, tv.n1, q, tgt);
-    else {
-      // Blick: Fahrtrichtung der Bahn plus der Versatz der beiden Enden; Neigung und Abstand vergrößern sich über der Mitte (Blick auf den Tisch)
-      hermiteD(P0, tv.m0, P1, tv.m1, q, _d);
-      const psi = tv.psi0 + wrapPi(yawOf(_d) - tv.psi0), e = smoother(q), bump = 4 * q * (1 - q);
-      const yaw = psi + tv.off0 + (tv.off1 - tv.off0) * e, pitch = tv.p0 + (tv.p1 - tv.p0) * e + .2 * bump, dist = (tv.d0 + (tv.d1 - tv.d0) * e) * (1 + .5 * bump);
-      dirAng(yaw, pitch, _c0); tgt.copy(cam).addScaledVector(_c0, dist);
-    }
-    // Überblick: Plateau in der Mitte (Anteil wFit), sonst die Bahn der Szenen; Kamera, Ziel und Sichtfeld blenden zur Überblickspose
-    // Die Überblickspose wandert dabei langsam von der verlassenen zur kommenden Parzelle (±12 % ihres Abstands), die Fahrt steht nie
-    // Der Flug bleibt nah und flach (Erik: „kein harter Wechsel in die Draufsicht, primär smooth“): höchstens FLIGHT_FIT der Überblickspose,
-    // in einer Glockenkurve (stetig mit stetiger Ableitung an beiden Enden, sin²), die Nachbarparzelle deutet sich am Rand an
-    const fit = tv.fit, wFit = FLIGHT_FIT * Math.pow(Math.sin(PI * st.q), 2), dr = .12 * (2 * st.q - 1);
-    const fovP = fovOf(A) + (fovOf(B) - fovOf(A)) * sm(st.q);
-    const ap = Math.max(B.cfg.apex || 0, B.apex || 0); if (ap) cam.y += ap * q16;   // Mindesthöhe über Bauteilen (clearance), ohne Knick an den Enden
-    return wFit > 0 ? blendPose(cam, tgt, fovP, _fp.set(fit, dr), wFit) : fovP;
+    const A = INST[st.i - 1], B = I;
+    if (!B.trVel || B.trVelKey !== aspect) { B.trVel = chaseTrack(A, B); B.trVelKey = aspect; }
+    const tr = B.trVel, q = clamp(st.q, 0, 1), u = q * tr.n, i = Math.min(tr.n - 1, Math.floor(u)), f = u - i, g = k => clamp(k, 0, tr.n);
+    cr(tr.cams[g(i - 1)], tr.cams[i], tr.cams[i + 1], tr.cams[g(i + 2)], f, cam);
+    cr(tr.tgts[g(i - 1)], tr.tgts[i], tr.tgts[i + 1], tr.tgts[g(i + 2)], f, tgt);
+    const wo = smoother(win(q, 1 - CHASE_END, CHASE_END));
+    if (wo > 0) mixPose(cam.clone(), tgt.clone(), tr.P1, tr.T1, wo, cam, tgt);
+    const fovP = fovOf(A) + (fovOf(B) - fovOf(A)) * sm(q);
+    return fovP;
   }
 
   // ---------- Roter Faden ----------
@@ -860,6 +870,7 @@ export function seite(renderer, SEQ, opt = {}) {
     } else if (I.entry && I.exit) {
       addPiece(I, [I.entry, ...(f.via || []).map(a => wpt(I, a)), I.exit], { tr: I.idx + 1, s0: 0, s1: .3 });
     }
+    linkTimes(I);       // Punkt im Übergang in diese Szene: gleichmäßig nach Bogenlänge über den ganzen Flug
   }
   function updateThread(st) {
     let last = null;
@@ -872,7 +883,8 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     for (const pc of pieces) {
       const tm = pc.time; let k;
-      if (tm.tr !== undefined) k = tm.tr >= INST.length ? 0 : sm(win(sInto(tm.tr, st), tm.s0, tm.s1 - tm.s0));
+      if (tm.k0 !== undefined && sInto(tm.tr, st) <= 0) { const w0 = win(bOf(tm.I, st), tm.b0, Math.max(1e-4, tm.b1 - tm.b0)); k = tm.lin0 ? w0 : sm(w0); }     // noch in der Szene
+      else if (tm.tr !== undefined) { const w = win(sInto(tm.tr, st), tm.s0, tm.s1 - tm.s0); k = tm.tr >= INST.length ? 0 : (tm.k0 || 0) + (1 - (tm.k0 || 0)) * (tm.lin ? w : sm(w)); }
       else { const b = bOf(tm.I, st), w0 = win(b, tm.b0, Math.max(1e-4, tm.b1 - tm.b0)); k = tm.lin ? w0 : sm(w0); }
       pc.mesh.visible = k > 0;
       pc.g.setDrawRange(0, Math.floor(k * pc.N) * 6);
@@ -1141,16 +1153,10 @@ export function seite(renderer, SEQ, opt = {}) {
     const hz = smoother(win(M, 0, .5)); FAR.set(70 + 830 * hz, 140 + 1660 * hz);
     const nearV = .1 + 2.9 * smoother(win(M, .1, .6));
     if (camera.fov !== fov || camera.near !== nearV || camera.far !== 1500) { camera.fov = fov; camera.near = nearV; camera.far = 1500; camera.updateProjectionMatrix(); }
-    if (!opts.still && M < 1) {
-      // zwischen den Szenen atmet die Kamera ruhig; an Lesestellen steht sie ganz still (die Schrift soll das Auge fixieren können,
-      // auf großen Monitoren wandert sie sonst um Subpixel). Travel ist dort nur im Scheitelpunkt 0, daher eine weiche Schwelle:
-      // unter .15 (rund ±0,4 Glockenbreiten um die Stelle) kein Atem, ab .65 voll, dazwischen weich, ohne Ruck beim Losfahren
-      const tv = st.kind === "b" ? sm((INST[st.i].def.travel(INST[st.i].def.uOfP(st.q)) - .15) / .5) : 1;
-      const sway = clamp(camera.position.distanceTo(_t) / 20, .1, .8) * tv * (1 - M);
-      camera.position.x += (Math.sin(time * .23) * .08 + Math.sin(time * .07) * .05) * sway;
-      camera.position.y += Math.sin(time * .19 + 1) * .03 * sway;
-    }
+    // Kein Atem: die Kamera bewegt sich nur, wenn gescrollt wird (Erik: „sinnloses Kamerageeier“)
     camera.lookAt(_t);
+    // Haarkante des Tisches (Rand des gemeinsamen Bogens) liegt in Startblickhöhe als Linie auf dem Horizont durch die Grundlinie der Marke: erst ab Blickhöhe 2,5 sichtbar
+    if (table) table.body.children[0].visible = camera.position.y > 2.5;
     camera.updateMatrixWorld();
     const cw = VW(), ch = VH();
     for (const I of visible) {
@@ -1203,7 +1209,7 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     for (const I of visible) I.fadeReady = true;
     // Haarkanten der Bögen (LineBasicMaterial, ohne eigenen Shader) folgen dem Dunst ihrer Szene
-    for (const I of visible) for (const sh of I.sheets) { const e = sh.children[0]; if (e && e.material) { _pp.setFromMatrixPosition(sh.matrixWorld); e.material.opacity = .32 * (1 - sm((camera.position.distanceTo(_pp) - I.farS.x) / Math.max(1, I.farS.y - I.farS.x))); } }
+    for (const I of visible) for (const sh of I.sheets) { const e = sh.children[0]; if (e && e.material) { _pp.setFromMatrixPosition(sh.matrixWorld); e.material.opacity = (camera.position.y > 2.5 ? .32 : 0) * (1 - sm((camera.position.distanceTo(_pp) - I.farS.x) / Math.max(1, I.farS.y - I.farS.x))); } }
     updateThread(st);
     try { updateCards(M, M > .92); } catch (e) { mapFail(e); }
     state = st;
@@ -1334,7 +1340,6 @@ export function seite(renderer, SEQ, opt = {}) {
     camera.aspect = aspect; camera.updateProjectionMatrix();
     // Lesestellungen hängen von der Fenstergröße ab: Bahnen neu (Lage der Szenen bleibt)
     for (const I of INST) if (I.built) { buildPath(I); const c = V(), t = V(); localPose(I, 0, c, t); I.camStart = c.clone(); I.tgtStart = t.clone(); localPose(I, 1, c, t); I.camEnd = c.clone(); I.tgtEnd = t.clone(); I.trVel = null; }
-    for (const I of INST) if (I.built && I.idx) I.apex = clearance(I);
   }
 
   // ---------- Aufbau ----------
@@ -1390,7 +1395,11 @@ export function seite(renderer, SEQ, opt = {}) {
     applyState(st, now);
     renderer.render(scene, camera);
     if (first) dbg("erster Frame gezeichnet");
-    if (first) { first = false; opt.onFirstFrame && opt.onFirstFrame(); setTimeout(more, 250); }
+    if (first) {
+      first = false; opt.onFirstFrame && opt.onFirstFrame(); setTimeout(more, 250);
+      // Das HTML-Vorbild geht mit dem ersten 3D-Frame hart weg (kein Überblenden: sonst stünden Vorbild und Marke gleichzeitig im Bild); die Marke steht dann schon fertig
+      const vb = document.querySelector(".vorbild"); if (vb) { vb.style.transition = "none"; vb.classList.add("weg"); }
+    }
   }
   // Ein Fehler im Bild darf die Seite nie weiß lassen: der nächste Frame wird immer geplant; liegt es an der Karte, wird sie abgeschaltet
   let frameErrors = 0;
