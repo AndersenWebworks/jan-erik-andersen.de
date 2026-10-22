@@ -74,7 +74,7 @@ export default function (K) {
   const FACE = c3("#f8f6f1"), METAL = c3("#dcd7cd"), CASE = c3("#ece9e2"), FRONTC = c3("#e7e3da"), CALC = c3("#e9e3d6"), PAGE = c3("#fbfaf7");
 
   // ---------- Lage der Bahn: eine Linie vor der Szenerie (vorderste Kante: Kalender bei z 1,7), Überschrift links davon ----------
-  const PITCH = 26, LEAN = PITCH * PI / 180, ZB = 3.6, XL1 = -3.4, eH = N ? .5 : .62;
+  const PITCH = K.PITCH, LEAN = PITCH * PI / 180, ZB = 3.6, XL1 = -3.4, eH = N ? .5 : .62;
   F.part("titel", 0, .01);
   const titleW = K.measure(["Betreuung und"], { font: "serif" }).tw * eH, titleX = XL1 - .7 - titleW;
   const H1 = K.word(["Betreuung und", "Absicherung"], eH, titleX, ZB, .15, .85,
@@ -99,7 +99,8 @@ export default function (K) {
   // Szenerie über der Bahn: Mitte des Bildschirms zwischen Blatt 1 und 2 (Lücke rechts, Flicken am rechten Rand), Uhr über Blatt 1, Kalender über Blatt 3
   // Handy (Bild nur rund 5 Einheiten breit): der Bildschirm steht ganz über Blatt 2, wenn der Flicken die Lücke schließt; die Uhr über Blatt 1
   const MX = N ? bc[1] - .3 : (bc[0] + bc[1]) / 2 + .3;
-  K.sheet(titleX - 1.2, BA.endX + 4.2, -3.6, ZB + .46 + 1.3);
+  const ZSH = -12;
+  K.sheet(titleX - 1.2, BA.endX + 4.2, ZSH, ZB + .46 + 1.3);
 
 
   // ---------- Bildschirm: Fuß, Hals, Bildschirm (wie in der Eröffnung), steht direkt auf dem Bogen ----------

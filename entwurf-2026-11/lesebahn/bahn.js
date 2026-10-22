@@ -5,6 +5,8 @@
 //      und nennt den Haltepunkt des Fadens; Satzumbruch, Zeiten, Schriftgrößen, Kamera und Faden macht die Bahn-Schicht.
 // Anleitung und Beispiel für eigene Formen: LESEBAHN-BAUKASTEN.md
 const PI = Math.PI;
+// Gemeinsame Kameraneigung aller Bahn-Szenen (Grad); Träger, Köpfe und Lesestellen folgen ihr (K.PITCH)
+export const PITCH = 38;
 const EC = .2;                      // Bezugsgröße der Schrift (em in Welteinheiten); alle Träger lesen sich bei gleichem Abstand gleich groß: px wächst mit e / EC
 const LH = 1.25;                    // Zeilenhöhe der Sätze
 const ink = a => `rgba(48,48,51,${a})`;
@@ -97,7 +99,7 @@ export const FORMEN = { anhaenger };
 // }
 export function bahn(K, o) {
   const { F, V, narrow: N } = K;
-  const form0 = o.form || FORMEN.anhaenger, pitch = o.pitch === undefined ? 26 : o.pitch, lean = pitch * PI / 180;
+  const form0 = o.form || FORMEN.anhaenger, pitch = o.pitch === undefined ? PITCH : o.pitch, lean = pitch * PI / 180;
   const z = o.z !== undefined ? o.z : o.front + (o.gapZ === undefined ? 6 : o.gapZ);
   const gap = o.gap === undefined ? 1.1 : o.gap, prefix = o.prefix || "s";
   const items = []; let x = o.x0, runT, kw = 0;

@@ -23,8 +23,8 @@
 // Zustände: #p=0…1 (ganze Seite), #s=<szene> (Szenenanfang), Handy-Ausschnitt #…&w=390&h=844 (Prüfhilfe).
 import * as THREE from "three";
 import { SCHRIFTEN } from "./fonts/schriften.js";
-import { bahn as makeBahn, FORMEN, wrap as wrapText } from "./bahn.js";
-import { Model, kit, useFar, FAR, paperMaterial, edgeMaterial, rissMaterial, geruestMaterial, gridOn, frameOn, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
+import { bahn as makeBahn, FORMEN, wrap as wrapText, PITCH as BPITCH } from "./bahn.js";
+import { Model, kit, useFar, dunst, FAR, paperMaterial, edgeMaterial, rissMaterial, geruestMaterial, gridOn, frameOn, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
 
 const win = (b, t0, d) => clamp((b - t0) / d, 0, 1);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -133,7 +133,7 @@ export function seite(renderer, SEQ, opt = {}) {
     const add = o => { group.add(o); return o; };
     function mkPrint(lines, e, on, o = {}) {
       const t = printTex(lines, o);
-      const mat = new THREE.MeshBasicMaterial({ map: t.tex, transparent: true, opacity: on < 0 ? 1 : 0, depthWrite: false, toneMapped: false, side: THREE.FrontSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+      const mat = dunst(new THREE.MeshBasicMaterial({ map: t.tex, transparent: true, opacity: on < 0 ? 1 : 0, depthWrite: false, toneMapped: false, side: THREE.FrontSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 }));
       const w = t.w * e, h = t.h * e;
       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
       mesh.renderOrder = 3; mesh.frustumCulled = false; group.add(mesh);
@@ -143,7 +143,7 @@ export function seite(renderer, SEQ, opt = {}) {
     function mkDecal(wpx, hpx, draw, w, h, on, fade = .025) {
       const cv = document.createElement("canvas"); cv.width = wpx; cv.height = hpx;
       draw(cv.getContext("2d"), wpx, hpx);
-      const mat = new THREE.MeshBasicMaterial({ map: texOf(cv), transparent: true, opacity: on < 0 ? 1 : 0, depthWrite: false, toneMapped: false, side: THREE.FrontSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+      const mat = dunst(new THREE.MeshBasicMaterial({ map: texOf(cv), transparent: true, opacity: on < 0 ? 1 : 0, depthWrite: false, toneMapped: false, side: THREE.FrontSide, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }));
       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
       mesh.renderOrder = 2; mesh.frustumCulled = false; group.add(mesh);
       const pr = { mesh, mat, on, e: 1, w, h, fade, I };
@@ -152,7 +152,7 @@ export function seite(renderer, SEQ, opt = {}) {
     const F = Model(), K = kit(F), R = F.root;
     Object.assign(K, {
       F, R, THREE, V, COL, PI, Q, EPS, sm, mech, win, clamp, narrow, vw: VW(), vh: VH(),
-      bahn: o => makeBahn(K, o), formen: FORMEN, wrap: (text, maxEm) => wrapText(K, text, maxEm),
+      bahn: o => makeBahn(K, o), PITCH: BPITCH, formen: FORMEN, wrap: (text, maxEm) => wrapText(K, text, maxEm),
       anim: fn => anims.push(fn), add, paperMaterial, edgeMaterial, camera,
       print: mkPrint, decal: mkDecal,
       // Klickbarer Druck (Raycast auf die Fläche des Drucks): Kontaktwege bleiben echte Links, zusätzlich als HTML-Links im Dokument
@@ -198,8 +198,8 @@ export function seite(renderer, SEQ, opt = {}) {
       // Statuspunkt: rote Scheibe, tickt im festen Takt, kein Schein
       ticker(nd, r, p, q, side, on) {
         const g = new THREE.Group();
-        const m = new THREE.Mesh(new THREE.CircleGeometry(r, 32), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3 }));
-        const ring = new THREE.Mesh(new THREE.RingGeometry(r * 1.55, r * 1.75, 40), new THREE.MeshBasicMaterial({ color: RED, transparent: true, opacity: 0, toneMapped: false, depthWrite: false }));
+        const m = new THREE.Mesh(new THREE.CircleGeometry(r, 32), dunst(new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -3, polygonOffsetUnits: -3 }), 1));
+        const ring = new THREE.Mesh(new THREE.RingGeometry(r * 1.55, r * 1.75, 40), dunst(new THREE.MeshBasicMaterial({ color: RED, transparent: true, opacity: 0, toneMapped: false, depthWrite: false })));
         ring.position.z = .0005; g.add(m, ring); add(g);
         F.attach(nd, g, p, q, side, .004);
         anims.push((b, t) => {
@@ -223,7 +223,7 @@ export function seite(renderer, SEQ, opt = {}) {
       sheet(x0, x1, z0, z1, col = "#faf8f3", from = -1) {
         const g = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, .03, z1 - z0), paperMaterial(col));
         g.position.set((x0 + x1) / 2, -.0152, (z0 + z1) / 2);
-        const e = new THREE.LineSegments(new THREE.EdgesGeometry(g.geometry), new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: .32, depthWrite: false }));
+        const e = new THREE.LineSegments(new THREE.EdgesGeometry(g.geometry), dunst(new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: .32, depthWrite: false })));
         g.add(e); add(g); sheets.push(g); sheetBox.push([Math.min(x0, x1), Math.max(x0, x1), Math.min(z0, z1), Math.max(z0, z1)]);
         if (from >= 0) anims.push(b => { g.visible = b >= from; });
         return g;
@@ -532,7 +532,7 @@ export function seite(renderer, SEQ, opt = {}) {
   }
 
   // Kamera, Ziel und Sichtfeld zu einem Zustand (Welt), ohne Atem
-  const _c = V(), _t = V(), _c2 = V(), _t2 = V();
+  const _c = V(), _t = V(), _c2 = V(), _t2 = V(), _ax = V(), DREH = .4;
   function poseOf(st, cam, tgt) {
     const I = INST[st.i];
     if (st.kind === "b") { localPose(I, st.q, cam, tgt); cam.add(I.O); tgt.add(I.O); return fovOf(I); }
@@ -552,6 +552,15 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     hermite(P0, B.trVel.m0, P1, B.trVel.m1, st.q, cam);
     hermite(T0, B.trVel.n0, T1, B.trVel.n1, st.q, tgt);
+    // Blickrichtung: gleichmäßig (Mischung aus linearem und weichem Lauf) von der Richtung am Ende der alten zur Richtung am Anfang der neuen Szene drehen;
+    // die Hermite-Kurve des Ziels allein dreht in der Mitte der Fahrt mit dem Doppelten der mittleren Rate (Drehsprung). Abstand zum Ziel bleibt wie berechnet.
+    {
+      const dist = tgt.distanceTo(cam), uA = T0.clone().sub(P0).normalize(), uB = T1.clone().sub(P1).normalize(), ang = Math.acos(clamp(uA.dot(uB), -1, 1));
+      if (ang > .01 && ang < 3) {
+        const ax = _ax.crossVectors(uA, uB).normalize(), x = st.q, g = DREH * x + (1 - DREH) * x * x * (3 - 2 * x);
+        tgt.copy(uA).applyAxisAngle(ax, ang * g).multiplyScalar(dist).add(cam);
+      }
+    }
     // Scheitel: die Fahrt hebt sich über Bauteile der verlassenen und der neuen Szene (gerechnet in clearance(), ohne Knick an den Enden)
     const ap = Math.max(B.cfg.apex || 0, B.apex || 0); if (ap) cam.y += ap * 16 * st.q * st.q * (1 - st.q) * (1 - st.q);
     return fovOf(A) + (fovOf(B) - fovOf(A)) * sm(st.q);
@@ -563,7 +572,7 @@ export function seite(renderer, SEQ, opt = {}) {
   const pieces = [];
   let dot = null;
   const tmat = new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 });
-  function ribbon(pts) {
+  function ribbon(pts, far) {
     const curve = new THREE.CatmullRomCurve3(pts, false, "centripetal", .5);
     const len = curve.getLength(), N = Math.round(clamp(len * 18, 24, 1400)), sp = curve.getSpacedPoints(N), hw = .022;
     const pos = new Float32Array((N + 1) * 6), idx = [];
@@ -576,14 +585,14 @@ export function seite(renderer, SEQ, opt = {}) {
       if (i < N) idx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2);
     }
     const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(pos, 3)); g.setIndex(idx);
-    const mesh = new THREE.Mesh(g, tmat); mesh.renderOrder = 2; mesh.frustumCulled = false; scene.add(mesh);
-    return { curve, N, g, mesh };
+    useFar(far || null); const mesh = new THREE.Mesh(g, dunst(tmat.clone(), 1)); useFar(null); mesh.renderOrder = 2; mesh.frustumCulled = false; scene.add(mesh);
+    return { curve, N, g, mesh, far: far || null };
   }
   // Punkt (x, z) oder (x, y, z) in Szenenkoordinaten → Welt
   const wpt = (I, a) => a.isVector3 ? a.clone().add(I.O) : a.length === 3 ? V(a[0] + I.O.x, a[1], a[2] + I.O.z) : V(a[0] + I.O.x, .004, a[1] + I.O.z);
-  function addPiece(I, pts, time) {
+  function addPiece(I, pts, time, far) {
     if (pts.length < 2) return;
-    const r = ribbon(pts); r.time = time; r.I = I; r.end = pts[pts.length - 1].clone(); pieces.push(r);
+    const r = ribbon(pts, far === undefined ? I.far : far); r.time = time; r.I = I; r.end = pts[pts.length - 1].clone(); pieces.push(r);
   }
   function buildThreadFor(I) {
     if (!dot) { dot = new THREE.Mesh(new THREE.CircleGeometry(1, 40), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, depthTest: false })); dot.renderOrder = 6; dot.visible = false; scene.add(dot); }
@@ -597,7 +606,7 @@ export function seite(renderer, SEQ, opt = {}) {
     // f.bridge [s0, s1]: Fenster der Brücke in der Fahrt; f.preTr [s0, s1]: das Stück vom Eingang zum Anfang des eigenen Fadens läuft ebenfalls noch in der
     // Fahrt (der Punkt steht beim Eintreffen der Szene schon am Anfang des Fadens, Lesebahn)
     const br = f.bridge || [.3, 1];
-    if (A && A.exit && I.entry) addPiece(I, [A.exit, A.exit.clone().lerp(I.entry, .5), I.entry], { tr: I.idx, s0: br[0], s1: br[1] });
+    if (A && A.exit && I.entry) addPiece(I, [A.exit, A.exit.clone().lerp(I.entry, .5), I.entry], { tr: I.idx, s0: br[0], s1: br[1] }, null);
     const outTime = (b1) => b1 + .06 <= I.bMax ? { I, b0: b1, b1: b1 + .06 } : { tr: I.idx + 1, s0: 0, s1: .3 };
     if (ownPts) {
       const t0 = Math.max(own.t0, I.b0), t1 = Math.max(own.t1, t0 + .01);
@@ -706,12 +715,13 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     // Nebelweite der Nachbarszenen: Bögen und Teile der nächsten Szene stehen im Lesebild sonst schwebend am oberen Bildrand (Abstand 40 bis 55 Einheiten).
     // Sie bleiben bis zur Fahrt in weißem Dunst (ab 30 bis 36 Einheiten) und kommen in der Fahrt mit q heran; die eigene und die vorigen Szenen unverändert.
+    const NX = 22, NY = 28;
     for (const I of INST) {
       if (!I.built || !I.far) continue;
       const ahead = I.idx - st.i - (st.kind === "t" ? 0 : 1);          // 0: die Szene, die als Nächste ankommt (im Übergang: die ankommende)
       if (ahead < 0) { I.far.copy(FAR); continue; }
       const s = ahead === 0 && st.kind === "t" ? sm(clamp(st.q / .8, 0, 1)) : 0;
-      I.far.set(ahead > 0 ? 30 : 30 + (FAR.x - 30) * s, ahead > 0 ? 36 : 36 + (FAR.y - 36) * s);
+      I.far.set(ahead > 0 ? NX : NX + (FAR.x - NX) * s, ahead > 0 ? NY : NY + (FAR.y - NY) * s);
     }
     // Zeit der Lettern: läuft ab dem Eintreffen der Szene (Fahrt in die Szene beginnt)
     const time = now / 1000;

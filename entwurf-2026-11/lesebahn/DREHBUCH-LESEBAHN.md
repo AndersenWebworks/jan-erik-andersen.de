@@ -512,3 +512,29 @@ Handy (390 × 844): etwa 46, weil die Haltefenster am Handy länger sein müssen
 | 17 | Mensch im Bild: Porträtfoto fehlt weiter (Grundsatz 5 der Fassung). | Aktuelles Foto als kleine Foto-Ecke am Kontakt-Umschlag, sobald ein Bild da ist. Bis dahin kein Platzhalter-Bild. |
 | 18 | Länge 44 vh (Handy etwa 46). | Planmaß, nach dem ersten gebauten Durchlauf nachrechnen. Wenn Lesefenster knapp werden, zuerst Außerdem und Modernisierung kürzen, nicht Gerwing. |
 | 19 | Fahrt in der Eröffnung: einmalige Hebung der Kamera vom Podest, danach starr. | Ja. Alles andere würde das Bild des Namens auf dem Podest brechen. |
+
+## Stand 22.10.2026, nachts (Arbeitsstand zur Korrektur)
+
+Umgebaut nach Lesebahn (Satzträger am Faden, Kamera Gier 0, Neigung 38° zentral `K.PITCH`, Punkt hält an jedem Satz):
+- Gerwing: Lieferschein-Bon aus dem Papiermaul, Szenerie Terrasse → Steine → Palette → Händler → Laptop
+- Betreuung: Abreißkalender (Monatsblätter), Szenerie Bildschirm mit Lücke, Uhr, Aufstellkalender
+- Modernisierung: Schieber mit Lasche, Streifen altert von alt zu neu
+- Schnittstellen: Anhänger mit zwei Ösen
+- Wie ich arbeite: Prüfrahmen mit Tunnelrahmen
+- Stimmen: SiS-Leporello am Faden, ai-coustics-Zitat in ganzen Sätzen auf zweitem Leporello
+- Für Agenturen: Einsteckschiene mit Steckschildern
+- Kontakt: Umschlag mit Überschrift und Standort, drei Karten als Links, Faden endet im roten Siegel; Handy als Briefbogen
+
+Noch im bisherigen Aufbau (laufen, aber ohne Lesebahn): Eröffnung (bewusst, nur Doppelbild behoben), Shop, WBG, Gestaltung/Staffelei, Platzhalter, Werdegang.
+
+Systemisch behoben: Nachbarträger stehen an Lesestellen ganz draußen (Abstand aus Bildbreite berechnet); fremde Szenen liegen im Lesebild im Dunst (Flächen, Linien, Drucke, Faden); Horizont oben, kein leeres oberes Drittel; Übergänge ohne Drehsprünge; Eröffnung ohne Doppelbild (HTML-Startbild deckungsgleich, Ablösung in 0,12 s); Konstruktionsphase (Spur, Gerüst) in allen Szenen gleich dicht.
+
+Gesehen im Browser: Schnittstellen, Betreuung, Modernisierung, Gerwing, Kontakt (Desktop), Stimmen. Rechnerisch: alle Lesestellen Desktop 1280 × 900 und Handy 390 × 844 ganz im Rahmen, keine frühere Szene im Vordergrund.
+
+Offen für die nächste Runde:
+- Shop (Karteikarten), WBG (Drehscheibe), Gestaltung, Außerdem (Setzkasten), Werdegang an den Faden auf die Lesebahn umbauen; in diesen alten Szenen dreht die Kamera noch (bis 2,7 °/vh).
+- Stimmen: Punkt sitzt mitten auf der Zitatseite statt am Fadenende; Leporello-Seiten stehen schräg.
+- Wie ich arbeite: breite Prüfrahmen schneiden an zwei Lesestellen den Nachbarträger an.
+- Fette Schlüsselgruppen auf den Trägern (Kern kennt keinen Teilfettdruck).
+- Gesamtlänge noch rund 65 Bildschirmhöhen Desktop, 71 Handy (Ziel 40–50); kürzer wird es mit dem Umbau der alten Szenen.
+- Offene Inhaltsfragen mit Empfehlung: siehe Abschnitt „Offene Entscheidungen“ oben.

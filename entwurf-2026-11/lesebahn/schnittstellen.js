@@ -224,7 +224,7 @@ export default function (K, opt = {}) {
   // ===================================================================================================
   // Überschrift steht sofort (Zeitlauf wie der Name der Eröffnung)
   // Lesebahn (nicht WBG): Fahnen links→rechts vor den Geräten, Überschrift links davon; Fahne 1 beginnt bei XL1, Fahne 2 folgt mit Lücke
-  const eH = N ? .5 : .62, XL1 = -1.5, GAPC = .9, ZC = 8.6, ZT = 9.25, EC = .2, MARG = .38, PITCH = 26, LEAN = PITCH * PI / 180;
+  const eH = N ? .5 : .62, XL1 = -1.5, GAPC = .9, ZC = 8.6, ZT = 9.25, EC = .2, MARG = .38, PITCH = K.PITCH, LEAN = PITCH * PI / 180;
   const titleW = K.measure(["Schnittstellen und"], { font: "serif" }).tw * eH;
   const H1 = K.word(["Schnittstellen und", "eigene Werkzeuge"], eH, WBG ? (N ? -4.6 : -5.4) : XL1 - .7 - titleW, WBG ? 6.6 : ZC, .15, .85,
     { font: "serif", foot: 1, imprint: { ...IMPRINT, close: .25, closeDur: .7 }, ...(WBG ? {} : { ang: Q - LEAN }) });

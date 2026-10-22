@@ -19,7 +19,10 @@ import abschluss from "./abschluss.js";
 // an einer Lesestelle am Szenenanfang bzw. -ende (kern.js). Übergang tr: Fahrt in die Szene, 40 vh + 1,2 vh je Einheit
 // Flugweite, 60 … 100 vh. Gerechnet mit tmp/seite-pruefung/rechnen.mjs und fenster.mjs (nicht im Repo).
 const L = (d, n = d) => ({ d: Math.round(d), n: Math.round(n) });
-const TR = (fd, fn) => L(Math.min(100, Math.max(60, 40 + 1.2 * fd)), Math.min(100, Math.max(60, 40 + 1.2 * fn)));
+// Länge der Fahrt: mindestens 2,6 vh je Einheit Flugweite (die Tempospitze liegt beim 1,5-fachen des Mittels: höchstens rund 0,6 E/vh), 60 … 150 vh.
+// Die Flugweiten stehen fest (tmp/lesebahn/rechnen.mjs: flyToNext der vorigen Szene, Breitbild, Hochkant) und gelten für die gemeinsame Neigung der Bahn (bahn.js: PITCH).
+const trLen = f => Math.min(150, Math.max(60, 40 + 1.2 * f, 2.6 * f));
+const TR = (fd, fn) => L(trLen(fd), trLen(fn));
 
 // Faden je Szene (Szenenkoordinaten x, z bzw. x, y, z): Eingang an der Vorderkante, Ausgang an der Hinterkante, Umwege um Bauteile
 const lane = (I, dx = .35) => {
@@ -31,49 +34,49 @@ const lane = (I, dx = .35) => {
 export const SEQ = [
   { name: "eroeffnung", label: "Eröffnung", mod: eroeffnung, len: L(590), tr: L(0),
     faden: () => ({}) },
-  { name: "gerwing", label: "Gerwing", mod: gerwing, len: L(390, 540), tr: TR(11.2, 12.6), lead: 1, leadShift: [-2.2, 0, 0], leadW: 1.1,
+  { name: "gerwing", label: "Gerwing", mod: gerwing, len: L(390, 540), tr: L(100), lead: 1, leadShift: [-2.2, 0, 0], leadW: 1.1,
     // Lesebahn: Lieferschein-Bons am Faden (gerwing.js, bon.js, Baukasten bahn.js); Ein- und Ausgang des Fadens liefert die Bahn (d.fadenIO)
     bMax: .97,
     faden: d => d.fadenIO },
-  { name: "betreuung", label: "Betreuung und Absicherung", mod: betreuung, len: L(330, 380), tr: TR(27.2, 25.1), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
+  { name: "betreuung", label: "Betreuung und Absicherung", mod: betreuung, len: L(330, 380), tr: TR(28.1, 26.2), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
     // Lesebahn: Abreißkalender am Faden (betreuung.js, kalenderform.js); Ein- und Ausgang des Fadens liefert die Bahn (d.fadenIO)
     bMax: .98,
     faden: d => d.fadenIO },
-  { name: "modernisierung", label: "Modernisierung", mod: modernisierung, len: L(330, 400), tr: TR(23.1, 21.0), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
+  { name: "modernisierung", label: "Modernisierung", mod: modernisierung, len: L(330, 400), tr: TR(29.5, 27.6), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
     // Lesebahn: Schieber mit Lasche am Faden (modernisierung.js, schieberform.js); Ein- und Ausgang des Fadens liefert die Bahn (d.fadenIO)
     bMax: .98,
     faden: d => d.fadenIO },
-  { name: "shop", label: "Shops und Shop-Wechsel", mod: shop, len: L(520), tr: TR(44.9, 62.7),
+  { name: "shop", label: "Shops und Shop-Wechsel", mod: shop, len: L(520), tr: TR(51.2, 57.8),
     faden: (d, I) => ({ in: [-7.75, I.K.narrow ? 9.4 : 5.05], out: [-7.75, I.K.narrow ? -10.3 : -9.3] }) },
   // Schnittstellen und WBG Pooling sind ein Modul: hier der erste Teil (b 0 … .55), WBG folgt nach „Gestaltung“
-  { name: "schnittstellen", label: "Schnittstellen und eigene Werkzeuge", mod: schnittstellen, len: L(400), tr: TR(30.2, 41.0), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
+  { name: "schnittstellen", label: "Schnittstellen und eigene Werkzeuge", mod: schnittstellen, len: L(400), tr: TR(30.4, 41.0), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
     // Lesebahn: Anhänger am Faden (schnittstellen.js, Baukasten bahn.js); Ein- und Ausgang des Fadens liefert die Bahn (d.fadenIO)
     bMax: .55,
     faden: d => d.fadenIO },
-  { name: "gestaltung", label: "Gestaltung", optional: "./staffelei.js", pick: m => m.default, len: L(540 * .6), tr: TR(32.3, 32.4),
+  { name: "gestaltung", label: "Gestaltung", optional: "./staffelei.js", pick: m => m.default, len: L(540 * .6), tr: TR(29.5, 30.1),
     faden: (d, I) => lane(I) },
-  { name: "wbg", label: "WBG Pooling", mod: schnittstellen, len: L(900 * 7.4 / 13.9 + 30, 900 * 7.7 / 14.2 + 30), tr: TR(26, 43.1), tail: 1, modOpt: { wbg: true },
+  { name: "wbg", label: "WBG Pooling", mod: schnittstellen, len: L(900 * 7.4 / 13.9 + 30, 900 * 7.7 / 14.2 + 30), tr: TR(26.1, 43.3), tail: 1, modOpt: { wbg: true },
     keys: d => [{ w: 0, b: .556, fromStop: d.names.h2, back: 1.6, up: 1.5 }, ...d.keys],
     // kein Raster: zwischen Szenenanfang (b .556) und erster Lesestelle (b .61) ist für eine Bauphase kein Platz; Gerüst und Spur bleiben
     grid: false,
     faden: () => ({ in: [-9.1, 18.8], out: [-9.1, -6.8] }) },
   { name: "gloves", label: "Take the Gloves Off", optional: "./platzhalter.js", pick: m => m.gloves, len: L(320 * .6), tr: TR(23.6, 25.3),
     faden: (d, I) => lane(I) },
-  { name: "ausserdem", label: "Außerdem", optional: "./platzhalter.js", pick: m => m.ausserdem, len: L(320 * .6), tr: TR(24, 32.3),
+  { name: "ausserdem", label: "Außerdem", optional: "./platzhalter.js", pick: m => m.ausserdem, len: L(320 * .6), tr: TR(24.1, 32.3),
     faden: (d, I) => lane(I) },
   // Abschluss (abschluss.js, je Szene ein Aufruf mit opt.scene): „Wie ich arbeite“ als Tunnelbuch aus Prüfrahmen auf der Lesebahn
-  { name: "arbeitsweise", label: "Wie ich arbeite", mod: abschluss, modOpt: { scene: "arbeit" }, len: L(300, 360), tr: TR(23.4, 30.4), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
+  { name: "arbeitsweise", label: "Wie ich arbeite", mod: abschluss, modOpt: { scene: "arbeit" }, len: L(300, 360), tr: TR(24.1, 30.6), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
     bMax: .62, faden: d => d.fadenIO },
-  { name: "werdegang", label: "Werdegang", mod: werdegang, len: L(460 + 30), tr: TR(32.1, 34.4), lead: 1,
+  { name: "werdegang", label: "Werdegang", mod: werdegang, len: L(460 + 30), tr: TR(33.9, 39.2), lead: 1,
     faden: d => {
       const P = d.thread.pts, a = P[0], z = P[P.length - 1], ZB = z.z - .45;
       return { in: [a.x, a.z + 1.05], out: [z.x, ZB - .6], viaPost: [[z.x, z.y, ZB + .03], [z.x, z.y - .04, ZB - .03], [z.x, .06, ZB - .03]] };
     } },
   // Lesebahn: zwei Leporellos (SiS, ai-coustics), der Faden läuft am Falz entlang, der Punkt hält an jeder Seite (stimmen.js, halt.js)
-  { name: "stimmen", label: "Stimmen", mod: stimmen, len: L(380, 500), tr: TR(44.7, 50.3), lead: 1, tail: 1,
+  { name: "stimmen", label: "Stimmen", mod: stimmen, len: L(380, 500), tr: TR(40.1, 47.7), lead: 1, tail: 1,
     faden: d => d.fadenIO },
   // „Für Agenturen“ (Einsteckschiene) und „Kontakt“ (Briefumschlag, Faden endet im Siegel) auf einem Bogen; Bahn endet im letzten Bild
-  { name: "agenturen", label: "Für Agenturen", mod: abschluss, modOpt: { scene: "agenturen" }, len: L(450, 500), tr: TR(32.6, 29.9), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
+  { name: "agenturen", label: "Für Agenturen", mod: abschluss, modOpt: { scene: "agenturen" }, len: L(450, 500), tr: TR(35.1, 31.6), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
     // „Kontakt“: Sprungziel ist das letzte Bild (Überschrift, alle drei Karten und der Standort ganz im Bild)
     anchors: { kontakt: d => d.keys.findIndex(k => k.stop && k.stop.name === "kontakt") },
     // Abschnittsname im Label: sobald die Kamera zum Umschlag fährt, steht dort „Kontakt“

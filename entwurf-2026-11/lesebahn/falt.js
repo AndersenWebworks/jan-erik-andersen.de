@@ -58,6 +58,18 @@ export const FAR = new THREE.Vector2(70, 140), NEAR = new THREE.Vector2(.35, 1.2
 // Nebelweite je Szene: Materialien, die beim Bau einer Szene entstehen, teilen deren eigenen Vektor (kern.js: build, fernAbblenden)
 let curFar = FAR;
 export const useFar = v => { curFar = v || FAR; };
+// Dunst für Standardmaterialien (Drucke, Decals, Haarlinien der Bögen, Statuspunkte): dieselbe Nebelweite wie das Papier der Szene (uFar teilt sich den Vektor der Szene)
+export function dunst(mat, white) {
+  const far = curFar, NL = String.fromCharCode(10);
+  mat.onBeforeCompile = sh => {
+    sh.uniforms.uFar = { value: far };
+    sh.vertexShader = "varying float vDunst;" + NL + sh.vertexShader.replace("#include <project_vertex>", "#include <project_vertex>" + NL + "vDunst = -mvPosition.z;");
+    const k = "(1.0 - smoothstep(uFar.x, uFar.y, vDunst))";
+    sh.fragmentShader = "uniform vec2 uFar; varying float vDunst;" + NL + sh.fragmentShader.replace("#include <opaque_fragment>", "#include <opaque_fragment>" + NL + (white ? "gl_FragColor.rgb = mix(vec3(1.0), gl_FragColor.rgb, " + k + ");" : "gl_FragColor.a *= " + k + ";"));
+  };
+  mat.customProgramCacheKey = () => "dunst" + (white ? "w" : "a");
+  return mat;
+}
 const NOCLIP = () => new THREE.Vector4(-1e5, 1e5, -1e5, 1e5);
 // Ausschnitt in Szenenkoordinaten (x0, x1, z0, z1); alles außerhalb wird verworfen
 const CLIP_GLSL = `if (vL.x < uClip.x || vL.x > uClip.y || vL.z < uClip.z || vL.z > uClip.w) discard;`;
@@ -159,18 +171,18 @@ const EDGE_FRAG = `
 const RISS_VERT = `
   uniform vec3 uOrg;
   attribute vec4 aCol; attribute vec4 aP;
-  varying vec4 vC; varying vec4 vP; varying vec3 vL;
-  void main() { vC = aCol; vP = aP; vec4 wp = modelMatrix * vec4(position, 1.0); vL = wp.xyz - uOrg; gl_Position = projectionMatrix * viewMatrix * wp; }`;
+  varying vec4 vC; varying vec4 vP; varying vec3 vL; varying float vDepth;
+  void main() { vC = aCol; vP = aP; vec4 wp = modelMatrix * vec4(position, 1.0); vL = wp.xyz - uOrg; vec4 mv = viewMatrix * wp; vDepth = -mv.z; gl_Position = projectionMatrix * mv; }`;
 const RISS_FRAG = `
-  uniform float uB; uniform vec4 uClip;
-  varying vec4 vC; varying vec4 vP; varying vec3 vL;
+  uniform float uB; uniform vec4 uClip; uniform vec2 uFar;
+  varying vec4 vC; varying vec4 vP; varying vec3 vL; varying float vDepth;
   void main() {
     ${CLIP_GLSL}
     float g = clamp((uB - vP.x) / vP.y, 0.0, 1.0);
     g = g * (2.0 - g);
     if (g <= 0.0 || vP.z > g + 0.0001) discard;
     if (vP.w < 0.0 && fract(vP.z * -vP.w / 0.085) > 0.56) discard;
-    float a = vC.a * (1.0 + 0.6 * (1.0 - step(0.999, g)));
+    float a = vC.a * (1.0 + 0.6 * (1.0 - step(0.999, g))) * (1.0 - smoothstep(uFar.x, uFar.y, vDepth));
     if (a < 0.004) discard;
     gl_FragColor = vec4(vC.rgb, min(a, 1.0));
     #include <colorspace_fragment>
@@ -206,7 +218,7 @@ export function gridOn(mat, attr, g) {
 const GER_VERT = `
   uniform float uB; uniform vec3 uOrg;
   attribute vec4 aCol; attribute vec4 aP; attribute vec3 aO;
-  varying vec4 vC; varying vec4 vP; varying float vF; varying vec3 vL;
+  varying vec4 vC; varying vec4 vP; varying float vF; varying vec3 vL; varying float vDepth;
   void main() {
     vC = aCol; vP = aP;
     // der Überstand zieht sich zurück, während das Teil einrastet; danach blendet die Linie aus
@@ -214,23 +226,24 @@ const GER_VERT = `
     vF = 1.0 - smoothstep(aP.w - .01, aP.w + .02, uB);
     vec4 wp = modelMatrix * vec4(position + aO * r, 1.0);
     vL = wp.xyz - uOrg;
-    gl_Position = projectionMatrix * viewMatrix * wp;
+    vec4 mv = viewMatrix * wp; vDepth = -mv.z;
+    gl_Position = projectionMatrix * mv;
   }`;
 const GER_FRAG = `
-  uniform float uB; uniform vec4 uClip;
-  varying vec4 vC; varying vec4 vP; varying float vF; varying vec3 vL;
+  uniform float uB; uniform vec4 uClip; uniform vec2 uFar;
+  varying vec4 vC; varying vec4 vP; varying float vF; varying vec3 vL; varying float vDepth;
   void main() {
     ${CLIP_GLSL}
     float g = clamp((uB - vP.x) / vP.y, 0.0, 1.0);
     g = g * (2.0 - g);
     if (g <= 0.0 || vP.z > g + 0.0001) discard;
-    float a = vC.a * vF * (1.0 + 0.6 * (1.0 - step(0.999, g)));
+    float a = vC.a * vF * (1.0 + 0.6 * (1.0 - step(0.999, g))) * (1.0 - smoothstep(uFar.x, uFar.y, vDepth));
     if (a < 0.004) discard;
     gl_FragColor = vec4(vC.rgb, min(a, 1.0));
     #include <colorspace_fragment>
   }`;
 export function geruestMaterial() {
-  return new THREE.ShaderMaterial({ uniforms: { uB: { value: 0 }, ...frameUniforms() }, vertexShader: GER_VERT, fragmentShader: GER_FRAG, transparent: true, depthWrite: false });
+  return new THREE.ShaderMaterial({ uniforms: { uB: { value: 0 }, uFar: { value: curFar }, ...frameUniforms() }, vertexShader: GER_VERT, fragmentShader: GER_FRAG, transparent: true, depthWrite: false });
 }
 export function edgeMaterial() {
   return new THREE.ShaderMaterial({
@@ -239,7 +252,7 @@ export function edgeMaterial() {
   });
 }
 export function rissMaterial() {
-  return new THREE.ShaderMaterial({ uniforms: { uB: { value: 0 }, ...frameUniforms() }, vertexShader: RISS_VERT, fragmentShader: RISS_FRAG, transparent: true, depthWrite: false });
+  return new THREE.ShaderMaterial({ uniforms: { uB: { value: 0 }, uFar: { value: curFar }, ...frameUniforms() }, vertexShader: RISS_VERT, fragmentShader: RISS_FRAG, transparent: true, depthWrite: false });
 }
 
 // ---------- Faltmodell ----------

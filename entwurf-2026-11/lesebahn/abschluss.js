@@ -88,7 +88,7 @@ const SATZ_Y = [
 
 export default function (K, opt = {}) {
   const { F, R, V, Q, sm, mech, clamp, THREE, narrow: N } = K;
-  const PI = Math.PI, PITCH = 26, lean = PITCH * PI / 180, SINL = Math.sin(lean), EC = .2;
+  const PI = Math.PI, PITCH = K.PITCH, lean = PITCH * PI / 180, SINL = Math.sin(lean), EC = .2;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
   const PAPER = c3("#f6f3ec"), PAPER2 = c3("#f1ede3"), RAIL = c3("#e3ded1"), NUT = c3("#cfc8b8"), BODY = c3("#efe6d2"), FLAPC = c3("#e8dcc4"), CARD = c3("#f8f6f1"), BLOCK = c3("#f2eee4");
 
@@ -164,7 +164,7 @@ export default function (K, opt = {}) {
     });
     const it = B.items, cx = it.map(i => i.x0 + i.w / 2), x3l = it[2].x0, x3r = x3l + it[2].w;
     const Hmax = Math.max(...it.map(i => i.h));
-    K.sheet(xh - 3.4, B.endX + 7, Math.min(kz - 1.6, z - 2.42 * Hmax - 1.6), zf);
+    K.sheet(xh - 3.4, B.endX + 7, Math.min(kz - 1.6, z - 2.42 * Hmax - 1.6) - 7, zf);
 
     // Teile laufen hinter dem Faden (zp) durch die Fenster der Rahmen: Schnittstelle, Datenumzug, Website. Was den Prüfrahmen (3) passiert,
     // bekommt ein Häkchen; die Website bleibt davor stehen (ohne Häkchen).
@@ -314,7 +314,7 @@ export default function (K, opt = {}) {
     const seal = K.decal(256, 256, sealDraw, .95, .95, .80, .03);
     K.onFlat(R, seal, xS, z, .003);
 
-    K.sheet(xh - 3.4, xKc + BW / 2 + 3.5, zBack, zf);
+    K.sheet(xh - 3.4, xKc + BW / 2 + 3.5, zBack - 7, zf);
 
     // ----- Faden: Bahn (Haltepunkte an den Schildern) und weiter zum Siegel -----
     const t0 = B.thread({ hold: .04, depart: .10 });

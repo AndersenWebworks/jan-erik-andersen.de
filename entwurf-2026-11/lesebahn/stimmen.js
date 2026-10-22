@@ -65,7 +65,7 @@ export default function (K) {
     return pr;
   }
 
-  K.sheet(-13, 28, -8, 8);
+  K.sheet(-13, 28, -16, 8);
 
   // ---------- Überschrift: steht wie der Name der Eröffnung aus dem Bogen auf ----------
   const EH = 1.05, HX = -7.6, HZ = 5.2;
@@ -175,7 +175,7 @@ export default function (K) {
   const pxD = (W, H, s) => pxBase(W, H) * s.e / .2;
   // breitere Handys (ab 390 px) bekommen größere Schrift, damit der sichtbare Ausschnitt in Textbreiten gleich bleibt (Nachbarn bleiben draußen)
   const pxN = (v) => (W, H, s) => v * Math.max(1, W / 390) * s.e / .2;
-  const FACE = V(0, 0, -1), PITCH = 26;
+  const FACE = V(0, 0, -1), PITCH = K.PITCH;
   const pxL = (W, H, s) => Math.min(21, pxBase(W, H) + 1.2) * s.e / .2, LSY = -.1;
   const orbit = (C, azd, el, D) => ({ tgt: V(C[0], C[1], C[2]), cam: V(C[0] + D * Math.sin(azd * DEG) * Math.cos(el * DEG), C[1] + D * Math.sin(el * DEG), C[2] + D * Math.cos(azd * DEG) * Math.cos(el * DEG)) });
   const ov = (b, C, azd, el, D, DN, elN = el, CN = C) => { const a = orbit(C, azd, el, D), n = orbit(CN, azd, elN, DN); return { b, cam: a.cam, tgt: a.tgt, camN: n.cam, tgtN: n.tgt }; };

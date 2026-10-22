@@ -46,7 +46,7 @@ export default function (K) {
   const sT = seg(.37, .62, .02, .15), sF = seg(.105, .41, .205, .35), sP = seg(.54, .69, .39, .52), sH = seg(.66, .85, .575, .70), sL = seg(.82, .96, .745, .875);
 
   // ---------- Bahn: Kopf (Lettern) + fünf Bons ----------
-  const PITCH = 26, LEAN = PITCH * PI / 180, ZB = 3.0, eH = N ? .5 : .62;
+  const PITCH = K.PITCH, LEAN = PITCH * PI / 180, ZB = 3.0, eH = N ? .5 : .62;
   const headLines = N ? ["Pflaster", "nach Fläche", "bestellen"] : ["Pflaster nach Fläche", "bestellen"];
   const titleW = K.measure([N ? "nach Fläche" : "Pflaster nach Fläche"], { font: "serif" }).tw * eH, XL1 = 0, hx = XL1 - .7 - titleW;
   const H1 = K.word(headLines, eH, hx, ZB, .15, .85, { font: "serif", foot: 1, imprint: { ...IMPRINT, close: .25, closeDur: .7 }, ang: Q - LEAN });
@@ -75,7 +75,7 @@ export default function (K) {
   const LW = N ? 2.85 : 3.2, LX0 = cL - LW / 2, LZF = -.1, LD = 2.05, LTH = .1, SHT = 2.0;
 
   // ---------- Bogen ----------
-  K.sheet(hx - 8, B.endX + 10, -8.5, ZB + 10.4);
+  K.sheet(hx - 8, B.endX + 10, -11.5, ZB + 10.4);   // Bogen reicht weit nach hinten: Oberkante der Szenerie im oberen Fünftel
 
   // ---------- 0 Wand mit Typenschild (steht mit dem Kopf, nach der Zeit seit dem Eintreffen) ----------
   F.part("wand", 0, .03);

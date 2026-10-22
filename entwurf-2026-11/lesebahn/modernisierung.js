@@ -22,7 +22,7 @@ export default function (K) {
   const BODY = c3("#e2dac8"), FRONTC = c3("#d9d0bc"), FACE = c3("#f8f6f1"), METAL = c3("#dcd7cd");
 
   // ---------- Lage der Bahn: eine Linie vor der Szenerie (vorderste Kante: Fuß des Flachbildschirms bei z 1,8), Überschrift links davon ----------
-  const PITCH = 26, LEAN = PITCH * Math.PI / 180, ZB = 3.7, XL1 = -3.4, eH = N ? .5 : .62;
+  const PITCH = K.PITCH, LEAN = PITCH * Math.PI / 180, ZB = 3.7, XL1 = -3.4, eH = N ? .5 : .62;
   F.part("titel", 0, .01);
   const HEAD = ["Modernisierung"], titleW = K.measure(HEAD, { font: "serif" }).tw * eH, titleX = XL1 - .7 - titleW;
   const head = K.word(HEAD, eH, titleX, ZB, .15, .85,
@@ -80,7 +80,8 @@ export default function (K) {
   });
 
   // ---------- Bogen ----------
-  K.sheet(titleX - 1.2, BA.endX + 4.2, -3.4, ZB + .46 + 1.3);
+  const ZSH = -14;
+  K.sheet(titleX - 1.2, BA.endX + 4.2, ZSH, ZB + .46 + 1.3);
 
   // ---------- Röhrenmonitor: Frontwand und Wände klappen hoch, der Deckel folgt ----------
   F.part("crt", .02, .1);

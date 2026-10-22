@@ -165,6 +165,8 @@ Aus Eriks Sichtung des Prototyps der ganzen Seite:
 - **Test Lesebahn** (`entwurf-2026-11/lesebahn/`, Schnittstellen): Ruhe und Lesbarkeit tragen, die Drehrate der Kamera sank von 0,86 auf 0,04 °/vh, das Höchsttempo halbierte sich. Schwach waren die schildhaften Fahnen, der Faden lief unter dem Satz vorbei statt ihn zu tragen, und es blieb viel Leerraum zwischen Satz und Szenerie.
 - **Arbeitsstand:** Der Umbau aller Szenen läuft in `lesebahn/` (Baukasten `LESEBAHN-BAUKASTEN.md`, Drehbuch `DREHBUCH-LESEBAHN.md`); `seite/` bleibt als Vergleich unverändert.
 
+- **Stand nachts 22.10.:** In `lesebahn/` laufen Gerwing, Betreuung, Modernisierung, Schnittstellen, Wie ich arbeite, Stimmen, Agenturen und Kontakt auf der Lesebahn, jede Szene mit eigener Trägerform; Shop, WBG, Gestaltung, Außerdem und Werdegang sind noch im alten Aufbau. Einzelheiten und offene Punkte am Ende von `lesebahn/DREHBUCH-LESEBAHN.md`.
+
 ## Offen (in dieser Reihenfolge abfragen)
 
 1. Fließtext: A oder B (siehe oben)
