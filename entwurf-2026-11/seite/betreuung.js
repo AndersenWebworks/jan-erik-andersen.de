@@ -77,7 +77,7 @@ export default function (K) {
 
   // ---------- Überschrift: Lettern stehen beim Scrollen aus dem Bogen auf (Desktop eine Zeile, Handy zwei) ----------
   F.part("titel", 0, .01);
-  const MX = -1.8, he = N ? .5 : .42, ho = { font: "marke", clock: "b", foot: 1, imprint: { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2 } };
+  const MX = -1.8, he = N ? .5 : .42, ho = { font: "marke", clock: "b", foot: 1, imprint: { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, closeB: .01 } };
   const HL = N ? [["Betreuung und"], ["Absicherung"]] : [["Betreuung und Absicherung"]];
   const heads = HL.map((l, i) => {
     const w = K.measure(l, { font: "marke" }).tw * he;
@@ -228,14 +228,14 @@ export default function (K) {
     const last = k === NP - 1, t0 = last ? 9 : PF0 + k * PFS;
     const pg = K.panel(cf, cf.uv(PU0, L), cf.uv(PU0 + PWc, L), [0, 1], t0, PFD, PA, { nocut: 1, nofold: 1, lv: cf.lvl + 2 * (NP - k), bounce: .03 });
     K.rect(pg, 0, 0, PWc, PL, PAGE, .5);
-    // Blatt k > 0 liegt unter Blatt k − 1: sein Druck erscheint erst, wenn das Blatt darüber umgeschlagen ist (vorher schien er durch das Papier
-    // darüber: Monatsnamen übereinander, „MAI“ verwaschen)
-    const base = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageBase(k), PWc, PL, k === 0 ? .35 : PF0 + (k - 1) * PFS + .6 * PFD, .02);
-    const chk = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageCheck, PWc, PL, k === 0 ? .7 : PF0 + (k - 1) * PFS + .7 * PFD, .015);
-    chk.mesh.renderOrder = 4;
-    K.onPanel(pg, base, PWc / 2, PL / 2, 1, [0, -1], .001);
-    K.onPanel(pg, chk, PWc / 2, PL / 2, 1, [0, -1], .0012);
-    if (!last) base.off = chk.off = t0 + PFD;
+    // Alle Blätter tragen von Anfang an ihren ganzen Druck. Damit der Druck eines unteren Blattes nicht durch das Papier darüber scheint
+    // (Abstand der Blätter 2 · EPS = 0,003), liegt er nur 0,0008 bzw. 0,0011 über seinem Blatt und ohne Tiefenversatz (polygonOffset aus):
+    // der Tiefentest verdeckt ihn dann exakt hinter dem Blatt darüber.
+    const base = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageBase(k), PWc, PL, -1, .02);
+    const chk = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageCheck, PWc, PL, -1, .015);
+    chk.mesh.renderOrder = 4; base.mat.polygonOffset = false; chk.mat.polygonOffset = false;
+    K.onPanel(pg, base, PWc / 2, PL / 2, 1, [0, -1], .0008);
+    K.onPanel(pg, chk, PWc / 2, PL / 2, 1, [0, -1], .0011);
     pages.push(pg);
   }
 
@@ -266,6 +266,10 @@ export default function (K) {
       { w: .7, b: .2, cam: V(1.75, 11.73, 15.25), tgt: V(1.75, .8, .2), camN: V(-.9, 11.73, 13.52), tgtN: V(-.9, .8, .5) },
       // alles steht: Blickhöhe sinkt auf 21°, Handy 22° und näher an den Bildschirm
       { w: 1, b: .38, cam: V(1.75, 8.21, 17.74), tgt: V(1.75, 1.4, 0), camN: V(-1.3, 7.41, 13.77), tgtN: V(-1.3, 1.6, -.6) },
+      // nah am Bildschirm: Schild, Balken und Haken der Update-Zeile (Plugin-Liste rund zwei Drittel der Bildbreite; Handy rund 85 %)
+      { w: .9, b: .4, cam: V(-3.4, 3.55, 6.4), tgt: V(-1.8, 2.35, -1.1), camN: V(-2.0, 3.4, 11.6), tgtN: V(-1.8, 2.1, -1.1) },
+      // langsamer Schwenk nach rechts über den Bildschirm (die Dauer folgt dem Weg der Kamera), am Ende zur Uhr hin
+      { w: .9, b: .555, cam: V(.1, 3.55, 6.0), tgt: V(-1.6, 2.35, -1.1), camN: V(-1.4, 3.4, 10.8), tgtN: V(-1.6, 2.1, -1.1) },
       { w: 1.1, stop: S.t1 },
       { w: 1.2, stop: S.t2 },
       // Ende: Überblick über alle drei Gegenstände (rund 22°)

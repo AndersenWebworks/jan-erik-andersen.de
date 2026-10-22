@@ -177,7 +177,7 @@ export default function (K) {
 
   // ---------- Überschrift: Lettern stehen aus dem Bogen auf ----------
   F.part("titel", -.02, .01);
-  const head = K.word(["Werdegang"], HE, HX, HZ, .15, .9, { font: "marke", foot: 1, imprint: IMPRINT });
+  const head = K.word(["Werdegang"], HE, HX, HZ, .15, .9, { font: "marke", foot: 1, imprint: { ...IMPRINT, close: .25, closeDur: .7 } });
   // die Lettern blenden aus, während die Kamera in den Überblick steigt (b .06–.09), bevor sie aus dem Bildrand laufen
   head.off = .06;
 
