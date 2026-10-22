@@ -3,16 +3,46 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jan-Erik Andersen · Webentwicklung, Raum Plau am See</title>
+<meta name="description" content="Jan-Erik Andersen entwickelt Websites und Onlineshops, bindet sie an andere Systeme an und betreut sie. Webentwicklung aus dem Raum Plau am See, remote.">
+<!-- Entwurf: noindex; weg-auf-main.sh setzt beim Veröffentlichen index, follow -->
 <meta name="robots" content="noindex, nofollow">
 <meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f5f6f8">
+<link rel="canonical" href="https://jan-erik-andersen.de/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="de_DE">
+<meta property="og:site_name" content="Jan-Erik Andersen">
+<meta property="og:url" content="https://jan-erik-andersen.de/">
+<meta property="og:title" content="Jan-Erik Andersen · Webentwicklung, Raum Plau am See">
+<meta property="og:description" content="Jan-Erik Andersen entwickelt Websites und Onlineshops, bindet sie an andere Systeme an und betreut sie. Webentwicklung aus dem Raum Plau am See, remote.">
+<meta property="og:image" content="https://jan-erik-andersen.de/bilder/vorschau.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Jan-Erik Andersen, Webentwicklung, Raum Plau am See · remote">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Jan-Erik Andersen · Webentwicklung, Raum Plau am See">
+<meta name="twitter:description" content="Jan-Erik Andersen entwickelt Websites und Onlineshops, bindet sie an andere Systeme an und betreut sie. Webentwicklung aus dem Raum Plau am See, remote.">
+<meta name="twitter:image" content="https://jan-erik-andersen.de/bilder/vorschau.jpg">
+<meta name="twitter:image:alt" content="Jan-Erik Andersen, Webentwicklung, Raum Plau am See · remote">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="favicon-16.png" sizes="16x16" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Jan-Erik Andersen · Webentwicklung (Entwurf Seite)</title>
+<!-- Module der 3D-Seite vorab holen (Importmap steht davor, damit "three" aufgelöst wird). Schrift der Marke N4 ohne preload: gemessen (Mobil-Emulation) verzögerte ein preload den ersten Paint, font-display: swap zeigt den Namen sofort -->
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<link rel="modulepreload" href="./main.js" fetchpriority="low">
+<link rel="modulepreload" href="./vendor/three.module.js" fetchpriority="low">
+<link rel="modulepreload" href="./vendor/three.core.js" fetchpriority="low">
+<link rel="modulepreload" href="./kern.js" fetchpriority="low">
+<link rel="modulepreload" href="./falt.js" fetchpriority="low">
+<link rel="modulepreload" href="./fonts/schriften.js" fetchpriority="low">
+<link rel="modulepreload" href="./folge.js" fetchpriority="low">
+<link rel="modulepreload" href="./gerwing.js" fetchpriority="low">
 <style>
-@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4.woff2") format("woff2"); font-weight: 200 800; font-style: normal; }
-@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4-Italic.woff2") format("woff2"); font-weight: 200 800; font-style: italic; }
+@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4.woff2") format("woff2"); font-weight: 200 800; font-style: normal; font-display: swap; }
+@font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4-Italic.woff2") format("woff2"); font-weight: 200 800; font-style: italic; font-display: swap; }
 :root {
   --bg: #f5f6f8;
   --ink: #303033;
@@ -28,6 +58,10 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 ::selection { background: var(--red); color: #fff; }
 :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+main.sr:focus { outline: none; }
+/* Sprunglink: erstes fokussierbares Element, nur bei Fokus sichtbar */
+.skip { position: fixed; z-index: 10; left: var(--pad); top: 12px; transform: translateY(-200%); padding: 10px 14px; background: #fff; color: var(--ink); border: 1px solid var(--ink); border-radius: 2px; font: 500 14px/1 var(--sans); text-decoration: none; }
+.skip:focus { transform: none; }
 
 #stage { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 .track { height: 6000vh; }
@@ -129,7 +163,7 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 
 /* Rechtliche Links: dauerhaft, dezent am unteren Rand (3D-Ansicht), im Fallback am Ende der Seite */
 .rechtlich { position: fixed; z-index: 4; left: 50%; bottom: 2px; transform: translateX(-50%); display: flex; gap: 6px; align-items: center; font: 500 11px/1 var(--sans); letter-spacing: .04em; color: var(--muted); white-space: nowrap; text-shadow: 0 0 3px var(--bg), 0 0 6px var(--bg), 0 0 10px var(--bg); }
-.rechtlich a { color: var(--muted); text-decoration: none; padding: 6px 5px; }
+.rechtlich a { color: var(--muted); text-decoration: none; padding: 7px 5px; }
 .rechtlich a:hover { color: var(--red); text-decoration: underline; text-underline-offset: 3px; }
 .nogl .rechtlich { position: static; transform: none; padding: 0 var(--pad) 2rem; max-width: 42em; font-size: 14px; text-shadow: none; }
 .nogl .rechtlich a { padding: .35em 0; text-decoration: underline; text-underline-offset: 3px; }
@@ -146,23 +180,173 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
   .karte text { font-size: 10.5px; }
 }
 </style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "WebSite",
+   "@id": "https://jan-erik-andersen.de/#website",
+   "url": "https://jan-erik-andersen.de/",
+   "name": "Jan-Erik Andersen",
+   "inLanguage": "de-DE",
+   "publisher": {
+    "@id": "https://jan-erik-andersen.de/#person"
+   }
+  },
+  {
+   "@type": "ProfilePage",
+   "@id": "https://jan-erik-andersen.de/#seite",
+   "url": "https://jan-erik-andersen.de/",
+   "name": "Jan-Erik Andersen · Webentwicklung, Raum Plau am See",
+   "inLanguage": "de-DE",
+   "isPartOf": {
+    "@id": "https://jan-erik-andersen.de/#website"
+   },
+   "about": {
+    "@id": "https://jan-erik-andersen.de/#person"
+   },
+   "mainEntity": {
+    "@id": "https://jan-erik-andersen.de/#person"
+   },
+   "description": "Jan-Erik Andersen entwickelt Websites und Onlineshops, bindet sie an andere Systeme an und betreut sie. Webentwicklung aus dem Raum Plau am See, remote.",
+   "primaryImageOfPage": {
+    "@type": "ImageObject",
+    "url": "https://jan-erik-andersen.de/bilder/vorschau.jpg",
+    "width": 1200,
+    "height": 630
+   }
+  },
+  {
+   "@type": "Person",
+   "@id": "https://jan-erik-andersen.de/#person",
+   "name": "Jan-Erik Andersen",
+   "givenName": "Jan-Erik",
+   "familyName": "Andersen",
+   "jobTitle": "Webentwickler",
+   "url": "https://jan-erik-andersen.de/",
+   "email": "mail@andersen-webworks.de",
+   "telephone": "+49 38733 270015",
+   "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Plau am See",
+    "addressRegion": "Mecklenburg-Vorpommern",
+    "addressCountry": "DE"
+   },
+   "sameAs": [
+    "https://www.linkedin.com/in/andersen-erik/"
+   ],
+   "knowsAbout": [
+    "WordPress",
+    "WooCommerce",
+    "YOOtheme Pro",
+    "Salesforce",
+    "Concludis",
+    "CRM-Systeme",
+    "ERP-Systeme",
+    "Umzug von Shopify zu WooCommerce",
+    "HTML",
+    "CSS",
+    "JavaScript",
+    "Kundenabstimmung",
+    "Projektorganisation",
+    "QA und Fehleranalyse"
+   ],
+   "knowsLanguage": [
+    "de",
+    "en"
+   ]
+  },
+  {
+   "@type": "ProfessionalService",
+   "@id": "https://jan-erik-andersen.de/#leistungen",
+   "name": "Jan-Erik Andersen · Webentwicklung",
+   "alternateName": "Andersen Webworks",
+   "url": "https://jan-erik-andersen.de/",
+   "description": "Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt. Unternehmen arbeiten direkt mit mir. Auf Wunsch arbeite ich auch befristet im Team mit.",
+   "email": "mail@andersen-webworks.de",
+   "telephone": "+49 38733 270015",
+   "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Plau am See",
+    "addressRegion": "Mecklenburg-Vorpommern",
+    "addressCountry": "DE"
+   },
+   "founder": {
+    "@id": "https://jan-erik-andersen.de/#person"
+   },
+   "audience": {
+    "@type": "Audience",
+    "audienceType": "Agenturen und Unternehmen"
+   },
+   "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Leistungen",
+    "itemListElement": [
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Betreuung und Absicherung",
+       "description": "Ich halte Ihre Seite laufend aktuell und sehe regelmäßig nach, ob sie sauber läuft."
+      }
+     },
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Modernisierung",
+       "description": "Ich bringe WordPress-Seiten technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben."
+      }
+     },
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Shops und Shop-Wechsel",
+       "description": "Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen. Wer von Shopify zu WooCommerce wechseln will: Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um."
+      }
+     },
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Schnittstellen und eigene Werkzeuge",
+       "description": "Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen. Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt."
+      }
+     },
+     {
+      "@type": "Offer",
+      "itemOffered": {
+       "@type": "Service",
+       "name": "Gestaltung",
+       "description": "Ich entwerfe Erscheinungsbilder und Oberflächen selbst oder setze vorhandene Entwürfe sorgfältig um."
+      }
+     }
+    ]
+   }
+  }
+ ]
+}
+</script>
 </head>
 <body>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <canvas id="stage" aria-hidden="true"></canvas>
 <svg id="karte" class="karte" role="group" aria-label="Übersicht der Seite: Parzellen anklicken" aria-hidden="true"></svg>
 <header class="top">
   <a class="mark n4" href="#start" data-scene="eroeffnung" aria-label="Jan-Erik Andersen"><span aria-hidden="true">Jan-Erik <i>Andersen</i><span class="dot"></span><span class="fold"></span></span></a>
   <nav aria-label="Hauptnavigation"><a href="#arbeit" data-scene="gerwing">Projekte</a><a href="#leistungen" data-scene="betreuung">Leistungen</a><button type="button" class="kontaktknopf" id="kontaktknopf" aria-expanded="false" aria-controls="kontaktblatt">Kontakt</button></nav>
 </header>
-<div class="kontaktblatt" id="kontaktblatt" role="region" aria-label="Kontakt" hidden>
-  <h2>Schreiben Sie mir, <i>worum es geht.</i></h2>
+<div class="kontaktblatt" id="kontaktblatt" role="dialog" aria-modal="true" aria-labelledby="kontaktblatt-titel" hidden>
+  <h2 id="kontaktblatt-titel">Schreiben Sie mir, <i>worum es geht.</i></h2>
   <p><span>Mail</span><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a></p>
   <p><span>Telefon</span><a href="tel:+4938733270015">+49 38733 270015</a></p>
   <p><span>LinkedIn</span><a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">andersen-erik</a></p>
 </div>
 <div class="vorbild" aria-hidden="true"><span class="n4"><span class="zl">Jan-Erik </span><span class="zl"><i>Andersen</i><span class="dot"></span></span></span><p><span>Webentwicklung</span><span class="sep"> · </span><span>Raum Plau am See · remote</span></p></div>
 <script src="./vorbild.js"></script>
-<main class="sr">
+<main class="sr" id="inhalt" tabindex="-1">
   <section id="start">
     <h1>Jan-Erik <i>Andersen</i></h1>
     <p class="meta">Webentwicklung · Raum Plau am See · remote</p>
@@ -189,7 +373,7 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
     <p class="meta">2023 bis 2025 · für die Runden Group</p>
     <p>Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.</p>
     <h3>Gestaltung</h3>
-    <p>Für mich gehört Gestaltung zur Entwicklung. Ich entwerfe Erscheinungsbilder und Oberflächen selbst oder setze vorhandene Entwürfe sorgfältig um. Beispiele: Logo und Styleguide für das Musiktheaterstück „Take the Gloves Off“, ehrenamtlich, dazu das NOVUM-Cover und das Ausstellungsmotiv „100 Jahre Audi“.</p>
+    <p>Für mich gehört Gestaltung zur Entwicklung. Ich entwerfe Erscheinungsbilder und Oberflächen selbst oder setze vorhandene Entwürfe sorgfältig um. Beispiele: Logo und Styleguide für das Musiktheaterstück „<span lang="en">Take the Gloves Off</span>“, ehrenamtlich, dazu das NOVUM-Cover und das Ausstellungsmotiv „100 Jahre Audi“.</p>
   </section>
   <section id="weitere">
     <h2>Weitere <i>Arbeit</i></h2>
@@ -241,7 +425,7 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
   </section>
 </main>
 <div class="track"></div>
-<div class="hint" id="hint">Scrollen</div>
+<div class="hint" id="hint" aria-hidden="true">Scrollen</div>
 <div class="controls">
   <button id="uebersicht" type="button" aria-label="Übersicht" aria-pressed="false" title="Übersicht"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg><span class="lbl">Übersicht</span></button>
   <button id="prev" type="button" aria-label="Vorige Szene"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 3 5 8l5 5"/></svg></button>
@@ -250,9 +434,8 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 <p class="kartenhinweis" id="kartenhinweis" aria-hidden="true">Parzelle anklicken</p>
 <div class="draft"><b>Entwurf Seite</b><span id="szene" aria-hidden="true"></span></div>
 <div class="bar"><i id="bar"></i></div>
-<nav class="rechtlich" aria-label="Kontakt und Rechtliches"><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a><span aria-hidden="true">·</span><a href="tel:+4938733270015">+49 38733 270015</a><span aria-hidden="true">·</span><a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">LinkedIn</a><span aria-hidden="true">·</span><a href="/de/impressum.html">Impressum</a><span aria-hidden="true">·</span><a href="/de/datenschutz.html">Datenschutz</a></nav>
+<footer class="rechtlich" aria-label="Kontakt und Rechtliches"><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a><span aria-hidden="true">·</span><a href="tel:+4938733270015">+49 38733 270015</a><span aria-hidden="true">·</span><a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">LinkedIn</a><span aria-hidden="true">·</span><a href="/de/impressum.html">Impressum</a><span aria-hidden="true">·</span><a href="/de/datenschutz.html">Datenschutz</a></footer>
 
-<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
 <script type="module" src="./main.js"></script>
 </body>
 </html>

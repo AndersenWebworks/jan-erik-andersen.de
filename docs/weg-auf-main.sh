@@ -27,10 +27,11 @@ WTW="$(cd "$WT" && pwd -W)"; HAUPTW="$(cd "$HAUPT" && pwd -W)"; SEITEW="$(cd "$S
 # ---------- a) Dateien aus seite/ kopieren ----------
 # Was index.html lädt: main.js (Modul) -> kern.js, folge.js, gerwing.js ... (alle *.js im Ordner), vendor/ komplett (three + addons/ für Post-Processing, Importmap),
 # bilder/*.js (dynamische Importe: bilder, staffelei-bilder, projekte-bilder), fonts/NewsreaderN4*.woff2 (CSS), fonts/schriften.js, Favicons.
-# Nicht ausgeliefert: _pruefung/, *.md (DREHBUCH, Notizen), bilder/*.jpg (nur Quellbilder der eingebetteten Daten), OFL-Lizenztexte werden mitgegeben.
+# bilder/vorschau.jpg: Vorschaubild 1200 × 630 für Open Graph / Twitter-Card (aus dem Startbild).
+# Nicht ausgeliefert: _pruefung/, *.md (DREHBUCH, Notizen), übrige bilder/*.jpg (nur Quellbilder der eingebetteten Daten), OFL-Lizenztexte werden mitgegeben.
 ( cd "$SEITE"
   ls index.html *.js apple-touch-icon.png favicon.svg favicon-16.png favicon-32.png
-  ls bilder/*.js
+  ls bilder/*.js bilder/vorschau.jpg
   ls fonts/*.woff2 fonts/schriften.js fonts/OFL-*.txt
   find vendor -type f
 ) > "$MANIFEST.neu"
@@ -60,12 +61,13 @@ python -I - "$WTW/index.html" <<'PY'
 import re, sys
 p = sys.argv[1]
 s = open(p, encoding="utf-8").read()
-# noindex nur für den Entwurf gesetzt -> raus
-s = s.replace('<meta name="robots" content="noindex, nofollow">\n', '')
-s = s.replace('<title>Jan-Erik Andersen · Webentwicklung (Entwurf Seite)</title>',
-  '<title>Jan-Erik Andersen · Webentwicklung</title>\n'
-  '<meta name="description" content="Jan-Erik Andersen entwickelt Websites und Onlineshops, bindet sie an andere Systeme an und betreut sie. Webentwicklung aus dem Raum Plau am See, remote.">\n'
-  '<link rel="canonical" href="https://jan-erik-andersen.de/">')
+# Title, Description, canonical, Open Graph, Twitter-Card und JSON-LD stehen bereits in seite/index.html; hier nur: Entwurf-noindex -> index (Vorschaubilder groß erlaubt)
+alt = '<meta name="robots" content="noindex, nofollow">'
+if alt not in s: sys.exit("FEHLER: robots-Meta des Entwurfs nicht gefunden")
+s = s.replace(alt, '<meta name="robots" content="index, follow, max-image-preview:large">')
+s = re.sub(r'<!-- Entwurf: noindex;[^>]*-->\n', '', s)
+for pflicht in ('<link rel="canonical" href="https://jan-erik-andersen.de/">', '<meta name="description"', 'property="og:image"', 'application/ld+json'):
+    if pflicht not in s: sys.exit("FEHLER: im Kopf fehlt " + pflicht)
 # sichtbares Schild samt Szenenanzeige
 s, n = re.subn(r'<div class="draft">.*?</div>\n', '', s, flags=re.S)
 if n != 1 and '<div class="draft">' in s:
@@ -168,7 +170,7 @@ import re, sys
 from html.parser import HTMLParser
 quelle, wt, site = sys.argv[1:4]
 src = open(quelle, encoding="utf-8").read()
-m = re.search(r'<main class="sr">.*?</main>', src, flags=re.S)
+m = re.search(r'<main class="sr"[^>]*>.*?</main>', src, flags=re.S)
 if not m: sys.exit("FEHLER: Text-Fallback nicht gefunden")
 # Kontaktwege stehen als letzter Abschnitt (section id="kontakt") im Fallback; für den Textteil abtrennen
 km = re.search(r'<section id="kontakt">.*?</section>', m.group(0), flags=re.S)
@@ -185,14 +187,14 @@ class P(HTMLParser):
         elif t == "section": s.blocks.append(["section", a.get("id", ""), ""])
         elif t == "blockquote": s.blocks.append(["bq", "", ""])
         elif t == "a" and s.cur is not None:
-            s.cur[2] += ""; s.href = a.get("href", "")
+            s.cur[2] += "["; s.href = a.get("href", "")
         elif t == "span" and a.get("class") == "y" and s.cur: s.cur[2] += "\u0001"
         elif t == "small" and s.cur: s.cur[2] += "\u0002"
     def handle_endtag(s, t):
         if t in ("h1", "h2", "h3", "p", "dt", "dd", "cite", "li") and s.cur:
             s.cur[2] = re.sub(r"\s+", " ", s.cur[2]).strip(); s.blocks.append(s.cur); s.cur = None
         elif t == "span" and s.cur and "\u0001" in s.cur[2] and "\u0003" not in s.cur[2]: s.cur[2] += "\u0003"
-        elif t == "a": pass
+        elif t == "a" and s.cur is not None: s.cur[2] += "](" + s.href + ")"
     def handle_data(s, d):
         if s.cur is not None: s.cur[2] += d
     def handle_entityref(s, n): pass
@@ -232,7 +234,7 @@ kontakt = "\n".join("- " + (txt if not href.startswith("http") else txt + " (" +
 voll = text + "\n" + kontakt + "\n"
 
 # llms-full.txt: kompletter Text
-kopf_voll = "Quelle: " + site + "/ (Text ohne 3D-Darstellung)\n\n"
+kopf_voll = "Quelle: " + site + "/ (Text ohne 3D-Darstellung)\n\nKontakt:\n" + kontakt + "\n\n"
 open(wt + "/llms-full.txt", "w", encoding="utf-8", newline="\n").write(kopf_voll + voll + "\nRechtliches:\n- Impressum: " + site + "/de/impressum.html\n- Datenschutz: " + site + "/de/datenschutz.html\n")
 
 # llms.txt: je Abschnitt Überschrift und erster Satz des ersten Absatzes (Werdegang: Zeitraum und Station; Stimmen: Hinweis)
@@ -241,7 +243,7 @@ def erster_satz(x):
     return m.group(0) if m else x
 abschnitte = re.split(r"\n(?=## )", text)
 kopf = [l for l in abschnitte[0].split("\n") if l and not l.startswith("# ")]
-llms = ["# Jan-Erik Andersen", "", "> " + kopf[0], ">", "> " + " ".join(kopf[1:]), "", "Ausführliche Fassung: " + site + "/llms-full.txt", ""]
+llms = ["# Jan-Erik Andersen", "", "> " + kopf[0], ">", "> " + " ".join(kopf[1:]), "", "Ausführliche Fassung: " + site + "/llms-full.txt", "", "## Kontakt", ""] + kontakt.split("\n") + [""]
 for ab in abschnitte[1:]:
     zl = ab.split("\n")
     titel = zl[0][3:]
@@ -256,7 +258,7 @@ for ab in abschnitte[1:]:
     h3 = [i for i, l in enumerate(zl) if l.startswith("### ")]
     if not h3:
         par = [l for l in zl[1:] if l and not l.startswith("- ")]
-        if par: llms += [par[0] if len(par[0]) < 300 else erster_satz(par[0]), ""]
+        if par: llms += [x for q in par for x in (q, "")]   # Abschnitte ohne Unterüberschrift sind kurz: ganz übernehmen
         continue
     for k, i in enumerate(h3):
         ende = h3[k + 1] if k + 1 < len(h3) else len(zl)
@@ -266,9 +268,9 @@ for ab in abschnitte[1:]:
         if not par:
             llms += ["- " + l[2:] for l in zl[i + 1:ende] if l.startswith("- ")]
             continue
-        llms.append("- " + zl[i][4:] + (" (" + meta + ")" if meta else "") + (": " + erster_satz(par[0]) if par else ""))
+        llms.append("- " + zl[i][4:] + (" (" + meta + ")" if meta else "") + (": " + (par[0] if len(par[0]) <= 350 else erster_satz(par[0])) if par else ""))
     llms.append("")
-llms += ["## Kontakt", ""] + kontakt.split("\n") + ["", "## Rechtliches", "", "- Impressum: " + site + "/de/impressum.html", "- Datenschutz: " + site + "/de/datenschutz.html", ""]
+llms += ["## Rechtliches", "", "- Impressum: " + site + "/de/impressum.html", "- Datenschutz: " + site + "/de/datenschutz.html", ""]
 s = re.sub(r"\n{3,}", "\n\n", "\n".join(llms))
 open(wt + "/llms.txt", "w", encoding="utf-8", newline="\n").write(s)
 PY
