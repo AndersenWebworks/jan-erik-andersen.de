@@ -528,22 +528,22 @@ export default function (K) {
     // Zoom auf den Laptop mit dem Shop: die Bestellung, Quadratmeter rein
     key(1.2, .205, V(LX0 + LW / 2 + .15, .55, ZFR - .5), 17, -9, 4.2, V(LX0 + LW / 2, .6, ZFR - .5), 19, -6, 4.7),
     // Station 0: der Lieferschein steht am Laptop auf
-    ...hold(0, 1.0, 20, 16, 4.6, 3.5, { dx: -1.4, dxN: .15 }),
+    ...hold(0, 1.0, 20, 16, 5.4, 4.1, { dx: -1.4, dxN: .15 }),
     // Station Fläche (m²): Fläche mit Kontur, etwas höherer Blick
-    ...hold(1, 1.3, 20, 17, 4.1, 3.3, { dx: .75, dxN: .12 }),
+    ...hold(1, 1.3, 20, 17, 4.8, 3.9, { dx: .75, dxN: .12 }),
     // Station ganze Steine: die Reihen stehen
-    ...hold(2, 1.3, 20, 17, 4.0, 3.3, { dx: .8, dxN: .12 }),
+    ...hold(2, 1.3, 20, 17, 4.7, 3.9, { dx: .8, dxN: .12 }),
     // Station Palette: Gewicht
-    ...hold(3, 1.3, 20, 17, 4.0, 3.3, { dx: .8, dxN: .12 }),
+    ...hold(3, 1.3, 20, 17, 4.7, 3.9, { dx: .8, dxN: .12 }),
     // Station Weiche: Fracht nach PLZ
-    ...hold(4, 1.3, 20, 17, 4.0, 3.3, { dx: .8, dxN: .12 }),
+    ...hold(4, 1.3, 20, 17, 4.7, 3.9, { dx: .8, dxN: .12 }),
     // Station Tor der zuständigen Halle: an Händler (roter Haken)
-    ...hold(5, 1.3, 20, 17, 4.0, 3.3, { dx: .8, dxN: .12 }),
+    ...hold(5, 1.3, 20, 17, 4.7, 3.9, { dx: .8, dxN: .12 }),
     // Weg hinter dem Tor nach hinten durch die Lücke und zum Haus
     key(.9, .78, V(GX + .5, .55, GZ2 + .8), 17, -9, 4.8, V(GX + .1, .6, GZ2 + .8), 20, -6, 3.9),
     key(.8, .815, V(SH6[0] - .5, .6, SH6[1] + 1.0), 17, -9, 4.6, V(SH6[0] - .9, .6, SH6[1] + 1.0), 19, -6, 3.8),
     // Station Haus: Ankunft, Haken, der letzte Stein legt sich
-    ...hold(6, .9, 20, 16, 4.4, 3.4, { dx: .8, dxN: .12, y: .75 }),
+    ...hold(6, .9, 20, 16, 5.2, 4.0, { dx: .8, dxN: .12, y: .75 }),
     // Rückzug beginnt, während der letzte Stein sich legt (die Kamera hebt sich über den Lieferschein), zuletzt Haus mit Terrasse, Deko und fertigem Pflaster als Schlussbild
     key(1.2, .935, V(SH6[0] - .6, .7, SH6[1] - 1.2), 22, -9, 8.0, V(SH6[0] - .8, .8, SH6[1] - 1.6), 24, -6, 10.5),
     key(1.7, 1, V(16.8, 1.35, -9.0), 26, -9, 17.0, V(16.8, 1.5, -8.8), 28, -6, 26.0)
