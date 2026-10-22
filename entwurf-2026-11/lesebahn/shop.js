@@ -24,14 +24,15 @@ export default function (K) {
   // ---------- Texte ----------
   const kp = K.kopf({ head: "Shops und Shop-Wechsel", headLines: N ? ["Shops und", "Shop-Wechsel"] : undefined, e: EV * (N ? 1.55 : 1.8), on: 9 });
   const mk = (t, em) => K.satz(t, { e: EV * (N ? 1.05 : 1), maxEm: em, on: 9 });
-  const T1 = mk("Ich baue WooCommerce-Shops für Produkte, die *in kein Standardformular passen*, etwa mit Mengen nach Fläche oder Fracht nach Entfernung.", N ? 12.5 : 17.5);
+  const T1 = mk("Ich baue WooCommerce-Shops für Produkte, die *in kein Standardformular passen*, etwa mit Mengen nach Fläche oder Fracht nach Entfernung.", N ? 11 : 19);
   const T2 = mk("Wer bei Shopify mit wachsendem Umsatz immer höhere *Gebühren* zahlt, kann zu *WooCommerce wechseln*.", N ? 12 : 15);
   const T3 = mk("Ich *rechne vorher durch*, ob sich das lohnt.", N ? 10.5 : 13.5);
   const T4 = mk("Dann ziehe ich *Produkte, Kunden und Bestellungen* um.", N ? 10.5 : 12);
 
   // ---------- Größen der Kartons ----------
   const W0 = kp.w + (N ? 1.0 : 1.3), H0 = N ? 2.5 : 2.3;
-  const W1 = T1.tw + 1.1, H1 = Math.max(2.5, T1.h + 1.0);
+  const W1 = T1.tw + 1.0, H1 = N ? Math.max(3.2, T1.h + 1.0) : T1.h + .85;   // Sonderformat: Breitbild sehr lang und flach, Hochkant hoch und schmal
+  const WS = 1.2, HS = 1.0;                                                     // Standardkartons daneben: passen in ein Fach (Fach 1,5 x 1,1)
   const W2 = T2.tw + 1.0, H2 = T2.h + 1.0;
   const W3 = T3.tw + 1.0, H3 = Math.max(1.8, T3.h + 1.0);
   const W4 = T4.tw + 1.0, H4 = Math.max(2.1, T4.h + 1.35);
@@ -43,10 +44,10 @@ export default function (K) {
   // ---------- Mitfahrt (Handy; am Desktop nur wo sie etwas bedeutet): erst die Weglängen, dann das Layout ----------
   const Dof = (w, o) => K.trage(0, w, o || {}).D;
   const D0 = Dof(kp.w), D1 = Dof(T1.tw), D2 = Dof(T2.tw), D3 = Dof(T3.tw);
-  const DD = Dof(T4.tw, { minD: trioW + .45 });
+  const DD = Dof(T4.tw, { minD: trioW + .25 });
 
   // ---------- Layout (x in Szenenkoordinaten; Korridor = Startlage bis Endlage samt Anbauten) ----------
-  const GP = .7;
+  const GP = .5;
   let cur = 0;
   const it = {};
   const put = (key, W, D, pre = 0, post = 0, gap = GP) => {
@@ -54,7 +55,7 @@ export default function (K) {
     it[key] = { c0, cF, W, xl: cur, xr: cF + W / 2 + post };
     cur = it[key].xr + gap;
   };
-  put("k0", W0, D0); put("k1", W1, D1); put("k2", W2, D2); put("k3", W3, D3, .7, .7);
+  put("k0", W0, D0); put("ks", WS * 2 + .2, 0, 0, 0, .6); put("k1", W1, D1); put("k2", W2, D2); put("k3", W3, D3, .7, .7);
   const L4 = cur;                                    // linke Kante des Zugs der drei Kartons
   const cP0 = L4 + WP / 2, cK0 = cP0 + WP / 2 + gp + WP / 2, cB0 = cK0 + WP / 2 + gp + W4 / 2;
   const cPF = cP0 + DD, cKF = cK0 + DD, cBF = cB0 + DD;
@@ -75,7 +76,7 @@ export default function (K) {
     const z0 = LZ, z1 = LZ - DP, W = x1 - x0, tl = tIn(x0), tf = tl + bE(.8), d = bE(1.0);
     const op = { over: .04 }, sop = { over: .04, nocut: 1, nofold: 1 };
     F.part(tag, tl, bE(.75));
-    const fr = K.panel(par, [x0, z0], [x1, z0], [0, 1], tf, d, Q, op);
+    const fr = K.panel(par, [x0, z0], [x1, z0], [0, 1], tf, d, Q, { over: .04, nocut: 1 });
     K.rect(fr, 0, 0, W, h, CF);
     // Rollbrett: Leiste am Fuß der Vorderseite mit zwei Rollen
     K.P(fr, [[0, 0], [W, 0], [W, .2], [0, .2]], METAL, .4, OUT);
@@ -138,6 +139,9 @@ export default function (K) {
   const R0 = ride("k0", kp.w);
   const c0 = carton(R0.node(R), "k0", R0.c0 - W0 / 2, R0.c0 + W0 / 2, H0, { open: true, bAt: R0.D > 0 ? R0.bA : 1 });
   aufschrift(c0, kp.h, -.05);
+
+  // ---------- zwei Standardkartons (passen in ein Fach) als Maß neben dem Sonderkarton ----------
+  for (let k = 0; k < 2; k++) { const xa = it.ks.xl + k * (WS + .2); carton(R, "ks" + k, xa, xa + WS, HS, {}); }
 
   // ---------- S1: Sonderkarton, zu lang und zu hoch für ein Standardfach ----------
   const R1 = ride("k1", T1.tw);
@@ -226,7 +230,7 @@ export default function (K) {
   }
 
   // ---------- S4: drei Kartons wandern vom Shopify- ins WooCommerce-Regal, der vorderste trägt den Satz ----------
-  const R4 = K.trage(cBF, T4.tw, { minD: trioW + .45 });
+  const R4 = K.trage(cBF, T4.tw, { minD: trioW + .25 });
   const tr = [
     { key: "p", c0: cP0, W: WP, h: HP, txt: "PRODUKTE" },
     { key: "k", c0: cK0, W: WP, h: HP, txt: "KUNDEN" },
@@ -275,7 +279,12 @@ export default function (K) {
   for (const g of GER) F.geruest(g);
 
   // ---------- Faden: auf dem Boden vor den Kartons, über die Wiegeplatte ----------
-  const faden = [[xs + 4.6, .004, FZ], [xp0 - .12, .004, FZ], [xp0, .06, FZ], [xp1, .06, FZ], [xp1 + .12, .004, FZ], [xe + 4, .004, FZ]];
+  // Stützpunkte dicht setzen: sonst überschwingt der Spline vor dem Anstieg an der Wiegeplatte unter den Boden (y < 0) und der Faden verschwindet
+  const FY = .035, faden = [];
+  const run = (xa, xb) => { for (let x = xa; x < xb - .01; x += 1.0) faden.push([x, FY, FZ]); };
+  run(xs + 4.6, xp0 - .12);
+  faden.push([xp0 - .12, FY, FZ], [xp0, .09, FZ], [xp1, .09, FZ], [xp1 + .12, FY, FZ]);
+  run(xp1 + .12 + 1.0, xe + 4); faden.push([xe + 4, FY, FZ]);
 
   return {
     strecke: [xs, xe], lineZ: LZ,

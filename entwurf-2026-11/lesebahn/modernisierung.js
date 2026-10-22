@@ -47,7 +47,7 @@ export default function (K, opt) {
   const WALLC = c3("#f3f0e8"), FOOTC = c3("#dcd7cd"), CASTC = c3("#b9b3a6");
 
   // ---------- Maße der Wand (v: Höhe an der Wand, u: Länge) ----------
-  const HW = 6.2, SK = .34, FR0 = 3.45, FR1 = 4.45, VC = 1.65, CV0 = .8, CV1 = 2.5;
+  const HW = 5.0, SK = .34, FR0 = 3.45, FR1 = 4.45, VC = 1.65, CV0 = .8, CV1 = 2.5;
   const S1 = "Viele WordPress-Seiten laufen seit Jahren auf *veralteten Themes, Plugins und PHP-Versionen*.";
   const S2 = "Ich bringe sie *technisch und gestalterisch* auf den heutigen Stand.";
   const S3 = "Dabei achte ich darauf, dass *Inhalte und Adressen erhalten bleiben*.";
@@ -75,7 +75,7 @@ export default function (K, opt) {
   const D = [wG, w2, sgW - .8].map(w => K.trage(0, w, { R: RD }).D);
   const uc = [ucG, uc2, sgC], cF = []; let acc = 0;
   D.forEach((d, i) => { acc += d; cF[i] = uc[i] + acc; });
-  const WXS = 0, xs = WXS - hw, xe = cF[2], Slen = xe - xs;
+  const WXS = 0, xs = WXS - hw, xe = cF[2] + .7, Slen = xe - xs;
   K.strecke(xs, xe);
   const T = [wG, w2, sgW - .8].map((w, i) => K.trage(cF[i], w, { R: RD }));
   const vb = K.vWorld / Slen;                                           // b je vh
@@ -87,26 +87,31 @@ export default function (K, opt) {
   const FZ = 1.3;
 
   // ---------- Segmente der Wand, Füße ----------
-  const NS = N ? 11 : 8, SW = Lw / NS, PXU = 120;
+  // Schnitte zwischen den Segmenten: gleichmäßig, aber nie durch einen Text (jeder Satz liegt ganz auf einem Segment)
+  const PXU = 120, NS0 = 12;
+  const spans = [[G0, G0 + w0], [a1, a1 + w1], [a2, a2 + w2], [sgC - w3 / 2, sgC + w3 / 2]].map(([a, b]) => [a - .15, b + .15]);
+  let cuts = [];
+  for (let k = 1; k < NS0; k++) { let c = k * Lw / NS0; for (const [a, b] of spans) if (c > a && c < b) c = c - a < b - c ? a : b; cuts.push(c); }
+  cuts = cuts.sort((p, q) => p - q).filter((c, i, A) => (i ? c - A[i - 1] > .7 : c > .7) && Lw - c > .7);
+  const E = [0, ...cuts, Lw], NS = E.length - 1;
   const rise = [], bast = [];
   for (let k = 0; k < NS; k++) {
-    const rs = riseB(k * SW, .9 * hw), p0 = riseB(k * SW, 1.0 * hw);
+    const rs = riseB(E[k], 1.5 * hw), p0 = riseB(E[k], 1.9 * hw);
     rise.push([rs, (.25 * hw) / Slen]);
     bast.push([Math.max(0, p0), Math.max(.012, rs - p0)]);
   }
-  const sn = [], ZSEG = [];
+  const sn = [];
   for (let k = 0; k < NS; k++) {
-    const u0 = k * SW, [rs, rd] = rise[k];
+    const u0 = E[k], SW = E[k + 1] - u0, [rs, rd] = rise[k];
     F.part("wand" + k, Math.min(.97, bast[k][0]), bast[k][1]);
     const nd = K.panel(par, [WXS + u0, ZW], [WXS + u0 + SW, ZW], [0, -1], Math.min(.98, rs), rd, UP, { over: .04 });
     K.rect(nd, 0, 0, SW, HW, WALLC, .35);
     sn.push(nd);
     // Fuß mit zwei Rollen, liegt flach vor der Wand
-    const fw = N ? .8 : 1.0, fx = u0 + SW / 2 - fw / 2;
+    const fw = Math.min(N ? .8 : 1.0, SW - .3), fx = u0 + SW / 2 - fw / 2;
     const ft = K.panel(par, [WXS + fx, ZW], [WXS + fx + fw, ZW], [0, 1], Math.min(.98, rs), rd, 0, { over: 0 });
     K.rect(ft, 0, 0, fw, .6, FOOTC, .35);
     for (const cu of [.09, fw - .27]) K.rect(ft, cu, .32, cu + .18, .5, CASTC, .35, .0006);
-    ZSEG.push(nd);
   }
   // Rahmen für die Rolle: Knoten in der Ebene der aufgestellten Wand über die ganze Länge, ohne Fläche
   F.part("rahmen", 0, .01);
@@ -122,8 +127,7 @@ export default function (K, opt) {
     { k: "text", id: "A", u0: A.u0, u1: A.u1, v0: CV0, v1: CV1 },
     { k: "side", u0: Sd.u0, u1: Sd.u1, v0: CV0, v1: CV1 },
     { k: "text", id: "B", u0: B.u0, u1: B.u1, v0: CV0, v1: CV1 },
-    { k: "img", u0: I2.u0, u1: I2.u1, v0: CV0, v1: CV1 },
-    { k: "banner", u0: .7, u1: pageR, v0: 4.85, v1: 5.95 }
+    { k: "img", u0: I2.u0, u1: I2.u1, v0: CV0, v1: CV1 }
   ];
   const HOLES = [[0, 0, Lw, SK], [0, FR0, Lw, FR1], [sg.u0 - .12, sg.v0 - .12, sg.u1 + .12, sg.v1 + .12]];
 
@@ -255,7 +259,7 @@ export default function (K, opt) {
     return a * (.5 + .5 * Math.sin(u * 2.3 + (v < 3 ? .7 : 2.1)));
   };
   for (let k = 0; k < NS; k++) {
-    const u0 = k * SW, u1 = u0 + SW;
+    const u0 = E[k], u1 = E[k + 1], SW = u1 - u0;
     // neue Schicht
     const mN = dunst(new THREE.MeshBasicMaterial({ map: tex(mkCanvas(u0, u1, PXU, drawNew)), toneMapped: false, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 }), 1);
     const gN = new THREE.PlaneGeometry(SW, HW), pN = { mesh: K.add(new THREE.Mesh(gN, mN)) }; pN.mesh.frustumCulled = false;
@@ -305,11 +309,21 @@ export default function (K, opt) {
     rGeo.attributes.position.needsUpdate = true; rGeo.attributes.color.needsUpdate = true; rGeo.attributes.uv.needsUpdate = true;
   }
 
+  // ---------- Texte ----------
+  const segOf = u => { let k = 0; while (k < NS - 1 && u >= E[k + 1]) k++; return k; };
+  const place = (pr, uC, v, lift) => { const k = segOf(uC); K.onPanel(sn[k], pr, uC - E[k], v, 1, null, lift); };
+  const onFor = (ua, ub) => { let m = 0; for (let k = segOf(ua); k <= segOf(ub); k++) m = Math.max(m, rise[k][0] + rise[k][1]); return Math.min(.99, m + .012); };
+  place(kp.h, cx(kp.h, G0), (FR0 + FR1) / 2, .007);
+  place(T1, cx(T1, a1), VC, .0155);
+  place(T2, cx(T2, a2), VC, .007);
+  place(T3, sgC, sgTv, .007);
+  kp.h.on = onFor(G0, G0 + w0); T1.on = onFor(a1, a1 + w1); T2.on = onFor(a2, a2 + w2); T3.on = onFor(sgC - w3 / 2, sgC + w3 / 2);
+
   // ---------- Abrisskante: Lauf in b, von den Lesefenstern abgeleitet ----------
   const bws = (c0, w) => K.bAt(c0 - (hwR - w / 2)), blv = (cf, w) => K.bAt(cf + (hwR - w / 2));
   const bS = K.bAt(-.3 * hw);
-  let b1 = Math.min(bws(T[0].c0, wG) + RT * vb, blv(cF[0], wG));
-  let b2 = Math.max(blv(cF[1], w2) - RT * vb, bws(T[1].c0, w2));
+  let b1 = Math.min(blv(cF[0], wG) - 4 * vb, Math.max(bws(T[0].c0, wG), T1.on, kp.h.on) + 58 * vb);
+  let b2 = Math.max(bws(T[1].c0, w2), T2.on, blv(cF[1], w2) - 55 * vb);
   b1 = Math.max(b1, bS + .02); b2 = Math.max(b2, b1 + .03);
   const bE = Math.max(b2 + .04, Math.min(1, K.bAt(xe - 1.2)));
   const tear = pchip([[bS, 0], [b1, A.u0 - .1], [b2, B.u1 + .35], [bE, Lw]]);
@@ -321,22 +335,15 @@ export default function (K, opt) {
   // M1 gehört zur Tapete und wird mit ihr abgezogen
   T1.mat.clippingPlanes = [PL];
 
-  // ---------- Texte ----------
-  const segOf = u => clamp(Math.floor(u / SW), 0, NS - 1);
-  const place = (pr, uC, v, lift) => { const k = segOf(uC); K.onPanel(sn[k], pr, uC - k * SW, v, 1, null, lift); };
-  const onFor = (ua, ub) => { let m = 0; for (let k = segOf(ua); k <= segOf(ub); k++) m = Math.max(m, rise[k][0] + rise[k][1]); return Math.min(.99, m + .012); };
-  place(kp.h, cx(kp.h, G0), (FR0 + FR1) / 2, .007);
-  place(T1, cx(T1, a1), VC, .0155);
-  place(T2, cx(T2, a2), VC, .007);
-  place(T3, sgC, sgTv, .007);
-  kp.h.on = onFor(G0, G0 + w0); T1.on = onFor(a1, a1 + w1); T2.on = onFor(a2, a2 + w2); T3.on = onFor(sgC - w3 / 2, sgC + w3 / 2);
 
+  // ---------- Bogen ----------
+  K.sheet(WXS - 2.5, WXS + Lw + D[0] + D[1] + D[2] + 2.5, -12, 3);
 
   // ---------- Faden: vor der Wand über den Boden, an den Füßen vorbei ----------
   const faden = [[WXS + 2, .004, FZ], [xe + 4, .004, FZ]];
   return {
     strecke: [xs, xe], lineZ: 0, faden,
     stops: [{ name: "m0", prints: [kp.h] }, { name: "m1", prints: [T1] }, { name: "m2", prints: [T2] }, { name: "m3", prints: [T3] }],
-    dbg: { D, b1, b2, bS, bE, Lw, Slen, NS, SW, rise, bast }
+    dbg: { D, b1, b2, bS, bE, Lw, Slen, NS, rise, bast, E, tear, shiftW, a1, w1, a2, w2, sgC, w3, wG, G0, A, B, sg, TT, R0 }
   };
 }

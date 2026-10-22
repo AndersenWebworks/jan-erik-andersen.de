@@ -5,7 +5,7 @@
 //  X0 Kopf: erster Träger auf dem Band (Kicker und Kopf), er läuft aus dem Einlauf an seinen Anschlag.
 //  X1 Träger am ersten Anschlag; dahinter die Werkzeugtafel (eigene Werkzeuge, jedes an seinem Platz).
 //  X2 Träger am zweiten Anschlag; hinter dem Band liegen die Plätze des früheren Teams nur noch als Schnittmuster eines Hockers im Bogen.
-//  X3 Prüfstation: der Träger steht auf, die Prüflehre (Rahmen) klappt über ihn, passt, der rote Prüfpunkt sitzt; die Lehre legt sich zurück,
+//  X3 Prüfstation: der Träger steht auf, der Prüfbügel schwenkt von hinten über seine Oberkante, passt, der rote Prüfpunkt sitzt; der Bügel schwenkt zurück,
 //     die Ausgabeklappe am Bandende senkt sich, erst dann läuft der Träger zur Ausgabe. Hinter der Prüfstation steht der einzige Hocker
 //     (Entscheidungen bleiben bei mir).
 // Am Handy (und kurz am Desktop) läuft jeder Träger auf den Rollen ein Stück mit der Kamera mit (K.trage) und rastet am Anschlag ein.
@@ -74,7 +74,7 @@ const SETS = [
 export default function (K) {
   const { F, R, V, Q, COL, narrow: N } = K;
   const c3 = s => { const c = new K.THREE.Color(s); return [c.r, c.g, c.b]; };
-  const PLATE = c3("#faf8f3"), BELT = c3("#e8e1d2"), BODY = c3("#e1d9c9"), WOOD = c3("#e1d9c9"), BOARD = c3("#ece7dd"), GAUGE = c3("#d8cfbf"), STOOL = c3("#e8e1d2");
+  const PLATE = c3("#faf8f3"), BELT = c3("#e8e1d2"), BODY = c3("#e1d9c9"), WOOD = c3("#e1d9c9"), BOARD = c3("#ece7dd"), GAUGE = c3("#d6ccba"), STOOL = c3("#e8e1d2");
   const lean = K.lean, UP = Q - lean;
 
   // ---------- Sätze ----------
@@ -98,8 +98,8 @@ export default function (K) {
   const HB = .5;                                   // Höhe des Bandes
   const ZH = 0;                                    // Scharnierlinie der Träger
   const LZ = -.3;                                  // Lesetiefe (Mitte der Textflächen)
-  const FB = .05, FW = PW + 2 * FB, FH = PH[3] + FB; // Prüflehre (Rahmen): Außenmaß
-  const ZF = ZH + FH + .35;                        // Vorderkante des Bandes (Platz für die liegende Prüflehre)
+  const HBP = .08;                                 // Grundplatte der Werkstückträger
+  const ZF = ZH + 1.35;                            // Vorderkante des Bandes
   const ZBK = ZH - Math.max(...PH) - .15;          // Hinterkante (Platz für die liegenden Träger)
   const FZ = ZH + .95;                             // Faden auf dem Band
   const ZST = ZBK - .8;                            // Hocker hinter dem Band
@@ -160,11 +160,16 @@ export default function (K) {
     const tP = Math.max(mods[i].t + .035, tIn);
     F.part("traeger" + i, Math.max(0, tP - .025), .025);
     const par = T.node(mods[i].L);
-    const pl = K.panel(par, [xl, ZH], [xl + PW, ZH], [0, -1], tP, N ? .03 : .04, UP, { over: .04 });
+    // Werkstückträger: Grundplatte auf den Rollen, darin steckt die Karte zwischen zwei Passecken
+    const base = K.slab(par, xl - .14, xl + PW + .14, ZH + .22, ZH - .3, HBP, Math.max(mods[i].t + .03, tP - .012), .02, { col: GAUGE, top: GAUGE });
+    F.line(base, [xl - .1, ZH + .17], [xl + PW + .1, ZH + .17], .3);
+    const pl = K.panel(base, [xl, ZH], [xl + PW, ZH], [0, -1], tP, N ? .03 : .04, UP, { over: .04 });
     const H = PH[i];
     K.rect(pl, 0, 0, PW, H, PLATE, .5);
-    // Fuß: schmale Leiste am Scharnier (Werkstückträger)
-    F.line(pl, pl.uv(.05, .06), pl.uv(PW - .05, .06), .3);
+    for (const u0 of [-.07, PW - .12]) {
+      const ec = K.panel(base, [xl + u0, ZH + .035], [xl + u0 + .19, ZH + .035], [0, -1], tP + .012, .03, UP, { over: .03 });
+      K.rect(ec, 0, 0, .19, .27, WOOD, .5);
+    }
     const on = tP + (N ? .035 : .045);
     // Druck: Textblock links bei uL, Oberkante (Versalhöhe) bei vTop
     const put = (pr, uL, vTop) => { pr.on = on; K.onPanel(pl, pr, uL + pr.w / 2 - pr.t.padX * pr.e, vTop + .32 * pr.e - pr.h / 2, 1, [0, -1]); };
@@ -177,27 +182,31 @@ export default function (K) {
       put(s, (PW - s.tw) / 2, H / 2 + vis / 2);
     }
     // Anschlag (eigene Vorrichtung) rechts der Endlage
-    const xa = cF[i] + PW / 2 + .04;
+    const xa = cF[i] + PW / 2 + .17;
     const an = K.panel(mods[i].L, [xa, ZH + .14], [xa, ZH - .42], [1, 0], mods[i].t + .02, .03, Q, { over: .03 });
     K.rect(an, 0, 0, .56, .2, WOOD, .45);
     TR.push({ T, c0, tP, on, pl });
   }
 
-  // ---------- Prüfstation: der letzte Träger steht auf, die Prüflehre (Rahmen) klappt über ihn und passt, der rote Prüfpunkt sitzt;
-  //            die Lehre legt sich zurück, die Ausgabeklappe senkt sich, erst dann läuft der Träger zur Ausgabe ----------
+  // ---------- Prüfstation: hinter dem letzten Träger steht der Prüfbügel hochgeklappt. Er schwenkt nach vorn und greift über die Oberkante
+  //            der Karte (passt), der rote Prüfpunkt sitzt dort, wo Bügel und Karte sich treffen; der Bügel schwenkt zurück, die Ausgabeklappe
+  //            senkt sich, erst dann läuft der Träger zur Ausgabe ----------
   const T3 = TR[3].T, cS = TR[3].c0, bGo = T3.D > 0 ? T3.bA : sicht(cF[3]).mitte;
   const tUp = Math.max(TR[3].on + .004, bGo - .075), tDot = tUp + .016, tDn = Math.max(tDot + .008, Math.min(tUp + .045, bGo - .017));
+  const yT = HB + HBP + PH[3] * Math.cos(lean) + .03, zT = ZH - PH[3] * Math.sin(lean) + .04, z0 = zT - .95;
+  const Lb = Math.hypot(yT - HB, zT - z0), aC = Math.atan2(yT - HB, z0 - zT), aO = Q - .35;
+  const GW = PW + .34, gx0 = cS - GW / 2, GB = .09;
   F.part("lehre", Math.max(0, mods[3].t + .01), .03);
-  const gx0 = cS - PW / 2 - FB;
-  const gauge = K.panel(mods[3].L, [gx0, ZH + .02], [gx0 + FW, ZH + .02], [0, 1], tUp, .016, Q + lean, { over: .02, dn: { t0: tDn, d: .015 } });
-  const FBd = .1;
-  K.rect(gauge, 0, 0, FW, FBd, GAUGE, .5);
-  K.rect(gauge, 0, FH - FBd, FW, FH, GAUGE, .5);
-  K.rect(gauge, 0, FBd, FBd, FH - FBd, GAUGE, .5);
-  K.rect(gauge, FW - FBd, FBd, FW, FH - FBd, GAUGE, .5);
+  const bA = K.panel(mods[3].L, [gx0, z0], [gx0 + GW, z0], [0, -1], TR[3].tP, .035, aO, { over: .03 });
+  const bug = K.panel(bA, [gx0, z0], [gx0 + GW, z0], [0, -1], tUp, .016, aC - aO, { over: .02, dn: { t0: tDn, d: .015 } });
+  K.rect(bug, 0, 0, GB, Lb, GAUGE, .5);
+  K.rect(bug, GW - GB, 0, GW, Lb, GAUGE, .5);
+  K.rect(bug, GB, Lb - .14, GW - GB, Lb, GAUGE, .5);
+  // Lagerböcke des Bügels auf dem Band
+  for (const u of [0, GW - .16]) K.rect(K.panel(mods[3].L, [gx0 + u, z0 + .06], [gx0 + u + .16, z0 + .06], [0, 1], mods[3].t + .03, .03, Q), 0, 0, .16, .16, WOOD, .45);
   // roter Prüfpunkt: sitzt auf dem Träger in der Ecke, die die Lehre freilässt, und fährt mit ihm zur Ausgabe
   const dot = K.decal(96, 96, (x, W, H) => { x.fillStyle = RED; x.beginPath(); x.arc(W / 2, H / 2, W * .46, 0, 7); x.fill(); }, .17, .17, tDot, .008);
-  K.onPanel(TR[3].pl, dot, PW - .27, PH[3] - .14, 1, [0, -1]);
+  K.onPanel(TR[3].pl, dot, PW - .24, PH[3] - .12, 1, [0, -1]);
   // Ausgabeklappe am Bandende: steht als Sperre, senkt sich nach der Prüfung
   const gate = K.panel(mods[3].L, [XEND, ZH + .4], [XEND, ZBK + .25], [1, 0], mods[3].t + .02, .03, Q, { dn: { t0: tDot + .006, d: .03 }, over: .03 });
   K.rect(gate, 0, 0, ZH + .4 - (ZBK + .25), .62, WOOD, .45);

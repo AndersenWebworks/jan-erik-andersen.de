@@ -98,7 +98,7 @@ export default function (K, opt) {
   const xs = xl0 - halfW;
   const xe = PL[4].cF + (N ? 2.0 : 2.5);
   const dashEnd = xe + Math.min(halfW - .4, 3.4);
-  const peg1 = Math.max(xl0 - .6, xs + 4.5), peg2 = dashEnd + .1;
+  const peg1 = Math.max(xl0 - .6, xs + 4.9), peg2 = dashEnd + .1;
   K.strecke(xs, xe);
   const SPAN = xe - xs, db = e => e / SPAN, bX = x => K.bAt(x);
   const tbx = (xl, off) => Math.max(0, bX(xl - halfW + off));      // b, wenn die linke Kante xl um off Welteinheiten im Bild steht
@@ -278,33 +278,36 @@ export default function (K, opt) {
   // Bilder zu den Sätzen
   // ============================================================================================================
   // Lage: Desktop zwischen den Platten (Zone vor Platte k), Handy hinter der Platte (gleiches x, weiter hinten)
-  const picX = k => N ? PL[k].cF : (PL[k + 1].zx0 + PL[k + 1].zx1) / 2;          // k: 1 = G2, 2 = G3, 3 = G4
-  const picZ = N ? ZB - .45 : Z0;                                                // vordere Kante des Bilds
+  const picX = k => N ? PL[k].cF - PL[k].D / 2 : (PL[k + 1].zx0 + PL[k + 1].zx1) / 2;          // k: 1 = G2, 2 = G3, 3 = G4
+  const picZ = N ? ZB - 1.8 : Z0;
+  const HS = N ? 1.5 : 1.12;                                                     // Höhenmaßstab der stehenden Teile (obere Bildhälfte füllen)                                                // vordere Kante des Bilds
 
   // ---------- G1 Baustofflager: Pflastersteine, Terrassenplatten, Stufen (hinter dem Weg) ----------
   {
-    const cx = N ? PL[0].cF : (PL[1].zx0 + PL[1].zx1) / 2, zf = ZB - (N ? .9 : 3.0), tag = "lager";
+    const cx = N ? PL[0].cF - PL[0].D / 2 : (PL[1].zx0 + PL[1].zx1) / 2, zf = ZB - (N ? 2.4 : 3.0), tag = "lager";
     const t = tbx(cx - 2.2, .9);
     F.part(tag, tbx(cx - 2.2, .1), db(1.8));
     const w1 = N ? 1.15 : 1.4, w2 = N ? 1.2 : 1.5, w3 = N ? 1.1 : 1.4, gx = N ? .12 : .3;
     const xa = cx - (w1 + w2 + w3 + 2 * gx) / 2;
     // Pflastersteine (Palette im Läuferverband)
-    const a = block(R, xa, xa + w1, zf, zf - .8, .95, t, db(1.4), { lv: 2, col: PALC });
-    decalOn(a.fr, w1, .95, stackFace(w1, .95, .6, .17), w1 / 2, .475, a.t1);
-    decalOn(a.rt, .8, .95, stackFace(.8, .95, .3, .17), .4, .475, a.t1);
+    const h1 = .95 * HS;
+    const a = block(R, xa, xa + w1, zf, zf - .8, h1, t, db(1.4), { lv: 2, col: PALC });
+    decalOn(a.fr, w1, h1, stackFace(w1, h1, .6, .17), w1 / 2, h1 / 2, a.t1);
+    decalOn(a.rt, .8, h1, stackFace(.8, h1, .3, .17), .4, h1 / 2, a.t1);
     decalOn(a.top, w1, .8, topFace(w1, .6), w1 / 2, .4, a.t1, -1, [0, 1]);
     // Terrassenplatten (dünne Großformate, hochkant gestapelt wie Lagen)
     const xb = xa + w1 + gx;
-    const b = block(R, xb, xb + w2, zf, zf - .9, .62, t + db(.3), db(1.4), { lv: 2, col: c3("#dcd2c1") });
-    decalOn(b.fr, w2, .62, (x, W, H) => {
+    const h2 = .62 * HS;
+    const b = block(R, xb, xb + w2, zf, zf - .9, h2, t + db(.3), db(1.4), { lv: 2, col: c3("#dcd2c1") });
+    decalOn(b.fr, w2, h2, (x, W, H) => {
       x.fillStyle = "#e3dacb"; x.fillRect(0, 0, W, H); x.strokeStyle = ink(.4); x.lineWidth = Math.max(1.2, .01 * W / w2);
       const n = 7; for (let r = 0; r <= n; r++) { x.beginPath(); x.moveTo(0, r * H / n); x.lineTo(W, r * H / n); x.stroke(); }
-    }, w2 / 2, .31, b.t1);
+    }, w2 / 2, h2 / 2, b.t1);
     decalOn(b.top, w2, .9, (x, W, H) => { x.fillStyle = "#e9e0d1"; x.fillRect(0, 0, W, H); x.strokeStyle = ink(.22); x.lineWidth = 2; x.strokeRect(W * .06, H * .06, W * .88, H * .88); }, w2 / 2, .45, b.t1, -1, [0, 1]);
     // Stufen: drei Blöcke, jeder höher und weiter hinten
     const xc = xb + w2 + gx;
     for (let k = 0; k < 3; k++) {
-      slabv(xc, xc + w3, zf - k * .3, zf - 1.05, .18 * (k + 1), t + db(.6 + k * .25), db(1.0), { walls: "fl" + (k === 2 ? "r" : ""), col: ST[k % 2 ? 1 : 0], top: ST[2], lv: 2 + k, over: .05 });
+      slabv(xc, xc + w3, zf - k * .3, zf - 1.05, .18 * HS * (k + 1), t + db(.6 + k * .25), db(1.0), { walls: "fl" + (k === 2 ? "r" : ""), col: ST[k % 2 ? 1 : 0], top: ST[2], lv: 2 + k, over: .05 });
     }
     bau(tag, t, [], 1);
   }
@@ -348,14 +351,14 @@ export default function (K, opt) {
     const pf = slabv(xa, xa + wP, zf, zf - 1.3, .14, t, db(1.2), { walls: "flr", col: STEEL, top: STEEL, lv: 3 });
     for (const dx of [.12, wP - .12]) line(pf, [xa + dx, zf - .1], [xa + dx, zf - 1.2], .22);
     line(pf, [xa + .12, zf - .1], [xa + wP - .12, zf - .1], .22); line(pf, [xa + .12, zf - 1.2], [xa + wP - .12, zf - 1.2], .22);
-    const pw = wP - (N ? .4 : .5), px0 = xa + (wP - pw) / 2, ph = N ? .85 : .95, tp = t + db(1.1);
+    const pw = wP - (N ? .4 : .5), px0 = xa + (wP - pw) / 2, ph = (N ? .85 : .95) * HS, tp = t + db(1.1);
     const pal = block(pf, px0, px0 + pw, zf - .3, zf - 1.1, ph, tp, db(1.5), { lv: 4, col: PALC, fresh: true });
     decalOn(pal.fr, pw, ph, stackFace(pw, ph, .6, .17), pw / 2, ph / 2, pal.t1);
     decalOn(pal.rt, .8, ph, stackFace(.8, ph, .3, .17), .4, ph / 2, pal.t1);
     decalOn(pal.lf, .8, ph, stackFace(.8, ph, .3, .17), .4, ph / 2, pal.t1);
     decalOn(pal.top, pw, .8, topFace(pw, .6), pw / 2, .4, pal.t1, -1, [0, 1]);
     // Anzeigegehäuse mit Skala (ohne Zahl) und Zeiger
-    const hx = xa + wP + gx, hh = N ? 1.15 : 1.3, th = t + db(.5);
+    const hx = xa + wP + gx, hh = (N ? 1.15 : 1.3) * HS, th = t + db(.5);
     const hs = block(R, hx, hx + wH, zf - .5, zf - 1.1, hh, th, db(1.3), { lv: 3, col: HALLC });
     const dr = wH * .38, dcu = wH / 2, dcv = hh - dr - .16;
     decalOn(hs.fr, wH, hh, (x, W, H) => {
@@ -369,14 +372,12 @@ export default function (K, opt) {
         x.beginPath(); x.moveTo(cx_ + Math.cos(a) * r1, cy - Math.sin(a) * r1); x.lineTo(cx_ + Math.cos(a) * r2, cy - Math.sin(a) * r2); x.stroke();
       }
       x.fillStyle = ink(.5); x.fillRect(.14 * s, H - .24 * s, W - .28 * s, .05 * s);
-    }, hh > 0 ? wH / 2 : 0, hh / 2, hs.t1, -1, null, 260);
-    // Zeiger: dreht an der Front um die Achse der Skala (Zeigerlänge ~ Skalenradius), schlägt nach dem Auflegen der Palette aus
-    const ndl = F.spin(hs.fr, hs.fr.uv(dcu, dcv), 1.0, tp + db(1.2), db(1.8), { lv: 6, ang0: -.95, ease: x => x <= 0 ? 0 : x >= 1 ? 1 : 1 - Math.exp(-5 * x) * Math.cos(11 * x) });
+    }, wH / 2, hh / 2, hs.t1, -1, null, 260);
+    // Zeiger: dreht an der Front im Uhrzeigersinn von der Null (links) über die Mitte zum Ausschlag, nach dem Auflegen der Palette (Winkel: positiv = im Uhrzeigersinn)
+    const ndl = F.spin(hs.fr, hs.fr.uv(dcu, dcv), -1.16, tp + db(1.2), db(1.8), { lv: 6, ang0: -3.6, ease: x => x <= 0 ? 0 : x >= 1 ? 1 : 1 - Math.exp(-6 * x) * Math.cos(9 * x) });
     {
-      const L = dr * .82, c = hs.fr.uv(dcu, dcv), n = hs.fr.uv(dcu + L, dcv), n2 = hs.fr.uv(dcu - .09 * dr, dcv);
-      const wd = .022, a = hs.fr.uv(dcu + L, dcv + wd), b = hs.fr.uv(dcu + L, dcv - wd), cc = hs.fr.uv(dcu - .09 * dr, dcv - wd), d_ = hs.fr.uv(dcu - .09 * dr, dcv + wd);
+      const L = dr * .82, wd = .022, a = hs.fr.uv(dcu + L, dcv + wd), b = hs.fr.uv(dcu + L, dcv - wd), cc = hs.fr.uv(dcu - .09 * dr, dcv - wd), d_ = hs.fr.uv(dcu - .09 * dr, dcv + wd);
       F.poly(ndl, [d_, cc, b, a], c3("#303033"), 0);
-      void c; void n; void n2;
     }
     // Frachtzettel: Karte steht an der Schnur, zurückgelehnt; Feld PLZ bleibt leer
     const zx = hx + wH + gx, tz = t + db(1.0), zh = N ? 1.2 : 1.35;
@@ -400,7 +401,7 @@ export default function (K, opt) {
 
   // ---------- G4 Händlerlager: Halle mit Rolltor, davor die Palette ----------
   {
-    const cx = picX(3), HW_ = N ? 2.8 : 3.4, HD = 1.5, HH = 1.55, tag = "lager2";
+    const cx = picX(3), HW_ = N ? 2.8 : 3.4, HD = 1.5, HH = 1.55 * HS, tag = "lager2";
     const zfH = ZB - HH - (N ? .45 : .2), zbH = zfH - HD, x0 = cx - HW_ / 2, x1 = x0 + HW_;
     const t = tbx(x0 - 1.0, .9), d = db(1.7), tw_ = d * .55, op = { lv: 2, over: .04 };
     F.part(tag, tbx(x0 - 1.0, .1), db(2.0));
@@ -458,7 +459,7 @@ export default function (K, opt) {
 
   // ---------- Bauzaun im Hintergrund (füllt das obere Drittel) ----------
   {
-    const zf = Z0 - 8.2, zw = 2.6, h = 1.15;
+    const zf = Z0 - 8.2, zw = 2.6, h = N ? 1.7 : 1.9;
     const xa = xl0 + (N ? 1.5 : 7.0), xb = dashEnd - 1.0;
     let k = 0;
     for (let x = xa; x + zw <= xb; x += zw + .06, k++) {
@@ -477,11 +478,10 @@ export default function (K, opt) {
   }
 
   // ---------- Faden: die Schnur zwischen den Nägeln, leicht erhöht ----------
-  const faden = [[peg1 - .35, .004, FZ], [peg1, .08, FZ], [peg2, .08, FZ], [peg2 + .3, .004, FZ], [xe + 4, .004, FZ]];
+  const faden = [[peg1 - .7, .004, FZ], [peg1 - .25, .03, FZ], [peg1, .08, FZ], [peg2, .08, FZ], [peg2 + .3, .004, FZ], [xe + 4, .004, FZ]];
 
   return {
     strecke: [xs, xe], lineZ: LZ,
-    grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: 2 },
     faden,
     stops: [{ name: "g0", prints: [kp.k, kp.h] }, ...S.map((s, i) => ({ name: "g" + (i + 1), prints: [s] }))]
   };

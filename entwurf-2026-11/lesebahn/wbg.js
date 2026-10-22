@@ -264,9 +264,11 @@ export default function (K) {
   onFront(m2.fr, T1, MG, H / 2 + .02);
   // Drehteller: Rand steht auf, Teller hebt sich, Produkt faltet sich auf ihm auf; dann dreht er sich einmal ganz, solange das Modul durchs Bild zieht
   const cx = T1t.c0, cz = -TD / 2;
-  // Handy: Teller und Produkt bauen sich doppelt so schnell auf, damit sie stehen, solange der Satz mitfährt
-  const bt = d => bx(d * (N ? .5 : 1));
-  const tT = m2.tF + bt(.2);
+  // Teller und Produkt bauen sich zügig auf: sie stehen fertig, bevor W1 ganz im Bild ist (Handy: solange der Satz mitfährt).
+  // Kein Raumgerüst für alles, was sich dreht (es liefe nicht mit); die Bleistiftspur auf den Flächen bleibt.
+  const bt = d => bx(d * (N ? .3 : .45));
+  F.geruest({ tags: ["teller", "produkt"], t0: 0, t1: .001, filter: () => false });
+  const tT = m2.tF - bx(.6);                                 // Teller beginnt, sobald die Platte oben ist (Front schwenkt noch)
   F.part("teller", tT - bt(.3), bt(.8));
   // feste Gradteilung als Ring auf der Platte; der Teller dreht sich darin, der Markierungsstrich an seinem Rand dreht mit
   K.onFlat(m2.top, K.decal(1024, 1024, gradArt(RP / RG), 2 * RG, 2 * RG, tT + bt(.4)), cx, cz, .003);

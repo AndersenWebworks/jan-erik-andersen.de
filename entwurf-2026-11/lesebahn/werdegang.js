@@ -163,7 +163,7 @@ export default function (K) {
 
   // ---------- Schrift ----------
   // Setzstufen stehen senkrecht: alle Größen mit K.EV (gleicht die Verkürzung aus). Jahr klein in Grotesk (Kicker), Station in Newsreader groß, Zusatz als Lesetext.
-  const eY = .62 * EV, eS = (N ? 1.15 : 1.3) * EV, eD = EV, eH = (N ? 1.7 : 2.0) * EV;
+  const eY = .62 * EV, eS = (N ? 1.15 : 1.3) * EV, eD = EV, eH = (N ? 2.4 : 2.9) * EV;
   const WT = N ? 3.5 : 4.2;                              // größte Breite eines Eintrags (Welt)
   const twOf = p => p.t.tw * p.e;
   const stLines = name => {                              // Handy: lange Stationsnamen auf zwei Zeilen
@@ -197,7 +197,7 @@ export default function (K) {
 
   // ---------- Maße, Lage ----------
   const CL = N ? .8 : 1.0, M = CL + .2;                  // Steigung des Fadens am linken Rand der Setzstufe, Rand bis zum Text
-  const DT = N ? 7 : 8.5;                                // Tiefe der Tritte (hinter der Setzstufe liegt der Tritt, darauf das Zeichen)
+  const DT = N ? 22 : 17;                                // Tiefe der Tritte (hinter der Setzstufe liegt der Tritt, darauf das Zeichen)
   const SC = N ? 1.05 : 1.3, s = SC;                     // Größe der Zeichen
   const SW = [0, .8, 1, 1.25, 1.2, 1.24, .82, 1.7, 1.46];                 // nominale Breite des Zeichens je Stufe
   const SA = [0, -.4, -.5, -.625, -.6, -.62, -.41, -.85, -.74];          // linke Kante des Zeichens bei Mitte c: c + SA[k] * s
@@ -215,12 +215,15 @@ export default function (K) {
 
   // ---------- Anstieg der Bahn (def.rise): die Kamera steigt gleichmäßig mit, passend zur Treppe ----------
   const xm = k => cF(k) - Dk[k] / 2, yc = k => Y(k) - gapT - items[k].blk / 2;
+  // Suche: Beginn x0 und Ende x1 des Anstiegs so, dass der Eintrag in jeder Stufe etwa gleich zum Lesepunkt liegt (Abweichung e);
+  // der Anstieg darf kurz vor der Szene beginnen (höchstens 0,3 E Höhe am Szenenanfang) und soll am Ende der Szene fast oben sein.
   let fit = null;
-  for (let ia = 0; ia <= 48; ia++) for (let ib = 0; ib <= 48; ib++) {
-    const a = ia / 48 * 3 * P, b = (.6 + ib / 48 * 1.6) * P, x0 = Math.max(xsS, xm(0) - a), x1 = xm(n - 1) + b;
-    let e = 0; for (let k = 0; k < n; k++) e = Math.max(e, Math.abs(K.YL + HT * sm((xm(k) - x0) / (x1 - x0)) - yc(k) - .6));
-    const sc = e + .5 * HT * (1 - sm((xe + 6 - x0) / (x1 - x0)));
-    if (!fit || sc < fit.sc) fit = { sc, e, x0, x1 };
+  for (let ia = 0; ia <= 60; ia++) for (let ib = 0; ib <= 60; ib++) {
+    const x0 = xm(0) - ia / 60 * 3 * P, x1 = xm(n - 1) + (.5 + ib / 60 * 2) * P;
+    let e = 0; for (let k = 0; k < n; k++) e = Math.max(e, Math.abs(K.YL + HT * sm((xm(k) - x0) / (x1 - x0)) - yc(k) - .45));
+    const lead = HT * sm((xsS - x0) / (x1 - x0)), short = HT * (1 - sm((xe + 6 - x0) / (x1 - x0)));
+    const sc = e + .5 * short + 4 * Math.max(0, lead - .3);
+    if (!fit || sc < fit.sc) fit = { sc, e, x0, x1, lead, short };
   }
 
   // ---------- Bogen ----------
@@ -294,17 +297,19 @@ export default function (K) {
   let frame = R;
   items.forEach((it, k) => {
     const T = K.trage(cF(k), it.w, {}), x0 = xl(k), x1 = XE - T.D, tag = "stufe" + k;
-    const bIn = K.sicht(x0).in, tF = bIn + 1.0 * dE, dF = 1.4 * dE, tB = bIn + 1.9 * dE, dB = 1.3 * dE, tZ = bIn + 2.6 * dE, dZ = 1.3 * dE, tOn = bIn + 3.3 * dE;
+    const bIn = K.sicht(x0).in, tF = bIn + 1.0 * dE, dF = 1.4 * dE, tB = bIn + 1.9 * dE, dB = 1.3 * dE, tZ = bIn + 2.0 * dE, dZ = 1.1 * dE, tOn = bIn + 3.3 * dE;
     tags.push(tag); bIns.push(bIn);
     F.part(tag, bIn - .1 * dE, 1.3 * dE);
     const S = T.node(frame);
     // Platte (Tritt): hebt sich um eine Stufenhöhe über die Stufe davor; ihr unsichtbarer Zwilling trägt die nächste Stufe an der Endlage
     const L = F.lift(S, H - 2 * EPS, tF, dF, { over: .03, lv: S.lvl + 2 });
     F.poly(L, [[x0, 0], [x1, 0], [x1, -DT], [x0, -DT]], TREAD, .5);
+    L.rl = "plate";
     const next = S === frame ? L : F.lift(frame, H - 2 * EPS, tF, dF, { over: .03, lv: frame.lvl + 2 });
     // Setzstufe: innere Lage unter der Platte (ohne eigene Bastellinien), klappt hoch, sobald die Platte oben ist
     const band = K.panel(S, [x0, 0], [x1, 0], [0, -1], tB, dB, Q, { nocut: 1, nofold: 1, over: .035, lv: S.lvl + 1 });
     K.rect(band, 0, 0, x1 - x0, H, RISER);
+    band.rl = "band";
     bands.push(band);
     // Text von oben nach unten, links bündig
     let v = H - gapT;
@@ -329,7 +334,6 @@ export default function (K) {
     if (nx > x + CL + .4) pts.push(V(nx, Y(k) + .006, FZ));
   }
 
-  if (globalThis.WD) console.log("werdegang", JSON.stringify({ N, H: +H.toFixed(2), P: +P.toFixed(2), Pmin: +Pmin.toFixed(2), Dk: Dk.map(v => +v.toFixed(2)), w: items.map(i => +i.w.toFixed(2)), blk: items.map(i => +i.blk.toFixed(2)), fit: { e: +fit.e.toFixed(2), x0: +(fit.x0 - xsS).toFixed(1), x1: +(fit.x1 - xe).toFixed(1) }, len: +(xe - xsS).toFixed(1) }));
 
   return {
     strecke: [xsS, xe], lineZ: 0,

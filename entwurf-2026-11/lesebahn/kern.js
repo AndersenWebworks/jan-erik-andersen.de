@@ -248,6 +248,7 @@ export function seite(renderer, SEQ, opt = {}) {
     if (M.geoG) { const gm = geruestMaterial(), gl = add(new THREE.LineSegments(M.geoG, gm)); gl.frustumCulled = false; gl.renderOrder = 1; bMats.push(gm); }
     bMats.push(rissMat);
     Object.assign(I, { group, prints, anims, sheets, sheetBox, bMats, rissMat, F, K, M, def, built: true });
+    I.groups = (def.stops || []).map(s => (s.prints || []).filter(pr => pr && pr.mat)).filter(g => g.length > 1);
     I.clip = cfg.clip || def.clip || null;
     layout(I);
     group.position.copy(I.O); group.updateMatrixWorld(true);
@@ -385,7 +386,10 @@ export function seite(renderer, SEQ, opt = {}) {
   const pieces = [];
   let dot = null;
   const tmat = new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 });
-  function ribbon(pts) {
+  function ribbon(pts0) {
+    // Stützpunkte höchstens 1 E auseinander (gerade Stücke bleiben gerade; die Kurve schwingt sonst zwischen weit entfernten Punkten unter den Boden)
+    const pts = [pts0[0]];
+    for (let i = 1; i < pts0.length; i++) { const a = pts0[i - 1], b = pts0[i], n = Math.ceil(a.distanceTo(b) / 1); for (let k = 1; k <= n; k++) pts.push(a.clone().lerp(b, k / n)); }
     const curve = new THREE.CatmullRomCurve3(pts, false, "centripetal", .5);
     const len = curve.getLength(), N = Math.round(clamp(len * 14, 16, 2400)), sp = curve.getSpacedPoints(N), hw = .022;
     const pos = new Float32Array((N + 1) * 6), idx = [], xs = new Float32Array(N + 1);
@@ -522,7 +526,12 @@ export function seite(renderer, SEQ, opt = {}) {
           if (pr.tOff !== undefined) o *= 1 - sm((tl - pr.tOff) / pr.tDur);
         }
         if (pr.hold && !opts.still) o *= released ? sm((now - releasedAt) / 120) : 0;
-        if (o > .001 && ((pr.t && pr.t.rows) || pr.textual)) o *= clipFactor(pr, cw, ch);
+        pr._o = o; pr._c = o > .001 && ((pr.t && pr.t.rows) || pr.textual) ? clipFactor(pr, cw, ch) : 1;
+      }
+      // Drucke eines Lesepunkts (def.stops: Kicker und Kopf, Jahr, Station und Zusatz …) stehen ganz im Bild oder gar nicht: gemeinsamer Ausschnittfaktor
+      for (const g of I.groups) { let c = 1; for (const pr of g) if (pr._o > .001) c = Math.min(c, pr._c); for (const pr of g) pr._c = c; }
+      for (const pr of I.prints) {
+        const o = pr._o * pr._c;
         if (pr.mat.opacity !== o) pr.mat.opacity = o;
         pr.mesh.visible = o > .001;
       }

@@ -24,7 +24,7 @@ export const PI = Math.PI, Q = PI / 2;
 export const EPS = .0015;
 const lin = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
 export const COL = {
-  PAPER: lin("#faf8f3"), HOLE: lin("#e7e2d7"), OLD: lin("#e6dfd1"), SHADE: lin("#d6cfc2"), DARK: lin("#9d978d"),
+  PAPER: lin("#faf8f3"), HOLE: lin("#efebe3"), OLD: lin("#e6dfd1"), SHADE: lin("#d6cfc2"), DARK: lin("#9d978d"),
   RED: lin("#d40235"), INK: lin("#303033"), STONE: lin("#ece7dd"), STONE2: lin("#ddd6c8"), WHITE: lin("#ffffff")
 };
 const { PAPER, INK, HOLE } = COL;
