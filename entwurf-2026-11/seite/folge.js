@@ -1,6 +1,6 @@
 // Szenenfolge der durchgehenden Seite (entwurf-2026-11/seite/): Reihenfolge, Ausschnitte, Längen, Faden je Szene.
 // Reihenfolge laut Seitentext (entwurf-2026-10-b-raumtext-2/index.html): Eröffnung, Gerwing, Leistungen (Betreuung, Modernisierung,
-// Shops, Schnittstellen, Gestaltung), Weitere Arbeit (WBG Pooling, Take the Gloves Off, Außerdem), Wie ich arbeite, Werdegang,
+// Shops, Schnittstellen, Gestaltung), Weitere Arbeit (WBG Pooling, Außerdem), Wie ich arbeite, Werdegang,
 // Stimmen, Für Agenturen, Kontakt. Eigenes Modul, damit die Prüfskripte dieselbe Folge rechnen wie die Seite.
 import eroeffnung from "./eroeffnung.js";
 import gerwing from "./gerwing.js";
@@ -31,11 +31,11 @@ const lane = (I, dx = .35) => {
 export const SEQ = [
   { name: "eroeffnung", label: "Eröffnung", mod: eroeffnung, len: L(590), tr: L(0),
     faden: () => ({}) },
-  { name: "gerwing", label: "Gerwing", mod: gerwing, len: L(580), tr: TR(25.4, 32.7),
+  { name: "gerwing", label: "Gerwing", mod: gerwing, len: L(640), tr: TR(22.8, 31.4),
     // Eingang rechts neben dem Abdruck der Palette vorbei zum Anfang des eigenen Fadens (Palette → Weiche → Halle), danach zwischen
-    // den Hallen nach hinten
-    faden: () => ({ in: [6.6, 4.7], viaPre: [[8.15, -.4]], viaPost: [[13.6, -1.3], [13.65, -3.5]], out: [13.65, -9.4] }) },
-  { name: "betreuung", label: "Betreuung und Absicherung", mod: betreuung, len: L(440 * .8), tr: TR(35.3, 38.7),
+    // der mittleren Halle (durch die Halle) nach hinten
+    faden: () => ({ in: [6.6, 3.2], viaPre: [[8.15, -.4]], viaPost: [[14.5, -6.0]], out: [14.5, -9.4] }) },
+  { name: "betreuung", label: "Betreuung und Absicherung", mod: betreuung, len: L(440 * .8), tr: TR(31.6, 37.9),
     faden: (d, I) => ({ in: [-5.3, I.K.narrow ? 4.4 : 3.8], out: [-5.3, -3.4] }) },
   { name: "modernisierung", label: "Modernisierung", mod: modernisierung, len: L(440 * .9), tr: TR(25.1, 21.4),
     faden: (d, I) => I.K.narrow ? { in: [-6.6, 9.6], out: [-6.6, -13.2] } : { in: [-9.2, 7.0], out: [-9.2, -6.2] } },
@@ -52,13 +52,11 @@ export const SEQ = [
     // kein Raster: zwischen Szenenanfang (b .556) und erster Lesestelle (b .61) ist für eine Bauphase kein Platz; Gerüst und Spur bleiben
     grid: false,
     faden: () => ({ in: [-9.1, 18.8], out: [-9.1, -6.8] }) },
-  { name: "gloves", label: "Take the Gloves Off", optional: "./platzhalter.js", pick: m => m.gloves, len: L(320 * .6), tr: TR(23.6, 25.3),
-    faden: (d, I) => lane(I) },
   { name: "ausserdem", label: "Außerdem", optional: "./platzhalter.js", pick: m => m.ausserdem, len: L(320 * .6), tr: TR(24, 32.3),
     faden: (d, I) => lane(I) },
   // Abschluss ist ein Modul mit drei Szenen auf einem langen Bogen: „Wie ich arbeite“ hier, „Für Agenturen“ und „Kontakt“ am Schluss
   { name: "arbeitsweise", label: "Wie ich arbeite", mod: abschluss, len: L(1150 * 4.6 / 17.45 + 30, 1150 * 4.6 / 18.45 + 30), tr: TR(23.4, 30.4), tail: 1,
-    keys: d => d.keys.slice(0, 8), bMax: .36, clip: [-1e5, 8.5, -1e5, 1e5], ownThread: false,
+    keys: d => d.keys.slice(0, 7), bMax: .36, clip: [-1e5, 8.5, -1e5, 1e5], ownThread: false,
     faden: () => ({ in: [-9.1, 6.3], out: [-9.1, -12.7] }) },
   { name: "werdegang", label: "Werdegang", mod: werdegang, len: L(460 + 30), tr: TR(32.1, 34.4), lead: 1,
     faden: d => {
@@ -67,8 +65,8 @@ export const SEQ = [
     } },
   { name: "stimmen", label: "Stimmen", mod: stimmen, len: L(500 + 60), tr: TR(44.7, 50.3), lead: 1, tail: 1, clip: [-1e5, 1e5, -14, 1e5],
     faden: () => ({ in: [5.5, 7.8], viaPost: [[12.0, -3.2]], out: [12.0, -13.6] }) },
-  { name: "agenturen", label: "Für Agenturen", mod: abschluss, len: L(1150 * 12.15 / 17.45, 1150 * 13.15 / 18.45), tr: TR(32.6, 29.9),
-    keys: d => [{ w: 0, b: .37, fromStop: d.stops.find(s => s.name === "h2"), back: 1.6, up: 1.5 }, ...d.keys.slice(9)],
+  { name: "agenturen", label: "Zusammenarbeit", mod: abschluss, len: L(1150 * 12.15 / 17.45, 1150 * 13.15 / 18.45), tr: TR(32.6, 29.9),
+    keys: d => [{ w: 0, b: .37, fromStop: d.stops.find(s => s.name === "h2"), back: 1.6, up: 1.5 }, ...d.keys.slice(8)],
     clip: [8.5, 1e5, -1e5, 1e5],
     // kein Raster: die Lesestellen beginnen bei b .43, kurz nach dem Szenenanfang (b .37); Gerüst und Spur bleiben
     grid: false,
@@ -79,7 +77,7 @@ export const SEQ = [
     faden: () => ({ in: [9.0, 6.3], viaPre: [[9.0, 3.0], [20.6, 3.0]], ownFrom: 4 }) }
 ];
 
-// Szenen eines anderen Helfers (Gestaltung, Take the Gloves Off, Außerdem): fehlen sie, entfällt ihr Abschnitt (Hinweis in der Konsole)
+// Szenen eines anderen Helfers (Gestaltung, Außerdem): fehlen sie, entfällt ihr Abschnitt (Hinweis in der Konsole)
 export async function optional(cfg) {
   if (!cfg.optional) return cfg;
   try { const m = await import(cfg.optional), fn = cfg.pick(m); if (typeof fn !== "function") throw new Error("kein Szenenmodul"); return { ...cfg, mod: fn }; }

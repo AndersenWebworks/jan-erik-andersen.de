@@ -1,13 +1,16 @@
 // Szene Modernisierung (Fassung 2026-11, Bogen + Bastellinien): Röhrenmonitor wird zum Flachbildschirm.
 // Text (wörtlich aus entwurf-2026-10-b-raumtext-2/index.html, #leistungen, Abschnitt Modernisierung):
-//   Überschrift  Modernisierung  (Lettern stehen aus dem Bogen auf)
-//   Satz 1       Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen.   -> Kinn des Röhrenmonitors
-//   Satz 2, Teil 1  Ich bringe sie technisch und gestalterisch auf den heutigen Stand                          -> Kinn des Flachbildschirms
-//   Satz 2, Teil 2  und achte darauf, dass Inhalte und Adressen erhalten bleiben.                               -> auf der Adresszeile
+//   Überschrift  Modernisierung  (Lettern stehen aus dem Bogen auf, am Anfang lesbar)
+//   Satz 1  Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen.
+//   Satz 2  Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.
+//   Beide Sätze stehen vollständig auf dem flachgelegten Röhrenmonitor (Innenseite der Frontwand crt.fr, die beim Flachlegen nach oben
+//   zeigt); Kinn beider Geräte und Adresszeile tragen keinen Satztext. Der Druck blendet erst ein, wenn der Monitor liegt (b ab .935).
 // Ablauf (b): Überschrift steht auf, Bastellinien beider Geräte zeichnen sich, der Röhrenmonitor (Keilgehäuse, Frontwand = Bildschirm) klappt auf
 // und zeigt eine alte Seite; der Flachbildschirm (Fuß, Hals, Bildschirm) klappt daneben hoch; die Blöcke der alten Seite und die Adresszeile
-// heben sich ab, drehen sich um (alte Gestaltung -> neue Gestaltung), wandern hinüber und rasten in ihre Felder im neuen Layout ein;
-// zuletzt legt sich der alte Monitor wieder flach in den Bogen (Schnitt- und Falzlinien kehren zurück).
+// heben sich ab, drehen sich um (alte Gestaltung -> neue Gestaltung), wandern hinüber und rasten in ihre Felder im neuen Layout ein
+// (Kamera aus ruhiger Distanz, keine Zooms auf Kinn oder Bildschirm);
+// zuletzt legt sich der alte Monitor wieder flach in den Bogen (Schnitt- und Falzlinien kehren zurück); einzige Lesestelle: Blick schräg von
+// oben (87 Grad: steil, damit die Zeilen kaum scheren; Flachbildschirm mit der neuen Seite zur Hälfte rechts im Bild) auf die Sätze auf dem liegenden Monitor.
 // Technik: Gerät = Faltmodell aus falt.js (kit.box, kit.panel, kit.slab); Blöcke = freie Papierstücke, deren Anfangs- und Endlage
 // aus Ankerobjekten an der alten Frontwand bzw. am neuen Bildschirm folgen (F.attach), dazwischen Bogenbahn, Wendung, kleines Überschwingen.
 // Kopie von entwurf-2026-11/modernisierung/m-modernisierung.js für die durchgehende Seite (entwurf-2026-11/seite/), unverändert
@@ -124,10 +127,13 @@ export default function (K) {
   crt.top.dn = { t0: DN, d: .06 }; crt.lf.dn = { t0: DN + .04, d: .06 }; crt.rt.dn = { t0: DN + .045, d: .06 };
   crt.fr.dn = { t0: DN + .07, d: .07 }; crt.bk.dn = { t0: DN + .09, d: .06 };
 
-  // Satz 1 im Kinn des Röhrenmonitors
-  const T1lines = N ? ["Viele WordPress-Seiten", "laufen seit Jahren auf", "veralteten Themes, Plugins", "und PHP-Versionen."] : ["Viele WordPress-Seiten laufen", "seit Jahren auf veralteten Themes,", "Plugins und PHP-Versionen."];
-  const T1 = K.print(T1lines, N ? .15 : .125, T_ON, { lh: 1.2 });
-  K.onPanel(crt.fr, T1, .32 - T1.t.padX * T1.e + T1.w / 2, CHIN / 2, -1);
+  // Beide Sätze auf der Innenseite der Frontwand (side +1, Leserichtung zum Scharnier hin = -z): sie wird erst sichtbar, wenn der Monitor liegt.
+  // Umbrüche nach Satzgliedern, Leerzeile zwischen den Sätzen.
+  const TXlines = ["Viele WordPress-Seiten", "laufen seit Jahren auf", "veralteten Themes, Plugins", "und PHP-Versionen.", "",
+    "Ich bringe sie technisch", "und gestalterisch", "auf den heutigen Stand", "und achte darauf,", "dass Inhalte und Adressen", "erhalten bleiben."];
+  const T_TXT = .935, TXE = .15;
+  const TX = K.print(TXlines, N ? .16 : TXE, T_TXT, { lh: 1.25, fade: .03 });
+  K.onPanel(crt.fr, TX, CW / 2, 1.4, 1, [0, -1], .004);
 
   // ---------- Flachbildschirm: Fuß, Hals, Bildschirm ----------
   F.part("neu", .05, .1);
@@ -152,9 +158,6 @@ export default function (K) {
     x.setLineDash([]);
   }, SW, SL, T_NEU - .02, .03);
   K.onPanel(scr, newScr, U(0), SL / 2, -1);
-  const T2lines = N ? ["Ich bringe sie technisch", "und gestalterisch auf", "den heutigen Stand"] : ["Ich bringe sie technisch und gestalterisch", "auf den heutigen Stand"];
-  const T2 = K.print(T2lines, N ? .16 : .125, T_NEU, { align: "center", lh: 1.2 });
-  K.onPanel(scr, T2, U(0), (CH - BZ) / 2 - .01, -1);
 
   // ---------- Blöcke: heben ab, drehen sich, wandern, rasten ein ----------
   const LIFT = .03, BPX = 300;
@@ -286,31 +289,22 @@ export default function (K) {
     });
     return blk;
   };
-  // Reihenfolge: Kopf, Bild, Text, Karten, zuletzt die Adresszeile (der Satz endet mit den Adressen)
+  // Reihenfolge: Kopf, Bild, Text, Karten, zuletzt die Adresszeile
   const FL = { kopf: .52, bild: .55, text: .575, karten: .6, bar: .635 }, FD = .09;
   mkBlock("kopf", FL.kopf, FD, .75, 1.3);
   mkBlock("bild", FL.bild, FD, .8, 1.8);
   mkBlock("text", FL.text, FD, .75, 1.1);
   mkBlock("karten", FL.karten, FD, .75, 1.6);
   mkBlock("bar", FL.bar, FD, .75, 1.4);
-  const T_BAR = FL.bar + FD + .005;
-
-  // Satz 2, Teil 2 auf der Adresszeile (liegt auf dem neuen Platz des Blocks, über dem Papierstück)
-  const bw = BLK.bar.w * S, bh = BLK.bar.h * S;
-  const T3lines = ["und achte darauf, dass Inhalte", "und Adressen erhalten bleiben."];
-  const T3 = K.print(T3lines, N ? .14 : .105, T_BAR, { align: "center", lh: 1.15 });
-  K.onPanel(scr, T3, U(-DX / 2 + newC.bar[0]), CH + newC.bar[1], -1, null, .06);
 
   // ---------- Konstruktionsphase: Gerüst im Raum, Bleistiftspur auf den Flächen ----------
   F.geruest({ tags: ["crt", "neu"], t0: .09, t1: .27, du: .03, a: .5, bAt: .62 });
   F.spur({ tags: ["crt", "neu"], quiet: [crt.fr, scr], a: .3 });
 
   // ---------- Lesestellen und Kamera ----------
-  const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
+  // Eine Lesestelle auf dem flachgelegten Monitor (Fläche liegt, Blick schräg von oben, Leserichtung zur Kamera hin aufwärts = -z)
   const ST = {
-    t1: { prints: [T1], px: pxD, fb: .5, pitch: 14, yaw: 16, sx: -.05, sy: -.1, npitch: 14, nyaw: 4, nsx: -.16, nsy: -.05 },
-    t2: { prints: [T2], px: pxD, fb: .5, pitch: 14, yaw: -10, sx: (W, H) => -clamp((W / H - 1.4) * 1.15, 0, .46), sy: -.1, npitch: 14, nyaw: -10, nsx: 0, nsy: -.1 },
-    t3: { prints: [T3], px: pxD, fb: .8, pitch: 14, yaw: -8, sx: 0, sy: .6, npitch: 14, nyaw: -8, nsx: 0, nsy: .3 }
+    tx: { prints: [TX], px: 19, pxN: 17, fb: 1, pitch: 87, yaw: 0, sx: -.4, sy: -.06, npitch: 87, nyaw: 0, nsx: 0, nsy: .1 }
   };
   return {
     info: { head: { cx: HCX, z: HZ, w: hw, h: .8 } },
@@ -325,16 +319,13 @@ export default function (K) {
       { w: .55, b: .12, cam: V(-1.25, 11.01, 15.95), tgt: V(-1.25, -.36, 1.4), camN: V(0, 13.54, 17.86), tgtN: V(0, -1.21, .28) },
       // Röhrenmonitor klappt auf
       { w: .55, b: .27, cam: V(.43, 7.95, 14.11), tgt: V(-.03, .4, 1.04), camN: V(.31, 11.12, 15.3), tgtN: V(-.24, -.4, -.55) },
-      { w: .9, stop: ST.t1 },
       // Flachbildschirm klappt hoch
       { w: .7, b: .42, cam: V(.18, 6.59, 13.39), tgt: V(-.27, .25, .39), camN: V(.32, 11.02, 11.24), tgtN: V(-.12, .52, -1.26) },
-      { w: .9, stop: ST.t2 },
       // Blöcke wandern
-      { w: 1.1, b: .6, cam: V(-.5, 7.17, 14.55), tgt: V(-.5, .29, .45), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
-      { w: .9, b: .72, cam: V(-.5, 7.17, 14.55), tgt: V(-.5, .29, .45), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
-      { w: .9, stop: ST.t3 },
-      // alter Monitor legt sich flach, Schlussbild
+      { w: 2.0, b: .72, cam: V(-.5, 7.17, 14.55), tgt: V(-.5, .29, .45), camN: V(0, 10.94, 11.16), tgtN: V(0, .52, -1.26) },
+      // alter Monitor legt sich flach, Lesestelle auf der Fläche, Schlussbild
       { w: 1, b: .86, cam: V(-1.49, 9.4, 16.2), tgt: V(-1.49, .67, 1.08), camN: V(-.11, 13.79, 15.14), tgtN: V(-.11, 1.33, -2.02) },
+      { w: 1.1, stop: ST.tx },
       { w: .8, b: 1, cam: V(-1.41, 10.96, 15.44), tgt: V(-1.41, -.17, 1.19), camN: V(0, 14.35, 17.52), tgtN: V(0, -1.16, .3) }
     ]
   };

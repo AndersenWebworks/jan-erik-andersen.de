@@ -179,9 +179,13 @@ export default function (K) {
 
     F.part("schild", .015, .05);
     const sr = K.panel(R, [4.1 - SW / 2, z(-.4)], [4.1 + SW / 2, z(-.4)], [0, -1], .09, .035, Q, { over: .05 });
-    K.rect(sr, 0, 0, SW, SHH, SIGN);
-    const T2 = K.print(["Damit schaffe ich allein Projekte,", "für die früher ein kleines Team", "nötig war, etwa Schnittstellen", "oder Datenumzüge."], .14, .125, { align: "center", lh: 1.22 });
-    K.onPanel(sr, T2, SW / 2, SHH / 2, 1);
+    // Satz 2 bis 4 des Absatzes („Damit schaffe ich …“, „Auf diese Weise …“, „Wo es passt, bekommen Sie …“): zehn Zeilen, breiteste etwa 17 em × 0,14 = 2,4 von 3,0 Schildbreite
+    // (vier neue Zeilen je höchstens 32 Zeichen); Textblock 10 × 1,22 × 0,14 = 1,71, Rand oben und unten je 0,21, daher Schild 2,15 hoch (vorher 1,45).
+    // Das Schild steht frei bei x 2,6 bis 5,6 und z −0,4: Arme (x ±2,1) und Prüfrahmen (x bis 2,5, z −5) bleiben unberührt; die Lesestelle t2 richtet sich nach dem Druck.
+    const SHR = 2.15;
+    K.rect(sr, 0, 0, SW, SHR, SIGN);
+    const T2 = K.print(["Damit schaffe ich allein Projekte,", "für die früher ein kleines Team", "nötig war, etwa Schnittstellen", "oder Datenumzüge. Auf diese Weise", "arbeite ich mich auch schnell", "in fremden oder älteren Code ein.", "Wo es passt, bekommen Sie statt", "eines Angebots ein Konzept und", "einen klickbaren Entwurf, an dem", "Sie sehen, wie Ihre Seite wird."], .14, .125, { align: "center", lh: 1.22 });
+    K.onPanel(sr, T2, SW / 2, SHR / 2, 1);
 
     // Prüfrahmen: zwei Pfosten und ein Sturz; der ganze Satz 3 steht auf dem Sturz
     F.part("rahmen", .02, .05);
@@ -255,7 +259,7 @@ export default function (K) {
   const LED2 = V(OX2 + 4.05, 1.0, 1.3 + .006);
   {
     const z = v => v;
-    const rows = N ? [[{ t: "Für" }], [{ t: "Agenturen", it: 1 }]] : [[{ t: "Für" }, { t: "Agenturen", it: 1 }]];
+    const rows = N ? [[{ t: "Zusammenarbeit" }]] : [[{ t: "Zusammenarbeit" }]];
     const H2 = heading(rows, HE, z(4.9), .395, "kopf2", OX2);
 
     const HT = 1.25, ZF = z(1.3), ZB = z(-1.3), LW = .18, AP = .5, X0 = OX2 - 4.4, XM = OX2 + 2.2, X1 = OX2 + 4.4;
@@ -302,9 +306,13 @@ export default function (K) {
     F.part("monitore1", .37, .05);
     const mons = [];
     PL.forEach((xk, i) => { const m = monitor(T_A.top, xk, .47 + .008 * i); mons.push(m); monDecal(m, .50); matDecal(T_A.top, xk, .50); });
-    // Satz 1 auf der Zarge des bestehenden Tisches
-    const tA = K.print(["Ich steige in laufende", "Projekte ein,"], .13, .49, { align: "center", lh: 1.2 });
-    K.onPanel(T_A.apron, tA, (T_A.ax1 - T_A.ax0) / 2, AP / 2, 1, [0, -1]);
+    // Satz 0 (Agenturjahre) links auf derselben Zarge, Satz 1 rechts daneben (Lesereihenfolge von links nach rechts);
+    // Zarge 6,24 x .5: Satz 0 dreizeilig .115 hoch = 3,78 em x .115 = .43 von .5, rund 2,0 breit (längste Zeile 35 Zeichen), Mitte bei 1,95;
+    // Satz 1 rund 1,4 breit, Mitte bei 4,85 (Lücke dazwischen gut 1)
+    const tA0 = K.print(["Agenturarbeit kenne ich von innen:", "sechs Jahre bei Tangram, danach als", "freier Partner der Runden Group."], .115, .485, { align: "center", lh: 1.2 });
+    K.onPanel(T_A.apron, tA0, 1.95, AP / 2, 1, [0, -1]);
+    const tA = K.print(["Ich steige in laufende", "Projekte ein,"], .13, .495, { align: "center", lh: 1.2 });
+    K.onPanel(T_A.apron, tA, 4.85, AP / 2, 1, [0, -1]);
 
     // neu: vierter Platz exakt im selben Raster (sein Umriss steht von Anfang an in den Bastellinien)
     const T_B = table("tisch2", XM, X1, .52, false, true, false, true, .05);
@@ -317,8 +325,10 @@ export default function (K) {
     const tS3 = K.print(["und halte mich an Ihre", "Abläufe und Werkzeuge."], .1, .62, { align: "center", lh: 1.2 });
     K.onPanel(T_B.apron, tS3, (T_B.ax1 - T_B.ax0) / 2 - .15, AP / 2, 1, [0, -1]);
     K.ticker(T_B.apron, .04, T_B.apron.uv(T_B.ax1 - T_B.ax0 - .2, AP / 2), [0, -1], 1, .625);
-    const tS4 = K.print(["Konditionen und freie", "Kapazität nenne ich Ihnen", "auf Anfrage."], .085, .63, { align: "center", lh: 1.2 });
-    K.onFlat(T_B.top, tS4, OX2 + 3.3, z(.63));
+    // Platzset: neuer Absatz (Teilzeit im eigenen Team), Leerzeile, dann Formen, freie Kapazität und Konditionen; längste Zeile rund 18 em x .07 = 1,3 von 1,9 Breite des Sets,
+    // 10 Zeilen x .066 x 1,2 rund .79 von .9 Tiefe (Mitte auf Set-Mitte z .78)
+    const tS4 = K.print(["Sie haben ein eigenes Webteam und", "brauchen für eine Weile Verstärkung?", "Dann arbeite ich auch angestellt in", "Teilzeit mit, vollständig remote und", "gern befristet.", "", "Ob Projekt, Betreuung oder Mitarbeit", "auf Zeit: Derzeit habe ich Kapazität", "frei. Konditionen nenne ich Ihnen", "auf Anfrage."], .066, .63, { align: "center", lh: 1.2 });
+    K.onFlat(T_B.top, tS4, OX2 + 3.3, z(.78));
 
     // Konstruktionsphase (seite/): Gerüst je Tischteil kurz vor dem Heben, Bleistiftspur (Zargen, Platzset und Monitore nur Eckmarken)
     F.geruest({ tags: ["tisch1", "monitore1"], t0: .365, t1: .4, du: .02, a: .5 });
@@ -327,12 +337,14 @@ export default function (K) {
 
     carriers.push({ n: "h2", nodes: [], prints: H2 });
     stops.h2 = { prints: H2, pitch: 10, sy: 0, nsy: 0, px: (W, H) => H * .075, pxN: 38, fit: .74, fitN: .86, b: .43 };
-    carriers.push({ n: 'sA', nodes: [T_A.apron], prints: [tA] }, { n: 'sMon', nodes: [m4], prints: [tS2] }, { n: 'sB', nodes: [T_B.apron], prints: [tS3] }, { n: 'sMat', nodes: [T_B.top], prints: [tS4], only: 1 });
+    carriers.push({ n: 'sA0', nodes: [T_A.apron], prints: [tA0] }, { n: 'sA', nodes: [T_A.apron], prints: [tA] }, { n: 'sMon', nodes: [m4], prints: [tS2] }, { n: 'sB', nodes: [T_B.apron], prints: [tS3] }, { n: 'sMat', nodes: [T_B.top], prints: [tS4], only: 1 });
     // seite/: Lesestellen erst, wenn ihr Druck ganz eingeblendet ist (vorher stand dort halbe Deckkraft: Druck ab b + Blende .02)
-    stops.s1 = { carrier: [T_A.apron], prints: [tA], px: pxD, pitch: 14, yaw: -8, sy: -.2, nsy: -.1, npitch: 16, nyaw: 0, b: .515 };
+    // Satz 0 vor Satz 1: gleiche Stellung wie s1, Blick auf die linke Hälfte der Zarge
+    stops.s0 = { carrier: [T_A.apron], prints: [tA0], px: pxD, fit: .8, fitN: .9, pitch: 14, yaw: -8, sy: -.2, nsy: -.1, npitch: 16, nyaw: 0, b: .51 };
+    stops.s1 = { carrier: [T_A.apron], prints: [tA], px: pxD, pitch: 14, yaw: -8, sy: -.2, nsy: -.1, npitch: 16, nyaw: 0, b: .525 };
     stops.s2 = { carrier: [m4], prints: [tS2], px: pxD, pitch: 12, yaw: 10, sy: .05, nsy: 0, npitch: 14, nyaw: 4, b: .635 };
     stops.s3 = { carrier: [T_B.apron], prints: [tS3], px: pxD, pitch: 14, yaw: 8, sy: -.2, nsy: -.1, npitch: 16, nyaw: 4, b: .645 };
-    stops.s4 = { carrier: [T_B.top], prints: [tS4], px: pxD, pitch: 52, yaw: 0, sy: -.05, nsy: 0, npitch: 54, nyaw: 0, b: .655 };
+    stops.s4 = { carrier: [T_B.top], prints: [tS4], px: pxD, fit: .8, fitN: .92, pitch: 52, yaw: 0, sy: -.05, nsy: 0, npitch: 54, nyaw: 0, b: .655 };
   }
 
   // =====================================================================================================
@@ -345,7 +357,7 @@ export default function (K) {
     const H3 = heading(rows, N ? .36 : .72, z(4.6), .715, "kopf3", OX3);
 
     // Umschlag: der Körper liegt als Papier auf dem Bogen (die Karten stehen aus ihm auf), die Klappe liegt hinten und klappt auf
-    const BW = 7.2, zF = z(1.9), zB = z(N ? -2.95 : -2.7), CX = N ? 2.1 : 1.6, ZBK = N ? -1.3 : -.95, ZFR = N ? 1.5 : 1.15;
+    const BW = 7.2, zF = z(1.9), zB = z(N ? -2.95 : -2.7), CX = N ? 2.1 : 1.85, ZBK = N ? -1.3 : -.95, ZFR = N ? 1.5 : 1.15;
     F.poly(R, [[OX3 - BW / 2, zF], [OX3 + BW / 2, zF], [OX3 + BW / 2, zB], [OX3 - BW / 2, zB]], BODY, .5, .01);
     F.part("klappe", .70, .05);
     const FH = 3.2, flap = K.panel(R, [OX3 - BW / 2, zB], [OX3 + BW / 2, zB], [0, -1], .83, .06, Q + .3, { over: .04 });
@@ -353,7 +365,7 @@ export default function (K) {
     K.onPanel(flap, K.decal(1440, Math.round(1440 * FH / BW), liningDraw, BW, FH, .86, .03), BW / 2, FH / 2, 1);
 
     F.part("karten", .71, .06);
-    const CW = 2.6, CHt = .95, DD = .5, EM = .115, LV = { over: .05 };
+    const CW = N ? 2.6 : 3.0, CHt = N ? .95 : 1.05, DD = .5, EM = N ? .155 : .15, LV = { over: .05 };
     const spots = [
       { x: N ? OX3 : OX3 - CX, zh: z(N ? -1.6 : ZBK), label: "Mail", val: "mail@andersen-webworks.de", href: "mailto:mail@andersen-webworks.de" },
       { x: N ? OX3 : OX3 + CX, zh: z(N ? -.15 : ZBK), label: "Telefon", val: "+49 38733 270015", href: "tel:+4938733270015" },
@@ -382,7 +394,7 @@ export default function (K) {
     carriers.push({ n: "h3", nodes: [], prints: H3 });
     stops.h3 = { prints: H3, pitch: 44, sy: 0, nsy: 0, px: (W, H) => H * .07, pxN: 34, fit: .74, fitN: .86, b: .77 };
     // Eine Kontakt-Lesestelle: Überschrift und alle drei Karten ganz im Bild (Handy: Karten untereinander)
-    stops.all = { prints: [...decs, ...H3], e0: EM, px: 15, pxN: 14, fit: .9, fitN: .95, pitch: 42, npitch: 48, yaw: 0, nyaw: 0, sy: .2, nsy: 0, b: 1 };
+    stops.all = { prints: [...decs, ...H3], e0: EM, px: (W, H) => Math.min(21, (H - 150) / 32.5), pxN: (W, H) => Math.min(19, (H - 175) / 33.6), fit: .9, fitN: .95, pitch: 42, npitch: 48, yaw: 0, nyaw: 0, sy: .2, nsy: 0, b: 1 };
   }
 
   // ---------- Roter Faden: vom Statuspunkt des neuen Platzes zum Umschlag ----------
@@ -392,7 +404,6 @@ export default function (K) {
   const S = stops;
   const keys = [
     // Szene 1: Überschrift steht (nach der Zeit), Bastellinien zeichnen sich, Kamera hebt sich über den Bogen, Teile klappen hoch, Teile laufen durch
-    { w: .3, b: 0, cam: V(0, 3.1, 22.9), tgt: V(0, .27, 5), camN: V(0, 2.6, 19.8), tgtN: V(0, .2, 4.6) },
     { w: .4, stop: S.h1 },
     { w: .5, slow: 1, b: .09, ...orbit(V(0, .6, -3), 34, 8, 26, 21, 44, V(0, .6, -3.5)) },
     { w: .7, stop: S.t1 },
@@ -404,7 +415,8 @@ export default function (K) {
     // Szene 2
     { w: .9, stop: S.h2 },
     { w: .75, slow: 1, b: .47, ...orbit(V(OX2, 1, 0), 30, 0, 17, 25, 38) },
-    { w: .9, stop: S.s1 },
+    { w: .8, stop: S.s0 },
+    { w: .5, stop: S.s1 },
     { w: .9, stop: S.s2 },
     { w: .8, stop: S.s3 },
     { w: .8, stop: S.s4 },

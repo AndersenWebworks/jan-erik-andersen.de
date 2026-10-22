@@ -71,26 +71,31 @@ export function seite(renderer, SEQ, opt = {}) {
   const GAP = opt.gap || 3;
 
   // ---------- Druck (Canvas-Textur auf der Fläche) ----------
-  const PXEM = 120;
+  const PXEM = 120, MAXTEX = Math.min(4096, renderer.capabilities.maxTextureSize || 4096);
   const texOf = cv => { const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; t.minFilter = THREE.LinearMipmapLinearFilter; return t; };
   function printTex(lines, o = {}) {
-    const em = PXEM, lh = (o.lh || 1.3) * em;
+    // Marke zweifach aufgelöst (bei Pixeldichte 2 bleiben Überschriften bis rund 120 px Schrift scharf); o.hi (nur die große Wortmarke
+    // im Startbild) vierfach: dort bis rund 140 px Schrift. Vierfach überall ergab rund 300 MB Grafikspeicher und Kontextverlust (schwarzer Hintergrund, keine Drucke).
+    let em = o.hi ? PXEM * 4 : o.font === "marke" ? PXEM * 2 : PXEM, lh = (o.lh || 1.3) * em;
     // o.font "marke": Wortmarke N4 (Newsreader variabel, aufrecht 380, kursiv 340, Laufweite -0,018 em)
     const mk = o.font === "marke";
     const fam = mk ? '"Newsreader N4", "Newsreader", serif' : o.font === "serif" ? '"Newsreader"' : '"Schibsted Grotesk"';
-    const font = `${o.italic ? "italic " : ""}${mk ? (o.italic ? 340 : 380) : o.font === "serif" ? 300 : 500} ${em}px ${fam}`;
+    const font = () => `${o.italic ? "italic " : ""}${mk ? (o.italic ? 340 : 380) : o.font === "serif" ? 300 : 500} ${em}px ${fam}`;
     if (mk && o.track === undefined) o = { ...o, track: -.018 };
     const cv = document.createElement("canvas"), x = cv.getContext("2d");
-    const setF = () => { x.font = font; if (o.track) x.letterSpacing = (o.track * em) + "px"; };
+    const setF = () => { x.font = font(); if (o.track) x.letterSpacing = (o.track * em) + "px"; };
     setF();
-    const padX = .16 * em, padY = .1 * em;
+    let padX = .16 * em, padY = .1 * em;
     // o.disc: Radius in em; statt Text eine Scheibe, deren Unterkante auf der Grundlinie sitzt (Schlusspunkt der Marke)
-    const ws = o.disc ? [2 * o.disc * em] : lines.map(l => x.measureText(l).width), wMax = Math.max(...ws);
-    cv.width = Math.ceil(wMax + padX * 2);
+    const meas = () => o.disc ? [2 * o.disc * em] : lines.map(l => x.measureText(l).width);
+    let ws = meas(), wMax = Math.max(...ws);
+    // Kante der Leinwand begrenzen (Texturgrenze der Grafikkarte, höchstens 4096): Schrift entsprechend kleiner setzen
+    if (wMax + padX * 2 > MAXTEX) { em *= MAXTEX / (wMax + padX * 2); lh = (o.lh || 1.3) * em; setF(); padX = .16 * em; padY = .1 * em; ws = meas(); wMax = Math.max(...ws); }
+    cv.width = Math.min(MAXTEX, Math.ceil(wMax + padX * 2));
     cv.height = Math.ceil(padY * 2 + (lines.length - 1) * lh + em * 1.18);
     setF(); x.fillStyle = o.col || INK; x.textBaseline = "alphabetic";
     // o.outline: nur die Kontur (Abdruck der Lettern als feine Schnittlinie im Bogen); mit o.fillCol zuerst eine zarte Füllung
-    if (o.outline) { x.strokeStyle = o.col || INK; x.lineWidth = o.outline; x.lineJoin = "round"; }
+    if (o.outline) { x.strokeStyle = o.col || INK; x.lineWidth = o.outline * em / PXEM; x.lineJoin = "round"; }
     const at = i => [padX + (o.align === "center" ? (wMax - ws[i]) / 2 : 0), padY + em * .94 + i * lh];
     if (o.disc) {
       const [ax, ay] = at(0), r = o.disc * em; x.beginPath(); x.arc(ax + r, ay - r, r, 0, 2 * PI);
@@ -241,7 +246,7 @@ export function seite(renderer, SEQ, opt = {}) {
     const lk = keys[keys.length - 1];
     if (cfg.tail && lk.stop) keys = [...keys, { w: .35, b: lk.stop.b, fromStop: lk.stop, back: 1.2, up: .3 }];
     def.keys = keys;
-    Object.assign(I, { group, prints, anims, sheets, sheetBox, bMats, rissMat, F, K, M, def, built: true });
+    Object.assign(I, { group, lines, prints, anims, sheets, sheetBox, bMats, rissMat, F, K, M, def, built: true });
     prep(I);
     I.b0 = clamp(def.bOfU(0), 0, 1);
     I.bLast = clamp(def.bOfU(1), 0, 1);
@@ -288,16 +293,26 @@ export function seite(renderer, SEQ, opt = {}) {
     const keyU = def.keys.map(k => k.u);
     def.bOfU = pchip(keyU, def.keys.map(k => k.b));
     def.idxOfU = pchip(keyU, def.keys.map((k, i) => i));
-    // Zeitverzerrung: an Lesestellen (und Schlüsseln mit slow) sinkt die Bahngeschwindigkeit auf rund ein Drittel, nie auf null.
-    // Seite: auch Anfang und Ende jeder Szene sind langsam (dort schließt die Fahrt zur Nachbarszene an, sie beginnt und endet ruhig)
-    const STOPU = def.keys.filter((k, i) => ((k.stop || k.slow) && !k.noWarp) || i === 0 || i === def.keys.length - 1).map(k => k.u);
-    const WARP_MIN = def.warpMin || .34, WARP_W = def.warpW || .028, NW = 3000;
-    const warpP = new Float64Array(NW + 1);
-    const bump = u => STOPU.length ? Math.max(...STOPU.map(s => Math.exp(-(((u - s) / WARP_W) ** 2)))) : 0;
-    const sp = u => 1 - (1 - WARP_MIN) * bump(u);
-    // Anteil Fahrt (0 an einer Lesestelle, 1 auf freier Strecke): dämpft den Atem der Kamera an Lesestellen
-    def.travel = u => clamp((sp(clamp(u, 0, 1)) - WARP_MIN) / (1 - WARP_MIN), 0, 1);
-    let T = 0; for (let i = 0; i < NW; i++) T += 1 / sp((i + .5) / NW) / NW;
+    // Zeit: keine Bremsen. Die Schlüssel liegen in buildPath() (retime) so in der Zeit, dass die Kamera mit annähernd gleichem Tempo
+    // durch alle Stellungen fährt; an Lesestellen nimmt das Tempo nur weich bis TEMPO_F ab (applyWarp), an Szenenrändern gar nicht.
+    applyWarp(def);
+    // Anteil Fahrt (0 an einer Lesestelle, 1 auf freier Strecke): dämpft nur den Atem der Kamera an Lesestellen, nicht die Fahrt
+    const BW = def.warpW || .028;
+    def.travel = u => {
+      const ks = def.keys; let m = 0;
+      for (let i = 0; i < ks.length; i++) { const k = ks[i]; if (((k.stop || k.slow) && !k.noWarp) || i === 0 || i === ks.length - 1) m = Math.max(m, Math.exp(-(((u - k.u) / BW) ** 2))); }
+      return clamp(1 - m, 0, 1);
+    };
+  }
+  // Weicher Tempoabfall an Lesestellen (und Schlüsseln mit slow): das Tempo sinkt dort nie unter TEMPO_F des Tempos auf freier Strecke
+  // (Glocke, ohne Einrasten und Stillstand), übers Bild gerechnet daher noch höher als TEMPO_F der mittleren Szenengeschwindigkeit.
+  const TEMPO_F = .6;
+  function applyWarp(def) {
+    const ks = def.keys, NW = 3000, BW = def.warpW || .028, F = TEMPO_F;
+    const su = ks.filter(k => (k.stop || k.slow) && !k.noWarp).map(k => k.u);
+    const sp = u => { let m = 0; for (const c of su) m = Math.max(m, Math.exp(-(((u - c) / BW) ** 2))); return 1 - (1 - F) * m; };
+    const warpP = new Float64Array(NW + 1); let T = 0;
+    for (let i = 0; i < NW; i++) T += 1 / sp((i + .5) / NW) / NW;
     let a2 = 0; for (let i = 0; i < NW; i++) { a2 += 1 / sp((i + .5) / NW) / NW; warpP[i + 1] = a2 / T; }
     def.pOfU = u => { const f = clamp(u, 0, 1) * NW, i = Math.min(NW - 1, Math.floor(f)); return warpP[i] + (warpP[i + 1] - warpP[i]) * (f - i); };
     def.uOfP = p => {
@@ -306,6 +321,35 @@ export function seite(renderer, SEQ, opt = {}) {
       while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (warpP[mid] < p) lo = mid; else hi = mid; }
       return (lo + (p - warpP[lo]) / (warpP[hi] - warpP[lo])) / NW;
     };
+  }
+  // Schlüssel in der Zeit (Abschnitt 0 … 1): die Dauer zwischen zwei Schlüsseln folgt dem Weg (Ort plus Blickdrehung) der Bahn dazwischen,
+  // damit das Tempo durch die Lesestellungen gleich bleibt. Gemischt mit der Vorgabe w (RETIME_B Weganteil), mit Untergrenze (RETIME_MIN
+  // Anteil von w), damit Teile, die sich bei stehender Kamera aufbauen, nicht in einem Zug springen.
+  const RETIME_B = .85, RETIME_MIN = .2, RETIME_R = 10;
+  function retime(I) {
+    const def = I.def, ks = def.keys, n = ks.length; if (n < 2) return;
+    const SUB = 24, tot = (n - 1) * SUB, cum = new Float64Array(tot + 1);
+    const c0 = V(), c1 = V(), g0 = V(), g1 = V(), d0 = V(), d1 = V();
+    I.camC.getPoint(0, c0); I.tgtC.getPoint(0, g0); d0.subVectors(g0, c0).normalize();
+    for (let j = 1; j <= tot; j++) {
+      const t = j / tot; I.camC.getPoint(t, c1); I.tgtC.getPoint(t, g1); d1.subVectors(g1, c1).normalize();
+      cum[j] = cum[j - 1] + c1.distanceTo(c0) + RETIME_R * Math.acos(clamp(d1.dot(d0), -1, 1));
+      c0.copy(c1); d0.copy(d1);
+    }
+    const sw = ks.reduce((a, k, i) => a + (i ? k.w : 0), 0) || 1, sm = cum[tot] || 1, dur = [0];
+    for (let i = 1; i < n; i++) { const a = ks[i].w / sw, m = (cum[i * SUB] - cum[(i - 1) * SUB]) / sm; dur.push(Math.max(RETIME_MIN * a, (1 - RETIME_B) * a + RETIME_B * m)); }
+    const sd = dur.reduce((a, b) => a + b, 0); let acc = 0;
+    ks.forEach((k, i) => { acc += dur[i]; k.u = acc / sd; });
+    const keyU = ks.map(k => k.u), keyS = ks.map((k, i) => cum[i * SUB]);
+    def.bOfU = pchip(keyU, ks.map(k => k.b));
+    const sOfU = pchip(keyU, keyS);
+    const tOfS = s => {
+      if (s <= 0) return 0; if (s >= cum[tot]) return 1;
+      let lo = 0, hi = tot; while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (cum[mid] <= s) lo = mid; else hi = mid; }
+      return (lo + (s - cum[lo]) / Math.max(1e-12, cum[hi] - cum[lo])) / tot;
+    };
+    def.idxOfU = u => tOfS(sOfU(u)) * (n - 1);
+    applyWarp(def);
   }
   // Lesestellung aus der Textfläche (Vorlage readingPose() in Raumtext 2): Blickrichtung aus Normale bzw. Leserichtung (oder s.face),
   // Gier- und Neigungswinkel, Abstand aus der gewünschten Schriftgröße in Pixeln, Lage des Textes im Ausschnitt (sx, sy in −1 … 1)
@@ -345,6 +389,7 @@ export function seite(renderer, SEQ, opt = {}) {
     I.camC = new THREE.CatmullRomCurve3(cams, false, "centripetal");
     I.tgtC = new THREE.CatmullRomCurve3(tgts, false, "centripetal");
     I.nK = def.keys.length;
+    retime(I);
   }
   // Kamera in der Szene, q = Anteil des Szenenabschnitts (0 … 1), Szenenkoordinaten
   function localPose(I, q, cam, tgt) {
@@ -633,10 +678,11 @@ export function seite(renderer, SEQ, opt = {}) {
     const fov = poseOf(st, camera.position, _t);
     if (camera.fov !== fov) { camera.fov = fov; camera.updateProjectionMatrix(); }
     if (!opts.still) {
-      // die Kamera steht nie ganz still: ein ruhiger Atem, an Lesestellen kaum merklich (dort auf 15 %, damit Text am Rand nicht
-      // durch den Atem aus dem Rahmen läuft und ausblendet; am Handy sind die Ränder an einigen Lesestellen nur 5–10 px)
-      const tv = st.kind === "b" ? INST[st.i].def.travel(INST[st.i].def.uOfP(st.q)) : 1;
-      const sway = clamp(camera.position.distanceTo(_t) / 20, .1, .8) * (.15 + .85 * tv);
+      // zwischen den Szenen atmet die Kamera ruhig; an Lesestellen steht sie ganz still (die Schrift soll das Auge fixieren können,
+      // auf großen Monitoren wandert sie sonst um Subpixel). Travel ist dort nur im Scheitelpunkt 0, daher eine weiche Schwelle:
+      // unter .15 (rund ±0,4 Glockenbreiten um die Stelle) kein Atem, ab .65 voll, dazwischen weich, ohne Ruck beim Losfahren
+      const tv = st.kind === "b" ? sm((INST[st.i].def.travel(INST[st.i].def.uOfP(st.q)) - .15) / .5) : 1;
+      const sway = clamp(camera.position.distanceTo(_t) / 20, .1, .8) * tv;
       camera.position.x += (Math.sin(time * .23) * .08 + Math.sin(time * .07) * .05) * sway;
       camera.position.y += Math.sin(time * .19 + 1) * .03 * sway;
     }
@@ -649,6 +695,8 @@ export function seite(renderer, SEQ, opt = {}) {
       I.curB = b; I.curT = tl;
       I.M.update(b, tl);
       for (const m of I.bMats) { if (m.uniforms.uGB) m.uniforms.uGB.value = b; else m.uniforms.uB.value = b; }
+      // def.linesFrom: Haarkanten der Teile erst ab diesem b (Startbild flach über Papierhöhe: sonst liegen alle Kanten als Linie auf dem Horizont)
+      if (I.def.linesFrom !== undefined) I.lines.visible = b >= I.def.linesFrom;
       for (const a of I.anims) a(b, time);
       I.group.updateMatrixWorld(true);
       for (const pr of I.prints) {

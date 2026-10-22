@@ -27,7 +27,7 @@ const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2 };
 
 // Blätter: Titel und Vermerk wörtlich aus dem Seitentext; Seitenverhältnis Breite : Höhe
 const SHEETS = [
-  { id: "plakat", title: "Take the Gloves Off", note: "[nach Zustimmung]", ar: 594 / 841 },
+  { id: "plakat", title: "Take the Gloves Off", note: "Logo und Styleguide", ar: 594 / 841 },
   { id: "novum", title: "NOVUM-Cover", note: null, ar: 230 / 297 },
   { id: "audi", title: "„100 Jahre Audi“", note: "Ausstellungsmotiv", ar: 3 / 2 }
 ];

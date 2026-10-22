@@ -1,6 +1,6 @@
 // Durchgehende Startseite, Fassung 2026-11: alle Szenen in Seitenreihenfolge auf einer Kamerabahn (Kern: kern.js, Faltkern: falt.js).
 // Reihenfolge laut Seitentext (entwurf-2026-10-b-raumtext-2/index.html): Eröffnung, Gerwing, Leistungen (Betreuung, Modernisierung,
-// Shops, Schnittstellen, Gestaltung), Weitere Arbeit (WBG Pooling, Take the Gloves Off, Außerdem), Wie ich arbeite, Werdegang,
+// Shops, Schnittstellen, Gestaltung), Weitere Arbeit (WBG Pooling, Außerdem), Wie ich arbeite, Werdegang,
 // Stimmen, Für Agenturen, Kontakt.
 // Zustände: #p=0…1 (ganze Seite), #s=<szene> (Szenenanfang), Handy-Ausschnitt #…&w=390&h=844.
 import * as THREE from "three";
@@ -26,8 +26,9 @@ else {
   const vorbild = document.querySelector(".vorbild");
   Promise.all([loadFonts().catch(() => {}), bilder().then(setBilder).catch(() => {}), Promise.all(SEQ.map(optional))]).then(([, , seq]) => {
     const api = seite(renderer, seq.filter(Boolean), {
-      // das HTML-Vorbild (Name und Unterzeile) bleibt, bis die Lettern im Bild aufgestanden sind
-      onFirstFrame() { if (vorbild) setTimeout(() => vorbild.classList.add("weg"), 900); }
+      // das HTML-Vorbild (Name, am Handy auch die Unterzeile) deckt sich mit dem Startbild und bleibt, bis die Lettern ganz aufgestanden sind
+      // (letzter Letter .5 + .7 s, Schlusspunkt bis 1,2 s, Überschwingen); erst dann blendet es aus, es steht nie versetzt neben dem Bild
+      onFirstFrame() { if (vorbild) setTimeout(() => vorbild.classList.add("weg"), 1500); }
     });
     const lbl = document.getElementById("szene");
     if (lbl) setInterval(() => { const st = api.state(); if (st) { lbl.textContent = (st.kind === "t" ? "→ " : "") + api.labelAt(api.p()); } }, 250);

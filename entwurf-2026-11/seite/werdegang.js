@@ -16,13 +16,13 @@ function rr(x, X, Y, w, h, r) { x.beginPath(); x.roundRect(X, Y, w, h, r); }
 // d: Zeilen am Desktop, n: Zeilen am Handy (nur Umbruch, kein anderer Wortlaut)
 const ROWS = [
   { yr: "2000 bis 2006", st: "Pixel Arrays", d: ["erste Selbstständigkeit"] },
+  { yr: "2007 bis 2010", st: "HTK Hamburg", d: ["Zertifikat Multimedia Design"] },
   { yr: "2010 bis 2017", st: "Games", d: ["Spielprototypen in Flash und Haxe, danach Qualitätssicherung", "bei Goodgame Studios und Deep Silver FISHLABS"],
     n: ["Spielprototypen in Flash", "und Haxe, danach Qualitäts-", "sicherung bei Goodgame Studios", "und Deep Silver FISHLABS"] },
-  { yr: "2007 bis 2010", st: "HTK Hamburg", d: ["Zertifikat Multimedia Design"] },
   { yr: "seit 2010", st: "Freiberufliche Webprojekte", d: ["seit 2018 als Andersen Webworks"] },
   { yr: "2017", st: "YOOtheme", d: ["Support Management"] },
-  { yr: "2017 bis 2023", st: "Tangram Werbeagentur", d: ["Frontend-Entwicklung, unter anderem für Nissen,", "BIG Arbeitsschutz und EMPORE"],
-    n: ["Frontend-Entwicklung, unter", "anderem für Nissen, BIG", "Arbeitsschutz und EMPORE"] },
+  { yr: "2017 bis 2023", st: "Tangram Werbeagentur", d: ["Frontend-Entwicklung, unter anderem für Nissen", "und EMPORE, für BIG Arbeitsschutz das Shop-Frontend"],
+    n: ["Frontend-Entwicklung, unter", "anderem für Nissen und EMPORE,", "für BIG Arbeitsschutz das", "Shop-Frontend"] },
   { yr: "2023 bis 2025", st: "Runden Group", d: ["WBG Pooling und viele weitere Websites und", "Anwendungen der Firmengruppe"],
     n: ["WBG Pooling und viele weitere", "Websites und Anwendungen", "der Firmengruppe"] },
   { yr: "seit 2023", st: "Gerwing", d: ["Umsetzung und laufende Betreuung des Onlineshops"],
@@ -39,7 +39,7 @@ function drawPixel(x, W, H) {
   x.fillStyle = ink(.82);
   CURSOR.forEach((row, r) => [...row].forEach((v, k) => { if (v === "1") x.fillRect((k + 3) * c + 1, (r + .5) * c + 1, c - 2, c - 2); }));
 }
-// Stufe 2, Games: Steuerkreuz, vier Knöpfe, zwei Pillen (Fläche 1,25 × 0,62)
+// Stufe 3, Games: Steuerkreuz, vier Knöpfe, zwei Pillen (Fläche 1,25 × 0,62)
 function drawPad(x, W, H) {
   const s = W / 1.25, Y = v => (.62 - v) * s;
   x.fillStyle = ink(.72);
@@ -50,7 +50,7 @@ function drawPad(x, W, H) {
   x.fillStyle = ink(.4);
   rr(x, .5 * s, Y(.47), .09 * s, .03 * s, .015 * s); x.fill(); rr(x, .66 * s, Y(.47), .09 * s, .03 * s, .015 * s); x.fill();
 }
-// Stufe 3, HTK: Urkunde mit Rahmen, Titelzeilen, Text, Unterschrift, Siegel
+// Stufe 2, HTK: Urkunde mit Rahmen, Titelzeilen, Text, Unterschrift, Siegel
 function drawCert(x, W, H) {
   const s = W / 1.0;
   x.strokeStyle = ink(.4); x.lineWidth = .012 * s; x.strokeRect(.05 * s, .05 * s, W - .1 * s, H - .1 * s);
@@ -160,7 +160,9 @@ export default function (K) {
   // ---------- Maße ----------
   // W Breite, H Stufenhöhe, D Auftritt. Am Handy schmaler (Text mittig, Zeichen dahinter), höher (bis vier Zeilen Zusatz)
   // und tiefer (das Zeichen steht weit genug vor der nächsten Setzstufe, um sie bei 30° Neigung nicht zu verdecken).
-  const W = N ? 3.0 : 7.2, H = N ? 1.2 : .95, D = N ? 2.2 : 1.9, Z1 = 4, X0 = -W / 2, X1 = W / 2, ZB = Z1 - 8 * D;
+  // EXT: die oberste Stufe (und mit ihr der Bogen hinten) ist um EXT tiefer, damit die Übersicht „Womit ich arbeite“ auf ihrer Trittfläche Platz hat
+  const EXT = N ? 3.2 : 2.2;
+  const W = N ? 3.0 : 7.2, H = N ? 1.2 : .95, D = N ? 2.2 : 1.9, Z1 = 4, X0 = -W / 2, X1 = W / 2, ZB = Z1 - 8 * D - EXT;
   const Zf = k => Z1 - (k - 1) * D;
   // Zeitplan: Bastellinien b 0–.11, Stufe k ab B0 + (k − 1)·S (Platte, dann Setzstufe und Seitenwände, dann Zeichen)
   // (Korrektur nach Sichtprüfung: keine hohen Wangen mehr, die Seiten wachsen Stufe für Stufe mit)
@@ -240,14 +242,14 @@ export default function (K) {
   const zeichen = [
     // 1 Pixel Arrays: Kachel mit Pixel-Mauszeiger
     (L, zf, t0, d) => card(L, EX - .4, EX + .4, zf, .8, t0, d, { draw: drawPixel }),
-    // 2 Games: Gamepad als Silhouette (Körper, zwei Griffe; innere Kanten ohne Linie)
+    // 2 HTK: Urkunde, leicht zurückgelehnt
+    (L, zf, t0, d) => card(L, EX - .5, EX + .5, zf, .72, t0, d, { ang: Q - .2, draw: drawCert }),
+    // 3 Games: Gamepad als Silhouette (Körper, zwei Griffe; innere Kanten ohne Linie)
     (L, zf, t0, d) => {
       const body = [[.15, .62], [1.1, .62], [1.23, .45], [1.15, .22], [.89, .22], [.36, .22], [.1, .22], [.02, .45]];
       const gl = [[.1, .22], [.36, .22], [.24, 0], [.06, 0]], gr = [[.89, .22], [1.15, .22], [1.19, 0], [1.01, 0]];
       return card(L, EX - .625, EX + .625, zf, .62, t0, d, { col: GREY, shape: [[body, [.5, .5, .5, 0, .5, 0, .5, .5]], [gl, [0, .5, .5, .5]], [gr, [0, .5, .5, .5]]], draw: drawPad });
     },
-    // 3 HTK: Urkunde, leicht zurückgelehnt
-    (L, zf, t0, d) => card(L, EX - .5, EX + .5, zf, .72, t0, d, { ang: Q - .2, draw: drawCert }),
     // 4 Freiberuflich: Laptop, Grundplatte hebt sich, Bildschirm klappt auf
     (L, zf, t0, d) => {
       const z1 = zf - .78, b = block(L, EX - .6, EX + .6, zf, z1, .06, t0, d * .5, { col: GREY });
@@ -283,6 +285,36 @@ export default function (K) {
     F.part("zeichen" + st.k, .02 + st.k * .008, .04);
     zeichen[i](st.L, st.z - .12, st.s + .6 * S, .32 * S);
   });
+
+  // ---------- Übersicht „Womit ich arbeite“: Druck auf der Trittfläche der obersten Stufe (Gerwing), von hinten nach vorn zu lesen ----------
+  // Dieselben Stimmen wie die Setzstufen: Überschrift in der Marke, je Gruppe der Name wie die Jahreszahlen (Grotesk, klein, gesperrt, grau)
+  // direkt über seinen Einträgen in Zusatzgröße (Grotesk). Drei Gruppen, am Desktop je eine Zeile, am Handy nur im Umbruch verschieden.
+  // Die Überschrift steht mit größerem Abstand vom Block als die Gruppen untereinander; eine gemeinsame linke Kante.
+  // (Arbeitsweise und Sprachen stehen nur im Text ohne 3D.)
+  // Platz: links rechts vom roten Faden (Faden bei XL − 0,16, Druck ab XL + 0,45), rechts mindestens 0,25 vor dem linken Rand des Stufenzeichens
+  // (Desktop x 1,81; längste Zeile rund 3,8 breit bei 4,37 Platz), nach hinten so tief (EXT), dass der Stapel ganz vor der Fläche endet,
+  // die das Zeichen von vorn her verdeckt (Handy).
+  const KENN = [
+    ["Plattformen", ["WordPress, WooCommerce, YOOtheme Pro"], ["WordPress, WooCommerce,", "YOOtheme Pro"]],
+    ["Anbindungen", ["Salesforce, Concludis, CRM- und ERP-Systeme, Umzug von Shopify"], ["Salesforce, Concludis,", "CRM- und ERP-Systeme,", "Umzug von Shopify"]],
+    ["Frontend", ["HTML, CSS, JavaScript"]]
+  ];
+  {
+    const top8 = steps[7], on = top8.s + .8 * S;
+    const EH = N ? .2 : .24, HG = N ? .4 : .5, GG = N ? .18 : .22;
+    const ph = K.print(["Womit ich arbeite"], EH, on, { font: "marke" });
+    const at = (pr, x, z) => K.onFlat(top8.L, pr, x + pr.w / 2 - pr.t.padX * pr.e, z + pr.h / 2);
+    const x0 = XL + (N ? .2 : .45), T0 = ZB + .14;
+    at(ph, x0, T0);
+    let cur = T0 + ph.h + HG;
+    KENN.forEach(g => {
+      const vs = (N && g[2]) || g[1];
+      const nm = K.print([g[0].toUpperCase()], N ? .09 : .1, on, { track: .12, col: "#2b2b2e" }), en = K.print(vs, N ? ED : .13, on, { lh: 1.25 });
+      at(nm, x0, cur);
+      at(en, x0, cur + nm.h - .01);
+      cur += nm.h + en.h - .01 + GG;
+    });
+  }
 
   // ---------- Konstruktionsphase (seite/): Gerüst je Stufe kurz bevor sie sich hebt, Bleistiftspur (auf den Setzstufen nur Eckmarken) ----------
   steps.forEach(st => F.geruest({ tags: ["stufe" + st.k], t0: st.s - .05, t1: st.s, du: .02, a: .5 }));
@@ -333,8 +365,13 @@ export default function (K) {
     for (let i = 1; i < SYT.length; i++) if (Hp <= SYT[i][0]) { const [h0, s0] = SYT[i - 1], [h1, s1] = SYT[i]; return s0 + (s1 - s0) * (Hp - h0) / (h1 - h0); }
     return SYT[SYT.length - 1][1];
   };
+  // Stufe 8 (Gerwing): steiler (45°) und tiefer im Bild, damit die Übersicht auf der Trittfläche über der Setzstufe mit im Bild ist
+  // (Rechnung wie readingPose, Mitte von Übersichtsoberkante und Setzstufenunterkante; tmp/textmass/cam.mjs)
+  const SY8D = [[720, -.47], [768, -.45], [864, -.41], [900, -.4], [1024, -.36], [1080, -.34], [1440, -.26]];
+  const SY8N = [[667, -.52], [740, -.49], [844, -.43], [915, -.41]];
   const ST = steps.map(st => {
-    const s = { prints: st.prints, e0: ED, b: st.s + S, px: pxD, pitch: globalThis.WP ?? 32, yaw: -6 + (st.k - 1) * .8, sy: globalThis.WSY ?? syD, pxN: 16, npitch: globalThis.WNP ?? 32, nyaw: 0, nsy: globalThis.WNSY ?? syN };
+    const top = st.k === 8;
+    const s = { prints: st.prints, e0: ED, b: st.s + S, px: pxD, pitch: top ? 45 : globalThis.WP ?? 32, yaw: -6 + (st.k - 1) * .8, sy: top ? (Wp, Hp) => interp(SY8D, Hp) : globalThis.WSY ?? syD, pxN: 16, npitch: top ? 45 : globalThis.WNP ?? 32, nyaw: 0, nsy: top ? (Wp, Hp) => interp(SY8N, Hp) : globalThis.WNSY ?? syN };
     s.sx = sxOf(s, false); s.nsx = sxOf(s, true);
     return s;
   });

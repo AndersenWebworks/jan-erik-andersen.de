@@ -1,9 +1,11 @@
 // Variante C – Vom Entwurf zur Technik, aus dem Bogen (Eröffnung).
 // Ein Schreibtisch hebt sich aus dem Bogen, auf der Platte zeichnet sich eine Website-Skizze in Haarlinien;
-// das Blatt steht auf Fuß und Hals auf und wird zum Bildschirm (Satzteil 1 im Kinn).
+// das Blatt steht auf Fuß und Hals auf und wird zum Bildschirm (zeigt die fertige Website, das Kinn bleibt leer).
 // Ein Kabel läuft hinten über die Platte, am Tischbein hinunter und über den Bogen zum Rechner (anbinden),
 // einem Mini-Tower mit Laufwerk, Einschalter und tickendem Statuspunkt (betreuen).
-// Satz zwei steht auf der Zarge an der Vorderkante der Tischplatte.
+// Der Kernsatz („Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen.“) steht
+// als ein Druck, dreizeilig, auf der Vorderseite des Podests unter der Unterzeile; Lesestelle 1 (kern) zeigt Name und Kernsatz zusammen.
+// Satz zwei steht auf der Zarge an der Vorderkante der Tischplatte (Lesestellen t4, t5). Monitor, Rechnerseite und Deckel tragen keinen Text.
 // Pop-up-Logik: Die Tischplatte hebt sich parallel, Beine (L-Profil) und Zarge schwenken von ihren Kanten nach unten;
 // Fuß, Hals und Bildschirm sind aus der Tischplatte geschnitten. Im Bogen bleibt der Abdruck.
 // Der Name kommt aus wortmarke.js (eine Stelle, später tauschbar).
@@ -113,10 +115,35 @@ export default function (K) {
   // im Bogen bleibt sein Abdruck hinter dem Podest. Am Handy zwei Stufen: Vorderseite, Deck 1 („Andersen.“), Setzstufe, Deck 2 („Jan-Erik“), Rückseite.
   // Breite: breiter als das Startbild (sonst läge links und rechts wieder Bogen im Bild); startD() hält die Kamera so nah, dass das auch bei
   // Breitbild gilt. Lage: der Streifen braucht hinter PZ D1 + 2·H1 (Handy D1 + D2 + 2·H2) Platz bis zu den liegenden Vorderbeinen (z 4,1).
-  const PZ = N ? 10.4 : 6.25, PW = N ? 3.4 : 5.4, H1 = N ? .85 : .5, D1 = 1.05, H2 = 2.0, D2 = 1.12, K1 = 1.083;
-  K.sheet(X0 - 2.9, PX0 + 3.7, -5.6, PZ + .05);
-  F.part("podest", -.02, .01); // Schnitt- und Falzlinien des Podests stehen schon (es ist beim Laden aufgestanden)
-  const STEP = c3("#f6f3ec"), PL = 2 * PW, pt = { clock: "t", over: .04 }, PT0 = 0, PD = .75;
+  // Die Vorderseite trägt unter der Unterzeile den Kernsatz (dreizeilig): Desktop H1 1,33 (vorher .5), Handy H1 1,92 und H2 3,07 (vorher .85 und 2,0;
+  // die Setzstufe bleibt 1,15 hoch, die Marke steht relativ zur Startkamera wie bisher); PZ rückt entsprechend nach hinten, damit der Streifen
+  // hinter PZ weiter bis zu den liegenden Vorderbeinen (z 4,1) reicht.
+  const PZ = N ? 12.5 : 7.9, PW = N ? 3.4 : 5.4, H1 = N ? 1.92 : 1.33, D1 = 1.05, H2 = N ? 3.07 : 2.0, D2 = 1.12, K1 = 1.083;
+  const LINES_B = .002;
+  const bogen = K.sheet(X0 - 2.9, PX0 + 3.7, -5.6, PZ + .05);
+  // Desktop: das Startbild blickt flach über den Bogen (Kamera auf Papierhöhe). Die 0,03 dicke Vorderkante des Bogens stünde dort als
+  // 3 bis 4 px hoher Streifen über die ganze Breite genau unter der Grundlinie und schnitte Überhänge und Unterlängen der Lettern an:
+  // Vorderseite und ihre Kantenlinien fallen weg (die Oberseite steht auf Kante und ist unsichtbar, die Dicke ist von oben nicht zu sehen).
+  if (!N) {
+    const g = bogen.geometry, ix = g.index.array, keep = [];
+    for (let i = 0; i < ix.length; i++) if (i < 24 || i >= 30) keep.push(ix[i]); // BoxGeometry: Fläche 4 (Indizes 24 bis 29) ist die Vorderseite (+z)
+    g.setIndex(keep);
+    const zf = g.parameters.depth / 2, ln = bogen.children[0], ps = ln.geometry.attributes.position, out = [];
+    for (let i = 0; i < ps.count; i += 2) if (!(Math.abs(ps.getZ(i) - zf) < 1e-4 && Math.abs(ps.getZ(i + 1) - zf) < 1e-4))
+      out.push(ps.getX(i), ps.getY(i), ps.getZ(i), ps.getX(i + 1), ps.getY(i + 1), ps.getZ(i + 1));
+    ln.geometry = new THREE.BufferGeometry().setAttribute("position", new THREE.Float32BufferAttribute(out, 3));
+    // auch die übrigen Kanten des Bogens liegen auf Papierhöhe (Seiten und Rückkante laufen im Startbild als Linie über den Horizont): erst mit dem Hochfahren sichtbar
+    K.anim(b => { ln.visible = b >= LINES_B; });
+  }
+  // Schnitt- und Falzlinien des Podests: Handy stehen schon (es ist beim Laden aufgestanden); Desktop zeichnen sie sich erst beim Hochfahren
+  // (b ab .003), flach bei Kamerahöhe 0 lägen sie sonst als Linien auf dem Horizont durch die Grundlinie der Marke
+  F.part("podest", N ? -.02 : .003, .01);
+  // Desktop (Erik, 22.10.): im Startbild liegt das Podest noch flach im Bogen, man sieht nur die Marke; es fährt mit dem ersten Scrollen
+  // hoch (Uhr b, Fenster 0 bis PB, siehe Schlüssel 1). Handy: zwei Stufen, flach lägen beide Zeilen hintereinander, daher wie bisher beim Laden.
+  const PB = .012;
+  // Handy: die Stufenflächen stehen im Papierton des Bogens (#faf8f3 bei 0,967 Licht); senkrechte Flächen bekommen im Shader nur 0,927,
+  // daher hellere Grundfarbe, sonst steht „Andersen“ auf einem grauen Band („Etikett“), während „Jan-Erik“ auf Weiß steht
+  const STEP = N ? c3("#fffdf7") : c3("#f6f3ec"), PL = 2 * PW, pt = N ? { clock: "t", over: .04 } : { clock: "b", over: .04 }, PT0 = 0, PD = N ? .75 : PB;
   const face1 = K.panel(R, [-PW, PZ], [PW, PZ], [0, -1], PT0, PD, Q, pt);
   K.P(face1, [[0, 0], [PL, 0], [PL, H1], [0, H1]], STEP, [.35, .5, 0, .5]);
   const deck1 = K.panel(face1, face1.uv(0, H1), face1.uv(PL, H1), [0, -1], PT0, PD, -Q, pt);
@@ -137,7 +164,10 @@ export default function (K) {
   // ---------- Name (wortmarke.js) auf dem Podest, Unterzeile auf seiner Vorderseite ----------
   F.part("name", 0, .01);
   // Lettern stehen an der Vorderkante des Decks (Ruhelage z PZ - H1); am Handy „Jan-Erik“ auf Deck 2 (Ruhelage PZ - D1 - H2)
-  const mark = N ? wortmarke(K, { cx: 0, narrow: true, par: deck2, zb: PZ - D1 - H2, par2: deck1, zb2: PZ - H1, k1: K1 })
+  // Handy: die Lettern stehen 0,02 Welteinheiten vor der Stufenfläche (Ebene von Setzstufe bzw. Vorderseite), sonst fällt der Fuß mit ihr zusammen und
+  // Überhang und J-Haken unter der Grundlinie verschwinden in der Fläche
+  const LF = .02;
+  const mark = N ? wortmarke(K, { cx: 0, narrow: true, par: deck2, zb: PZ - D1 - H2 + LF, par2: deck1, zb2: PZ - H1 + LF, k1: K1 })
     : wortmarke(K, { cx: 0, zb: PZ - H1, narrow: false, par: deck1 });
   // die gestrichelte Falz läuft über die Stufenkante auf die Oberkante der Vorderseite (frontal ist nur diese zu sehen)
   const [fA, fB] = mark.folds;
@@ -146,7 +176,13 @@ export default function (K) {
   const KT = N ? ["Webentwicklung", "Raum Plau am See · remote"] : ["Webentwicklung · Raum Plau am See · remote"];
   const ko = { track: .05, col: "#66666a", align: "center", lh: 1.45 };
   // gedruckt, mittig auf der Vorderseite (Mitte des Drucks = Mitte des Versalblocks)
-  const ke = N ? .19 : .15, kick = K.onPanel(face1, K.print(KT, ke, -1, ko), PW, H1 / 2, 1);
+  // Die Unterzeile sitzt wie bisher (gleicher Abstand unter der Stufenkante wie vorher: Handy deckt das HTML-Vorbild, Desktop bleibt der J-Haken über der Fläche frei von der Zeile), der Kernsatz steht
+  // als ein Druck darunter: drei Zeilen je ein Satzglied, eine Stufe größer als die Unterzeile (Faktor 1,18) und mit deutlichem Absatz davon (Lesestellung: Desktop 19 bis 21 px, Handy 16 px).
+  // Hinweis: Handy ist die Unterzeile bei fertigem Hochfahren schon sichtbar, der Kernsatz blendet erst mit dem ersten Scrollen ein (b .0005).
+  const ke = N ? .19 : .15, kickP = K.print(KT, ke, -1, ko), kv = N ? H1 - .425 : H1 - .25, kick = K.onPanel(face1, kickP, PW, kv, 1);
+  const ks = ke * 1.18, ksGap = .8 * 1.22 * ke, KS = K.print(["Ich entwickle Websites und Onlineshops,", "binde sie an Ihre übrigen Systeme an", "und betreue sie, solange sie laufen."], ks, N ? .0005 : -1,
+    { lh: 1.22, align: "center", track: .005, fade: N ? .0015 : undefined });
+  K.onPanel(face1, KS, PW, kv - kickP.h / 2 + .07 * ke - ksGap - KS.h / 2, 1);
 
   // ---------- Schreibtisch: Platte hebt sich, L-Beine und Zarge schwenken nach unten ----------
   F.part("tisch", .015, .08);
@@ -172,8 +208,11 @@ export default function (K) {
   K.rect(K.panel(top, [X1, ZF - LW], [X1, ZB + LW], [1, 0], .296, .075, -Q, down), 0, 0, ZF - ZB - 2 * LW, AP, LEG);
   // Satz 2 auf der Zarge (Außenseite +1, oben = zum Scharnier), je Hälfte zweizeilig
   const so = { lh: 1.18, align: "center", track: .005 };
-  const T4 = K.print(["Agenturen holen mich als", "Entwickler ins Projekt,"], .132, .72, so);
-  const T5 = K.print(["Unternehmen arbeiten", "direkt mit mir."], .132, .79, so);
+  // zweite Hälfte: „Unternehmen arbeiten direkt mit mir / oder holen mich auf Zeit ins eigene Team.“ (längste Zeile rund 19,8 em: Desktop 2,61 von 3,4,
+  // Handy mit e .115 rund 2,27 von 2,45 Halbbreite der Zarge; am Handy 16 px Schrift, Zeile rund 322 px von 390)
+  const se = N ? .115 : .132;
+  const T4 = K.print(["Agenturen holen mich als", "Entwickler ins Projekt,"], se, .72, so);
+  const T5 = K.print(["Unternehmen arbeiten direkt mit mir", "oder holen mich auf Zeit ins eigene Team."], se, .79, so);
   const xh = (X1 - LW) / 2;
   K.onPanel(apron, T4, -xh - (X0 + LW), AP / 2, 1, [0, -1]);
   K.onPanel(apron, T5, xh - (X0 + LW), AP / 2, 1, [0, -1]);
@@ -203,21 +242,14 @@ export default function (K) {
     x.fillStyle = ink(.84); rr(x, dx - bz, dy - bz, DX * PXU + 2 * bz, DY * PXU + 2 * bz, bz * .5); x.fill();
     x.save(); x.translate(dx, dy); x.beginPath(); x.rect(0, 0, DX * PXU, DY * PXU); x.clip(); webDraw(x, DX * PXU, DY * PXU); x.restore();
   }, SW, SL, .405, .05), U(0), SL / 2, -1);
-  const T1 = K.print(["Ich entwickle Websites", "und Onlineshops,"], .135, .5, { align: "center", lh: 1.18 });
-  // Kinn: frei zwischen Unterkante und Rahmen (Rahmen reicht .055 ins Kinn), Text mittig darin
-  K.onPanel(scr, T1, U(0), (CH - .055) / 2 - .01, -1);
+  // Das Kinn bleibt leer (der Kernsatz steht ganz auf dem Podest)
 
   // ---------- Rechner: Mini-Tower neben dem Tisch auf dem Bogen ----------
   F.part("rechner", .1, .08);
   const PZ0 = .1, { W: TW, D: TD, H: TH } = TOWER;
   const pc = K.box(R, PX0, PX0 + TW, PZ0, PZ0 - TD, TH, .31, .09, { col: CASE, fcol: FRONTC });
   K.onPanel(pc.fr, K.decal(Math.round(TW * 700), Math.round(TH * 700), towerFront, TW, TH, .17), TW / 2, TH / 2, -1);
-  // Satzteil 2 auf der rechten Seitenwand (zum Betrachter gedreht), Satzteil 3 auf dem Deckel
-  const T2 = K.print(["binde sie an Ihre", "übrigen Systeme an"], .15, .57, { lh: 1.2 });
-  K.onPanel(pc.rt, T2, TD / 2 - T2.t.tw * T2.e / 2 + T2.w / 2 - T2.t.padX * T2.e, TH * .64, -1);
   K.ticker(pc.fr, .045, pc.fr.uv(TOWER.led[0], TOWER.led[1]), [0, 1], -1, .62);
-  const T3 = K.print(["und betreue sie,", "solange sie laufen."], .09, .64, { lh: 1.22, align: "center" });
-  K.onPanel(pc.top, T3, TW / 2, TD * .6, -1, [0, 1]);
   // Kabel: hinter dem Hals auf die Platte, schräg zur rechten Kante, dort über die Kante und zwischen den Beinen
   // auf den Bogen fallend (von vorn sichtbar), über den Bogen zur linken Seitenwand des Rechners
   const ty = HT + .026, xe = X1 + .05, zd = -.6, gap = PX0 - xe;
@@ -230,7 +262,7 @@ export default function (K) {
   // die Teile klappen hinein, beim Einrasten zieht sich der Überstand zurück und die Linie blendet aus.
   F.geruest({ tags: ["tisch", "blatt", "rechner"], t0: .09, t1: .25, du: .03, a: .5 });
   // Bleistiftspur: Eckmarken und zarte Konstruktionskanten auf den Flächen, bleibt stehen; auf Flächen mit Text nur Eckmarken
-  F.spur({ tags: ["tisch", "blatt", "rechner"], quiet: [apron, scr, pc.rt, pc.top, pc.fr], a: .3 });
+  F.spur({ tags: ["tisch", "blatt", "rechner"], quiet: [apron, scr, pc.fr], a: .3 });
 
   // Statuspunkt in Weltkoordinaten (Front z = PZ0)
   const LED = V(PX0 + TOWER.led[0], TOWER.led[1], PZ0 + .012);
@@ -240,44 +272,49 @@ export default function (K) {
   const syH = (lo, hi) => (W, H) => Math.min(hi, Math.max(lo, lo + (H - 720) / 180 * .15 * (hi > lo ? 1 : -1)));
   // Abstand D der Startkamera zur Ebene der Lettern (z = PZ). Desktop: Name rund 70 % der Breite, Schrift höchstens H/6, und das Podest
   // reicht seitlich über das Bild hinaus (sonst sähe man daneben den Bogen). Handy: zweizeiliger Name rund 70 % der Breite.
+  const NAME_MAX = 1000, Y0 = N ? H1 : 0;
   const tanS = () => Math.tan((N ? 44 : 32) * Math.PI / 360);
   const startD = (W, H) => {
     const T = tanS(), f = H / (2 * T);
     // Obergrenze: beide Vorderseiten (Handy: auch die Setzstufe, sie steht D1 weiter hinten) reichen mit 0,3 Rand über den Bildrand
     const cap = (PW - .3) / (T * W / H) - (N ? D1 : 0);
     if (N) { const l = Math.min(-.2 - mark.w1 / 2, .2 - mark.l2 / 2), r = Math.max(-.2 + mark.w1 / 2, .2 + mark.l2 / 2); return Math.min(cap, (r - l) * f / (.7 * W)); }
-    return Math.min(Math.max(3 * mark.e / T, mark.w * f / (.7 * W)), cap);
+    // Desktop: das Podest liegt im Startbild flach, also keine Obergrenze durch seine Breite; der Name ist höchstens NAME_MAX px breit
+    // (27 Zoll: sonst über 1800 px), dazu passt im HTML-Vorbild font-size min(…, 137px)
+    // Das flache Podest verschiebt die Marke im Startbild um H1 nach hinten; die Rechnung (und das HTML-Vorbild, vorbild.js) gilt für H1 = .5, daher ausgleichen
+    return Math.max(3 * mark.e / T, mark.w * f / Math.min(.7 * W, NAME_MAX)) + (.5 - H1);
   };
   // readingPose() übersetzt: Tiefe bis zur Mitte der Drucke, daraus Schriftgröße und Verschiebung so, dass die Kamera bei (0, H1, PZ + D) steht
   const dep = (W, H) => PZ + startD(W, H) - S.name.C.z;
   const startPx = (W, H, s) => s.e * H / (2 * tanS() * dep(W, H));
   const startSx = (W, H) => S.name.C.x / (tanS() * (W / H) * dep(W, H));
-  const startSy = (W, H) => (S.name.C.y - H1) / (tanS() * dep(W, H));
+  const startSy = (W, H) => (S.name.C.y - Y0) / (tanS() * dep(W, H));
   const S = {
     // Startbild: Kamera genau auf Höhe der vorderen Stufenkante H1, waagerecht und frontal (Neigung 0, Rollen 0): Horizont = Bildmitte = Stufenkante,
     // Deckflächen liegen exakt in Blickhöhe (Desktop) bzw. darüber (Handy, Deck 2), der Bogen liegt ganz hinter der Vorderseite
-    name: { prints: [...mark.prints, kick], e0: mark.e, pitch: 0, npitch: 0, b: 0, px: startPx, pxN: startPx, sx: startSx, nsx: startSx, sy: startSy, nsy: startSy },
+    // fb 0: Lage bei b = 0 (Desktop: Podest flach, Kamera auf Papierhöhe, die Unterzeile liegt noch und zählt nicht mit)
+    name: { prints: N ? [...mark.prints, kick] : [...mark.prints], fb: 0, e0: mark.e, pitch: 0, npitch: 0, b: 0, px: startPx, pxN: startPx, sx: startSx, nsx: startSx, sy: startSy, nsy: startSy },
     // t1: im Breitbild steht der Rechner ganz rechts mit im Bild (Text links der Mitte), sonst bleibt er ganz draußen, nie angeschnitten
-    t1: { prints: [T1], px: pxD, pitch: 16, yaw: -14, sy: syH(-.18, .04), sx: (W, H) => W / H >= 1.68 ? -.4 : .03, npitch: 16, nyaw: -6, nsy: .14 },
-    t2: { prints: [T2], px: pxD, pitch: 10, yaw: -30, sy: -.33, npitch: 10, nyaw: -30, nsy: -.3 },
-    t3: { prints: [T3], px: pxD, pitch: 52, yaw: 8, sy: -.1, npitch: 54, nsy: .16 },
+    // kern: Name und Kernsatz auf dem Podest (Podest ist hochgefahren: Desktop b = PB, Handy b .004); Schriftgröße nach dem Kernsatz (e0)
+    kern: { prints: N ? [...mark.prints, kick, KS] : [...mark.prints, KS], e0: ks, b: N ? .004 : PB, px: pxD, pitch: 6, npitch: 8, sx: 0, nsx: 0, sy: 0, nsy: -.06 },
     t4: { prints: [T4], px: pxD, pitch: 16, yaw: -16, sy: syH(-.64, -.4), sx: (W, H) => W / H >= 1.55 ? -.35 : .08, npitch: 18, nyaw: 4, nsy: -.28 },
     t5: { prints: [T5], px: pxD, pitch: 16, yaw: -4, sy: syH(-.64, -.4), sx: -.12, npitch: 18, nyaw: -4, nsy: -.28 }
   };
   return {
     // Sichtfeld Breitbild 32° statt 36° (Kamera rund 12 % weiter weg, Bogen weniger trapezförmig verzerrt); hochkant 44° wie bisher
     fov: 32, fovN: 44,
-    track: 750,
+    track: 750, linesFrom: N ? undefined : LINES_B,
     // Raster wie auf einer Schneidematte, auf den Bogen gedruckt: Teilung 0,5, jede fünfte Linie kräftiger; zieht als Welle von links
     // nach rechts mit den Bastellinien ein (b ab .004, voll bis rund .085), geht auf den Teilen weg, sobald sie hochklappen, verblasst b .40–.46
-    grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .40 },
+    grid: { step: .5, every: 5, a: .12, aM: .22, t0: N ? .004 : PB + .002, wave: .0025, d: .04, out: .40 },
     thread: { pts: [LED, V(LED.x + .06, .8, LED.z), V(LED.x + .2, .004, PZ0 + .25), V(PX0 + 2.2, .004, .6), V(PX0 + 3.2, .004, -.2), V(PX0 + 3.25, .004, -2.6), V(PX0 + 2.2, .004, -5.0), V(PX0 + 2.0, .004, -5.45)], t0: .88, t1: 1 },
     stops: Object.values(S),
     keys: [
       { w: 0, stop: S.name },
       // Kamera hebt sich über den Bogen und gibt die Fläche frei, b bleibt 0 (noch keine Linien): Blickhöhe 0° -> 18°, Abstand 10,8 -> 19;
       // Handy 0° -> 19°, Abstand 13,2 -> 22 (vorher 27,5, dann wieder heran: jetzt wächst der Abstand stetig bis zum nächsten Schlüssel)
-      { w: .4, b: 0, cam: V(.1, 6.6, 21.6), tgt: V(.6, .7, 3.5), camN: V(.5, 8.06, 26.8), tgtN: V(.5, .9, 6.0) },
+      { w: 1, stop: S.kern },
+      { w: .4, b: N ? .004 : PB, cam: V(.1, 6.6, 21.6), tgt: V(.6, .7, 3.5), camN: V(.5, 8.06, 26.8), tgtN: V(.5, .9, 6.0) },
       // Bastellinien fertig, Tisch beginnt sich zu heben: Überblick über den Bogen (el 38°, az −4°, Abstand 22,7; Handy el 42°, 25,4).
       // Eingepasst bei 1280 × 900 (tmp-Rechnung, Podest eingeschlossen): fertiges Modell, flach liegende Beine, Name und Podest 72 bis 815 px,
       // seitlich mindestens 20 px frei; Handy fertiges Modell, Name und Podest zwischen 150 und 680 px, seitlich 12 px frei. Blickhöhe und Gier wie bisher.
@@ -288,9 +325,6 @@ export default function (K) {
       // Tisch steht, Monitor und Rechner fertig: Kamera ist mit dem Heben auf Augenhöhe eines Stehenden gesunken
       // (el 28°, az −6°, Abstand 22,2; Handy el 30°, 26,8), Monitor-Oberkante ≥ 72 px, Name und Podest über der Leiste
       { w: .8, b: .47, cam: V(-1.64, 11.72, 20.19), tgt: V(.41, 1.3, .69), camN: V(.93, 14.71, 27.45), tgtN: V(.93, 1.3, 4.23) },
-      { w: .9, stop: S.t1 },
-      { w: 1.1, stop: S.t2 },
-      { w: .8, stop: S.t3 },
       { w: 1.1, stop: S.t4 },
       { w: .9, stop: S.t5 },
       // Überblick, bevor der Punkt losläuft (el 42°, az 6°; Handy el 40°)

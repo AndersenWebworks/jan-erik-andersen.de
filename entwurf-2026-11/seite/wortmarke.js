@@ -17,7 +17,7 @@ const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, close: .25, closeD
 // (gleiche scheinbare Größe beider Zeilen). folds: Lage der Falzlinien, damit die Szene dieselbe Strichelung an der Stufenkante fortsetzt.
 export function wortmarke(K, { cx = 0, zb, narrow, par, zb2, par2, k1 = 1 }) {
   const e = .95, RED = "#d40235", DOT = .085; // Punkt: Radius in em (Durchmesser 0,17 em)
-  const up = { font: "marke" }, it = { font: "marke", italic: 1 };
+  const up = { font: "marke", hi: 1 }, it = { font: "marke", italic: 1, hi: 1 };
   const w1 = K.measure(["Jan-Erik"], up).tw * e, w2 = K.measure(["Andersen"], it).tw * e;
   const sp = (K.measure(["x x"], up).tw - K.measure(["xx"], up).tw) * e;   // Wortzwischenraum wie im Satz (Leerzeichen + Laufweite)
   const dw = .01 * e, dd = 2 * DOT * e;                                     // Abstand und Breite des Schlusspunkts
