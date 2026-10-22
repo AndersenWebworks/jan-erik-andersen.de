@@ -203,7 +203,8 @@ export default function (K) {
     const last = k === NP - 1, t0 = last ? 9 : PF0 + k * PFS;
     const pg = K.panel(cf, cf.uv(PU0, L), cf.uv(PU0 + PWc, L), [0, 1], t0, PFD, PA, { nocut: 1, nofold: 1, lv: cf.lvl + 2 * (NP - k), bounce: .03 });
     K.rect(pg, 0, 0, PWc, PL, PAGE, .5);
-    const base = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageBase(k), PWc, PL, .35, .03);
+    // Monatsname erst, wenn das Blatt darüber wegklappt: die Drucke der tieferen Blätter (Abstand nur 0,003) schienen sonst durch das oberste Blatt (Geisterkontur „JAN“)
+    const base = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageBase(k), PWc, PL, k === 0 ? .35 : PF0 + (k - 1) * PFS + .7 * PFD, k === 0 ? .03 : .015);
     const chk = K.decal(Math.round(PWc * 500), Math.round(PL * 500), pageCheck, PWc, PL, k === 0 ? .7 : PF0 + (k - 1) * PFS + .7 * PFD, .015);
     chk.mesh.renderOrder = 4;
     K.onPanel(pg, base, PWc / 2, PL / 2, 1, [0, -1], .001);

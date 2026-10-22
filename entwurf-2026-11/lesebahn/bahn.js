@@ -100,16 +100,26 @@ export function bahn(K, o) {
   const form0 = o.form || FORMEN.anhaenger, pitch = o.pitch === undefined ? 26 : o.pitch, lean = pitch * PI / 180;
   const z = o.z !== undefined ? o.z : o.front + (o.gapZ === undefined ? 6 : o.gapZ);
   const gap = o.gap === undefined ? 1.1 : o.gap, prefix = o.prefix || "s";
-  const items = []; let x = o.x0, runT;
+  const items = []; let x = o.x0, runT, kw = 0;
+  // Schriftgröße des Lesebildes (px je em) für den Abstand der Träger: Ein Träger steht an der Lesestelle ganz im Bild oder ganz draußen, der vorige darf
+  // nie angeschnitten am Rand stehen. Dafür muss der freie Abstand mindestens (Bildbreite − Trägerbreite) / 2 betragen. Bildbreite: Handy so breit wie das
+  // Fenster, Desktop 1280 … 1920 (K.vw beim Bau); Trägerbreite vorab geschätzt aus dem Rand des ersten Trägers (w − Textbreite, wächst mit e).
+  const pxS = N ? 16 : Math.min(23.5, Math.max(20, 20.5 + ((K.vh || 900) - 900) / 540 * 2.5)), sc = pxS / EC;
+  const frameW = N ? (K.vw || 390) : Math.min(1920, Math.max(1280, K.vw || 1280)), rim = N ? 10 : 36;
   o.sentences.forEach((s, i) => {
     const form = s.form || form0, big = s.big || 1, e = EC * big;
     const maxEm = s.maxEm || form.maxEm(N) * (N && big > 1 ? .72 : 1);
     const lines = s.lines || wrap(K, s.text, maxEm), tw = K.measure(lines).tw * e, th = (lines.length - 1) * LH * e + .8 * e;
     const tag = prefix + (i + 1) + "t", t = { line: s.t[0], rise: s.t[1], text: s.t[2] };
+    if (i > 0 && !o.noClear) {
+      const wEst = tw + kw * e, need = frameW / (2 * sc) - wEst / 2 - (items[i - 1].side || 0) + rim / sc;
+      if (need > gap) x += need - gap;
+    }
     F.part(tag, t.line, .04);
     const it = form.build({ K, x, z, lines, e, lh: LH, tw, th, i, tag, t, lean, narrow: N, text: s.text, col: s.col || o.col });
     F.geruest({ tags: [tag], t0: t.rise - .035, t1: t.rise, du: .02, a: .5, filter: it.gerFilter });
     Object.assign(it, { i, tag, x0: x, e, lines, b: s.b !== undefined ? s.b : t.text + .03, wKey: s.w || 2.0 });
+    if (i === 0) kw = (it.w - tw) / e;
     items.push(it); x += it.w + gap + (it.side || 0) * 2;
   });
   // Lesestellen (Kamera): gleiche Neigung und Blickrichtung (Gier 0), Abstand so, dass die Schrift in der Welt gleich groß bleibt

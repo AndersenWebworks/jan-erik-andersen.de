@@ -217,7 +217,7 @@ export default function (K) {
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .1 },
     thread,
     // Ein- und Ausgang des Fadens für folge.js: von vorn links neben die Überschrift, nach dem letzten Fahnenfuß zur Hinterkante des Bogens
-    fadenIO: { in: [tx, 7.8], viaPost: [[az2[2][0], az2[2][1]], [xo - .4, az2[2][1] - 1.5]], out: [xo, -7.8] },
+    fadenIO: { in: [tx, 7.8], bridge: [.25, .6], preTr: [.6, 1], viaPost: [[az2[2][0], az2[2][1]], [xo - .4, az2[2][1] - 1.5]], out: [xo, -7.8] },
     stops: Object.values(S),
     keys,
     parts: { pg, p0, pa, teeth, head, aT, aQ, sT, sQ, hh, gam, LW, LH, AW, AH, flag }

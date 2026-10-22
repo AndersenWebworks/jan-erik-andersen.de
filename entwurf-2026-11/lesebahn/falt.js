@@ -55,6 +55,9 @@ export const linRun = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x) * .35 +
 // ---------- Shader ----------
 const LIGHT = new THREE.Vector3(-.45, .8, .5).normalize();
 export const FAR = new THREE.Vector2(70, 140), NEAR = new THREE.Vector2(.35, 1.2);
+// Nebelweite je Szene: Materialien, die beim Bau einer Szene entstehen, teilen deren eigenen Vektor (kern.js: build, fernAbblenden)
+let curFar = FAR;
+export const useFar = v => { curFar = v || FAR; };
 const NOCLIP = () => new THREE.Vector4(-1e5, 1e5, -1e5, 1e5);
 // Ausschnitt in Szenenkoordinaten (x0, x1, z0, z1); alles außerhalb wird verworfen
 const CLIP_GLSL = `if (vL.x < uClip.x || vL.x > uClip.y || vL.z < uClip.z || vL.z > uClip.w) discard;`;
@@ -175,7 +178,7 @@ const RISS_FRAG = `
 const frameUniforms = () => ({ uOrg: { value: new THREE.Vector3() }, uClip: { value: NOCLIP() } });
 export function paperMaterial(col) {
   const m = new THREE.ShaderMaterial({
-    uniforms: { uL: { value: LIGHT }, uFar: { value: FAR }, uNear: { value: NEAR }, uCol: { value: col ? new THREE.Color(col) : new THREE.Color() },
+    uniforms: { uL: { value: LIGHT }, uFar: { value: curFar }, uNear: { value: NEAR }, uCol: { value: col ? new THREE.Color(col) : new THREE.Color() },
       uGB: { value: 0 }, uGP: { value: new THREE.Vector4() }, uGT: { value: new THREE.Vector4() }, uInk: { value: new THREE.Vector3(...INK) }, ...frameUniforms() },
     vertexShader: PAPER_VERT, fragmentShader: PAPER_FRAG, side: THREE.DoubleSide,
     polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 2
@@ -231,7 +234,7 @@ export function geruestMaterial() {
 }
 export function edgeMaterial() {
   return new THREE.ShaderMaterial({
-    uniforms: { uFar: { value: FAR }, uNear: { value: NEAR }, ...frameUniforms() },
+    uniforms: { uFar: { value: curFar }, uNear: { value: NEAR }, ...frameUniforms() },
     vertexShader: EDGE_VERT, fragmentShader: EDGE_FRAG, transparent: true, depthWrite: false
   });
 }

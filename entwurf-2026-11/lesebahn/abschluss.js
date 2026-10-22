@@ -1,15 +1,18 @@
-// Abschluss: Wie ich arbeite, Für Agenturen, Kontakt (drei Szenen auf einem langen Bogen, eine Kamerabahn).
-// Jedes Konstrukt tut, was im Absatz steht (Drehbuch: DREHBUCH.md):
-//  1  Wie ich arbeite: drei Helferarme liefern Teile zu, jedes Teil passiert den Prüfrahmen, erst danach rastet es ein (roter Haken).
-//  2  Für Agenturen: ein Teamtisch mit drei laufenden Plätzen; ein vierter Platz entsteht exakt im vorhandenen Raster.
-//  3  Kontakt: die rote Linie endet an einem Briefumschlag, der sich aufklappt; Mail, Telefon und LinkedIn (kein Lebenslauf-PDF) stehen auf Aufstellkarten.
-// Alle Bauteile liegen in Ruhe flach auf dem Bogen (Faltplan) und klappen mit dem Baufortschritt b hoch.
-// b-Fenster: Szene 1 0 … .36, Szene 2 .36 … .68, Szene 3 .68 … 1.
-// Kopie von entwurf-2026-11/abschluss/abschluss.js für die durchgehende Seite (entwurf-2026-11/seite/). Die Seite zeigt das Modul zweimal,
-// je mit Ausschnitt des Bogens: „Wie ich arbeite“ (x bis 8,5, b 0 … .36) und nach Werdegang und Stimmen „Für Agenturen“ mit „Kontakt“
-// (x ab 8,5, b .37 … 1). Ergänzt: Konstruktionsphase (Raster, Gerüst je Bauabschnitt, Bleistiftspur).
+// Abschluss der Lesebahn: „Wie ich arbeite“, „Für Agenturen“ und „Kontakt“ (Drehbuch: DREHBUCH-LESEBAHN.md, Abschnitte 13, 16, 17;
+// Baukasten: LESEBAHN-BAUKASTEN.md). Das Modul baut je Aufruf eine Szene (opt.scene):
+//  "arbeit"     Wie ich arbeite: Tunnelbuch aus Prüfrahmen. Drei Rahmen (Bögen aus Papier, Fenster bis zum Boden) stehen auf der Bahn, der rote
+//               Faden läuft unter dem Sturz durch jedes Fenster, der Satz steht ganz auf dem Sturz. Hinter jedem Rahmen stehen zwei kleinere
+//               Rahmen als Tunnel. Szenerie: Teile (Schnittstelle, Datenumzug, Website) laufen durch die Rahmen; was den Prüfrahmen
+//               passiert, bekommt ein Häkchen, das Teil ohne Häkchen bleibt vor dem Prüfrahmen stehen.
+//  "agenturen"  Für Agenturen und Kontakt auf einem Bogen: Einsteckschiene mit drei Steckschildern (Schienenstücke mit Nut für den Faden), dahinter
+//               eine Reihe gleicher Bausteine (laufendes Projekt) mit einer Lücke, in die sich ein neuer Baustein einsteckt (Themes, Plugins).
+//               Danach läuft der Faden zum Briefumschlag: Er steht hinter drei Karten (Mail, Telefon, LinkedIn, echte Links); der Faden endet im
+//               roten Siegel vor den Karten. Letztes Bild: Überschrift, alle Karten und der Standort ganz im Bild.
+// Jeder Satz steht ganz auf einem Träger (keine Satzketten), Lesereihenfolge = Bahnrichtung, Kamera Gier 0, Neigung 26 (K.bahn).
+import { halt } from "./halt.js";
 const ink = a => `rgba(48,48,51,${a})`;
-const RED = "#d40235", INKC = "#303033";
+const RED = "#d40235", INKC = "#303033", MUTED = "#66666a";
+const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2 };
 function rr(x, X, Y, w, h, r) { x.beginPath(); x.roundRect(X, Y, w, h, r); }
 
 // ---------- Druckbilder ----------
@@ -43,54 +46,28 @@ function checkDraw(x, W, H) {
   x.strokeStyle = "#fff"; x.lineWidth = W * .1; x.lineCap = "round"; x.lineJoin = "round";
   x.beginPath(); x.moveTo(W * .3, H * .52); x.lineTo(W * .45, H * .66); x.lineTo(W * .72, H * .36); x.stroke();
 }
-// Website-Layout für die Monitore der Teamplätze (ein Theme, überall gleich)
-function themeDraw(x, W, H) {
-  x.fillStyle = "#fff"; x.fillRect(0, 0, W, H);
-  const s = W / 1000, S = H / 625;
-  x.fillStyle = ink(.8); rr(x, 60 * s, 46 * S, 118 * s, 22 * S, 2 * s); x.fill();
-  x.fillStyle = ink(.35); for (let i = 0; i < 3; i++) { rr(x, (620 + i * 100) * s, 52 * S, 70 * s, 10 * S, 5 * S); x.fill(); }
-  x.fillStyle = ink(.12); x.fillRect(0, 100 * S, W, 2 * S);
-  x.fillStyle = ink(.78); rr(x, 60 * s, 150 * S, 430 * s, 42 * S, 2 * s); x.fill(); rr(x, 60 * s, 204 * S, 300 * s, 42 * S, 2 * s); x.fill();
-  x.fillStyle = ink(.26); [400, 380, 260].forEach((w, i) => { rr(x, 60 * s, (276 + i * 24) * S, w * s, 10 * S, 5 * S); x.fill(); });
-  x.fillStyle = ink(.07); x.fillRect(560 * s, 140 * S, 380 * s, 280 * S);
-  x.strokeStyle = ink(.3); x.lineWidth = 3 * s; x.strokeRect(560 * s, 140 * S, 380 * s, 280 * S);
-  for (let c = 0; c < 3; c++) { x.fillStyle = ink(.65); rr(x, (60 + c * 300) * s, 470 * S, 150 * s, 14 * S, 2 * s); x.fill(); x.fillStyle = ink(.22); [240, 220, 170].forEach((w, i) => { rr(x, (60 + c * 300) * s, (500 + i * 20) * S, w * s, 8 * S, 4 * S); x.fill(); }); }
+// Siegel: Wachsscheibe mit gezacktem Rand (der rote Punkt des Fadens liegt in der Mitte)
+function sealDraw(x, W, H) {
+  x.translate(W / 2, H / 2); const r = W * .46;
+  x.fillStyle = "#b50029"; x.beginPath();
+  for (let i = 0; i < 30; i++) { const a = i / 30 * Math.PI * 2, q = r * (i % 2 ? .94 : 1); x.lineTo(Math.cos(a) * q, Math.sin(a) * q); }
+  x.closePath(); x.fill();
+  x.fillStyle = RED; x.beginPath(); x.arc(0, 0, r * .82, 0, Math.PI * 2); x.fill();
+  x.strokeStyle = "rgba(255,255,255,.3)"; x.lineWidth = r * .05; x.beginPath(); x.arc(0, 0, r * .58, 0, Math.PI * 2); x.stroke();
 }
-// Platzset: Rahmen und Tastatur (vorn) im Raster, 1,9 × 0,9; oben im Bild = hinten am Monitor
-function matDraw(x, W, H) {
-  x.strokeStyle = ink(.28); x.lineWidth = H * .012; rr(x, H * .01, H * .01, W - H * .02, H - H * .02, H * .05); x.stroke();
-  const kx = W * .22, kw = W * .56, ky = H * .62, kh = H * .3;
-  x.strokeStyle = ink(.4); x.lineWidth = H * .012; rr(x, kx, ky, kw, kh, H * .02); x.stroke();
-  x.strokeStyle = ink(.2); x.lineWidth = H * .007;
-  for (let r = 1; r < 4; r++) { x.beginPath(); x.moveTo(kx, ky + kh * r / 4); x.lineTo(kx + kw, ky + kh * r / 4); x.stroke(); }
-  for (let c = 1; c < 14; c++) { x.beginPath(); x.moveTo(kx + kw * c / 14, ky); x.lineTo(kx + kw * c / 14, ky + kh); x.stroke(); }
-}
-// Bildschirm eines Platzes: dunkler Rahmen mit Seite, darunter das Kinn (Papierfarbe); W × H in Pixeln, Oberkante = Oberkante des Monitors
-function monDraw(scrFrac) {
-  return (x, W, H) => {
-    const bz = W * .035, sh = H * scrFrac;
-    x.fillStyle = ink(.86); rr(x, 0, 0, W, sh, bz * .6); x.fill();
-    x.save(); x.beginPath(); x.rect(bz, bz, W - 2 * bz, sh - 2 * bz); x.clip(); x.translate(bz, bz); themeDraw(x, W - 2 * bz, sh - 2 * bz); x.restore();
-  };
-}
-// Innenseite der Umschlagklappe: feines Sicherheitsmuster, auf das Dreieck begrenzt
-function liningDraw(x, W, H) {
-  x.beginPath(); x.moveTo(0, H); x.lineTo(W, H); x.lineTo(W / 2, 0); x.closePath(); x.clip();
-  x.strokeStyle = ink(.1); x.lineWidth = Math.max(1, W * .002);
-  for (let i = -H; i < W + H; i += W * .028) { x.beginPath(); x.moveTo(i, 0); x.lineTo(i + H, H); x.stroke(); }
-}
-// Aufstellkarte eines Kontaktwegs: Etikett klein, Wert groß unterstrichen, roter Punkt davor (zeigt „anklickbar“). em: Höhe 1 em in Weltmaßen
-function cardDraw(label, value, CW, CH, em) {
+// Karte eines Kontaktwegs: Etikett (grau) über dem Wert (Tinte, unterstrichen), roter Punkt davor zeigt „anklickbar“. em: Schrifthöhe in Welteinheiten
+function cardDraw(label, value, CW, CH, em, box) {
   const pxu = 520;
   return {
     wpx: Math.round(CW * pxu), hpx: Math.round(CH * pxu),
     draw: (x, W, H) => {
       const u = pxu * em, padX = .2 * pxu;
+      if (box) { x.strokeStyle = ink(.2); x.lineWidth = Math.max(2, u * .03); rr(x, 2, 2, W - 4, H - 4, u * .25); x.stroke(); }
       x.textBaseline = "alphabetic";
-      x.fillStyle = "#66666a"; x.font = `500 ${u * .68}px "Schibsted Grotesk"`;
-      x.fillText(label, padX, H * .3);
+      x.fillStyle = MUTED; x.font = `500 ${u * .86}px "Schibsted Grotesk"`;
+      x.fillText(label, padX + u * .55, H * .36);
       x.fillStyle = INKC; x.font = `500 ${u}px "Schibsted Grotesk"`;
-      const yb = H * .66, w = x.measureText(value).width, xv = padX + u * .55;
+      const yb = H * .76, w = x.measureText(value).width, xv = padX + u * .55;
       x.fillText(value, xv, yb);
       x.fillStyle = RED; x.beginPath(); x.arc(padX + u * .16, yb - u * .3, u * .13, 0, Math.PI * 2); x.fill();
       x.strokeStyle = ink(.7); x.lineWidth = Math.max(2, u * .045); x.beginPath(); x.moveTo(xv, yb + u * .16); x.lineTo(xv + w, yb + u * .16); x.stroke();
@@ -98,325 +75,273 @@ function cardDraw(label, value, CW, CH, em) {
   };
 }
 
-export default function (K) {
-  const { F, R, V, COL, Q, sm, mech, win, clamp, THREE, narrow: N } = K;
-  const PI = Math.PI;
+const SATZ_X = [
+  "Ich arbeite mit aktuellen KI-Werkzeugen und habe dafür eigene Abläufe entwickelt.",
+  "Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge.",
+  "Entscheidungen und Verantwortung bleiben bei mir, und ausgeliefert wird nur, was ich geprüft habe."
+];
+const SATZ_Y = [
+  "Ich steige in laufende Projekte ein.",
+  "Ich arbeite mich in bestehende Themes und Plugins ein und halte mich an Ihre Abläufe und Werkzeuge.",
+  "Konditionen und freie Kapazität nenne ich Ihnen auf Anfrage."
+];
+
+export default function (K, opt = {}) {
+  const { F, R, V, Q, sm, mech, clamp, THREE, narrow: N } = K;
+  const PI = Math.PI, PITCH = 26, lean = PITCH * PI / 180, SINL = Math.sin(lean), EC = .2;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const DESK = c3("#e8e1d2"), LEG = c3("#e1d9c9"), METAL = c3("#dcd7cd"), SIGN = c3("#f6f3ec"), FRAMEC = c3("#e4dccb"),
-    ARM = c3("#dcd7cd"), ARM2 = c3("#d6d1c7"), BODY = c3("#efe6d2"), FLAPC = c3("#e8dcc4"), CARD = c3("#f8f6f1"), DECK = c3("#ece8de"), LIGHT = c3("#f8f6f1");
-  const IMP = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, closeB: .03 }, IMP_T = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, close: .25, closeDur: .7 };
-  // Kamera auf der Kugel um das Ziel (Blickhöhe el, Gier az, Abstand dist); Handy: eigener Abstand und eigene Blickhöhe (sonst würde die Breitbild-Stellung gestreckt)
-  const ring = (tgt, el, az, dist) => { const e = el * PI / 180, a = az * PI / 180; return tgt.clone().add(V(Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e)).multiplyScalar(dist)); };
-  const orbit = (tgt, el, az, dist, distN, elN, tgtN) => ({ tgt, cam: ring(tgt, el, az, dist), tgtN: tgtN || tgt, camN: ring(tgtN || tgt, elN || el + 6, az * .6, distN || dist * .7) });
-  const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
-  const stops = {};
-  const carriers = []; // Textträger mit ihren Drucken (Prüfung: ganz im Bild oder ganz draußen)
+  const PAPER = c3("#f6f3ec"), PAPER2 = c3("#f1ede3"), RAIL = c3("#e3ded1"), NUT = c3("#cfc8b8"), BODY = c3("#efe6d2"), FLAPC = c3("#e8dcc4"), CARD = c3("#f8f6f1"), BLOCK = c3("#f2eee4");
 
-  // Bogen: ein langer Streifen, die drei Szenen liegen hintereinander (x von -9,5 bis 46)
-  K.sheet(-9.5, 46, -13, 6.6);
-
-  // ---------- Überschrift als Teil des Modells ----------
-  // rows: Zeilen aus Wörtern {t, it}; Zeilen stehen hintereinander (hinterste zuerst), jedes Wort steht an seiner Fußlinie aus dem Bogen auf
-  function heading(rows, e, zb, t0, tag, xo = 0, clk = "b") {
-    F.part(tag, -.02, .01);
-    const up = { font: "marke" }, it = { font: "marke", italic: 1 };
-    const wd = w => K.measure([w.t], w.it ? it : up).tw * e;
-    const sp = (K.measure(["x x"], up).tw - K.measure(["xx"], up).tw) * e;
-    const prints = [], step = 1.32 * e;
-    rows.forEach((row, ri) => {
-      const z = zb - (rows.length - 1 - ri) * step, tot = row.reduce((a, w) => a + wd(w), 0) + sp * (row.length - 1);
-      let x = xo - tot / 2;
-      row.forEach((w, wi) => {
-        const n = prints.length;
-        prints.push(clk === "t" ? K.word([w.t], e, x, z, .15 + .23 * n, .85, { ...(w.it ? it : up), foot: 1, imprint: IMP_T })
-          : K.word([w.t], e, x, z, t0 + .005 * (ri + wi), .04, { ...(w.it ? it : up), foot: 1, clock: "b", imprint: IMP }));
-        x += wd(w) + sp;
-      });
-    });
-    return prints;
+  // Aufsteller: Fläche an einem Scharnier (Grundlinie), um die Neigung der Kamera zurückgelehnt, mit zwei Seitenstützen (Dreiecke, klappen nach hinten)
+  function stand(par, a, b, W, H, rise, col, draw, sup = true) {
+    const nd = K.panel(par, a, b, [0, -1], rise, .045, Q - lean, { over: .04 });
+    if (draw) draw(nd); else K.rect(nd, 0, 0, W, H, col, .4);
+    const quiet = [nd]; let vg = 0;
+    if (sup) {
+      const ws = Math.min(.42, H * .45), ug = ws * Math.sin(lean), uT = Math.min(H * .85, .75);
+      vg = ws * Math.cos(lean);
+      const wl = K.panel(nd, nd.uv(0, 0), nd.uv(0, uT), [-1, 0], rise + .03, .035, -Q, { over: .07 });
+      K.P(wl, [[0, 0], [uT, 0], [ug, vg]], col, .3);
+      const wr = K.panel(nd, nd.uv(W, 0), nd.uv(W, uT), [1, 0], rise + .034, .035, -Q, { over: .07 });
+      K.P(wr, [[0, 0], [uT, 0], [ug, vg]], col, .3);
+      quiet.push(wl, wr);
+    }
+    return { nd, vg, quiet };
   }
-  const HE = N ? .56 : .78;
+  // Bogen aus Papier: zwei Pfosten und ein Sturz, darunter ein Fenster bis zum Boden
+  const arch = (W, H, HP, PO, col) => nd => {
+    K.P(nd, [[0, 0], [PO, 0], [PO, HP], [0, HP]], col, [.5, .5, 0, .5]);
+    K.P(nd, [[W - PO, 0], [W, 0], [W, HP], [W - PO, HP]], col, [.5, .5, 0, .5]);
+    K.P(nd, [[0, HP], [W, HP], [W, H], [0, H]], col, .4);
+  };
+  const pxD = (W, H) => Math.min(23.5, Math.max(20, 20.5 + (H - 900) / 540 * 2.5));
 
-  // =====================================================================================================
-  // Szene 1: Wie ich arbeite (z0 = 0)
-  // =====================================================================================================
-  {
-    const z = v => v;
-    const LX = [-1.6, 0, 1.6];
-    // Überschrift: Breitbild eine Zeile, Handy zwei Zeilen
-    const rows = N ? [[{ t: "Wie ich" }], [{ t: "arbeite", it: 1 }]] : [[{ t: "Wie ich" }, { t: "arbeite", it: 1 }]];
-    const H1 = heading(rows, HE, z(5.0), 0, "kopf1", 0, "t");
+  // ===================================================================================================
+  // Wie ich arbeite: Tunnelbuch aus Prüfrahmen
+  // ===================================================================================================
+  function arbeit() {
+    const z = 5.0, zf = z + 3.0, eH = .5;
+    const lines = N ? ["Allein, wofür", "früher ein Team", "nötig war"] : ["Allein, wofür früher", "ein Team nötig war"];
+    const titleW = K.measure(lines, { font: "serif" }).tw * eH;
+    const x0 = -1.0, xh = x0 - .7 - titleW;
+    const H1 = K.word(lines, eH, xh, z, .15, .85, { font: "serif", foot: 1, imprint: { ...IMPRINT, close: .25, closeDur: .7 }, ang: Q - lean });
+    // Kicker „Wie ich arbeite“ steht hinter der Überschrift (im Bild darüber)
+    const kz = z - (H1.h + .3) / SINL;
+    const kick = K.word(["Wie ich arbeite"], .2, xh, kz, .15, .85, { foot: 1, noImprint: true, col: MUTED, track: .02, ang: Q - lean });
 
-    // Schild links: Satz 1 (Werkzeuge und Abläufe); Schild rechts: Satz 2 (Lieferschein neben der Bahn)
-    F.part("pult", 0, .05);
-    const SW = 3.0, SHH = 1.3;
-    const sl = K.panel(R, [-4.1 - SW / 2, z(1.0)], [-4.1 + SW / 2, z(1.0)], [0, -1], .065, .035, Q, { over: .05 });
-    K.rect(sl, 0, 0, SW, SHH, SIGN);
-    const T1 = K.print(["Ich arbeite mit aktuellen", "KI-Werkzeugen und habe dafür", "eigene Abläufe entwickelt."], .145, .11, { align: "center", lh: 1.2 });
-    K.onPanel(sl, T1, SW / 2, SHH / 2, 1);
-
-    // Drei Greifarme aus Papier: Sockel, Glied 1 (Schulter), Glied 2 (Ellbogen), Gabel mit zwei Zinken, die das Teil halten
-    F.part("arme", .005, .05);
-    const BWd = .9, BHt = .45, GW = .3, L1 = 1.5, L2 = 2.4, TH1 = 1.1, TH2 = -.15, YK = .15, FNL = .5, az = z(1.2);
-    LX.forEach((x, i) => {
-      const t = .06 + .006 * i;
-      const base = K.panel(R, [x - BWd / 2, az], [x + BWd / 2, az], [0, -1], t, .03, Q, { over: .05 });
-      K.rect(base, 0, 0, BWd, BHt, ARM2);
-      const g1 = K.panel(base, base.uv(BWd / 2 - GW / 2, BHt), base.uv(BWd / 2 + GW / 2, BHt), [0, -1], t + .02, .03, TH1 - Q, { over: .05 });
-      K.rect(g1, 0, 0, GW, L1, ARM);
-      const g2 = K.panel(g1, g1.uv(0, L1), g1.uv(GW, L1), [0, -1], t + .035, .035, TH2 - TH1, { over: .05 });
-      K.P(g2, [[0, 0], [GW, 0], [GW, L2 - YK], [0, L2 - YK]], ARM2, [.5, .5, 0, .5]);
-      K.rect(g2, -.35, L2 - YK, GW + .35, L2, ARM2);
-      for (const [u0, u1] of [[-.35, -.25], [GW + .25, GW + .35]]) {
-        const fi = K.panel(g2, g2.uv(u0, L2), g2.uv(u1, L2), [0, -1], t + .05, .025, -Q - TH2, { over: .05 });
-        K.rect(fi, 0, 0, u1 - u0, FNL, ARM);
+    // Trägerform „Prüfrahmen“: Der Faden läuft in der Ebene des Rahmens durch das Fenster unter dem Sturz (Haltepunkt im Fenster).
+    // Hinter jedem Rahmen stehen zwei kleinere Rahmen (Tunnel), leicht nach rechts versetzt.
+    const rahmen = {
+      name: "rahmen", maxEm: n => n ? 14 : 22,
+      build(c) {
+        const { x, z: zz, lines: ls, e, tw, th, t, tag } = c;
+        const mx = 1.5 * e, mt = 1.0 * e, mb = 1.2 * e, PO = Math.max(.34, mx * .8), HP = 1.5;
+        const W = tw + 2 * mx, LI = mt + th + mb, H = HP + LI, col = PAPER;
+        const s = stand(R, [x, zz], [x + W, zz], W, H, t.rise, col, arch(W, H, HP, PO, col));
+        const pr = K.print(ls, e, t.text, { lh: c.lh });
+        K.onPanel(s.nd, pr, mx - pr.t.padX * e + pr.w / 2, H - mt + .34 * e - pr.h / 2, 1);
+        const quiet = [...s.quiet];
+        // Tunnel: zwei kleinere Rahmen dahinter (nur Papier, kein Text)
+        let zg = zz - H - .45;
+        [[.8, .94, .5], [.62, .88, 1.0]].forEach(([fh, fw, sh], k) => {
+          const Hg = H * fh, Wg = W * fw, HPg = HP * fh, xg = x + sh;
+          const g = stand(R, [xg, zg], [xg + Wg, zg], Wg, Hg, t.rise + .012 * (k + 1), PAPER2, arch(Wg, Hg, HPg, PO * fw, PAPER2), false);
+          quiet.push(g.nd); zg -= Hg + .45;
+        });
+        const a = [x + mx + 2 * e, .004, zz];
+        return { w: W, h: H, pr, nd: s.nd, anchor: a, anchors: [a], quiet, side: s.vg, tags: [tag] };
       }
-      // Gelenke: Ring mit Bolzen auf Schulter und Ellbogen
-      const joint = (nd, v) => K.onPanel(nd, K.decal(128, 128, (c, W, H) => { c.strokeStyle = ink(.7); c.lineWidth = W * .07; c.beginPath(); c.arc(W / 2, H / 2, W * .38, 0, 7); c.stroke(); c.fillStyle = ink(.75); c.beginPath(); c.arc(W / 2, H / 2, W * .13, 0, 7); c.fill(); }, .24, .24, .1, .02), GW / 2, v, 1);
-      joint(g1, .17); joint(g1, L1 - .17);
+    };
+    const T = [[.10, .14, .20], [.28, .32, .38], [.46, .50, .56]];
+    const B = K.bahn({
+      prefix: "x", form: rahmen, x0, z, gap: 1.7, pitch: PITCH, sy: -.34, nsy: -.3,
+      head: { prints: [H1, kick], e0: eH, b: 0, fit: .72, fitN: .72, x: xh, w: titleW },
+      sentences: [
+        { text: SATZ_X[0], t: T[0], b: .23 },
+        { text: SATZ_X[1], t: T[1], b: .41, big: 1.2 },
+        { text: SATZ_X[2], t: T[2], b: .59 }
+      ]
     });
-    const ZH = az - L1 * Math.cos(TH1) - L2 * Math.cos(TH2), HOLD = BHt + L1 * Math.sin(TH1) + L2 * Math.sin(TH2) - .3;
+    const it = B.items, cx = it.map(i => i.x0 + i.w / 2), x3l = it[2].x0, x3r = x3l + it[2].w;
+    const Hmax = Math.max(...it.map(i => i.h));
+    K.sheet(xh - 3.4, B.endX + 7, Math.min(kz - 1.6, z - 2.42 * Hmax - 1.6), zf);
 
-    F.part("schild", .015, .05);
-    const sr = K.panel(R, [4.1 - SW / 2, z(-.4)], [4.1 + SW / 2, z(-.4)], [0, -1], .09, .035, Q, { over: .05 });
-    K.rect(sr, 0, 0, SW, SHH, SIGN);
-    const T2 = K.print(["Damit schaffe ich allein Projekte,", "für die früher ein kleines Team", "nötig war, etwa Schnittstellen", "oder Datenumzüge."], .14, .125, { align: "center", lh: 1.22 });
-    K.onPanel(sr, T2, SW / 2, SHH / 2, 1);
-
-    // Prüfrahmen: zwei Pfosten und ein Sturz; der ganze Satz 3 steht auf dem Sturz
-    F.part("rahmen", .02, .05);
-    const FO = 2.5, FHt = 2.4, PO = .3, LI = 1.0, fz = z(-5.0), HP = FHt - LI;
-    const fr = K.panel(R, [-FO, fz], [FO, fz], [0, -1], .10, .04, Q, { over: .05 });
-    K.P(fr, [[0, 0], [PO, 0], [PO, HP], [0, HP]], FRAMEC, [.5, .5, 0, .5]);
-    K.P(fr, [[2 * FO - PO, 0], [2 * FO, 0], [2 * FO, HP], [2 * FO - PO, HP]], FRAMEC, [.5, .5, 0, .5]);
-    K.P(fr, [[0, HP], [2 * FO, HP], [2 * FO, FHt], [0, FHt]], FRAMEC);
-    const T3 = K.print(["Entscheidungen und Verantwortung", "bleiben bei mir, und ausgeliefert", "wird nur, was ich geprüft habe."], .2, .14, { align: "center", lh: 1.2 });
-    K.onPanel(fr, T3, FO, HP + LI / 2, 1);
-
-    // Plätze im Bogen hinter dem Rahmen
-    const ZS = z(-9.4);
-    K.onFlat(R, K.decal(1200, 300, (x, W, H) => {
-      x.strokeStyle = ink(.4); x.lineWidth = 5; x.lineCap = "round";
-      LX.forEach(lx => {
-        const cx = W / 2 + lx / 4.8 * W, s = .86 / 4.8 * W, hh = s * .5;
-        const c = s * .2;
-        for (const [sx2, sy2] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { const px = cx + sx2 * hh, py = H / 2 + sy2 * hh; x.beginPath(); x.moveTo(px - sx2 * c, py); x.lineTo(px, py); x.lineTo(px, py - sy2 * c); x.stroke(); }
-      });
-    }, 4.8, 1.2, .16), 0, ZS);
-
-    // Teile: kommen aus der Hand, laufen durch den Prüfrahmen (roter Haken), rasten im Platz ein
-    const TS = .76, TT = .12, TCOL = ["#f1ece0", "#ebe6da", "#f4efe6"], S0 = [.15, .19, .23];
-    LX.forEach((x, i) => {
-      const g = new THREE.Group();
-      const box = new THREE.Mesh(new THREE.BoxGeometry(TS, TT, TS), K.paperMaterial(TCOL[i]));
+    // Teile laufen hinter dem Faden (zp) durch die Fenster der Rahmen: Schnittstelle, Datenumzug, Website. Was den Prüfrahmen (3) passiert,
+    // bekommt ein Häkchen; die Website bleibt davor stehen (ohne Häkchen).
+    const TS = .76, TT = .1, zp = z - 1.0, TCOL = ["#f1ece0", "#ebe6da", "#f4efe6"];
+    const kk = (b, ks) => {
+      if (b <= ks[0][0]) return ks[0][1];
+      for (let i = 1; i < ks.length; i++) if (b < ks[i][0]) return ks[i - 1][1] + (ks[i][1] - ks[i - 1][1]) * sm((b - ks[i - 1][0]) / (ks[i][0] - ks[i - 1][0]));
+      return ks[ks.length - 1][1];
+    };
+    const tiles = [
+      { born: .17, ks: [[.17, cx[0] - 1.6], [.23, cx[0]], [.41, cx[1] - .55], [.59, x3r + 1.3]], ck: true },
+      { born: .30, ks: [[.30, cx[0] - 1.6], [.41, cx[1] + .55], [.59, x3r + 2.5]], ck: true },
+      { born: .44, ks: [[.44, cx[1] - 1.1], [.59, x3l - 1.3]], ck: false }
+    ];
+    tiles.forEach((tl, i) => {
+      const g = new THREE.Group(), box = new THREE.Mesh(new THREE.BoxGeometry(TS, TS, TT), K.paperMaterial(TCOL[i]));
       box.add(new THREE.LineSegments(new THREE.EdgesGeometry(box.geometry), new THREE.LineBasicMaterial({ color: 0x303033, transparent: true, opacity: .38, depthWrite: false })));
       g.add(box);
-      const gl = K.decal(256, 256, GLYPH[i], TS * .86, TS * .86, -1); gl.mesh.rotation.x = -Q; gl.mesh.position.y = TT / 2 + .004; g.add(gl.mesh);
-      const ck = K.decal(128, 128, checkDraw, .3, .3, -1); ck.mesh.rotation.x = -Q; ck.mesh.position.set(TS / 2 - .17, TT / 2 + .008, TS / 2 - .17); g.add(ck.mesh);
-      K.add(g);
-      const s = S0[i], DROP = .02, L1 = .045, PAUSE = .02, L2 = .045;
+      const gl = K.decal(256, 256, GLYPH[i], TS * .86, TS * .86, -1); gl.mesh.position.z = TT / 2 + .004; g.add(gl.mesh);
+      const ck = K.decal(128, 128, checkDraw, .3, .3, -1); ck.mesh.position.set(TS / 2 - .17, -TS / 2 + .17, TT / 2 + .008); g.add(ck.mesh);
+      g.rotation.x = -lean; K.add(g);
       K.anim(b => {
-        // Greifer hält das Teil, sobald die Hand steht
-        const k0 = sm((b - (.133 + .006 * i)) / .01);
-        g.visible = k0 > 0;
-        let y = HOLD, zz = ZH, ck0 = 0;
-        if (b > s) {
-          const d = clamp((b - s) / DROP, 0, 1);
-          y = HOLD - (HOLD - TT / 2) * d * d;
-          const a = clamp((b - s - DROP) / L1, 0, 1);
-          zz = ZH + (fz - ZH) * sm(a);
-          const c2 = clamp((b - s - DROP - L1 - PAUSE) / L2, 0, 1);
-          if (c2 > 0) zz = fz + (ZS - fz) * mech(c2, .03);
-          ck0 = sm((b - (s + DROP + L1 + .004)) / .012);
-        }
-        g.position.set(x, y, zz);
-        g.scale.setScalar(k0);
-        ck.mesh.scale.setScalar(Math.max(.001, ck0 * (1 + .25 * Math.sin(clamp((b - (s + DROP + L1 + .004)) / .02, 0, 1) * PI))));
+        const k0 = sm((b - tl.born) / .02), x = kk(b, tl.ks);
+        g.visible = k0 > 0; g.scale.setScalar(Math.max(.001, k0));
+        g.position.set(x, TS / 2 * Math.cos(lean) + TT / 2 * SINL, zp - TS / 2 * SINL);
+        const c = tl.ck ? sm((x - (cx[2] - .4)) / .5) : 0;
+        ck.mesh.scale.setScalar(Math.max(.001, c * (1 + .2 * Math.sin(clamp(c, 0, 1) * PI))));
       });
     });
 
-    // Konstruktionsphase (seite/): Gerüst von Schildern, Armen und Prüfrahmen vor dem Hochklappen, Bleistiftspur (Schilder mit Text nur Eckmarken)
-    F.geruest({ tags: ["pult", "schild", "rahmen", "arme"], t0: .02, t1: .06, du: .02, a: .5 });
-    F.spur({ tags: ["pult", "schild", "rahmen"], quiet: [sl, sr, fr], a: .3 });
-
-    // Lesestellen
-    carriers.push({ n: "h1", nodes: [], prints: H1 });
-    stops.h1 = { prints: H1, pitch: 9, sy: 0, nsy: 0, px: (W, H) => H * .075, pxN: 38, fit: .74, fitN: .86, b: .06 };
-    carriers.push({ n: 'T1', nodes: [sl], prints: [T1] }, { n: 'T2', nodes: [sr], prints: [T2] }, { n: 'T3', nodes: [fr], prints: [T3] });
-    stops.t1 = { carrier: [sl], prints: [T1], px: pxD, pitch: 14, yaw: -10, sy: -.1, nsy: -.1, npitch: 16, nyaw: 0, b: .14 };
-    stops.t2 = { carrier: [sr], prints: [T2], px: pxD, pitch: 14, yaw: 14, sy: -.15, nsy: -.1, npitch: 16, nyaw: 8, b: .205 };
-    stops.t3 = { carrier: [fr], prints: [T3], px: pxD, pitch: 38, yaw: -8, sy: .1, nsy: .1, npitch: 38, nyaw: 0, b: .35 };
+    const th = B.thread({ hold: .04, depart: .10, bEnd: .62 });
+    const keys = B.keys({ b: .62, shift: 1.8, w: .6 });
+    return {
+      fov: 32, fovN: 44, smooth: true,
+      stops: B.stops, names: B.names, keys, thread: th,
+      fadenIO: B.faden({ inn: [xh - 2.2, zf - .2], out: [B.endX + 3, kz - 1.4] }),
+      grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .09 }
+    };
   }
 
-  // =====================================================================================================
-  // Szene 2: Für Agenturen (x0 = 17)
-  // =====================================================================================================
-  const OX2 = 17;
-  const LED2 = V(OX2 + 4.05, 1.0, 1.3 + .006);
-  {
-    const z = v => v;
-    const rows = N ? [[{ t: "Für" }], [{ t: "Agenturen", it: 1 }]] : [[{ t: "Für" }, { t: "Agenturen", it: 1 }]];
-    const H2 = heading(rows, HE, z(4.9), .395, "kopf2", OX2);
+  // ===================================================================================================
+  // Für Agenturen (Einsteckschiene) und Kontakt (Briefumschlag)
+  // ===================================================================================================
+  function agenturen() {
+    const z = 6.0, zf = z + 3.0, eH = N ? .55 : .62;
+    const lines = N ? ["Für", "Agenturen"] : ["Für Agenturen"];
+    const titleW = K.measure(lines, { font: "serif" }).tw * eH;
+    const x0 = -1.0, xh = x0 - .7 - titleW;
+    const H1 = K.word(lines, eH, xh, z, .15, .85, { font: "serif", foot: 1, imprint: { ...IMPRINT, close: .25, closeDur: .7 }, ang: Q - lean });
 
-    const HT = 1.25, ZF = z(1.3), ZB = z(-1.3), LW = .18, AP = .5, X0 = OX2 - 4.4, XM = OX2 + 2.2, X1 = OX2 + 4.4;
-    const MW = 1.5, NK = .42, CHN = .26, SHT = .8, MZ = z(.2), MH = NK + CHN + SHT;
-    const down = { own: R, over: .035 };
-    // Teamtisch: bestehender Teil (drei Plätze) und neuer Teil (vierter Platz) im selben Raster
-    function table(tag, xa, xb, t0, legsL, legsR, sideL, sideR, d) {
-      F.part(tag, tag === "tisch1" ? .36 : .37, .05);
-      const top = F.lift(R, HT, t0, d, { over: .02 });
-      F.poly(top, [[xa, ZF], [xb, ZF], [xb, ZB], [xa, ZB]], DESK, .5);
-      const lt = t0 + d * .55;
-      const legs = [];
-      if (legsL) legs.push([xa, xa + LW]);
-      if (legsR) legs.push([xb - LW, xb]);
-      legs.forEach(([p, q], k) => {
-        K.rect(K.panel(top, [p, ZF], [q, ZF], [0, 1], lt, .05, -Q, down), 0, 0, LW, HT, LEG);
-        K.rect(K.panel(top, [p, ZB], [q, ZB], [0, -1], lt + .004, .05, -Q, down), 0, 0, LW, HT, LEG);
+    // Trägerform „Steckschild“: Schienenstück (flach vor der Grundlinie, mit Nut für den Faden), darauf steht das Schild, um die Neigung zurückgelehnt.
+    // Die Schienenstücke stoßen aneinander (gap 0): eine durchgehende Einsteckschiene.
+    const schild = {
+      name: "steckschild", maxEm: n => n ? 15 : 22,
+      build(c) {
+        const { x, z: zz, lines: ls, e, tw, th, t, tag } = c;
+        const PAD = .5, FD = .5, mx = 1.5 * e, mt = 1.2 * e, mb = 1.4 * e, W = tw + 2 * mx, H = mt + th + mb, fw = W + 2 * PAD;
+        const rail = K.panel(R, [x, zz + FD], [x + fw, zz + FD], [0, -1], t.line + .02, .02, 0, { nofold: true, over: 0 });
+        K.rect(rail, 0, 0, fw, FD, RAIL, .45);
+        K.rect(rail, .12, FD * .38, fw - .12, FD * .62, NUT, 0, .0007);
+        const s = stand(rail, rail.uv(PAD, FD), rail.uv(PAD + W, FD), W, H, t.rise, PAPER);
+        const pr = K.print(ls, e, t.text, { lh: c.lh });
+        K.onPanel(s.nd, pr, mx - pr.t.padX * e + pr.w / 2, H - mt + .34 * e - pr.h / 2, 1);
+        const a = [x + PAD + mx + 2 * e, .004, zz + FD / 2];
+        return { w: fw, h: H, pr, nd: s.nd, foot: rail, anchor: a, anchors: [a], quiet: s.quiet, side: 0, tags: [tag] };
+      }
+    };
+    const T = [[.10, .14, .20], [.30, .34, .40], [.50, .54, .60]];
+    const B = K.bahn({
+      prefix: "y", form: schild, x0, z, gap: 0, pitch: PITCH, sy: -.34, nsy: -.3,
+      head: { prints: [H1], e0: eH, b: 0, fit: .72, fitN: .72, x: xh, w: titleW },
+      sentences: [
+        { text: SATZ_Y[0], t: T[0], b: .23, big: 1.25, w: 3.0 },
+        { text: SATZ_Y[1], t: T[1], b: .43, w: 2.6 },
+        { text: SATZ_Y[2], t: T[2], b: .63, w: 2.6 }
+      ]
+    });
+    const it = B.items, endX = B.endX;
+
+    // Szenerie: eine Reihe gleicher Bausteine (laufendes Projekt) hinter der Schiene; unter Schild 1 fehlt einer, er steckt sich nach Satz 1 ein
+    const zRow = z - 5.2, BWd = 1.5, BHt = 1.2, pitch = 1.85, nB = Math.max(4, Math.floor((endX - x0 + 1) / pitch));
+    const gapIx = Math.round((it[0].x0 + it[0].w / 2 - x0) / pitch);
+    const blocks = [];
+    F.part("reihe", .04, .06);
+    for (let k = 0; k < nB; k++) {
+      const bx = x0 - .3 + k * pitch, fill = k === gapIx;
+      const s = stand(R, [bx, zRow], [bx + BWd, zRow], BWd, BHt, fill ? T[0][2] + .08 : .08 + .012 * k, BLOCK, null, false);
+      blocks.push({ k, nd: s.nd, bx, fill });
+    }
+    // Beschriftungen zweier Bausteine unter Schild 2: Theme und Plugin (kurze Namen)
+    const c2 = it[1].x0 + it[1].w / 2, pick = ix => blocks.reduce((m, b) => !b.fill && Math.abs(b.bx + BWd / 2 - ix) < Math.abs(m.bx + BWd / 2 - ix) ? b : m, blocks[0]);
+    const bTheme = pick(c2 - 1.4), bPlug = blocks.find(b => !b.fill && b !== bTheme && Math.abs(b.bx + BWd / 2 - (c2 + 1.4)) < pitch);
+    [[bTheme, "Theme"], [bPlug || pick(c2 + 1.4), "Plugin"]].forEach(([b, name]) => {
+      const pr = K.print([name], .17, T[1][2] + .01, { align: "center" });
+      K.onPanel(b.nd, pr, BWd / 2, BHt / 2, 1);
+    });
+
+    // ----- Kontakt: Briefumschlag mit Klappe, Karten (Desktop: drei nebeneinander; Handy: ein Briefbogen mit drei Zeilen), Siegel am Ende des Fadens -----
+    const EM = .2, CHt = N ? .8 : 1.0, CT = [["Mail", "mail@andersen-webworks.de", "mailto:mail@andersen-webworks.de"],
+      ["Telefon", "+49 38733 270015", "tel:+4938733270015"], ["LinkedIn", "andersen-erik", "https://www.linkedin.com/in/andersen-erik/"]];
+    const CW = .4 + EM * (.55 + Math.max(...CT.map(c => K.measure([c[1]]).tw)));
+    const GAPC = .5, rowW = 3 * CW + 2 * GAPC;
+    const eK = N ? .4 : .56;
+    const H3 = K.print(["Schreiben Sie mir,", "worum es geht."], eK, .86, { font: "serif", align: "center", lh: 1.2 });
+    const St = K.print(["Raum Plau am See · remote"], EC, .88, { align: "center", col: MUTED });
+    const cardDec = (c, k, on) => { const cd = cardDraw(c[0], c[1], CW, CHt, EM, N), dec = K.decal(cd.wpx, cd.hpx, cd.draw, CW, CHt, on, .02); K.link(dec, c[2]); dec.textual = true; return dec; };
+    const xS0 = endX + 3.2;
+    let xKc, xS, BW, BH, zE, flapTop, decs, zBack;
+    const FH = 1.1;
+    F.part("umschlag", .60, .05);
+    if (!N) {
+      // Desktop: Umschlag mit Überschrift und Standort, davor drei Karten in einer Reihe
+      BW = rowW + 1.8; xKc = xS0 + BW / 2; xS = xKc; BH = 3.2;
+      const tc1 = .15, tHead = 1.9, tSt = .62, zc = z - 1.5;
+      zE = zc - (CHt - tc1) / SINL;
+      const env = stand(R, [xKc - BW / 2, zE], [xKc + BW / 2, zE], BW, BH, .66, BODY);
+      const flap = K.panel(env.nd, env.nd.uv(0, BH), env.nd.uv(BW, BH), [0, -1], .74, .08, -1.1, { over: .04 });
+      K.P(flap, [[0, 0], [BW, 0], [BW / 2, FH]], FLAPC, [.5, .5, .5]);
+      K.onPanel(env.nd, H3, BW / 2, tHead, 1);
+      K.onPanel(env.nd, St, BW / 2, tSt, 1);
+      F.part("karten", .75, .05);
+      decs = CT.map((c, k) => {
+        const x = xKc - rowW / 2 + k * (CW + GAPC), s = stand(R, [x, zc], [x + CW, zc], CW, CHt, .80 + .035 * k, CARD, null, true);
+        const dec = cardDec(c, k, .88 + .012 * k); K.onPanel(s.nd, dec, CW / 2, CHt / 2, 1); return dec;
       });
-      if (sideL) {
-        K.rect(K.panel(top, [xa, ZF], [xa, ZF - LW], [-1, 0], lt + .002, .05, -Q, down), 0, 0, LW, HT, LEG);
-        K.rect(K.panel(top, [xa, ZB + LW], [xa, ZB], [-1, 0], lt + .012, .05, -Q, down), 0, 0, LW, HT, LEG);
-      }
-      if (sideR) {
-        K.rect(K.panel(top, [xb, ZF], [xb, ZF - LW], [1, 0], lt + .002, .05, -Q, down), 0, 0, LW, HT, LEG);
-        K.rect(K.panel(top, [xb, ZB + LW], [xb, ZB], [1, 0], lt + .012, .05, -Q, down), 0, 0, LW, HT, LEG);
-      }
-      const ax0 = legsL ? xa + LW : xa, ax1 = legsR ? xb - LW : xb;
-      const apron = K.panel(top, [ax0, ZF], [ax1, ZF], [0, 1], lt + .01, .045, -Q, down);
-      K.rect(apron, 0, 0, ax1 - ax0, AP, LEG);
-      return { top, apron, ax0, ax1, lt, d };
+      zBack = Math.min(zE - BH - FH, z - 5.2 - 1.2) - 1.2;
+    } else {
+      // Handy: Briefbogen (Überschrift, drei Zeilen als Links, Standort) steht in einem Umschlag; alles in einer Ebene, ohne Tiefenstaffel
+      const BWb = CW + .5, hH = H3.h, rowsB = .6, gR = .12, rowsTop = rowsB + 3 * CHt + 2 * gR;
+      const yHead = rowsTop + .25 + hH / 2, BHb = yHead + hH / 2 + .35, zB = z - 1.5;
+      BW = BWb + 1.0; BH = BHb + 1.0; xKc = xS0 + BW / 2; xS = xKc; zE = zB - BHb - .6;
+      const env = stand(R, [xKc - BW / 2, zE], [xKc + BW / 2, zE], BW, BH, .66, BODY);
+      const flap = K.panel(env.nd, env.nd.uv(0, BH), env.nd.uv(BW, BH), [0, -1], .74, .08, -1.1, { over: .04 });
+      K.P(flap, [[0, 0], [BW, 0], [BW / 2, FH]], FLAPC, [.5, .5, .5]);
+      F.part("karten", .75, .05);
+      const brief = stand(R, [xKc - BWb / 2, zB], [xKc + BWb / 2, zB], BWb, BHb, .80, CARD, null, true);
+      K.onPanel(brief.nd, H3, BWb / 2, yHead, 1);
+      K.onPanel(brief.nd, St, BWb / 2, .3, 1);
+      decs = CT.map((c, k) => {
+        const dec = cardDec(c, k, .88 + .012 * k), yc = rowsB + (2 - k) * (CHt + gR) + CHt / 2;
+        K.onPanel(brief.nd, dec, BWb / 2, yc, 1); return dec;
+      });
+      zBack = zE - BH - FH - 1.2;
     }
-    function monitor(top, xk, t0) {
-      const m = K.panel(top, [xk - MW / 2, MZ], [xk + MW / 2, MZ], [0, -1], t0, .04, Q, { over: .05 });
-      K.P(m, [[MW / 2 - .16, 0], [MW / 2 + .16, 0], [MW / 2 + .16, NK], [MW / 2 - .16, NK]], METAL, [.5, .5, 0, .5]);
-      K.P(m, [[0, NK], [MW, NK], [MW, MH], [0, MH]], LIGHT);
-      return m;
-    }
-    const monDecal = (m, on) => K.onPanel(m, K.decal(Math.round(MW * 400), Math.round((CHN + SHT) * 400), monDraw(SHT / (CHN + SHT)), MW, CHN + SHT, on, .02), MW / 2, NK + (CHN + SHT) / 2, 1);
-    const matDecal = (top, xk, on) => K.onFlat(top, K.decal(Math.round(1.9 * 400), Math.round(.9 * 400), matDraw, 1.9, .9, on, .02), xk, z(.78));
 
-    // bestehend: drei laufende Plätze
-    const T_A = table("tisch1", X0, XM, .40, true, true, true, false, .05);
-    const PL = [-3.3, -1.1, 1.1].map(v => OX2 + v);
-    F.part("monitore1", .37, .05);
-    const mons = [];
-    PL.forEach((xk, i) => { const m = monitor(T_A.top, xk, .47 + .008 * i); mons.push(m); monDecal(m, .50); matDecal(T_A.top, xk, .50); });
-    // Satz 1 auf der Zarge des bestehenden Tisches
-    const tA = K.print(["Ich steige in laufende", "Projekte ein,"], .13, .49, { align: "center", lh: 1.2 });
-    K.onPanel(T_A.apron, tA, (T_A.ax1 - T_A.ax0) / 2, AP / 2, 1, [0, -1]);
+    // Siegel am Ende des Fadens (flach auf dem Bogen vor den Karten)
+    const seal = K.decal(256, 256, sealDraw, .95, .95, .80, .03);
+    K.onFlat(R, seal, xS, z, .003);
 
-    // neu: vierter Platz exakt im selben Raster (sein Umriss steht von Anfang an in den Bastellinien)
-    const T_B = table("tisch2", XM, X1, .52, false, true, false, true, .05);
-    F.part("monitor2", .38, .05);
-    const m4 = monitor(T_B.top, OX2 + 3.3, .585);
-    monDecal(m4, .60); matDecal(T_B.top, OX2 + 3.3, .60);
-    // Satz 2 im Kinn des neuen Monitors, Satz 3 auf der neuen Zarge, Satz 4 auf dem Platzset
-    const tS2 = K.print(["arbeite mich in bestehende", "Themes und Plugins ein"], .075, .61, { align: "center", lh: 1.15 });
-    K.onPanel(m4, tS2, MW / 2, NK + CHN / 2, 1);
-    const tS3 = K.print(["und halte mich an Ihre", "Abläufe und Werkzeuge."], .1, .62, { align: "center", lh: 1.2 });
-    K.onPanel(T_B.apron, tS3, (T_B.ax1 - T_B.ax0) / 2 - .15, AP / 2, 1, [0, -1]);
-    K.ticker(T_B.apron, .04, T_B.apron.uv(T_B.ax1 - T_B.ax0 - .2, AP / 2), [0, -1], 1, .625);
-    const tS4 = K.print(["Konditionen und freie", "Kapazität nenne ich Ihnen", "auf Anfrage."], .085, .63, { align: "center", lh: 1.2 });
-    K.onFlat(T_B.top, tS4, OX2 + 3.3, z(.63));
+    K.sheet(xh - 3.4, xKc + BW / 2 + 3.5, zBack, zf);
 
-    // Konstruktionsphase (seite/): Gerüst je Tischteil kurz vor dem Heben, Bleistiftspur (Zargen, Platzset und Monitore nur Eckmarken)
-    F.geruest({ tags: ["tisch1", "monitore1"], t0: .365, t1: .4, du: .02, a: .5 });
-    F.geruest({ tags: ["tisch2", "monitor2"], t0: .48, t1: .52, du: .02, a: .5 });
-    F.spur({ tags: ["tisch1", "tisch2", "monitore1", "monitor2"], quiet: [T_A.apron, T_B.apron, T_B.top, m4, ...mons], a: .3 });
+    // ----- Faden: Bahn (Haltepunkte an den Schildern) und weiter zum Siegel -----
+    const t0 = B.thread({ hold: .04, depart: .10 });
+    const pts = t0.pts.slice();
+    pts.push(V(xS - 1.4, .004, z), V(xS, .004, z));
+    const holds = [{ at: pts[0], b: B.head.b }, ...it.map(i => ({ at: V(...i.anchor), b: i.b })), { at: pts[pts.length - 1], b: .93, hold: .05 }];
+    const thread = halt(THREE, pts, holds, { hold: .04, depart: .10, bEnd: 1 });
 
-    carriers.push({ n: "h2", nodes: [], prints: H2 });
-    stops.h2 = { prints: H2, pitch: 10, sy: 0, nsy: 0, px: (W, H) => H * .075, pxN: 38, fit: .74, fitN: .86, b: .43 };
-    carriers.push({ n: 'sA', nodes: [T_A.apron], prints: [tA] }, { n: 'sMon', nodes: [m4], prints: [tS2] }, { n: 'sB', nodes: [T_B.apron], prints: [tS3] }, { n: 'sMat', nodes: [T_B.top], prints: [tS4], only: 1 });
-    // seite/: Lesestellen erst, wenn ihr Druck ganz eingeblendet ist (vorher stand dort halbe Deckkraft: Druck ab b + Blende .02)
-    stops.s1 = { carrier: [T_A.apron], prints: [tA], px: pxD, pitch: 14, yaw: -8, sy: -.2, nsy: -.1, npitch: 16, nyaw: 0, b: .515 };
-    stops.s2 = { carrier: [m4], prints: [tS2], px: pxD, pitch: 12, yaw: 10, sy: .05, nsy: 0, npitch: 14, nyaw: 4, b: .635 };
-    stops.s3 = { carrier: [T_B.apron], prints: [tS3], px: pxD, pitch: 14, yaw: 8, sy: -.2, nsy: -.1, npitch: 16, nyaw: 4, b: .645 };
-    stops.s4 = { carrier: [T_B.top], prints: [tS4], px: pxD, pitch: 52, yaw: 0, sy: -.05, nsy: 0, npitch: 54, nyaw: 0, b: .655 };
-  }
-
-  // =====================================================================================================
-  // Szene 3: Kontakt (x0 = 36)
-  // =====================================================================================================
-  const OX3 = 36;
-  {
-    const z = v => v;
-    const rows = N ? [[{ t: "Schreiben" }], [{ t: "Sie mir," }], [{ t: "worum es geht.", it: 1 }]] : [[{ t: "Schreiben Sie mir," }], [{ t: "worum es geht.", it: 1 }]];
-    const H3 = heading(rows, N ? .36 : .72, z(4.6), .715, "kopf3", OX3);
-
-    // Umschlag: der Körper liegt als Papier auf dem Bogen (die Karten stehen aus ihm auf), die Klappe liegt hinten und klappt auf
-    const BW = 7.2, zF = z(1.9), zB = z(N ? -2.95 : -2.7), CX = N ? 2.1 : 1.6, ZBK = N ? -1.3 : -.95, ZFR = N ? 1.5 : 1.15;
-    F.poly(R, [[OX3 - BW / 2, zF], [OX3 + BW / 2, zF], [OX3 + BW / 2, zB], [OX3 - BW / 2, zB]], BODY, .5, .01);
-    F.part("klappe", .70, .05);
-    const FH = 3.2, flap = K.panel(R, [OX3 - BW / 2, zB], [OX3 + BW / 2, zB], [0, -1], .83, .06, Q + .3, { over: .04 });
-    K.P(flap, [[0, 0], [BW, 0], [BW / 2, FH]], FLAPC, [.5, .5, .5]);
-    K.onPanel(flap, K.decal(1440, Math.round(1440 * FH / BW), liningDraw, BW, FH, .86, .03), BW / 2, FH / 2, 1);
-
-    F.part("karten", .71, .06);
-    const CW = 2.6, CHt = .95, DD = .5, EM = .115, LV = { over: .05 };
-    const spots = [
-      { x: N ? OX3 : OX3 - CX, zh: z(N ? -1.6 : ZBK), label: "Mail", val: "mail@andersen-webworks.de", href: "mailto:mail@andersen-webworks.de" },
-      { x: N ? OX3 : OX3 + CX, zh: z(N ? -.15 : ZBK), label: "Telefon", val: "+49 38733 270015", href: "tel:+4938733270015" },
-      { x: OX3, zh: z(N ? 1.2 : ZFR), label: "LinkedIn", val: "andersen-erik", href: "https://www.linkedin.com/in/andersen-erik/" }
+    // ----- Kamera: Überschrift, drei Schilder, dann die letzten Meter ohne Haltepunkte zum Umschlag; letztes Bild: alles ganz im Bild -----
+    const sealPt = V(xS, .004, z);
+    const all = { name: "kontakt", prints: [...decs, H3, St], e0: EM, b: .97, px: (W, H, s) => pxD(W, H) * s.e / EC, pxN: (W, H, s) => Math.min(19.5 * Math.max(1, W / 390), 19.5 * Math.max(1, H / 844)) * s.e / EC,
+      fit: .9, fitN: .95, pitch: PITCH, npitch: PITCH, yaw: 0, nyaw: 0, sx: 0, nsx: 0, sy: N ? -.05 : -.05, nsy: -.05, keep: [sealPt] };
+    const stops = [...B.stops, all];
+    const names = { ...B.names, kontakt: all };
+    const keys = [
+      { w: 0, stop: B.head },
+      ...it.map(i => ({ w: i.wKey, stop: i.stop })),
+      { w: 4.5, b: .80, fromStop: all, back: 1.5, up: .6 },
+      { w: 4.0, stop: all }
     ];
-    const faces = [];
-    const decs = spots.map((s, i) => {
-      const t = .88 + .014 * i;
-      const face = K.panel(R, [s.x - CW / 2, s.zh], [s.x + CW / 2, s.zh], [0, -1], t, .04, Q, LV); faces.push(face);
-      K.rect(face, 0, 0, CW, CHt, CARD);
-      const deck = K.panel(face, face.uv(0, CHt), face.uv(CW, CHt), [0, -1], t + .025, .035, -Q, LV);
-      K.rect(deck, 0, 0, CW, DD, DECK);
-      const c = cardDraw(s.label, s.val, CW, CHt, EM);
-      const dec = K.decal(c.wpx, c.hpx, c.draw, CW, CHt, .93 + .01 * i, .02);
-      K.onPanel(face, dec, CW / 2, CHt / 2, 1);
-      K.link(dec, s.href);
-      dec.textual = true;   // Kartendruck ist Text: ganz im Bild oder gar nicht (Rahmenregel im Kern)
-      carriers.push({ n: 'card' + s.label, nodes: [face], prints: [dec] });
-      return dec;
-    });
-
-    // Konstruktionsphase (seite/): Gerüst von Klappe und Karten, bevor sie aufgehen, Bleistiftspur (Karten nur Eckmarken)
-    F.geruest({ tags: ["klappe", "karten"], t0: .8, t1: .875, du: .02, a: .5 });
-    F.spur({ tags: ["klappe", "karten"], quiet: [flap, ...faces], a: .3 });
-
-    carriers.push({ n: "h3", nodes: [], prints: H3 });
-    stops.h3 = { prints: H3, pitch: 44, sy: 0, nsy: 0, px: (W, H) => H * .07, pxN: 34, fit: .74, fitN: .86, b: .77 };
-    // Eine Kontakt-Lesestelle: Überschrift und alle drei Karten ganz im Bild (Handy: Karten untereinander)
-    stops.all = { prints: [...decs, ...H3], e0: EM, px: 15, pxN: 14, fit: .9, fitN: .95, pitch: 42, npitch: 48, yaw: 0, nyaw: 0, sy: .2, nsy: 0, b: 1 };
+    return {
+      fov: 32, fovN: 44, smooth: true,
+      stops, names, keys, thread,
+      fadenIO: B.faden({ inn: [xh - 2.2, zf - .2] }),
+      grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .09 }
+    };
   }
 
-  // ---------- Roter Faden: vom Statuspunkt des neuen Platzes zum Umschlag ----------
-  const thread = { pts: [LED2, V(OX2 + 4.05, .62, 1.38), V(OX2 + 4.05, .3, 1.7), V(OX2 + 4.05, .09, 2.0), V(OX2 + 4.1, .012, 2.35), V(OX2 + 4.6, .012, 2.8), V(OX2 + 6.0, .012, 2.9), V(OX2 + 10, .012, 2.6), V(OX3 - 5.2, .012, 1.4), V(OX3 - 4.3, .012, -.3), V(OX3 - 3.0, .012, .05)], t0: .65, t1: .80 };
-
-  // ---------- Kamerabahn ----------
-  const S = stops;
-  const keys = [
-    // Szene 1: Überschrift steht (nach der Zeit), Bastellinien zeichnen sich, Kamera hebt sich über den Bogen, Teile klappen hoch, Teile laufen durch
-    { w: .3, b: 0, cam: V(0, 3.1, 22.9), tgt: V(0, .27, 5), camN: V(0, 2.6, 19.8), tgtN: V(0, .2, 4.6) },
-    { w: .4, stop: S.h1 },
-    { w: .5, slow: 1, b: .09, ...orbit(V(0, .6, -3), 34, 8, 26, 21, 44, V(0, .6, -3.5)) },
-    { w: .7, stop: S.t1 },
-    { w: .6, slow: 1, b: .17, ...orbit(V(0, .6, -1.5), 30, 0, 17, 9, 38) },
-    { w: .7, stop: S.t2 },
-    { w: .6, slow: 1, b: .26, ...orbit(V(0, .6, -2.5), 34, 0, 17, 9.5, 38) },
-    { w: .8, stop: S.t3 },
-    { w: .7, slow: 1, b: .385, ...orbit(V(9, .5, -2), 30, 0, 24, 30, 40) },
-    // Szene 2
-    { w: .9, stop: S.h2 },
-    { w: .75, slow: 1, b: .47, ...orbit(V(OX2, 1, 0), 30, 0, 17, 25, 38) },
-    { w: .9, stop: S.s1 },
-    { w: .9, stop: S.s2 },
-    { w: .8, stop: S.s3 },
-    { w: .8, stop: S.s4 },
-    { w: .9, slow: 1, b: .72, ...orbit(V(OX2 + 10, 0, 1), 30, 0, 18, 24, 40) },
-    // Szene 3: der Faden kommt an, die Klappe geht auf, die Karten stehen auf
-    { w: 1, stop: S.h3 },
-    { w: 1.8, slow: 1, b: .86, ...orbit(V(OX3, .8, -.5), 32, 0, 15, 20, 40) },
-    { w: 1.4, slow: 1, b: .93, ...orbit(V(OX3, .8, -.5), 34, 10, 12) },
-    { w: 2, stop: S.all }
-  ];
-  Object.entries(S).forEach(([k, v]) => { v.name = k; });
-  // Raster (seite/) für „Wie ich arbeite“; „Für Agenturen“ setzt in der Szenenfolge ein eigenes Zeitfenster
-  const grid = { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .05 }; // weg vor der ersten Lesestelle (t1, b .14)
-  return { fov: 32, fovN: 44, track: 1250, grid, stops: Object.values(S), keys, thread, carriers };
+  return opt.scene === "arbeit" ? arbeit() : agenturen();
 }

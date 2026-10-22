@@ -61,28 +61,24 @@ export const SEQ = [
     faden: (d, I) => lane(I) },
   { name: "ausserdem", label: "Außerdem", optional: "./platzhalter.js", pick: m => m.ausserdem, len: L(320 * .6), tr: TR(24, 32.3),
     faden: (d, I) => lane(I) },
-  // Abschluss ist ein Modul mit drei Szenen auf einem langen Bogen: „Wie ich arbeite“ hier, „Für Agenturen“ und „Kontakt“ am Schluss
-  { name: "arbeitsweise", label: "Wie ich arbeite", mod: abschluss, len: L(1150 * 4.6 / 17.45 + 30, 1150 * 4.6 / 18.45 + 30), tr: TR(23.4, 30.4), tail: 1,
-    keys: d => d.keys.slice(0, 8), bMax: .36, clip: [-1e5, 8.5, -1e5, 1e5], ownThread: false,
-    faden: () => ({ in: [-9.1, 6.3], out: [-9.1, -12.7] }) },
+  // Abschluss (abschluss.js, je Szene ein Aufruf mit opt.scene): „Wie ich arbeite“ als Tunnelbuch aus Prüfrahmen auf der Lesebahn
+  { name: "arbeitsweise", label: "Wie ich arbeite", mod: abschluss, modOpt: { scene: "arbeit" }, len: L(300, 360), tr: TR(23.4, 30.4), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
+    bMax: .62, faden: d => d.fadenIO },
   { name: "werdegang", label: "Werdegang", mod: werdegang, len: L(460 + 30), tr: TR(32.1, 34.4), lead: 1,
     faden: d => {
       const P = d.thread.pts, a = P[0], z = P[P.length - 1], ZB = z.z - .45;
       return { in: [a.x, a.z + 1.05], out: [z.x, ZB - .6], viaPost: [[z.x, z.y, ZB + .03], [z.x, z.y - .04, ZB - .03], [z.x, .06, ZB - .03]] };
     } },
   // Lesebahn: zwei Leporellos (SiS, ai-coustics), der Faden läuft am Falz entlang, der Punkt hält an jeder Seite (stimmen.js, halt.js)
-  { name: "stimmen", label: "Stimmen", mod: stimmen, len: L(430, 500), tr: TR(44.7, 50.3), lead: 1, tail: 1,
+  { name: "stimmen", label: "Stimmen", mod: stimmen, len: L(380, 500), tr: TR(44.7, 50.3), lead: 1, tail: 1,
     faden: d => d.fadenIO },
-  { name: "agenturen", label: "Für Agenturen", mod: abschluss, len: L(1150 * 12.15 / 17.45, 1150 * 13.15 / 18.45), tr: TR(32.6, 29.9),
-    keys: d => [{ w: 0, b: .37, fromStop: d.stops.find(s => s.name === "h2"), back: 1.6, up: 1.5 }, ...d.keys.slice(9)],
-    clip: [8.5, 1e5, -1e5, 1e5],
-    // kein Raster: die Lesestellen beginnen bei b .43, kurz nach dem Szenenanfang (b .37); Gerüst und Spur bleiben
-    grid: false,
-    // „Kontakt“: Sprungziel ist die letzte Lesestelle (Überschrift und alle drei Karten ganz im Bild)
-    anchors: { kontakt: d => d.keys.findIndex(k => k.stop && k.stop.name === "all") },
-    // Abschnittsname im Label: ab der Überschrift „Schreiben Sie mir“ steht dort „Kontakt“
-    labels: [{ label: "Kontakt", ki: d => d.keys.findIndex(k => k.stop && k.stop.name === "h3") - 1 }],
-    faden: () => ({ in: [9.0, 6.3], viaPre: [[9.0, 3.0], [20.6, 3.0]], ownFrom: 4 }) }
+  // „Für Agenturen“ (Einsteckschiene) und „Kontakt“ (Briefumschlag, Faden endet im Siegel) auf einem Bogen; Bahn endet im letzten Bild
+  { name: "agenturen", label: "Für Agenturen", mod: abschluss, modOpt: { scene: "agenturen" }, len: L(450, 500), tr: TR(32.6, 29.9), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
+    // „Kontakt“: Sprungziel ist das letzte Bild (Überschrift, alle drei Karten und der Standort ganz im Bild)
+    anchors: { kontakt: d => d.keys.findIndex(k => k.stop && k.stop.name === "kontakt") },
+    // Abschnittsname im Label: sobald die Kamera zum Umschlag fährt, steht dort „Kontakt“
+    labels: [{ label: "Kontakt", ki: d => d.keys.findIndex(k => k.fromStop && k.fromStop.name === "kontakt") }],
+    faden: d => d.fadenIO }
 ];
 
 // Szenen eines anderen Helfers (Gestaltung, Take the Gloves Off, Außerdem): fehlen sie, entfällt ihr Abschnitt (Hinweis in der Konsole)

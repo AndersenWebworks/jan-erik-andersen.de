@@ -24,7 +24,7 @@
 import * as THREE from "three";
 import { SCHRIFTEN } from "./fonts/schriften.js";
 import { bahn as makeBahn, FORMEN, wrap as wrapText } from "./bahn.js";
-import { Model, kit, paperMaterial, edgeMaterial, rissMaterial, geruestMaterial, gridOn, frameOn, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
+import { Model, kit, useFar, FAR, paperMaterial, edgeMaterial, rissMaterial, geruestMaterial, gridOn, frameOn, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
 
 const win = (b, t0, d) => clamp((b - t0) / d, 0, 1);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -126,6 +126,7 @@ export function seite(renderer, SEQ, opt = {}) {
   // Eine Szene bauen: Modul ausführen, Faltmodell abschließen, Drucke und Netze in die Gruppe der Szene hängen
   function build(I) {
     const cfg = I.cfg;
+    I.far = FAR.clone(); useFar(I.far);
     const group = new THREE.Group(); scene.add(group);
     const prints = [], anims = [], sheets = [], sheetBox = [], bMats = [], mats = [];
     const rissMat = rissMaterial();
@@ -150,7 +151,7 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     const F = Model(), K = kit(F), R = F.root;
     Object.assign(K, {
-      F, R, THREE, V, COL, PI, Q, EPS, sm, mech, win, clamp, narrow,
+      F, R, THREE, V, COL, PI, Q, EPS, sm, mech, win, clamp, narrow, vw: VW(), vh: VH(),
       bahn: o => makeBahn(K, o), formen: FORMEN, wrap: (text, maxEm) => wrapText(K, text, maxEm),
       anim: fn => anims.push(fn), add, paperMaterial, edgeMaterial, camera,
       print: mkPrint, decal: mkDecal,
@@ -270,6 +271,7 @@ export function seite(renderer, SEQ, opt = {}) {
     if (I.idx) I.apex = clearance(I);
     I.M.update(I.b0, 0); I.curB = I.b0; I.curT = 0;
     group.visible = false;
+    useFar(null);
     return I;
   }
 
@@ -701,6 +703,15 @@ export function seite(renderer, SEQ, opt = {}) {
       const on = want.has(I.idx);
       I.group.visible = on; if (on) visible.add(I);
       park(I, Math.abs(I.idx - st.i) > 3);
+    }
+    // Nebelweite der Nachbarszenen: Bögen und Teile der nächsten Szene stehen im Lesebild sonst schwebend am oberen Bildrand (Abstand 40 bis 55 Einheiten).
+    // Sie bleiben bis zur Fahrt in weißem Dunst (ab 30 bis 36 Einheiten) und kommen in der Fahrt mit q heran; die eigene und die vorigen Szenen unverändert.
+    for (const I of INST) {
+      if (!I.built || !I.far) continue;
+      const ahead = I.idx - st.i - (st.kind === "t" ? 0 : 1);          // 0: die Szene, die als Nächste ankommt (im Übergang: die ankommende)
+      if (ahead < 0) { I.far.copy(FAR); continue; }
+      const s = ahead === 0 && st.kind === "t" ? sm(clamp(st.q / .8, 0, 1)) : 0;
+      I.far.set(ahead > 0 ? 30 : 30 + (FAR.x - 30) * s, ahead > 0 ? 36 : 36 + (FAR.y - 36) * s);
     }
     // Zeit der Lettern: läuft ab dem Eintreffen der Szene (Fahrt in die Szene beginnt)
     const time = now / 1000;
