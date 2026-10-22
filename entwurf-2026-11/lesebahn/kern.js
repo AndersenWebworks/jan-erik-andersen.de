@@ -23,6 +23,7 @@
 // Zustände: #p=0…1 (ganze Seite), #s=<szene> (Szenenanfang), Handy-Ausschnitt #…&w=390&h=844 (Prüfhilfe).
 import * as THREE from "three";
 import { SCHRIFTEN } from "./fonts/schriften.js";
+import { bahn as makeBahn, FORMEN, wrap as wrapText } from "./bahn.js";
 import { Model, kit, paperMaterial, edgeMaterial, rissMaterial, geruestMaterial, gridOn, frameOn, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
 
 const win = (b, t0, d) => clamp((b - t0) / d, 0, 1);
@@ -103,7 +104,7 @@ export function seite(renderer, SEQ, opt = {}) {
       lines.forEach((l, i) => x[o.outline ? "strokeText" : "fillText"](l, ...at(i)));
     }
     const h = cv.height / em;
-    return { tex: texOf(cv), w: cv.width / em, h, padX: padX / em, tw: wMax / em, bfb: h - (padY / em + .94 + (lines.length - 1) * lh / em), rows: ws.map(v => v / em), lines };
+    return { tex: texOf(cv), w: cv.width / em, h, lh: lh / em, padX: padX / em, tw: wMax / em, bfb: h - (padY / em + .94 + (lines.length - 1) * lh / em), rows: ws.map(v => v / em), lines };
   }
 
   // ---------- Ansicht ----------
@@ -150,6 +151,7 @@ export function seite(renderer, SEQ, opt = {}) {
     const F = Model(), K = kit(F), R = F.root;
     Object.assign(K, {
       F, R, THREE, V, COL, PI, Q, EPS, sm, mech, win, clamp, narrow,
+      bahn: o => makeBahn(K, o), formen: FORMEN, wrap: (text, maxEm) => wrapText(K, text, maxEm),
       anim: fn => anims.push(fn), add, paperMaterial, edgeMaterial, camera,
       print: mkPrint, decal: mkDecal,
       // Klickbarer Druck (Raycast auf die Fläche des Drucks): Kontaktwege bleiben echte Links, zusätzlich als HTML-Links im Dokument
@@ -181,12 +183,15 @@ export function seite(renderer, SEQ, opt = {}) {
           const f = o.fold, wpx = 2400, hpx = 24, k = wpx / f.len;
           const fd = mkDecal(wpx, hpx, (c, cw, ch) => { c.strokeStyle = f.col; c.lineWidth = f.lw * k; c.setLineDash([f.dash * k, f.gap * k]); c.beginPath(); c.moveTo(0, ch / 2); c.lineTo(cw, ch / 2); c.stroke(); }, f.len, f.len * hpx / wpx, -1);
           F.attach(o.par || R, fd.mesh, [x + f.x0 + f.len / 2, zb], [0, -1], 1, .0007);
+          if (o.hold) fd.hold = true;
         }
         const L = K.panel(o.par || R, [x, zb], [x + W, zb], [0, -1], t0, d, o.ang || Q, { clock: ck, nocut: 1, nofold: 1, over: o.over !== undefined ? o.over : .07 });
         const u = (pr.w / 2 - pr.t.padX * e), v = base + (pr.h / 2 - pr.t.bfb * e);
         F.attach(L, pr.mesh, L.uv(u, v), [0, -1], 1, .0015);
         if (im) F.attach(o.par || R, im.mesh, L.uv(u, v), [0, -1], 1, .0006);
         pr.W = W; pr.node = L;
+        // o.hold: Teil des Startbilds, das erst erscheint, wenn das HTML-Vorbild abgelöst wird (siehe release() unten)
+        if (o.hold) { pr.hold = true; if (im) im.hold = true; }
         return pr;
       },
       // Statuspunkt: rote Scheibe, tickt im festen Takt, kein Schein
@@ -329,8 +334,27 @@ export function seite(renderer, SEQ, opt = {}) {
     const c = Math.cos(yaw), sn = Math.sin(yaw); h.set(h.x * c + h.z * sn, 0, -h.x * sn + h.z * c);
     const Fw = h.clone().multiplyScalar(Math.cos(pitch)).add(V(0, -Math.sin(pitch), 0)).normalize();
     const Rt = V().crossVectors(Fw, UP).normalize(), U = V().crossVectors(Rt, Fw);
-    const D = Fw.clone().addScaledVector(Rt, sx * TAN * aspect).addScaledVector(U, sy * TAN).normalize();
-    const P = s.C.clone().addScaledVector(D, -depth / D.dot(Fw));
+    // s.keep (Lesebahn): Punkte (Szenenkoordinaten, z. B. der Haltepunkt des Fadens), die mit der Schrift ins Bild müssen; der Ausschnitt
+    // wird um das Nötige verschoben (nur Bildlage sx/sy, Abstand und Neigung bleiben). Rand wie beim Text: oben 64 px, unten 70 px, seitlich 24 px.
+    const pose = (px2, py2) => {
+      const D = Fw.clone().addScaledVector(Rt, px2 * TAN * aspect).addScaledVector(U, py2 * TAN).normalize();
+      return s.C.clone().addScaledVector(D, -depth / D.dot(Fw));
+    };
+    let ax = sx, ay = sy, P = pose(ax, ay);
+    if (s.keep) {
+      for (let it = 0; it < 4; it++) {
+        let dx = 0, dy = 0;
+        for (const k of s.keep) {
+          const q = k.clone().sub(P), zz = q.dot(Fw); if (zz < .1) continue;
+          const nx = q.dot(Rt) / (zz * TAN * aspect), ny = q.dot(U) / (zz * TAN);
+          const lo = -1 + 2 * (70 + 12) / H, hi = 1 - 2 * (64 + 12) / H, le = -1 + 2 * 24 / W, ri = 1 - 2 * 24 / W;
+          if (ny < lo) dy = Math.max(dy, lo - ny); else if (ny > hi) dy = Math.min(dy, hi - ny);
+          if (nx < le) dx = Math.max(dx, le - nx); else if (nx > ri) dx = Math.min(dx, ri - nx);
+        }
+        if (!dx && !dy) break;
+        ax += dx; ay += dy; P = pose(ax, ay);
+      }
+    }
     return { cam: P, tgt: P.clone().addScaledVector(Fw, depth), px };
   }
   function buildPath(I) {
@@ -568,11 +592,14 @@ export function seite(renderer, SEQ, opt = {}) {
     I.exit = f.out ? wpt(I, f.out) : (ownPts ? ownPts[ownPts.length - 1] : null);
     // Brücke aus der vorigen Szene: läuft im zweiten Teil der Fahrt hinüber
     const A = INST[I.idx - 1];
-    if (A && A.exit && I.entry) addPiece(I, [A.exit, A.exit.clone().lerp(I.entry, .5), I.entry], { tr: I.idx, s0: .3, s1: 1 });
+    // f.bridge [s0, s1]: Fenster der Brücke in der Fahrt; f.preTr [s0, s1]: das Stück vom Eingang zum Anfang des eigenen Fadens läuft ebenfalls noch in der
+    // Fahrt (der Punkt steht beim Eintreffen der Szene schon am Anfang des Fadens, Lesebahn)
+    const br = f.bridge || [.3, 1];
+    if (A && A.exit && I.entry) addPiece(I, [A.exit, A.exit.clone().lerp(I.entry, .5), I.entry], { tr: I.idx, s0: br[0], s1: br[1] });
     const outTime = (b1) => b1 + .06 <= I.bMax ? { I, b0: b1, b1: b1 + .06 } : { tr: I.idx + 1, s0: 0, s1: .3 };
     if (ownPts) {
       const t0 = Math.max(own.t0, I.b0), t1 = Math.max(own.t1, t0 + .01);
-      if (f.in) addPiece(I, [I.entry, ...(f.viaPre || []).map(a => wpt(I, a)), ownPts[0]], { I, b0: Math.max(I.b0, t0 - .05), b1: t0 });
+      if (f.in) addPiece(I, [I.entry, ...(f.viaPre || []).map(a => wpt(I, a)), ownPts[0]], f.preTr ? { tr: I.idx, s0: f.preTr[0], s1: f.preTr[1] } : { I, b0: Math.max(I.b0, t0 - .05), b1: t0 });
       addPiece(I, ownPts, { I, b0: t0, b1: Math.min(t1, I.bMax), lin: !!own.lin, map: own.map });
       if (f.out) addPiece(I, [ownPts[ownPts.length - 1], ...(f.viaPost || []).map(a => wpt(I, a)), I.exit], outTime(Math.min(t1, I.bMax)));
     } else if (I.entry && I.exit) {
@@ -618,6 +645,35 @@ export function seite(renderer, SEQ, opt = {}) {
     return { f: ox * oy / A, r: [x0, y0, x1, y1] };
   }
   const clipFactor = (pr, cw, ch) => sm((frameFrac(pr, cw, ch).f - .985) / .014);
+
+  // ---------- Übergabe vom HTML-Vorbild an die 3D-Szene ----------
+  // Das Vorbild (Name und Unterzeile als HTML) steht, bis das erste Bild der Szene da ist. Die Lettern der Szene (pr.hold) bleiben unsichtbar, solange es steht;
+  // damit liegen nie zwei Namen versetzt übereinander. Abgelöst wird, sobald die Lettern ausgewachsen stehen (Uhr der Szene ≥ HOLD_T) oder der Leser zu
+  // scrollen beginnt (dann stehen die Lettern sofort fertig). Das Vorbild blendet in 0,12 s aus, die Lettern gleichzeitig ein (opt.onRelease).
+  const vb0 = typeof document !== "undefined" && document.querySelector ? document.querySelector(".vorbild") : null;
+  const HOLD_T = opt.holdT || 2.0;
+  let released = !(vb0 && vb0.classList && vb0.classList.contains && !vb0.classList.contains("weg")), releasedAt = -1e9;
+  function release(now) {
+    if (released) return; released = true; releasedAt = now;
+    opt.onRelease && opt.onRelease();
+  }
+  // Lage des Namens und der Unterzeile im Startbild in Pixeln (für das HTML-Vorbild): je Druck Grundlinie, linke Schreibkante bzw. Mitte, Schriftgröße
+  function vorbildBox() {
+    const I = INST[0]; if (!I || !I.built) return null;
+    const st = stateAt(0), cw = VW(), ch = VH();
+    I.M.update(I.b0, 1e9); I.group.updateMatrixWorld(true);
+    const fov = poseOf(st, camera.position, _t); camera.fov = fov; camera.aspect = cw / ch; camera.updateProjectionMatrix();
+    camera.lookAt(_t); camera.updateMatrixWorld();
+    const out = [];
+    for (const pr of I.prints) {
+      if (!pr.hold || !pr.t || !pr.t.lines || !pr.t.lines.join("") || pr.mat.blending === THREE.CustomBlending) continue;      // ohne Abdrücke (flach im Bogen)
+      const { r } = frameFrac(pr, cw, ch); if (!r) continue;
+      const em = (r[3] - r[1]) / pr.t.h, text = pr.t.lines.join(" ");
+      out.push({ text, em, lh: pr.t.lh * em, x0: r[0] + pr.t.padX * em, xm: (r[0] + r[2]) / 2, base: r[1] + (.1 + .94) * em, lines: pr.t.lines.length, rect: r });
+    }
+    I.M.update(I.b0, 0);
+    return out;
+  }
 
   // ---------- Bild zu einem Zustand ----------
   const visible = new Set();
@@ -672,6 +728,8 @@ export function seite(renderer, SEQ, opt = {}) {
           if (pr.off !== undefined) o *= 1 - sm((b - pr.off) / .03);
           if (pr.tOff !== undefined) o *= 1 - sm((tl - pr.tOff) / pr.tDur);
         }
+        // Startbild: Teile mit pr.hold bleiben unsichtbar, solange das HTML-Vorbild steht; mit der Ablösung blenden sie in 0,12 s ein
+        if (pr.hold && !opts.still) o *= released ? sm((now - releasedAt) / 120) : 0;
         // Text (nicht Bilder) nur ganz im Bild oder gar nicht; Decals mit Text (Kontaktkarten) tragen pr.textual
         if (o > .001 && ((pr.t && pr.t.rows) || pr.textual)) o *= clipFactor(pr, cw, ch);
         if (pr.mat.opacity !== o) pr.mat.opacity = o;
@@ -781,6 +839,8 @@ export function seite(renderer, SEQ, opt = {}) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
     p += (target - p) * (1 - Math.exp(-dt * 3.0));
     if (Math.abs(target - p) < 1e-5) p = target;
+    // Ablösung des Vorbilds: bei Scrollbeginn sofort (Lettern stehen dann fertig), sonst wenn die Lettern ausgewachsen stehen
+    if (!released && INST[0].built) { if (p > .004) { INST[0].tStart = -1e9; release(now); } else if ((now - INST[0].tStart) / 1000 >= HOLD_T) release(now); }
     const st = stateAt(p);
     applyState(st, now);
     hint && hint.classList.toggle("off", p > .004);
@@ -808,7 +868,8 @@ export function seite(renderer, SEQ, opt = {}) {
       for (const I of INST) I.def.keys.forEach((k, ki) => { if (k.stop || k.slow) out.push({ scene: I.name, ki, stop: k.stop || null, slow: !!k.slow, p: I.body.p0 + I.def.pOfU(k.u) * (I.body.p1 - I.body.p0), b: k.b }); });
       return out;
     },
-    pieces: () => pieces
+    pieces: () => pieces,
+    vorbildBox, release: () => release(performance.now()), released: () => released
   };
   window.__seite = api;
   return api;

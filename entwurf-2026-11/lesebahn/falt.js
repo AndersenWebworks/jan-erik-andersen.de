@@ -246,7 +246,7 @@ export function Model() {
   const lv = [], lc = [], ln = [];          // Haarkanten der Teile
   const hinges = [], cuts = [], holes = [], sketches = [], polys = [];
   const gerOpts = [], spurOpts = [];
-  let edgeOwn = false;
+  let edgeOwn = false, autoOn = true;
   const att = [];
   const parts = new Map(); let tag = null;
   const mk = (par, P, A, ang, t0, d, lvl, opt = {}) => {
@@ -343,7 +343,9 @@ export function Model() {
       }
       for (let k = 1; k < n - 1; k++) for (const p of [pts[0], pts[k], pts[k + 1]]) { tv.push(p[0], y, p[1]); tc.push(...col); tn.push(nd.i); }
       for (let k = 0; k < n; k++) {
-        const w = Array.isArray(e) ? e[k] : e; if (!w) continue;
+        // Haarkante: Standard 0,35 … 0,5 (Eröffnung); 0 = keine Kante an dieser Seite
+        const w0 = Array.isArray(e) ? e[k] : e; if (!w0) continue;
+        const w = Math.min(.5, Math.max(.35, w0));
         const p = pts[k], q = pts[(k + 1) % n];
         lv.push(p[0], y, p[1], q[0], y, q[1]); lc.push(...ecol, w, ...ecol, w); ln.push(nd.i, nd.i);
         if (nd !== root && !dy && !opt.nocut) cuts.push({ p: [p[0], p[1]], q: [q[0], q[1]], nd });
@@ -360,6 +362,9 @@ export function Model() {
     // (spurOf). Beide dürfen mehrfach aufgerufen werden.
     geruest(o) { gerOpts.push(o); },
     spur(o) { spurOpts.push(o); },
+    auto(on) { autoOn = !!on; },
+    // Abdeckung (Prüfhilfe): Teile mit Fläche, davon mit Spur / mit Gerüst (nach finish() inklusive der selbsttätig ergänzten)
+    coverage() { const tg = [...new Set(polys.map(p => p.nd.tag).filter(Boolean))], tagsOf = (L, auto) => new Set(L.filter(o => !!o.auto === auto).flatMap(o => o.tags)); return { tags: tg, spur: tg.filter(t => tagsOf(spurOpts, false).has(t)), geruest: tg.filter(t => tagsOf(gerOpts, false).has(t)), spurAuto: tg.filter(t => tagsOf(spurOpts, true).has(t)), geruestAuto: tg.filter(t => tagsOf(gerOpts, true).has(t)) }; },
     // Gezeichnete Linien auf der Fläche eines Knotens (z. B. Skizze): segs [[a, b], …] in x/z der Ruhelage,
     // zeichnen sich im Fenster [t0, t0 + d]; fade(b) liefert die Deckkraft (1 = voll)
     sketch(nd, segs, t0, d, opt = {}) { sketches.push({ nd, segs, t0, d, a: opt.a || .55, fade: opt.fade || null, dy: opt.dy !== undefined ? opt.dy : .0009, dash: !!opt.dash, col: opt.col || INK }); },
@@ -378,6 +383,19 @@ export function Model() {
       for (const n of nodes) {
         if (!n.par || n.own) continue;
         let o = n.par; while (o.par && !o.lift) o = o.par; n.own = o;
+      }
+      // Standard für alle Szenen (Anmutung der Eröffnung): Teile, für die die Szene weder Bleistiftspur (F.spur) noch Gerüst (F.geruest) angegeben hat,
+      // bekommen beides selbsttätig: Spur auf allen Flächen des Teils (Flächen mit Druck oder Abbild nur als Eckmarken), Gerüst in dem Fenster
+      // kurz vor dem ersten Hochklappen. F.auto(false) schaltet das für eine Szene ab (nicht nötig).
+      if (autoOn) {
+        const tagsAll = [...new Set(polys.map(p => p.nd.tag).filter(t => t && nodes.some(n => n.tag === t && n.clock !== "t")))];
+        const sp = new Set(spurOpts.flatMap(o => o.tags)), ge = new Set(gerOpts.flatMap(o => o.tags));
+        const ts = tagsAll.filter(t => !sp.has(t));
+        if (ts.length) spurOpts.push({ tags: ts, quiet: [...new Set(att.map(a => a.nd))], a: .3, auto: true });
+        for (const t of tagsAll.filter(t => !ge.has(t))) {
+          const t1 = Math.min(...nodes.filter(n => n.tag === t && n.par && n.clock !== "t").map(n => n.t0));
+          if (t1 > .06) gerOpts.push({ tags: [t], t0: t1 - .055, t1, du: .03, a: .5, auto: true });
+        }
       }
       for (const o of spurOpts) spurOf(o);
       // ---- Bastellinien ----

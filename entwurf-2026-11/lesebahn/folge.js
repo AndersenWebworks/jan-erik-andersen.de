@@ -43,9 +43,9 @@ export const SEQ = [
     faden: (d, I) => ({ in: [-7.75, I.K.narrow ? 9.4 : 5.05], out: [-7.75, I.K.narrow ? -10.3 : -9.3] }) },
   // Schnittstellen und WBG Pooling sind ein Modul: hier der erste Teil (b 0 … .55), WBG folgt nach „Gestaltung“
   { name: "schnittstellen", label: "Schnittstellen und eigene Werkzeuge", mod: schnittstellen, len: L(400), tr: TR(30.2, 41.0), lead: 1, leadShift: [-2.2, 0, 0], leadW: .6,
-    // Lesebahn: Fahnen am Faden (schnittstellen.js); der Faden läuft nach der zweiten Fahne rechts an den Geräten vorbei nach hinten
+    // Lesebahn: Anhänger am Faden (schnittstellen.js, Baukasten bahn.js); Ein- und Ausgang des Fadens liefert die Bahn (d.fadenIO)
     bMax: .55,
-    faden: () => ({ in: [-9.1, 18.8], viaPost: [[9.0, 9.25], [10.0, 8.0]], out: [10.0, -6.8] }) },
+    faden: d => d.fadenIO },
   { name: "gestaltung", label: "Gestaltung", optional: "./staffelei.js", pick: m => m.default, len: L(540 * .6), tr: TR(32.3, 32.4),
     faden: (d, I) => lane(I) },
   { name: "wbg", label: "WBG Pooling", mod: schnittstellen, len: L(900 * 7.4 / 13.9 + 30, 900 * 7.7 / 14.2 + 30), tr: TR(26, 43.1), tail: 1, modOpt: { wbg: true },

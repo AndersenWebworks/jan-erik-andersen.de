@@ -21,7 +21,7 @@ export function wortmarke(K, { cx = 0, zb, narrow, par, zb2, par2, k1 = 1 }) {
   const w1 = K.measure(["Jan-Erik"], up).tw * e, w2 = K.measure(["Andersen"], it).tw * e;
   const sp = (K.measure(["x x"], up).tw - K.measure(["xx"], up).tw) * e;   // Wortzwischenraum wie im Satz (Leerzeichen + Laufweite)
   const dw = .01 * e, dd = 2 * DOT * e;                                     // Abstand und Breite des Schlusspunkts
-  const o = { foot: 1, imprint: IMPRINT };
+  const o = { foot: 1, imprint: IMPRINT, hold: 1 };   // hold: erscheint erst mit der Ablösung des HTML-Vorbilds (kern.js, release)
   const fold = (len, ee = e) => ({ x0: -.06 * ee, len: len + .12 * ee, lw: .014 * ee, dash: .045 * ee, gap: .035 * ee, col: "#8f8a80" });
   const dot = (x, z, t0, p) => K.word([""], e, x, z, t0, .7, { ...o, font: "marke", disc: DOT, col: RED, par: p });
   const folds = [];
@@ -53,5 +53,6 @@ export function faltkante(K, nd, fold, u0, v, q = null) {
   const f = fold.f, wpx = 2400, hpx = 24, k = wpx / f.len;
   const fd = K.decal(wpx, hpx, (c, cw, ch) => { c.strokeStyle = f.col; c.lineWidth = f.lw * k; c.setLineDash([f.dash * k, f.gap * k]); c.beginPath(); c.moveTo(0, ch / 2); c.lineTo(cw, ch / 2); c.stroke(); }, f.len, f.len * hpx / wpx, -1);
   K.F.attach(nd, fd.mesh, nd.uv(u0 + f.len / 2, v), q || nd.n, 1, .0007);
+  fd.hold = true;
   return fd;
 }

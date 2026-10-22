@@ -278,31 +278,20 @@ export default function (K, opt = {}) {
   })();
 
   // ===================================================================================================
-  // LESEBAHN (nur Schnittstellen): zwei Fahnen am roten Faden, jede mit genau einem ganzen Satz
+  // LESEBAHN (nur Schnittstellen): zwei Anhänger am roten Faden, jeder mit genau einem ganzen Satz (Baukasten: bahn.js, K.bahn)
   // ===================================================================================================
-  // Fahne = stehendes Blatt aus dem Bogen (Bastellinien, Gerüst, Abdruck wie jedes Teil), um den Neigungswinkel der Kamera zurückgelehnt,
-  // sodass die Schrift der Kamera zugewandt ist. Beide Fahnen stehen auf einer Linie (z = ZC), gleich hoch gerechnet, gleich ausgerichtet.
-  const fahnen = [];
-  let lbThread = null;
-  if (!WBG) {
-    const MAXEM = N ? 18.5 : 21, LH = 1.25;
-    let xl = XL1;
-    const fahne = (tag, sentence, tLine, tRise, tText) => {
-      const lines = wrap(sentence, EC, MAXEM), tw = K.measure(lines).tw * EC;
-      const Wc = tw + 2 * MARG, Hc = .3 + (lines.length - 1) * LH * EC + .8 * EC + .3;
-      F.part(tag, tLine, .04);
-      const nd = K.panel(R, [xl, ZC], [xl + Wc, ZC], [0, -1], tRise, .045, Q - LEAN, { over: .04 });
-      K.rect(nd, 0, 0, Wc, Hc, BOARD);
-      const pr = K.print(lines, EC, tText, { lh: LH });
-      K.onPanel(nd, pr, MARG - pr.t.padX * EC + pr.w / 2, Hc - .3 + .34 * EC - pr.h / 2, 1);
-      F.geruest({ tags: [tag], t0: tRise - .035, t1: tRise, du: .02, a: .5 });
-      const f = { tag, nd, pr, x0: xl, Wc, Hc, lines };
-      xl += Wc + GAPC; fahnen.push(f); return f;
-    };
-    // Satz 1 steht, wenn Bildschirm und Geräte stehen (die Kabel kommen danach); Satz 2, wenn der Adapter einrastet (wie bisher b .495)
-    fahne("fahne1", SATZ1, .17, .205, .235);
-    fahne("fahne2", SATZ2, .43, .465, .49);
-      }
+  // Anhänger = Papierzettel auf einer Fußlasche mit zwei Ösen (der Faden läuft hindurch), Falz, Seitenstützen; zurückgelehnt um die Neigung der
+  // Kamera, damit die Schrift ihr zugewandt ist. Beide stehen auf einer Linie (z = ZC) und sind gleich ausgerichtet. Satz 1 ist die Kernaussage (größer).
+  const B = WBG ? null : K.bahn({
+    prefix: "s", x0: XL1, z: ZC, gap: 1.3, pitch: PITCH, sy: -.34, nsy: -.3,
+    head: { prints: [H1], e0: eH, b: 0, fit: .72, fitN: .72, x: XL1 - .7 - titleW, w: titleW },
+    sentences: [
+      // Satz 1 steht, wenn Bildschirm und Geräte stehen (die Kabel kommen danach); Satz 2, wenn der Adapter einrastet (b .495)
+      { text: SATZ1, t: [.15, .185, .25], b: .285, big: 1.25 },
+      { text: SATZ2, t: [.38, .43, .495], b: .53 }
+    ]
+  });
+  const fahnen = B ? B.items : [];
 
   // ===================================================================================================
   // SZENE 2
@@ -382,7 +371,7 @@ export default function (K, opt = {}) {
   F.geruest({ tags: ["m2"], t0: .575, t1: .615, du: .03, a: .5 });
   F.geruest({ tags: ["tt"], t0: .6, t1: .655, du: .03, a: .5 });
   F.geruest({ tags: ["login"], t0: .81, t1: .86, du: .03, a: .5 });
-  F.spur({ tags: ["m1", "geraete", "adapter", "m2", "tt", "login", ...fahnen.map(f => f.tag)], quiet: [m1.scr, m2.scr, crm.fr, erp.fr, bew.fr, crm.dk, erp.dk, bew.dk, adF, board, ...fahnen.map(f => f.nd)], a: .3 });
+  F.spur({ tags: ["m1", "geraete", "adapter", "m2", "tt", "login", ...(B ? B.spur.tags : [])], quiet: [m1.scr, m2.scr, crm.fr, erp.fr, bew.fr, crm.dk, erp.dk, bew.dk, adF, board, ...(B ? B.spur.quiet : [])], a: .3 });
 
   // ===================================================================================================
   // Kamera
@@ -392,18 +381,10 @@ export default function (K, opt = {}) {
   const S = {};
   // Handy übernimmt Lage und Einpassung des Desktops, solange nichts Eigenes (n…) angegeben ist; Schriftgröße dort immer 16 px
   const frontStop = (prints, o) => { const s = { prints, px: pxD, pitch: 14, yaw: 0, sx: 0, sy: 0, ...o }; s.nsx = o.nsx !== undefined ? o.nsx : s.sx; s.nsy = o.nsy !== undefined ? o.nsy : s.sy; s.fitN = o.fitN !== undefined ? o.fitN : s.fit; return s; };
-  // Lesebahn: Überschrift und beide Fahnen mit demselben Abstand (Schrift gleich groß in der Welt: px wächst mit e), gleicher Neigung,
-  // Gier 0; die Kamera verschiebt sich nur nach rechts. Der Text steht im unteren Bildteil, darüber die Szenerie.
-  const bahn = (prints, o) => ({ prints, e0: o.e0, b: o.b, px: (W, H, s) => pxD(W, H) * s.e / EC, pxN: (W, H, s) => 16 * s.e / EC, fit: o.fit || .92, fitN: o.fitN || .92,
-    pitch: PITCH, npitch: PITCH, yaw: 0, nyaw: 0, sx: 0, nsx: 0, sy: -.34, nsy: -.3 });
   if (WBG) {
     S.h1 = { prints: [H1], b: 0, px: 999, pxN: 999, fit: .72, fitN: .84, pitch: 12, sy: -.1, nsy: -.05, nsx: 0, sx: 0 };
     S.t1 = frontStop([m1.chin, m1.dec], { b: TT.m1.text + .02, pitch: 16, yaw: -10, nyaw: 0, sy: -.1, e0: CE, fit: .96 });
     S.ad = frontStop([lidE], { b: .53, pitch: 46, yaw: 0, px: 22, sy: .12 });
-  } else {
-    S.h1 = bahn([H1], { b: 0, e0: eH, fit: .72, fitN: .84 });
-    S.s1 = bahn([fahnen[0].pr], { b: .265, e0: EC });
-    S.s2 = bahn([fahnen[1].pr], { b: .53, e0: EC });
   }
   S.h2 = { prints: [h2w, kick], b: TT.h2 + .05, px: 999, pxN: 999, fit: .66, fitN: .78, pitch: 22, sy: -.05, nsy: -.05, sx: 0, nsx: 0 };
   S.t2 = frontStop([m2.chin, m2.dec], { b: TT.m2.text + .02, pitch: 16, yaw: -10, nyaw: 0, sy: -.1, e0: CE, fit: .96 });
@@ -413,24 +394,13 @@ export default function (K, opt = {}) {
   S.an = frontStop([sfL, coL], { b: 1, pitch: 40, yaw: 0, sy: .3, fit: .9, px: 22 });
   S.an1 = frontStop([sfL], { b: .99, pitch: 40, px: 22, sy: .3 });
   S.an2 = frontStop([coL], { b: 1, pitch: 40, px: 22, sy: .3 });
-  const stops = WBG ? Object.values(S) : [S.h1, S.s1, S.s2];
+  const stops = WBG ? Object.values(S) : B.stops;
 
   // ---------- Roter Faden als Lesebahn (nur Schnittstellen) ----------
-  // Der Faden läuft links neben der Überschrift los, dann vor den Fahnen entlang (z = ZT). Der Punkt hält am linken Fuß jeder Fahne
-  // (Überschrift, Fahne 1, Fahne 2): zwischen den Haltestellen weich beschleunigt und gebremst (Glättung sm), an der Haltestelle ruhig.
-  // Die Haltezeiten (b) liegen um die Lesestellen der Kamera.
-  let thread = null;
-  if (!WBG) {
-    const hx = XL1 - .7 - titleW, y = .004;
-    const stopX = f => f.x0 + .22;
-    const pts = [V(hx - .4, y, ZT), V(hx + titleW * .5, y, ZT), V(stopX(fahnen[0]) - 1.2, y, ZT), V(stopX(fahnen[0]), y, ZT),
-      V((stopX(fahnen[0]) + stopX(fahnen[1])) / 2, y, ZT), V(stopX(fahnen[1]), y, ZT)];
-    const cv = new THREE.CatmullRomCurve3(pts, false, "centripetal", .5), KD = 40, cum = cv.getLengths(KD * (pts.length - 1)), LT = cum[cum.length - 1];
-    const fr = j => cum[j * KD] / LT, f1 = fr(3), f2 = fr(5);
-    const A1 = S.s1.b - .04, D1 = S.s1.b + .04, A2 = S.s2.b - .04, D0 = .10, T0 = .06;
-    const map = b => b <= T0 ? 0 : b < D0 ? 0 : b < A1 ? f1 * sm((b - D0) / (A1 - D0)) : b < D1 ? f1 : b < A2 ? f1 + (f2 - f1) * sm((b - D1) / (A2 - D1)) : f2;
-    thread = { pts, t0: T0, t1: A2, map, dbg: { f1, f2, LT, A1, D1, A2 } };
-  }
+  // Der Faden beginnt links neben der Überschrift und läuft durch die Ösen beider Anhänger (z = Fußmitte). Der Punkt hält an der Überschrift und an
+  // der ersten Öse jedes Anhängers: zwischen den Haltestellen weich beschleunigt und gebremst, an der Haltestelle ruhig (hold um die Lesestelle).
+  // bEnd = Ende der Bahn (b .55): danach läuft der Faden erst in der Fahrt zur nächsten Szene weiter (der Punkt bleibt bis dahin an Anhänger 2).
+  const thread = WBG ? null : B.thread({ hold: .04, depart: .10, bEnd: .55 });
 
   // Schlüssel der Kamera. Schnittstellen: Überschrift → Fahne 1 → Fahne 2 → ein Stück weiter nach rechts (gleicher Blick, kein Zoom).
   const wbgKeys = [
@@ -442,16 +412,13 @@ export default function (K, opt = {}) {
       { w: 1.0, stop: S.lg },
       ...(N ? [{ w: .7, stop: S.an1 }, { w: .6, stop: S.an2 }] : [{ w: 1.0, stop: S.an }])
   ];
-  const bahnKeys = [
-      { w: 0, stop: S.h1 },
-      { w: 2.0, stop: S.s1 },
-      { w: 2.0, stop: S.s2 },
-      // Auslauf: Kamera fährt am Ende ein Stück in derselben Richtung weiter (Ende der Bahn b .55), gleicher Abstand und Winkel
-      { w: .6, b: .55, fromStop: S.s2, back: 1, up: 0, shift: V(1.8, 0, 0) }
-  ];
+  // Schnittstellen: Überschrift → Anhänger 1 → Anhänger 2 → Auslauf nach rechts (gleicher Blick, kein Zoom, Ende der Bahn b .55)
+  const bahnKeys = WBG ? null : B.keys({ b: .55, shift: 1.8, w: .6 });
 
   return {
     names: S, fov: 32, fovN: 44, track: 1000, thread: thread || undefined, smooth: !WBG,
+    // Ein- und Ausgang des Fadens für folge.js (setzt die Bahn stetig fort)
+    fadenIO: WBG ? null : B.faden({ inn: [-9.1, 18.8], out: [10.0, -6.8] }),
     // Raster (seite/) für den ersten Teil; „WBG Pooling“ setzt in der Szenenfolge ein eigenes Zeitfenster
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .13 },
     stops,

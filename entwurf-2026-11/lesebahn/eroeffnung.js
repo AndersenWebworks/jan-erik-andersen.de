@@ -147,6 +147,7 @@ export default function (K) {
   const ko = { track: .05, col: "#66666a", align: "center", lh: 1.45 };
   // gedruckt, mittig auf der Vorderseite (Mitte des Drucks = Mitte des Versalblocks)
   const ke = N ? .19 : .15, kick = K.onPanel(face1, K.print(KT, ke, -1, ko), PW, H1 / 2, 1);
+  kick.hold = true;   // erscheint erst mit der Ablösung des HTML-Vorbilds (kern.js, release)
 
   // ---------- Schreibtisch: Platte hebt sich, L-Beine und Zarge schwenken nach unten ----------
   F.part("tisch", .015, .08);

@@ -26,9 +26,20 @@ else {
   const vorbild = document.querySelector(".vorbild");
   Promise.all([loadFonts().catch(() => {}), bilder().then(setBilder).catch(() => {}), Promise.all(SEQ.map(optional))]).then(([, , seq]) => {
     const api = seite(renderer, seq.filter(Boolean), {
-      // das HTML-Vorbild (Name und Unterzeile) bleibt, bis die Lettern im Bild aufgestanden sind
-      onFirstFrame() { if (vorbild) setTimeout(() => vorbild.classList.add("weg"), 900); }
+      // das HTML-Vorbild (Name und Unterzeile) bleibt, bis die Lettern der Szene stehen; dann tauschen beide in 0,12 s (kern.js, release)
+      onRelease() { if (vorbild) vorbild.classList.add("weg"); }
     });
+    // Lage des Vorbilds aus der 3D-Szene (deckungsgleich), bei jeder Größenänderung neu
+    const lage = () => {
+      if (!vorbild) return;
+      const b = api.vorbildBox(); if (!b || b.length < 2) return;
+      const nm = b.filter(x => !/Webentwicklung/.test(x.text)), ki = b.find(x => /Webentwicklung/.test(x.text)), s = vorbild.style, px = v => v.toFixed(2) + "px";
+      s.setProperty("--tx", "0px");
+      s.setProperty("--F1", px(nm[0].em)); s.setProperty("--x1", px(nm[0].x0)); s.setProperty("--b1", px(nm[0].base));
+      if (nm.length > 1 && Math.abs(nm[1].base - nm[0].base) > 5) { s.setProperty("--F2", px(nm[1].em)); s.setProperty("--x2", px(nm[1].x0)); s.setProperty("--b2", px(nm[1].base)); }
+      if (ki) { s.setProperty("--kF", px(ki.em)); s.setProperty("--kx", px(ki.xm)); s.setProperty("--kb", px(ki.base)); s.setProperty("--klh", (ki.lh / ki.em).toFixed(3)); }
+    };
+    lage(); addEventListener("resize", lage);
     const lbl = document.getElementById("szene");
     if (lbl) setInterval(() => { const st = api.state(); if (st) { lbl.textContent = (st.kind === "t" ? "→ " : "") + api.labelAt(api.p()); } }, 250);
   }).catch(e => { console.error(e); document.documentElement.classList.add("nogl"); });

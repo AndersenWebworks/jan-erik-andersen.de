@@ -49,18 +49,25 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .top nav a { color: var(--ink); text-decoration: none; }
 .top nav a:hover { color: var(--red); }
 
-/* Vorbild: Name und Unterzeile stehen sofort, bis die Lettern im Bild aufgestanden sind (Lage wie im Startbild: Stufenkante = Bildmitte) */
-.vorbild { position: fixed; z-index: 1; left: 0; right: 0; top: 0; height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; pointer-events: none; transition: opacity .45s; }
-.vorbild .n4 { font-size: min(15.3vh, 9.6vw); padding-bottom: 0; }
-.vorbild p { position: absolute; top: 100%; margin-top: 2.6vh; font: 500 min(2.4vh, 1.7vw)/1.4 var(--sans); letter-spacing: .05em; color: var(--muted); text-align: center; }
+/* Vorbild: Name und Unterzeile stehen sofort, bis das erste Bild der 3D-Szene da ist. Lage und Größe liefert die 3D-Szene selbst (main.js setzt
+   --F1/--F2 Schriftgröße, --x1/--x2 linke Schreibkante, --b1/--b2 Grundlinie je Zeile, --kF/--kx/--kb/--klh für die Unterzeile, alles in Pixeln),
+   damit beide deckungsgleich sind; bis dahin gilt die Vorgabe (Grundlinie in Bildmitte = Stufenkante, Name rund 70 % der Breite). Die Lettern der Szene
+   bleiben unsichtbar, solange das Vorbild steht (kern.js, pr.hold); bei der Ablösung blendet das Vorbild in 0,12 s aus, die Lettern gleichzeitig ein.
+   Grundlinie: Newsreader N4 hat Aufstieg 0,735 em und Abstieg 0,265 em (hhea), bei line-height 1 liegt die Grundlinie 0,735 em unter der Oberkante der Zeile. */
+.vorbild { position: fixed; z-index: 1; inset: 0; pointer-events: none; transition: opacity .12s linear; }
+.vorbild .n4 { position: absolute; left: var(--x1, 50%); top: calc(var(--b1, 50vh) - .735em); transform: translateX(var(--tx, -50%)); padding: 0; font-size: var(--F1, min(15.3vh, 9.6vw)); line-height: 1; white-space: nowrap; }
 .vorbild .zl { display: inline; }
+.vorbild p { position: absolute; left: var(--kx, 50%); transform: translateX(-50%); top: calc(var(--kb, 54vh) - (var(--klh, 1.4) * .5 + .3594) * 1em); margin: 0; font: 500 var(--kF, min(2.4vh, 1.7vw))/var(--klh, 1.4) var(--sans); letter-spacing: .05em; color: var(--muted); text-align: center; white-space: nowrap; }
 .vorbild.weg { opacity: 0; }
 .nogl .vorbild { display: none; }
 @media (max-aspect-ratio: 1/1) {
-  .vorbild { height: 47vh; }
-  .vorbild .n4 { font-size: min(9vh, 19vw); line-height: 1.15; text-align: center; white-space: normal; }
-  .vorbild .zl { display: block; }
-  .vorbild p { font-size: 4.1vw; }
+  .vorbild .n4 { left: 0; top: 0; transform: none; width: 100%; font-size: var(--F1, min(9vh, 19vw)); }
+  .vorbild .zl { position: absolute; display: block; transform: translateX(var(--tx, -50%)); }
+  .vorbild .zl:nth-child(1) { left: var(--x1, 50%); top: calc(var(--b1, 36vh) - .735em); }
+  .vorbild .zl:nth-child(2) { left: var(--x2, 50%); top: calc(var(--b2, 44vh) - .735em); font-size: var(--F2, var(--F1, min(9vh, 19vw))); }
+  .vorbild p { font-size: var(--kF, 4.1vw); top: calc(var(--kb, 52vh) - (var(--klh, 1.4) * .5 + .3594) * 1em); }
+  .vorbild p .k1, .vorbild p .k2 { display: block; }
+  .vorbild p .ksep { display: none; }
 }
 
 .hint { position: fixed; z-index: 2; left: 50%; bottom: 76px; transform: translateX(-50%); font: 500 12px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); transition: opacity .5s; pointer-events: none; white-space: nowrap; }
@@ -113,7 +120,7 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
   <a class="mark n4" href="#start" data-scene="eroeffnung" aria-label="Jan-Erik Andersen"><span aria-hidden="true">Jan-Erik <i>Andersen</i><span class="dot"></span><span class="fold"></span></span></a>
   <nav aria-label="Hauptnavigation"><a href="#arbeit" data-scene="gerwing">Projekte</a><a href="#leistungen" data-scene="betreuung">Leistungen</a><a href="#kontakt" data-scene="kontakt">Kontakt</a></nav>
 </header>
-<div class="vorbild" aria-hidden="true"><span class="n4"><span class="zl">Jan-Erik </span><span class="zl"><i>Andersen</i><span class="dot"></span></span></span><p>Webentwicklung · Raum Plau am See · remote</p></div>
+<div class="vorbild" aria-hidden="true"><span class="n4"><span class="zl">Jan-Erik </span><span class="zl"><i>Andersen</i><span class="dot"></span></span></span><p><span class="k1">Webentwicklung</span><span class="ksep"> · </span><span class="k2">Raum Plau am See · remote</span></p></div>
 <script src="./vorbild.js"></script>
 <main class="sr">
   <section id="start">
