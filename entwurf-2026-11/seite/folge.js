@@ -1,7 +1,7 @@
 // Szenenfolge der durchgehenden Seite (entwurf-2026-11/seite/): Reihenfolge, Ausschnitte, Längen, Faden je Szene.
 // Reihenfolge laut Seitentext (entwurf-2026-10-b-raumtext-2/index.html): Eröffnung, Gerwing, Leistungen (Betreuung, Modernisierung,
 // Shops, Schnittstellen mit WBG Pooling als Beleg, Gestaltung), Weitere Arbeit (Außerdem), Wie ich arbeite, Werdegang,
-// Stimmen, Für Agenturen, Kontakt. Eigenes Modul, damit die Prüfskripte dieselbe Folge rechnen wie die Seite.
+// Für Agenturen, Kontakt. Eigenes Modul, damit die Prüfskripte dieselbe Folge rechnen wie die Seite.
 import eroeffnung from "./eroeffnung.js";
 import gerwing from "./gerwing.js";
 import betreuung from "./betreuung.js";
@@ -9,7 +9,6 @@ import modernisierung from "./modernisierung.js";
 import shop from "./shop.js";
 import schnittstellen from "./schnittstellen.js";
 import werdegang from "./werdegang.js";
-import stimmen from "./stimmen.js";
 import abschluss from "./abschluss.js";
 
 // Längen je Abschnitt in vh (d: Breitbild, n: hochkant), fest, damit #p schon vor dem Bau aller Szenen gilt.
@@ -68,8 +67,6 @@ export const SEQ = [
       const P = d.thread.pts, a = P[0], z = P[P.length - 1], ZB = z.z - .45;
       return { in: [a.x, a.z + 1.05], out: [z.x, ZB - .6], viaPost: [[z.x, z.y, ZB + .03], [z.x, z.y - .04, ZB - .03], [z.x, .06, ZB - .03]] };
     } },
-  { name: "stimmen", label: "Stimmen", short: "Stimmen", mod: stimmen, len: L(500 + 60), tr: TR(101.9, 151.0), lead: 1, tail: 1, clip: [-1e5, 1e5, -14, 1e5],
-    faden: () => ({ in: [5.5, 7.8], viaPost: [[12.0, -3.2]], out: [12.0, -13.6] }) },
   { name: "agenturen", label: "Zusammenarbeit", short: "Zusammenarbeit und Kontakt", mod: abschluss, len: L(1150 * 12.15 / 17.45, 1150 * 13.15 / 18.45), tr: TR(119.4, 221.8),
     keys: d => [{ w: 0, b: .37, fromStop: d.stops.find(s => s.name === "h2"), back: 1.6, up: 1.5 }, ...d.keys.slice(8)],
     clip: [8.5, 1e5, -1e5, 1e5],

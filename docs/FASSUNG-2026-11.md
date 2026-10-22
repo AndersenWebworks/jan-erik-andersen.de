@@ -288,6 +288,11 @@ Reihenfolge nach Gewicht; je Punkt eine Frage an Erik, Entscheidung hier eintrag
 
 - Erik: „den außerdem bereich würd ich stark ausbauen und viel cooler machen - da fehlen screenshots der ganzen seiten … links fehlen eh überall wo sie möglich wären! live projekte sind viel wert!“ Gewählt: „Wand aus Geräten“. Monitor, Laptop, Tablet und Handy aus Papier zeigen echte Bildschirmfotos der Live-Projekte; unter jedem Gerät auf einem Sockel Name, ein Satz und Link. Kamera gleitet an der Wand entlang. Links zu Live-Projekten überall, wo ein Projekt genannt wird (3D anklickbar und im Text ohne 3D).
 
+## Stimmen gestrichen, Leporello als Textelement gemerkt (22.10.2026, Erik)
+
+- Erik: „die stimmensektion würd ich komplett streichen, dafür sowas wie faltflyer / liporello als element merken an anderen stellen wo uns noch gute idee für textplatzierung fehlen“. Die Szene Stimmen fällt aus 3D, Text ohne 3D, Szenenanzeige, Sprungzielen und Karte. `stimmen.js` bleibt als Bestand liegen, damit der Leporello wiederverwendet werden kann.
+- Leporello/Faltflyer ist ab jetzt ein Werkzeug für Textplatzierung: Jede Falzseite trägt einen ganzen Satz, steht dem Leser zugewandt, gelesen wird in Klapprichtung. Kandidaten, wo noch eine gute Idee fehlt: Schnittstellen/WBG (Sätze heute auf der Brettkante), Wie ich arbeite (Tafeln neben den Armen), Zusammenarbeit (Satz auf der Tischzarge). Wird je Szene als Option angeboten, nicht ungefragt eingebaut.
+
 ## Weg auf main (22.10.2026, Erik)
 
 - Entwurfsordner liegen nur auf `entwuerfe-2026-10`, nie in main zusammenführen. Eigener Zweig `veroeffentlichung` von main: Inhalt von `entwurf-2026-11/seite/` ins Hauptverzeichnis (`index.html` wird Startseite), angepasste `de/datenschutz.html` mit, Schild „Entwurf Seite“ raus, alter Kopf mit Dunkelmodus-Schalter auf `de/impressum.html` und `de/datenschutz.html` raus.

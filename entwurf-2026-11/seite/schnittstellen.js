@@ -30,19 +30,65 @@ function pageSite(x, W, H) {
   L.push({ t: "rule", y: 590 });
   draw(x, s, S, W, H, L);
 }
-// Portal: Kopfzeile, Produktbild mit Rundumpfeil, Textzeilen, Schaltfläche, Anmelde-Reiter
+// Portal: geschütztes Vertriebsbereich-Backend (Sales Center) als Pseudobild: Kopfleiste mit Anmeldestatus, Seitenleiste, Produktkarten mit 360-Grad-Ansicht,
+// Anbindungsstatus Salesforce und Concludis, Tabellenzeilen. Nur allgemeine Beschriftungen, keine Zahlen oder Kundennamen. Zeichnung in 1000 × 625.
 function pagePortal(x, W, H) {
-  const s = W / 1000, S = H / 625, L = [];
-  L.push({ t: "box", x: 60, y: 46, w: 118, h: 22, a: .85 });
-  for (let i = 0; i < 3; i++) L.push({ t: "txt", x: 600 + i * 88, y: 52, w: 62, h: 10, a: .4 });
-  L.push({ t: "box", x: 830, y: 40, w: 110, h: 30, a: .0, tab: 1 });
-  L.push({ t: "rule", y: 100 }, { t: "prod", x: 80, y: 140, w: 400, h: 330 });
-  L.push({ t: "box", x: 540, y: 150, w: 360, h: 40, a: .82 }, { t: "box", x: 540, y: 202, w: 250, h: 40, a: .82 });
-  [340, 320, 220].forEach((w, i) => L.push({ t: "txt", x: 540, y: 274 + i * 24, w, h: 10, a: .3 }));
-  L.push({ t: "btn", x: 540, y: 372, w: 150, h: 44 });
-  for (let c = 0; c < 4; c++) { const X = 80 + c * 220; L.push({ t: "txt", x: X, y: 510, w: 150, h: 10, a: .5 }, { t: "txt", x: X, y: 536, w: 110, h: 8, a: .26 }); }
-  L.push({ t: "rule", y: 590 });
-  draw(x, s, S, W, H, L);
+  const s = W / 1000, S = H / 625;
+  x.save(); x.scale(s, S);
+  const bar = (X, Y, w, h, a, c) => { x.fillStyle = c || ink(a); rr(x, X, Y, w, h, h / 2); x.fill(); };
+  const txt = (t, X, Y, sz, col, wt, al) => { x.font = `${wt || 600} ${sz}px "Segoe UI", system-ui, Arial, sans-serif`; x.fillStyle = col; x.textAlign = al || "left"; x.textBaseline = "alphabetic"; x.fillText(t, X, Y); };
+  x.fillStyle = "#ffffff"; x.fillRect(0, 0, 1000, 625);
+  // Kopfleiste: Wortmarke, Bereichsname, Anmeldestatus mit Schloss
+  x.fillStyle = ink(.92); x.fillRect(0, 0, 1000, 58);
+  x.fillStyle = RED; rr(x, 22, 15, 28, 28, 5); x.fill();
+  txt("Sales Center", 62, 36, 21, "rgba(255,255,255,.95)", 700);
+  x.strokeStyle = "rgba(255,255,255,.7)"; x.lineWidth = 2.6; x.lineJoin = "round";
+  rr(x, 842, 26, 16, 13, 2); x.stroke(); x.beginPath(); x.arc(850, 26, 5.5, PI, 0); x.stroke();
+  txt("Angemeldet", 868, 38, 17, "rgba(255,255,255,.88)", 600);
+  x.strokeStyle = "rgba(255,255,255,.55)"; x.lineWidth = 2.4; x.beginPath(); x.arc(790, 29, 13, 0, PI * 2); x.stroke();
+  x.fillStyle = "rgba(255,255,255,.55)"; x.beginPath(); x.arc(790, 25, 4.4, 0, PI * 2); x.fill(); x.beginPath(); x.arc(790, 40, 9, PI * 1.1, PI * 1.9); x.fill();
+  // Seitenleiste
+  x.fillStyle = ink(.8); x.fillRect(0, 58, 190, 567);
+  ["Übersicht", "Produkte", "Dokumente", "Anfragen", "Einstellungen"].forEach((t, i) => {
+    const Y = 100 + i * 46, on = i === 1;
+    if (on) { x.fillStyle = "rgba(255,255,255,.16)"; x.fillRect(0, Y - 26, 190, 40); x.fillStyle = RED; x.fillRect(0, Y - 26, 5, 40); }
+    x.fillStyle = on ? "rgba(255,255,255,.95)" : "rgba(255,255,255,.4)"; rr(x, 24, Y - 12, 16, 16, 3); x.fill();
+    txt(t, 52, Y + 2, 18, on ? "rgba(255,255,255,.95)" : "rgba(255,255,255,.5)", on ? 700 : 500);
+  });
+  // Inhalt: Titel, Suchfeld
+  txt("Produkte", 222, 112, 32, ink(.88), 700);
+  x.strokeStyle = ink(.4); x.lineWidth = 2.4; rr(x, 640, 84, 330, 38, 6); x.stroke();
+  x.beginPath(); x.arc(660, 102, 7, 0, PI * 2); x.moveTo(665, 107); x.lineTo(672, 114); x.stroke(); bar(684, 98, 110, 8, .3);
+  // Produktkarten mit 360-Grad-Ansicht
+  for (let c = 0; c < 3; c++) {
+    const X = 222 + c * 262, Y = 146, w = 242, h = 214;
+    x.fillStyle = ink(.045); rr(x, X, Y, w, h, 8); x.fill(); x.strokeStyle = ink(.3); x.lineWidth = 2.2; rr(x, X, Y, w, h, 8); x.stroke();
+    const cx = X + w / 2, cy = Y + 84, a = 36 + (c === 1 ? 6 : 0);
+    x.strokeStyle = ink(.55); x.lineWidth = 3; x.beginPath();
+    x.moveTo(cx - a, cy - a * .25); x.lineTo(cx, cy - a * .75); x.lineTo(cx + a, cy - a * .25); x.lineTo(cx + a, cy + a * .65); x.lineTo(cx, cy + a * 1.15); x.lineTo(cx - a, cy + a * .65); x.closePath(); x.stroke();
+    x.beginPath(); x.moveTo(cx - a, cy - a * .25); x.lineTo(cx, cy + a * .25); x.lineTo(cx + a, cy - a * .25); x.moveTo(cx, cy + a * .25); x.lineTo(cx, cy + a * 1.15); x.stroke();
+    x.strokeStyle = ink(.32); x.lineWidth = 2.4; x.beginPath(); x.ellipse(cx, cy + a * .55, a * 1.75, a * .5, 0, .15 * PI, 1.55 * PI); x.stroke();
+    x.fillStyle = RED; rr(x, X + w - 66, Y + 12, 54, 24, 12); x.fill(); txt("360°", X + w - 39, Y + 30, 16, "rgba(255,255,255,.96)", 700, "center");
+    bar(X + 16, Y + 164, [130, 110, 150][c], 14, .8); bar(X + 16, Y + 188, 74, 8, .28); bar(X + 100, Y + 188, 54, 8, .28);
+  }
+  // Anbindungen: zwei Statuskarten
+  txt("Anbindungen", 222, 400, 21, ink(.8), 700);
+  ["Salesforce", "Concludis"].forEach((t, i) => {
+    const X = 222 + i * 262, Y = 414, w = 242, h = 58;
+    x.strokeStyle = ink(.4); x.lineWidth = 2.4; rr(x, X, Y, w, h, 8); x.stroke();
+    x.fillStyle = ink(.82); x.beginPath(); x.arc(X + 30, Y + 29, 14, 0, PI * 2); x.fill();
+    x.strokeStyle = "#ffffff"; x.lineWidth = 3.4; x.lineCap = "round"; x.lineJoin = "round"; x.beginPath(); x.moveTo(X + 23, Y + 29); x.lineTo(X + 28, Y + 34); x.lineTo(X + 38, Y + 23); x.stroke();
+    txt(t, X + 56, Y + 28, 19, ink(.85), 700); txt("verbunden", X + 56, Y + 48, 15, ink(.55), 500);
+  });
+  // Tabellenzeilen darunter
+  for (let r = 0; r < 3; r++) {
+    const Y = 500 + r * 38;
+    x.fillStyle = ink(.1); x.fillRect(222, Y + 30, 748, 2);
+    x.strokeStyle = ink(.45); x.lineWidth = 2; x.strokeRect(222, Y + 6, 14, 14);
+    bar(250, Y + 7, [180, 150, 200][r], 12, .6); bar(520, Y + 9, 110, 8, .28); bar(660, Y + 9, 90, 8, .28);
+    x.strokeStyle = ink(.35); x.lineWidth = 2.2; rr(x, 880, Y + 3, 80, 22, 11); x.stroke();
+  }
+  x.restore();
 }
 function draw(x, s, S, W, H, L) {
   x.fillStyle = "#ffffff"; x.fillRect(0, 0, W, H);
@@ -236,7 +282,7 @@ export default function (K) {
     for (const sx of [-.1, .1]) { const pr = new THREE.Mesh(new THREE.BoxGeometry(.07, .04, .22), K.paperMaterial("#c9c4b8")); pr.position.set(sx, 0, -.11); plug.add(pr); }
     for (const o of [body]) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry), new THREE.LineBasicMaterial({ color: 0x303033, transparent: true, opacity: .45, depthWrite: false })); o.add(e); }
     K.add(plug);
-    const tmp = new THREE.Vector3(), tg = new THREE.Vector3();
+    const tmp = new THREE.Vector3(), tg = new THREE.Vector3(), ZERO = new THREE.Vector3(), UPV = new THREE.Vector3(0, 1, 0), LM = new THREE.Matrix4();
     // k: Anteil der Kabellänge, bei dem der Anfang des Steckers (seine Rückseite) sitzt
     K.anim(b => {
       let k = 0;
@@ -250,7 +296,8 @@ export default function (K) {
       geo.setDrawRange(0, Math.floor(k * TS) * RS * 6);
       curve.getPointAt(k, tmp); curve.getTangentAt(k, tg);
       plug.position.copy(tmp).addScaledVector(tg, PLUGL);
-      plug.lookAt(plug.position.x + tg.x, plug.position.y + tg.y, plug.position.z + tg.z);
+      // Ausrichtung im Raum der Szene (Object3D.lookAt rechnet in Weltkoordinaten und dreht den Stecker, sobald die Szene gedreht auf der Seite steht)
+      plug.quaternion.setFromRotationMatrix(LM.lookAt(tg, ZERO, UPV));
     });
     return { curve, total, plug, tube };
   }
@@ -271,7 +318,7 @@ export default function (K) {
   const bew = device(2, "Bewerbermanagement", [{ u: SOCK[0], kind: "rect" }, { u: SOCK[1], kind: "rect" }], TT.dev.fr[2], TT.dev.dk[2], TT.dev.fr[2] + TT.dev.dur, ["Bewerbermanagement"], .17);
   // Rotes Adapterstück: Front steht vor der Buchse auf (Vorderseite Unterseite), Deckel klappt zurück gegen das Gerät
   F.part("adapter", TT.ad.line[0], TT.ad.line[1]);
-  const AW = 1.5, AH = .85, AD = .7, ax = sockX(1, 0);
+  const AW = 1.5, AH = .72, AD = .7, ax = sockX(1, 0);
   const adF = K.panel(BOARD_T, [ax - AW / 2, AD], [ax + AW / 2, AD], [0, 1], TT.ad.fr[0], TT.ad.fr[1], Q, { over: .06 });
   K.rect(adF, 0, 0, AW, AH, REDC);
   const adD = K.panel(adF, adF.uv(0, AH), adF.uv(AW, AH), [0, 1], TT.ad.dk[0], TT.ad.dk[1], Q, { over: 0 });

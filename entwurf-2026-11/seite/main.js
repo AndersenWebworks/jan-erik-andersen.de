@@ -1,7 +1,7 @@
 // Durchgehende Startseite, Fassung 2026-11: alle Szenen in Seitenreihenfolge auf einer Kamerabahn (Kern: kern.js, Faltkern: falt.js).
 // Reihenfolge laut Seitentext (entwurf-2026-10-b-raumtext-2/index.html): Eröffnung, Gerwing, Leistungen (Betreuung, Modernisierung,
 // Shops, Schnittstellen mit WBG Pooling als Beleg, Gestaltung), Weitere Arbeit (Außerdem), Wie ich arbeite, Werdegang,
-// Stimmen, Für Agenturen, Kontakt.
+// Für Agenturen, Kontakt.
 // Zustände: #p=0…1 (ganze Seite), #s=<szene> (Szenenanfang), #s=uebersicht (stehende Karte am Seitenende), Handy-Ausschnitt #…&w=390&h=844.
 // Die Szenen stehen als Parzellen auf einem gemeinsamen Tisch (Anordnung in kern.js layout(), Richtungen in folge.js), am Ende zoomt die Kamera zur Karte.
 import * as THREE from "three";
