@@ -249,25 +249,6 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 <div class="bar"><i id="bar"></i></div>
 <nav class="rechtlich" aria-label="Rechtliches"><a href="/de/impressum.html">Impressum</a><span aria-hidden="true">·</span><a href="/de/datenschutz.html">Datenschutz</a></nav>
 
-<script>
-/* Diagnose (nur mit "dbg" im Hash, z. B. #s=uebersicht&dbg): rotes Feld oben links mit Schrittmarken und Fehlern aus kern.js */
-(function () {
-  if (!/dbg/.test((location.hash || "") + (location.search || ""))) return;
-  var lines = [], el = null;
-  window.__dbg = function (m) {
-    try {
-      if (!el) { el = document.createElement("div"); el.id = "dbg"; el.style.cssText = "position:fixed;left:0;top:0;z-index:2147483647;color:#d40235;background:rgba(255,255,255,.92);font:12px/1.35 monospace;padding:4px 6px;max-width:92vw;white-space:pre-wrap;pointer-events:none"; document.body.appendChild(el); }
-      lines.push((performance.now() / 1000).toFixed(2) + " " + m); if (lines.length > 18) lines.shift(); el.textContent = lines.join("
-");
-    } catch (e) { /* nichts */ }
-  };
-  window.addEventListener("error", function (ev) { window.__dbg("FEHLER " + ev.message + " | " + String(ev.error && ev.error.stack || "").split("
-").slice(0, 3).join(" | ")); });
-  window.addEventListener("unhandledrejection", function (ev) { var r = ev.reason; window.__dbg("FEHLER (Promise) " + (r && r.message || r) + " | " + String(r && r.stack || "").split("
-").slice(0, 3).join(" | ")); });
-  window.__dbg("Seite geladen");
-})();
-</script>
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
 <script type="module" src="./main.js"></script>
 </body>
