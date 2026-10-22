@@ -9,7 +9,8 @@
 <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
 <link rel="icon" href="favicon-16.png" sizes="16x16" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<title>Jan-Erik Andersen · Webentwicklung (Entwurf Seite)</title>
+<title>Jan-Erik Andersen · Webentwicklung, Shops und Betreuung</title>
+<meta name="description" content="Websites und WooCommerce-Shops, Anbindung an Ihre Systeme, Modernisierung und Betreuung. Jan-Erik Andersen, Raum Plau am See und remote.">
 <style>
 @font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4.woff2") format("woff2"); font-weight: 200 800; font-style: normal; }
 @font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4-Italic.woff2") format("woff2"); font-weight: 200 800; font-style: italic; }
@@ -86,16 +87,39 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .draft b { font-weight: 500; letter-spacing: .08em; text-transform: uppercase; font-size: 11px; background: var(--ink); color: #fff; padding: 7px 10px; border-radius: 2px; }
 
 /* Ohne WebGL: der ganze Seitentext als normale Seite, Kontaktwege als Links */
-.nogl main.sr { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; padding: 16vh var(--pad) 2rem; max-width: 42em; }
-.nogl main.sr h1 { font: 380 clamp(40px, 7vw, 88px)/1.05 "Newsreader N4", Georgia, serif; letter-spacing: -.018em; }
+.nogl main.sr { position: static; width: auto; height: auto; overflow: visible; clip: auto; white-space: normal; max-width: 52rem; padding: 16vh var(--pad) 2rem; color: #303033; font-family: "Newsreader N4", Georgia, serif; font-weight: 440; font-size: 17px; line-height: 1.5; hyphens: auto; -webkit-hyphens: auto; overflow-wrap: break-word; }
+.nogl main.sr section { margin-top: 3em; }
+.nogl main.sr section:first-child { margin-top: 0; }
+.nogl main.sr h1 { font: 380 clamp(44px, 7vw, 88px)/1.05 "Newsreader N4", Georgia, serif; letter-spacing: -.018em; hyphens: manual; }
 .nogl main.sr h1 i { font-weight: 340; }
-.nogl main.sr h2 { font: 400 clamp(30px, 4.6vw, 52px)/1.1 "Newsreader N4", Georgia, serif; margin: 2em 0 .5em; }
-.nogl main.sr h3 { font: 400 clamp(22px, 2.6vw, 28px)/1.2 "Newsreader N4", Georgia, serif; margin: 1.4em 0 .3em; }
-.nogl main.sr p, .nogl main.sr li, .nogl main.sr blockquote { font-size: 18px; margin-top: .7em; }
-.nogl main.sr .meta, .nogl main.sr cite, .nogl main.sr .y { display: block; font-size: 14px; color: var(--muted); font-style: normal; letter-spacing: .03em; }
-.nogl main.sr ol { list-style: none; }
-.nogl main.sr li small { display: block; font-size: 16px; }
-.nogl main.sr footer { margin-top: 3em; font-size: 14px; color: var(--muted); }
+.nogl main.sr h2 { font: 400 clamp(30px, 4.6vw, 52px)/1.12 "Newsreader N4", Georgia, serif; letter-spacing: -.01em; margin: 0 0 .5em; max-width: 18em; text-wrap: balance; }
+.nogl main.sr p, .nogl main.sr li, .nogl main.sr blockquote { font-size: 17px; font-weight: 440; line-height: 1.5; max-width: 34em; text-wrap: pretty; }
+.nogl main.sr p { margin-top: .8em; }
+.nogl main.sr p:first-child { margin-top: 0; }
+.nogl main.sr em { font-style: italic; font-weight: 480; }
+.nogl main.sr .meta { font: 500 12px/1.4 var(--sans); text-transform: uppercase; letter-spacing: .12em; color: #66666a; hyphens: manual; margin: 0 0 1.1em; }
+.nogl main.sr h1 + .meta { margin: 1.3em 0 1.6em; }
+.nogl main.sr ol { list-style: none; max-width: 34em; margin-top: 1.4em; border-top: 1px solid rgba(48,48,51,.18); }
+.nogl main.sr li { display: grid; grid-template-columns: 8.5em 1fr; column-gap: 1.2em; padding: .75em 0; border-bottom: 1px solid rgba(48,48,51,.18); }
+.nogl main.sr li .y { grid-row: 1 / span 2; padding-top: .35em; font: 500 12px/1.4 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: #66666a; }
+.nogl main.sr li .st { font-size: 1.12em; line-height: 1.3; }
+.nogl main.sr li small { font-size: .9em; line-height: 1.4; color: #303033; }
+.nogl main.sr blockquote { margin: 1.4em 0 0; padding-left: 1.1em; border-left: 2px solid rgba(48,48,51,.25); }
+.nogl main.sr blockquote p { font-size: 1em; }
+.nogl main.sr cite { display: block; margin-top: .9em; font: 500 12px/1.4 var(--sans); font-style: normal; text-transform: uppercase; letter-spacing: .1em; color: #66666a; }
+.nogl main.sr .fuss { font: 500 14px/1.5 var(--sans); color: #66666a; margin-top: 3em; hyphens: manual; }
+.nogl main.sr .fuss a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+@media (min-width: 700px) {
+  .nogl main.sr p, .nogl main.sr li, .nogl main.sr blockquote { font-size: 20px; }
+  .nogl main.sr li { grid-template-columns: 9.5em 1fr; }
+}
+@media (min-width: 1100px) {
+  .nogl main.sr p, .nogl main.sr li, .nogl main.sr blockquote { font-size: 21px; }
+}
+@media (max-width: 520px) {
+  .nogl main.sr li { grid-template-columns: 1fr; }
+  .nogl main.sr li .y { grid-row: auto; padding-top: 0; }
+}
 .nogl #stage, .nogl .controls, .nogl .hint, .nogl .track, .nogl .bar { display: none; }
 /* Kontaktwege als echte Links: im Bild klickbar (Raycast), im Dokument als Links für Tastatur und Screenreader */
 .kontaktwege { position: fixed; z-index: 5; left: 0; bottom: 0; }
@@ -126,67 +150,74 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
   <section id="start">
     <h1>Jan-Erik <i>Andersen</i></h1>
     <p class="meta">Webentwicklung · Raum Plau am See · remote</p>
-    <p>Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen. Agenturen holen mich als Entwickler ins Projekt, Unternehmen arbeiten direkt mit mir.</p>
+    <p>Ich entwickle <em>Websites und Onlineshops</em>. Ich binde sie an Ihre <em>übrigen Systeme</em> an und betreue sie, solange sie laufen. <em>Agenturen</em> holen mich als Entwickler ins Projekt, <em>Unternehmen</em> arbeiten direkt mit mir.</p>
   </section>
   <section id="arbeit">
-    <h2>Gerwing</h2>
-    <p class="meta">WooCommerce · seit 2023</p>
-    <h3>Pflaster nach Fläche bestellen</h3>
-    <p>Für Gerwing habe ich 2023 einen WooCommerce-Shop gebaut, der Pflastersteine, Terrassenplatten und Stufen so verkauft, wie man sie bestellt: nach Fläche.</p>
-    <p>Kunden geben ihre Quadratmeter ein, der Shop rechnet sie in ganze Steine um, ermittelt Gewicht und Fracht nach Postleitzahl und leitet die Bestellung an den zuständigen Händler weiter. Seitdem betreue ich den Shop und entwickle ihn laufend weiter.</p>
+    <p class="meta">Gerwing · WooCommerce · seit 2023</p>
+    <h2>Pflaster nach Fläche bestellen</h2>
+    <p>Für Gerwing habe ich 2023 einen <em>WooCommerce-Shop</em> gebaut, der Pflastersteine, Terrassenplatten und Stufen nach Fläche verkauft. Kunden geben ihre <em>Quadratmeter</em> ein, der Shop rechnet sie in <em>ganze Steine</em> um. Er ermittelt <em>Gewicht und Fracht</em> nach Postleitzahl. Dann leitet er die Bestellung an den zuständigen <em>Händler</em> weiter. Seitdem <em>betreue ich den Shop</em> und entwickle ihn laufend weiter.</p>
   </section>
   <section id="leistungen">
-    <h2>Was ich <i>mache</i></h2>
-    <h3>Betreuung und Absicherung</h3>
-    <p>Zwischen dem Bekanntwerden einer Lücke in einem WordPress-Plugin und dem ersten Angriff vergehen oft nur Stunden. Ich halte Ihre Seite deshalb laufend aktuell und sehe regelmäßig nach, ob sie sauber läuft.</p>
-    <h3>Modernisierung</h3>
-    <p>Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen. Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.</p>
-    <h3>Shops und Shop-Wechsel</h3>
-    <p>Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.</p>
-    <h3>Schnittstellen und eigene Werkzeuge</h3>
-    <p>Ich verbinde Websites und Shops mit CRM-, ERP- und Bewerbermanagementsystemen, bei WBG etwa mit Salesforce und Concludis. Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, entwickle ich eines, das passt.</p>
-    <h3>Gestaltung</h3>
-    <p>Für mich gehört Gestaltung zur Entwicklung. Ich entwerfe Erscheinungsbilder und Oberflächen selbst oder setze vorhandene Entwürfe sorgfältig um. Beispiele: [Take the Gloves Off, nach Zustimmung], das NOVUM-Cover und das Ausstellungsmotiv „100 Jahre Audi“.</p>
+    <h2>Betreuung und Absicherung</h2>
+    <p>Zwischen dem Bekanntwerden einer Lücke in einem WordPress-Plugin und dem ersten Angriff vergehen oft <em>nur Stunden</em>. Ich halte Ihre Seite deshalb <em>laufend aktuell</em>. Bei betreuten Websites sehe ich <em>monatlich</em> nach, ob sie sauber läuft.</p>
   </section>
-  <section id="weitere">
-    <h2>Weitere <i>Arbeit</i></h2>
+  <section id="modernisierung">
+    <h2>Modernisierung</h2>
+    <p>Viele WordPress-Seiten laufen seit Jahren auf <em>veralteten Themes, Plugins und PHP-Versionen</em>. Ich bringe sie <em>technisch und gestalterisch</em> auf den heutigen Stand. Dabei achte ich darauf, dass <em>Inhalte und Adressen erhalten bleiben</em>.</p>
+  </section>
+  <section id="shop">
+    <h2>Shops und Shop-Wechsel</h2>
+    <p>Ich baue WooCommerce-Shops für Produkte, die <em>in kein Standardformular passen</em>, etwa mit Mengen nach Fläche oder Fracht nach Entfernung. Wer bei Shopify mit wachsendem Umsatz immer höhere <em>Gebühren</em> zahlt, kann zu <em>WooCommerce wechseln</em>. Ich <em>rechne vorher durch</em>, ob sich das lohnt. Dann ziehe ich <em>Produkte, Kunden und Bestellungen</em> um.</p>
+  </section>
+  <section id="schnittstellen">
+    <h2>Schnittstellen und eigene Werkzeuge</h2>
+    <p>Ich verbinde <em>Websites und Shops</em> mit <em>CRM-, ERP- und Bewerbermanagementsystemen</em>. Wo ein gekauftes Werkzeug nicht zu Ihren Abläufen passt, <em>entwickle ich eines, das passt</em>.</p>
+  </section>
+  <section id="wbg">
     <p class="meta">2023 bis 2025 · für die Runden Group</p>
-    <h3>WBG Pooling</h3>
-    <p>Ein Industrie- und Vertriebsportal mit 360-Grad-Produktansichten, einem geschützten Bereich für den Vertrieb und Anbindungen an Salesforce und Concludis.</p>
-    <p class="meta">Ehrenamtlich</p>
-    <h3>Take the Gloves Off</h3>
-    <p>[Ein Satz zum Erscheinungsbild, nach Abstimmung]</p>
-    <p>Außerdem: Onkologie Laatzen, Mindblossom und Soundhealing Hamburg, der digitale Wirkungsbericht für Seniorpartner in School, Bäckerei Behrens. [je ein Satz nach erneuter Sichtung]</p>
+    <h2>WBG Pooling</h2>
+    <p>WBG Pooling ist ein <em>Industrie- und Vertriebsportal</em> mit <em>360-Grad-Produktansichten</em>. Es hat einen <em>geschützten Bereich</em> für den Vertrieb und <em>Anbindungen an Salesforce und Concludis</em>.</p>
+  </section>
+  <section id="gestaltung">
+    <h2>Gestaltung</h2>
+    <p>Für mich gehört <em>Gestaltung zur Entwicklung</em>. Ich <em>entwerfe Erscheinungsbilder und Oberflächen selbst</em> oder setze vorhandene Entwürfe sorgfältig um. Beispiele sind das NOVUM-Cover und das Ausstellungsmotiv „100 Jahre Audi“.</p>
+  </section>
+  <section id="ausserdem">
+    <h2>Außerdem</h2>
+    <p>Außerdem habe ich für <em>Onkologie Laatzen</em>, <em>Mindblossom und Soundhealing Hamburg</em> sowie für <em>Seniorpartner in School</em> und die <em>Bäckerei Behrens</em> gearbeitet.</p>
   </section>
   <section id="arbeitsweise">
-    <h2>Wie ich <i>arbeite</i></h2>
-    <p>Ich arbeite mit aktuellen KI-Werkzeugen und habe dafür eigene Abläufe entwickelt. Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge. Entscheidungen und Verantwortung bleiben bei mir, und ausgeliefert wird nur, was ich geprüft habe.</p>
+    <p class="meta">Wie ich arbeite</p>
+    <h2>Allein, wofür früher ein Team nötig war</h2>
+    <p>Ich arbeite mit aktuellen <em>KI-Werkzeugen</em> und habe dafür <em>eigene Abläufe</em> entwickelt. Damit schaffe ich <em>allein</em> Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge. Entscheidungen und Verantwortung bleiben bei mir, und <em>ausgeliefert wird nur, was ich geprüft habe</em>.</p>
   </section>
   <section id="werdegang">
+    <p class="meta">Acht Stationen, die jüngste oben</p>
     <h2>Werdegang</h2>
     <ol>
-      <li><span class="y">seit 2023</span>Gerwing<small>Umsetzung und laufende Betreuung des Onlineshops</small></li>
-      <li><span class="y">2023 bis 2025</span>Runden Group<small>WBG Pooling und viele weitere Websites und Anwendungen der Firmengruppe</small></li>
-      <li><span class="y">2017 bis 2023</span>Tangram Werbeagentur<small>Frontend-Entwicklung, unter anderem für Nissen, BIG Arbeitsschutz und EMPORE</small></li>
-      <li><span class="y">2017</span>YOOtheme<small>Support Management</small></li>
-      <li><span class="y">seit 2010</span>Freiberufliche Webprojekte<small>seit 2018 als Andersen Webworks</small></li>
-      <li><span class="y">2007 bis 2010</span>HTK Hamburg<small>Zertifikat Multimedia Design</small></li>
-      <li><span class="y">2010 bis 2017</span>Games<small>Spielprototypen in Flash und Haxe, danach Qualitätssicherung bei Goodgame Studios und Deep Silver FISHLABS</small></li>
-      <li><span class="y">2000 bis 2006</span>Pixel Arrays<small>erste Selbstständigkeit</small></li>
+      <li><span class="y">2000 bis 2006</span> <span class="st">Pixel Arrays</span> <small>erste Selbstständigkeit</small></li>
+      <li><span class="y">2007 bis 2010</span> <span class="st">HTK Hamburg</span> <small>Zertifikat Multimedia Design</small></li>
+      <li><span class="y">2010 bis 2017</span> <span class="st">Games</span> <small>Spielprototypen in Flash und Haxe, danach Qualitätssicherung bei Goodgame Studios und Deep Silver FISHLABS</small></li>
+      <li><span class="y">seit 2010</span> <span class="st">Freiberufliche Webprojekte</span> <small>seit 2018 als Andersen Webworks</small></li>
+      <li><span class="y">2017</span> <span class="st">YOOtheme</span> <small>Support Management</small></li>
+      <li><span class="y">2017 bis 2023</span> <span class="st">Tangram Werbeagentur</span> <small>Frontend-Entwicklung, unter anderem für Nissen, BIG Arbeitsschutz und EMPORE</small></li>
+      <li><span class="y">2023 bis 2025</span> <span class="st">Runden Group</span> <small>WBG Pooling und viele weitere Websites und Anwendungen der Firmengruppe</small></li>
+      <li><span class="y">seit 2023</span> <span class="st">Gerwing</span> <small>Umsetzung und laufende Betreuung des Onlineshops</small></li>
     </ol>
   </section>
   <section id="stimmen">
-    <h2>Stimmen</h2>
-    <blockquote><p>Seniorpartner in School (SiS) ist eine bundesweit agierende Sozialorganisation. Ein gut aufgestellter digitaler Wirkungsbericht ist für unsere Arbeit wichtig. Jan-Erik und die kompetente Texterin Annemarie haben das für uns neue Format professionell und barrierefreundlich aufgesetzt. Super Teamarbeit, verlässlich und engagiert. SiS sagt DANKE!</p><cite>Karin, Seniorpartner in School · Google-Bewertung</cite></blockquote>
-    <blockquote><p>Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich mit Andersen Webworks seit nun mehreren Jahren einen zuverlässigen Partner gefunden zu haben. Professionelles Webdesign das mich immer wieder überrascht, meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff, so setzt man sich von der Konkurrenz ab!</p><cite>Corvin Jädicke, ai-coustics · Google-Bewertung</cite></blockquote>
+    <p class="meta">Stimmen</p>
+    <h2>Was Kunden sagen</h2>
+    <blockquote><p>Seniorpartner in School (SiS) ist eine bundesweit agierende Sozialorganisation. Ein gut aufgestellter <em>digitaler Wirkungsbericht</em> ist für unsere Arbeit wichtig. Jan-Erik und die kompetente Texterin Annemarie haben das für uns neue Format <em>professionell und barrierefreundlich</em> aufgesetzt. Super Teamarbeit, <em>verlässlich und engagiert</em>. SiS sagt <em>DANKE!</em></p><cite>Karin, Seniorpartner in School · Google-Bewertung</cite></blockquote>
+    <blockquote><p>Berufsbedingt habe ich schon mit verschiedenen Mediendesignern zusammengearbeitet und freue mich mit Andersen Webworks seit nun mehreren Jahren <em>einen zuverlässigen Partner</em> gefunden zu haben. Professionelles Webdesign das mich <em>immer wieder überrascht</em>, meine Vorstellungen werden ernst genommen und bekommen von Herrn Andersen den letzten Schliff, so setzt man sich von der Konkurrenz ab!</p><cite>Corvin Jädicke, ai-coustics · Google-Bewertung</cite></blockquote>
   </section>
   <section id="agenturen">
-    <h2>Für <i>Agenturen</i></h2>
-    <p>Ich steige in laufende Projekte ein, arbeite mich in bestehende Themes und Plugins ein und halte mich an Ihre Abläufe und Werkzeuge.</p>
-    <p>Konditionen und freie Kapazität nenne ich Ihnen auf Anfrage.</p>
+    <h2>Für Agenturen</h2>
+    <p>Ich <em>steige in laufende Projekte ein</em>. Ich arbeite mich in bestehende <em>Themes und Plugins</em> ein und halte mich an <em>Ihre Abläufe und Werkzeuge</em>. <em>Konditionen und freie Kapazität</em> nenne ich Ihnen auf Anfrage.</p>
   </section>
   <section id="kontakt">
-    <h2>Schreiben Sie mir, <i>worum es geht.</i></h2>
+    <h2>Schreiben Sie mir, worum es geht.</h2>
+    <p class="fuss">Raum Plau am See · remote · <a href="/de/impressum.html">Impressum</a> · <a href="/de/datenschutz.html">Datenschutz</a></p>
   </section>
 </main>
 <nav class="kontaktwege" aria-label="Kontakt">

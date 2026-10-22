@@ -20,7 +20,8 @@ async function bilder() {
 }
 const canvas = document.getElementById("stage");
 let renderer = null;
-try { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); if (!renderer.getContext()) renderer = null; } catch (e) { renderer = null; }
+// #nogl: Prüfhilfe für die Seite ohne WebGL
+try { if (!/(^|[#&])nogl\b/.test(location.hash)) { renderer = new THREE.WebGLRenderer({ canvas, antialias: true }); if (!renderer.getContext()) renderer = null; } } catch (e) { renderer = null; }
 if (!renderer) document.documentElement.classList.add("nogl");
 else {
   const vorbild = document.querySelector(".vorbild");
@@ -41,6 +42,6 @@ else {
     };
     lage(); addEventListener("resize", lage);
     const lbl = document.getElementById("szene");
-    if (lbl) setInterval(() => { const st = api.state(); if (st) { lbl.textContent = (st.kind === "t" ? "→ " : "") + api.labelAt(api.p()); } }, 250);
+    if (lbl) setInterval(() => { const st = api.state(); if (st) lbl.textContent = api.labelAt(api.p()); }, 250);
   }).catch(e => { console.error(e); document.documentElement.classList.add("nogl"); });
 }
