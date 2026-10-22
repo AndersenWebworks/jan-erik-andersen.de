@@ -17,7 +17,7 @@
 
 const ink = a => `rgba(48,48,51,${a})`;
 const RED = "#d40235", MUTED = "#66666a";
-const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2 };
+const IMPRINT = { fill: "#edeff5", col: "#c9cbd1", line: 2.2 };
 function rr(x, X, Y, w, h, r) { x.beginPath(); x.roundRect(X, Y, w, h, r); }
 
 // ---------- Bildschirminhalte (Koordinaten 1000 × 625) ----------
@@ -163,8 +163,8 @@ function shackleArt(x, W, H) {
 export default function (K) {
   const { F, R, V, COL, Q, sm, mech, win, clamp, THREE, narrow: N } = K;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const METAL = c3("#dcd7cd"), FACE = c3("#f8f6f1"), DEV = c3("#e4e0d6"), DECK = c3("#f0ede6"), REDC = c3("#d40235"), PLATE = c3("#e9e4d8");
-  const WALL = c3("#e1dccf"), PROD = c3("#efe9dc"), PRODT = c3("#f7f3ea"), BOARD = c3("#f8f6f1");
+  const METAL = c3("#d4d7dc"), FACE = c3("#f3f6fb"), DEV = c3("#dde0e5"), DECK = c3("#eaedf2"), REDC = c3("#d40235"), PLATE = c3("#e1e4e9");
+  const WALL = c3("#d9dce1"), PROD = c3("#e6e9ee"), PRODT = c3("#f0f3f8"), BOARD = c3("#f3f6fb");
 
   // ---------- Sätze auf dem Leporello (wörtlich aus index.html) ----------
   // Zeilenumbruch nur an Wortgrenzen, möglichst gleichmäßig lange Zeilen
@@ -238,7 +238,7 @@ export default function (K) {
   // Maße: Breite von DEVX[0] − .5 bis hinter die Login-Tafel, hinten bis zur Tiefe der Deckel (DD), vorn so tief, dass der Adapter (Auffaltung bis z 1,55)
   // und das Kabelbündel samt Rückzug des ERP-Steckers (Stecker zurück bis z 2,32, Kurve ab 2,5) noch auf dem Brett liegen. Die Zarge trägt keinen Text.
   const BH = .5;
-  const BRDC = c3("#e6e0d2"), ZARC = c3("#e1d9c9");
+  const BRDC = c3("#dde0e5"), ZARC = c3("#d7d9df");
   F.part("brett", TT.bd.line[0], TT.bd.line[1]);
   const bOp = { over: .04 }, bt0 = TT.bd.lift[0], bd0 = TT.bd.lift[1];
   const zarge = K.panel(R, [BX0, BZF], [BX1, BZF], [0, 1], bt0, bd0, Q, bOp);
@@ -258,7 +258,7 @@ export default function (K) {
   const LH = Math.max(prA.h, prB.h, prH.h + prC.h - .05) + .8, topY = LH - .3;
   const d0 = [Math.cos(hh), -Math.sin(hh)], eb = [-Math.sin(hh), -Math.cos(hh)];
   const lp = (u, v) => [A0[0] + d0[0] * u + eb[0] * v, A0[1] + d0[1] * u + eb[1] * v];
-  const PG = ["#fbfaf6", "#f1eee6", "#fbfaf6"].map(c3);
+  const PG = ["#f6f8fe", "#ebedf3", "#f6f8fe"].map(c3);
   F.part("leporello", TT.lp.line[0], TT.lp.line[1], { lift: .014 });
   const p0 = K.panel(R, lp(0, 0), lp(LW, 0), eb, TT.lp.p0[0], TT.lp.p0[1], Q, { over: .05, lv: 1 });
   K.rect(p0, 0, 0, LW, LH, PG[0], .5);
@@ -295,12 +295,12 @@ export default function (K) {
   function cable(pts, stages, opt = {}) {
     const curve = new THREE.CatmullRomCurve3(pts, false, "centripetal", .5), total = curve.getLength(), TS = 700, RS = 10;
     const geo = new THREE.TubeGeometry(curve, TS, opt.r || .042, RS, false);
-    const tube = K.add(new THREE.Mesh(geo, K.paperMaterial("#8e8981")));
+    const tube = K.add(new THREE.Mesh(geo, K.paperMaterial("#88898d")));
     const plug = new THREE.Group();
     const body = new THREE.Mesh(new THREE.BoxGeometry(.46, .3, .4), K.paperMaterial("#4b4a4e")); body.position.set(0, 0, -.42);
-    const neckp = new THREE.Mesh(new THREE.BoxGeometry(.26, .2, .1), K.paperMaterial("#6a6862")); neckp.position.set(0, 0, -.67);
+    const neckp = new THREE.Mesh(new THREE.BoxGeometry(.26, .2, .1), K.paperMaterial("#66686b")); neckp.position.set(0, 0, -.67);
     plug.add(body, neckp);
-    for (const sx of [-.1, .1]) { const pr = new THREE.Mesh(new THREE.BoxGeometry(.07, .04, .22), K.paperMaterial("#c9c4b8")); pr.position.set(sx, 0, -.11); plug.add(pr); }
+    for (const sx of [-.1, .1]) { const pr = new THREE.Mesh(new THREE.BoxGeometry(.07, .04, .22), K.paperMaterial("#c1c4c9")); pr.position.set(sx, 0, -.11); plug.add(pr); }
     for (const o of [body]) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry), new THREE.LineBasicMaterial({ color: 0x303033, transparent: true, opacity: .45, depthWrite: false })); o.add(e); }
     K.add(plug);
     const tmp = new THREE.Vector3(), tg = new THREE.Vector3(), ZERO = new THREE.Vector3(), UPV = new THREE.Vector3(0, 1, 0), LM = new THREE.Matrix4();

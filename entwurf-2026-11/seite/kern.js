@@ -23,6 +23,136 @@
 import * as THREE from "three";
 import { SCHRIFTEN } from "./fonts/schriften.js";
 import { Model, kit, paperMaterial, edgeMaterial, rissMaterial, geruestMaterial, gridOn, frameOn, FAR, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
+import { EffectComposer } from "./vendor/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "./vendor/addons/postprocessing/RenderPass.js";
+import { ShaderPass } from "./vendor/addons/postprocessing/ShaderPass.js";
+import { OutputPass } from "./vendor/addons/postprocessing/OutputPass.js";
+import { SMAAPass } from "./vendor/addons/postprocessing/SMAAPass.js";
+import { Pass, FullScreenQuad } from "./vendor/addons/postprocessing/Pass.js";
+
+// ---------- Nachbearbeitung (Palette „Mirror's Edge mit Papier“, Erik 22.10.) ----------
+// Alle Stellschrauben an einer Stelle. Voll (Desktop): Umgebungsverdeckung (SSAO aus der Tiefe, halbe Auflösung) → Belichtung, kühle Abstimmung, Vignette →
+// Tonemapping → SMAA. Leicht (Handy, schwache Grafik): nur Tonemapping und SMAA. Keine Tiefenunschärfe, keine Bewegungsunschärfe,
+// keine chromatische Aberration, keine Linsenreflexe. Hash fx=aus|leicht|voll erzwingt eine Stufe (Prüfung).
+const FX = {
+  exposure: 1.2,                     // Belichtung nur in der leichten Stufe (Handy)
+  lift: .45,                         // Überstrahlung (voll): helle Flächen werden um bis zu diesen Anteil angehoben (ab Helligkeit .5 weich zugeschaltet), Dunkles und Schrift bleiben
+  tone: THREE.NeutralToneMapping,    // Khronos PBR Neutral: Farben (das Rot) bleiben, nur die Lichter werden weich zusammengeschoben
+  aoStrength: .28, aoRadius: .3, aoBias: .02, aoFade: [45, 110], aoTint: [.50, .62, .84],     // Stärke, Radius (Welteinheiten), Bias, Ausblendung nach Ferne, Farbe der Verdeckung (bläulich)
+  tint: [.99, 1.0, 1.025],           // kühle Abstimmung (Multiplikation im linearen Licht)
+  vignette: .05                      // Abdunklung in den Ecken (Anteil), kaum sichtbar
+};
+const FSQ_VERT = `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+// Umgebungsverdeckung nur aus der Tiefe des Hauptbildes (kein zweiter Szenendurchlauf): Position im Blickraum aus der Tiefe, Normale aus den Nachbarn,
+// 12 Proben in der Halbkugel, je Pixel gedreht; danach tiefenbewusstes Weichzeichnen und Mischung ins Bild.
+class AOPass extends Pass {
+  constructor(camera) {
+    super();
+    this.camera = camera; this.needsSwap = true;
+    const mk = (frag, uniforms) => new THREE.ShaderMaterial({ uniforms, vertexShader: FSQ_VERT, fragmentShader: frag, depthTest: false, depthWrite: false });
+    const kern = []; for (let i = 0; i < 12; i++) {
+      const a = i * 2.399963, z = (i + .5) / 12, r = Math.sqrt(1 - z * z), s = .25 + .75 * Math.pow((i + 1) / 12, 2);
+      kern.push(new THREE.Vector3(Math.cos(a) * r * s, Math.sin(a) * r * s, z * s));
+    }
+    this.aoMat = mk(`
+      uniform sampler2D tDepth; uniform mat4 uProj; uniform mat4 uProjInv; uniform vec2 uTexel; uniform float uRadius; uniform float uBias; uniform vec3 uK[12];
+      varying vec2 vUv;
+      vec3 vp(vec2 uv) { float d = texture2D(tDepth, uv).r; vec4 c = uProjInv * vec4(uv * 2.0 - 1.0, d * 2.0 - 1.0, 1.0); return c.xyz / c.w; }
+      void main() {
+        float d0 = texture2D(tDepth, vUv).r;
+        if (d0 >= 0.99999) { gl_FragColor = vec4(1.0, 1e4, 0.0, 1.0); return; }
+        vec3 P = vp(vUv);
+        vec3 pr = vp(vUv + vec2(uTexel.x, 0.0)), pl = vp(vUv - vec2(uTexel.x, 0.0)), pu = vp(vUv + vec2(0.0, uTexel.y)), pd = vp(vUv - vec2(0.0, uTexel.y));
+        vec3 dx = abs(pr.z - P.z) < abs(P.z - pl.z) ? pr - P : P - pl;
+        vec3 dy = abs(pu.z - P.z) < abs(P.z - pd.z) ? pu - P : P - pd;
+        vec3 N = normalize(cross(dx, dy)); if (dot(N, -P) < 0.0) N = -N;
+        float ang = 6.2831853 * fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715))));
+        vec3 T0 = normalize(abs(N.y) < 0.9 ? cross(N, vec3(0.0, 1.0, 0.0)) : cross(N, vec3(1.0, 0.0, 0.0))), B0 = cross(N, T0);
+        vec3 T = T0 * cos(ang) + B0 * sin(ang), B = cross(N, T);
+        float occ = 0.0;
+        for (int i = 0; i < 12; i++) {
+          vec3 s = uK[i]; vec3 sp = P + (T * s.x + B * s.y + N * s.z) * uRadius;
+          vec4 pc = uProj * vec4(sp, 1.0); vec2 suv = pc.xy / pc.w * 0.5 + 0.5;
+          if (suv.x < 0.0 || suv.x > 1.0 || suv.y < 0.0 || suv.y > 1.0) continue;
+          float sz = vp(suv).z;
+          float range = smoothstep(0.0, 1.0, uRadius / max(abs(P.z - sz), 1e-4));
+          occ += (sz >= sp.z + uBias * (1.0 + abs(P.z) * 0.02) ? 1.0 : 0.0) * range;
+        }
+        gl_FragColor = vec4(1.0 - occ / 12.0, -P.z, 0.0, 1.0);
+      }`, { tDepth: { value: null }, uProj: { value: new THREE.Matrix4() }, uProjInv: { value: new THREE.Matrix4() }, uTexel: { value: new THREE.Vector2() }, uRadius: { value: FX.aoRadius }, uBias: { value: FX.aoBias }, uK: { value: kern } });
+    this.blurMat = mk(`
+      uniform sampler2D tAO; uniform vec2 uDir;
+      varying vec2 vUv;
+      void main() {
+        vec2 c = texture2D(tAO, vUv).rg; float sum = 0.0, wsum = 0.0;
+        for (int i = -3; i <= 3; i++) {
+          vec2 s = texture2D(tAO, vUv + uDir * float(i)).rg;
+          float w = exp(-float(i * i) / 5.0) * exp(-abs(s.g - c.g) / max(0.04 * c.g, 0.02));
+          sum += s.r * w; wsum += w;
+        }
+        gl_FragColor = vec4(sum / wsum, c.g, 0.0, 1.0);
+      }`, { tAO: { value: null }, uDir: { value: new THREE.Vector2() } });
+    this.mixMat = mk(`
+      uniform sampler2D tDiffuse; uniform sampler2D tAO; uniform float uStrength; uniform vec3 uTint; uniform vec2 uFade;
+      varying vec2 vUv;
+      void main() {
+        vec4 c = texture2D(tDiffuse, vUv); vec2 a = texture2D(tAO, vUv).rg;
+        float k = (1.0 - a.r) * uStrength * (1.0 - smoothstep(uFade.x, uFade.y, a.g));
+        gl_FragColor = vec4(c.rgb * mix(vec3(1.0), uTint, clamp(k, 0.0, 1.0)), c.a);
+      }`, { tDiffuse: { value: null }, tAO: { value: null }, uStrength: { value: FX.aoStrength }, uTint: { value: new THREE.Vector3(...FX.aoTint) }, uFade: { value: new THREE.Vector2(...FX.aoFade) } });
+    this.fsq = new FullScreenQuad(this.aoMat);
+    const o = { type: THREE.HalfFloatType, minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, depthBuffer: false };
+    this.rtA = new THREE.WebGLRenderTarget(1, 1, o); this.rtB = new THREE.WebGLRenderTarget(1, 1, o);
+  }
+  setSize(w, h) { this.rtA.setSize(Math.max(1, w >> 1), Math.max(1, h >> 1)); this.rtB.setSize(Math.max(1, w >> 1), Math.max(1, h >> 1)); }
+  render(renderer, writeBuffer, readBuffer) {
+    const cam = this.camera, f = this.fsq;
+    this.aoMat.uniforms.tDepth.value = readBuffer.depthTexture;
+    this.aoMat.uniforms.uProj.value.copy(cam.projectionMatrix); this.aoMat.uniforms.uProjInv.value.copy(cam.projectionMatrixInverse);
+    this.aoMat.uniforms.uTexel.value.set(2 / readBuffer.width, 2 / readBuffer.height);
+    f.material = this.aoMat; renderer.setRenderTarget(this.rtA); f.render(renderer);
+    const tx = 1 / this.rtA.width, ty = 1 / this.rtA.height;
+    this.blurMat.uniforms.tAO.value = this.rtA.texture; this.blurMat.uniforms.uDir.value.set(tx, 0);
+    f.material = this.blurMat; renderer.setRenderTarget(this.rtB); f.render(renderer);
+    this.blurMat.uniforms.tAO.value = this.rtB.texture; this.blurMat.uniforms.uDir.value.set(0, ty);
+    renderer.setRenderTarget(this.rtA); f.render(renderer);
+    this.mixMat.uniforms.tDiffuse.value = readBuffer.texture; this.mixMat.uniforms.tAO.value = this.rtA.texture;
+    f.material = this.mixMat; renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer); f.render(renderer);
+  }
+  dispose() { this.rtA.dispose(); this.rtB.dispose(); this.aoMat.dispose(); this.blurMat.dispose(); this.mixMat.dispose(); this.fsq.dispose(); }
+}
+const GradeShader = {
+  uniforms: { tDiffuse: { value: null }, uLift: { value: FX.lift }, uTint: { value: new THREE.Vector3(...FX.tint) }, uVig: { value: FX.vignette } },
+  vertexShader: FSQ_VERT,
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float uLift; uniform vec3 uTint; uniform float uVig; varying vec2 vUv;
+    void main() {
+      vec4 c = texture2D(tDiffuse, vUv);
+      float v = 1.0 - uVig * smoothstep(0.25, 0.75, length(vUv - 0.5));
+      float l = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
+      gl_FragColor = vec4(c.rgb * (1.0 + uLift * smoothstep(0.5, 1.0, l)) * uTint * v, c.a);
+    }`
+};
+function makePost(renderer, scene, camera, W, H, pr) {
+  renderer.toneMapping = FX.tone;
+  const dt = new THREE.DepthTexture(W * pr, H * pr); dt.type = THREE.UnsignedIntType;
+  const rt = new THREE.WebGLRenderTarget(W * pr, H * pr, { type: THREE.HalfFloatType, depthTexture: dt, depthBuffer: true });
+  const composer = new EffectComposer(renderer, rt);
+  composer.setPixelRatio(pr); composer.setSize(W, H);
+  const ao = new AOPass(camera), grade = new ShaderPass(GradeShader);
+  const out = new OutputPass(), smaa = new SMAAPass(W * pr, H * pr);
+  for (const p of [new RenderPass(scene, camera), ao, grade, out, smaa]) composer.addPass(p);
+  const full = [ao, grade];
+  let lastMode = "";
+  return {
+    composer,
+    resize(w, h, ratio) { composer.setPixelRatio(ratio); composer.setSize(w, h); },
+    // mode: "voll" | "leicht"
+    draw(mode) {
+      if (mode !== lastMode) { lastMode = mode; for (const p of full) p.enabled = mode === "voll"; renderer.toneMappingExposure = mode === "voll" ? 1 : FX.exposure; }
+      composer.render();
+    }
+  };
+}
 
 const win = (b, t0, d) => clamp((b - t0) / d, 0, 1);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
@@ -66,14 +196,15 @@ export function seite(renderer, SEQ, opt = {}) {
   // Hintergrund, Schatten und die Richtung des Lichts für die Schatten.
   const PAL = {
     hazeStart: "#ffffff",         // Dunst und Hintergrund am Startbild (wie das HTML-Vorbild)
-    hazeNear: "#f6f9fc",          // Dunst der mittleren Ferne (ab den ersten Scrollschritten)
-    hazeFar: "#d8ecfb",           // Dunst am Horizont, zugleich Hintergrundfarbe: sehr helles Himmelblau, kein Himmel, keine Wolken
-    shadow: "#dde6f1",            // Schattenfarbe (bläulich): das Papier wird im Schatten mit ihr multipliziert
-    shadowStrength: .85,          // Mischung zur Schattenfarbe im vollen Schatten (0 … 1)
-    ground: "#efebe3",            // Boden (Tisch) unter den Parzellen
-    plate: "#faf8f3",             // Bogen jeder Parzelle
-    gridInk: "#303033",           // Linienfarbe des Rasters am Boden
-    gridMinor: .075, gridMajor: .15,      // Deckkraft der feinen Linien (alle 2 Einheiten) und der kräftigen (alle 10)
+    hazeNear: "#f3f8fd",          // Dunst der mittleren Ferne (ab den ersten Scrollschritten)
+    hazeFar: "#dfedf9",           // Dunst am Horizont, zugleich Hintergrundfarbe: sehr helles Himmelblau, kein Himmel, keine Wolken
+    shadow: "#d6e1ee",            // Schattenfarbe (bläulich): das Papier wird im Schatten mit ihr multipliziert
+    shadowStrength: .5,          // Mischung zur Schattenfarbe im vollen Schatten (0 … 1)
+    ground: "#e7edf4",            // Boden (Tisch) unter den Parzellen
+    plate: "#f8fafd",             // Bogen jeder Parzelle
+    gridInk: "#6a7584",           // Linienfarbe des Rasters am Boden
+    gridMinor: .09, gridMajor: .17,      // Deckkraft der feinen Linien (alle 2 Einheiten) und der kräftigen (alle 10)
+    penumbra: 1.8,                // Weichzeichner der Schattenkante in Texeln der Schattenkarte (klein = klarer umrissen)
     light: [-.45, .8, .5]         // Richtung zum Licht (Welt), bestimmt die Richtung der Schatten
   };
   // Gemeinsame Uniforms aller Papier-Shader. uHaze/uHazeF: Dunstfarbe nah und fern, uSM/uSMM/uSMP: Schattenkarte (Tiefe aus Richtung des Lichts), ihre Matrix
@@ -95,7 +226,7 @@ export function seite(renderer, SEQ, opt = {}) {
       float rot = fract(52.9829189 * fract(dot(gl_FragCoord.xy, vec2(0.06711056, 0.00583715)))) * 6.2831853, s = 0.0;
       for (int i = 0; i < 12; i++) {
         float r = sqrt((float(i) + .5) / 12.0), a = float(i) * 2.399963 + rot;
-        float d = texture2D(uSM, sc.xy + vec2(cos(a), sin(a)) * r * 5.0 * uSMP.y).r;
+        float d = texture2D(uSM, sc.xy + vec2(cos(a), sin(a)) * r * ${PAL.penumbra.toFixed(2)} * uSMP.y).r;
         s += step(d, sc.z - uSMP.w);
       }
       return s / 12.0 * smoothstep(0.0, .06, e) * smoothstep(.2, .6, n.y);
@@ -112,7 +243,7 @@ export function seite(renderer, SEQ, opt = {}) {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, .1, 300);
   const maxAniso = renderer.capabilities.getMaxAnisotropy();
-  const INK = "#303033", RED = "#d40235", IMPRINT = "#e8e4db";
+  const INK = "#303033", RED = "#d40235", IMPRINT = "#e1e4e9";
 
   // ---------- Druck (Canvas-Textur auf der Fläche) ----------
   // Auflösung der Drucke: buildScale 1 = volle Pixeldichte, kleiner = Canvas von Anfang an klein gezeichnet (Zeichnen unter ctx.scale, die Maße
@@ -162,6 +293,7 @@ export function seite(renderer, SEQ, opt = {}) {
   // ---------- Ansicht ----------
   const hashQ = () => new URLSearchParams((location.hash || "").replace(/^#/, ""));
   const fq = hashQ();
+  let post = null, fxFailed = false;                              // Nachbearbeitung (makePost), siehe drawScene()
   const START_FULL = !fq.get("p") && !fq.get("s");                 // Szene 1 in voller Auflösung bauen, nur wenn die Seite vorn beginnt
   const FORCE = fq.get("w") && fq.get("h") ? { w: +fq.get("w"), h: +fq.get("h") } : null;
   const VW = () => FORCE ? FORCE.w : innerWidth, VH = () => FORCE ? Math.min(FORCE.h, innerHeight) : innerHeight;
@@ -274,7 +406,7 @@ export function seite(renderer, SEQ, opt = {}) {
         return mesh;
       },
       // Bogen: dünne Papierplatte, Oberseite y = 0, feine Haarkante
-      sheet(x0, x1, z0, z1, col = "#faf8f3", from = -1) {
+      sheet(x0, x1, z0, z1, col = "#f5f8fd", from = -1) {
         const g = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, .03, z1 - z0), paperMaterial(col));
         g.position.set((x0 + x1) / 2, -.0152, (z0 + z1) / 2);
         const e = new THREE.LineSegments(new THREE.EdgesGeometry(g.geometry), new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: .32, depthWrite: false }));
@@ -1560,6 +1692,7 @@ const CHASE_END = 8;                                                  // letztes
     if (FORCE) Object.assign(canvas.style, { width: w + "px", height: h + "px", left: "50%", top: "0", transform: "translateX(-50%)", outline: "1px solid #999" });
     renderer.setPixelRatio(lowRatio ? 1.25 : Math.min(devicePixelRatio || 1, 2));
     renderer.setSize(w, h, false);
+    if (post) post.resize(w, h, renderer.getPixelRatio());
     aspect = w / h;
     camera.aspect = aspect; camera.updateProjectionMatrix();
     // Lesestellungen hängen von der Fenstergröße ab: Bahnen neu (Lage der Szenen bleibt)
@@ -1592,6 +1725,18 @@ const CHASE_END = 8;                                                  // letztes
   // übrige Szenen im Hintergrund nacheinander bauen, erst nach dem ersten Bild (das Startbild steht vorher)
   function more() { const n = INST.find(I => !I.built); if (!n) return; build(n); setTimeout(more, 40); }
 
+  // Zeichnen mit Nachbearbeitung (FX): Stufe voll am Desktop, leicht (nur Tonemapping + SMAA) hochkant/Handy und bei Software-Rendering, aus per Hash fx=aus.
+  // Gelingt der Aufbau nicht, wird ohne Nachbearbeitung gezeichnet (wie bisher).
+  const weakGpu = (() => { try { const gl = renderer.getContext(), e = gl.getExtension("WEBGL_debug_renderer_info"); return !!e && /swiftshader|llvmpipe|software|microsoft basic/i.test(String(gl.getParameter(e.UNMASKED_RENDERER_WEBGL))); } catch (e) { return false; } })();
+  const fxMode = () => { const q = fq.get("fx"); if (q === "aus" || q === "leicht" || q === "voll") return q; return narrow || aspect < 1 || weakGpu ? "leicht" : "voll"; };
+  function drawScene() {
+    const m = fxMode();
+    if (m !== "aus" && !fxFailed) {
+      try { if (!post) post = makePost(renderer, scene, camera, VW(), VH(), renderer.getPixelRatio()); post.draw(m); return; }
+      catch (e) { console.error("Nachbearbeitung abgeschaltet:", e); fxFailed = true; post = null; renderer.setRenderTarget(null); }
+    }
+    renderer.toneMapping = THREE.NoToneMapping; renderer.setRenderTarget(null); renderer.render(scene, camera);
+  }
   let last = performance.now(), first = true, drawKey = "";
   function frameStep(now) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
@@ -1611,14 +1756,14 @@ const CHASE_END = 8;                                                  // letztes
     if (bar) bar.style.width = (p * 100).toFixed(2) + "%";
     syncMapUi();
     const lr = mNow(st) > .6 && (devicePixelRatio || 1) > 1.25;
-    if (lr !== lowRatio) { lowRatio = lr; renderer.setPixelRatio(lr ? 1.25 : Math.min(devicePixelRatio || 1, 2)); renderer.setSize(VW(), VH(), false); drawKey = ""; }
+    if (lr !== lowRatio) { lowRatio = lr; renderer.setPixelRatio(lr ? 1.25 : Math.min(devicePixelRatio || 1, 2)); renderer.setSize(VW(), VH(), false); if (post) post.resize(VW(), VH(), renderer.getPixelRatio()); drawKey = ""; }
     // steht die Karte still (alle Szenen fertig, keine Textur im Tausch), wird nichts neu gezeichnet
     const key = p.toFixed(6) + "|" + mNow(st).toFixed(5) + "|" + aspect.toFixed(4) + "|" + INST.filter(I => I.built).length;
     if (mNow(st) >= .9999 && key === drawKey && INST.every(I => I.built && I.lodSmall === true && !I.easing) && revealN >= INST.length) return;
     drawKey = key;
     applyState(st, now);
     try { shadowPass(st); } catch (e) { console.error("Schatten abgeschaltet:", e); SM.off = true; U.smp.value.x = 0; scene.overrideMaterial = null; renderer.setRenderTarget(null); }
-    renderer.render(scene, camera);
+    drawScene();
     if (first) dbg("erster Frame gezeichnet");
     if (first) {
       first = false; opt.onFirstFrame && opt.onFirstFrame(); setTimeout(more, 250);

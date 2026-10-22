@@ -23,7 +23,7 @@
 // o.heading = false lässt die Lettern „Gestaltung“ weg.
 
 const ink = a => `rgba(48,48,51,${a})`;
-const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2 };
+const IMPRINT = { fill: "#edeff5", col: "#c9cbd1", line: 2.2 };
 
 // Arbeiten: Bildverhältnis Breite : Höhe der eingebetteten Bilder (NOVUM und Plakat 1109 : 1600, Audi 1600 : 1130).
 // Bildunterschrift zweistufig: Titel (Grotesk, dunkel) und Angabe (Grotesk, grau), Wortlaut wie bisher.
@@ -109,9 +109,9 @@ export default function (K, o = {}) {
   const { F, R, V, Q, PI, EPS, sm, THREE, narrow: N } = K;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
   // Töne: Holz in drei Lagen (Beine, Mast/Stütze, Ablage), Klemme dunkler; Wand warmgrau, Laibung eine Spur dunkler, Rahmen hell lackiert
-  const WOOD = c3("#e1d4ba"), WOOD2 = c3("#d7c8ab"), WOOD3 = c3("#e9dec8"), CLAMP = c3("#c3b69c"), KNOB = c3("#a5987f");
-  const PAGE = c3("#fbfaf7"), WALL = c3("#e9e4da"), REVEAL = c3("#ded7ca"), SILL = c3("#f1ede5"), FRAME = c3("#f8f6f0"), PLINTH = c3("#d9d2c4");
-  const CROWN_B = c3("#cdd6c1"), CROWN_F = c3("#dfe5d3"), BARK = c3("#cbbda3");
+  const WOOD = c3("#d2d4da"), WOOD2 = c3("#c6c9ce"), WOOD3 = c3("#dcdee4"), CLAMP = c3("#b4b6bb"), KNOB = c3("#97999d");
+  const PAGE = c3("#f6f8fe"), WALL = c3("#e1e4e9"), REVEAL = c3("#d5d7dd"), SILL = c3("#eaedf2"), FRAME = c3("#f3f5fb"), PLINTH = c3("#cfd2d7");
+  const CROWN_B = c3("#cdd6c1"), CROWN_F = c3("#dfe5d3"), BARK = c3("#bbbec3");
 
   // ---------- Verschiebung im Bogen und Zeitabbildung (Szene 0 … 1 -> Baufortschritt b0 … b1) ----------
   const ox = o.x || 0, oz = o.z || 0, B0 = o.b0 || 0, B1 = o.b1 === undefined ? 1 : o.b1, SP = B1 - B0;
@@ -151,7 +151,7 @@ export default function (K, o = {}) {
 
   const BZ0 = Math.min(ZR - LEGL, ZW - WH - WT, ZT - TOPY) - .8, BZ1 = N ? 7.4 : 6.6;     // Ausdehnung des eigenen Bogens (z)
   const BX0 = -6.4, BX1 = 7.4;
-  if (o.sheet !== false) K.sheet(BX0 + ox, BX1 + ox, BZ0 + oz, BZ1 + oz, "#faf8f3", o.sheetFrom !== undefined ? o.sheetFrom : -1);
+  if (o.sheet !== false) K.sheet(BX0 + ox, BX1 + ox, BZ0 + oz, BZ1 + oz, "#f5f8fd", o.sheetFrom !== undefined ? o.sheetFrom : -1);
 
   // ---------- Überschrift (Lettern stehen beim Scrollen aus dem Bogen auf) ----------
   part("gest-titel", 0, .01);

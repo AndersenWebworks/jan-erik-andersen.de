@@ -58,7 +58,7 @@ export function dtTastatur(K, o) {
   const { F } = K, { c, block, onTop } = werkzeug(K), N = o.N !== undefined ? o.N : K.narrow, T = o.t, col = o.col || {};
   const { x0: kx0, x1: kx1, z0: kz0, z1: kz1 } = o, kcx = (kx0 + kx1) / 2, kcz = (kz0 + kz1) / 2, kw = kx1 - kx0, kd = kz1 - kz0;
   F.part(o.tag || "tastatur", T[0], T[1]);
-  const keyb = block(o.top, rrect(kx0, kx1, kz0, kz1, .06), [.09], T[0], T[1], { side: c(col.side || "#d6d1c6"), top: c(col.top || "#f1eee7") });
+  const keyb = block(o.top, rrect(kx0, kx1, kz0, kz1, .06), [.09], T[0], T[1], { side: c(col.side || "#ced1d6"), top: c(col.top || "#ebeef3") });
   const PXU = 420, wpx = Math.round(kw * PXU), hpx = Math.round(kd * PXU);
   // Fünf Reihen wie bei einer flachen Tastatur (Zahlen, drei Buchstabenreihen, unten Modifier mit mittiger Leertaste), je 15 Einheiten breit,
   // gleiche Abstände, keine Überlappung (die Reihen teilen sich Breite und Höhe der Fläche gleichmäßig)
@@ -86,7 +86,7 @@ export function dtMaus(K, o) {
   F.part(o.tag || "maus", T[0], T[1]);
   // abgerundet länglich (Tropfen): vorn (zum Bildschirm, −z) schmaler, hinten (zur Hand) breiter
   const mpts = Array.from({ length: 12 }, (_, k) => { const a = k * PI / 6; return [mcx + (mw / 2) * Math.cos(a) * (1 + .1 * Math.sin(a)), mcz + (md / 2) * Math.sin(a)]; });
-  const mouse = block(o.top, mpts, [.11], T[0], T[1], { side: c(col.side || "#d6d1c6"), top: c(col.top || "#f1eee7") });
+  const mouse = block(o.top, mpts, [.11], T[0], T[1], { side: c(col.side || "#ced1d6"), top: c(col.top || "#ebeef3") });
   const PXU = 420, wpx = Math.round(mw * 1.1 * PXU), hpx = Math.round(md * PXU);
   const dec = K.decal(wpx, hpx, (x, W, H) => {
     x.strokeStyle = ink(.4); x.lineWidth = 3; x.lineCap = "round";
@@ -102,9 +102,9 @@ export function dtMaus(K, o) {
 // o: top, cx, cz, t, th (Henkel), tag, tagH, col { cup, coffee }
 export function dtTasse(K, o) {
   const { F, Q, EPS } = K, { c, block, flap } = werkzeug(K), T = o.t, TH = o.th, col = o.col || {};
-  const ccx = o.cx, ccz = o.cz, CR = .2, CH = .38, cup = c(col.cup || "#f6f4ee");
+  const ccx = o.cx, ccz = o.cz, CR = .2, CH = .38, cup = c(col.cup || "#f1f3f9");
   F.part(o.tag || "tasse", T[0], T[1]);
-  block(o.top, oct(ccx, ccz, CR), [CH / 2, CH / 2], T[0], T[1], { side: cup, top: cup, inner: { pts: oct(ccx, ccz, CR * .78), col: c(col.coffee || "#6a6157") } });
+  block(o.top, oct(ccx, ccz, CR), [CH / 2, CH / 2], T[0], T[1], { side: cup, top: cup, inner: { pts: oct(ccx, ccz, CR * .78), col: c(col.coffee || "#616265") } });
   // Henkel: C-Form aus drei Rechtecken in einer senkrechten Fläche an der rechten Seite (Fläche z = ccz, steht an der Kante x = ccx + CR)
   F.part(o.tagH || "henkel", TH[0], TH[1]);
   // (das Scharnier liegt wie die Standflächen BUR unter der Platte: Höhen um HB nach oben versetzt)
@@ -120,7 +120,7 @@ export function dtBecher(K, o) {
   F.part(o.tag || "becher", T[0], T[1]);
   const pcup = block(o.top, hex6(pcx, pcz, PR * 1.1), [.19, .19], T[0], T[1], { side: c(col.side || "#5b5b60"), top: c(col.top || "#2f2f33") });
   F.part(o.tagP || "stifte", TP[0], TP[1]);
-  const pc = col.pens || ["#f6f4ee", "#3d3d42", "#e1ddd3", "#f6f4ee"];
+  const pc = col.pens || ["#f1f3f9", "#3d3d42", "#dadde2", "#f1f3f9"];
   [[Q * .0, .46, pc[0]], [PI * .8, .52, pc[1]], [PI * 1.15, .4, pc[2]], [PI * 1.55, .48, pc[3]]].forEach(([az, len, cl], k) => {
     const dx = Math.cos(az), dz = Math.sin(az), tx = -dz, tz = dx, hc = [pcx + dx * .04, pcz + dz * .04];
     const pn = flap(pcup, [hc[0] - tx * .028, hc[1] - tz * .028], [hc[0] + tx * .028, hc[1] + tz * .028], [dx, dz], TP[0] + k * .004, TP[1], 1.28 + .05 * (k % 2), LV + 4 + k);
@@ -134,7 +134,7 @@ export function dtPflanze(K, o) {
   const { F } = K, { c, block, flap } = werkzeug(K), T = o.t, TL = o.tl, col = o.col || {};
   const plx = o.cx, plz = o.cz, PTR = .26;
   F.part(o.tag || "topf", T[0], T[1]);
-  const pot = block(o.top, oct(plx, plz, PTR), [.18, .18], T[0], T[1], { side: c(col.pot || "#d6cbb8"), top: c(col.soil || "#6f665b") });
+  const pot = block(o.top, oct(plx, plz, PTR), [.18, .18], T[0], T[1], { side: c(col.pot || "#c9ccd1"), top: c(col.soil || "#66676a") });
   F.part(o.tagL || "blaetter", TL[0], TL[1]);
   const lc = col.leaves || ["#b9c6ab", "#c4cfb7"];
   [[-.4, .62, 1.0], [.5, .56, 1.15], [1.35, .66, .95], [2.25, .5, 1.2], [3.0, .64, 1.05], [3.85, .55, 1.12], [4.75, .6, .98], [5.5, .48, 1.2]].forEach(([az, len, ang], k) => {
@@ -152,13 +152,14 @@ export function dtLampe(K, o) {
   const lpx = o.cx, lpz = o.cz, tb = o.tb, ts = o.ts, ta = o.ta, tsh = o.tsh;
   F.part(o.tag || "lampe", tb[0], tsh[0] + tsh[1] - tb[0]);
   const lampBase = block(o.top, rrect(lpx - .3, lpx + .3, lpz - .22, lpz + .22, .07), [.07], tb[0], tb[1], { side: c(col.base || "#55555a"), top: c(col.baseTop || "#6a6a70") });
-  const LS = 1.25, LA = 1.0, LW = .12, LD = .62, lvB = LV + 1;
-  const stem = flap(lampBase, [lpx - LW / 2, lpz], [lpx + LW / 2, lpz], [0, 1], ts[0], ts[1], Q, lvB + 1);
+  const LS = 1.25, LA = .85, LW = .12, LD = .62, lvB = LV + 1;
+  const dn = o.dir || [0, 1], du = [dn[1], -dn[0]];                               // Ausladung des Arms (Vorgabe +z), Scharnierrichtung quer dazu
+  const stem = flap(lampBase, [lpx - du[0] * LW / 2, lpz - du[1] * LW / 2], [lpx + du[0] * LW / 2, lpz + du[1] * LW / 2], dn, ts[0], ts[1], Q, lvB + 1);
   K.rect(stem, 0, 0, LW, LS, c(col.stem || "#5f5f64"));
-  const arm = flap(stem, stem.uv(0, LS), stem.uv(LW, LS), [0, 1], ta[0], ta[1], -1.05, lvB + 2, -PI);
+  const arm = flap(stem, stem.uv(0, LS), stem.uv(LW, LS), dn, ta[0], ta[1], -1.05, lvB + 2, -PI);
   K.rect(arm, 0, 0, LW, LA, c(col.stem || "#5f5f64"));
-  const shade = flap(arm, arm.uv(0, LA), arm.uv(LW, LA), [0, 1], tsh[0], tsh[1], -1.22, lvB + 3, -PI);
-  K.P(shade, [[0, 0], [LW, 0], [LW + .2, LD], [-.2, LD]], c(col.shade || "#ece9e2"));
+  const shade = flap(arm, arm.uv(0, LA), arm.uv(LW, LA), dn, tsh[0], tsh[1], -1.22, lvB + 3, -PI);
+  K.P(shade, [[0, 0], [LW, 0], [LW + .2, LD], [-.2, LD]], c(col.shade || "#e6e9ee"));
 }
 
 export function schreibtisch(K, G) {
@@ -200,7 +201,7 @@ export function schreibtisch(K, G) {
   const sx0 = tx0 + BZ.l, sx1 = tx1 - BZ.r, sz0 = tz0 + BZ.t, sz1 = tz1 - BZ.b;      // Schreibfläche
   F.part("tablett", T.tablet[0], T.tablet[1]);
   const tab = block(top, rrect(tx0, tx1, tz0, tz1, .08), [TH], T.tablet[0], T.tablet[1], {
-    side: c("#46464b"), top: c("#5b5b60"), inner: { pts: rrect(sx0, sx1, sz0, sz1, .02), col: c("#f8f6f1") } });
+    side: c("#46464b"), top: c("#5b5b60"), inner: { pts: rrect(sx0, sx1, sz0, sz1, .02), col: c("#f3f6fb") } });
   // Sätze: je Satz zwei Zeilen (Texte wie im Fallbacktext der Seite), Grotesk wie bisher, linksbündig auf der Schreibfläche
   const SENT = [["Agenturen holen mich", "als Entwickler ins Projekt."], ["Unternehmen arbeiten", "direkt mit mir."], ["Auf Wunsch arbeite ich auch", "befristet im Team mit."]];
   const LINES = SENT.flat(), POPT = { track: .005, lh: 1.22 };
@@ -256,7 +257,7 @@ export function schreibtisch(K, G) {
   {
     const body = new THREE.CylinderGeometry(.03, .03, PL - .14, 6, 1).rotateX(PI / 2).translate(0, 0, .14 + (PL - .14) / 2);
     const tipG = new THREE.CylinderGeometry(.03, .007, .14, 6, 1).rotateX(PI / 2).translate(0, 0, .07);
-    const m1 = new THREE.Mesh(body, K.paperMaterial("#3d3d42")), m2 = new THREE.Mesh(tipG, K.paperMaterial("#e9e5dc"));
+    const m1 = new THREE.Mesh(body, K.paperMaterial("#3d3d42")), m2 = new THREE.Mesh(tipG, K.paperMaterial("#e2e5ea"));
     const em = g => new THREE.LineSegments(new THREE.EdgesGeometry(g), new THREE.LineBasicMaterial({ color: 0x303033, transparent: true, opacity: .55, depthWrite: false }));
     pen.add(m1, m2, em(body), em(tipG));
     for (const o of pen.children) o.frustumCulled = false;
@@ -305,7 +306,7 @@ export function schreibtisch(K, G) {
 
   // ---------- Schreibtischlampe (Fuß, Stiel, Arm, Schirm) ----------
   const [lpx, lpz] = L.lamp;
-  dtLampe(K, { top, cx: lpx, cz: lpz, tb: T.lampBase, ts: T.lampStem, ta: T.lampArm, tsh: T.lampShade, tag: "lampe" });
+  dtLampe(K, { top, cx: lpx, cz: lpz, tb: T.lampBase, ts: T.lampStem, ta: T.lampArm, tsh: T.lampShade, tag: "lampe", dir: [1, 0] });
 
   // ---------- Daten für die Szene ----------
   const sum = prints.reduce((a, p) => a.add(new THREE.Vector3(p.cx, TOPY, p.zb)), new THREE.Vector3()).multiplyScalar(1 / prints.length);

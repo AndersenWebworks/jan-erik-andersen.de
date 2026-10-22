@@ -14,7 +14,7 @@
 @font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4.woff2") format("woff2"); font-weight: 200 800; font-style: normal; }
 @font-face { font-family: "Newsreader N4"; src: url("fonts/NewsreaderN4-Italic.woff2") format("woff2"); font-weight: 200 800; font-style: italic; }
 :root {
-  --bg: #ffffff;
+  --bg: #f5f6f8;
   --ink: #303033;
   --muted: #66666a;
   --red: #d40235;
@@ -35,12 +35,12 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .top { position: fixed; z-index: 2; inset: 0 0 auto 0; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 20px var(--pad); font: 500 13px/1.3 var(--sans); letter-spacing: .02em; }
 .top .mark { color: var(--ink); text-decoration: none; opacity: 0; transition: opacity .6s; }
 /* Lichthof um Marke und Navigation: Bauteile und Linien der Szenen laufen nie durch die Schrift */
-.top .mark, .top nav a, .top nav .kontaktknopf { text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 10px #fff, 0 0 14px #fff; }
+.top .mark, .top nav a, .top nav .kontaktknopf { text-shadow: 0 0 3px var(--bg), 0 0 6px var(--bg), 0 0 10px var(--bg), 0 0 14px var(--bg); }
 /* Marke N4: Newsreader 380, Andersen kursiv 340, roter Schlusspunkt, gestrichelte Falz */
 .n4 { position: relative; display: inline-block; font-family: "Newsreader N4", Georgia, serif; font-weight: 380; font-style: normal; letter-spacing: -.018em; line-height: 1; white-space: nowrap; padding-bottom: .14em; }
 .n4 i { font-weight: 340; }
 .n4 .dot { display: inline-block; width: .17em; height: .17em; margin-left: .01em; border-radius: 50%; background: var(--red); }
-.n4 .fold { position: absolute; left: -.06em; right: -.06em; top: .775em; border-bottom: .014em dashed #8f8a80; }
+.n4 .fold { position: absolute; left: -.06em; right: -.06em; top: .775em; border-bottom: .014em dashed #8f99a6; }
 .top .n4 { font-size: 20px; }
 .top .n4 .dot { width: .2em; height: .2em; }
 .top .n4 .fold { border-bottom-width: 1px; }
@@ -50,7 +50,7 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 .top nav a:hover, .top nav .kontaktknopf:hover, .top nav .kontaktknopf[aria-expanded="true"] { color: var(--red); }
 .top nav .kontaktknopf { appearance: none; background: none; border: 0; padding: 0; font: inherit; letter-spacing: inherit; color: var(--ink); cursor: pointer; }
 /* Kontaktblatt: kleines Papierblatt unter dem Menüpunkt, Mail, Telefon und LinkedIn */
-.kontaktblatt { position: fixed; z-index: 6; top: 54px; right: var(--pad); width: min(340px, calc(100vw - 2 * var(--pad))); padding: 18px 22px 16px; background: #faf8f3; border: 1px solid rgba(48,48,51,.5); border-radius: 2px; box-shadow: 0 10px 28px rgba(48,48,51,.14); }
+.kontaktblatt { position: fixed; z-index: 6; top: 54px; right: var(--pad); width: min(340px, calc(100vw - 2 * var(--pad))); padding: 18px 22px 16px; background: #f8fafd; border: 1px solid rgba(48,48,51,.5); border-radius: 2px; box-shadow: 0 10px 28px rgba(48,48,51,.14); }
 .kontaktblatt[hidden] { display: none; }
 .kontaktblatt h2 { font: 380 21px/1.15 "Newsreader N4", Georgia, serif; letter-spacing: -.012em; margin-bottom: 12px; }
 .kontaktblatt h2 i { font-weight: 340; }
@@ -97,12 +97,12 @@ body { background: var(--bg); color: var(--ink); font: 400 16px/1.6 var(--sans);
 body.kartenmodus .karte a { pointer-events: auto; }
 .karte polygon { fill: rgba(255,255,255,.012); stroke: rgba(48,48,51,.22); stroke-width: 1; stroke-dasharray: 3 3; stroke-linejoin: round; transition: fill .2s, stroke .2s; }
 .karte text { font: 500 12.5px/1 var(--sans); letter-spacing: .03em; fill: var(--ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; transition: fill .2s; }
-.karte rect { fill: #faf8f3; stroke: rgba(48,48,51,.5); stroke-width: 1; rx: 2px; ry: 2px; transition: stroke .2s; }
+.karte rect { fill: #f8fafd; stroke: rgba(48,48,51,.5); stroke-width: 1; rx: 2px; ry: 2px; transition: stroke .2s; }
 .karte a.hier polygon { stroke: var(--red); stroke-dasharray: none; stroke-width: 1.6; }
 .karte a:hover polygon, .karte a:focus-visible polygon { fill: rgba(212,2,53,.09); stroke: var(--red); stroke-dasharray: none; stroke-width: 1.6; }
 .karte a:hover text, .karte a:focus-visible text { fill: var(--red); }
 .karte a:hover rect, .karte a:focus-visible rect, .karte a.hier rect { stroke: var(--red); }
-.kartenhinweis { position: fixed; z-index: 2; left: 50%; bottom: 58px; transform: translateX(-50%); font: 500 12px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); opacity: 0; transition: opacity .5s; pointer-events: none; text-shadow: 0 0 3px #fff, 0 0 8px #fff; white-space: nowrap; }
+.kartenhinweis { position: fixed; z-index: 2; left: 50%; bottom: 58px; transform: translateX(-50%); font: 500 12px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); opacity: 0; transition: opacity .5s; pointer-events: none; text-shadow: 0 0 3px var(--bg), 0 0 8px var(--bg); white-space: nowrap; }
 body.kartenmodus .kartenhinweis { opacity: 1; }
 
 .bar { position: fixed; z-index: 2; left: var(--pad); right: var(--pad); bottom: 0; height: 1px; background: rgba(48,48,51,.15); }
@@ -128,7 +128,7 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 .nogl .draft { position: static; padding: 0 var(--pad) 2rem; }
 
 /* Rechtliche Links: dauerhaft, dezent am unteren Rand (3D-Ansicht), im Fallback am Ende der Seite */
-.rechtlich { position: fixed; z-index: 4; left: 50%; bottom: 2px; transform: translateX(-50%); display: flex; gap: 6px; align-items: center; font: 500 11px/1 var(--sans); letter-spacing: .04em; color: var(--muted); white-space: nowrap; text-shadow: 0 0 3px #fff, 0 0 6px #fff, 0 0 10px #fff; }
+.rechtlich { position: fixed; z-index: 4; left: 50%; bottom: 2px; transform: translateX(-50%); display: flex; gap: 6px; align-items: center; font: 500 11px/1 var(--sans); letter-spacing: .04em; color: var(--muted); white-space: nowrap; text-shadow: 0 0 3px var(--bg), 0 0 6px var(--bg), 0 0 10px var(--bg); }
 .rechtlich a { color: var(--muted); text-decoration: none; padding: 6px 5px; }
 .rechtlich a:hover { color: var(--red); text-decoration: underline; text-underline-offset: 3px; }
 .nogl .rechtlich { position: static; transform: none; padding: 0 var(--pad) 2rem; max-width: 42em; font-size: 14px; text-shadow: none; }

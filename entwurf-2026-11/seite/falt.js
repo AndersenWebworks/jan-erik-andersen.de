@@ -24,8 +24,8 @@ export const PI = Math.PI, Q = PI / 2;
 export const EPS = .0015;
 const lin = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
 export const COL = {
-  PAPER: lin("#faf8f3"), HOLE: lin("#e7e2d7"), OLD: lin("#e6dfd1"), SHADE: lin("#d6cfc2"), DARK: lin("#9d978d"),
-  RED: lin("#d40235"), INK: lin("#303033"), STONE: lin("#ece7dd"), STONE2: lin("#ddd6c8"), WHITE: lin("#ffffff")
+  PAPER: lin("#f8fafd"), HOLE: lin("#dde3ea"), OLD: lin("#d9dfe7"), SHADE: lin("#c9d1dc"), DARK: lin("#8f99a6"),
+  RED: lin("#d40235"), INK: lin("#566170"), STONE: lin("#e3e8ee"), STONE2: lin("#cfd6df"), WHITE: lin("#ffffff")
 };
 const { PAPER, INK, HOLE } = COL;
 export const clamp = (v, a, b) => Math.min(b, Math.max(a, v));

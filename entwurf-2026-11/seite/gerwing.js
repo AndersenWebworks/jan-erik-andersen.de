@@ -46,9 +46,9 @@ const P2N = ["Kunden geben ihre Quadratmeter", "ein, der Shop rechnet sie in", "
 export default function (K) {
   const { F, R, V, COL, Q, PI, THREE, narrow: N } = K;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const WALLC = c3("#f3efe6"), HOUSEC = c3("#f1ede4"), STONE = COL.STONE, STONE2 = COL.STONE2, OLD = COL.OLD;
-  const TERR = c3("#e6dfd1"), TERRTOP = c3("#efeae0"), PALC = c3("#e9e2d3"), HALLC = c3("#eeece7"), ROOFC = c3("#dcd8cf");
-  const LAPC = c3("#e4e1db"), SCRC = c3("#3a3a3e"), RED = COL.RED;
+  const WALLC = c3("#eceff4"), HOUSEC = c3("#eaedf2"), STONE = COL.STONE, STONE2 = COL.STONE2, OLD = COL.OLD;
+  const TERR = c3("#dcdfe4"), TERRTOP = c3("#e7eaef"), PALC = c3("#dfe2e7"), HALLC = c3("#e9ecf1"), ROOFC = c3("#d5d8dd");
+  const LAPC = c3("#dee1e6"), SCRC = c3("#3a3a3e"), RED = COL.RED;
   const MUTED = "#66666a";
   // Zeitplan (b) der Stationen des Lieferscheins: Halt (Ankunft, Abfahrt) an Laptop, Fläche (m²), ganze Steine, Palette, Weiche (Fracht), Tor, Haus
   const HOLD = [[.245, .290], [.345, .380], [.435, .470], [.525, .560], [.615, .650], [.705, .740], [.850, .892]];
@@ -252,14 +252,14 @@ export default function (K) {
   }
   // Lücke für den letzten Stein (eine Zelle im Läuferverband, vorn links neben der Treppe, vom Lieferschein aus gut zu sehen): dunkler gezeichnet, bis der Stein sich legt
   const LK = [16.4, 17.0, TZF - .3, TZF - .6];
-  F.poly(top, [[LK[0], LK[2]], [LK[1], LK[2]], [LK[1], LK[3]], [LK[0], LK[3]]], c3("#d6cdbb"), .5, .0012, undefined, { nocut: true });
+  F.poly(top, [[LK[0], LK[2]], [LK[1], LK[2]], [LK[1], LK[3]], [LK[0], LK[3]]], c3("#cbcdd3"), .5, .0012, undefined, { nocut: true });
 
   // ---------- Deko auf der Terrasse: Pflanzkübel (dtPflanze aus schreibtisch.js), Tisch und zwei Stühle ----------
   // Kübel links und rechts an der Hauswand, Tisch mit Stühlen links vor den Türen, Treppe und Weg zur Tür bleiben frei
   const DT = .858;
   for (const [i, cx] of [[0, 14.75], [1, 19.1]]) dtPflanze(K, { top, cx, cz: TZB + .75, t: [DT + i * .004, .018], tl: [DT + .014 + i * .004, .04], tag: "kuebel" + i, tagL: "kuebelgruen" + i });
   F.part("moebel", DT, .05);
-  const WOOD = c3("#e1d5bf"), WOOD2 = c3("#ebe2cf"), CHR = c3("#d8ccb6");
+  const WOOD = c3("#d3d6db"), WOOD2 = c3("#e0e2e8"), CHR = c3("#cacdd2");
   {
     const tz = TZB + 1.8;
     const ped = blk(top, 15.25, 15.55, tz + .15, tz - .15, [.56], DT + .006, .014, WOOD, WOOD2);
@@ -317,16 +317,16 @@ export default function (K) {
   // unten die Palette mit Lattung und Klotzöffnungen (sofort), darüber Lage für Lage ganze Steine im Läuferverband
   const palFace = Wm => (x, W, H) => {
     const s = W / Wm;
-    x.fillStyle = "#ddd2bd"; x.fillRect(0, 0, W, H);
+    x.fillStyle = "#d0d2d8"; x.fillRect(0, 0, W, H);
     x.fillStyle = ink(.1); x.fillRect(0, 0, W, H * .22); x.fillRect(0, H * .8, W, H * .2);
-    x.fillStyle = "#6f6a62";
+    x.fillStyle = "#696a6d";
     const bw = W * .2, gaps = [[bw, W / 2 - bw / 2], [W / 2 + bw / 2, W - bw]];
     for (const [a, b] of gaps) x.fillRect(a, H * .24, b - a, H * .54);
     x.strokeStyle = ink(.45); x.lineWidth = Math.max(1.5, .01 * s); x.strokeRect(1, 1, W - 2, H - 2);
   };
   const rowFace = (Wm, cwm, k) => (x, W, H) => {
     const s = W / Wm, cw = cwm * s;
-    x.fillStyle = k % 3 === 1 ? "#ebe3d4" : "#efe9dc"; x.fillRect(0, 0, W, H);
+    x.fillStyle = k % 3 === 1 ? "#e1e3e9" : "#e6e9ee"; x.fillRect(0, 0, W, H);
     x.strokeStyle = ink(.36); x.lineWidth = Math.max(1.5, .012 * s);
     x.beginPath(); x.moveTo(0, 1); x.lineTo(W, 1); x.moveTo(0, H - 1); x.lineTo(W, H - 1); x.stroke();
     for (let X = (k % 2 ? cw / 2 : cw); X < W - 2; X += cw) { x.beginPath(); x.moveTo(X, 0); x.lineTo(X, H); x.stroke(); }
@@ -339,7 +339,7 @@ export default function (K) {
   // oberste Lage: Steinfugen
   K.onFlat(pal.top, K.decal(Math.round(faceW * PXU), Math.round(faceD * PXU), (x, W, H) => {
     const s = W / faceW, cw = .6 * s, rh = .3 * s;
-    x.fillStyle = "#efe9dc"; x.fillRect(0, 0, W, H);
+    x.fillStyle = "#e6e9ee"; x.fillRect(0, 0, W, H);
     x.strokeStyle = ink(.2); x.lineWidth = Math.max(1.5, .01 * s);
     for (let y = rh; y < H - 2; y += rh) { x.beginPath(); x.moveTo(0, y); x.lineTo(W, y); x.stroke(); }
     for (let r = 0; r * rh < H; r++) for (let X = (r % 2 ? cw / 2 : cw); X < W - 2; X += cw) { x.beginPath(); x.moveTo(X, r * rh); x.lineTo(X, Math.min(H, (r + 1) * rh)); x.stroke(); }
@@ -351,11 +351,11 @@ export default function (K) {
   const gateDraw = open => (Wm, Hm) => (x, W, H) => {
     const s = W / Wm, gw0 = 1.15 * s, gh = Math.min(.58 * s, H * .72), X = (W - gw0) / 2, Y = H - gh;
     if (open) {
-      x.fillStyle = "#55514a"; x.fillRect(X, Y, gw0, gh);
-      x.fillStyle = "#d9d5cc"; x.fillRect(X, Y, gw0, gh * .2);
+      x.fillStyle = "#505153"; x.fillRect(X, Y, gw0, gh);
+      x.fillStyle = "#d2d5da"; x.fillRect(X, Y, gw0, gh * .2);
       x.strokeStyle = ink(.26); x.lineWidth = Math.max(1, .008 * s); for (let k = 1; k < 3; k++) { x.beginPath(); x.moveTo(X, Y + k * gh * .2 / 3); x.lineTo(X + gw0, Y + k * gh * .2 / 3); x.stroke(); }
     } else {
-      x.fillStyle = "#d9d5cc"; x.fillRect(X, Y, gw0, gh);
+      x.fillStyle = "#d2d5da"; x.fillRect(X, Y, gw0, gh);
       x.strokeStyle = ink(.26); x.lineWidth = Math.max(1, .008 * s); for (let k = 1; k < 8; k++) { x.beginPath(); x.moveTo(X, Y + k * gh / 8); x.lineTo(X + gw0, Y + k * gh / 8); x.stroke(); }
     }
     x.strokeStyle = ink(.42); x.lineWidth = Math.max(1.5, .012 * s); x.strokeRect(X, Y, gw0, gh);
@@ -475,12 +475,12 @@ export default function (K) {
   const edgeOf = geo => new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: 0x303033, transparent: true, opacity: .4, depthWrite: false }));
   const slip = new THREE.Group(), blatt = new THREE.Group();
   {
-    const bg = new THREE.BoxGeometry(SW, SHT2, .018), bm = new THREE.Mesh(bg, K.paperMaterial("#fcfaf5")); bm.position.y = SHT2 / 2; bm.add(edgeOf(bg));
+    const bg = new THREE.BoxGeometry(SW, SHT2, .018), bm = new THREE.Mesh(bg, K.paperMaterial("#f6f8fe")); bm.position.y = SHT2 / 2; bm.add(edgeOf(bg));
     const face = new THREE.Mesh(new THREE.PlaneGeometry(SW, SHT2), slipMat); face.position.set(0, SHT2 / 2, .0105); face.renderOrder = 4; face.frustumCulled = false;
     blatt.add(bm, face); blatt.position.set(0, 0, -.16); blatt.rotation.x = -.1; slip.add(blatt);
     // Stütze: Streifen von der Oberkante schräg nach hinten zum Boden (wie die Tischkarte in abschluss.js)
     const top = new THREE.Vector3(0, (SHT2 - .12) * Math.cos(.1), -.16 - (SHT2 - .12) * Math.sin(.1) - .03), foot = new THREE.Vector3(0, 0, -.62);
-    const len = top.distanceTo(foot), sg = new THREE.BoxGeometry(SW * .8, len, .014), st = new THREE.Mesh(sg, K.paperMaterial("#ebe5d6"));
+    const len = top.distanceTo(foot), sg = new THREE.BoxGeometry(SW * .8, len, .014), st = new THREE.Mesh(sg, K.paperMaterial("#e2e5ea"));
     st.position.copy(top).add(foot).multiplyScalar(.5); st.rotation.x = Math.atan2(top.z - foot.z, top.y - foot.y); st.add(edgeOf(sg)); slip.add(st);
     // beim Bau weit unter dem Bogen geparkt (kern.js partBoxes nimmt sonst eine feste Box am Ursprung der Szene als Hindernis); die Animation setzt y = 0
     slip.position.y = -50; slip.visible = false; K.add(slip);
@@ -519,7 +519,7 @@ export default function (K) {
   ];
   const KEYS = [
     // Start: Wand liegt flach im Bogen, Name, Kennzeile und Überschrift lesbar
-    key(0, 0, V(-7.2, -.22, ZW - HW / 2 + .1), 52, 0, 11.3, V(-7.3, -.4, ZW - HW / 2 + .1), 54, 0, 15.8),
+    key(0, 0, V(-5.4, -.22, -1.5), 50, 0, 15.5, V(-6.3, -.4, -1.3), 52, 0, 21.0),
     // Wand steht auf und rastet ein, Kamera sinkt
     key(.8, .07, V(-7.2, 1.7, ZW), 24, -6, 11.0, V(-7.3, 2.6, ZW), 24, -4, 15.0),
     { w: .9, stop: S.wand },

@@ -105,7 +105,7 @@ export default function (K) {
   const { F, R, V, COL, Q, sm, THREE, narrow: N } = K;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
   // Papierfarben: Tisch warm, Beine und Zarge eine Spur tiefer, Bildschirm hell, Fuß und Hals grau, Rechner kühler
-  const DESK = c3("#e8e1d2"), LEG = c3("#e1d9c9"), FACE = c3("#f8f6f1"), METAL = c3("#dcd7cd"), CASE = c3("#ece9e2"), FRONTC = c3("#e2ded5");
+  const DESK = c3("#dee1e6"), LEG = c3("#d7d9df"), FACE = c3("#f3f6fb"), METAL = c3("#d4d7dc"), CASE = c3("#e6e9ee"), FRONTC = c3("#dbdee3");
 
   // Am Handy schmalerer Tisch und Rechner näher dran: das Hochkantbild ist sonst breitenbegrenzt und bleibt oben und unten leer
   const X1 = N ? 2.65 : 3.6, X0 = -X1, PX0 = N ? 5.1 : 6.2;
@@ -145,9 +145,9 @@ export default function (K) {
   // Desktop (Erik, 22.10.): im Startbild liegt das Podest noch flach im Bogen, man sieht nur die Marke; es fährt mit dem ersten Scrollen
   // hoch (Uhr b, Fenster 0 bis PB, siehe Schlüssel 1). Handy: zwei Stufen, flach lägen beide Zeilen hintereinander, daher wie bisher beim Laden.
   const PB = .012;
-  // Handy: die Stufenflächen stehen im Papierton des Bogens (#faf8f3 bei 0,967 Licht); senkrechte Flächen bekommen im Shader nur 0,927,
+  // Handy: die Stufenflächen stehen im Papierton des Bogens (#f5f8fd bei 0,967 Licht); senkrechte Flächen bekommen im Shader nur 0,927,
   // daher hellere Grundfarbe, sonst steht „Andersen“ auf einem grauen Band („Etikett“), während „Jan-Erik“ auf Weiß steht
-  const STEP = N ? c3("#fffdf7") : c3("#f6f3ec"), PL = 2 * PW, pt = N ? { clock: "t", over: .04 } : { clock: "b", over: .04 }, PT0 = N ? -5 : 0, PD = N ? .01 : PB;
+  const STEP = N ? c3("#f6f8fe") : c3("#f0f3f8"), PL = 2 * PW, pt = N ? { clock: "t", over: .04 } : { clock: "b", over: .04 }, PT0 = N ? -5 : 0, PD = N ? .01 : PB;
   const face1 = K.panel(R, [-PW, PZ], [PW, PZ], [0, -1], PT0, PD, Q, pt);
   K.P(face1, [[0, 0], [PL, 0], [PL, H1], [0, H1]], STEP, [.35, .5, 0, .5]);
   const deck1 = K.panel(face1, face1.uv(0, H1), face1.uv(PL, H1), [0, -1], PT0, PD, -Q, pt);
@@ -246,7 +246,7 @@ export default function (K) {
   // auf den Bogen fallend (von vorn sichtbar), über den Bogen zur linken Seitenwand des Rechners
   const ty = HT + .026, xe = X1 + .05, zd = -.6, gap = PX0 - xe;
   K.cable([V(MX, 2.62, ZFB - .05), V(MX + .15, ty, ZFB - .08), V(Math.max(X1 * .5, MX + .75), ty, ZFB - .02), V(X1 * .82, ty, -1.25), V(X1 - .14, ty, zd - .12), V(X1 - .01, ty - .004, zd - .02),
-    V(xe, HT - .1, zd), V(xe + .02, 1.4, zd + .02), V(xe + .05, .3, zd + .03), V(xe + .22, .025, zd), V(xe + gap * .45, .025, zd - .12), V(PX0 - .3, .03, -.78), V(PX0 - .07, .12, -.8), V(PX0, .2, -.8)], .024, "#8e8981", .44, .05);
+    V(xe, HT - .1, zd), V(xe + .02, 1.4, zd + .02), V(xe + .05, .3, zd + .03), V(xe + .22, .025, zd), V(xe + gap * .45, .025, zd - .12), V(PX0 - .3, .03, -.78), V(PX0 - .07, .12, -.8), V(PX0, .2, -.8)], .024, "#88898d", .44, .05);
 
   // ---------- Roter Faden: eine ruhige Linie ----------
   // Der Faden läuft vom Statuspunkt über den Bogen an der Vorderseite des Tisches vorbei (außen um die Abdrücke der liegenden Vorderbeine herum),

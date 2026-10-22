@@ -10,7 +10,7 @@
 // Kopie von entwurf-2026-11/stimmen/stimmen.js für die durchgehende Seite (entwurf-2026-11/seite/). Ergänzt: Konstruktionsphase
 // (Raster, Gerüst des Berichts und des Bands, Bleistiftspur). Der Bogen reicht weiter nach hinten als nötig; die Seite schneidet ihn ab.
 const INKS = "#303033", MUTED = "#66666a", RED = "#d40235";
-const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, close: .25, closeDur: .7 };
+const IMPRINT = { fill: "#edeff5", col: "#c9cbd1", line: 2.2, close: .25, closeDur: .7 };
 
 // ---------- Text, wörtlich (Raumtext 2, #stimmen) ----------
 export const TEXT = {
@@ -64,7 +64,7 @@ export default function (K) {
   // ---------- Überschrift: steht wie der Name der Eröffnung aus dem Bogen auf ----------
   const EH = 1.05, HX = -7.6, HZ = 5.2;
   const hw = K.measure(["Stimmen"], { font: "marke" }).tw * EH;
-  const headFold = { x0: -.06 * EH, len: hw + .12 * EH, lw: .014 * EH, dash: .045 * EH, gap: .035 * EH, col: "#8f8a80" };
+  const headFold = { x0: -.06 * EH, len: hw + .12 * EH, lw: .014 * EH, dash: .045 * EH, gap: .035 * EH, col: "#888a8e" };
   const head = K.word(["Stimmen"], EH, HX, HZ, .15, .85, { font: "marke", foot: 1, imprint: IMPRINT, par: R, fold: headFold });
 
   // ---------- 1. SiS: Leporello (Wirkungsbericht) ----------
@@ -74,7 +74,7 @@ export default function (K) {
   const LW = 2.8, LH = 2.7, MX = .25, hh = 26 * DEG, gam = PI - 2 * hh, A0 = [-7.5, 2.4];
   const d0 = [Math.cos(hh), -Math.sin(hh)], eb = [-Math.sin(hh), -Math.cos(hh)];
   const lp = (u, v) => [A0[0] + d0[0] * u + eb[0] * v, A0[1] + d0[1] * u + eb[1] * v];
-  const PG = ["#fbfaf6", "#f1eee6", "#fbfaf6", "#f1eee6", "#fbfaf6"].map(c3);
+  const PG = ["#f6f8fe", "#ebedf3", "#f6f8fe", "#ebedf3", "#f6f8fe"].map(c3);
   const TP = [.25, .31, .37, .43], DP = .09;                 // Beginn des Aufschlagens der Seiten 1 … 4
   F.part("bericht", .04, .10, { lift: .014 });
   const p0 = K.panel(R, lp(0, 0), lp(LW, 0), eb, .14, .10, Q, { over: .05, lv: 1 });
@@ -113,8 +113,8 @@ export default function (K) {
   F.part("welle", .56, .10);
   const TB = [.64, .10];
   const B = K.panel(R, [X0, ZW], [X0 + WTOT, ZW], [0, -1], TB[0], TB[1], Q, { over: .04, lv: 1 });
-  K.P(B, [[0, 0], [WTOT, 0], [WTOT, CB], [0, CB]], c3("#f7f4ec"), [.5, .5, 0, .5]);
-  const TOOTH = c3("#dcd5c6"), TF0 = .74, TF1 = .83, TFD = .05;
+  K.P(B, [[0, 0], [WTOT, 0], [WTOT, CB], [0, CB]], c3("#f1f3f9"), [.5, .5, 0, .5]);
+  const TOOTH = c3("#d2d5da"), TF0 = .74, TF1 = .83, TFD = .05;
   const teeth = [];
   for (let i = 0; i < NT; i++) {
     const u0 = i * BWT, ht = i % 2 ? .35 + .45 * rnd(i, 1) : .85 + .6 * rnd(i, 1);   // abwechselnd kurz und lang: gezackt
@@ -124,7 +124,7 @@ export default function (K) {
   }
   const FR = [.91, .08];
   const flag = K.panel(B, B.uv(XF, CB), B.uv(XF + FWD, CB), [0, -1], FR[0], FR[1], 0, { ang0: -(PI - .25), over: .06 });
-  K.P(flag, [[0, 0], [FWD, 0], [FWD, FH], [0, FH]], c3("#fbfaf7"), [.5, .5, .5, .5]);
+  K.P(flag, [[0, 0], [FWD, 0], [FWD, FH], [0, FH]], c3("#f6f8fe"), [.5, .5, .5, .5]);
   // Text auf dem Band: vier Blöcke, jeder ein Satzteil im Wortlaut; erscheint der Reihe nach
   const BON = [.70, .74, .78, .82], ET = .2, btw = 3.1 / ET - .3;
   const bT = TEXT.ai.slice(0, 4).map((s, j) => {

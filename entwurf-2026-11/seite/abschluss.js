@@ -69,9 +69,9 @@ export default function (K) {
   const { F, R, V, COL, Q, sm, mech, win, clamp, THREE, narrow: N } = K;
   const PI = Math.PI;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const DESK = c3("#e8e1d2"), LEG = c3("#e1d9c9"), METAL = c3("#dcd7cd"), FRAMEC = c3("#e4dccb"),
-    ARM = c3("#dcd7cd"), ARM2 = c3("#d6d1c7"), LIGHT = c3("#f8f6f1"), BOARD = c3("#f1ece0"), TILE = c3("#fbf9f4"), RULE = c3("#cfc7b6");
-  const IMP = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, closeB: .03 };
+  const DESK = c3("#dee1e6"), LEG = c3("#d7d9df"), METAL = c3("#d4d7dc"), FRAMEC = c3("#d9dce1"),
+    ARM = c3("#d4d7dc"), ARM2 = c3("#ced1d6"), LIGHT = c3("#f3f6fb"), BOARD = c3("#e9ecf1"), TILE = c3("#f6f8fe"), RULE = c3("#c4c7cc");
+  const IMP = { fill: "#edeff5", col: "#c9cbd1", line: 2.2, closeB: .03 };
   // Kamera auf der Kugel um das Ziel (Blickhöhe el, Gier az, Abstand dist); Handy: eigener Abstand und eigene Blickhöhe (sonst würde die Breitbild-Stellung gestreckt)
   const ring = (tgt, el, az, dist) => { const e = el * PI / 180, a = az * PI / 180; return tgt.clone().add(V(Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e)).multiplyScalar(dist)); };
   const orbit = (tgt, el, az, dist, distN, elN, tgtN) => ({ tgt, cam: ring(tgt, el, az, dist), tgtN: tgtN || tgt, camN: ring(tgtN || tgt, elN || el + 6, az * .6, distN || dist * .7) });
@@ -137,7 +137,7 @@ export default function (K) {
 
     // Papierband: flacher Streifen auf dem Bogen
     const BX0 = -8.9, BX1 = 8.1, BZ = .52;
-    F.poly(R, [[BX0, ZH - BZ], [BX1, ZH - BZ], [BX1, ZH + BZ], [BX0, ZH + BZ]], c3("#ede7d8"), .5, .0004);
+    F.poly(R, [[BX0, ZH - BZ], [BX1, ZH - BZ], [BX1, ZH + BZ], [BX0, ZH + BZ]], c3("#e4e7ec"), .5, .0004);
     K.onFlat(R, K.decal(2400, Math.round(2400 * 2 * BZ / (BX1 - BX0)), bandDraw, BX1 - BX0, 2 * BZ, -1, .02), (BX0 + BX1) / 2, ZH, .001);
 
     // Drei Greifarme aus Papier (stehen hinter dem Band, greifen nach vorn): Sockel, Glied 1 (Schulter), Glied 2 (Ellbogen), breite Gabel mit zwei Zinken, die die Karte oben halten
@@ -173,9 +173,9 @@ export default function (K) {
     // Karten: bewegte Papierkärtchen (Vorderseite mit Satz, Stütze dahinter, wie eine Tischkarte), Text und Haken laufen mit
     const edge = geo => new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: 0x303033, transparent: true, opacity: .38, depthWrite: false }));
     const makeCard = (W, lines) => {
-      const g = new THREE.Group(), fg = new THREE.BoxGeometry(W, CHt, .022), front = new THREE.Mesh(fg, K.paperMaterial("#f8f6f1"));
+      const g = new THREE.Group(), fg = new THREE.BoxGeometry(W, CHt, .022), front = new THREE.Mesh(fg, K.paperMaterial("#f3f6fb"));
       front.position.set(0, CHt / 2, FZ); front.add(edge(fg));
-      const sl = Math.hypot(CHt - .02, FZ + BK), sg = new THREE.BoxGeometry(W * .96, sl, .016), st = new THREE.Mesh(sg, K.paperMaterial("#ebe5d6"));
+      const sl = Math.hypot(CHt - .02, FZ + BK), sg = new THREE.BoxGeometry(W * .96, sl, .016), st = new THREE.Mesh(sg, K.paperMaterial("#e2e5ea"));
       st.position.set(0, (CHt + .01) / 2, (FZ - BK) / 2); st.rotation.x = Math.atan2(FZ + BK, CHt - .02); st.add(edge(sg));
       g.add(front, st); K.add(g);
       const pr = K.print(lines, E, 0, TOPT);
@@ -282,8 +282,8 @@ export default function (K) {
 
     // Schreibtischdinge (Bauteile aus schreibtisch.js, helle Papiertöne, kein Text): je Platz eine andere Mischung
     const HELL = {
-      lampe: { base: "#cfc8b9", baseTop: "#ddd6c8", stem: "#d3ccbd", shade: "#efeadd" },
-      becher: { side: "#d8cfbd", top: "#aaa190", pens: ["#f6f4ee", "#cdc1aa", "#e1ddd3", "#e9e2d3"] }
+      lampe: { base: "#c5c8cd", baseTop: "#d3d6db", stem: "#c9ccd1", shade: "#e7eaef" },
+      becher: { side: "#cdcfd5", top: "#9fa1a6", pens: ["#f1f3f9", "#bfc1c7", "#dadde2", "#dfe2e7"] }
     };
     const P1 = PL[0], P2 = PL[1], P3 = PL[2], ZM = z(.78);
     // Platz 1 (links): Pflanze am Rand, Tasse und Maus am Platzset

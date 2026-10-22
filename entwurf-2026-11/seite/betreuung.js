@@ -71,13 +71,13 @@ function clockFront(x, W, H) {
 export default function (K) {
   const { F, R, V, COL, Q, PI, sm, THREE, narrow: N } = K;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const FACE = c3("#f8f6f1"), METAL = c3("#dcd7cd"), CASE = c3("#ece9e2"), FRONTC = c3("#e7e3da"), CALC = c3("#e9e3d6"), PAGE = c3("#fbfaf7");
+  const FACE = c3("#f3f6fb"), METAL = c3("#d4d7dc"), CASE = c3("#e6e9ee"), FRONTC = c3("#e0e3e8"), CALC = c3("#e0e3e8"), PAGE = c3("#f6f8fe");
 
   K.sheet(-5.6, 9.2, -3.6, N ? 4.6 : 4.0);
 
   // ---------- Überschrift: Lettern stehen beim Scrollen aus dem Bogen auf (Desktop eine Zeile, Handy zwei) ----------
   F.part("titel", 0, .01);
-  const MX = -1.8, he = N ? .5 : .42, ho = { font: "marke", clock: "b", foot: 1, imprint: { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, closeB: .01 } };
+  const MX = -1.8, he = N ? .5 : .42, ho = { font: "marke", clock: "b", foot: 1, imprint: { fill: "#edeff5", col: "#c9cbd1", line: 2.2, closeB: .01 } };
   const HL = N ? [["Betreuung und"], ["Absicherung"]] : [["Betreuung und Absicherung"]];
   const heads = HL.map((l, i) => {
     const w = K.measure(l, { font: "marke" }).tw * he;

@@ -17,8 +17,8 @@ export default function (K) {
   const { F, R, V, COL, Q, THREE, narrow: N } = K;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
   const { INK, DARK, RED, WHITE } = COL;
-  const MASS = c3("#ebe2cf"), MASS2 = c3("#dfd4bd"), BOX = c3("#dccaa8"), BOX2 = c3("#cfbb95");
-  const FEE = c3("#dedad2"), SIGN = c3("#fbfaf6"), HEAVY = c3("#cdc6b8"), PLATE = c3("#e6e0d4"), TAG = c3("#fffdf7");
+  const MASS = c3("#e0e2e8"), MASS2 = c3("#d2d4da"), BOX = c3("#c9cbd1"), BOX2 = c3("#babcc1");
+  const FEE = c3("#d7dadf"), SIGN = c3("#f6f8fe"), HEAVY = c3("#c4c6cb"), PLATE = c3("#dde0e5"), TAG = c3("#f6f8fe");
   const rect = (x0, z0, x1, z1) => [[x0, z0], [x1, z0], [x1, z1], [x0, z1]];
   const circ = (cx, cz, r, n = 18) => Array.from({ length: n }, (_, i) => [cx + r * Math.cos(i / n * 2 * Math.PI), cz + r * Math.sin(i / n * 2 * Math.PI)]);
   const OUT = -.003; // Druck auf der Außenseite hochgeklappter Wände (Unterseite der Ruhelage)

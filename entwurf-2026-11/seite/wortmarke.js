@@ -1,7 +1,7 @@
 // Wortmarke der Eröffnung: die einzige Stelle mit der Namensgeometrie. Marke N4 (Erik, 21.10.2026):
 // „Jan-Erik“ (Newsreader 380, Tinte) und „Andersen“ (Newsreader kursiv 340, ebenfalls Tinte), Laufweite -0,018 em, Größe .95.
 // Einziges Rot ist der runde Schlusspunkt (0,17 em, Unterkante auf der Grundlinie, dicht am kursiven n). Er steht als eigener Letter mit auf.
-// Die Lettern stehen auf der gestrichelten Falzlinie (#8f8a80); sie liegt im Bogen genau am Scharnier und läuft 0,06 em über Anfang und Ende hinaus.
+// Die Lettern stehen auf der gestrichelten Falzlinie (#888a8e); sie liegt im Bogen genau am Scharnier und läuft 0,06 em über Anfang und Ende hinaus.
 // Der Schlusspunkt gehört nicht in prints: die Kamera mittelt die Ecken aller prints, ein dritter Druck am Ende zöge den Namen aus der Mitte.
 // Schnittstelle (für einen späteren Tausch nur diese Funktion ersetzen):
 //   prints  Drucke der Marke (für die Lesestellung des Namens)
@@ -10,7 +10,7 @@
 // Lettern stehen aus dem Bogen auf; ihr Fuß sitzt genau auf dem Scharnier (opt.foot). Beim Aufstehen ist der Abdruck
 // als zarte Schnittkante zu sehen, danach schließt er sich; geblieben ist die gestrichelte Falz an der Fußlinie.
 // (Ein stehender Abdruck liegt bei 30–50° Blickhöhe fast deckungsgleich hinter den Lettern und las sich als Doppelbild.)
-const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, close: .25, closeDur: .7 };
+const IMPRINT = { fill: "#edeff5", col: "#c9cbd1", line: 2.2, close: .25, closeDur: .7 };
 
 // Podest (C): opt.par / opt.par2 sind die Deckflächen, auf deren Vorderkante die Zeilen stehen (zb / zb2 in deren Ruhelage).
 // Zweizeilig steht „Jan-Erik“ auf der hinteren, höheren Stufe; k1 gleicht aus, dass sie im Startbild weiter weg steht
@@ -26,7 +26,7 @@ export function wortmarke(K, { cx = 0, zb, narrow, par, zb2, par2, k1 = 1, falz 
   const dw = .01 * e, dd = 2 * DOT * e;                                     // Abstand und Breite des Schlusspunkts
   // grp: alle Drucke der Marke (Lettern, Abdrücke, Schlusspunkt) blenden im Kern gemeinsam aus, wenn sie den Rahmen verlassen: der Name steht ganz oder gar nicht
   const o = { foot: 1, imprint: IMPRINT, grp: "marke" };
-  const fold = (len, ee = e) => ({ x0: -.06 * ee, len: len + .12 * ee, lw: .014 * ee, dash: .045 * ee, gap: .035 * ee, col: "#8f8a80" });
+  const fold = (len, ee = e) => ({ x0: -.06 * ee, len: len + .12 * ee, lw: .014 * ee, dash: .045 * ee, gap: .035 * ee, col: "#888a8e" });
   const dot = (x, z, t0, p) => K.word([""], e, x, z, T(t0), TD(.7), { ...o, font: "marke", disc: DOT, col: RED, par: p });
   const folds = [];
   const fl = (x, z, p, f) => { folds.push({ x: x + f.x0, z, par: p, f }); return f; };

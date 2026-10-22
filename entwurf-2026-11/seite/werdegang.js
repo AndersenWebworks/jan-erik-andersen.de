@@ -148,14 +148,14 @@ function drawShop(x, W, H) {
   drawSite(x, bz, bz * 1.6, W - 2 * bz, H - 3.2 * bz, { shop: 1 });
 }
 
-const IMPRINT = { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, close: .25, closeDur: .7 };
+const IMPRINT = { fill: "#edeff5", col: "#c9cbd1", line: 2.2, close: .25, closeDur: .7 };
 
 export default function (K) {
   const { F, R, V, Q, PI, EPS, THREE, narrow: N } = K;
   F.edgeOwn(true);
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const TREAD = c3("#ece6d9"), RISER = c3("#fbfaf6"), WANGE = c3("#e3dccd"), CARD = c3("#f8f6f1"), GREY = c3("#dcd7cd"),
-    WOOD = c3("#e3d6bd"), STONE = c3("#dad4c9"), DARK = c3("#cfc9bf");
+  const TREAD = c3("#e3e6eb"), RISER = c3("#f6f8fe"), WANGE = c3("#d9dce1"), CARD = c3("#f3f6fb"), GREY = c3("#d4d7dc"),
+    WOOD = c3("#d4d7dc"), STONE = c3("#d2d4da"), DARK = c3("#c7c9cf");
 
   // ---------- Maße ----------
   // W Breite, H Stufenhöhe, D Auftritt. Am Handy schmaler (Text mittig, Zeichen dahinter), höher (bis vier Zeilen Zusatz)

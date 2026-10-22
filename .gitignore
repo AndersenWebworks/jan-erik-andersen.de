@@ -42,3 +42,6 @@ v215-*.css
 .claude/
 _funnel-map.html
 jan-erik-andersen-berufliche-historie-standalone.html
+
+# Messflug-Werkzeug: Ausgaben
+tools/messflug/out/

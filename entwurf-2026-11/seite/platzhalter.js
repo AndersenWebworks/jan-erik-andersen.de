@@ -63,7 +63,7 @@ function anzeige(x, X, Y, w, h, im) {
     if (ia > da) { sw = im.height * da; sx = (im.width - sw) / 2; } else sh = im.width / da;
     x.drawImage(im, sx, 0, sw, sh, X, Y, w, h);
   } else {
-    x.fillStyle = "#f5f2ea"; x.fillRect(X, Y, w, h);
+    x.fillStyle = "#eff1f7"; x.fillRect(X, Y, w, h);
     const s = w, tall = h > w * 1.3;
     x.fillStyle = ink(.06); x.fillRect(X, Y, w, h * (tall ? .075 : .1));
     x.fillStyle = ink(.16); rr(x, X + .05 * s, Y + h * (tall ? .027 : .035), .16 * s, h * (tall ? .022 : .03), 3); x.fill();
@@ -97,7 +97,7 @@ const adresse = u => u.replace(/^https?:\/\//, "").replace(/\/$/, "");
 export function ausserdem(K, o = {}) {
   const { F, R, V, Q, PI, THREE, narrow: N } = K;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const WALLC = c3("#ece7dc"), SHELFC = c3("#e9e3d6"), FRONTC = c3("#f3efe6"), SCRC = c3(SCR), LAPC = c3("#e4e1db"), STEMC = c3("#c9c4b8");
+  const WALLC = c3("#e4e7ec"), SHELFC = c3("#e0e3e8"), FRONTC = c3("#eceff4"), SCRC = c3(SCR), LAPC = c3("#dee1e6"), STEMC = c3("#c1c4c9");
   const ox = o.x || 0, oz = o.z || 0, B0 = o.b0 || 0, B1 = o.b1 === undefined ? 1 : o.b1, SP = B1 - B0;
   const T = t => B0 + t * SP, D = d => d * SP;
   const rp = a => [a[0] + ox, a[1] + oz];
@@ -130,7 +130,7 @@ export function ausserdem(K, o = {}) {
   const HW = HF + (N ? 3.4 : 3.8);
 
   const BZ0 = ZW - HW - 1.0, BZ1 = ZW + DS + (N ? 4.4 : 3.6);
-  if (o.sheet !== false) K.sheet(X0 - .9 + ox, -X0 + .9 + ox, BZ0 + oz, BZ1 + oz, "#faf8f3", o.sheetFrom !== undefined ? o.sheetFrom : -1);
+  if (o.sheet !== false) K.sheet(X0 - .9 + ox, -X0 + .9 + ox, BZ0 + oz, BZ1 + oz, "#f5f8fd", o.sheetFrom !== undefined ? o.sheetFrom : -1);
 
   // ---------- Wand: Rückwand, Ablage (klappt aus der Rückwand nach vorn), Front (klappt von der Ablage zum Boden) ----------
   F.part("ax-wand", T(.02), D(.14));
@@ -192,7 +192,7 @@ export function ausserdem(K, o = {}) {
       if (neck) {                                                                  // Standfuß des Monitors auf der Ablage
         const fw = 1.15 * k, fd = .5 * k;
         K.onPanel(shelf, K.decal(Math.round(fw * 200), Math.round(fd * 200), (x, Wp, Hp) => {
-          x.fillStyle = "#c9c4b8"; rr(x, 0, 0, Wp, Hp, Hp * .35); x.fill();
+          x.fillStyle = "#c1c4c9"; rr(x, 0, 0, Wp, Hp, Hp * .35); x.fill();
           x.strokeStyle = ink(.28); x.lineWidth = Math.max(1.2, Hp * .03); rr(x, 1, 1, Wp - 2, Hp - 2, Hp * .35); x.stroke();
         }, fw, fd, on, D(.03)), U, vz - .02, 1, null, .004);
       }

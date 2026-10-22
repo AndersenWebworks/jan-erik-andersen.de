@@ -22,7 +22,7 @@ function rr(x, X, Y, w, h, r) { x.beginPath(); x.roundRect(X, Y, w, h, r); }
 export default function (K) {
   const { F, R, V, COL, Q, sm, mech, win, clamp, THREE, narrow: N } = K;
   const c3 = s => { const c = new THREE.Color(s); return [c.r, c.g, c.b]; };
-  const BODY = c3("#e2dac8"), FRONTC = c3("#d9d0bc"), FACE = c3("#f8f6f1"), METAL = c3("#dcd7cd");
+  const BODY = c3("#d7dadf"), FRONTC = c3("#cdd0d5"), FACE = c3("#f3f6fb"), METAL = c3("#d4d7dc");
 
   // ---------- Maße ----------
   // Röhrenmonitor (links): Keilgehäuse, vorn hoch, hinten niedrig. Frontwand = Bildschirm mit Kinn.
@@ -65,7 +65,7 @@ export default function (K) {
   const HE = N ? .76 : .85, HEAD = ["Modernisierung"], hw = K.measure(HEAD, { font: "serif" }).tw * HE;
   const HZ = N ? 8.6 : 6.2, HCX = N ? 0 : -1.1;
   const head = K.word(HEAD, HE, HCX - hw / 2, HZ, 0, .07, { font: "serif", foot: 1, clock: "b", on: .004, over: .05,
-    imprint: { fill: "#f3f0e8", col: "#d2cbbe", line: 2.2, closeB: .01 } });
+    imprint: { fill: "#edeff5", col: "#c9cbd1", line: 2.2, closeB: .01 } });
 
   // Die Überschrift gehört zum Anfang und zum Schluss: sie klappt zurück, bevor die Kamera dicht an die Geräte geht (sonst ragt sie angeschnitten
   // ins untere Bildfeld), im Bogen bleibt ihr Abdruck, und steht am Ende wieder auf.
@@ -82,7 +82,7 @@ export default function (K) {
     // Wulst um das Glas, Glas mit Eckenrundung, Knöpfe im Kinn
     x.fillStyle = ink(.07); rr(x, (ISX - .11) * k, (TOPI - .11) * k, (DW + .22) * k, (DH + .22) * k, .2 * k); x.fill();
     x.strokeStyle = ink(.28); x.lineWidth = 3; rr(x, (ISX - .11) * k, (TOPI - .11) * k, (DW + .22) * k, (DH + .22) * k, .2 * k); x.stroke();
-    x.fillStyle = "#d8d5ca"; rr(x, ISX * k, TOPI * k, DW * k, DH * k, .14 * k); x.fill();
+    x.fillStyle = "#d2d4da"; rr(x, ISX * k, TOPI * k, DW * k, DH * k, .14 * k); x.fill();
     x.strokeStyle = ink(.6); x.lineWidth = 4; rr(x, ISX * k, TOPI * k, DW * k, DH * k, .14 * k); x.stroke();
     x.strokeStyle = "rgba(255,255,255,.7)"; x.lineWidth = 5; x.lineCap = "round";
     x.beginPath(); x.arc((ISX + .3) * k, (TOPI + .3) * k, .18 * k, Math.PI * 1.05, Math.PI * 1.5); x.stroke();
@@ -98,7 +98,7 @@ export default function (K) {
   const T_ON = .33;
   const oldPage = K.decal(Math.round(DW * PX), Math.round(DH * PX), (x, W, H) => {
     const k = W / DW;
-    x.fillStyle = "#e6e2d6"; x.fillRect(0, 0, W, H);
+    x.fillStyle = "#dfe1e7"; x.fillRect(0, 0, W, H);
     // Vertiefungen, in denen die Blöcke liegen
     for (const key of Object.keys(oldC)) {
       const [cx, cv] = oldC[key], { w, h } = BLK[key];
@@ -122,10 +122,10 @@ export default function (K) {
     }
   }, CW, crt.topL, -1);
   K.onPanel(crt.top, vent, CW / 2, crt.topL / 2, -1);
-  // Zurückklappen: Deckel zuerst, dann Seiten, Front, Rückwand
+  // Zurückklappen: Rückwand zuerst (der Deckel schwenkt dann nur schräg auf, statt als senkrechter Turm oben aus dem Bild zu ragen), dann Deckel, Seiten, Front
   const DN = .795;
-  crt.top.dn = { t0: DN, d: .06 }; crt.lf.dn = { t0: DN + .04, d: .06 }; crt.rt.dn = { t0: DN + .045, d: .06 };
-  crt.fr.dn = { t0: DN + .07, d: .07 }; crt.bk.dn = { t0: DN + .09, d: .06 };
+  crt.bk.dn = { t0: DN, d: .06 }; crt.top.dn = { t0: DN + .03, d: .06 }; crt.lf.dn = { t0: DN + .04, d: .06 }; crt.rt.dn = { t0: DN + .045, d: .06 };
+  crt.fr.dn = { t0: DN + .07, d: .07 };
 
   // Beide Sätze auf der Innenseite der Frontwand (side +1, Leserichtung zum Scharnier hin = -z): sie wird erst sichtbar, wenn der Monitor liegt.
   // Umbrüche nach Satzgliedern, Leerzeile zwischen den Sätzen.
@@ -171,13 +171,13 @@ export default function (K) {
   const lines = (x, X, Y, w, n, gap, th, a, widths) => { for (let i = 0; i < n; i++) { x.fillStyle = ink(a); rr(x, X, Y + i * gap, w * (widths ? widths[i % widths.length] : 1), th, th / 2); x.fill(); } };
   ART.bar = {
     old(x, W, H) {
-      x.fillStyle = "#d6d2c6"; x.fillRect(0, 0, W, H); bevel(x, 0, 0, W, H, 3);
+      x.fillStyle = "#cfd1d7"; x.fillRect(0, 0, W, H); bevel(x, 0, 0, W, H, 3);
       const b = H * .6, y = (H - b) / 2;
-      for (let i = 0; i < 3; i++) { x.fillStyle = "#e4e0d5"; x.fillRect(H * .3 + i * (b + H * .12), y, b, b); bevel(x, H * .3 + i * (b + H * .12), y, b, b, 2); }
+      for (let i = 0; i < 3; i++) { x.fillStyle = "#dddfe5"; x.fillRect(H * .3 + i * (b + H * .12), y, b, b); bevel(x, H * .3 + i * (b + H * .12), y, b, b, 2); }
       const fx = H * .3 + 3 * (b + H * .12) + H * .1, fw = W - fx - H * 1.1;
-      x.fillStyle = "#f2efe6"; x.fillRect(fx, y, fw, b); x.fillStyle = ink(.45); x.fillRect(fx, y, fw, 2); x.fillRect(fx, y, 2, b);
+      x.fillStyle = "#eceef4"; x.fillRect(fx, y, fw, b); x.fillStyle = ink(.45); x.fillRect(fx, y, fw, 2); x.fillRect(fx, y, 2, b);
       lines(x, fx + H * .2, y + b * .4, fw * .22, 1, 0, b * .2, .5); lines(x, fx + H * .2 + fw * .26, y + b * .4, fw * .18, 1, 0, b * .2, .35);
-      x.fillStyle = "#e4e0d5"; x.fillRect(W - H * .9, y, b, b); bevel(x, W - H * .9, y, b, b, 2);
+      x.fillStyle = "#dddfe5"; x.fillRect(W - H * .9, y, b, b); bevel(x, W - H * .9, y, b, b, 2);
     },
     neu(x, W, H) {
       x.fillStyle = "#ffffff"; x.fillRect(0, 0, W, H);
@@ -189,8 +189,8 @@ export default function (K) {
   ART.kopf = {
     old(x, W, H) {
       x.fillStyle = ink(.7); x.fillRect(0, 0, W, H); bevel(x, 0, 0, W, H, 3);
-      x.fillStyle = "#e4e0d5"; x.fillRect(H * .15, H * .15, H * 2.1, H * .7); bevel(x, H * .15, H * .15, H * 2.1, H * .7, 2);
-      for (let i = 0; i < 5; i++) { const bx = W - (5 - i) * H * 1.1 - H * .1; x.fillStyle = "#d6d2c6"; x.fillRect(bx, H * .22, H * 1.0, H * .56); bevel(x, bx, H * .22, H * 1.0, H * .56, 2); }
+      x.fillStyle = "#dddfe5"; x.fillRect(H * .15, H * .15, H * 2.1, H * .7); bevel(x, H * .15, H * .15, H * 2.1, H * .7, 2);
+      for (let i = 0; i < 5; i++) { const bx = W - (5 - i) * H * 1.1 - H * .1; x.fillStyle = "#cfd1d7"; x.fillRect(bx, H * .22, H * 1.0, H * .56); bevel(x, bx, H * .22, H * 1.0, H * .56, 2); }
     },
     neu(x, W, H) {
       x.fillStyle = "#ffffff"; x.fillRect(0, 0, W, H); x.fillStyle = ink(.12); x.fillRect(0, H - 3, W, 3);
@@ -200,7 +200,7 @@ export default function (K) {
   };
   ART.text = {
     old(x, W, H) {
-      x.fillStyle = "#e9e5da"; x.fillRect(0, 0, W, H); x.strokeStyle = ink(.5); x.lineWidth = 3; x.strokeRect(3, 3, W - 6, H - 6); x.lineWidth = 1.5; x.strokeRect(9, 9, W - 18, H - 18);
+      x.fillStyle = "#e2e4ea"; x.fillRect(0, 0, W, H); x.strokeStyle = ink(.5); x.lineWidth = 3; x.strokeRect(3, 3, W - 6, H - 6); x.lineWidth = 1.5; x.strokeRect(9, 9, W - 18, H - 18);
       x.fillStyle = ink(.78); x.fillRect(H * .1, H * .12, W * .7, H * .1);
       lines(x, H * .1, H * .32, W - H * .2, 7, H * .082, H * .045, .35, [1, .94, 1, .88, .97, 1, .55]);
     },
@@ -214,8 +214,8 @@ export default function (K) {
   };
   ART.bild = {
     old(x, W, H) {
-      x.fillStyle = "#e9e5da"; x.fillRect(0, 0, W, H); x.strokeStyle = ink(.5); x.lineWidth = 3; x.strokeRect(3, 3, W - 6, H - 6); x.lineWidth = 1.5; x.strokeRect(9, 9, W - 18, H - 18);
-      x.fillStyle = "#cfcbbf"; x.fillRect(H * .1, H * .1, W - H * .2, H * .68);
+      x.fillStyle = "#e2e4ea"; x.fillRect(0, 0, W, H); x.strokeStyle = ink(.5); x.lineWidth = 3; x.strokeRect(3, 3, W - 6, H - 6); x.lineWidth = 1.5; x.strokeRect(9, 9, W - 18, H - 18);
+      x.fillStyle = "#c8cad0"; x.fillRect(H * .1, H * .1, W - H * .2, H * .68);
       x.strokeStyle = ink(.4); x.lineWidth = 2.5; x.strokeRect(H * .1, H * .1, W - H * .2, H * .68);
       x.beginPath(); x.moveTo(H * .1, H * .1); x.lineTo(W - H * .1, H * .78); x.moveTo(W - H * .1, H * .1); x.lineTo(H * .1, H * .78); x.stroke();
       lines(x, H * .1, H * .86, W * .5, 1, 0, H * .045, .45);
@@ -230,10 +230,10 @@ export default function (K) {
   };
   ART.karten = {
     old(x, W, H) {
-      x.fillStyle = "#e9e5da"; x.fillRect(0, 0, W, H);
+      x.fillStyle = "#e2e4ea"; x.fillRect(0, 0, W, H);
       const cw = (W - H * .2) / 3;
       for (let i = 0; i < 3; i++) {
-        const X = H * .06 + i * (cw + H * .04); x.fillStyle = "#e2ded2"; x.fillRect(X, H * .08, cw, H * .84); x.strokeStyle = ink(.5); x.lineWidth = 2.5; x.strokeRect(X + 1, H * .08, cw - 2, H * .84);
+        const X = H * .06 + i * (cw + H * .04); x.fillStyle = "#dbdde3"; x.fillRect(X, H * .08, cw, H * .84); x.strokeStyle = ink(.5); x.lineWidth = 2.5; x.strokeRect(X + 1, H * .08, cw - 2, H * .84);
         x.fillStyle = ink(.7); x.fillRect(X + cw * .08, H * .2, cw * .6, H * .14); lines(x, X + cw * .08, H * .46, cw * .84, 3, H * .13, H * .06, .32, [1, .9, .7]);
       }
     },
