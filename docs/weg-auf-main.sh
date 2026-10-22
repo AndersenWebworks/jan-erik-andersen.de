@@ -25,14 +25,14 @@ mkdir -p "$MANIFEST_DIR"
 WTW="$(cd "$WT" && pwd -W)"; HAUPTW="$(cd "$HAUPT" && pwd -W)"; SEITEW="$(cd "$SEITE" && pwd -W)"
 
 # ---------- a) Dateien aus seite/ kopieren ----------
-# Was index.html lädt: main.js (Modul) -> kern.js, folge.js, gerwing.js ... (alle *.js im Ordner), vendor/three.*.js (Importmap),
-# bilder/bilder.js + bilder/staffelei-bilder.js (dynamische Importe), fonts/NewsreaderN4*.woff2 (CSS), fonts/schriften.js, Favicons.
+# Was index.html lädt: main.js (Modul) -> kern.js, folge.js, gerwing.js ... (alle *.js im Ordner), vendor/ komplett (three + addons/ für Post-Processing, Importmap),
+# bilder/*.js (dynamische Importe: bilder, staffelei-bilder, projekte-bilder), fonts/NewsreaderN4*.woff2 (CSS), fonts/schriften.js, Favicons.
 # Nicht ausgeliefert: _pruefung/, *.md (DREHBUCH, Notizen), bilder/*.jpg (nur Quellbilder der eingebetteten Daten), OFL-Lizenztexte werden mitgegeben.
 ( cd "$SEITE"
   ls index.html *.js apple-touch-icon.png favicon.svg favicon-16.png favicon-32.png
-  ls bilder/bilder.js bilder/staffelei-bilder.js
+  ls bilder/*.js
   ls fonts/*.woff2 fonts/schriften.js fonts/OFL-*.txt
-  ls vendor/*
+  find vendor -type f
 ) > "$MANIFEST.neu"
 sort -u "$MANIFEST.neu" -o "$MANIFEST.neu"
 
@@ -162,14 +162,18 @@ cat > "$WT/sitemap.xml" <<EOF
 </urlset>
 EOF
 
-# llms.txt (kurz) und llms-full.txt (ganzer Text) nur aus dem Text-Fallback (<main class="sr"> und nav.kontaktwege) von seite/index.html
+# llms.txt (kurz) und llms-full.txt (ganzer Text) nur aus dem Text-Fallback (<main class="sr">, Kontaktwege aus section#kontakt) von seite/index.html
 python -I - "$SEITEW/index.html" "$WTW" "$SITE" <<'PY'
 import re, sys
 from html.parser import HTMLParser
 quelle, wt, site = sys.argv[1:4]
 src = open(quelle, encoding="utf-8").read()
-m = re.search(r'<main class="sr">.*?</main>\s*<nav class="kontaktwege".*?</nav>', src, flags=re.S)
+m = re.search(r'<main class="sr">.*?</main>', src, flags=re.S)
 if not m: sys.exit("FEHLER: Text-Fallback nicht gefunden")
+# Kontaktwege stehen als letzter Abschnitt (section id="kontakt") im Fallback; für den Textteil abtrennen
+km = re.search(r'<section id="kontakt">.*?</section>', m.group(0), flags=re.S)
+if not km: sys.exit("FEHLER: Kontaktabschnitt im Text-Fallback nicht gefunden")
+haupt = m.group(0).replace(km.group(0), "")
 
 class P(HTMLParser):
     def __init__(s):
@@ -193,9 +197,10 @@ class P(HTMLParser):
         if s.cur is not None: s.cur[2] += d
     def handle_entityref(s, n): pass
 
-p = P(); p.feed(m.group(0))
+p = P(); p.feed(haupt)
 # Kontaktwege: a-Texte einzeln
-kw = re.findall(r'<a href="([^"]*)">([^<]*)</a>', m.group(0).split('class="kontaktwege"', 1)[1])
+kw = re.findall(r'<a href="([^"]*)">([^<]*)</a>', km.group(0))
+if len(kw) < 3: sys.exit("FEHLER: Kontaktwege unvollständig")
 
 def md_li(t):
     # Werdegang: "\x01 Zeitraum \x03 Titel \x02 Zusatz"
