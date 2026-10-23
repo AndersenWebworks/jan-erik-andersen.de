@@ -68,6 +68,8 @@ Gleiche Abfolge in jeder Szene, gestrafft: Schnitt (gestrichelte Linie) und Falz
 
 ## Mockup (Eröffnung)
 
+**Soll ab 23.10.2026 (Drehbuch, Eröffnung):** Mockup nur auf dem Monitor, in Desktop- und Mobilansicht; das Smartphone in der Szene zeigt keinen Text. Der folgende Absatz beschreibt den gebauten Zwischenstand, der mit dem Neubau der Eröffnung ersetzt wird.
+
 Der Name steht allein als Papierlettern auf dem Bogen (Wortmarke aus `schriften/NewsreaderMarke*.ttf`, gestrichelte Falzlinie darunter). Ortszeile, Kernsatz und die drei Sätze erscheinen als Website auf dem Monitor (Desktop) bzw. auf dem Smartphone, das flach auf dem Tisch liegt (Hochkant, `druckflaeche_oben`). Jede Fläche ist eine durchsichtige Überlagerung auf dem Bildschirm (`m_seite` Rahmen der Seite, `m_hero`, `m_satz1..3`, am Handy `h_*`), die der Browser aus der Szenendatei zeichnet und zum genannten Zeitpunkt weich einblendet; die Textquelle ist nur der Block `texte`. Das Gerät, das den Text nicht trägt, zeigt die Seite ohne Text (Monitor: Platzhalterbalken) bzw. bleibt dunkel (Handy am Desktop).
 
 ## Schiene (Faden und Punkt)

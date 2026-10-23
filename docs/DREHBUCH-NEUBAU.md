@@ -2,7 +2,17 @@
 
 Stand: 23.10.2026. Verdichtet aus `docs/FASSUNG-2026-11.md` (Entscheidungen vom 21. bis 23.10.2026) und dem Seitentext in `entwurf-2026-11/seite/index.html`. Hier steht nur noch, was heute gilt. Wo sich Entscheidungen widersprochen haben, gilt die jüngere; strittige Punkte stehen unter „Offen“ und werden vor dem Bau mit Erik geklärt.
 
-Die Fassung bleibt als Protokoll erhalten. `entwurf-2026-11/seite/` bleibt als Bestand liegen und ist Teilelager, nicht Grundlage.
+Die Fassung bleibt als Protokoll erhalten. `entwurf-2026-11/seite/` bleibt als Bestand liegen und ist Teilelager und Vorlage, nicht Grundlage.
+
+**Pflege:** Eine Entscheidung ersetzt die alte Stelle, sie wird nicht als „überholt“ angehängt; die Geschichte steht in Git. Was Erik nicht selbst gesagt oder ausdrücklich bestätigt hat, steht als **Vorschlag (Clautz)** da.
+
+### Begriffe
+- **Mobilansicht:** die Seite, wie ein Besucher sie auf seinem Handy sieht (Hochformat, `hochkant`). **Desktopansicht:** am Rechner (Querformat, `breit`).
+- **Smartphone (in der Szene):** das Gerät, das als Gegenstand auf dem Schreibtisch liegt. Nicht mit der Mobilansicht verwechseln.
+- **Monitor:** der Bildschirm des Rechners am Schreibtisch der Eröffnung. „Screen“ meint ihn.
+- **Mockup:** eine Website, die auf dem Monitor zu sehen ist, als wäre sie echt.
+- **Bogen:** das Papier, aus dem sich alles aufbaut. **Träger:** das Bauteil, auf dem ein Satz steht.
+- **Faden, Punkt, Schiene:** die rote Linie mit Punkt; die Schiene ist ihre vorab hellgraue Bahn.
 
 ---
 
@@ -41,7 +51,7 @@ Prüffrage für jede Szene und jeden Bauschritt: Versteht jemand, der aus einer 
 - **Marke N4:** „Jan-Erik *Andersen*“ in Newsreader, „Andersen“ kursiv in Tinte `#303033`, roter runder Schlusspunkt, Lettern auf einer gestrichelten Falzlinie. Favicon: kleines a mit rotem Punkt. Vorhanden in `wortmarke.js` und `marke/`.
 
 ### Text
-- **Ganzer Satz auf eigenem Träger:** Jeder Satz steht in einem Stück auf einem Bauteil, das selbst der Träger ist (Maßstab: Treppe im Werdegang, Leporello). Neu ab 23.10.2026 (Erik, „Mockup auch anderswo“): Ein Bildschirm darf Träger sein, wenn er eine echte Website zeigt, also ein Mockup mit Hero, Abschnitten und Webtypografie, auf das die Kamera einmal in der durchgehenden Fahrt heranfährt. Der Bildschirm ist dann selbst der Beleg: Die Sätze stehen dort, wo Eriks Arbeit sichtbar wird. Am Handy (hochkant) bleibt der Monitor der Träger; die Kamera rahmt ihn so, dass das Mockup lesbar ist. Ein Smartphone auf dem Tisch trägt keinen Text (Erik, 23.10.2026). Grenzen: je Szene höchstens ein Bildschirm als Träger, kein Springen von Gerät zu Gerät, Sätze nie auf Kinnen oder auf Geräten ohne Bildschirm. Wo kein Bildschirm zur Handlung gehört, bleibt der Satz im Papier.
+- **Ganzer Satz auf eigenem Träger:** Jeder Satz steht in einem Stück auf einem Bauteil, das selbst der Träger ist (Maßstab: Treppe im Werdegang, Leporello). Ein Bildschirm darf Träger sein, wenn er ein Mockup zeigt, also eine Website mit Hero, Abschnitten und Webtypografie, auf die die Kamera in der durchgehenden Fahrt heranfährt (Erik, 23.10.2026: „Mockup auch anderswo“). Grenzen: je Szene höchstens ein Bildschirm als Träger, kein Springen von Gerät zu Gerät, in der Mobilansicht derselbe Bildschirm wie in der Desktopansicht, nur anders gerahmt. Wo kein Bildschirm zur Handlung gehört, bleibt der Satz im Papier.
 - **Trägerformen wechseln je Szene** und passen zum Thema; keine Zettelparade.
 - **Text verschwindet nie schlagartig.** Er bleibt stehen, solange sein Bauteil im Bild ist, und blendet sonst weich aus.
 - **Lesbar:** Desktop rund 20 px, Handy mindestens 16 px, frontal, vollständig im Bild. Ein Satz muss in zwei bis drei Sekunden erfassbar sein; je Szene die Kernaussage zuerst.
@@ -70,7 +80,7 @@ Befund im Bestand: Die Kamera kannte nur zwei Regeln, „Punkt im Bild“ und �
 
 ### Startbild
 - Beim Laden steht **nur der Name**, scharf, auf großen Bildschirmen nicht zu groß. Kamera flach vor der Marke, man sieht keine Fläche. Bestätigt von Erik am 23.10.2026 gegen die Alternativen „Name plus feste Zeile“ und „Name plus Kernsatz“: Die Marke hat Vorrang vor dem Fünf-Sekunden-Maßstab im allerersten Bild.
-- Ortszeile, Kernsatz und Podest kommen erst mit dem Scrollen, ohne dass sich etwas durch die Buchstaben schiebt.
+- Ortszeile und Kernsatz kommen erst mit dem Scrollen, auf dem Monitor (siehe Eröffnung). Nichts schiebt sich durch die Buchstaben, nichts liegt zwischen Kamera und Name.
 - Nie zwei Namen übereinander (HTML-Vorbild und 3D), keine Animation über dem Startbild. Name und Text laden sofort, das 3D darf nachladen.
 
 ### Keine Karte (23.10.2026, Erik: „Karte weg“)
@@ -94,7 +104,10 @@ Reihenfolge, Kernaussage, Text, Bild. Texte wörtlich wie heute im Seitentext.
 - **Ziel:** Nach dem ersten Bild steht fest: Name, Webentwickler, für wen. Dass sich alles aus Papier präzise aufbaut, ist der erste Beleg fürs Niveau. Die drei Sätze zeigen jeder Zielgruppe ihren Weg zur Zusammenarbeit. Prüfen: Reicht das erste Bild, wenn jemand nach fünf Sekunden geht?
 - **Kernaussage:** Wer ich bin und was ich mache.
 - **Text:** Name; Ortszeile „Webentwicklung · Raum Plau am See · remote“; Kernsatz „Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen.“ Danach drei Sätze: „Agenturen holen mich als Entwickler ins Projekt.“ · „Unternehmen arbeiten direkt mit mir.“ · „Auf Wunsch arbeite ich auch befristet im Team mit.“
-- **Bild:** Name steht auf einem Pop-up-Podest aus dem Bogen; Kernsatz auf dessen Vorderseite. Beim Scrollen hebt sich die Kamera, aus dem Bogen baut sich der Schreibtisch auf (Variante C: Skizze auf der Platte wird zum Bildschirm, Rechner mit Statuspunkt und Kabel). Auf dem Tisch Leben: Grafiktablett, Tasse, Pflanze, Tastatur, Maus, Lampe, Stiftebecher. Die drei Sätze erscheinen nacheinander auf einem eigenen Träger aus dem Bogen am Schreibtisch, gedruckt ins Papier; das Grafiktablett bleibt Deko ohne Text (Erik, 23.10.2026).
+- **Bild:** Startbild nur der Name als Papierlettern auf dem Bogen. Beim Scrollen baut sich aus dem Bogen der Schreibtisch auf (Variante C: Skizze auf der Platte wird zum Monitor, Rechner mit Statuspunkt und Kabel), mit sichtbarer Konstruktionsphase. Auf dem Tisch Leben: Grafiktablett, Tasse, Pflanze, Tastatur, Maus, Lampe, Stiftebecher, Smartphone; alle ohne Text. Kein Wegweiser, keine Podestkarte.
+- **Mockup auf dem Monitor (Erik, 23.10.2026: „fake mockup einer normalen website für mich, quasi das was ich sonst gebaut hätte … das war der Gag“):** Der Monitor zeigt eine normale Website für Erik, wie er sie für sich gebaut hätte: Kopfzeile mit Wortmarke und Menü, Ortszeile, Kernsatz als Hero-Überschrift, die drei Sätze als Abschnitte. Vorlage für Farben, Schrift und Aufbau ist die heutige Live-Seite (`index.html` im Repo-Root). Keine erfundenen Texte. Der Monitor wirkt voll wie ein Screenshot, nicht halb leer.
+- **Mobilansicht:** Dasselbe Mockup auf demselben Monitor; die Kamera rahmt ihn so, dass er lesbar ist. Das Smartphone in der Szene zeigt keinen Text (Erik, 23.10.2026). **Vorschlag (Clautz), nicht bestätigt:** Der Monitor zeigt in der Mobilansicht die mobile Fassung des Mockups (schmaler Inhalt in der Bildschirmmitte), damit die Schrift groß genug wird.
+- **Rechner:** Erik: „der pc steht falsch“. **Vorschlag (Clautz), nicht bestätigt:** Tower unter der Tischplatte neben dem rechten Bein, Front zur Kamera, Kabel zum Monitor.
 - **Übergang:** Der Punkt startet am Statuspunkt des Rechners und läuft zu Gerwing.
 
 ### 2 Gerwing (Leitreferenz)
@@ -163,8 +176,8 @@ Die Lehre aus `seite/`: Die Nähte und die lange Abstimmzeit kamen daher, dass j
 
 Fehler werden nicht hinterher gesucht, sondern durch die Bauweise ausgeschlossen (Eriks Haltung: „make them unable to fail“).
 
-1. **Erst die Bahn, dann die Szenen.** Eine Stationstabelle legt fest: Reihenfolge und Lage der Szenen, Bahnabschnitte, Einstellungen mit Scrollposition. Darauf liegt eine durchgehende glatte Bahn für Faden, Punkt und Kamera. Die Lage der Szenen folgt der Fahrt, nicht einer Kartenansicht.
-2. **Ein Kamera-Rig für alles.** Abstand, Höhe, Vorausschau und Blickziel sind weiche Parameterkurven über der Bahn. Szenen haben keine eigene Kamerabahn; sie melden ihre Einstellungen (was im Bild sein muss, wie groß, von wo), und das Rig rahmt sie weich nacheinander.
+1. **Freie Bühnen mit Eingang und Ausgang.** Jede Szene ist eine eigene Bühne; Übergänge entstehen nach fester Formel aus Ausgang und Eingang (siehe unten).
+2. **Eine durchgehende Kamerafahrt**, deren Stützposen aus der Einstellungsliste jeder Szene kommen.
 3. **Szenen sind Beschreibungen.** Teile, Faltplan, Text, Einstellungen, Zeitfenster relativ zur eigenen Bahnstrecke. Eine Datei je Szene, ohne Sonderwege im Kern.
 4. **Text und Kanten gehören zum Papier.** Im Bestand ist jeder Satz eine eigene durchsichtige Folie knapp über der Fläche und jede Haarkante eine lose Linie daneben; je nach Blickwinkel und Zeichenreihenfolge franst Text aus, flackert, verschwindet oder Kanten stehen über. Im Neubau wird das Druckbild Teil der Fläche selbst, und die Kante wird mit der Fläche gezeichnet. Ohne zweite Schicht kann nichts überlagern.
 5. **Kollisionsprüfung beim Bauen.** Jedes Teil, jede Textfläche, jedes Kabel und der Faden haben einen Umriss; die Szene meldet jede Durchdringung (im Bestand: Überschrift im Monitorfuß, Kabel durch die Überschrift, Leporello im Gerät).
@@ -173,8 +186,7 @@ Fehler werden nicht hinterher gesucht, sondern durch die Bauweise ausgeschlossen
 
 ### Werkzeuge vor Szenen (23.10.2026, Erik: „Ja, Werkzeuge zuerst“)
 
-Erik will modular bauen, weil die Seite öfter angepasst wird: Text tauschen und Gegenstände versetzen, ohne die Szene neu zu bauen, und ohne bei jeder kleinen Anpassung Tokens zu verschwenden. Deshalb kommen die Werkzeuge vor der nächsten Szene. Punkt 1 und 2 oben (eine durchgehende Bahn, ein Rig für alles) gelten mit dem Wegfall der Karte nicht mehr; an ihre Stelle treten freie Bühnen mit Eingang und Ausgang.
-
+Erik will modular bauen, weil die Seite öfter angepasst wird: Text tauschen und Gegenstände versetzen, ohne die Szene neu zu bauen, und ohne bei jeder kleinen Anpassung Tokens zu verschwenden. Deshalb kommen die Werkzeuge vor der nächsten Szene. 
 - **Szenendatei je Szene:** Titel, Sätze, Lage der Gegenstände, Zeitpunkte, Einstellungsliste breit und hochkant, Eingang und Ausgang. Inhalt steht nur dort, nicht im Bauskript.
 - **Blender baut Form, Bewegung und Kamera** und legt für Text nur benannte leere Druckflächen an.
 - **Der Browser druckt den Text beim Laden auf diese Flächen.** Optisch bleibt es Druck im Papier. Ein Satztausch braucht keinen Blender-Lauf; kleine Lageänderungen übernimmt der Abspieler ebenfalls.
@@ -191,6 +203,18 @@ Nach einem halben Tag war das Ergebnis nicht besser oder schneller als der Besta
 - **Bildfehler sind Prüfungen, keine Sichtschleifen:** Anschnitt wichtiger Teile, Verdeckung von Titel und Text, Blickwinkel auf Bildschirme, Füllgrad der Mockups und Lageregeln aus der Szenendatei misst der Baubefehl. Das Auge bleibt nur für Geschmack.
 - **Messlatte:** Mit diesen Prüfungen bekommt die Eröffnung genau eine Runde. Ist sie danach nicht sichtbar besser als die Eröffnung im Bestand, endet der Blender-Weg. Mitgenommen wird, was ohne Blender trägt: Prüfungen, Szenendateien, durchgehende Kamera.
 
+- **Eröffnung wird neu gebaut, nicht geflickt (23.10.2026, Erik).** Sie hat an einem Tag vier Prämissen gewechselt (Wegweiser, Platzhalterseite, Mockup, Smartphone mit Text). Bauskript und Szenendatei der Eröffnung entstehen frisch aus diesem Drehbuch, mit der Eröffnung des Bestands als Vorlage. Werkzeuge, Basis, Prüfungen, Abspieler, Übergangsformel und Modernisierung bleiben. Diese Runde ist die Messlatte-Runde.
+
+### Arbeitsweise (23.10.2026, aus den Pannen des Tages)
+- **Das Drehbuch ist die einzige Quelle** und steht immer auf dem heutigen Stand (siehe Pflege oben).
+- **Nur Eriks Wort ist Entscheidung.** Eine Auswahlkarte entscheidet nur, was in ihrer Frage steht, nicht das Kleingedruckte der Optionen. Eigene Vorschläge bleiben als Vorschlag markiert, bis Erik sie bestätigt.
+- **Feste Begriffe** aus der Begriffsliste, in Gespräch, Drehbuch und Helferauftrag gleich.
+- **Der Helfer baut aus dem Drehbuch,** nicht aus einer Nacherzählung. Sein Auftrag ist: Drehbuchabschnitt der Szene, Bestand als Vorlage, Prüfungen; Freitext nur für Technik.
+- **Vor dem Bau prüft Erik die Quelle,** also den Drehbuchabschnitt der Szene, nicht erst das Bild.
+- **Bestand übersetzen statt neu erfinden;** neu nur, wo der Bestand nachweislich nicht trug.
+- **Ändert sich die Prämisse einer Szene, wird sie neu gebaut,** nicht geflickt.
+- **Fehler werden zu Prüfungen,** Bilder sieht man nur für Geschmack an.
+
 **Ort:** neuer Ordner neben `seite/`. Der Weg auf main zeigt erst nach Eriks Abnahme auf den Neubau. Push nur nach Eriks Klick.
 
 ## 5 Offen – vor dem Bau mit Erik klären
@@ -204,7 +228,7 @@ Eine Frage nach der anderen, Entscheidung hier eintragen. Sortiert nach Gewicht 
 5. ~~**Shop-Szene doppelt zu Gerwing**~~ Entschieden 23.10.2026, Erik: „Probleme lösen, Ziel WooCommerce“. Neuer Zuschnitt und Text siehe 3, Szene 5. Bild ebenfalls entschieden: Ladenfront aus Papier.
 6. ~~**Bild für „Wie ich arbeite“**~~ Entschieden 23.10.2026, Erik: „Band mit Prüfplatz“ (siehe 3, Szene 9).
 7. ~~**Navigation**~~ Entschieden 23.10.2026, Erik: „Ja, als vierter Punkt“. Oben: Projekte, Leistungen, Werdegang, Kontakt.
-8. ~~**Grafiktablett in der Eröffnung**~~ Entschieden 23.10.2026, Erik: „Sätze ins Papier“. Die drei Sätze stehen auf einem eigenen Träger aus dem Bogen am Schreibtisch; das Tablett bleibt Deko ohne Text, keine Heranfahrt. Die Regel „kein Satz auf Geräten“ gilt ohne Ausnahme. **Überholt am 23.10.2026:** Erik wählt das Mockup. Kernsatz und die drei Sätze stehen als Website auf dem Monitor am Schreibtisch, auch am Handy (das Smartphone auf dem Tisch trägt keinen Text); Wegweiser und Podestkarte entfallen, das Startbild bleibt der Name allein.
+8. ~~**Text in der Eröffnung**~~ Entschieden 23.10.2026, Erik: Mockup auf dem Monitor (siehe 3, Eröffnung).
 9. **Handy:** Einige Sätze (WBG, Außerdem, „Damit schaffe ich …“, Werdegang-Stufen) sind bei 16 px breiter als 390 px. Am Handy anders umbrechen auf höheren Trägern, oder kürzere Handyfassungen der Sätze?
 10. **Bewegungssprache:** mechanisch (anfahren, abbremsen, leicht überschwingen, einrasten) für alle Teile, nur langsamer als bisher?
 11. **Bildschirmfotos für „Außerdem“:** selbst von den Live-Seiten aufnehmen (Desktop und Handy) oder liefert Erik sie?
