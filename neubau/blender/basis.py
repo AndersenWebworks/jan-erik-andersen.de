@@ -17,12 +17,13 @@ PAL = {
     "papier": "#f6f8fc",      # Bogen und weiße Teile: kühles, fast reines Weiß
     "flaeche": "#f3f6fb",     # helle Bauteilfläche
     "grau1": "#e3e7ee",       # feine kühle Grauabstufungen für Flächen, die sich absetzen
-    "grau2": "#cbd1da",       # Gehäuse des alten Geräts
-    "grau3": "#c2c8d2",       # Front des alten Geräts
-    "metall": "#d4d7dc",
-    "kante": "#c3c8d0",       # Schnittkante des Kartons (Dicke), zeichnet die Kontur mit der Fläche
-    "boden": "#e9eef5",       # Tisch unter dem Bogen
-    "dunst": "#dfedf9",       # Horizont und Hintergrund: sehr helles Himmelblau, kein Himmelsbild
+    "grau2": "#b4bdcb",       # Gehäuse des alten Geräts
+    "grau3": "#a7b0bf",       # Front des alten Geräts
+    "metall": "#a9b3c1",
+    "kante": "#8b95a6",       # Schnittkante des Kartons (Dicke), zeichnet die Kontur mit der Fläche
+    "boden": "#e3e9f1",       # Tisch unter dem Bogen
+    "dunst": "#f7fbff",       # Horizont und Boden in der Ferne: sehr helles Himmelblau, kein Himmelsbild
+    "himmel": "#d4e5f6",      # Zenit des Verlaufs über dem Horizont (nur ein Farbverlauf)
     "schatten": "#d6e1ee",    # Schattenfarbe (bläulich)
     "tinte": "#303033",       # Schrift dunkel und kontrastreich
     "rot": "#d40235",         # einzige kräftige Farbe: Faden, Punkt, wenige Akzente
@@ -71,7 +72,15 @@ def buehne(frames, bogen=(-8, 8, -10, 10)):
     out = nt.nodes.new("ShaderNodeOutputWorld")
     lp = nt.nodes.new("ShaderNodeLightPath")
     mix = nt.nodes.new("ShaderNodeMixShader")
-    bg_cam = nt.nodes.new("ShaderNodeBackground"); bg_cam.inputs[0].default_value = lin(PAL["dunst"]); bg_cam.inputs[1].default_value = 1
+    bg_cam = nt.nodes.new("ShaderNodeBackground"); bg_cam.inputs[1].default_value = 1
+    # Himmelsverlauf: Horizont (Dunst) -> Zenit über die Blickrichtung (Texture Coordinate „Generated“ ist in der Welt die Richtung)
+    tc = nt.nodes.new("ShaderNodeTexCoord"); sep = nt.nodes.new("ShaderNodeSeparateXYZ")
+    nt.links.new(tc.outputs["Generated"], sep.inputs[0])
+    mr = nt.nodes.new("ShaderNodeMapRange"); mr.interpolation_type = "SMOOTHSTEP"; mr.inputs["From Min"].default_value = 0; mr.inputs["From Max"].default_value = 1.0
+    nt.links.new(sep.outputs["Z"], mr.inputs["Value"])
+    mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"
+    mx.inputs["A"].default_value = lin(PAL["dunst"]); mx.inputs["B"].default_value = lin(PAL["himmel"])
+    nt.links.new(mr.outputs["Result"], mx.inputs["Factor"]); nt.links.new(mx.outputs["Result"], bg_cam.inputs[0])
     bg_amb = nt.nodes.new("ShaderNodeBackground"); bg_amb.inputs[0].default_value = lin(LICHT["umgebung_farbe"]); bg_amb.inputs[1].default_value = LICHT["umgebung"]
     nt.links.new(lp.outputs["Is Camera Ray"], mix.inputs[0])
     nt.links.new(bg_amb.outputs[0], mix.inputs[1]); nt.links.new(bg_cam.outputs[0], mix.inputs[2])
@@ -97,17 +106,17 @@ def buehne(frames, bogen=(-8, 8, -10, 10)):
 
 
 # Licht: an einer Stelle, der Browser liest dieselben Werte aus den Extras (licht) der glb
-LICHT = {"sonne": 4.2, "winkel": 2.5, "hoehe": 40, "richtung": 32, "umgebung": .92, "umgebung_farbe": "#e2ebf6"}
+LICHT = {"sonne": 4.6, "winkel": 2.5, "hoehe": 38, "richtung": 32, "umgebung": .86, "umgebung_farbe": "#e2ebf6"}
 
 
 # ---------- Material ----------
 _mat = {}
 
 
-def material(name, farbe, bild=None, unbeleuchtet=False, rau=.85, einblenden=None):
+def material(name, farbe, bild=None, unbeleuchtet=False, rau=.85, einblenden=None, extra=None):
     """einblenden=(f0, f1): der Druck erscheint weich zwischen Bild f0 und f1 (vorher nur die Grundfarbe). Im Browser
     liest der Abspieler das aus den Extras des Materials (neubau.einblenden)."""
-    key = (name, farbe, bild, unbeleuchtet, einblenden)
+    key = (name, farbe, bild, unbeleuchtet, einblenden, json.dumps(extra, sort_keys=True) if extra else None)
     if key in _mat:
         return _mat[key]
     m = bpy.data.materials.new(name)
@@ -137,7 +146,7 @@ def material(name, farbe, bild=None, unbeleuchtet=False, rau=.85, einblenden=Non
         else:
             nt.links.new(tx.outputs["Color"], col_in)
     nt.links.new(sh.outputs[0], out.inputs[0])
-    m["neubau"] = json.dumps({"farbe": farbe, "unbeleuchtet": unbeleuchtet, "einblenden": list(einblenden) if einblenden else None})
+    m["neubau"] = json.dumps({"farbe": farbe, "unbeleuchtet": unbeleuchtet, "einblenden": list(einblenden) if einblenden else None, **(extra or {})})
     _mat[key] = m
     return m
 
@@ -256,19 +265,20 @@ def karton(name, w, h, t=KARTON, mats=None, uv_hinten=(True, False), liegend=Fal
 
 
 # ---------- Druckflächen: benannte, leere Flächen für Text, der erst im Browser gedruckt wird ----------
-def druckflaeche(name, traeger, seite, w, h, mat, dicke, abstand=.001):
+def druckflaeche(name, traeger, seite, w, h, mat, dicke, abstand=.001, x0=0, z0=0):
     """Leere Druckfläche ("druck:<name>") dicht über einer Seite des Trägers (Kind des Trägers, bewegt sich mit ihm).
     seite "hinten": Rückseite des Kartons bei y = dicke (Druckkoordinaten x -> x, y -> z, von unten gezählt wie die Rückseite der
     Front); seite "vorn": Vorderseite bei y = 0 (Druckkoordinaten y von oben, also z = h - y). w, h: Maße in Einheiten, = Maße des
-    Druckbilds im Browser. Die UV füllt die Fläche (u nach rechts, v nach oben, Blender-Konvention). Der Abspieler liest Name, w und h aus
-    den Extras (neubau.druck, w, h) und legt das gezeichnete Bild als Textur auf."""
+    Druckbilds im Browser. x0, z0: Lage der unteren linken Ecke der Fläche in den lokalen Koordinaten des Trägers (für Flächen, die
+    nur einen Teil des Trägers einnehmen, etwa ein Schild auf einem Pfeilbrett). Die UV füllt die Fläche (u nach rechts, v nach oben,
+    Blender-Konvention). Der Abspieler liest Name, w und h aus den Extras (neubau.druck, w, h) und legt das gezeichnete Bild als Textur auf."""
     me = bpy.data.meshes.new("druck:" + name)
     ob = bpy.data.objects.new("druck:" + name, me); bpy.context.scene.collection.objects.link(ob)
     if seite == "hinten":
-        pt = lambda px, py: (px, dicke + abstand, py)
+        pt = lambda px, py: (x0 + px, dicke + abstand, z0 + py)
         gewollt = 1
     else:
-        pt = lambda px, py: (px, -abstand, h - py)
+        pt = lambda px, py: (x0 + px, -abstand, z0 + h - py)
         gewollt = -1
     ecken = [(0, 0), (w, 0), (w, h), (0, h)]
     me.from_pydata([pt(*e) for e in ecken], [], [[0, 1, 2, 3]])
@@ -285,6 +295,88 @@ def druckflaeche(name, traeger, seite, w, h, mat, dicke, abstand=.001):
     ob["neubau"] = json.dumps({"druck": name, "w": round(w, 5), "h": round(h, 5), "traeger": traeger.name, "seite": seite})
     ob.visible_shadow = False
     return ob
+
+
+# ---------- Weitere Papierbausteine (gemeinsam für alle Szenen) ----------
+def zylinder(name, r, h, n, mat, ort=(0, 0, 0)):
+    """Geschlossenes n-Eck-Prisma mit senkrechter Achse (z), Boden auf z = ort[2]. Papierrolle, Scheibe, Fuß."""
+    me = bpy.data.meshes.new(name); ob = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(ob)
+    bm = bmesh.new()
+    v0 = [bm.verts.new((r * math.cos(2 * math.pi * i / n), r * math.sin(2 * math.pi * i / n), 0)) for i in range(n)]
+    v1 = [bm.verts.new((r * math.cos(2 * math.pi * i / n), r * math.sin(2 * math.pi * i / n), h)) for i in range(n)]
+    bm.faces.new(v0[::-1]); bm.faces.new(v1)
+    for i in range(n):
+        j = (i + 1) % n
+        bm.faces.new([v0[i], v0[j], v1[j], v1[i]])
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(me); bm.free()
+    me.materials.append(mat)
+    uv = me.uv_layers.new()
+    for l in me.loops:
+        co = me.vertices[l.vertex_index].co
+        uv.data[l.index].uv = (co.x / (2 * r) + .5, co.y / (2 * r) + .5)
+    ob.location = ort
+    return ob
+
+
+def faltpanel(name, mitte, azimut_grad, breite, hoehe, t, mats, auf, flach=90, eltern=None):
+    """Blatt, das sich nach außen flach in den Bogen legt und senkrecht aufstellt (Seitenwand eines Gefäßes, Blatt einer Pflanze, Stift).
+    mitte: Weltpunkt unten auf der Außenfläche des Blattes; azimut_grad: Richtung nach außen (0 = +y, 90 = +x). Das Scharnier liegt in der
+    Außenfläche am Fuß, das Blatt ist in der Bauform senkrecht (Außenfläche = Vorderseite, Dicke nach innen). Die Dicke geht beim
+    Flachlegen nach oben, nichts taucht in die Unterlage. flach: Winkel Bauform -> flach (90 = ganz flach; kleiner für ein nach außen
+    geneigtes Blatt, dann steht es in der Bauform um 90 - flach nach außen geneigt). Gibt (Blatt, Scharnier, Rahmen) zurück."""
+    psi = math.radians(180 - azimut_grad)
+    rahmen_ = leer(name + "_rahmen", Vector(mitte), eltern)
+    rahmen_.rotation_euler = (0, 0, psi)
+    gelenk = klappe(name + "_gelenk", (0, 0, 0), "x", flach, auf, None, [], eltern=rahmen_)
+    b = karton(name, breite, hoehe, t, mats=mats, mitte_x=True)
+    b.parent = gelenk; b.matrix_parent_inverse = Matrix.Identity(4); b.location = (0, 0, 0)
+    if flach < 90:
+        b.rotation_euler = (math.radians(90 - flach), 0, 0)   # Bauform: nach außen geneigt (+x-Drehung kippt +z nach -y = außen)
+    return b, gelenk, rahmen_
+
+
+def gefaess(name, mitte, z0, apothem, h, n, t, mat_aussen, mat_boden, auf, versatz=0, boden_dicke=.012, mat_kante=None):
+    """Gefäß (Tasse, Becher, Topf) als n-eckiges Papiernetz: Boden und n Seitenblätter, die flach nach außen liegen und sich
+    nacheinander (versatz Bilder je Blatt) aufstellen. apothem: Abstand Mitte - Außenfläche. Gibt (Boden, [Blätter]) zurück."""
+    kante = mat_kante or material("Kante", PAL["kante"])
+    boden = zylinder(name + "_boden", (apothem - t - SPALT) / math.cos(math.pi / n), boden_dicke, n, mat_boden, ort=(mitte[0], mitte[1], z0))
+    boden.rotation_euler = (0, 0, math.pi / n)
+    teile = []
+    w = 2 * (apothem - t) * math.tan(math.pi / n) - SPALT * 4
+    for i in range(n):
+        az = 360 * i / n
+        u = richtung_vektor(az)
+        p = (mitte[0] + u.x * apothem, mitte[1] + u.y * apothem, z0)
+        a0 = auf[0] + versatz * i
+        b, g, r_ = faltpanel(f"{name}_w{i}", p, az, w, h, t, {"vorn": mat_aussen, "hinten": mat_boden, "rand": kante}, (a0, a0 + (auf[1] - auf[0])))
+        teile.append(b)
+    return boden, teile
+
+
+def lettern(name, text, schriften, em, mat, dicke, kursiv_ab=None):
+    """Papierlettern aus einer Schrift (Newsreader): Mesh in der x-z-Ebene, Vorderseite bei y = 0 (zeigt nach -y), Grundlinie auf z = 0,
+    Dicke nach +y. schriften: {"aufrecht": ttf, "kursiv": ttf}; kursiv_ab: Index des ersten kursiven Zeichens. Gibt (Objekt, (x0, x1, z0, z1))
+    zurück, Maße in Einheiten (em = Schriftgröße)."""
+    cu = bpy.data.curves.new(name, "FONT")
+    cu.body = text
+    cu.font = bpy.data.fonts.load(schriften["aufrecht"])
+    if kursiv_ab is not None:
+        cu.font_italic = bpy.data.fonts.load(schriften["kursiv"])
+        for i in range(kursiv_ab, len(text)):
+            cu.body_format[i].use_italic = True
+    cu.size = em; cu.extrude = dicke / 2; cu.resolution_u = 12; cu.fill_mode = "BOTH"
+    cu.align_x = "LEFT"
+    tmp = bpy.data.objects.new(name + "_text", cu); bpy.context.scene.collection.objects.link(tmp)
+    bpy.context.view_layer.update()
+    me = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get()))
+    bpy.data.objects.remove(tmp, do_unlink=True)
+    me.transform(Matrix.Rotation(math.pi / 2, 4, "X") @ Matrix.Identity(4))
+    me.transform(Matrix.Translation((0, dicke / 2, 0)))
+    me.materials.clear(); me.materials.append(mat)
+    ob = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(ob)
+    xs = [v.co.x for v in me.vertices]; zs = [v.co.z for v in me.vertices]
+    return ob, (min(xs), max(xs), min(zs), max(zs))
 
 
 def gruppe(name, objekte, pivot=(0, 0, 0), versatz=(0, 0, 0), drehung_z=0):
@@ -501,6 +593,99 @@ def faden(name, bahn, breite=.05, hoehe=.0035):
     return ob
 
 
+# ---------- Schiene (Faden): Bahn mit stetiger Krümmung, Anschluss an Szenen und Übergänge über „Tore“ ----------
+# Eine Bahn ist ein offener kubischer B-Spline (C2: Tangente und Krümmung überall stetig). An den Toren (Eingang/Ausgang einer Szene)
+# liegen die ersten bzw. letzten drei Kontrollpunkte auf einer Geraden durch den Torpunkt in Torrichtung: dort ist die Krümmung exakt 0.
+# Zwei Bahnen, die an einem Tor mit gleichem Punkt und gleicher Richtung enden/beginnen, gehen damit mit gleicher Richtung UND gleicher
+# Krümmung (0) ineinander über (G2). Richtung in Grad: 0 = nach +y, 90 = nach +x.
+SCHIENE = {"grau": "#c3cad6", "breit": .06, "hoehe": .0022}   # kühles Grau aus der Palette, heller und breiter als die Bau-Linien
+
+
+def richtung_vektor(grad):
+    h = math.radians(grad)
+    return Vector((math.sin(h), math.cos(h)))
+
+
+def tor_kontrolle(punkt, richtung_grad, schritt=1.6):
+    """Drei Kontrollpunkte auf der Geraden durch punkt in Richtung richtung_grad (Mitte = Torpunkt)."""
+    p = Vector(punkt); d = richtung_vektor(richtung_grad) * schritt
+    return [p - d, p, p + d]
+
+
+def bahn_g2(tor_ein, tor_aus, innen=(), schritt=1.6, n=600, dicht=48):
+    """Bahn von Tor 1 nach Tor 2. tor_*: ((x, y), richtung_grad). innen: Kontrollpunkte dazwischen (ohne Gewähr, dass die Bahn durch
+    sie läuft: ein B-Spline bleibt innerhalb des Kontrollpolygons). Gibt (Punkte (Vector, gleichabständig), Krümmung je Punkt (1/Einheit,
+    vorzeichenbehaftet, links positiv), Länge) zurück."""
+    a = tor_kontrolle(tor_ein[0], tor_ein[1], schritt)
+    b = tor_kontrolle(tor_aus[0], tor_aus[1], schritt)
+    C = a + [Vector(p) for p in innen] + b
+    pts, kap = [], []
+    def auswerten(P0, P1, P2, P3, t):
+        p = ((-P0 + 3 * P1 - 3 * P2 + P3) * t ** 3 + (3 * P0 - 6 * P1 + 3 * P2) * t ** 2 + (-3 * P0 + 3 * P2) * t + (P0 + 4 * P1 + P2)) / 6
+        d1 = ((-P0 + 3 * P1 - 3 * P2 + P3) * (3 * t ** 2) + (3 * P0 - 6 * P1 + 3 * P2) * (2 * t) + (-3 * P0 + 3 * P2)) / 6
+        d2 = ((-P0 + 3 * P1 - 3 * P2 + P3) * (6 * t) + (3 * P0 - 6 * P1 + 3 * P2) * 2) / 6
+        k = (d1.x * d2.y - d1.y * d2.x) / max(1e-12, d1.length ** 3)
+        return p, k
+    for i in range(len(C) - 3):
+        for j in range(dicht):
+            p, k = auswerten(*C[i:i + 4], j / dicht)
+            pts.append(p); kap.append(k)
+    p, k = auswerten(*C[-4:], 1.0)
+    pts.append(p); kap.append(k)
+    L = [0]
+    for u, v in zip(pts, pts[1:]):
+        L.append(L[-1] + (v - u).length)
+    out, kout, j = [], [], 0
+    for i in range(n + 1):
+        s = L[-1] * i / n
+        while j < len(L) - 2 and L[j + 1] < s:
+            j += 1
+        f = (s - L[j]) / max(1e-9, L[j + 1] - L[j])
+        out.append(pts[j].lerp(pts[j + 1], f)); kout.append(kap[j] + (kap[j + 1] - kap[j]) * f)
+    return out, kout, L[-1]
+
+
+def bahn_bericht(bahn, kap, laenge):
+    """Messwerte einer Bahn: Richtung und Krümmung an beiden Enden, größte Krümmung, größte Krümmungsänderung je Einheit, Wendepunkte
+    (Vorzeichenwechsel der Krümmung außerhalb eines Rauschbands), kleinster Radius."""
+    n = len(bahn) - 1
+    rich = lambda i: math.degrees(math.atan2((bahn[min(n, i + 1)] - bahn[max(0, i - 1)]).x, (bahn[min(n, i + 1)] - bahn[max(0, i - 1)]).y))
+    ds = laenge / n
+    dk = max(abs(kap[i + 1] - kap[i]) / ds for i in range(n))
+    vz = [k for k in kap if abs(k) > 2e-3]
+    wende = sum(1 for a, b in zip(vz, vz[1:]) if a * b < 0)
+    return {"richtung_anfang": round(rich(0), 3), "richtung_ende": round(rich(n), 3), "kruemmung_anfang": round(kap[0], 6), "kruemmung_ende": round(kap[-1], 6),
+            "kruemmung_max": round(max(abs(k) for k in kap), 4), "dkruemmung_max": round(dk, 4), "wendepunkte": wende,
+            "radius_min": round(1 / max(1e-9, max(abs(k) for k in kap)), 3), "laenge": round(laenge, 3)}
+
+
+def schiene(name, bahn, breite=None, hoehe=None):
+    """Flache Bahn auf dem Papier (nicht erhaben): ein Band mit Attribut _s (Bogenlänge ab Bahnanfang, in Einheiten). Der Abspieler färbt
+    es nach dem Scrollfortschritt: hinter dem Punkt rot, davor kühles Grau (Material-Extras neubau.schiene)."""
+    breite = breite or SCHIENE["breit"]; hoehe = hoehe or SCHIENE["hoehe"]
+    me = bpy.data.meshes.new(name); ob = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(ob)
+    v, f, s_attr = [], [], []
+    s = 0.0
+    for i, p in enumerate(bahn):
+        a = bahn[max(0, i - 1)]; b = bahn[min(len(bahn) - 1, i + 1)]
+        t = (b - a).normalized(); nrm = Vector((-t.y, t.x))
+        if i: s += (p - bahn[i - 1]).length
+        v += [(p.x + nrm.x * breite / 2, p.y + nrm.y * breite / 2, hoehe), (p.x - nrm.x * breite / 2, p.y - nrm.y * breite / 2, hoehe)]
+        s_attr += [s, s]
+        if i:
+            f.append([2 * i - 2, 2 * i - 1, 2 * i + 1, 2 * i])
+    me.from_pydata(v, [], f); me.update()
+    for p in me.polygons:
+        if p.normal.z < 0:
+            p.flip()
+    at = me.attributes.new("_s", "FLOAT", "POINT"); at.data.foreach_set("value", s_attr)
+    me.materials.append(material("Schiene", SCHIENE["grau"], unbeleuchtet=True, extra={"schiene": True, "grau": SCHIENE["grau"], "rot": PAL["rot"]}))
+    ob.visible_shadow = False
+    ob["neubau_rolle"] = "schiene"
+    ob["neubau_schiene"] = json.dumps({"laenge": round(s, 5)})
+    return ob
+
+
 def faden_pruefkoerper(bahn, breite):
     """Unsichtbarer Prüfkörper: das Fadenband als Wand bis 0,6 hoch. Was ihn schneidet, liegt auf dem Faden."""
     me = bpy.data.meshes.new("Pruef_Faden"); ob = bpy.data.objects.new("Pruef_Faden", me); bpy.context.scene.collection.objects.link(ob)
@@ -521,8 +706,9 @@ def faden_pruefkoerper(bahn, breite):
     return ob
 
 
-def punkt(name, bahn, laenge, s_von_f, r=.085):
-    """Roter Punkt, flach auf dem Faden. s_von_f(frame) -> Anteil 0..1 der Bahn."""
+def punkt(name, bahn, laenge, s_von_f, r=.085, erscheint=None):
+    """Roter Punkt, flach auf der Schiene. s_von_f(frame) -> Anteil 0..1 der Bahn. erscheint=(f0, f1): wächst in diesem Zeitfenster aus
+    dem Papier (Radius 0 -> r, wie ein Tintenpunkt); sonst von Anfang an da."""
     bpy.ops.mesh.primitive_cylinder_add(vertices=40, radius=r, depth=.012, location=(0, 0, .006))
     ob = bpy.context.object; ob.name = name
     bpy.ops.object.shade_auto_smooth() if hasattr(bpy.ops.object, "shade_auto_smooth") else None
@@ -532,7 +718,10 @@ def punkt(name, bahn, laenge, s_von_f, r=.085):
         s = min(1, max(0, s_von_f(f))) * n
         i = min(n - 1, int(s)); k = s - i
         p = bahn[i].lerp(bahn[i + 1], k)
-        return {"loc": Vector((p.x, p.y, .007))}
+        v = {"loc": Vector((p.x, p.y, .007))}
+        if erscheint:
+            g = max(1e-3, fenster(f, *erscheint)); v["scale"] = Vector((g, g, 1))
+        return v
     bewegung(ob, fn)
     ob["neubau_rolle"] = "punkt"
     return ob
@@ -969,6 +1158,12 @@ def im_bild(cam, aspekt, punkte, frame, rand=0.0):
         if not (rand <= co.x <= 1 - rand and rand <= co.y <= 1 - rand and co.z > 0):
             aus.append(p)
     return aus
+
+
+def huelle_xy(objekte, frames):
+    """Achsenparalleles Rechteck [x0, x1, y0, y1] (Ebene des Bogens) um alle Teile über die angegebenen Bilder: Platzbedarf der Szene für Übergänge."""
+    pts = huellpunkte(objekte, frames)
+    return [round(min(p.x for p in pts), 3), round(max(p.x for p in pts), 3), round(min(p.y for p in pts), 3), round(max(p.y for p in pts), 3)]
 
 
 def huellpunkte(objekte, frames):

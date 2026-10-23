@@ -47,6 +47,7 @@ NEU = os.path.join(basis.NEUBAU)
 PROBEN = os.path.join(NEU, "proben", "modernisierung", "blender")
 os.makedirs(PROBEN, exist_ok=True)
 lage = lambda g: GEG[g]["lage"][ANORDNUNG]
+ov = lambda v: v[ANORDNUNG] if isinstance(v, dict) and ("breit" in v or "hochkant" in v) else v
 
 sc = basis.buehne(F_END, bogen=tuple(SZ["bogen"]))
 
@@ -346,23 +347,29 @@ for k, (x, y, w, h) in ALT.items():
     b["neubau"] = json.dumps({"block": k, "zeit": [f0, f1], "start": "alter_monitor", "ende": "neuer_monitor"})
     blocks[k] = b
 
-# ---------------------------------------------------------------- Faden und Punkt (flach auf dem Papier, rechts um alle Teile herum)
-FADEN_STUETZ = [tuple(p) for p in SZ["faden"]["stuetzpunkte"][ANORDNUNG]]
-bahn, laenge = basis.faden_bahn(FADEN_STUETZ)
-fd = basis.faden("Faden", bahn, breite=SZ["faden"]["breite"])
-pruef_faden = basis.faden_pruefkoerper(bahn, SZ["faden"]["breite"] + .08)
-FP = SZ["faden"]["punkt"]
-def s_punkt(f):
-    # gleichmäßig je Scrollweg, an der Lesestelle weich langsamer, kein Halt
-    if f <= F_LESEN[0]:
-        return FP["start"] + (FP["bis_lesen"] - FP["start"]) * f / F_LESEN[0]
-    k = (f - F_LESEN[0]) / (F_END - F_LESEN[0])
-    return FP["bis_lesen"] + FP["lesen_zuwachs"] * (k - FP["bremse"] * k * k)
+# ---------------------------------------------------------------- Schiene und Punkt (Tore aus der Szenendatei, Krümmung 0 an den Toren)
+FD_ = SZ["faden"]
+TOR_EIN = (tuple(SZ["eingang"][ANORDNUNG]["faden"]["punkt"]), SZ["eingang"][ANORDNUNG]["faden"]["richtung_grad"])
+TOR_AUS = (tuple(SZ["ausgang"][ANORDNUNG]["faden"]["punkt"]), SZ["ausgang"][ANORDNUNG]["faden"]["richtung_grad"])
+bahn, kap, laenge = basis.bahn_g2(TOR_EIN, TOR_AUS, FD_["kontrolle"][ANORDNUNG], schritt=ov(FD_["tor_schritt"]))
+BERICHT_BAHN = basis.bahn_bericht(bahn, kap, laenge)
+print("BAHN", json.dumps(BERICHT_BAHN))
+rail = basis.schiene("Schiene", bahn, breite=FD_["breite"])
+pruef_faden = basis.faden_pruefkoerper(bahn, FD_["breite"] + .08)
+FP = FD_["punkt"]
+S_TAB, acc = [], 0.0
+for f in range(0, F_END + 1):
+    v = smm(f / FP["rampe"]) * smm((F_END - f) / FP["rampe"])
+    br = 0.0
+    for a_, b_ in FP["lesen"]:
+        br = max(br, smm((f - (a_ - 12)) / 12) * smm(((b_ + 12) - f) / 12))
+    acc += v * (1 - FP["bremse"] * br); S_TAB.append(acc)
+S_TAB = [x / acc for x in S_TAB]
+s_punkt = lambda f: S_TAB[min(F_END, max(0, int(round(f))))]
 def faden_zustand(f):
-    """Lage des Punkts im Bild f und Laufrichtung des Fadens dort (Grad im Uhrzeigersinn von oben: 0 = nach +y, 90 = nach +x)."""
     n = len(bahn) - 1; sv = min(1, max(0, s_punkt(f))) * n
     i = min(n - 1, int(sv)); p = bahn[i].lerp(bahn[i + 1], sv - i); d = bahn[i + 1] - bahn[i]
-    return {"punkt": [round(p.x, 3), round(p.y, 3)], "richtung_grad": round(math.degrees(math.atan2(d.x, d.y)), 1)}
+    return {"punkt": [round(p.x, 4), round(p.y, 4)], "richtung_grad": round(math.degrees(math.atan2(d.x, d.y)), 2)}
 pkt = basis.punkt("Punkt", bahn, laenge, s_punkt)
 
 # ---------------------------------------------------------------- Bewegung backen
@@ -415,6 +422,7 @@ def rahmt(r):
         a_, b_, st = r["bilder"]; return H(geraete_stehend + list(blocks.values()), list(range(a_, b_ + 1, st)))
     if was == "front_schirm_fuss": return H([front, schirm, fuss], [r.get("bild", F_END)])
     if was == "lesetext": return text_punkte()
+    if was == "netz": return H(netz + [schirm], [r.get("bild", F_END)])
     raise ValueError("unbekannt: rahmt " + was)
 E = []
 for e in KC["einstellungen"]:
@@ -435,12 +443,12 @@ for e in E:
 # ---------------------------------------------------------------- Eingang und Ausgang der Szene (Vorbereitung für Übergänge)
 def pose(e, f):
     return {"bild": f, "faden": faden_zustand(f),
-            "kamera": {"ort": [round(v, 3) for v in e["ort"]], "neigung": e["neigung"], "gier": e["gier"], "vfov": VF, "verschiebung": round(e["verschiebung"], 4)}}
+            "kamera": {"ort": [e["ort"].x, e["ort"].y, e["ort"].z], "neigung": e["neigung"], "gier": e["gier"], "vfov": VF, "verschiebung": e["verschiebung"]}}
 UEBERGANG = {"eingang": pose(E[0], 0), "ausgang": pose(E[-1], F_END)}
 print("EINGANG", json.dumps(UEBERGANG["eingang"]), "AUSGANG", json.dumps(UEBERGANG["ausgang"]))
 
 # ---------------------------------------------------------------- Prüfung (Form; der Text wird im Browser geprüft: neubau/werkzeug/browser.mjs pruefen)
-bericht = {"form_hash": FORM_HASH, "einstellungen": {}, "kollisionen": {}, "hinweise": {}, "uebergang": UEBERGANG}
+bericht = {"form_hash": FORM_HASH, "einstellungen": {}, "kollisionen": {}, "hinweise": {}, "uebergang": UEBERGANG, "bahn": BERICHT_BAHN}
 teile = [crt_boden, front, rueck, links, rechts, deckel, fuss, hals, schirm, titel, stuetze, pkt] + list(blocks.values())
 # zulässig: Teile, die sich an ihrem gemeinsamen Falz berühren (der Karton biegt dort)
 erlaubt = [("Titel", "Titel_Stuetze"), ("CRT_Rueck", "CRT_Deckel")]
@@ -461,6 +469,7 @@ aus_um = sum(len(basis.im_bild(cam, ASP, basis.huellpunkte(netz, [f]), f, rand=0
 aus_auf = sum(len(basis.im_bild(cam, ASP, basis.huellpunkte([front, links, rueck, deckel], [f]), f, rand=0)) for f in range(60, 141, 4))
 bericht["hinweise"][f"{ANORDNUNG}: Netz beim Umlegen 252–324 im Bild"] = {"punkte_ausserhalb": aus_um}
 bericht["hinweise"][f"{ANORDNUNG}: Röhrenmonitor beim Hochklappen 60–140 im Bild"] = {"punkte_ausserhalb": aus_auf}
+bericht["huelle"] = basis.huelle_xy([o for o in teile if o.name != "Pruef_Faden"] + [rail, titel], list(range(0, F_END + 1, 20)))
 print("PRUEFUNG", json.dumps(bericht, ensure_ascii=False, indent=1))
 os.makedirs(os.path.join(NEU, "tmp"), exist_ok=True)
 json.dump(bericht, open(os.path.join(NEU, "tmp", f"modernisierung_{ANORDNUNG}_pruefung.json"), "w", encoding="utf8"), ensure_ascii=False, indent=1)
@@ -487,7 +496,7 @@ if A["export"]:
                                  ("titelkarte", bpy.data.objects["Gruppe_titelkarte"]))},
         "bloecke": {k: json.loads(b["neubau"]) for k, b in blocks.items()},
         "druckflaechen": {"lesestelle": {"w": FW, "h": HF - G}, "titel": {"w": TW, "h": TH}},
-        "uebergang": UEBERGANG,
+        "uebergang": UEBERGANG, "faden_s": [round(s_punkt(f) * laenge, 5) for f in range(F_END + 1)], "bahn": BERICHT_BAHN, "bogen": SZ["bogen"], "huelle": bericht["huelle"],
     }
     out = os.path.join(NEU, "seite", "assets", f"modernisierung-{ANORDNUNG}.glb")
     n = basis.export_glb(out, extras, draco="--draco" in sys.argv)

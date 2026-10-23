@@ -1,8 +1,132 @@
 {
- "form_hash": "29277c28d5f46ce0",
- "gebaut": "2026-10-23 13:17:35",
+ "form_hash": "1852f168d733dbd8",
+ "gebaut": "2026-10-23 14:30:24",
  "glb": {
-  "breit": 353736,
-  "hochkant": 355880
+  "breit": 379312,
+  "hochkant": 381504
+ },
+ "tore": {
+  "breit": {
+   "eingang": {
+    "bild": 0,
+    "faden": {
+     "punkt": [
+      0.86,
+      -8.6
+     ],
+     "richtung_grad": 0.0
+    },
+    "kamera": {
+     "ort": [
+      -0.9467238783836365,
+      -11.5708589553833,
+      6.077336311340332
+     ],
+     "neigung": 26,
+     "gier": 0,
+     "vfov": 30,
+     "verschiebung": 0.0
+    }
+   },
+   "ausgang": {
+    "bild": 380,
+    "faden": {
+     "punkt": [
+      4.6,
+      3.4
+     ],
+     "richtung_grad": 0.0
+    },
+    "kamera": {
+     "ort": [
+      -1.5,
+      -5.592639923095703,
+      9.584855079650879
+     ],
+     "neigung": 56,
+     "gier": 0,
+     "vfov": 30,
+     "verschiebung": 0.19678852240160433
+    }
+   },
+   "bahn": {
+    "richtung_anfang": 0.0,
+    "richtung_ende": 0.0,
+    "kruemmung_anfang": -0.0,
+    "kruemmung_ende": 0.0,
+    "kruemmung_max": 0.4653,
+    "dkruemmung_max": 0.6991,
+    "wendepunkte": 1,
+    "radius_min": 2.149,
+    "laenge": 13.104
+   },
+   "huelle": [
+    -4.829,
+    4.685,
+    -8.685,
+    5.07
+   ]
+  },
+  "hochkant": {
+   "eingang": {
+    "bild": 0,
+    "faden": {
+     "punkt": [
+      0.62,
+      -10.4
+     ],
+     "richtung_grad": 0.0
+    },
+    "kamera": {
+     "ort": [
+      -1.3833262920379639,
+      -11.398876190185547,
+      9.608895301818848
+     ],
+     "neigung": 42,
+     "gier": 0,
+     "vfov": 50,
+     "verschiebung": 0.0
+    }
+   },
+   "ausgang": {
+    "bild": 380,
+    "faden": {
+     "punkt": [
+      2.5,
+      5.8
+     ],
+     "richtung_grad": 0.0
+    },
+    "kamera": {
+     "ort": [
+      0.0,
+      -4.3232741355896,
+      4.829071521759033
+     ],
+     "neigung": 58,
+     "gier": 0,
+     "vfov": 50,
+     "verschiebung": -0.003544000401562701
+    }
+   },
+   "bahn": {
+    "richtung_anfang": 0.003,
+    "richtung_ende": 0.0,
+    "kruemmung_anfang": 0.0,
+    "kruemmung_ende": 0.0,
+    "kruemmung_max": 0.1903,
+    "dkruemmung_max": 0.3082,
+    "wendepunkte": 1,
+    "radius_min": 5.254,
+    "laenge": 16.454
+   },
+   "huelle": [
+    -3.5,
+    2.585,
+    -10.485,
+    8.19
+   ]
+  }
  }
 }

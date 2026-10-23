@@ -4,12 +4,15 @@ Drei Schichten, damit kleine Änderungen keinen Blender-Lauf brauchen.
 
 1. **Szenendatei** `neubau/szenen/<szene>.json`: einzige Quelle für alle Inhaltswerte.
 2. **Blender** (`blender/<szene>.py`, gemeinsame Basis `blender/basis.py`, `blender/szene.py`): baut Form, Animation, Kamera und exportiert glb. Text druckt Blender nicht; es legt benannte, leere Druckflächen an (`druck:titel`, `druck:lesestelle`, Kind des Trägers, mit UV; Maße `w`/`h` und Name in den Node-Extras `neubau`).
-3. **Browser** (`seite/abspieler.js`): liest `assets/<szene>.szene.json`, zeichnet den Text mit Canvas (Schriften Newsreader / Schibsted Grotesk aus `seite/schriften/`, Auflösung nach `devicePixelRatio`, Mipmaps, Anisotropie), legt ihn als Textur auf die Druckflächen und blendet ihn zum genannten Zeitpunkt ein. Setzt außerdem Versatz/Drehung der Gegenstände neu und prüft den Text.
+3. **Browser** (`seite/abspieler.js`): liest `assets/<szene>.szene.js` (ES-Modul mit `export default`, erzeugt aus der Szenendatei; die Webvorschau liefert keine .json aus), zeichnet den Text mit Canvas (Schriften Newsreader / Schibsted Grotesk aus `seite/schriften/`, Auflösung nach `devicePixelRatio`, Mipmaps, Anisotropie), legt ihn als Textur auf die Druckflächen und blendet ihn zum genannten Zeitpunkt ein. Setzt außerdem Versatz/Drehung der Gegenstände neu und prüft den Text.
 
 ## Befehle (python ist `python`)
 
 ```
-python neubau/bauen.py modernisierung              # Vollbau: Blender breit+hochkant (parallel), glb, Prüfungen, Blender-Probebilder, Browserprüfung
+python neubau/bauen.py eroeffnung                  # Vollbau einer Szene (ebenso modernisierung): Blender breit+hochkant (parallel), glb, Prüfungen, Blender-Probebilder, Browserprüfung
+python neubau/bauen.py uebergang eroeffnung modernisierung   # Übergangsstück aus Ausgang der ersten und Eingang der zweiten Szene
+python neubau/bauen.py seite                       # ganze Seite: alle Szenen aus szenen/folge.json, alle Übergänge dazwischen, assets/folge.js, Prüfungen, Nahtmessung
+python neubau/bauen.py seite --nur-neu             # nur, was sich geändert hat (Szenendatei bzw. Tore)
 python neubau/bauen.py modernisierung --nur-text   # ohne Blender: Szenendatei -> seite/assets, HTML-Text, Browserprüfung
 python neubau/bauen.py pruefen modernisierung      # nur Browserprüfung
 ```
@@ -48,3 +51,22 @@ Alles andere: Maße, Lagen (`form`, `lage`), Zeiten, Blöcke, Faden, Kamera, Tr�
 ## Eingang und Ausgang
 
 Jede Szene legt in `eingang`/`ausgang` fest, wo der Faden mit dem roten Punkt beginnt und endet (Punkt, Richtung) und wo die Kamera dann steht (Pose, Bild 0 bzw. letztes Bild). Der Vollbau schreibt die gebauten Werte in die glb-Extras (`uebergang`) und warnt, wenn sie von der Szenendatei um mehr als 0,06 abweichen. Ein späterer Übergang verbindet den Ausgang einer Szene mit dem Eingang der nächsten (Faden fortsetzen, Kamera von der einen Pose in die andere fahren); die Werte beider Szenen müssen dann übereinstimmen.
+
+## Schiene (Faden und Punkt)
+
+Die ganze Bahn des Fadens liegt als flaches Band (Mesh mit Attribut `_s` = Bogenlänge) vorher hellgrau auf dem Papier, in jeder Szene und jedem Übergang. Der Abspieler färbt sie nach dem Scrollfortschritt: hinter dem Punkt rot, davor grau (Uniform `uFill`, exakt am Punkt, ohne Nachlauf, bei Rückwärtsscrollen wieder weniger). Der Füllstand kommt aus `faden_s` (Bogenlänge des Punkts je Bild, Extras der glb); Abschnitte vor dem aktiven sind ganz rot, danach ganz grau. Der Punkt ist nur im aktiven Abschnitt sichtbar. Die Bahn ist ein offener kubischer B-Spline (C2); an den Toren liegen die ersten/letzten drei Kontrollpunkte auf einer Geraden in Torrichtung, die Krümmung ist dort genau 0. Zwei Bahnen mit gleichem Torpunkt und gleicher Richtung gehen damit mit gleicher Richtung und gleicher Krümmung (G2) ineinander über. Szenendatei: `faden.kontrolle.<anordnung>` (Kontrollpunkte zwischen den Toren), `faden.tor_schritt`, `eingang/ausgang.<anordnung>.faden` {punkt, richtung_grad} (Tore; 0 = nach +y, 90 = nach +x). Prüfung im Baubefehl je Bahn: Krümmung an den Toren (<= 0,01), größte Krümmungsänderung (<= 6 je Einheit), kleinster Radius (Fehler < 0,5, Hinweis < 1,5), Wendepunkte (<= 1).
+
+## Übergänge (Generator `blender/uebergang.py`)
+
+Ein Übergang ist ein eigenes glb im Bezugssystem der ersten Szene: `uebergang-<von>-<nach>-<breit|hochkant>.glb`. Eingabe sind nur die gemessenen Tore beider Szenen (`assets/<szene>.bau.json`, Schlüssel `tore`: Fadenpunkt, Richtung, Kamerapose, Hüllrechteck). Dieselbe Regel für jedes Paar (Konstanten `REGEL` im Skript): Szene B steht 34 Einheiten vor dem Ausgang von A in Laufrichtung, 6 nach rechts versetzt, mit derselben Laufrichtung. Daraus entstehen die Schiene als G2-S-Kurve (ein Wendepunkt), die Platzierung von B (`uebergang.ziel`: versatz, drehung_grad, steht in den Extras der glb; der Abspieler setzt B dort ein), ein Streifen Bogen zwischen den Szenen, niedrige weiße Papierblöcke als Füllung (ohne Text, ohne Rot, mit Abstand zur Schiene und zu den Hüllrechtecken der Szenen) und die Kamerafahrt: weicher Abstieg aus der Pose am Ausgang von A (110 Bilder), Mausperspektive 0,55 über dem Papier, 3,6 hinter dem Punkt, Blick entlang der Schiene, weicher Aufstieg in die Pose am Eingang von B (110 Bilder); Position, Neigung, Gier und Bildverschiebung stetig, nie Rollen. Der Punkt fährt mit Ruhe an beiden Enden (Szenen verlassen und betreten ihn ebenfalls aus der Ruhe). `bauen.py seite` verbindet die Szenen nach `folge.json` selbst neu: `tore_hash` im Manifest des Übergangs; ändern sich die Tore einer Szene nicht, bleibt der Übergang gültig. Umsortieren in `folge.json` genügt, ein Befehl baut jeden Übergang neu.
+
+## Welt der Folge (Abspieler)
+
+`spieleFolge(buehne, {segmente})`: alle Abschnitte stehen zugleich in einer Welt; ein Abschnitt hat die Kamera (`start`, `frames`), an den Nähten haben beide dieselbe Pose. Boden und Himmelsverlauf folgen der Kamera, der Sonnenschatten folgt dem Blickpunkt (aufs Texelraster gerastet). Anker `#p=0.4` (Anteil der ganzen Folge) oder `#g=860` (globales Bild). `index.html?nur=<szene>` spielt eine einzelne Szene (Prüfung, Entwicklung), sonst die ganze Folge. Werte der Szenendatei können je Anordnung getrennt stehen: `{"breit": 0.27, "hochkant": 0.38}` (Textgröße, Breite, Lage der Druckelemente und Maße der Gegenstände).
+
+## Prüfungen und Messungen
+
+- `node neubau/werkzeug/browser.mjs naht`: Messung an jeder Naht in der gebauten Welt (Kameraort, Drehung, Bildverschiebung, Rollen, Punkt, Schienenpunkt, Richtung und Krümmung links/rechts) und Bilder um die Naht. `bauen.py seite` ruft das auf und meldet Fehler bei Kamerasprung > 0,01 oder Schienensprung > 0,02 / 0,3 Grad.
+- `node neubau/werkzeug/browser.mjs bilder --nur <szene> --g 0,100,340 ...`: Bilder an globalen Bildern; `fps`: Bildrate beim gleichmäßigen Scrollen; `node neubau/werkzeug/bewegung.mjs --verzeichnis neubau/seite --naehte 0.45,0.69`: Flüssigkeitsprüfung (Lücken, Kamerapfad).
+- Textprüfung: `window.__neubau.pruefeText("<szene>:<fläche>", bild)` (siehe oben); die Ortszeile und der Kernsatz der Eröffnung laufen wie alle Sätze über Druckflächen. Der Name ist die Ausnahme: Papierlettern (Newsreader-Marke aus `schriften/NewsreaderMarke*.ttf`, erzeugt mit `werkzeug/schriften.py`) als Geometrie auf dem Deck des Podests, weil ein Druck bei flacher Kamera einen Träger (Folie) bräuchte.
+- Neue Bausteine in `basis.py`: `bahn_g2`, `schiene`, `faltpanel`, `gefaess`, `zylinder`, `lettern`, `huelle_xy`; Szenen: `blender/eroeffnung.py`, `blender/uebergang.py`.

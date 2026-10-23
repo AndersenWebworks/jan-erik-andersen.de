@@ -12,7 +12,7 @@ SZENEN = os.path.join(NEUBAU, "szenen")
 BROWSER = [
     "druckflaechen.*.elemente", "druckflaechen.*.einblenden", "druckflaechen.*.aufloesung", "druckflaechen.*.pruefen",
     "gegenstaende.*.versatz", "gegenstaende.*.drehung_z",
-    "eingang", "ausgang", "pruefung",
+    "pruefung",
 ]
 
 

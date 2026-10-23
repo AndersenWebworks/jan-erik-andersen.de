@@ -1,7 +1,10 @@
 // Browserwerkzeug des Neubaus (Node + playwright-core, nichts wird installiert; ein kurzer lokaler Server läuft nur während des Aufrufs).
-//   node neubau/werkzeug/browser.mjs bilder   --ordner <ordner> --praefix <name> [--p 0.15,0.4,0.7,0.95] [--seite index.html]
-//   node neubau/werkzeug/browser.mjs pruefen  --szene neubau/szenen/modernisierung.json [--ordner <ordner>] [--praefix <name>]
-// bilder:  Bildschirmfotos der Seite an Fortschrittswerten p (0..1), breit 1440x900 und hochkant 390x844.
+//   node neubau/werkzeug/browser.mjs bilder   --ordner <ordner> --praefix <name> [--nur <szene>] [--p 0.15,0.4,0.7,0.95 | --g 0,40,66] [--ansicht breit|hochkant]
+//   node neubau/werkzeug/browser.mjs pruefen  --szene neubau/szenen/modernisierung.json --nur modernisierung [--ordner <ordner>] [--praefix <name>]
+//   node neubau/werkzeug/browser.mjs naht     [--ordner <ordner>]      Nahtmessung und Nahtbilder der ganzen Folge
+//   node neubau/werkzeug/browser.mjs fps      [--nur <szene>]           Bildrate beim gleichmäßigen Scrollen
+// bilder:  Bildschirmfotos der Seite an Fortschrittswerten p (0..1) oder globalen Bildern g, breit 1440x900 und hochkant 390x844.
+//          --nur <szene>: nur diese Szene (index.html?nur=<szene>), sonst die ganze Folge.
 // pruefen: Textprüfung im Browser an den Lesestellen (Text >= 16 px, unverdeckt, im Bild, auf der Fläche), Ergebnis als JSON (letzte Zeile).
 import http from "node:http";
 import fs from "node:fs";
@@ -56,6 +59,8 @@ async function starten(pw) {
   throw new Error("kein Chromium-Browser startbar");
 }
 
+const seitenUrl = (port, seite) => `http://127.0.0.1:${port}/${seite}${arg("nur") ? "?nur=" + arg("nur") : ""}`;
+
 async function seiteOeffnen(browser, url, vp, dpr, mobil, logs) {
   const ctx = await browser.newContext({ viewport: vp, deviceScaleFactor: dpr, isMobile: mobil, hasTouch: mobil });
   const page = await ctx.newPage();
@@ -89,11 +94,13 @@ async function bilder() {
   const ergebnis = { dateien: [], logs: [] };
   try {
     for (const [name, vp, dpr, mobil] of ANSICHTEN) {
-      const { ctx, page } = await seiteOeffnen(browser, `http://127.0.0.1:${port}/${seite}`, vp, dpr, mobil, ergebnis.logs);
+      if (arg("ansicht") && arg("ansicht") !== name) continue;
+      const { ctx, page } = await seiteOeffnen(browser, seitenUrl(port, seite), vp, dpr, mobil, ergebnis.logs);
       const n = await page.evaluate(() => window.__neubau.bilder || 380);
-      for (const p of ps) {
-        await zuBild(page, p * n);
-        const datei = path.join(ordner, `${praefix}_${name}_p${String(Math.round(p * 100)).padStart(3, "0")}.png`);
+      const gs = arg("g") ? arg("g").split(",").map(Number) : null;
+      for (const p of (gs || ps)) {
+        await zuBild(page, gs ? p : p * n);
+        const datei = path.join(ordner, gs ? `${praefix}_${name}_g${String(p).padStart(4, "0")}.png` : `${praefix}_${name}_p${String(Math.round(p * 100)).padStart(3, "0")}.png`);
         await page.screenshot({ path: datei });
         ergebnis.dateien.push(datei);
       }
@@ -115,7 +122,7 @@ async function pruefen() {
   const bericht = { min_em_px_soll: min, ansichten: {}, fehler: [], logs: [] };
   try {
     for (const [name, vp, dpr, mobil] of ANSICHTEN) {
-      const { ctx, page } = await seiteOeffnen(browser, `http://127.0.0.1:${port}/${arg("seite", "index.html")}`, vp, dpr, mobil, bericht.logs);
+      const { ctx, page } = await seiteOeffnen(browser, seitenUrl(port, arg("seite", "index.html")), vp, dpr, mobil, bericht.logs);
       const a = bericht.ansichten[name] = { viewport: `${vp.width}x${vp.height}`, flaechen: {} };
       a.geladen = await page.evaluate(() => ({ schriften: [...document.fonts].filter(f => f.status === "loaded").map(f => f.family), glb_ms: Math.round(window.__neubau.ladezeit), druck_ms: Math.round(window.__neubau.druckzeit || 0) }));
       for (const [fname, fl] of Object.entries(szene.druckflaechen)) {
@@ -138,5 +145,67 @@ async function pruefen() {
   process.exitCode = bericht.ok ? 0 : 2;
 }
 
+async function naht() {
+  const ordner = path.resolve(arg("ordner", path.join(NEUBAU, "tmp", "naht"))); fs.mkdirSync(ordner, { recursive: true });
+  const wurzel = path.resolve(arg("wurzel", path.join(NEUBAU, "seite")));
+  const { s, port } = await server(wurzel);
+  const pw = playwrightLaden(), browser = await starten(pw);
+  const bericht = { ok: true, fehler: [], logs: [], ansichten: {} };
+  try {
+    for (const [name, vp, dpr, mobil] of ANSICHTEN) {
+      const { ctx, page } = await seiteOeffnen(browser, `http://127.0.0.1:${port}/index.html`, vp, dpr, mobil, bericht.logs);
+      const nahte = await page.evaluate(() => window.__neubau.messeNaht());
+      const abs = await page.evaluate(() => window.__neubau.abschnitte);
+      bericht.ansichten[name] = { nahte, abschnitte: abs };
+      // Bilder um jede Naht (zum Ansehen): 8 und 1 Bild davor, an der Naht, 1 und 8 danach
+      for (const a of abs.slice(1)) {
+        for (const d of [-8, -1, 0, 1, 8]) {
+          const g = a.start + d;
+          await zuBild(page, g);
+          await page.screenshot({ path: path.join(ordner, `naht_${name}_${a.name}_g${String(g).padStart(4, "0")}.png`) });
+        }
+      }
+      await ctx.close();
+    }
+  } finally { await browser.close(); s.close(); }
+  bericht.fehler.push(...bericht.logs.filter(l => l.startsWith("pageerror")));
+  console.log(JSON.stringify(bericht));
+}
+
+async function fpsMessen() {
+  const wurzel = path.resolve(arg("wurzel", path.join(NEUBAU, "seite")));
+  const { s, port } = await server(wurzel);
+  const pw = playwrightLaden(), browser = await starten(pw);
+  const out = { ansichten: {}, logs: [] };
+  try {
+    for (const [name, vp, dpr, mobil] of ANSICHTEN) {
+      const { ctx, page } = await seiteOeffnen(browser, seitenUrl(port, "index.html"), vp, dpr, mobil, out.logs);
+      const r = await page.evaluate(async () => {
+        const sz = document.querySelector(".szene"), weg = sz.offsetHeight - innerHeight, n = window.__neubau.bilder;
+        const zeiten = [];
+        const t0 = performance.now();
+        let last = t0;
+        const dauer = 12000;
+        await new Promise(ok => {
+          const schritt = now => {
+            const k = Math.min(1, (now - t0) / dauer);
+            scrollTo(0, sz.offsetTop + weg * k);
+            zeiten.push(now - last); last = now;
+            if (k < 1) requestAnimationFrame(schritt); else ok();
+          };
+          requestAnimationFrame(schritt);
+        });
+        zeiten.shift();
+        const sortiert = [...zeiten].sort((a, b) => a - b);
+        const mittel = zeiten.reduce((a, b) => a + b, 0) / zeiten.length;
+        return { rahmen: zeiten.length, fps_mittel: 1000 / mittel, fps_schlechteste_5_prozent: 1000 / sortiert[Math.floor(sortiert.length * .95)], laengster_rahmen_ms: sortiert.at(-1), bilder: n };
+      });
+      out.ansichten[name] = r;
+      await ctx.close();
+    }
+  } finally { await browser.close(); s.close(); }
+  console.log(JSON.stringify(out));
+}
+
 const befehl = process.argv[2];
-(befehl === "bilder" ? bilder() : befehl === "pruefen" ? pruefen() : Promise.reject(new Error("Befehl: bilder | pruefen"))).catch(e => { console.error(e); process.exit(1); });
+(befehl === "bilder" ? bilder() : befehl === "pruefen" ? pruefen() : befehl === "naht" ? naht() : befehl === "fps" ? fpsMessen() : Promise.reject(new Error("Befehl: bilder | pruefen | naht | fps"))).catch(e => { console.error(e); process.exit(1); });
