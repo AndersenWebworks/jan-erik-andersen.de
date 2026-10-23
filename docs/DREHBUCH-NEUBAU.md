@@ -78,7 +78,7 @@ Befund im Bestand: Die Kamera kannte nur zwei Regeln, „Punkt im Bild“ und �
 - Weicher Horizont statt Kante, Licht und Schatten bleiben.
 
 ### Rahmen
-- Kopfzeile mit Marke, Navigation (Projekte, Leistungen, Kontakt), Kontakt von überall mit einem Klick.
+- Kopfzeile mit Marke, Navigation (Projekte, Leistungen, Werdegang, Kontakt; Werdegang ergänzt 23.10.2026, Erik), Kontakt von überall mit einem Klick.
 - Vollständiger Seitentext ohne 3D (gleicher Wortlaut wie im 3D), SEO-Kopf, JSON-LD, Vorschaubild, Skip-Link, zugängliches Kontaktblatt: vorhanden in `seite/index.html`, wird übernommen.
 - Links zu Live-Projekten überall, wo ein Projekt genannt wird, im 3D anklickbar.
 - Handy ist bei jeder Szene Teil der Abnahme.
@@ -182,7 +182,7 @@ Eine Frage nach der anderen, Entscheidung hier eintragen. Sortiert nach Gewicht 
 4. ~~**Länge**~~ Entschieden 23.10.2026, Erik: „Kein fester Wert“. Jede Szene bekommt so viel Scrollweg, wie ihre Handlung ruhig braucht; die Gesamtlänge wird am Ende gemessen und mit Erik bewertet. Kein Füllweg ohne Handlung.
 5. ~~**Shop-Szene doppelt zu Gerwing**~~ Entschieden 23.10.2026, Erik: „Probleme lösen, Ziel WooCommerce“. Neuer Zuschnitt und Text siehe 3, Szene 5. Bild ebenfalls entschieden: Ladenfront aus Papier.
 6. ~~**Bild für „Wie ich arbeite“**~~ Entschieden 23.10.2026, Erik: „Band mit Prüfplatz“ (siehe 3, Szene 9).
-7. **Navigation:** heute Projekte, Leistungen, Kontakt. Kommt „Werdegang“ dazu, weil Recruiter ihn zuerst suchen?
+7. ~~**Navigation**~~ Entschieden 23.10.2026, Erik: „Ja, als vierter Punkt“. Oben: Projekte, Leistungen, Werdegang, Kontakt.
 8. ~~**Grafiktablett in der Eröffnung**~~ Entschieden 23.10.2026, Erik: „Sätze ins Papier“. Die drei Sätze stehen auf einem eigenen Träger aus dem Bogen am Schreibtisch; das Tablett bleibt Deko ohne Text, keine Heranfahrt. Die Regel „kein Satz auf Geräten“ gilt ohne Ausnahme.
 9. **Handy:** Einige Sätze (WBG, Außerdem, „Damit schaffe ich …“, Werdegang-Stufen) sind bei 16 px breiter als 390 px. Am Handy anders umbrechen auf höheren Trägern, oder kürzere Handyfassungen der Sätze?
 10. **Bewegungssprache:** mechanisch (anfahren, abbremsen, leicht überschwingen, einrasten) für alle Teile, nur langsamer als bisher?
