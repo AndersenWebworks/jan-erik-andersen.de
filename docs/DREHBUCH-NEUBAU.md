@@ -14,6 +14,8 @@ Die Fassung bleibt als Protokoll erhalten. `entwurf-2026-11/seite/` bleibt als B
 - **Aushängeschild, keine Tech-Demo:** Die Gestaltung zeigt Eriks gestalterisches Können als Gegensatz zum technischen Profil. Sie dient dem Inhalt.
 - **Ton:** Sie-Anrede ohne Steifheit, Problem, Lösung, konkret, keine Slogans. Nichts erfinden: keine Zahlen, Zeiträume oder Verfügbarkeiten außerhalb der Quellen.
 - **Ausschlüsse:** kein RPLC, kein ClautzGPT, keine Web-Tools als Arbeitsprobe, keine SEO- oder GEO-Versprechen, kein Lebenslauf-PDF, HTK ist ein Zertifikat, kein Stundensatz auf der Seite.
+- **Warum so positioniert:** Marktbild, These zur individuellen Software, „kein alter Hase“, Gestaltung als Gegenbeweis zu KI-Slop: siehe Fassung, Abschnitt „Geschäftskonzept: das Warum“. Jede Szene muss dazu passen.
+- **Gleichlauf mit dem Lebenslauf:** Die Vita geht mit Eriks Bewerbungsmails raus und verlinkt diese Seite. Positionierung, Leistungsfelder, Referenzen und Ausschlüsse müssen in beiden gleich sein; Abgleich mit dem Chat „Lebenslauf: auf neues Profil ziehen“ (c570bc98-80da-4d9d-b0ef-4d75dc47bbeb) bei jeder inhaltlichen Änderung und vor dem Start.
 
 ## 1a Wie die Seite gelesen wird
 
