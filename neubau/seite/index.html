@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Modernisierung · Neubau-Probe · Jan-Erik Andersen</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<link rel="modulepreload" href="./vendor/three.module.js">
+<link rel="modulepreload" href="./vendor/three.core.js">
+<link rel="preload" href="./assets/modernisierung-breit.glb" as="fetch" crossorigin="anonymous" media="(min-aspect-ratio: 1/1)">
+<link rel="preload" href="./assets/modernisierung-hochkant.glb" as="fetch" crossorigin="anonymous" media="(max-aspect-ratio: 1/1)">
+<style>
+  :root { --dunst: #dfedf9; --tinte: #303033; }
+  html, body { margin: 0; background: #eef3f9; color: var(--tinte); font: 400 16px/1.6 system-ui, sans-serif; }
+  /* Die Szene: ein hoher Abschnitt, die Bühne klebt oben; Scrollen spult die Animation, nichts wird festgehalten */
+  .szene { position: relative; height: 760vh; }
+  .buehne { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+  .buehne canvas { display: block; width: 100%; height: 100%; opacity: 0; transition: opacity .6s; }
+  .buehne.bereit canvas { opacity: 1; }
+  .vor, .nach { height: 30vh; display: grid; place-items: center; color: #8a93a0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+  /* Text für Screenreader und Suchmaschinen, gleicher Wortlaut wie im 3D */
+  .sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
+  /* ohne WebGL: der Text steht sichtbar da */
+  .ohne-3d .sr { position: static; width: auto; height: auto; margin: 2rem; clip: auto; clip-path: none; white-space: normal; }
+  .ohne-3d .szene { height: auto; } .ohne-3d .buehne { display: none; }
+</style>
+</head>
+<body>
+<div class="vor" aria-hidden="true">Szene 4</div>
+<section class="szene" id="modernisierung" aria-labelledby="t-modernisierung">
+  <div class="sr">
+    <h2 id="t-modernisierung">Modernisierung</h2>
+    <p>Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen.</p>
+    <p>Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.</p>
+  </div>
+  <div class="buehne" aria-hidden="true"><canvas></canvas></div>
+</section>
+<div class="nach" aria-hidden="true">Szene 5</div>
+<script type="module">
+  import { spieleSzene } from "./abspieler.js";
+  spieleSzene(document.querySelector("#modernisierung .buehne"), {
+    breit: "./assets/modernisierung-breit.glb",
+    hochkant: "./assets/modernisierung-hochkant.glb",
+  }).catch(e => { console.error(e); document.documentElement.classList.add("ohne-3d"); });
+</script>
+</body>
+</html>

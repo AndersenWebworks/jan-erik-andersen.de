@@ -45,3 +45,7 @@ jan-erik-andersen-berufliche-historie-standalone.html
 
 # Messflug-Werkzeug: Ausgaben
 tools/messflug/out/
+
+# Neubau: Probebilder lassen sich aus neubau/blender neu rendern
+neubau/proben/
+__pycache__/
