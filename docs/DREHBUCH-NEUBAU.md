@@ -136,7 +136,7 @@ Reihenfolge, Kernaussage, Text, Bild. Texte wörtlich wie heute im Seitentext.
 ### 9 Wie ich arbeite
 - **Ziel:** Die Antwort auf die stille Frage „Schafft der das allein?“. Das Bild muss Sorgfalt zeigen, nicht Menge. Ein Fließband kann als Massenware gelesen werden, das wäre das Gegenteil der Aussage (siehe Offen).
 - **Text:** „Ich arbeite mit aktuellen KI-Werkzeugen und habe dafür eigene Abläufe entwickelt.“ · „Damit schaffe ich allein Projekte, für die früher ein kleines Team nötig war, etwa Schnittstellen oder Datenumzüge.“ · „Auf diese Weise arbeite ich mich auch schnell in fremden oder älteren Code ein.“ · „Wo es passt, bekommen Sie statt eines Angebots ein Konzept und einen klickbaren Entwurf, an dem Sie sehen, wie Ihre Seite wird.“ · „Entscheidungen und Verantwortung bleiben bei mir, und ausgeliefert wird nur, was ich geprüft habe.“
-- **Bild:** Fließband. Arme legen je eine Karte mit einem ganzen Satz auf ein Papierband, die Karten laufen durch einen Prüfrahmen und bekommen einen roten Haken. Der Verantwortungssatz steht auf dem Balken des Prüfrahmens, die letzte Karte trägt Konzept und klickbaren Entwurf. Links nach rechts.
+- **Bild (23.10.2026, Erik: „Band mit Prüfplatz“):** Arme legen je eine Karte mit einem ganzen Satz auf ein Papierband; sie stehen für das Tempo der Werkzeuge. Am Ende hält jede Karte einzeln an einem Prüfplatz an, wird angesehen und rot abgezeichnet, erst dann läuft sie weiter. Der Verantwortungssatz steht am Prüfplatz, die letzte Karte trägt Konzept und klickbaren Entwurf. Links nach rechts. Kein Durchlauf ohne Halt, damit es nicht als Massenware gelesen wird.
 
 ### 10 Werdegang
 - **Ziel:** Für Recruiter und Agenturen nach Gerwing der wichtigste Abschnitt. Hier werden die Agenturjahre sichtbar. Er kommt spät im Film und muss deshalb über die Navigation direkt erreichbar sein.
@@ -181,7 +181,7 @@ Eine Frage nach der anderen, Entscheidung hier eintragen. Sortiert nach Gewicht 
 3. ~~**Szenentitel im 3D**~~ Entschieden 23.10.2026, Erik: „Ja, jede Szene“. Am Eingang jeder Szene steht ihr Titel, gedruckt ins Papier, zusätzlich zur Kapitelleiste.
 4. ~~**Länge**~~ Entschieden 23.10.2026, Erik: „Kein fester Wert“. Jede Szene bekommt so viel Scrollweg, wie ihre Handlung ruhig braucht; die Gesamtlänge wird am Ende gemessen und mit Erik bewertet. Kein Füllweg ohne Handlung.
 5. ~~**Shop-Szene doppelt zu Gerwing**~~ Entschieden 23.10.2026, Erik: „Probleme lösen, Ziel WooCommerce“. Neuer Zuschnitt und Text siehe 3, Szene 5. Bild ebenfalls entschieden: Ladenfront aus Papier.
-6. **Bild für „Wie ich arbeite“:** Das Fließband zeigt Takt und Prüfung, kann aber als Massenware gelesen werden, gerade zusammen mit KI. Behalten, oder ein Bild, das Sorgfalt zeigt (etwa ein Werktisch, auf dem jede Karte einzeln geprüft und abgezeichnet wird)?
+6. ~~**Bild für „Wie ich arbeite“**~~ Entschieden 23.10.2026, Erik: „Band mit Prüfplatz“ (siehe 3, Szene 9).
 7. **Navigation:** heute Projekte, Leistungen, Kontakt. Kommt „Werdegang“ dazu, weil Recruiter ihn zuerst suchen?
 8. ~~**Grafiktablett in der Eröffnung**~~ Entschieden 23.10.2026, Erik: „Sätze ins Papier“. Die drei Sätze stehen auf einem eigenen Träger aus dem Bogen am Schreibtisch; das Tablett bleibt Deko ohne Text, keine Heranfahrt. Die Regel „kein Satz auf Geräten“ gilt ohne Ausnahme.
 9. **Handy:** Einige Sätze (WBG, Außerdem, „Damit schaffe ich …“, Werdegang-Stufen) sind bei 16 px breiter als 390 px. Am Handy anders umbrechen auf höheren Trägern, oder kürzere Handyfassungen der Sätze?
