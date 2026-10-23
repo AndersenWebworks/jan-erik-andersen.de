@@ -110,10 +110,11 @@ Reihenfolge, Kernaussage, Text, Bild. Texte wörtlich wie heute im Seitentext.
 - **Text:** „Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen.“ · „Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.“
 - **Bild:** Inhaltsblöcke wandern vom Röhrenmonitor in einen Flachbildschirm, die Kamera sieht aus ruhiger Distanz zu. Am Ende legt sich der alte Monitor flach in den Bogen; auf seiner Fläche stehen beide Sätze, eine Lesestelle. Ausdrücklich ruhig.
 
-### 5 Shops und Shop-Wechsel
-- **Ziel:** Neu gegenüber Gerwing ist nur der Wechsel von Shopify. Satz 1 wiederholt fast, was Gerwing direkt davor gezeigt hat. Hier muss die Szene etwas Eigenes erzählen, sonst kostet sie nur Scrollweg (siehe Offen).
-- **Text:** „Ich baue WooCommerce-Shops für Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht und Entfernung.“ · „Wer bei Shopify mit wachsendem Umsatz immer höhere Gebühren zahlt, kann zu WooCommerce wechseln. Ich rechne vorher durch, ob sich das lohnt, und ziehe Produkte, Kunden und Bestellungen um.“
-- **Bild, links nach rechts:** Regal nach Maß mit sperrigem Gut, Satz 1 darauf. Daneben der Wechsel: Shopify-Karton mit wachsendem Gebührenstapel, drei Karten (Produkte, Kunden, Bestellungen) wandern über eine Brücke ins Regal nach Maß; die Wechselsätze an diesem Teil. Kein Standardregal, keine Waage, kein Lagerrundgang.
+### 5 Shops
+- **Ziel (23.10.2026, Erik: „ich will halt sagen ich löse ihre shop probleme“):** Die Szene zeigt Eriks Shop-Kompetenz insgesamt, nicht nur den Wechsel von Shopify. Gerwing davor ist der Beleg, hier geht es um den Shop des Lesers: Problem erkennen, beheben, notfalls umziehen. Ziel eines Umzugs ist immer WooCommerce. Abgrenzung: Modernisierung bleibt bei Websites, Schnittstellen übernimmt die Anbindung an Warenwirtschaft, ERP und CRM; der Faden läuft vom Shop sichtbar dorthin weiter.
+- **Kernaussage:** Ihr Shop hat ein Problem, ich löse es.
+- **Text:** „Wenn Ihr Shop zu teuer im Betrieb ist, zu langsam läuft oder nicht kann, was Ihr Sortiment braucht, finde ich die Ursache und behebe sie.“ · „Lohnt sich ein Wechsel, rechne ich ihn vorher durch und ziehe Produkte, Kunden und Bestellungen zu WooCommerce um, ob von Shopify, Magento oder einem anderen System.“
+- **Bild:** neu zu denken (siehe Offen). Das bisherige Bild (Regal nach Maß, Shopify-Karton mit Gebührenstapel, drei Karten über eine Brücke) war auf den Shopify-Wechsel zugeschnitten.
 
 ### 6 Schnittstellen und WBG Pooling (eine Szene)
 - **Ziel:** Technische Tiefe über Websites hinaus, belegt mit Salesforce und Concludis. Für Agenturen und Arbeitgeber das stärkste Argument nach Gerwing. Die Verbindung muss im Bild sichtbar werden: getrennt, dann verbunden.
@@ -177,9 +178,9 @@ Eine Frage nach der anderen, Entscheidung hier eintragen. Sortiert nach Gewicht 
 
 1. ~~**Startbild gegen Fünf-Sekunden-Maßstab**~~ Entschieden 23.10.2026, Erik: „Nur der Name“ (siehe 2, Startbild).
 2. ~~**Bastelbogen in jeder Szene?**~~ Entschieden 23.10.2026, Erik: „Überall gleich, aber kürzer“. Jede Szene behält die Konstruktionsphase (Schnitt- und Falzlinien, Raster, Gerüst, Bleistiftspur, Hochklappen) in gleicher Abfolge, aber gestrafft; gilt auch für die Eröffnung.
-3. **Szenentitel im 3D:** Titel sichtbar am Eingang jeder Szene (siehe 1a, Punkt 2)? Heute tragen nur Gerwing, WBG und Zusammenarbeit einen sichtbaren Titel.
-4. **Länge:** Richtwert war 40 bis 50 Bildschirmhöhen (der Bestand hat über 70). Zugleich sollen Animationen langsamer werden und mehr Scrollweg bekommen. Beides geht nur, wenn Szenen weniger zeigen. Gilt der Richtwert?
-5. **Shop-Szene doppelt zu Gerwing:** Satz 1 („Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht“) beschreibt fast genau Gerwing, das direkt davor steht. Vorschlag: Die Szene erzählt nur den Wechsel von Shopify, Satz 1 wird kürzer und verweist auf Gerwing. Das ist eine Textänderung, deshalb Eriks Entscheidung.
+3. ~~**Szenentitel im 3D**~~ Entschieden 23.10.2026, Erik: „Ja, jede Szene“. Am Eingang jeder Szene steht ihr Titel, gedruckt ins Papier, zusätzlich zur Kapitelleiste.
+4. ~~**Länge**~~ Entschieden 23.10.2026, Erik: „Kein fester Wert“. Jede Szene bekommt so viel Scrollweg, wie ihre Handlung ruhig braucht; die Gesamtlänge wird am Ende gemessen und mit Erik bewertet. Kein Füllweg ohne Handlung.
+5. ~~**Shop-Szene doppelt zu Gerwing**~~ Entschieden 23.10.2026, Erik: „Probleme lösen, Ziel WooCommerce“. Neuer Zuschnitt und Text siehe 3, Szene 5. **Neu offen:** das Bild der Shop-Szene zum neuen Text.
 6. **Bild für „Wie ich arbeite“:** Das Fließband zeigt Takt und Prüfung, kann aber als Massenware gelesen werden, gerade zusammen mit KI. Behalten, oder ein Bild, das Sorgfalt zeigt (etwa ein Werktisch, auf dem jede Karte einzeln geprüft und abgezeichnet wird)?
 7. **Navigation:** heute Projekte, Leistungen, Kontakt. Kommt „Werdegang“ dazu, weil Recruiter ihn zuerst suchen?
 8. ~~**Grafiktablett in der Eröffnung**~~ Entschieden 23.10.2026, Erik: „Sätze ins Papier“. Die drei Sätze stehen auf einem eigenen Träger aus dem Bogen am Schreibtisch; das Tablett bleibt Deko ohne Text, keine Heranfahrt. Die Regel „kein Satz auf Geräten“ gilt ohne Ausnahme.
