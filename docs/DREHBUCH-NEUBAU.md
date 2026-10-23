@@ -221,6 +221,10 @@ Nach einem halben Tag war das Ergebnis nicht besser oder schneller als der Besta
 
 - **Eröffnung wird neu gebaut, nicht geflickt (23.10.2026, Erik).** Sie hat an einem Tag vier Prämissen gewechselt (Wegweiser, Platzhalterseite, Mockup, Smartphone mit Text). Bauskript und Szenendatei der Eröffnung entstehen frisch aus diesem Drehbuch, mit der Eröffnung des Bestands als Vorlage. Werkzeuge, Basis, Prüfungen, Abspieler, Übergangsformel und Modernisierung bleiben. Diese Runde ist die Messlatte-Runde.
 
+### Rechnerlast (24.10.2026, Erik: „blender immer nur max. 75% systemauslastung! sofort für immer!“)
+
+Blender läuft nur über `D:/Tools/blender/blender.cmd`: höchstens 75 % der Kerne, niedrigere Priorität.
+
 ### Arbeitsweise (23.10.2026, aus den Pannen des Tages)
 - **Das Drehbuch ist die einzige Quelle** und steht immer auf dem heutigen Stand (siehe Pflege oben).
 - **Nur Eriks Wort ist Entscheidung.** Eine Auswahlkarte entscheidet nur, was in ihrer Frage steht, nicht das Kleingedruckte der Optionen. Eigene Vorschläge bleiben als Vorschlag markiert, bis Erik sie bestätigt.
