@@ -50,6 +50,8 @@ Prüffrage für jede Szene und jeden Bauschritt: Versteht jemand, der aus einer 
 - Ein roter Faden mit Punkt läuft vom Namen bis zum Kontakt, durch jede Szene hindurch, nicht nur zwischen den Szenen.
 - **Form:** weich geschwungen, stetige Krümmung, ruhige große Bögen. Keine Ecken, Stufen, Schlaufen, Zickzack.
 - **Lage:** flach auf dem Papier, nie durch oder über Bauteile. Eintritt vorn mittig in eine Szene, Austritt hinten in Laufrichtung.
+- **Schiene (23.10.2026, Erik):** Die ganze Bahn ist vorher in hellem Grau zu sehen, auch durch die Szenen. Der Punkt fährt darauf wie auf einer Schiene, hinter ihm füllt sich die Bahn rot, beim Zurückscrollen wird es wieder weniger. Das gibt ein Scrollbalkengefühl und soll Spaß am sanften Rauf- und Runterscrollen machen.
+- **Keine Knicke, Line of Beauty (23.10.2026, Erik):** Die Linie bleibt überall geschwungen und sanft, auch vor und nach Ein- und Austrittspunkten: gleiche Richtung und stetige Krümmung an jeder Naht. Übergänge entstehen nach einer festen Formel aus Ausgang und Eingang, mit gleicher Kameraführung, damit sie sich beim Umsortieren neu verbinden.
 - **Tempo:** gleich je Scrollweg; an Lesestellen wird der Punkt weich langsamer und fließt weiter, kein harter Halt, keine Ringe.
 
 ### Kamera (23.10.2026, aus Eriks Fehlerbildern)
