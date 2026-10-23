@@ -1,9 +1,9 @@
 {
- "form_hash": "f331d1734289e63f",
- "gebaut": "2026-10-23 19:07:53",
+ "form_hash": "8b2f8ab48e14c7bf",
+ "gebaut": "2026-10-23 21:24:09",
  "glb": {
-  "breit": 1661856,
-  "hochkant": 1662764
+  "breit": 1654352,
+  "hochkant": 1653640
  },
  "tore": {
   "breit": {
@@ -32,14 +32,14 @@
     "bild": 670,
     "faden": {
      "punkt": [
-      2.5,
+      3.8,
       -0.2
      ],
      "richtung_grad": 89.99
     },
     "kamera": {
      "ort": [
-      2.6500000953674316,
+      3.9499998092651367,
       -3.799865245819092,
       1.6119545698165894
      ],
@@ -51,20 +51,20 @@
     }
    },
    "bahn": {
-    "richtung_anfang": 0.011,
+    "richtung_anfang": 0.014,
     "richtung_ende": 89.987,
     "kruemmung_anfang": -0.0,
     "kruemmung_ende": 0.0,
-    "kruemmung_max": 0.2534,
-    "dkruemmung_max": 0.3403,
+    "kruemmung_max": 0.2561,
+    "dkruemmung_max": 0.3624,
     "wendepunkte": 0,
-    "radius_min": 3.946,
-    "laenge": 17.754
+    "radius_min": 3.904,
+    "laenge": 18.653
    },
    "huelle": [
     -9.085,
     6.148,
-    -12.421,
+    -12.418,
     4.4
    ]
   },
@@ -94,16 +94,16 @@
     "bild": 670,
     "faden": {
      "punkt": [
-      2.5,
+      3.8,
       -0.2
      ],
      "richtung_grad": 89.99
     },
     "kamera": {
      "ort": [
-      2.6500000953674316,
-      -3.6667213439941406,
-      1.6681239604949951
+      3.9499998092651367,
+      -3.6667206287384033,
+      1.6681238412857056
      ],
      "neigung": 16,
      "gier": 0,
@@ -113,20 +113,20 @@
     }
    },
    "bahn": {
-    "richtung_anfang": 0.011,
+    "richtung_anfang": 0.014,
     "richtung_ende": 89.987,
     "kruemmung_anfang": -0.0,
     "kruemmung_ende": 0.0,
-    "kruemmung_max": 0.2534,
-    "dkruemmung_max": 0.3403,
+    "kruemmung_max": 0.2561,
+    "dkruemmung_max": 0.3624,
     "wendepunkte": 0,
-    "radius_min": 3.946,
-    "laenge": 17.754
+    "radius_min": 3.904,
+    "laenge": 18.653
    },
    "huelle": [
     -9.085,
     6.148,
-    -12.421,
+    -12.418,
     4.4
    ]
   }

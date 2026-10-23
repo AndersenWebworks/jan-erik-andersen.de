@@ -70,9 +70,9 @@ Gleiche Abfolge in jeder Szene, gestrafft: Schnitt (gestrichelte Linie) und Falz
 
 ## Mockup (Eröffnung)
 
-**Soll:** steht im Drehbuch (Feste Regeln, „Ganzer Satz auf eigenem Träger“, und Eröffnung). Stand 23.10.2026 abends: Desktopansicht Mockup auf dem Monitor, Mobilansicht auf einem aufrechten, großen Smartphone. Der folgende Absatz beschreibt den gebauten Zwischenstand, der mit dem Neubau der Eröffnung ersetzt wird.
+Stand 23.10.2026 (Drehbuch, Eröffnung, neu gebaut). Der Name steht allein als Papierlettern auf dem Bogen (Wortmarke aus `schriften/NewsreaderMarke*.ttf`, gestrichelte Falzlinie darunter). Das Mockup (Ortszeile, Kernsatz, drei Sätze) trägt in der **Desktopansicht der Monitor** (`m_*`, nur `breit`), in der **Mobilansicht das Smartphone in der Szene** (`h_*`, nur `hochkant`, aufrecht auf einem Ständer, 7 Grad nach hinten geneigt, Einstellung `H4a/H4b` rahmt den ganzen Bildschirm, `handy_schirm`). Der jeweils andere Träger zeigt keinen Text (Monitor mobil und Smartphone am Desktop bleiben dunkel). Jede Fläche ist eine durchsichtige Überlagerung, die der Browser aus der Szenendatei zeichnet; die Textquelle ist nur der Block `texte`.
 
-Der Name steht allein als Papierlettern auf dem Bogen (Wortmarke aus `schriften/NewsreaderMarke*.ttf`, gestrichelte Falzlinie darunter). Ortszeile, Kernsatz und die drei Sätze erscheinen als Website auf dem Monitor (Desktop) bzw. auf dem Smartphone, das flach auf dem Tisch liegt (Hochkant, `druckflaeche_oben`). Jede Fläche ist eine durchsichtige Überlagerung auf dem Bildschirm (`m_seite` Rahmen der Seite, `m_hero`, `m_satz1..3`, am Handy `h_*`), die der Browser aus der Szenendatei zeichnet und zum genannten Zeitpunkt weich einblendet; die Textquelle ist nur der Block `texte`. Das Gerät, das den Text nicht trägt, zeigt die Seite ohne Text (Monitor: Platzhalterbalken) bzw. bleibt dunkel (Handy am Desktop).
+Rechner: Tower unter der Tischplatte neben dem rechten Bein (`rechner.lage.x` 3,95), Front zur Kamera, Kabel vom Monitor über die Platte, am Bein hinunter und unter ihm hindurch zur Rückwand. Damit sein flach liegender Zuschnitt im Bogen nicht auf dem Bein liegt, sitzen die Beine im hinteren Teil der Tiefe (`schreibtisch.form.bein_tiefe`).
 
 ## Schiene (Faden und Punkt)
 

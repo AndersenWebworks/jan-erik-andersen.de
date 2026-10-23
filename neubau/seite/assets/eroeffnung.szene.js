@@ -51,7 +51,8 @@ export default {
     "tiefe": 4.4,
     "hoehe": 1.55,
     "platte": 0.06,
-    "bein": 0.08
+    "bein": 0.08,
+    "bein_tiefe": 2.3
    },
    "lage": {
     "breit": {
@@ -265,11 +266,11 @@ export default {
    },
    "lage": {
     "breit": {
-     "x": 2.65,
+     "x": 3.95,
      "y_vorn": 0.12
     },
     "hochkant": {
-     "x": 2.65,
+     "x": 3.95,
      "y_vorn": 0.12
     }
    }
@@ -731,7 +732,8 @@ export default {
      "strichbreite": 0.00253,
      "radius": 0.02956
     }
-   ]
+   ],
+   "nur": "breit"
   },
   "m_hero": {
    "traeger": "M_Schirm",
@@ -920,7 +922,7 @@ export default {
   },
   "h_seite": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 0,
@@ -941,9 +943,9 @@ export default {
     {
      "typ": "rechteck",
      "x": 0.0,
-     "y": 0.90667,
+     "y": 0.14639,
      "breite": 0.85,
-     "hoehe": 1.90069,
+     "hoehe": 2.0,
      "fuellung": "#f5f4ee"
     },
     {
@@ -1149,7 +1151,7 @@ export default {
   },
   "h_hero": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 1,
@@ -1171,7 +1173,7 @@ export default {
      "x": 0.09444,
      "y": 0.17944,
      "breite": 0.70833,
-     "groesse": 0.05431,
+     "groesse": 0.046,
      "zeilenhoehe": 1.25,
      "schrift": "mono",
      "gewicht": 500,
@@ -1205,7 +1207,7 @@ export default {
   },
   "h_satz1": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 2,
@@ -1248,7 +1250,7 @@ export default {
   },
   "h_satz2": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 3,
@@ -1291,7 +1293,7 @@ export default {
   },
   "h_satz3": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 4,
@@ -1899,7 +1901,7 @@ export default {
      "bis": 333,
      "neigung": 40,
      "gier": 0,
-     "rand": 0.05,
+     "rand": 0.09,
      "lage_v": 0.5,
      "rahmt": [
       {
@@ -1946,11 +1948,11 @@ export default {
      "bis": 433,
      "neigung": 16,
      "gier": 0,
-     "rand": 0.24,
+     "rand": 0.1,
      "lage_v": 0.5,
      "rahmt": [
       {
-       "was": "handy",
+       "was": "handy_schirm",
        "bild": 430
       }
      ],
@@ -1963,11 +1965,11 @@ export default {
      "bis": 559,
      "neigung": 4,
      "gier": 0,
-     "rand": 0.2,
+     "rand": 0.1,
      "lage_v": 0.5,
      "rahmt": [
       {
-       "was": "handy",
+       "was": "handy_schirm",
        "bild": 556
       }
      ],
@@ -2036,7 +2038,7 @@ export default {
    "kamera_tempo": 0.05,
    "faden": {
     "punkt": [
-     2.5,
+     3.8,
      -0.2
     ],
     "richtung_grad": 90
@@ -2047,7 +2049,7 @@ export default {
    "kamera_tempo": 0.05,
    "faden": {
     "punkt": [
-     2.5,
+     3.8,
      -0.2
     ],
     "richtung_grad": 90
@@ -2200,8 +2202,8 @@ export default {
   }
  },
  "kabel": {
-  "y_bein": 1.5,
-  "y_hinten": 2.2,
+  "y_bein": 2.6,
+  "y_hinten": 2.3,
   "x_knick": 4.15
  }
 };

@@ -114,9 +114,13 @@ Z_TISCH = tuple(Z["tisch"])
 plate = karton("D_Platte", DW, DD, DP, mats={"vorn": M["platte"], "hinten": M["bein"], "rand": M["kante"]}, mitte_x=True, liegend=True)
 plate.location = (DX, DY, DH)
 LG = DH - G                                      # Beinlänge: zwischen Beinoberkante und Platte bleibt der Spalt G (nichts berührt sich in der Ruhelage)
+# Die Beine sitzen im hinteren Teil der Tiefe (Seitenwangen mit Abstand zur Front): ihr flacher Zuschnitt im Bogen
+# lässt vorn Platz für die Seitenwand des Rechners (sonst läge sie im Bogen auf dem Bein).
+BEIN_T = DF["bein_tiefe"]
+BEIN_Y = DY + DD - G - BEIN_T / 2
 def bein(name, x_hinge, rot):
-    b = karton(name, DD - 2 * G, LG, DB, mats={"vorn": M["bein"], "hinten": M["bein"], "rand": M["kante"]}, mitte_x=True)
-    b.rotation_euler = (0, 0, rot); b.location = (x_hinge, DY + DD / 2, 0)
+    b = karton(name, BEIN_T, LG, DB, mats={"vorn": M["bein"], "hinten": M["bein"], "rand": M["kante"]}, mitte_x=True)
+    b.rotation_euler = (0, 0, rot); b.location = (x_hinge, BEIN_Y, 0)
     return b
 beinL = bein("D_BeinL", DX - DW / 2, -math.pi / 2)
 beinR = bein("D_BeinR", DX + DW / 2, math.pi / 2)
@@ -408,10 +412,13 @@ for a, b in segs_k:
     L = (Vector(b) - Vector(a)).length; d_ = (k1 - k0) * .3 * L / lg_gesamt
     bau.strich(lokal_platte(*a), lokal_platte(*b), t_, d_, .92, normal=(0, 0, 1), eltern=plate, breite=cable_w); t_ += d_
 # über die Kante und am Bein hinunter (Außenfläche des rechten Beins, lokal: x entlang der Tiefe, z Höhe, y = Außenfläche)
-xl = yk - (DY + DD / 2)
+xl = yk - BEIN_Y
 bau.strich(Vector((xl, -0.0, DH + DP)), Vector((xl, -0.0, .0)), t_, (k1 - k0) * .2, .92, normal=(0, -1, 0), eltern=beinR, breite=cable_w); t_ += (k1 - k0) * .2
 # unter dem Bein durch, auf dem Bogen gerade zur rechten Rechnerwand (gleiche Tiefe: kein Knick, keine Schleife)
-bau.strich(Vector((DX + DW / 2 + .02, yk, .0011)), Vector((X1 + T + G, yk, .0011)), t_, (k1 - k0) * .3, .92, normal=(0, 0, 1), breite=cable_w)
+xr = RX + .2                                       # Rückseite des Rechners: Kabel läuft unter dem Bein hindurch zur Rückwand
+yr = RY + RD + T + G + .03
+bau.strich(Vector((DX + DW / 2 + .02, yk, .0011)), Vector((xr, yk, .0011)), t_, (k1 - k0) * .18, .92, normal=(0, 0, 1), breite=cable_w); t_ += (k1 - k0) * .18
+bau.strich(Vector((xr, yk, .0011)), Vector((xr, yr, .0011)), t_, (k1 - k0) * .12, .92, normal=(0, 0, 1), breite=cable_w)
 bau_obs = bau.bauen()
 print(f"BAU: {sum(len(v) for v in bau.striche.values())} Striche, {len(bau.flaechen)} Abdrücke, Gerüstkanten {n_ger}, Objekte {[o.name for o in bau_obs][:8]}")
 
@@ -439,6 +446,7 @@ def rahmt(r):
     if was == "handy_umgebung": return H([handy, h_fuss, h_hals, maus, tastatur, becher_boden, tasse_boden] + becher_w + tasse_w, [r["bild"]])
     if was == "handy": return H([handy, h_fuss], [r["bild"]])
     if was == "schirm": return H([schirm], [r["bild"]])
+    if was == "handy_schirm": return H([handy], [r["bild"]])
     if was == "schreibtisch_fertig": return H(objs_tisch + objs_monitor + objs_dinge, [r["bild"]])
     if was == "tisch_fertig": return H(objs_tisch + objs_monitor + objs_dinge + objs_tower, [r["bild"]])
     if was == "flaeche":

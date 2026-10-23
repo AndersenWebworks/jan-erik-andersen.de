@@ -50,7 +50,8 @@
     "tiefe": 4.4,
     "hoehe": 1.55,
     "platte": 0.06,
-    "bein": 0.08
+    "bein": 0.08,
+    "bein_tiefe": 2.3
    },
    "lage": {
     "breit": {
@@ -264,11 +265,11 @@
    },
    "lage": {
     "breit": {
-     "x": 2.65,
+     "x": 3.95,
      "y_vorn": 0.12
     },
     "hochkant": {
-     "x": 2.65,
+     "x": 3.95,
      "y_vorn": 0.12
     }
    }
@@ -730,7 +731,8 @@
      "strichbreite": 0.00253,
      "radius": 0.02956
     }
-   ]
+   ],
+   "nur": "breit"
   },
   "m_hero": {
    "traeger": "M_Schirm",
@@ -919,7 +921,7 @@
   },
   "h_seite": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 0,
@@ -940,9 +942,9 @@
     {
      "typ": "rechteck",
      "x": 0.0,
-     "y": 0.90667,
+     "y": 0.14639,
      "breite": 0.85,
-     "hoehe": 1.90069,
+     "hoehe": 2.0,
      "fuellung": "#f5f4ee"
     },
     {
@@ -1148,7 +1150,7 @@
   },
   "h_hero": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 1,
@@ -1170,7 +1172,7 @@
      "x": 0.09444,
      "y": 0.17944,
      "breite": 0.70833,
-     "groesse": 0.05431,
+     "groesse": 0.046,
      "zeilenhoehe": 1.25,
      "schrift": "mono",
      "gewicht": 500,
@@ -1204,7 +1206,7 @@
   },
   "h_satz1": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 2,
@@ -1247,7 +1249,7 @@
   },
   "h_satz2": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 3,
@@ -1290,7 +1292,7 @@
   },
   "h_satz3": {
    "traeger": "H_Handy",
-   "seite": "oben",
+   "seite": "vorn",
    "grund": "#ffffff",
    "transparent": true,
    "ebene": 4,
@@ -1898,7 +1900,7 @@
      "bis": 333,
      "neigung": 40,
      "gier": 0,
-     "rand": 0.05,
+     "rand": 0.09,
      "lage_v": 0.5,
      "rahmt": [
       {
@@ -1945,11 +1947,11 @@
      "bis": 433,
      "neigung": 16,
      "gier": 0,
-     "rand": 0.24,
+     "rand": 0.1,
      "lage_v": 0.5,
      "rahmt": [
       {
-       "was": "handy",
+       "was": "handy_schirm",
        "bild": 430
       }
      ],
@@ -1962,11 +1964,11 @@
      "bis": 559,
      "neigung": 4,
      "gier": 0,
-     "rand": 0.2,
+     "rand": 0.1,
      "lage_v": 0.5,
      "rahmt": [
       {
-       "was": "handy",
+       "was": "handy_schirm",
        "bild": 556
       }
      ],
@@ -2035,7 +2037,7 @@
    "kamera_tempo": 0.05,
    "faden": {
     "punkt": [
-     2.5,
+     3.8,
      -0.2
     ],
     "richtung_grad": 90
@@ -2046,7 +2048,7 @@
    "kamera_tempo": 0.05,
    "faden": {
     "punkt": [
-     2.5,
+     3.8,
      -0.2
     ],
     "richtung_grad": 90
@@ -2058,36 +2060,121 @@
   "tempo_min": 0.004,
   "bild": {
    "teile": {
-    "name": ["Marke", "Marke_Punkt"],
-    "tower": ["T_*"],
-    "tischplatte": ["D_Platte"],
-    "tischbein_rechts": ["D_BeinR"],
-    "tischbein_links": ["D_BeinL"],
-    "monitor": ["M_Hals", "M_Schirm", "M_Fuss"],
-    "monitor_schirm": ["M_Schirm"],
-    "smartphone": ["H_Handy"],
-    "tastatur": ["E_Tastatur"]
+    "name": [
+     "Marke",
+     "Marke_Punkt"
+    ],
+    "tower": [
+     "T_*"
+    ],
+    "tischplatte": [
+     "D_Platte"
+    ],
+    "tischbein_rechts": [
+     "D_BeinR"
+    ],
+    "tischbein_links": [
+     "D_BeinL"
+    ],
+    "monitor": [
+     "M_Hals",
+     "M_Schirm",
+     "M_Fuss"
+    ],
+    "monitor_schirm": [
+     "M_Schirm"
+    ],
+    "smartphone": [
+     "H_Handy"
+    ],
+    "tastatur": [
+     "E_Tastatur"
+    ]
    },
    "wichtig": [
-    {"teil": "name", "bei": [0]},
-    {"teil": "tischplatte", "bei": {"breit": ["D2 Bau"], "hochkant": ["H3 Schreibtisch"]}},
-    {"teil": "monitor_schirm", "nur": "breit", "bei": ["D4a", "D4b"]},
-    {"teil": "smartphone", "nur": "hochkant", "bei": ["H4a", "H4b"]},
-    {"teil": "tower", "bei": {"breit": ["D5"], "hochkant": ["H5"]}}
+    {
+     "teil": "name",
+     "bei": [
+      0
+     ]
+    },
+    {
+     "teil": "tischplatte",
+     "bei": {
+      "breit": [
+       "D2 Bau"
+      ],
+      "hochkant": [
+       "H3 Schreibtisch"
+      ]
+     }
+    },
+    {
+     "teil": "monitor_schirm",
+     "nur": "breit",
+     "bei": [
+      "D4a",
+      "D4b"
+     ]
+    },
+    {
+     "teil": "smartphone",
+     "nur": "hochkant",
+     "bei": [
+      "H4a",
+      "H4b"
+     ]
+    },
+    {
+     "teil": "tower",
+     "bei": {
+      "breit": [
+       "D5"
+      ],
+      "hochkant": [
+       "H5"
+      ]
+     }
+    }
    ],
-   "sichtbar": [{"teil": "name", "bei": [0, 12, 26]}],
+   "sichtbar": [
+    {
+     "teil": "name",
+     "bei": [
+      0,
+      12,
+      26
+     ]
+    }
+   ],
    "bildschirme": [
     {
      "name": "Monitor",
      "nur": "breit",
-     "flaechen": ["m_seite", "m_hero", "m_satz1", "m_satz2", "m_satz3"],
-     "grenzen": {"anteil_min": 0.35}
+     "flaechen": [
+      "m_seite",
+      "m_hero",
+      "m_satz1",
+      "m_satz2",
+      "m_satz3"
+     ],
+     "grenzen": {
+      "anteil_min": 0.35
+     }
     },
     {
      "name": "Smartphone",
      "nur": "hochkant",
-     "flaechen": ["h_seite", "h_hero", "h_satz1", "h_satz2", "h_satz3"],
-     "grenzen": {"anteil_min": 0.35}
+     "flaechen": [
+      "h_seite",
+      "h_hero",
+      "h_satz1",
+      "h_satz2",
+      "h_satz3"
+     ],
+     "grenzen": {
+      "anteil_min": 0.35
+     }
     }
    ],
    "regeln": [
@@ -2095,17 +2182,27 @@
      "teil": "tower",
      "unter": "tischplatte",
      "neben": "tischbein_rechts",
-     "front": {"flaeche": "T_Front", "zur": "kamera"},
+     "front": {
+      "flaeche": "T_Front",
+      "zur": "kamera"
+     },
      "aufrecht": "T_Boden"
     },
-    {"teil": "monitor", "auf": "tischplatte", "hinter": "tastatur"},
-    {"teil": "tastatur", "auf": "tischplatte"}
+    {
+     "teil": "monitor",
+     "auf": "tischplatte",
+     "hinter": "tastatur"
+    },
+    {
+     "teil": "tastatur",
+     "auf": "tischplatte"
+    }
    ]
   }
  },
  "kabel": {
-  "y_bein": 1.5,
-  "y_hinten": 2.2,
+  "y_bein": 2.6,
+  "y_hinten": 2.3,
   "x_knick": 4.15
  }
 }
