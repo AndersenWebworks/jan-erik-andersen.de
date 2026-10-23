@@ -7,8 +7,16 @@ Stand: 23.10.2026. Verdichtet aus `docs/FASSUNG-2026-11.md` (Entscheidungen vom 
 - **Wofür:** Eriks Aushängeschild für Bewerbungen und Projektanfragen. Die Seite selbst ist der Beweis, dass er Websites gestalten und bauen kann.
 - **Für wen:** Projektvermittler, Recruiter, Agenturen und Unternehmen, die aus seiner Bewerbung oder seinem Profil kommen, oft am Handy, mit wenig Zeit.
 - **Erfolg:** Nach fünf Sekunden weiß der Besucher, wer Erik ist, was er macht und auf welchem Niveau, und er schreibt ihm eher als vorher.
-- **Große Frage jetzt:** Trägt der Blender-Weg? Die neu gebaute Eröffnung muss sichtbar besser als die alte sein und kleine Änderungen billig machen. Sonst endet der Blender-Weg.
+- **Große Frage jetzt:** Wie kommt die Eröffnung von „korrekt“ zur Vision? Der Blender-Weg bleibt (Erik, 23.10.2026, zur neu gebauten Eröffnung: „das ist besser aber weit entfernt von der vision“). Fehlen laut Erik alle vier Ebenen: Handwerk und Zeichnen, Atmosphäre und Material, Kamera als Film, Geschichte, dazu Punkt und Linie als Regie durch alles. Nächster Schritt: Schlüsselbilder der Eröffnung entlang des Fadens, Erik urteilt je Bild, bewegt wird erst danach.
 - **Außerdem:** Die Seite muss rechtzeitig fertig werden, damit sie die Bewerbungen tragen kann. Eine vollkommene Szene ohne fertige Seite ist kein Erfolg.
+
+### Vision
+In Eriks Worten, von ihm am 23.10.2026 bestätigt („Trifft es, so ins Drehbuch“). Steht über allen Regeln: Erfüllt eine Szene die Regeln, aber nicht das hier, ist sie nicht fertig.
+- **Ein Film, eine Fahrt.** „EINE Kamerabewegung von vorn bis Ende, Smooth, dem Punkt durch die Szene folgend, ggf. Slomo, aber null Stops oder Bruch.“ „Die Kamera muss ein Fluss sein“, kein Eiern, „keine komischen zackigen Zooms“. Man soll „zum Ansehen und Genießen“ kommen, es soll ein „Flow-Gefühl“ aufkommen. Am Anfang steht die Kamera „flach vor dem Logo, so dass man die Fläche noch nicht sieht“.
+- **Punkt und Linie führen Regie.** Der rote Faden läuft vom Namen bis zum Kontakt, durch jede Szene hindurch, nicht nur dazwischen, und führt Kamera und Geschichte. „Keine eckigen Kurven in der Linie, das muss alles sauber geschwungen sein, und keine Stops.“ Feste Logik, „aber organisch“. Rot gehört dem Weg. Am Ende wird der Punkt zum Schlusspunkt des Namens.
+- **Zeichnen und Bauen.** Auf dem Bogen zeichnen sich Schnitt- und Falzlinien, das Teil schneidet sich frei, klappt hoch und rastet ein, „wirklich physikalisch, logisch und korrekt“. Die Vorzeichenphase wird nicht abgemildert: „AUF den Papierflächen eine Art Textur“, „das Raster fand ich auch nicht ganz schlecht“.
+- **Atmosphäre.** Nicht „bieder“, „mehr so wie Mirror's Edge“: Papier, klare Schatten, futuristisch.
+- **Geschichte.** Die Kamera zeigt das Wichtigste der Szene (Modernisierung: „die Modernisierung“). Jedes Konstrukt wird aus seinem Text gedacht, nichts wird draufgeklatscht. In der Eröffnung ist die Website auf dem Monitor „der Gag“. Nach fünf Sekunden ist klar, wer Erik ist, was er macht und auf welchem Niveau.
 
 Die Fassung bleibt als Protokoll erhalten. `entwurf-2026-11/seite/` bleibt als Bestand liegen und ist Teilelager und Vorlage, nicht Grundlage.
 
