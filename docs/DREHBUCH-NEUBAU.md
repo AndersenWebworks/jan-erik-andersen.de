@@ -168,6 +168,17 @@ Fehler werden nicht hinterher gesucht, sondern durch die Bauweise ausgeschlossen
 6. **Ein schlanker Kern** mit klaren Modulen: Bühne und Licht, Papier und Falten, Druck auf Flächen, Bahn und Rig, Prüfung, Fallback.
 7. **Messflug von Anfang an:** gleichmäßig gescrollt, je Bild Tempo, Beschleunigung, Ruck und Drehung der Kamera, Ruck im Abstand, Rollen, Punkt im Bild bei Wechseln. Je Einstellung: Ist ihr Gegenstand ganz und groß genug im Bild? Je Lesestelle: Schriftgröße, Standzeit, Schräge, und Bild für Bild, ob jeder Satz vollständig und unverdeckt zu sehen ist. Desktop und Handy. Die Abnahme einer Szene ist der Messflug plus Ansehen, ob man die Geschichte versteht.
 
+### Werkzeuge vor Szenen (23.10.2026, Erik: „Ja, Werkzeuge zuerst“)
+
+Erik will modular bauen, weil die Seite öfter angepasst wird: Text tauschen und Gegenstände versetzen, ohne die Szene neu zu bauen, und ohne bei jeder kleinen Anpassung Tokens zu verschwenden. Deshalb kommen die Werkzeuge vor der nächsten Szene. Punkt 1 und 2 oben (eine durchgehende Bahn, ein Rig für alles) gelten mit dem Wegfall der Karte nicht mehr; an ihre Stelle treten freie Bühnen mit Eingang und Ausgang.
+
+- **Szenendatei je Szene:** Titel, Sätze, Lage der Gegenstände, Zeitpunkte, Einstellungsliste breit und hochkant, Eingang und Ausgang. Inhalt steht nur dort, nicht im Bauskript.
+- **Blender baut Form, Bewegung und Kamera** und legt für Text nur benannte leere Druckflächen an.
+- **Der Browser druckt den Text beim Laden auf diese Flächen.** Optisch bleibt es Druck im Papier. Ein Satztausch braucht keinen Blender-Lauf; kleine Lageänderungen übernimmt der Abspieler ebenfalls.
+- **Ein Baubefehl** baut, prüft und meldet nur das Ergebnis. Die Textprüfung läuft im Browser, weil der Text erst dort entsteht.
+- **Übergänge:** Jede Szene hat einen festen Eingang und Ausgang (Fadenpunkt, Richtung, Kamera). Ein Übergang ist ein eigenes kurzes Stück aus dem Ausgang der einen und dem Eingang der nächsten Szene; die Kamera folgt dem Faden übers Papier. Ändert sich eine Szene innen, bleiben ihre Übergänge gültig.
+- **Reihenfolge:** Werkzeuge und Umstellung von Modernisierung, dann Eröffnung (verbessert die gemeinsame Basis mit, Modernisierung profitiert), dann ein Testübergang Eröffnung → Modernisierung.
+
 **Aus dem Bestand übernommen, geprüft statt kopiert:** `wortmarke.js`, Faltmechanik und Einrasten aus `falt.js`, Palette und Post-Processing aus `kern.js`, Schreibtischdinge aus `schreibtisch.js`, Leporello-Faltung aus `stimmen.js`, Gerwing-Bilder aus `bilder/`, Schriften, `vendor/`, Kopf und Fallback aus `index.html`, Weg auf main (`docs/weg-auf-main.sh`).
 
 **Ort:** neuer Ordner neben `seite/`. Der Weg auf main zeigt erst nach Eriks Abnahme auf den Neubau. Push nur nach Eriks Klick.
