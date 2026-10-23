@@ -40,9 +40,16 @@ Lücken > 25 ms und Long Tasks werden gezählt und berichtet, bewerten aber nich
 Seitenfehlern, nicht scrollbarer Seite, Kamera-Ausreißern. Das Gesamturteil ist das schlechteste der Läufe.
 Die Schwellen stehen oben in `bewegung.mjs` (`SCHWELLE`).
 
+## Kamera: eine durchgehende Fahrt (Neubau)
+Für eine Folge aus Szenen und Übergängen (`posen(name, f)` mit `verschiebung`) wertet `kameraAuswerten` zusätzlich aus und meldet Fehler (`KAMERA-FEHLER`, Gesamturteil FEHLER):
+- **Kombiniertes Tempo** je Bild = Ort + 0,08 je Grad Drehung + 3 je Bildverschiebung; Fehler, wenn es unter 0,004 je Bild fällt (ausgenommen die ersten und letzten 30 Bilder der ganzen Seite).
+- **Ruck-Ausreißer**: dritte Differenz des Kameraorts (Vektor); Fehler, wenn der größte Wert mehr als das Achtfache des 98. Perzentils beträgt (ein Knick der Fahrtrichtung zählt mit).
+- **Nähte** (Abschnittsgrenzen): Tempo und Fahrtrichtung links und rechts je über zwei Bilder; Fehler bei mehr als 12 % Tempoabweichung oder mehr als 4 Grad Richtungsknick; berichtet werden außerdem Beschleunigung links/rechts und Drehsprung.
+Schwellen: Konstante `KAMERA` oben in `bewegung.mjs`.
+
 ## Schnittstelle des Abspielers (Kamera)
 Gelesen wird `window.__neubau`: `bild` (aktuelles, nachgezogenes globales Bild), `ziel`, `bilder`, `abschnitte` (Name, start, frames)
-und `posen(name, f)` mit `{ ort:[x,y,z], q:[x,y,z,w], rollen_grad }`. Fehlt etwas davon, entfällt der Kamerateil mit Hinweis;
+und `posen(name, f)` mit `{ ort:[x,y,z], q:[x,y,z,w], rollen_grad, verschiebung }`. Fehlt etwas davon, entfällt der Kamerateil mit Hinweis;
 an der Seite wird nichts verändert. Für andere Seiten reicht ein Objekt mit diesen Feldern, `posen` darf die Szene verstellen
 (wird erst nach den Messläufen aufgerufen). Stand beim Bau: `posen` im Arbeitsstand von `abspieler.js` warf `ReferenceError: a is not defined`
 (Rückgabe `..., a }` ohne Variable `a`); mit `a: A` läuft es.

@@ -1,9 +1,9 @@
 {
- "form_hash": "781ad8980c290f35",
- "gebaut": "2026-10-23 14:32:34",
+ "form_hash": "83a8649dd1199e9d",
+ "gebaut": "2026-10-23 16:37:54",
  "glb": {
-  "breit": 1670264,
-  "hochkant": 1662936
+  "breit": 1686984,
+  "hochkant": 1683012
  },
  "tore": {
   "breit": {
@@ -11,15 +11,15 @@
     "bild": 0,
     "faden": {
      "punkt": [
-      2.4,
-      -8.4
+      3.9,
+      -8.8
      ],
-     "richtung_grad": 89.99
+     "richtung_grad": 40.0
     },
     "kamera": {
      "ort": [
       0.0,
-      -15.156393051147461,
+      -17.49639320373535,
       0.05999999865889549
      ],
      "neigung": 0,
@@ -29,42 +29,43 @@
     }
    },
    "ausgang": {
-    "bild": 560,
+    "bild": 670,
     "faden": {
      "punkt": [
-      10.35,
-      -4.05
+      7.75,
+      -6.05
      ],
-     "richtung_grad": 89.99
+     "richtung_grad": 90.0
     },
     "kamera": {
      "ort": [
-      10.600000381469727,
-      -9.025050163269043,
-      5.230195045471191
+      8.0,
+      -10.864538192749023,
+      5.1111674308776855
      ],
      "neigung": 36,
      "gier": 0,
      "vfov": 30,
-     "verschiebung": 0.0
+     "verschiebung": 0.0,
+     "tempo": 0.05
     }
    },
    "bahn": {
-    "richtung_anfang": 89.993,
-    "richtung_ende": 89.993,
+    "richtung_anfang": 40.0,
+    "richtung_ende": 89.997,
     "kruemmung_anfang": 0.0,
     "kruemmung_ende": 0.0,
-    "kruemmung_max": 0.3445,
-    "dkruemmung_max": 0.3399,
-    "wendepunkte": 1,
-    "radius_min": 2.903,
-    "laenge": 9.548
+    "kruemmung_max": 0.5229,
+    "dkruemmung_max": 1.059,
+    "wendepunkte": 0,
+    "radius_min": 1.913,
+    "laenge": 4.904
    },
    "huelle": [
-    -5.348,
-    13.03,
-    -8.485,
-    11.84
+    -6.148,
+    10.43,
+    -8.871,
+    4.4
    ]
   },
   "hochkant": {
@@ -72,15 +73,15 @@
     "bild": 0,
     "faden": {
      "punkt": [
-      3.6,
-      -10.8
+      3.2,
+      -12.2
      ],
-     "richtung_grad": 89.99
+     "richtung_grad": -0.0
     },
     "kamera": {
      "ort": [
-      -2.220446049250313e-16,
-      -20.660903930664062,
+      0.0,
+      -24.10090446472168,
       0.05999999865889549
      ],
      "neigung": 0,
@@ -90,42 +91,43 @@
     }
    },
    "ausgang": {
-    "bild": 560,
+    "bild": 670,
     "faden": {
      "punkt": [
-      10.35,
-      -4.05
+      4.15,
+      -6.05
      ],
      "richtung_grad": 89.99
     },
     "kamera": {
      "ort": [
-      10.600000381469727,
-      -6.747335910797119,
-      3.7278802394866943
+      4.400000095367432,
+      -9.032514572143555,
+      3.963674306869507
      ],
      "neigung": 38,
      "gier": 0,
      "vfov": 50,
-     "verschiebung": 0.0
+     "verschiebung": 0.0,
+     "tempo": 0.05
     }
    },
    "bahn": {
-    "richtung_anfang": 89.988,
-    "richtung_ende": 89.989,
+    "richtung_anfang": -0.002,
+    "richtung_ende": 89.991,
     "kruemmung_anfang": 0.0,
     "kruemmung_ende": 0.0,
-    "kruemmung_max": 0.5367,
-    "dkruemmung_max": 0.4135,
+    "kruemmung_max": 1.4198,
+    "dkruemmung_max": 1.9041,
     "wendepunkte": 1,
-    "radius_min": 1.863,
-    "laenge": 10.564
+    "radius_min": 0.704,
+    "laenge": 7.165
    },
    "huelle": [
-    -5.348,
-    13.03,
-    -10.885,
-    14.36
+    -6.148,
+    6.83,
+    -12.259,
+    4.4
    ]
   }
  }

@@ -1,24 +1,24 @@
 {
- "tore_hash": "d929cc7785c407e7",
- "gebaut": "2026-10-23 14:33:58",
+ "tore_hash": "0530b22daedfbb14",
+ "gebaut": "2026-10-23 16:39:04",
  "von": "eroeffnung",
  "nach": "modernisierung",
  "glb": {
-  "breit": 219648,
-  "hochkant": 202464
+  "breit": 201236,
+  "hochkant": 197008
  },
  "ziel": {
   "breit": {
    "versatz": [
-    52.9509,
-    -9.18256
+    50.35,
+    -11.19
    ],
-   "drehung_grad": -89.99
+   "drehung_grad": -90.0
   },
   "hochkant": {
    "versatz": [
-    54.75094,
-    -9.42225
+    48.55094,
+    -11.42225
    ],
    "drehung_grad": -89.99
   }

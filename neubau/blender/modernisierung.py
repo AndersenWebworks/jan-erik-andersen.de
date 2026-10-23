@@ -423,32 +423,48 @@ def rahmt(r):
     if was == "front_schirm_fuss": return H([front, schirm, fuss], [r.get("bild", F_END)])
     if was == "lesetext": return text_punkte()
     if was == "netz": return H(netz + [schirm], [r.get("bild", F_END)])
+    if was == "schirm_ausgang":   # Flachbildschirm samt Fuß und der Ausgang des Fadens (die Kamera fährt in Fadenrichtung weiter)
+        g = SZ["ausgang"][ANORDNUNG]["faden"]["punkt"]
+        return H([schirm, fuss], [F_END]) + [Vector((g[0], g[1], 0.0))]
     raise ValueError("unbekannt: rahmt " + was)
 E = []
 for e in KC["einstellungen"]:
     pts = []
     for r in e["rahmt"]:
         pts += rahmt(r)
-    E.append({"name": e["name"], "f0": e["von"], "f1": e["bis"], "neigung": e["neigung"], "gier": e["gier"], "punkte": pts, "rand": e["rand"],
-              "lage_v": e.get("lage_v", .5), "x_fest": front_mitte_x() if e.get("x_fest") == "front_mitte" else None})
+    E.append({"name": e["name"], "bild": e["bild"], "f0": e["von"], "f1": e["bis"], "neigung": e["neigung"], "gier": e["gier"], "punkte": pts, "rand": e["rand"],
+              "lage_v": e.get("lage_v", .5), "x_fest": front_mitte_x() if e.get("x_fest") == "front_mitte" else None, "folgt": e.get("folgt")})
 for e in E:
-    e["ort"], e["verschiebung"] = basis.rahmen(e["punkte"], e["neigung"], e["gier"], VF, ASP, rand=e["rand"], lage_v=e["lage_v"], x_fest=e["x_fest"])
+    if not e["folgt"]:
+        e["ort"], e["verschiebung"] = basis.rahmen(e["punkte"], e["neigung"], e["gier"], VF, ASP, rand=e["rand"], lage_v=e["lage_v"], x_fest=e["x_fest"])
+for e in E:
+    if e["folgt"]:   # Fortsetzung der Fahrt entlang der Blickachse der vorigen Stützpose (der Lesestoff bleibt im Bild, nur etwas größer)
+        b = next(x for x in E if x["name"] == e["folgt"]["nach"])
+        fw = basis.kamera_orientierung(b["neigung"], b["gier"]).to_matrix() @ Vector((0, 0, -1))
+        fh = Vector((fw.x, fw.y, 0)).normalized()      # waagerecht in Blickrichtung
+        e["ort"] = b["ort"] + fw * e["folgt"].get("achse", 0) + fh * e["folgt"].get("voraus", 0) + Vector((0, 0, e["folgt"].get("hoch", 0)))
+        e["verschiebung"] = b["verschiebung"]; e["neigung"] = e["folgt"].get("neigung", b["neigung"]); e["gier"] = b["gier"]
 cam = basis.kamera(KNAME, VF)
 basis._spuren.clear()
-basis.kamerafahrt(cam, E, F_END, ASP)
+KZ = SZ["kamera"]["zeitlupe"]
+EIN, AUS = SZ["eingang"][ANORDNUNG], SZ["ausgang"][ANORDNUNG]
+fahrt = basis.kamerafahrt(cam, E, F_END, ASP, ein=(EIN["faden"]["richtung_grad"], EIN["kamera_tempo"]), aus=(AUS["faden"]["richtung_grad"], AUS["kamera_tempo"]),
+                          zeitlupe=[(a_, b_, KZ["faktor"], KZ["rampe"]) for a_, b_ in KZ["fenster"]])
 basis.backen(F_END)
+KENN = basis.fahrt_kennwerte(fahrt)
+print("FAHRT", json.dumps(KENN))
 for e in E:
-    print(f"EINSTELLUNG {e['name']}: Ort {tuple(round(v, 2) for v in e['ort'])}, Neigung {e['neigung']}, Verschiebung {e['verschiebung']:.3f}")
+    print(f"STUETZPOSE {e['name']} (Bild {e['bild']}): Ort {tuple(round(v, 2) for v in e['ort'])}, Neigung {e['neigung']}, Verschiebung {e['verschiebung']:.3f}")
 
 # ---------------------------------------------------------------- Eingang und Ausgang der Szene (Vorbereitung für Übergänge)
-def pose(e, f):
+def pose(e, f, tempo):
     return {"bild": f, "faden": faden_zustand(f),
-            "kamera": {"ort": [e["ort"].x, e["ort"].y, e["ort"].z], "neigung": e["neigung"], "gier": e["gier"], "vfov": VF, "verschiebung": e["verschiebung"]}}
-UEBERGANG = {"eingang": pose(E[0], 0), "ausgang": pose(E[-1], F_END)}
+            "kamera": {"ort": [e["ort"].x, e["ort"].y, e["ort"].z], "neigung": e["neigung"], "gier": e["gier"], "vfov": VF, "verschiebung": e["verschiebung"], "tempo": tempo}}
+UEBERGANG = {"eingang": pose(E[0], 0, EIN["kamera_tempo"]), "ausgang": pose(E[-1], F_END, AUS["kamera_tempo"])}
 print("EINGANG", json.dumps(UEBERGANG["eingang"]), "AUSGANG", json.dumps(UEBERGANG["ausgang"]))
 
 # ---------------------------------------------------------------- Prüfung (Form; der Text wird im Browser geprüft: neubau/werkzeug/browser.mjs pruefen)
-bericht = {"form_hash": FORM_HASH, "einstellungen": {}, "kollisionen": {}, "hinweise": {}, "uebergang": UEBERGANG, "bahn": BERICHT_BAHN}
+bericht = {"form_hash": FORM_HASH, "einstellungen": {}, "kollisionen": {}, "hinweise": {}, "uebergang": UEBERGANG, "bahn": BERICHT_BAHN, "kamera": {k: v for k, v in KENN.items()}}
 teile = [crt_boden, front, rueck, links, rechts, deckel, fuss, hals, schirm, titel, stuetze, pkt] + list(blocks.values())
 # zulässig: Teile, die sich an ihrem gemeinsamen Falz berühren (der Karton biegt dort)
 erlaubt = [("Titel", "Titel_Stuetze"), ("CRT_Rueck", "CRT_Deckel")]
@@ -477,7 +493,7 @@ json.dump(bericht, open(os.path.join(NEU, "tmp", f"modernisierung_{ANORDNUNG}_pr
 # ---------------------------------------------------------------- Probebilder (Form und Bewegung; Text zeigt nur der Browser)
 pruef_faden.hide_render = True
 if A["proben"]:
-    frames = A["frames"] or [52, 166, 236, 352]
+    frames = A["frames"] or [0, 60, 120, 196, 270, 330, 352, 400, 440]
     for f in frames:
         t1 = basis.probe(cam, f, os.path.join(PROBEN, f"{ANORDNUNG}_{f:03d}.png"), BILD[0], BILD[1], prozent=200 if HOCH else 100)
         print(f"PROBE {f}: {t1:.1f}s")
@@ -488,7 +504,7 @@ if A["export"]:
         "szene": "modernisierung", "frames": F_END, "fps": basis.FPS, "form_hash": FORM_HASH,
         "anordnung": ANORDNUNG, "kamera": {"name": KNAME, "vfov": VF, "aspekt": ASP},
         "licht": basis.LICHT, "pal": PAL,
-        "einstellungen": [{k: e[k] for k in ("name", "f0", "f1")} for e in E],
+        "einstellungen": [{k: e[k] for k in ("name", "f0", "f1", "bild")} for e in E],
         "lesestellen": [list(F_LESEN)],
         "verschiebung": json.loads(cam["neubau_verschiebung"]),
         "gruppen": {n: {"pivot": json.loads(o["neubau"])["pivot"], "versatz": GEG[n].get("versatz", [0, 0, 0]), "drehung_z": GEG[n].get("drehung_z", 0)}

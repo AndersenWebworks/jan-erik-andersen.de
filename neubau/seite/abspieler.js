@@ -41,12 +41,17 @@ async function schriftenLaden(namen, ordner) {
 // Zeilenumbruch und Lage der Zeilen in Einheiten der Druckfläche (unabhängig von der Pixeldichte, gemessen bei REF px).
 // Versalhöhe (0,72 em) mittig in der Zeilenhöhe; Kästen der Zeilen für die Textprüfung.
 const REF = 200;
-function textSetzen(el, w, h, ctx) {
+// Text eines Elements: direkt (text/absaetze) oder als Verweis auf den Block "texte" der Szenendatei (ref): der Wortlaut steht nur einmal
+function textVon(el, texte) {
+  if (el.ref != null) { const t = (texte || {})[el.ref]; return Array.isArray(t) ? t : [t]; }
+  return el.absaetze || [el.text];
+}
+function textSetzen(el, w, h, ctx, texte) {
   const size = el.groesse, lh = (el.zeilenhoehe ?? 1.3) * size, gap = (el.abstand ?? .6) * size;
   const x0 = el.x ?? el.rand ?? 0, maxw = el.breite ?? (w - 2 * x0);
   ctx.font = schriftString(el.schrift, REF);
   const breite = s => ctx.measureText(s).width / REF * size;
-  const absaetze = el.absaetze || [el.text];
+  const absaetze = textVon(el, texte);
   const zl = [];
   absaetze.forEach((a, i) => {
     let cur = "", j = 0;
@@ -75,19 +80,29 @@ function textSetzen(el, w, h, ctx) {
 }
 
 // Zeichnet eine Druckfläche (Grund, Linien, Text) auf ein Canvas; ppu = Pixel je Einheit.
-function druckZeichnen(def, w, h, ppu, pal, mess, art) {
+function druckZeichnen(def, w, h, ppu, pal, mess, art, texte) {
   const cv = document.createElement("canvas");
   cv.width = Math.max(4, Math.round(w * ppu)); cv.height = Math.max(4, Math.round(h * ppu));
   const ctx = cv.getContext("2d");
-  ctx.fillStyle = farbe(pal, def.grund); ctx.fillRect(0, 0, cv.width, cv.height);
+  if (!def.transparent) { ctx.fillStyle = farbe(pal, def.grund); ctx.fillRect(0, 0, cv.width, cv.height); }   // Überlagerungen bleiben durchsichtig, wo nichts steht
   const zeilen = [];
   for (const roh of def.elemente || []) {
     const el = aufloesen(roh, art);
-    if (el.typ === "linie") {
+    if (el.anordnung && el.anordnung !== art) continue;     // Element nur für eine Anordnung (breit oder hochkant)
+    if (el.typ === "rechteck") {
+      const x = el.x * ppu, y = el.y * ppu, bw = el.breite * ppu, bh = el.hoehe * ppu, r = Math.min((el.radius || 0) * ppu, bw / 2, bh / 2);
+      ctx.beginPath(); ctx.roundRect(x, y, bw, bh, r);
+      if (el.fuellung) { ctx.fillStyle = farbe(pal, el.fuellung); ctx.fill(); }
+      if (el.strich) { ctx.strokeStyle = farbe(pal, el.strich); ctx.lineWidth = Math.max(1, (el.strichbreite || .006) * ppu); ctx.stroke(); }
+    } else if (el.typ === "kreis") {
+      ctx.beginPath(); ctx.arc(el.x * ppu, el.y * ppu, el.radius * ppu, 0, Math.PI * 2);
+      if (el.fuellung) { ctx.fillStyle = farbe(pal, el.fuellung); ctx.fill(); }
+      if (el.strich) { ctx.strokeStyle = farbe(pal, el.strich); ctx.lineWidth = Math.max(1, (el.strichbreite || .006) * ppu); ctx.stroke(); }
+    } else if (el.typ === "linie") {
       ctx.strokeStyle = farbe(pal, el.farbe); ctx.lineWidth = Math.max(1, el.breite * ppu); ctx.lineCap = "butt";
       ctx.beginPath(); ctx.moveTo(el.von[0] * ppu, el.von[1] * ppu); ctx.lineTo(el.bis[0] * ppu, el.bis[1] * ppu); ctx.stroke();
     } else if (el.typ === "text" || el.typ === "absaetze") {
-      const boxen = textSetzen(el, w, h, mess);
+      const boxen = textSetzen(el, w, h, mess, texte);
       ctx.fillStyle = farbe(pal, el.farbe); ctx.textBaseline = "alphabetic"; ctx.textAlign = "left"; ctx.fontKerning = "normal";
       ctx.font = schriftString(el.schrift, el.groesse * ppu);
       for (const b of boxen) ctx.fillText(b.text, b.x * ppu, b.base * ppu);
@@ -98,6 +113,18 @@ function druckZeichnen(def, w, h, ppu, pal, mess, art) {
 }
 
 // Einblenden: der Druck erscheint weich zwischen zwei Bildnummern (vorher nur die Grundfarbe), wie der Einblend-Knoten in Blender
+function einblendenAlpha(m, uFrame, f0, f1, ebene) {
+  // Überlagerung mit Alphakanal: die ganze Fläche (Karte, Text) erscheint weich zwischen f0 und f1
+  m.transparent = true; m.opacity = 1; m.depthWrite = false; m.alphaTest = 0; m.polygonOffset = true; m.polygonOffsetFactor = -2 - ebene; m.polygonOffsetUnits = -2 - ebene;
+  m.onBeforeCompile = sh => {
+    sh.uniforms.uFrame = uFrame;
+    sh.fragmentShader = "uniform float uFrame;\n" + sh.fragmentShader.replace("#include <map_fragment>",
+      `#include <map_fragment>
+       diffuseColor.a *= ${f0 === null ? "1.0" : `smoothstep(${f0.toFixed(1)}, ${f1.toFixed(1)}, uFrame)`};`);
+  };
+  m.customProgramCacheKey = () => `ea${f0}_${f1}`;
+  m.needsUpdate = true;
+}
 function einblenden(m, uFrame, f0, f1, grund) {
   m.onBeforeCompile = sh => {
     sh.uniforms.uFrame = uFrame; sh.uniforms.uGrund = { value: grund };
@@ -171,7 +198,7 @@ export async function spieleFolge(buehne, folge, opt = {}) {
       if (m.map) { m.map.anisotropy = aniso; m.map.needsUpdate = true; }
       if (info.bau) {
         // Bau-Linien: Sichtbarkeit je Ecke aus _ein/_aus/_deck gegen die Bildnummer (wie der Treiber in Blender)
-        const bm = new THREE.MeshBasicMaterial({ color: new THREE.Color(info.tinte), transparent: true, depthWrite: false, side: THREE.DoubleSide });
+        const bm = new THREE.MeshBasicMaterial({ color: new THREE.Color(info.tinte), transparent: true, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
         bm.onBeforeCompile = sh => {
           sh.uniforms.uFrame = A.uFrame;
           sh.vertexShader = "attribute float _ein; attribute float _aus; attribute float _deck; varying float vEin; varying float vAus; varying float vDeck;\n" +
@@ -235,7 +262,7 @@ export async function spieleFolge(buehne, folge, opt = {}) {
     const t1 = performance.now();
     if (sz && Object.keys(druckNodes).length) {
       const namen = new Set();
-      for (const fl of Object.values(sz.druckflaechen)) for (const roh of fl.elemente || []) { const el = aufloesen(roh, art); if (el.schrift) namen.add(el.schrift); else if (el.typ !== "linie") namen.add("grotesk"); }
+      for (const fl of Object.values(sz.druckflaechen)) for (const roh of fl.elemente || []) { const el = aufloesen(roh, art); if (el.anordnung && el.anordnung !== art) continue; if (el.schrift) namen.add(el.schrift); else if (el.typ === "text" || el.typ === "absaetze") namen.add("grotesk"); }
       await schriftenLaden(namen, schriftOrdner);
       await Promise.all([...namen].map(n => document.fonts.load(schriftString(n, 20))));
       const mess = document.createElement("canvas").getContext("2d");
@@ -244,7 +271,7 @@ export async function spieleFolge(buehne, folge, opt = {}) {
       for (const [name, { mesh, info }] of Object.entries(druckNodes)) {
         const def = sz.druckflaechen[name]; if (!def) continue;
         const ppu = Math.min((def.aufloesung || 400) * dpr, maxTex / Math.max(info.w, info.h));
-        const { cv, zeilen } = druckZeichnen(def, info.w, info.h, ppu, pal, mess, art);
+        const { cv, zeilen } = druckZeichnen(def, info.w, info.h, ppu, pal, mess, art, sz.texte);
         const tex = new THREE.CanvasTexture(cv);
         tex.colorSpace = THREE.SRGBColorSpace; tex.flipY = false; tex.anisotropy = aniso;
         tex.generateMipmaps = true; tex.minFilter = THREE.LinearMipmapLinearFilter; tex.magFilter = THREE.LinearFilter;
@@ -252,9 +279,10 @@ export async function spieleFolge(buehne, folge, opt = {}) {
         const m = mesh.material;
         m.map = tex; m.color.set(0xffffff);
         // kein Polygon-Offset: die Fläche liegt 1 mm über dem Karton, die Bleistiftspur (2,5 mm) darüber bleibt sichtbar
-        if (def.einblenden) einblenden(m, A.uFrame, def.einblenden[0], def.einblenden[1], new THREE.Color(farbe(pal, def.grund)));
+        if (def.transparent) { einblendenAlpha(m, A.uFrame, def.einblenden ? def.einblenden[0] : null, def.einblenden ? def.einblenden[1] : null, def.ebene || 0); mesh.renderOrder = 3 + (def.ebene || 0); mesh.receiveShadow = false; }
+        else if (def.einblenden) einblenden(m, A.uFrame, def.einblenden[0], def.einblenden[1], new THREE.Color(farbe(pal, def.grund)));
         else { m.onBeforeCompile = () => {}; m.customProgramCacheKey = () => "druck"; m.needsUpdate = true; }
-        mesh.castShadow = false; mesh.receiveShadow = true;
+        mesh.castShadow = false; if (!def.transparent) mesh.receiveShadow = true;
         // Abbildung Druckkoordinate -> Welt über die UV der Fläche (u = x / w, v = y / h, Bild oben links)
         const pos = mesh.geometry.attributes.position, uv = mesh.geometry.attributes.uv, P = {};
         for (let i = 0; i < pos.count; i++) P[Math.round(uv.getX(i)) + "" + Math.round(uv.getY(i))] = new THREE.Vector3().fromBufferAttribute(pos, i);
@@ -303,7 +331,7 @@ export async function spieleFolge(buehne, folge, opt = {}) {
     const hg = new THREE.SphereGeometry(200, 32, 24);
     const c0 = new THREE.Color(pal.dunst || "#f7fbff"), c1 = new THREE.Color(pal.himmel || "#d4e5f6"), cc = new THREE.Color();
     const pos = hg.attributes.position, col = new Float32Array(pos.count * 3);
-    for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 200, t = smm(y / 1.0); cc.copy(c0).lerp(c1, t); col.set([cc.r, cc.g, cc.b], i * 3); }
+    for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 200, t = smm(Math.max(0, y) / ((abschnitte[0].meta.licht || {}).himmel_steil || 1.0)); cc.copy(c0).lerp(c1, t); col.set([cc.r, cc.g, cc.b], i * 3); }
     hg.setAttribute("color", new THREE.BufferAttribute(col, 3));
     himmel = new THREE.Mesh(hg, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, depthWrite: false, fog: false }));
     himmel.renderOrder = -10; himmel.frustumCulled = false;
@@ -335,11 +363,11 @@ export async function spieleFolge(buehne, folge, opt = {}) {
   // Texte im Dokument (Screenreader, Suchmaschinen) aus denselben Szenendateien: data-szene="<szene>/<fläche>:<nr. des Absatzes>"
   function htmlText(A) {
     if (!A.sz) return;
-    const flach = n => ((A.sz.druckflaechen[n] || {}).elemente || []).flatMap(e => e.absaetze || (e.text ? [e.text] : []));
+    const flach = n => n === "texte" ? Object.keys(A.sz.texte || {}) : ((A.sz.druckflaechen[n] || {}).elemente || []).flatMap(e => e.absaetze || (e.text ? [e.text] : []));
     document.querySelectorAll("[data-szene]").forEach(el => {
       const [p, i] = el.dataset.szene.split(":"), [sn, fn] = p.includes("/") ? p.split("/") : [A.name, p];
       if (sn !== A.name) return;
-      const t = flach(fn)[+i || 0];
+      const t = fn === "texte" ? [].concat((A.sz.texte || {})[i] ?? [])[0] : flach(fn)[+i || 0];
       if (t != null && el.textContent !== t) el.textContent = t;
     });
   }
@@ -496,7 +524,7 @@ export async function spieleFolge(buehne, folge, opt = {}) {
       erg.min_em_px = Math.min(erg.min_em_px, em); erg.verdeckt += verd; erg.ausserhalb += aus;
     }
     erg.min_em_px = +erg.min_em_px.toFixed(1);
-    const schriftenOk = d.def.elemente.every(el => !el.schrift && el.typ === "linie" || document.fonts.check(schriftString(el.schrift, 20)));
+    const schriftenOk = d.def.elemente.every(el => (el.anordnung && el.anordnung !== art) || !(el.typ === "text" || el.typ === "absaetze") || document.fonts.check(schriftString(el.schrift, 20)));
     erg.gezeichnet = !!(d.mesh.material.map === d.tex && schriftenOk && d.zeilen.length);
     erg.eingeblendet = !d.def.einblenden || f >= d.def.einblenden[1];
     erg.viewport = [W, H]; erg.textur = d.px;

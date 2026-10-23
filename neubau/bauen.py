@@ -19,7 +19,7 @@ BLENDER = os.environ.get("BLENDER") or r"D:\Tools\blender\blender-5.2.3-windows-
 ASSETS = os.path.join(HIER, "seite", "assets")
 TMP = os.path.join(HIER, "tmp")
 ANORDNUNGEN = ("breit", "hochkant")
-SCHWELLE = {"kruemmung_tor": 0.01, "dkruemmung_max": 6.0, "radius_min_fehler": 0.5, "radius_min_warnung": 1.5, "wendepunkte_max": 1}
+SCHWELLE = {"tempo_min": 0.004, "ruck_ausreisser": 8.0, "kruemmung_tor": 0.01, "dkruemmung_max": 6.0, "radius_min_fehler": 0.5, "radius_min_warnung": 1.5, "wendepunkte_max": 1}
 
 
 def sync_schriften():
@@ -44,7 +44,14 @@ def html_text(name, sz):
         kopf, wert, tag = m.group(1), m.group(3), m.group(2)
         ziel = wert.split(":")
         sn, fn = ziel[0].split("/") if "/" in ziel[0] else (name, ziel[0])
-        if sn != name or fn not in sz["druckflaechen"]:
+        if sn != name:
+            return m.group(0)
+        if fn == "texte":      # Wortlaut aus dem Block "texte" der Szenendatei (Verweis über den Schlüssel)
+            if ziel[1] not in sz.get("texte", {}):
+                return m.group(0)
+            t = sz["texte"][ziel[1]]
+            return kopf + html.escape(t if isinstance(t, str) else " ".join(t), quote=False) + m.group(4)
+        if fn not in sz["druckflaechen"]:
             return m.group(0)
         return kopf + html.escape(flach(fn)[int(ziel[1])], quote=False) + m.group(4)
     neu = re.sub(r'(<(\w+)[^>]*data-szene="([^"]+)"[^>]*>)[^<]*(</\2>)', ers, h)
@@ -139,6 +146,22 @@ def bahn_pruefen(b, a, wer, fehler, hinweise):
         fehler.append(f"{a}: {wer}: {br['wendepunkte']} Wendepunkte (höchstens {S['wendepunkte_max']})")
 
 
+def fahrt_pruefen(sz, b, a, wer, fehler, hinweise):
+    """Kamerafahrt (eine durchgehende Bewegung): Tempo nirgends nahe 0 (außer in den ersten Bildern am Seitenanfang), Anschlusstempo gegen die Szenendatei."""
+    k = b.get("kamera")
+    if not k:
+        return
+    grenze = (sz.get("pruefung") or {}).get("tempo_min", SCHWELLE["tempo_min"])
+    if k["tempo_min"] < grenze:
+        fehler.append(f"{a}: {wer}: Kameratempo fällt auf {k['tempo_min']} (Grenze {grenze} Einheiten/Bild)")
+    for seite, schl in (("ausgang", "tempo_ende"), ("eingang", "tempo_anfang")):
+        soll = ((sz.get(seite) or {}).get(a) or {}).get("kamera_tempo")
+        if soll and abs(k[schl] - soll) > .2 * soll:
+            fehler.append(f"{a}: {wer}: Anschlusstempo {seite} {k[schl]} statt {soll}")
+    if k.get("ruck_ausreisser", 0) > SCHWELLE["ruck_ausreisser"]:
+        fehler.append(f"{a}: {wer}: Ruck-Ausreißer (größter Ruck {k['ruck_max']} = {k['ruck_ausreisser']}-fach des 98. Perzentils)")
+
+
 def groesse(p):
     return f"{os.path.getsize(p) / 1024:.0f} KB" if os.path.exists(p) else "fehlt"
 
@@ -180,6 +203,7 @@ def szene_bauen(name, flags, ausgabe=True):
                 if v["punkte_ausserhalb"]: hinweise.append(f"{k}: {v['punkte_ausserhalb']} Punkte außerhalb (nur Hinweis)")
             hinweise += ["Vertrag " + w for w in vergleiche_vertrag(sz, b, a)]
             bahn_pruefen(b, a, "Schiene", fehler, hinweise)
+            fahrt_pruefen(sz, b, a, name, fehler, hinweise)
         if not fehler:
             tore = {a: {"eingang": b["uebergang"]["eingang"], "ausgang": b["uebergang"]["ausgang"], "bahn": b.get("bahn"), "huelle": b.get("huelle")} for a, b in gebaut.items()}
             json.dump({"form_hash": h, "gebaut": time.strftime("%Y-%m-%d %H:%M:%S"), "glb": {a: os.path.getsize(os.path.join(ASSETS, f"{name}-{a}.glb")) for a in ANORDNUNGEN}, "tore": tore},
@@ -204,11 +228,13 @@ def szene_ausgeben(name, modus, fehler, hinweise, gebaut, bericht, zeiten, h):
         for a in ANORDNUNGEN:
             b = gebaut.get(a)
             print(f"  {a:9s} glb {groesse(os.path.join(ASSETS, f'{name}-{a}.glb'))}" + (f", Kollisionen {len(b['kollisionen'])}, Einstellungen außerhalb {sum(v['punkte_ausserhalb'] for v in b['einstellungen'].values())}"
-                  + (f", Schiene Länge {b['bahn']['laenge']}, Radius min {b['bahn']['radius_min']}, Krümmung Tore {b['bahn']['kruemmung_anfang']}/{b['bahn']['kruemmung_ende']}" if b.get("bahn") else "") if b else ""))
+                  + (f", Schiene Länge {b['bahn']['laenge']}, Radius min {b['bahn']['radius_min']}, Krümmung Tore {b['bahn']['kruemmung_anfang']}/{b['bahn']['kruemmung_ende']}" if b.get("bahn") else "")
+                  + (f", Kamera Tempo {b['kamera']['tempo_min']}…{b['kamera']['tempo_max']}, Ruck max {b['kamera']['ruck_max']}" if b.get("kamera") else "") if b else ""))
     if bericht:
         for a, v in bericht["ansichten"].items():
             for fn, fl in v["flaechen"].items():
                 es = fl["bilder"].values()
+                if not es: continue
                 print(f"  Browser {a:9s} {fn:10s} min {min(e['min_em_px'] for e in es):5.1f} px, verdeckt {sum(e['verdeckt'] for e in es)}, außerhalb {sum(e['ausserhalb'] for e in es)}, Bilder {list(fl['bilder'])}")
     for hw in hinweise: print("  Hinweis:", hw)
     for f in fehler: print("  FEHLER:", f)

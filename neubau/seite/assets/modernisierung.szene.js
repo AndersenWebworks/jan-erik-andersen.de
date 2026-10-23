@@ -1,8 +1,8 @@
 // erzeugt von neubau/bauen.py aus neubau/szenen/modernisierung.json – nicht von Hand ändern
 export default {
  "szene": "modernisierung",
- "schema": 1,
- "bilder": 380,
+ "schema": 2,
+ "bilder": 440,
  "bogen": [
   -11,
   11,
@@ -176,9 +176,9 @@ export default {
    ],
    "pruefen": {
     "bilder": [
-     324,
-     352,
-     380
+     350,
+     362,
+     374
     ]
    }
   }
@@ -367,9 +367,28 @@ export default {
    ],
    "einstellungen": [
     {
-     "name": "D1 Eingang und Bau",
+     "name": "D1a Eingang",
+     "bild": 0,
      "von": 0,
-     "bis": 100,
+     "bis": 6,
+     "neigung": 20,
+     "gier": 0,
+     "rand": 0.34,
+     "lage_v": 0.5,
+     "rahmt": [
+      {
+       "was": "alles_flach"
+      },
+      {
+       "was": "bauform"
+      }
+     ]
+    },
+    {
+     "name": "D1b Bau",
+     "bild": 80,
+     "von": 77,
+     "bis": 83,
      "neigung": 26,
      "gier": 0,
      "rand": 0.05,
@@ -385,11 +404,12 @@ export default {
     },
     {
      "name": "D2 Handlung",
-     "von": 140,
-     "bis": 252,
+     "bild": 244,
+     "von": 241,
+     "bis": 247,
      "neigung": 27,
      "gier": 0,
-     "rand": 0.06,
+     "rand": 0.09,
      "lage_v": 0.5,
      "rahmt": [
       {
@@ -399,18 +419,22 @@ export default {
         252,
         4
        ]
+      },
+      {
+       "was": "netz",
+       "bild": 380
       }
      ]
     },
     {
      "name": "D3 Lesestelle",
-     "von": 324,
-     "bis": 380,
-     "neigung": 56,
+     "bild": 364,
+     "von": 361,
+     "bis": 367,
+     "neigung": 63,
      "gier": 0,
-     "rand": 0.06,
+     "rand": 0.1,
      "lage_v": 0.5,
-     "x_fest": "front_mitte",
      "rahmt": [
       {
        "was": "front_schirm_fuss",
@@ -418,10 +442,22 @@ export default {
       },
       {
        "was": "lesetext"
-      },
+      }
+     ],
+     "x_fest": "front_mitte"
+    },
+    {
+     "name": "D4 Ausgang",
+     "bild": 440,
+     "von": 440,
+     "bis": 440,
+     "neigung": 40,
+     "gier": 0,
+     "rand": 0.12,
+     "lage_v": 0.5,
+     "rahmt": [
       {
-       "was": "netz",
-       "bild": 380
+       "was": "schirm_ausgang"
       }
      ]
     }
@@ -439,12 +475,31 @@ export default {
    ],
    "einstellungen": [
     {
-     "name": "H1 Eingang und Bau",
+     "name": "H1a Eingang",
+     "bild": 0,
      "von": 0,
-     "bis": 100,
+     "bis": 6,
+     "neigung": 34,
+     "gier": 0,
+     "rand": 0.34,
+     "lage_v": 0.5,
+     "rahmt": [
+      {
+       "was": "alles_flach"
+      },
+      {
+       "was": "bauform"
+      }
+     ]
+    },
+    {
+     "name": "H1b Bau",
+     "bild": 80,
+     "von": 77,
+     "bis": 83,
      "neigung": 42,
      "gier": 0,
-     "rand": 0.05,
+     "rand": 0.09,
      "lage_v": 0.5,
      "rahmt": [
       {
@@ -457,11 +512,12 @@ export default {
     },
     {
      "name": "H2 Handlung",
-     "von": 140,
-     "bis": 252,
+     "bild": 244,
+     "von": 241,
+     "bis": 247,
      "neigung": 38,
      "gier": 0,
-     "rand": 0.05,
+     "rand": 0.1,
      "lage_v": 0.5,
      "rahmt": [
       {
@@ -471,25 +527,55 @@ export default {
         252,
         4
        ]
+      },
+      {
+       "was": "netz",
+       "bild": 380
       }
      ]
     },
     {
      "name": "H3 Lesestelle",
-     "von": 324,
-     "bis": 380,
-     "neigung": 58,
+     "bild": 364,
+     "von": 361,
+     "bis": 367,
+     "neigung": 70,
      "gier": 0,
-     "rand": 0.1,
+     "rand": 0.13,
      "lage_v": 0.5,
-     "x_fest": "front_mitte",
      "rahmt": [
       {
        "was": "lesetext"
       }
+     ],
+     "x_fest": "front_mitte"
+    },
+    {
+     "name": "H4 Ausgang",
+     "bild": 440,
+     "von": 440,
+     "bis": 440,
+     "neigung": 42,
+     "gier": 0,
+     "rand": 0.12,
+     "lage_v": 0.5,
+     "rahmt": [
+      {
+       "was": "schirm_ausgang"
+      }
      ]
     }
    ]
+  },
+  "zeitlupe": {
+   "fenster": [
+    [
+     338,
+     388
+    ]
+   ],
+   "faktor": 0.27,
+   "rampe": 40
   }
  },
  "eingang": {
@@ -501,7 +587,8 @@ export default {
      -8.6
     ],
     "richtung_grad": 0
-   }
+   },
+   "kamera_tempo": 0.05
   },
   "hochkant": {
    "bild": 0,
@@ -511,32 +598,36 @@ export default {
      -10.4
     ],
     "richtung_grad": 0
-   }
+   },
+   "kamera_tempo": 0.05
   }
  },
  "ausgang": {
   "breit": {
-   "bild": 380,
+   "bild": 440,
    "faden": {
     "punkt": [
      4.6,
      3.4
     ],
     "richtung_grad": 0
-   }
+   },
+   "kamera_tempo": 0.05
   },
   "hochkant": {
-   "bild": 380,
+   "bild": 440,
    "faden": {
     "punkt": [
      2.5,
      5.8
     ],
     "richtung_grad": 0
-   }
+   },
+   "kamera_tempo": 0.05
   }
  },
  "pruefung": {
-  "min_em_px": 16
+  "min_em_px": 16,
+  "tempo_min": 0.004
  }
 };

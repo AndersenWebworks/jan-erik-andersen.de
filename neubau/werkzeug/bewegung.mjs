@@ -25,6 +25,10 @@ const flag = n => process.argv.includes("--" + n);
 
 // ---------- Schwellen ----------
 const SCHWELLE = { medianOk: 17.5, p99Ok: 33, luecke1: 25, luecke2: 50, medianFehler: 33 };
+// Kamera (eine durchgehende Fahrt): Tempo = Ort plus gewichtete Drehung (wie die Bogenlänge der Fahrt in basis.kamerafahrt), nirgends unter
+// tempoMin außer ganz am Seitenanfang und -ende (randBilder); Ruck-Ausreißer: größter Ruck im Verhältnis zum 98. Perzentil; Nähte: Tempo-Vektor
+// und Richtung links und rechts der Naht gleich.
+const KAMERA = { tempoMin: 0.004, randBilder: 30, ruckAusreisser: 8.0, nahtTempoRel: 0.12, nahtRichtungGrad: 4, gradGewicht: 0.08, shiftGewicht: 3.0 };
 
 function playwrightLaden() {
   const kandidaten = [process.env.PLAYWRIGHT_PFAD, path.join(NEUBAU, "node_modules"), path.join(NEUBAU, "..", "node_modules"), "C:/Andersen/Privat/Pa/node_modules",
@@ -91,7 +95,7 @@ function urteilLauf(m) {
 const STUFE = ["OK", "WARNUNG", "FEHLER"];
 
 // ---------- Kamerapfad ----------
-function kameraAuswerten(proben) {
+function kameraAuswerten(proben, grenzen = []) {
   // proben: [{g, ort:[3], q:[4], rollen_grad}] je Bildnummer g. Alles pro Bildnummer, unabhängig von der Bildrate des Browsers.
   const n = proben.length, v = [], w = [], rollTempo = [];
   const angle = (a, b) => { const d = Math.abs(a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3]); return 2 * Math.acos(Math.min(1, d)) * 180 / Math.PI; };
@@ -129,7 +133,45 @@ function kameraAuswerten(proben) {
     if (l && l.art === o.art && o.bild - l.bild_ende <= 3) { l.bild_ende = o.bild; if (o.wert > l.wert) l.wert = o.wert; l.anzahl++; } else gruppiert.push({ ...o, bild_ende: o.bild, anzahl: 1 });
   }
   const spitzen = (x, mal) => x.map((e, i) => [Math.abs(e), i]).sort((a, b) => b[0] - a[0]).slice(0, mal).map(([e, i]) => ({ bild: r(pos(i), 1), wert: r(e, 4) }));
+  // ----- eine durchgehende Fahrt: kombiniertes Tempo (Ort + gewichtete Drehung + Bildverschiebung), nie nahe 0; Ruck; Nähte -----
+  const G = KAMERA.gradGewicht, SH = KAMERA.shiftGewicht, fehler = [], hinweise = [];
+  const comb = [];
+  for (let i = 1; i < n; i++) {
+    const a = proben[i - 1], b = proben[i], dg = (b.g - a.g) || 1;
+    const dp = Math.hypot(b.ort[0] - a.ort[0], b.ort[1] - a.ort[1], b.ort[2] - a.ort[2]);
+    comb.push(Math.sqrt(dp * dp + (G * angle(a.q, b.q)) ** 2 + (SH * ((b.verschiebung ?? 0) - (a.verschiebung ?? 0))) ** 2) / dg);
+  }
+  const gesamt = proben.at(-1).g, rand = KAMERA.randBilder;
+  const imRand = i => proben[i].g < rand || proben[i + 1].g > gesamt - rand;
+  let tmin = Infinity, tminBild = null;
+  comb.forEach((x, i) => { if (!imRand(i) && x < tmin) { tmin = x; tminBild = proben[i + 1].g; } });
+  if (tmin < KAMERA.tempoMin) fehler.push(`Kameratempo fällt auf ${r(tmin, 5)} bei Bild ${r(tminBild, 1)} (Grenze ${KAMERA.tempoMin})`);
+  // Ruck als Vektor (Ort): dritte Differenz
+  const pv = proben.map(p => p.ort), acc = [], jerk = [];
+  for (let i = 1; i < n - 1; i++) acc.push([0, 1, 2].map(k => pv[i + 1][k] - 2 * pv[i][k] + pv[i - 1][k]));
+  for (let i = 1; i < acc.length; i++) jerk.push(Math.hypot(...[0, 1, 2].map(k => acc[i][k] - acc[i - 1][k])));
+  const js = [...jerk].sort((x, y) => x - y), j98 = js[Math.min(js.length - 1, Math.floor(js.length * .98))] || 1e-12;
+  let jmax = 0, jBild = null; jerk.forEach((x, i) => { if (x > jmax) { jmax = x; jBild = proben[i + 2].g; } });
+  const ruckRel = jmax / j98;
+  if (ruckRel > KAMERA.ruckAusreisser) fehler.push(`Ruck-Ausreißer bei Bild ${r(jBild, 1)}: ${r(jmax, 5)} = ${r(ruckRel, 2)}-fach des 98. Perzentils`);
+  // Nähte: Geschwindigkeit (Betrag und Richtung des Ortsvektors je Bild) und Beschleunigung links/rechts
+  const naehte = [];
+  for (const gb of grenzen) {
+    const i = proben.findIndex(p => p.g >= gb); if (i < 3 || i > n - 4) continue;
+    const vec = (a, b) => [0, 1, 2].map(k => proben[b].ort[k] - proben[a].ort[k]);
+    const vl = vec(i - 2, i - 1), vr = vec(i + 1, i + 2), lv = Math.hypot(...vl), lr = Math.hypot(...vr);
+    const cosw = (vl[0] * vr[0] + vl[1] * vr[1] + vl[2] * vr[2]) / Math.max(1e-12, lv * lr);
+    const richt = Math.acos(Math.max(-1, Math.min(1, cosw))) * 180 / Math.PI;
+    const al = acc[i - 2] ? Math.hypot(...acc[i - 2]) : 0, ar = acc[i + 1] ? Math.hypot(...acc[i + 1]) : 0;
+    const dq = angle(proben[i - 1].q, proben[i + 1].q) / 2;
+    const rel = Math.abs(lr - lv) / Math.max(lv, lr);
+    naehte.push({ bild: gb, tempo_vor: r(lv, 5), tempo_nach: r(lr, 5), tempo_abweichung_rel: r(rel, 4), richtung_abweichung_grad: r(richt, 3), beschleunigung_vor: r(al, 6), beschleunigung_nach: r(ar, 6), drehsprung_grad: r(dq, 4) });
+    if (rel > KAMERA.nahtTempoRel) fehler.push(`Naht bei Bild ${gb}: Tempo springt ${r(lv, 4)} -> ${r(lr, 4)}`);
+    if (richt > KAMERA.nahtRichtungGrad) fehler.push(`Naht bei Bild ${gb}: Fahrtrichtung knickt um ${r(richt, 2)} Grad`);
+  }
   return {
+    fehler, hinweise, kombiniertes_tempo: { min: r(tmin, 5), min_bei_bild: tminBild, max: r(Math.max(...comb), 5), median: r(median(comb), 5), einheit: "Einheiten/Bild (Ort + 0,08 je Grad + 3 je Bildverschiebung)" },
+    ruck: { max: r(jmax, 6), bei_bild: jBild, perzentil98: r(j98, 6), verhaeltnis: r(ruckRel, 2) }, naehte,
     proben: n, bilder_von: proben[0].g, bilder_bis: proben.at(-1).g,
     tempo: { median: r(mv, 5), max: r(mx(v), 5), einheit: "Weltenheiten/Bild" }, drehtempo: { median: r(mw, 4), max: r(mx(w), 4), einheit: "Grad/Bild" },
     beschleunigung_max: r(mx(beschl), 5), ruck_max: r(mx(ruck), 5), dreh_beschleunigung_max: r(mx(wbeschl), 4), dreh_ruck_max: r(mx(wruck), 4),
@@ -282,11 +324,11 @@ async function main() {
         for (let g = 0; g <= nb.bilder; g += schritt) {
           let i = 0; for (let k = ab.length - 1; k >= 0; k--) if (g >= ab[k].start && (g < ab[k].start + ab[k].frames || k === ab.length - 1)) { i = k; break; }
           const A = ab[i], f = Math.min(A.frames, Math.max(0, g - A.start)), p = nb.posen(A.name, f);
-          out.push({ g, ort: p.ort, q: p.q, rollen_grad: p.rollen_grad });
+          out.push({ g, ort: p.ort, q: p.q, rollen_grad: p.rollen_grad, verschiebung: p.verschiebung });
         }
         return out;
       }, { schritt });
-      if (proben && proben.length > 5) { kameraAnalyse = kameraAuswerten(proben); const { schritt: _s, ...rest } = kameraAnalyse; bericht.kamera = rest; fs.writeFileSync(path.join(ausgabe, "kamerapfad.json"), JSON.stringify(proben.map(p => ({ g: p.g, ort: p.ort.map(x => r(x, 4)), q: p.q.map(x => r(x, 5)), rollen_grad: r(p.rollen_grad, 3) })))); }
+      if (proben && proben.length > 5) { kameraAnalyse = kameraAuswerten(proben, bericht.seite.abschnitte ? bericht.seite.abschnitte.slice(1).map(a => a.start) : []); const { schritt: _s, ...rest } = kameraAnalyse; bericht.kamera = rest; fs.writeFileSync(path.join(ausgabe, "kamerapfad.json"), JSON.stringify(proben.map(p => ({ g: p.g, ort: p.ort.map(x => r(x, 4)), q: p.q.map(x => r(x, 5)), rollen_grad: r(p.rollen_grad, 3) })))); }
       else bericht.warnungen.push("Kamera: window.__neubau.posen nicht verfügbar, siehe README (Schnittstelle)");
     } else if (!flag("ohne-kamera")) bericht.kamera = { hinweis: "Seite bietet keine Kameraschnittstelle (window.__neubau.posen/abschnitte/bilder); siehe README" };
 
@@ -320,6 +362,7 @@ async function main() {
   let stufe = Math.max(...Object.values(bericht.laeufe).map(l => STUFE.indexOf(l.urteil)));
   if (bericht.gpu && (bericht.gpu.software || !bericht.gpu.webgl) && bericht.seite.neubau) stufe = Math.max(stufe, 1);
   if (bericht.kamera && bericht.kamera.ausreisser_gesamt > 0) stufe = Math.max(stufe, 1);
+  if (bericht.kamera && bericht.kamera.fehler && bericht.kamera.fehler.length) stufe = 2;
   if (bericht.unbrauchbar || bericht.logs.some(l => l.startsWith("pageerror"))) stufe = Math.max(stufe, 1);
   bericht.urteil = STUFE[stufe];
   fs.writeFileSync(path.join(ausgabe, "bericht.json"), JSON.stringify(bericht, null, 1));
@@ -338,6 +381,9 @@ async function main() {
     const k = bericht.kamera;
     L.push(`Kamera: Tempo Median ${k.tempo.median}/Bild, max ${k.tempo.max} | Dreh max ${k.drehtempo.max} °/Bild | Rollwinkel max ${k.rollwinkel.max_abs_grad}° | Ausreißer: ${k.ausreisser_gesamt}`);
     for (const o of k.ausreisser.slice(0, 5)) L.push(`           ${o.art} bei Bild ${o.bild}${o.bild_ende !== o.bild ? "-" + o.bild_ende : ""}: ${o.wert} ${o.einheit} (Grenze ${o.schwelle})`);
+    L.push(`Kameratempo kombiniert: min ${k.kombiniertes_tempo.min} (bei Bild ${k.kombiniertes_tempo.min_bei_bild}), median ${k.kombiniertes_tempo.median}, max ${k.kombiniertes_tempo.max} | Ruck max ${k.ruck.max} = ${k.ruck.verhaeltnis}-fach des 98. Perzentils (Bild ${k.ruck.bei_bild})`);
+    for (const nt of k.naehte) L.push(`           Naht Bild ${nt.bild}: Tempo ${nt.tempo_vor} -> ${nt.tempo_nach} (${(nt.tempo_abweichung_rel * 100).toFixed(1)} %), Richtung ${nt.richtung_abweichung_grad} Grad, Beschleunigung ${nt.beschleunigung_vor} -> ${nt.beschleunigung_nach}, Drehsprung ${nt.drehsprung_grad} Grad`);
+    for (const f of k.fehler) L.push("KAMERA-FEHLER: " + f);
   } else if (bericht.kamera) L.push("Kamera: " + bericht.kamera.hinweis);
   for (const k of bericht.kontaktbogen) L.push(`Kontaktbogen p=${k.p} (${k.grund}): ${k.datei}`);
   const e = bericht.logs.filter(l => l.startsWith("pageerror")); for (const x of e) L.push("Seitenfehler: " + x);

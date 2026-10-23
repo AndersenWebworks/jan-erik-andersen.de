@@ -14,20 +14,21 @@ NEUBAU = os.path.dirname(HIER)
 
 # ---------- Palette „Mirror's Edge mit Papier“ (FASSUNG-2026-11, Farbpalette; Werte aus dem Bestand kern.js / modernisierung.js) ----------
 PAL = {
-    "papier": "#f6f8fc",      # Bogen und weiße Teile: kühles, fast reines Weiß
-    "flaeche": "#f3f6fb",     # helle Bauteilfläche
-    "grau1": "#e3e7ee",       # feine kühle Grauabstufungen für Flächen, die sich absetzen
-    "grau2": "#b4bdcb",       # Gehäuse des alten Geräts
-    "grau3": "#a7b0bf",       # Front des alten Geräts
-    "metall": "#a9b3c1",
-    "kante": "#8b95a6",       # Schnittkante des Kartons (Dicke), zeichnet die Kontur mit der Fläche
-    "boden": "#e3e9f1",       # Tisch unter dem Bogen
-    "dunst": "#f7fbff",       # Horizont und Boden in der Ferne: sehr helles Himmelblau, kein Himmelsbild
-    "himmel": "#d4e5f6",      # Zenit des Verlaufs über dem Horizont (nur ein Farbverlauf)
-    "schatten": "#d6e1ee",    # Schattenfarbe (bläulich)
+    "papier": "#f4f7fc",      # Bogen: kühles Weiß, etwas gedämpfter als die weißen Teile (Teile stehen heller vor dem Bogen)
+    "flaeche": "#f2f6fc",     # helle Bauteilfläche
+    "grau1": "#d8e0ec",       # feine kühle Grauabstufungen für Flächen, die sich absetzen
+    "grau2": "#b0bacb",       # Gehäuse des alten Geräts
+    "grau3": "#a2acbe",       # Front des alten Geräts
+    "metall": "#a0abbd",
+    "kante": "#7c879e",       # Schnittkante des Kartons (Dicke), zeichnet die Kontur mit der Fläche
+    "boden": "#c2d1e4",       # Tisch unter dem Bogen: deutlich dunkler und kühler als der Bogen, damit der Bogen als Fläche steht
+    "dunst": "#d4e6fa",       # Horizont und Boden in der Ferne: helles Himmelblau (nach dem Tonemapping noch blau)
+    "himmel": "#6fa9e6",      # Zenit des Verlaufs über dem Horizont (nur ein Farbverlauf)
+    "schatten": "#bccbe0",    # Schattenfarbe (bläulich)
     "tinte": "#303033",       # Schrift dunkel und kontrastreich
     "rot": "#d40235",         # einzige kräftige Farbe: Faden, Punkt, wenige Akzente
 }
+HIMMEL_STEIL = .42        # Höhe über dem Horizont (sin der Erhebung), bei der der Verlauf den Zenitton erreicht
 KARTON = .03          # Dicke des Kartons (Einheiten)
 SPALT = .0015         # Luft zwischen Teilen, die sich berühren (Prüfung meldet erst darunter)
 FPS = 24
@@ -76,7 +77,7 @@ def buehne(frames, bogen=(-8, 8, -10, 10)):
     # Himmelsverlauf: Horizont (Dunst) -> Zenit über die Blickrichtung (Texture Coordinate „Generated“ ist in der Welt die Richtung)
     tc = nt.nodes.new("ShaderNodeTexCoord"); sep = nt.nodes.new("ShaderNodeSeparateXYZ")
     nt.links.new(tc.outputs["Generated"], sep.inputs[0])
-    mr = nt.nodes.new("ShaderNodeMapRange"); mr.interpolation_type = "SMOOTHSTEP"; mr.inputs["From Min"].default_value = 0; mr.inputs["From Max"].default_value = 1.0
+    mr = nt.nodes.new("ShaderNodeMapRange"); mr.interpolation_type = "SMOOTHSTEP"; mr.inputs["From Min"].default_value = 0; mr.inputs["From Max"].default_value = HIMMEL_STEIL
     nt.links.new(sep.outputs["Z"], mr.inputs["Value"])
     mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"
     mx.inputs["A"].default_value = lin(PAL["dunst"]); mx.inputs["B"].default_value = lin(PAL["himmel"])
@@ -106,17 +107,17 @@ def buehne(frames, bogen=(-8, 8, -10, 10)):
 
 
 # Licht: an einer Stelle, der Browser liest dieselben Werte aus den Extras (licht) der glb
-LICHT = {"sonne": 4.6, "winkel": 2.5, "hoehe": 38, "richtung": 32, "umgebung": .86, "umgebung_farbe": "#e2ebf6"}
+LICHT = {"sonne": 4.6, "winkel": 2.5, "hoehe": 38, "richtung": 32, "umgebung": .80, "umgebung_farbe": "#dfe9f6", "himmel_steil": HIMMEL_STEIL}
 
 
 # ---------- Material ----------
 _mat = {}
 
 
-def material(name, farbe, bild=None, unbeleuchtet=False, rau=.85, einblenden=None, extra=None):
+def material(name, farbe, bild=None, unbeleuchtet=False, rau=.85, einblenden=None, extra=None, transparent=False):
     """einblenden=(f0, f1): der Druck erscheint weich zwischen Bild f0 und f1 (vorher nur die Grundfarbe). Im Browser
     liest der Abspieler das aus den Extras des Materials (neubau.einblenden)."""
-    key = (name, farbe, bild, unbeleuchtet, einblenden, json.dumps(extra, sort_keys=True) if extra else None)
+    key = (name, farbe, bild, unbeleuchtet, einblenden, json.dumps(extra, sort_keys=True) if extra else None, transparent)
     if key in _mat:
         return _mat[key]
     m = bpy.data.materials.new(name)
@@ -131,6 +132,9 @@ def material(name, farbe, bild=None, unbeleuchtet=False, rau=.85, einblenden=Non
         sh.inputs["Roughness"].default_value = rau
         sh.inputs["Specular IOR Level"].default_value = .25
         col_in = sh.inputs["Base Color"]
+        if transparent:   # Überlagerung (Druck mit Alphakanal): in den Blender-Proben unsichtbar, der Browser zeichnet sie
+            sh.inputs["Alpha"].default_value = 0.0
+            m.surface_render_method = "BLENDED"
     col_in.default_value = lin(farbe)
     if bild:
         tx = nt.nodes.new("ShaderNodeTexImage")
@@ -146,7 +150,7 @@ def material(name, farbe, bild=None, unbeleuchtet=False, rau=.85, einblenden=Non
         else:
             nt.links.new(tx.outputs["Color"], col_in)
     nt.links.new(sh.outputs[0], out.inputs[0])
-    m["neubau"] = json.dumps({"farbe": farbe, "unbeleuchtet": unbeleuchtet, "einblenden": list(einblenden) if einblenden else None, **(extra or {})})
+    m["neubau"] = json.dumps({"farbe": farbe, "unbeleuchtet": unbeleuchtet, "einblenden": list(einblenden) if einblenden else None, "transparent": bool(transparent), **(extra or {})})
     _mat[key] = m
     return m
 
@@ -293,6 +297,29 @@ def druckflaeche(name, traeger, seite, w, h, mat, dicke, abstand=.001, x0=0, z0=
     ob.parent = traeger
     ob.matrix_parent_inverse = Matrix.Identity(4)
     ob["neubau"] = json.dumps({"druck": name, "w": round(w, 5), "h": round(h, 5), "traeger": traeger.name, "seite": seite})
+    ob.visible_shadow = False
+    return ob
+
+
+def druckflaeche_oben(name, traeger, w, h, mat, z, x0=0, y0=0):
+    """Leere Druckfläche ("druck:<name>") auf der Oberseite eines liegenden Trägers (Kind des Trägers): Ebene bei z (lokal), die Fläche reicht von
+    (x0, y0) um w nach +x und h nach +y; Bildoberkante liegt am fernen (+y) Ende, Blickrichtung +y liest also aufrecht. Extras wie bei druckflaeche()."""
+    me = bpy.data.meshes.new("druck:" + name)
+    ob = bpy.data.objects.new("druck:" + name, me); bpy.context.scene.collection.objects.link(ob)
+    ecken = [(0, 0), (w, 0), (w, h), (0, h)]
+    pt = lambda px, py: (x0 + px, y0 + h - py, z)
+    me.from_pydata([pt(*e) for e in ecken], [], [[0, 1, 2, 3]])
+    me.update()
+    if me.polygons[0].normal.z < 0:
+        me.polygons[0].flip()
+    uv = me.uv_layers.new()
+    for li in me.polygons[0].loop_indices:
+        e = ecken[me.loops[li].vertex_index]
+        uv.data[li].uv = (e[0] / w, 1 - e[1] / h)
+    me.materials.append(mat)
+    ob.parent = traeger
+    ob.matrix_parent_inverse = Matrix.Identity(4)
+    ob["neubau"] = json.dumps({"druck": name, "w": round(w, 5), "h": round(h, 5), "traeger": traeger.name, "seite": "oben"})
     ob.visible_shadow = False
     return ob
 
@@ -780,30 +807,252 @@ def kamera(name, vfov):
     return ob
 
 
-def kamerafahrt(cam, einstellungen, frames, aspekt=16 / 9):
-    """Einstellungen: Liste mit {name, f0, f1, ort (Vector), neigung, gier}. Zwischen den Haltebereichen weiche Fahrt
-    (smootherstep auf Ort, Neigung und Gier getrennt, nie Rollen). Gibt die Stützliste für den Bericht zurück."""
-    E = sorted(einstellungen, key=lambda e: e["f0"])
-    def zustand(f):
-        if f <= E[0]["f1"]:
-            e = E[0]; return e["ort"], e["neigung"], e["gier"], e.get("verschiebung", 0)
-        for a, b in zip(E, E[1:]):
-            if a["f1"] <= f <= b["f0"]:
-                k = smm((f - a["f1"]) / max(1, b["f0"] - a["f1"]))
-                va, vb = a.get("verschiebung", 0), b.get("verschiebung", 0)
-                return (a["ort"].lerp(b["ort"], k), a["neigung"] + (b["neigung"] - a["neigung"]) * k, a["gier"] + (b["gier"] - a["gier"]) * k,
-                        va + (vb - va) * k)
-            if b["f0"] <= f <= b["f1"]:
-                return b["ort"], b["neigung"], b["gier"], b.get("verschiebung", 0)
-        e = E[-1]; return e["ort"], e["neigung"], e["gier"], e.get("verschiebung", 0)
-    spur = []
+# ---------- Kamerafahrt: EINE durchgehende Bewegung (DREHBUCH, Kamera „Eine einzige Kamerabewegung“) ----------
+# Die Einstellungen der Szenendatei sind Stützposen (Durchgangsposen) bei bestimmten Bildern, keine Standbilder. Ort, Neigung, Gier und
+# Bildverschiebung laufen als eine C2-Kurve (kubischer Spline; bei Anschlüssen mit vorgegebener Tangente und Beschleunigung 0 am Anschluss)
+# durch alle Stützposen. Die Zeit läuft über die Bogenlänge dieser Kurve mit einem stetigen Tempoprofil: an Lesestellen („zeitlupe“) deutlich
+# langsamer, aber nie null; das Tempo ist das mit einem C1-Kern geglättete mittlere Tempo der Spannen, ohne Stufen und ohne Hügel je Spanne.
+# Nie Rollen: nur Neigung und Gier. Anschluss an Übergänge: ein/aus = (Richtung_grad, Tempo) legen Anfangs-/Endgeschwindigkeit fest (Bewegung
+# entlang der Fadenrichtung, Drehraten 0); ohne Angabe läuft die Kamera am Seitenanfang aus der Ruhe an bzw. am Seitenende in die Ruhe aus.
+KAMERA_MASS = {"grad": .08, "shift": 3.0}      # Gewicht von Winkeln (Einheiten je Grad) und Bildverschiebung (Einheiten je NDC) in der Bogenlänge der Fahrt
+
+
+def _loese(A, B):
+    """Lineares Gleichungssystem A x = b für mehrere rechte Seiten (Gauß mit Spaltenpivot). B: Liste von rechten Seiten."""
+    n = len(A)
+    M = [list(A[i]) + [b[i] for b in B] for i in range(n)]
+    for c in range(n):
+        p = max(range(c, n), key=lambda r: abs(M[r][c]))
+        M[c], M[p] = M[p], M[c]
+        for r in range(c + 1, n):
+            f = M[r][c] / M[c][c]
+            for k in range(c, len(M[r])):
+                M[r][k] -= f * M[c][k]
+    X = [[0.0] * n for _ in B]
+    for j in range(len(B)):
+        for i in range(n - 1, -1, -1):
+            X[j][i] = (M[i][n + j] - sum(M[i][k] * X[j][k] for k in range(i + 1, n))) / M[i][i]
+    return X
+
+
+class Kurve:
+    """C2-Kurve durch Stützpunkte Y_i (Listen) bei Parametern t_i. d_ein/d_aus: Ableitung nach t am Anfang/Ende (sonst natürlicher Rand).
+    Ist eine Ableitung vorgegeben, ist die erste/letzte Spanne ein Quintik-Hermite mit Beschleunigung 0 am Rand und den Werten (Ort, Tangente,
+    Beschleunigung) des Splines am inneren Ende: die Beschleunigung am Anschluss ist 0, die Kurve überall C2."""
+
+    def __init__(self, t, Y, d_ein=None, d_aus=None):
+        n = len(t) - 1
+        self.t, self.Y, self.n, self.dim = t, Y, n, len(Y[0])
+        h = [t[i + 1] - t[i] for i in range(n)]
+        self.h = h
+        A = [[0.0] * (n + 1) for _ in range(n + 1)]
+        B = [[0.0] * (n + 1) for _ in range(self.dim)]
+        for k in range(self.dim):
+            y = [p[k] for p in Y]
+            if d_ein is None:
+                A[0][0] = 1.0; B[k][0] = 0.0
+            else:
+                A[0][0] = 2 * h[0]; A[0][1] = h[0]; B[k][0] = 6 * ((y[1] - y[0]) / h[0] - d_ein[k])
+            if d_aus is None:
+                A[n][n] = 1.0; B[k][n] = 0.0
+            else:
+                A[n][n - 1] = h[n - 1]; A[n][n] = 2 * h[n - 1]; B[k][n] = 6 * (d_aus[k] - (y[n] - y[n - 1]) / h[n - 1])
+            for i in range(1, n):
+                A[i][i - 1] = h[i - 1]; A[i][i] = 2 * (h[i - 1] + h[i]); A[i][i + 1] = h[i]
+                B[k][i] = 6 * ((y[i + 1] - y[i]) / h[i] - (y[i] - y[i - 1]) / h[i - 1])
+        # A ändert sich nicht je Komponente: die Zeilen 0 und n hängen nur von d_ein/d_aus ab (Struktur gleich), nur B unterscheidet sich
+        self.M = _loese(A, B)       # M[k][i]: zweite Ableitung der Komponente k am Stützpunkt i
+        self.quint = {}
+        if d_ein is not None:
+            self.quint[0] = self._quintik(0, True, d_ein)
+        if d_aus is not None:
+            self.quint[n - 1] = self._quintik(n - 1, False, d_aus)
+
+    def _kubisch(self, i, t):
+        h = self.h[i]; a = (self.t[i + 1] - t) / h; b = (t - self.t[i]) / h
+        X, V, W = [], [], []
+        for k in range(self.dim):
+            y0, y1 = self.Y[i][k], self.Y[i + 1][k]; m0, m1 = self.M[k][i], self.M[k][i + 1]
+            X.append(a * y0 + b * y1 + ((a ** 3 - a) * m0 + (b ** 3 - b) * m1) * h * h / 6)
+            V.append((y1 - y0) / h - (3 * a * a - 1) / 6 * h * m0 + (3 * b * b - 1) / 6 * h * m1)
+            W.append(a * m0 + b * m1)
+        return X, V, W
+
+    def _quintik(self, i, anfang, d):
+        """Randwerte der Quintik-Hermite-Spanne i: am Rand (d, Beschleunigung 0), am inneren Ende die Werte des Splines."""
+        h = self.h[i]
+        if anfang:
+            inner = self._kubisch(i + 1, self.t[i + 1]) if i + 1 < self.n else ([*self.Y[i + 1]], [(self.Y[i + 1][k] - self.Y[i][k]) / h for k in range(self.dim)], [0.0] * self.dim)
+            return (self.Y[i], d, [0.0] * self.dim, *inner)
+        inner = self._kubisch(i - 1, self.t[i]) if i - 1 >= 0 else ([*self.Y[i]], [(self.Y[i + 1][k] - self.Y[i][k]) / h for k in range(self.dim)], [0.0] * self.dim)
+        return (*inner, self.Y[i + 1], d, [0.0] * self.dim)
+
+    def __call__(self, t):
+        """(Ort, 1. Ableitung, 2. Ableitung) bei Parameter t."""
+        t = min(self.t[-1], max(self.t[0], t))
+        i = next((j for j in range(self.n) if t < self.t[j + 1]), self.n - 1)
+        if i in self.quint:
+            p0, v0, a0, p1, v1, a1 = self.quint[i]
+            h = self.h[i]; u = (t - self.t[i]) / h
+            c = [(1, 0, 0, -10, 15, -6), (0, 1, 0, -6, 8, -3), (0, 0, .5, -1.5, 1.5, -.5), (0, 0, 0, 10, -15, 6), (0, 0, 0, -4, 7, -3), (0, 0, 0, .5, -1, .5)]
+            def pe(co, d):
+                s = 0.0
+                for e, a in enumerate(co):
+                    if e >= d and a:
+                        f = 1.0
+                        for q in range(d): f *= (e - q)
+                        s += a * f * u ** (e - d)
+                return s
+            X, V, W = [], [], []
+            for k in range(self.dim):
+                g = (p0[k], v0[k] * h, a0[k] * h * h, p1[k], v1[k] * h, a1[k] * h * h)
+                X.append(sum(g[j] * pe(c[j], 0) for j in range(6)))
+                V.append(sum(g[j] * pe(c[j], 1) for j in range(6)) / h)
+                W.append(sum(g[j] * pe(c[j], 2) for j in range(6)) / (h * h))
+            return X, V, W
+        return self._kubisch(i, t)
+
+
+def _fensterbump(f, f0, halb, rampe):
+    """1 innerhalb von f0 ± halb, danach weich (C2) auf 0 über rampe Bilder."""
+    d = abs(f - f0) - halb
+    return 1.0 if d <= 0 else (0.0 if d >= rampe else 1 - smm(d / rampe))
+
+
+def kamerafahrt(cam, einstellungen, frames, aspekt=16 / 9, ein=None, aus=None, zeitlupe=(), sub=8):
+    """Eine durchgehende Kamerafahrt durch die Stützposen. einstellungen: Liste mit {name, bild (Durchgangsbild), ort (Vector), neigung, gier,
+    verschiebung}; erstes Bild 0, letztes `frames`. ein/aus: None oder (richtung_grad, tempo): Bewegung entlang der Fadenrichtung mit diesem Tempo
+    (Einheiten je Bild), Drehraten 0. zeitlupe: Lesestellen als Liste (von, bis, faktor, rampe): zwischen den Bildern von und bis läuft die Fahrt mit dem
+    Tempofaktor (< 1), davor und danach weich (C2) über rampe Bilder hinein und heraus; nie null. Gibt einen Bericht zurück: tempo je Bild, Stationen,
+    pose je Bild."""
+    E = sorted(einstellungen, key=lambda e: e["bild"])
+    assert E[0]["bild"] == 0 and E[-1]["bild"] == frames, f"Stützposen müssen bei Bild 0 und {frames} beginnen/enden ({E[0]['bild']}, {E[-1]['bild']})"
+    kg, ks = KAMERA_MASS["grad"], KAMERA_MASS["shift"]
+    gier = []
+    for e in E:
+        g = e["gier"]
+        if gier: g = gier[-1] + ((g - gier[-1] + 180) % 360 - 180)
+        gier.append(g)
+    Y = [[e["ort"].x, e["ort"].y, e["ort"].z, e["neigung"] * kg, g * kg, e.get("verschiebung", 0) * ks] for e, g in zip(E, gier)]
+    t = [0.0]
+    for p, q in zip(Y, Y[1:]):
+        t.append(t[-1] + math.sqrt(sum((a - b) ** 2 for a, b in zip(p, q))))
+    def tangente(spec):
+        if spec is None: return None
+        r = richtung_vektor(spec[0])
+        return [r.x, r.y, 0, 0, 0, 0]
+    k = Kurve(t, Y, d_ein=tangente(ein), d_aus=tangente(aus))
+    # Bogenlänge dicht abtasten und an den Stützposen ablesen
+    N = 6000
+    ts = [t[-1] * i / N for i in range(N + 1)]
+    S = [0.0]
+    prev = k(ts[0])[0]
+    for tt in ts[1:]:
+        X = k(tt)[0]
+        S.append(S[-1] + math.sqrt(sum((a - b) ** 2 for a, b in zip(prev, X)))); prev = X
+    def t_von_s(s):
+        s = min(S[-1], max(0.0, s))
+        lo, hi = 0, N
+        while hi - lo > 1:
+            m = (lo + hi) // 2
+            if S[m] <= s: lo = m
+            else: hi = m
+        w = (s - S[lo]) / max(1e-12, S[hi] - S[lo])
+        return ts[lo] + (ts[hi] - ts[lo]) * w
+    sig = []
+    for tt in t:
+        j = min(N, max(0, round(tt / t[-1] * N)))
+        sig.append(S[j])
+    # Tempoprofil: v(f) = c(f) * B(f). c = Zeitlupe an den Lesestellen (weich hinein und heraus), B = mittleres Tempo der Spannen zwischen den Stützposen,
+    # an den Spannengrenzen mit smootherstep überblendet (keine Tempostufen, keine Hügel je Spanne). Die Spannentempi werden
+    # iterativ so bestimmt, dass jede Stützpose genau im vorgegebenen Bild erreicht wird. Am Anfang und Ende geht v mit smootherstep in das
+    # Anschlusstempo (oder 0 am Seitenrand) über; dort ist die Beschleunigung 0.
+    import numpy as np
+    W = 40                                                   # größte Halbbreite des weichen Übergangs zwischen zwei Spannen in Bildern
+    T0 = 36                                                  # Länge des Einlaufs und Auslaufs in Bildern
+    fs = [e["bild"] for e in E]
+    M = frames * sub
+    fm = (np.arange(M) + .5) / sub                           # Bildzeit der Teilschritte (Mittelpunkte)
+    seg = np.clip(np.searchsorted(fs, fm, side="right") - 1, 0, len(E) - 2)
+    c = np.array([1.0] * M)
+    for von, bis, z, rampe in zeitlupe:                      # überlappende Zeitlupen: die langsamere gilt
+        mitte, halb = (von + bis) / 2, (bis - von) / 2
+        d = np.abs(fm - mitte) - halb
+        x = np.clip(d / rampe, 0, 1)
+        bump = 1 - x ** 3 * (x * (x * 6 - 15) + 10)
+        c = np.minimum(c, 1 - (1 - z) * bump)
+    v_ein = ein[1] if ein else 0.0
+    v_aus = aus[1] if aus else 0.0
+    sm5 = lambda u: u * u * u * (u * (u * 6 - 15) + 10)
+    e_ein = np.where(fm < T0, sm5(np.clip(fm / T0, 0, 1)), 1.0)
+    e_aus = np.where(fm > frames - T0, sm5(np.clip((frames - fm) / T0, 0, 1)), 1.0)
+    nseg = len(E) - 1
+    Tn = np.array([fs[i + 1] - fs[i] for i in range(nseg)], dtype=float)
+    wb = [None] + [min(W, .45 * min(Tn[i - 1], Tn[i])) for i in range(1, nseg)]    # Breite des weichen Übergangs an jeder Spannengrenze
+    D = np.array([sig[i + 1] - sig[i] for i in range(len(E) - 1)])
+    Tn = np.array([fs[i + 1] - fs[i] for i in range(len(E) - 1)], dtype=float)
+    kk = D / Tn                                              # Anfangswerte: mittleres Tempo je Spanne
+    def profil(kk):
+        B = kk[seg].astype(float)
+        for i in range(1, nseg):    # an der Grenze zwischen Spanne i-1 und i weich (smootherstep, C2) vom einen zum anderen Tempo
+            w = wb[i]
+            m = (fm > fs[i] - w) & (fm < fs[i] + w)
+            B[m] = kk[i - 1] + (kk[i] - kk[i - 1]) * sm5((fm[m] - (fs[i] - w)) / (2 * w))
+        v = c * B
+        v = v_ein + (v - v_ein) * e_ein                      # Einlauf aus dem Anschlusstempo (oder aus der Ruhe)
+        v = v_aus + (v - v_aus) * e_aus
+        return v
+    for _ in range(200):
+        v = profil(kk)
+        ist = np.array([v[seg == i].sum() / sub for i in range(nseg)])
+        kk = kk * np.clip(D / np.maximum(ist, 1e-9), .7, 1.4)
+        if np.max(np.abs(ist - D) / D) < 2e-5: break
+    v = profil(kk)
+    warnungen = []
+    ist = np.array([v[seg == i].sum() / sub for i in range(len(E) - 1)])
+    if np.max(np.abs(ist - D) / D) > 1e-3: warnungen.append(f"Stützposen werden nur auf {np.max(np.abs(ist - D) / D) * 100:.2f} % genau erreicht")
+    cum = np.concatenate([[0.0], np.cumsum(v) / sub])
+    sigma = [float(cum[f * sub]) for f in range(frames + 1)]    # Bogenlänge der Fahrt je Bild
+    pose = []
+    for f in range(frames + 1):
+        X, V, W = k(t_von_s(sigma[f]))
+        pose.append({"loc": Vector((X[0], X[1], X[2])), "neigung": X[3] / kg, "gier": X[4] / kg, "verschiebung": X[5] / ks})
+    # Kameratempo = bildwirksames Tempo: Ort plus gewichtete Neigung, Gier und Bildverschiebung (dasselbe Maß wie die Bogenlänge der Fahrt);
+    # tempo_pos ist nur der Weg des Kameraorts
+    tempo = [math.sqrt((pose[f + 1]["loc"] - pose[f]["loc"]).length ** 2 + (kg * (pose[f + 1]["neigung"] - pose[f]["neigung"])) ** 2 + (kg * (pose[f + 1]["gier"] - pose[f]["gier"])) ** 2
+                       + (ks * (pose[f + 1]["verschiebung"] - pose[f]["verschiebung"])) ** 2) for f in range(frames)]
+    tempo_pos = [(pose[f + 1]["loc"] - pose[f]["loc"]).length for f in range(frames)]
+    bericht = {"warnungen": warnungen, "tempo": tempo, "tempo_pos": tempo_pos, "ein_tempo": ein[1] if ein else 0, "aus_tempo": aus[1] if aus else 0, "laenge": S[-1], "pose": pose,
+               "stationen": [{"name": e["name"], "bild": e["bild"], "tempo": round(tempo[min(frames - 1, e["bild"])], 5), "zeitlupe": None} for e in E]}
     def fn(f):
-        o, n, g, v = zustand(f)
-        # Blender misst die Verschiebung bei senkrechter Sensoranpassung in Bildhöhen: NDC v -> v * Breite/2 / Höhe
-        sx = v * aspekt / 2
-        return {"loc": o.copy(), "rot": kamera_orientierung(n, g), "shift": sx}
+        z = pose[f]
+        return {"loc": z["loc"].copy(), "rot": kamera_orientierung(z["neigung"], z["gier"]), "shift": z["verschiebung"] * aspekt / 2}
     bewegung(cam, fn)
-    cam["neubau_verschiebung"] = json.dumps([round(zustand(f)[3], 5) for f in range(frames + 1)])
+    cam["neubau_verschiebung"] = json.dumps([round(z["verschiebung"], 5) for z in pose])
+    return bericht
+
+
+def fahrt_kennwerte(bericht, ohne_rand=30):
+    """Kennzahlen der Fahrt für die Prüfung im Baubefehl: kleinstes/größtes Tempo (ohne die ersten/letzten Bilder am Seitenrand, wo aus der
+    Ruhe angelaufen wird), größte Beschleunigung und Ruck (Einheiten je Bild² bzw. ³), Tempo am Anfang und Ende."""
+    v = bericht["tempo"]
+    lo = 0 if bericht["ein_tempo"] else ohne_rand
+    hi = len(v) if bericht["aus_tempo"] else len(v) - ohne_rand
+    vv = v[lo:hi]
+    a = [vv[i + 1] - vv[i] for i in range(len(vv) - 1)]
+    j = [a[i + 1] - a[i] for i in range(len(a) - 1)]
+    # Ruck als Vektor (Ort): dritte Differenz der Positionen; so zählt auch ein Knick der Fahrtrichtung
+    P = [z["loc"] for z in bericht["pose"]]
+    lo_p, hi_p = (0 if bericht["ein_tempo"] else ohne_rand), (len(P) if bericht["aus_tempo"] else len(P) - ohne_rand)
+    P = P[lo_p:hi_p]
+    acc3 = [P[i + 1] - 2 * P[i] + P[i - 1] for i in range(1, len(P) - 1)]
+    jv = [(acc3[i + 1] - acc3[i]).length for i in range(len(acc3) - 1)]
+    aj = sorted(jv)
+    p98 = aj[min(len(aj) - 1, int(len(aj) * .98))]
+    jb = max(range(len(jv)), key=lambda i: jv[i])
+    j = [jv[jb]] if False else j
+    return {"ruck_max_bei": lo_p + jb + 2, "ruck_vektor_max": round(max(jv), 6), "ruck_ausreisser": round(max(aj) / max(1e-12, p98), 2), "tempo_min_bei": lo + vv.index(min(vv)), "tempo_min": round(min(vv), 5), "tempo_max": round(max(vv), 5), "beschleunigung_max": round(max(abs(x) for x in a), 6), "ruck_max": round(max(abs(x) for x in j), 6),
+            "tempo_anfang": round(v[0], 5), "tempo_ende": round(v[-1], 5), "stationen": bericht["stationen"], "warnungen": bericht["warnungen"]}
 
 
 # ---------- Konstruktionsphase (DREHBUCH 5, Frage 2, Erik 23.10.: in jeder Szene dieselbe Abfolge, gestrafft) ----------
@@ -813,7 +1062,7 @@ def kamerafahrt(cam, einstellungen, frames, aspekt=16 / 9):
 #   _aus  Bild, ab dem er ausblendet (BAU["aus_dauer"] Bilder lang), 1e5 = bleibt
 #   _deck Deckkraft
 # Ein Material („Bau_Tinte“) wertet das gegen die Bildnummer aus: in Blender per Treiber, im Browser per Uniform (seite/abspieler.js).
-BAU = {"tinte": "#566170", "breite": .012, "aus_dauer": 8, "zeichnen": .8}
+BAU = {"tinte": "#2a3a58", "breite": .022, "aus_dauer": 10, "zeichnen": .8}   # Tinte kräftig (dunkles Blaugrau), Striche breit genug für die Entfernung der Übersichtseinstellungen
 _BAU_MAT = []
 
 
@@ -851,13 +1100,15 @@ def bau_material():
 class Konstruktion:
     """Sammelt die Bau-Linien einer Szene und baut daraus Meshes (eins in Weltlage, eins je bewegtem Teil)."""
 
-    def __init__(self, name="Bau"):
+    def __init__(self, name="Bau", skala=1.0):
         self.name = name
+        self.skala = skala   # Strichbreite je Anordnung (am Handy sind die Übersichtsbilder kleiner: dickere Striche)
         self.striche = {}   # eltern-Name (oder None) -> Liste
+        self.flaechen = []  # gefüllte Polygone (Abdruck), in Weltlage
 
     def strich(self, A, B, ein, dauer, deck, aus=1e5, normal=None, breite=None, eltern=None):
         self.striche.setdefault(eltern.name if eltern else None, []).append(
-            (Vector(A), Vector(B), ein, dauer, deck, aus, Vector(normal) if normal is not None else None, breite or BAU["breite"]))
+            (Vector(A), Vector(B), ein, dauer, deck, aus, Vector(normal) if normal is not None else None, (breite or BAU["breite"]) * self.skala))
 
     def bauen(self):
         obs = []
@@ -895,13 +1146,76 @@ class Konstruktion:
                 ob.parent = eltern
                 ob.matrix_parent_inverse = Matrix.Identity(4)
             obs.append(ob)
+        if self.flaechen:
+            me = bpy.data.meshes.new(f"{self.name}_Abdruecke")
+            ob = bpy.data.objects.new(me.name, me); bpy.context.scene.collection.objects.link(ob)
+            V, F, ein, aus, deck = [], [], [], [], []
+            for P, e0, du, dk, z, au in self.flaechen:
+                xs = [p.x for p in P]; x0, x1 = min(xs), max(xs)
+                i0 = len(V)
+                for p in P:   # Einfärben läuft von links nach rechts über die Fläche
+                    V.append((p.x, p.y, z)); ein.append(e0 + du * (p.x - x0) / max(1e-6, x1 - x0)); aus.append(au); deck.append(dk)
+                for k in range(1, len(P) - 1):
+                    F.append((i0, i0 + k, i0 + k + 1))
+            me.from_pydata(V, [], F); me.update()
+            for nm, vals in (("_ein", ein), ("_aus", aus), ("_deck", deck)):
+                at = me.attributes.new(nm, "FLOAT", "POINT"); at.data.foreach_set("value", vals)
+            for pl in me.polygons:
+                if pl.normal.z < 0: pl.flip()
+            me.materials.append(bau_material())
+            ob.visible_shadow = False
+            ob["neubau_rolle"] = "bau"
+            obs.append(ob)
         return obs
 
+    # ----- Hilfen: gestrichelte Linien und Schraffur -----
+    def gestrichelt(self, A, B, ein, dauer, deck, muster=(.2, .09), aus=1e5, normal=(0, 0, 1), breite=None, eltern=None):
+        """Strichlinie von A nach B, die sich in [ein, ein + dauer] von A nach B zeichnet. muster: (Strich, Lücke) in Einheiten, oder
+        (Strich, Lücke, Punkt, Lücke) für Strich-Punkt (Falz)."""
+        A, B = Vector(A), Vector(B)
+        L = (B - A).length
+        if L < 1e-6: return
+        d = (B - A) / L
+        per = sum(muster); x = 0.0
+        while x < L - 1e-6:
+            for j in range(0, len(muster), 2):
+                a0 = x; a1 = min(L, x + muster[j])
+                if a0 >= L: break
+                self.strich(A + d * a0, A + d * a1, ein + dauer * a0 / L, max(.01, dauer * (a1 - a0) / L), deck, aus=aus, normal=normal, breite=breite, eltern=eltern)
+                x += muster[j] + (muster[j + 1] if j + 1 < len(muster) else 0)
+                if x >= L: break
+
+    def schraffur(self, P, abstand, ein, dauer, deck, winkel=45, aus=1e5, breite=.012, z=.0008):
+        """Schraffur (parallele Linien) in einem konvexen Polygon P (Liste Vector, Ebene des Bogens). Die Linien zeichnen sich nacheinander."""
+        w = math.radians(winkel); d = Vector((math.cos(w), math.sin(w))); nrm = Vector((-d.y, d.x))
+        pts = [Vector((p.x, p.y)) for p in P]
+        cs = [p.dot(nrm) for p in pts]
+        lo, hi = min(cs), max(cs)
+        n = max(1, int((hi - lo) / abstand))
+        k = 0
+        for i in range(1, n + 1):
+            c = lo + (hi - lo) * i / (n + 1)
+            x = []
+            for a, b in zip(pts, pts[1:] + pts[:1]):
+                ca, cb = a.dot(nrm), b.dot(nrm)
+                if (ca - c) * (cb - c) < 0:
+                    t = (c - ca) / (cb - ca); x.append(a.lerp(b, t))
+            if len(x) >= 2:
+                x.sort(key=lambda q: q.dot(d))
+                A, B = x[0] + d * .03, x[-1] - d * .03
+                if (B - A).length > .08:
+                    self.strich((A.x, A.y, z), (B.x, B.y, z), ein + dauer * k / n, max(.5, dauer / n * 1.5), deck, aus=aus, normal=(0, 0, 1), breite=breite)
+                    k += 1
+
+    def flaeche(self, P, ein, dauer, deck, z=.0006, aus=1e5, richtung=(1, 0)):
+        """Gefülltes konvexes Polygon (Tintenton, Deckkraft deck), das sich von einer Seite zur anderen (richtung) in [ein, ein + dauer] einfärbt."""
+        self.flaechen.append((list(P), ein, dauer, deck, z, aus))
+
     # ----- Schnitt- und Falzlinien: Umriss jedes Teils in der flachen Lage auf dem Bogen -----
-    def schnitt(self, teile, frame_flach, ein0, ein1, ab_klappe, nachbarn=(), deck=.55):
-        """teile: Objekte, die im Bogen liegen und hochklappen. ab_klappe: Name -> Bild, ab dem das Teil den Bogen verlässt
-        (Schnitt wird heller und bleibt als Umriss des Abdrucks, Falz verschwindet). nachbarn: weitere Umrisse (Grundplatte),
-        an denen ein Falz liegen kann, ohne selbst gezeichnet zu werden."""
+    def schnitt(self, teile, frame_flach, ein0, ein1, ab_klappe, nachbarn=(), deck=.8, abdruck=True):
+        """teile: Objekte, die im Bogen liegen und hochklappen. ab_klappe: Name -> Bild, ab dem das Teil den Bogen verlässt: der Schnitt (gestrichelt)
+        wird zu einem dünnen Umriss des Abdrucks, der Falz (Strich-Punkt) verschwindet, die Fläche des Abdrucks färbt sich mit Schraffur.
+        nachbarn: weitere Umrisse (Grundplatte), an denen ein Falz liegen kann, ohne selbst gezeichnet zu werden."""
         sc = bpy.context.scene; sc.frame_set(frame_flach); bpy.context.view_layer.update()
         dg = bpy.context.evaluated_depsgraph_get()
         umr = {o.name: _umriss_xy(o, dg) for o in list(teile) + list(nachbarn)}
@@ -922,8 +1236,8 @@ class Konstruktion:
         for i, o in enumerate(teile):
             P = umr[o.name]
             L = sum((P[(j + 1) % len(P)] - P[j]).length for j in range(len(P)))
-            t0 = ein0 + (ein1 - ein0) * .6 * (i / max(1, n - 1))
-            dur = (ein1 - ein0) * .4
+            t0 = ein0 + (ein1 - ein0) * .55 * (i / max(1, n - 1))
+            dur = (ein1 - ein0) * .45
             s = 0
             hoch = ab_klappe.get(o.name, 1e5)
             for j in range(len(P)):
@@ -932,34 +1246,33 @@ class Konstruktion:
                 e_a = t0 + dur * s / L; e_b = t0 + dur * (s + l) / L; s += l
                 # außen neben die Kante legen (Umriss gegen den Uhrzeigersinn: außen = rechts der Laufrichtung)
                 d = (b - a).normalized(); aussen = Vector((d.y, -d.x)) * (BAU["breite"] * .5)
-                A = Vector((a.x + aussen.x, a.y + aussen.y, .0009)); B = Vector((b.x + aussen.x, b.y + aussen.y, .0009))
+                A = Vector((a.x + aussen.x, a.y + aussen.y, .0012)); B = Vector((b.x + aussen.x, b.y + aussen.y, .0012))
                 if ist_falz(o.name, a, b):
-                    # Falz: gestrichelt, verschwindet, wenn das Teil hochklappt
-                    m = max(2, int(l / .09))
-                    for k in range(0, m, 2):
-                        pa, pb = A.lerp(B, k / m), A.lerp(B, (k + 1) / m)
-                        self.strich(pa, pb, e_a + (e_b - e_a) * k / m, (e_b - e_a) / m, deck * .8, aus=hoch, normal=(0, 0, 1))
+                    self.gestrichelt(A, B, e_a, e_b - e_a, deck * .9, muster=(.2, .07, .035, .07), aus=hoch, breite=.026)
                 else:
-                    # Schnitt: bleibt als hellerer Umriss des Abdrucks
-                    self.strich(A, B, e_a, e_b - e_a, deck * .5, normal=(0, 0, 1))
-                    self.strich(A, B, e_a, e_b - e_a, deck * .5, aus=hoch, normal=(0, 0, 1))
+                    self.gestrichelt(A, B, e_a, e_b - e_a, deck, muster=(.26, .1), aus=hoch, breite=.03)
+                    if abdruck:   # dünner Umriss des Abdrucks, bleibt
+                        self.strich(A - Vector((0, 0, .0004)), B - Vector((0, 0, .0004)), hoch if hoch < 1e4 else e_a, 6 if hoch < 1e4 else e_b - e_a, .35, normal=(0, 0, 1), breite=.012)
+            if abdruck and hoch < 1e4:
+                self.flaeche(P, hoch + 2, 14, .13)
+                self.schraffur(P, .16, hoch + 4, 16, .24, breite=.012)
         sc.frame_set(0)
 
     # ----- Raster: Schneidematte auf dem Bogen, Welle von links nach rechts, blendet nach dem Hochklappen aus -----
-    def raster(self, x0, x1, y0, y1, ein0, ein1, aus, schritt=.5, jede=5, deck=(.10, .2)):
+    def raster(self, x0, x1, y0, y1, ein0, ein1, aus, schritt=.5, jede=5, deck=(.17, .38)):
         nx = int(round((x1 - x0) / schritt)); ny = int(round((y1 - y0) / schritt))
         span = ein1 - ein0
         for i in range(nx + 1):
             x = x0 + i * schritt
-            dk = deck[1] if i % jede == 0 else deck[0]
-            self.strich((x, y0, .0007), (x, y1, .0007), ein0 + span * .7 * (i / nx), span * .3, dk, aus=aus + 6 * i / nx, normal=(0, 0, 1), breite=.009)
+            haupt = i % jede == 0
+            self.strich((x, y0, .0007), (x, y1, .0007), ein0 + span * .7 * (i / nx), span * .3, deck[1] if haupt else deck[0], aus=aus + 6 * i / nx, normal=(0, 0, 1), breite=.032 if haupt else .02)
         for j in range(ny + 1):
             y = y0 + j * schritt
-            dk = deck[1] if j % jede == 0 else deck[0]
-            self.strich((x0, y, .0007), (x1, y, .0007), ein0 + span * .15 * (j / ny), span * .85, dk, aus=aus + 6, normal=(0, 0, 1), breite=.009)
+            haupt = j % jede == 0
+            self.strich((x0, y, .0007), (x1, y, .0007), ein0 + span * .15 * (j / ny), span * .85, deck[1] if haupt else deck[0], aus=aus + 6, normal=(0, 0, 1), breite=.032 if haupt else .02)
 
     # ----- Gerüst: Kanten der Bauform im Raum, je Kante zwei bis drei Striche mit Überstand, wie von Hand -----
-    def geruest(self, teile, ein0, ein1, fertig, deck=.5, frame_bauform=None):
+    def geruest(self, teile, ein0, ein1, fertig, deck=.8, frame_bauform=None):
         """fertig: Name -> Bild, an dem das Teil in der Bauform steht (sein Gerüst blendet dann aus)."""
         sc = bpy.context.scene
         if frame_bauform is not None:
@@ -1006,18 +1319,18 @@ class Konstruktion:
             n1 = d.cross(Vector((0, 0, 1)) if abs(d.z) < .9 else Vector((1, 0, 0))).normalized(); n2 = d.cross(n1)
             ov = min(.26, .09 + .07 * L)
             aus = f + 4
-            self.strich(A - d * ov * (.7 + .6 * rnd(i, 1)), B + d * ov * (.7 + .6 * rnd(i, 2)), st, du, deck, aus=aus, breite=.008)
+            self.strich(A - d * ov * (.7 + .6 * rnd(i, 1)), B + d * ov * (.7 + .6 * rnd(i, 2)), st, du, deck, aus=aus, breite=.022)
             off = .036 + .01 * rnd(i, 3)
             self.strich(A + n1 * off * .8 + n2 * off * .4 - d * ov * (.35 + .3 * rnd(i, 4)), B + n1 * off * 1.15 + n2 * off * .55 + d * ov * (.35 + .3 * rnd(i, 5)),
-                        st + du * .45, du * .9, deck * .55, aus=aus, breite=.007)
+                        st + du * .45, du * .9, deck * .6, aus=aus, breite=.018)
             if L > 1.2:
                 self.strich(A + d * L * (.06 + .06 * rnd(i, 6)) - n1 * .028 - n2 * .018, B - d * L * (.08 + .1 * rnd(i, 7)) - n1 * .03 - n2 * .02,
-                            st + du * .9, du, deck * .32, aus=aus, breite=.007)
+                            st + du * .9, du, deck * .4, aus=aus, breite=.016)
         sc.frame_set(0)
         return len(E)
 
     # ----- Bleistiftspur: Eckmarken knapp innerhalb der Kanten auf beiden großen Seiten jedes Teils, wandern mit dem Teil -----
-    def spur(self, teile, ein, deck=.3):
+    def spur(self, teile, ein, deck=.55):
         """ein: Name -> Bild, ab dem sich die Spur des Teils zeichnet."""
         for o in teile:
             me = o.data
@@ -1035,10 +1348,10 @@ class Konstruktion:
                     if (c - a).dot(inn) < 0: inn = -inn
                     s = .045; arm = min(.4, .3 * L)
                     at = lambda uu, vv: a + u * uu + inn * vv
-                    self.strich(at(.4 * s, s), at(arm, s), e0, 3, deck, normal=nrm, eltern=o, breite=.008)
-                    self.strich(at(L - arm, s), at(L - .4 * s, s), e0 + 1, 3, deck, normal=nrm, eltern=o, breite=.008)
-                    self.strich(at(.6 * s, s + .012), at(arm * .78, s + .02), e0 + 2, 3, deck * .6, normal=nrm, eltern=o, breite=.007)
-                    self.strich(at(L - arm * .78, s + .02), at(L - .6 * s, s + .012), e0 + 3, 3, deck * .6, normal=nrm, eltern=o, breite=.007)
+                    self.strich(at(.4 * s, s), at(arm, s), e0, 3, deck, normal=nrm, eltern=o, breite=.017)
+                    self.strich(at(L - arm, s), at(L - .4 * s, s), e0 + 1, 3, deck, normal=nrm, eltern=o, breite=.017)
+                    self.strich(at(.6 * s, s + .012), at(arm * .78, s + .02), e0 + 2, 3, deck * .6, normal=nrm, eltern=o, breite=.014)
+                    self.strich(at(L - arm * .78, s + .02), at(L - .6 * s, s + .012), e0 + 3, 3, deck * .6, normal=nrm, eltern=o, breite=.014)
 
 
 def _umriss_xy(o, dg):

@@ -10,7 +10,7 @@ SZENEN = os.path.join(NEUBAU, "szenen")
 
 # Pfade, die der Browser selbst auswertet (Platzhalter * = jeder Schlüssel dieser Ebene)
 BROWSER = [
-    "druckflaechen.*.elemente", "druckflaechen.*.einblenden", "druckflaechen.*.aufloesung", "druckflaechen.*.pruefen",
+    "texte", "druckflaechen.*.elemente", "druckflaechen.*.einblenden", "druckflaechen.*.aufloesung", "druckflaechen.*.pruefen",
     "gegenstaende.*.versatz", "gegenstaende.*.drehung_z",
     "pruefung",
 ]

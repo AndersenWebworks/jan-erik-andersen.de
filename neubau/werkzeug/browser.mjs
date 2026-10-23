@@ -126,6 +126,7 @@ async function pruefen() {
       const a = bericht.ansichten[name] = { viewport: `${vp.width}x${vp.height}`, flaechen: {} };
       a.geladen = await page.evaluate(() => ({ schriften: [...document.fonts].filter(f => f.status === "loaded").map(f => f.family), glb_ms: Math.round(window.__neubau.ladezeit), druck_ms: Math.round(window.__neubau.druckzeit || 0) }));
       for (const [fname, fl] of Object.entries(szene.druckflaechen)) {
+        if (fl.nur && fl.nur !== name) continue;           // Fläche gibt es nur in der anderen Anordnung
         const frames = (fl.pruefen && fl.pruefen.bilder) || [];
         const r = a.flaechen[fname] = { bilder: {} };
         for (const f of frames) {
