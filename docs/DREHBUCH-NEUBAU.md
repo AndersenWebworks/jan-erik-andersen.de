@@ -20,9 +20,9 @@ Die Fassung bleibt als Protokoll erhalten. `entwurf-2026-11/seite/` bleibt als B
 Wer aus einer Bewerbung oder von einem Profil kommt, liest nicht bis zum Ende. Er sieht das erste Bild, vielleicht noch Gerwing, und entscheidet dann, ob er weiterscrollt, springt oder geht. Die Seite muss deshalb an jeder Stelle abbrechbar sein, ohne dass der Leser mit leeren Händen geht. Daraus folgt für alle Szenen:
 
 1. **Das erste Bild trägt allein.** Wer nach fünf Sekunden geht, weiß trotzdem, wer Erik ist und was er macht. Das Niveau zeigt die Gestaltung selbst.
-2. **Jede Szene sagt beim Ankommen, wo man ist.** Ihr Titel steht sichtbar am Eingang der Insel, bevor sich etwas aufbaut. Wer schnell scrollt, erkennt die Abschnitte, ohne anzuhalten.
+2. **Jede Szene sagt beim Ankommen, wo man ist.** Ihr Titel steht sichtbar am Eingang der Szene, bevor sich etwas aufbaut. Wer schnell scrollt, erkennt die Abschnitte, ohne anzuhalten.
 3. **Belege vor Behauptungen.** Gerwing steht direkt nach der Eröffnung. Jede Leistung zeigt ihr Problem und ihre Lösung im Bild, nicht nur im Satz. Wo ein Projekt genannt wird, führt ein Link zur echten Seite.
-4. **Jede Szene steht auch allein.** Über Navigation und Karte kommt man direkt hinein. Eine Szene darf nicht voraussetzen, dass man die vorige gesehen hat.
+4. **Jede Szene steht auch allein.** Über Navigation und Kapitelleiste kommt man direkt hinein. Eine Szene darf nicht voraussetzen, dass man die vorige gesehen hat.
 5. **Kontakt ist immer einen Klick entfernt.**
 6. **Die Inszenierung steht nie zwischen Leser und Inhalt.** Was ein Überflieger braucht (Titel, Kernsatz, Name des Projekts), muss auch beim schnellen Scrollen ankommen. Schönheit, die man nur bei langsamem Scrollen sieht, ist Zugabe.
 7. **Am Handy gilt dasselbe.** Trägt eine Szene dort nicht, wird sie am Handy einfacher, nicht bloß kleiner.
@@ -50,8 +50,14 @@ Prüffrage für jede Szene und jeden Bauschritt: Versteht jemand, der aus einer 
 - **Lage:** flach auf dem Papier, nie durch oder über Bauteile. Eintritt vorn mittig in eine Szene, Austritt hinten in Laufrichtung.
 - **Tempo:** gleich je Scrollweg; an Lesestellen wird der Punkt weich langsamer und fließt weiter, kein harter Halt, keine Ringe.
 
-### Kamera
-- **Die Kamera folgt dem Punkt.** Eine durchgehende Bahn, kein Schnitt, kein Überblicksflug, kein Abheben zur Karte zwischen den Szenen.
+### Kamera (23.10.2026, aus Eriks Fehlerbildern)
+Befund im Bestand: Die Kamera kannte nur zwei Regeln, „Punkt im Bild“ und „frontal vor den Text“. Was die Szene zeigt, wusste sie nicht. Daraus entstanden drei Fehlerarten: Bei Modernisierung war die Modernisierung selbst nicht zu sehen (Handlung unbekannt), bei Gestaltung war das Werk abgeschnitten (Kamera nah an der Bildunterschrift), und bei Zusammenarbeit wurde die Tafel zur Folie, während die Arbeitsplätze aus dem Bild fielen (nur der Text gerahmt).
+- **Einstellungsliste je Szene, bevor gebaut wird.** Für jeden Moment steht fest, was im Bild sein muss, wie groß und von wo aus (Beispiel Modernisierung: „beide Monitore nebeneinander, halbnah, leicht von vorn, solange die Blöcke wandern“; Gestaltung: „Werk ganz im Bild, frontal, Kamera auf Höhe der Bildmitte, rundum Luft, Unterschrift darunter“). Die Kamera rahmt den Inhalt der Einstellung, nicht den Punkt.
+- **Rangfolge:** In den Szenen führt erst die Handlung, dann der Text, dann der Punkt. Zwischen den Szenen führt der Punkt. Hat eine Einstellung keinen Platz für den Punkt, ist er nicht im Bild.
+- **Raum statt Fläche:** Eine Einstellung zeigt immer den Raum, nie nur eine Fläche. Füllt ein Textträger das Bild, ist die Kamera zu nah oder der Träger zu groß.
+- **Kein Rollen:** Der Horizont steht immer gerade.
+- **Bühne für die Kamera:** Was in einer Einstellung zusammen gezeigt wird, steht nebeneinander und dem Zuschauer zugewandt. Bewegung läuft quer durchs Bild, nicht in die Tiefe. Textgrößen werden beim Bau so gesetzt, dass Text und Gegenstand gemeinsam lesbar ins Bild passen; die Kamera gleicht das nicht nachträglich aus.
+- **Zwischen den Szenen folgt die Kamera dem Punkt.** Eine durchgehende Fahrt, kein Schnitt, kein Überblicksflug.
 - **Zwischen den Szenen Mausperspektive:** knapp über dem Papier hinter dem Punkt, Blick entlang des Fadens, die Szenen ragen auf; weicher Aufstieg in die nächste Szene. Füllung entlang des Fadens: niedrige weiße Papierblöcke, ohne Text, ohne Rot, nie höher als die Szenen.
 - **In den Szenen:** wenige Stellungen, eine Fahrtrichtung, kein Pendeln, Umkreisen oder Zwischenüberblick. Lesestellen frontal und still.
 - **Stetig:** Position, Blickziel und Abstand ohne Sprünge, kein zackiger Zoom. Gedämpftes Nachziehen zwischen Scrollen und Kamera. Kein Kamera-Atem, die Kamera bewegt sich nur beim Scrollen.
@@ -62,10 +68,12 @@ Prüffrage für jede Szene und jeden Bauschritt: Versteht jemand, der aus einer 
 - Ortszeile, Kernsatz und Podest kommen erst mit dem Scrollen, ohne dass sich etwas durch die Buchstaben schiebt.
 - Nie zwei Namen übereinander (HTML-Vorbild und 3D), keine Animation über dem Startbild. Name und Text laden sofort, das 3D darf nachladen.
 
-### Karte
-- Am Schluss zieht die Kamera heraus in eine Draufsicht; die Seite wird zur Karte, jede Szene ist anklickbar. Ein Knopf „Übersicht“ springt jederzeit dorthin.
-- **Form „Flusslauf mit Höhenlinien“:** Der Faden fließt in gleichmäßigen, ruhigen Mäandern, im Papier zarte Höhenlinien, die Szenen liegen als runde Inseln an den Außenseiten der Biegungen. Der Fluss mündet im roten Schlusspunkt der Wortmarke.
-- Weicher Horizont statt Kante, Licht und Schatten, Raster höchstens ganz zart.
+### Keine Karte (23.10.2026, Erik: „Karte weg“)
+- Die Übersichtskarte entfällt, ebenso der Knopf „Übersicht“ und der Schlusszoom. Grund: Sie zwang Faden, Kamera und alle Szenen in eine gemeinsame Welt mit fester Lage. Der Faden musste zugleich in den Szenen an Bauteilen vorbei, zwischen den Szenen als Kamerabahn und von oben als Ganzes schön laufen; daran sind Setzkasten, Spirale und Fluss gescheitert. Für den Besucher bringt sie wenig, er springt über die Navigation.
+- Jede Szene ist eine eigene Bühne, frei so gebaut, wie ihre Einstellungen es brauchen. Der Faden verbindet die Szenen in der Fahrt und muss nur aus der Fahrt gut aussehen, nicht von oben.
+- **Springen:** Navigation oben und eine schlichte Kapitelleiste in HTML mit allen Szenen und dem Fortschritt (leicht, am Handy brauchbar, barrierefrei).
+- **Schluss:** Der Faden läuft in den roten Schlusspunkt der Wortmarke.
+- Weicher Horizont statt Kante, Licht und Schatten bleiben.
 
 ### Rahmen
 - Kopfzeile mit Marke, Navigation (Projekte, Leistungen, Kontakt), Kontakt von überall mit einem Klick.
@@ -138,19 +146,24 @@ Reihenfolge, Kernaussage, Text, Bild. Texte wörtlich wie heute im Seitentext.
 - **Text:** Überschrift „Zusammenarbeit“. „Agenturarbeit kenne ich von innen: sechs Jahre bei Tangram, danach als freier Partner der Runden Group.“ · „Ich steige in laufende Projekte ein, arbeite mich in bestehende Themes und Plugins ein und halte mich an Ihre Abläufe und Werkzeuge.“ · „Sie haben ein eigenes Webteam und brauchen für eine Weile Verstärkung? Dann arbeite ich auch angestellt in Teilzeit mit, vollständig remote und gern befristet.“ · „Ob Projekt, Betreuung oder Mitarbeit auf Zeit: Derzeit habe ich Kapazität frei. Konditionen nenne ich Ihnen auf Anfrage.“ Danach „Schreiben Sie mir, worum es geht.“ mit Mail, Telefon, LinkedIn.
 - **Ton:** Anstellung ist ein möglicher Weg, keine aktive Stellensuche.
 - **Bild:** drei Arbeitsplätze mit Schreibtischdingen wie in der Eröffnung, je Platz anders gemischt, ohne Text. Dahinter eine Kanban-Tafel: Erledigt (Tangram, Runden Group), In Arbeit (Einstieg in laufende Projekte, auch befristet im Team), Als Nächstes (freie Kapazität, Konditionen auf Anfrage). Kontakt als Schlussbild mit allen drei Wegen, groß genug lesbar.
-- **Danach:** Zug heraus zur Karte, der Fluss mündet im Schlusspunkt der Wortmarke.
+- **Offen:** Die Kanban-Tafel passt nicht zu den Sätzen (siehe Offen). Am Kontaktbild hat das Handwerk zu stimmen: Karten gerade, gleiche Einzüge, ausgewogene Spalten.
+- **Danach:** Der Faden läuft in den roten Schlusspunkt der Wortmarke.
 
-**Gestrichen:** Stimmen (Leporello bleibt als Werkzeug), Eröffnung Variante A und B, Lesebahn-Neubau, Setzkasten-Raster und goldene Spirale als Kartenform, Flicken in Betreuung, Waage und Standardregal im Shop, zweite Abspielung WBG.
+**Gestrichen:** Stimmen (Leporello bleibt als Werkzeug), Eröffnung Variante A und B, Lesebahn-Neubau, Übersichtskarte samt Knopf „Übersicht“ und Schlusszoom (alle Formen: Setzkasten, Spirale, Fluss), Flicken in Betreuung, Waage und Standardregal im Shop, zweite Abspielung WBG.
 
 ## 4 Bauweise für den Neubau
 
 Die Lehre aus `seite/`: Die Nähte und die lange Abstimmzeit kamen daher, dass jede Szene ihre eigene Kamerabahn hatte und der gemeinsame Kern aus allen Szenen-Kopien zusammengeflickt wurde. Der Neubau dreht das um.
 
-1. **Erst das Level, dann die Szenen.** Eine Stationstabelle legt fest: Lage jeder Insel, Bahnabschnitte, Lesestellen mit Scrollposition. Darauf liegt eine durchgehende glatte Bahn für Faden, Punkt und Kamera.
-2. **Ein Kamera-Rig für alles.** Abstand, Höhe, Vorausschau und Blickziel sind weiche Parameterkurven über der Bahn. Szenen haben keine eigene Kamera; sie melden nur ihre Lesestellen.
-3. **Szenen sind Beschreibungen.** Teile, Faltplan, Text, Zeitfenster relativ zur eigenen Bahnstrecke. Eine Datei je Szene, ohne Sonderwege im Kern.
-4. **Ein schlanker Kern** mit klaren Modulen: Bühne und Licht, Papier und Falten, Text auf Flächen, Bahn und Rig, Karte, Fallback.
-5. **Messflug von Anfang an:** gleichmäßig gescrollt, je Bild Tempo, Beschleunigung, Ruck und Drehung der Kamera, Ruck im Abstand, Punkt im Bild bei Wechseln, je Lesestelle Schriftgröße, Vollständigkeit, Standzeit und Schräge. Desktop und Handy. Die Abnahme einer Szene ist der Messflug plus Ansehen.
+Fehler werden nicht hinterher gesucht, sondern durch die Bauweise ausgeschlossen (Eriks Haltung: „make them unable to fail“).
+
+1. **Erst die Bahn, dann die Szenen.** Eine Stationstabelle legt fest: Reihenfolge und Lage der Szenen, Bahnabschnitte, Einstellungen mit Scrollposition. Darauf liegt eine durchgehende glatte Bahn für Faden, Punkt und Kamera. Die Lage der Szenen folgt der Fahrt, nicht einer Kartenansicht.
+2. **Ein Kamera-Rig für alles.** Abstand, Höhe, Vorausschau und Blickziel sind weiche Parameterkurven über der Bahn. Szenen haben keine eigene Kamerabahn; sie melden ihre Einstellungen (was im Bild sein muss, wie groß, von wo), und das Rig rahmt sie weich nacheinander.
+3. **Szenen sind Beschreibungen.** Teile, Faltplan, Text, Einstellungen, Zeitfenster relativ zur eigenen Bahnstrecke. Eine Datei je Szene, ohne Sonderwege im Kern.
+4. **Text und Kanten gehören zum Papier.** Im Bestand ist jeder Satz eine eigene durchsichtige Folie knapp über der Fläche und jede Haarkante eine lose Linie daneben; je nach Blickwinkel und Zeichenreihenfolge franst Text aus, flackert, verschwindet oder Kanten stehen über. Im Neubau wird das Druckbild Teil der Fläche selbst, und die Kante wird mit der Fläche gezeichnet. Ohne zweite Schicht kann nichts überlagern.
+5. **Kollisionsprüfung beim Bauen.** Jedes Teil, jede Textfläche, jedes Kabel und der Faden haben einen Umriss; die Szene meldet jede Durchdringung (im Bestand: Überschrift im Monitorfuß, Kabel durch die Überschrift, Leporello im Gerät).
+6. **Ein schlanker Kern** mit klaren Modulen: Bühne und Licht, Papier und Falten, Druck auf Flächen, Bahn und Rig, Prüfung, Fallback.
+7. **Messflug von Anfang an:** gleichmäßig gescrollt, je Bild Tempo, Beschleunigung, Ruck und Drehung der Kamera, Ruck im Abstand, Rollen, Punkt im Bild bei Wechseln. Je Einstellung: Ist ihr Gegenstand ganz und groß genug im Bild? Je Lesestelle: Schriftgröße, Standzeit, Schräge, und Bild für Bild, ob jeder Satz vollständig und unverdeckt zu sehen ist. Desktop und Handy. Die Abnahme einer Szene ist der Messflug plus Ansehen, ob man die Geschichte versteht.
 
 **Aus dem Bestand übernommen, geprüft statt kopiert:** `wortmarke.js`, Faltmechanik und Einrasten aus `falt.js`, Palette und Post-Processing aus `kern.js`, Schreibtischdinge aus `schreibtisch.js`, Leporello-Faltung aus `stimmen.js`, Gerwing-Bilder aus `bilder/`, Schriften, `vendor/`, Kopf und Fallback aus `index.html`, Weg auf main (`docs/weg-auf-main.sh`).
 
@@ -162,7 +175,7 @@ Eine Frage nach der anderen, Entscheidung hier eintragen. Sortiert nach Gewicht 
 
 1. **Startbild gegen Fünf-Sekunden-Maßstab:** Grundsatz 5 der Fassung verlangt Name, Angebot und Niveau im ersten Bild ohne Scrollen. Die spätere feste Regel lautet: Beim Laden steht nur der Name, alles andere kommt mit dem Scrollen. Wer nach fünf Sekunden geht, kennt dann nur den Namen. Kommt beim Laden eine ruhige Zeile unter den Namen, die fest zur Marke gehört und nicht animiert wird?
 2. **Bastelbogen in jeder Szene?** Heute läuft die volle Konstruktionsphase (Schnitt- und Falzlinien, Raster, Gerüst mit Mehrfachstrichen, Bleistiftspur, dann Hochklappen) in allen Szenen. Das ist ein großer Teil von Länge und Unruhe. Volle Phase nur in der Eröffnung und danach ein kürzeres Aufklappen, oder überall gleich?
-3. **Szenentitel im 3D:** Titel sichtbar am Eingang jeder Insel (siehe 1a, Punkt 2)? Heute tragen nur Gerwing, WBG und Zusammenarbeit einen sichtbaren Titel.
+3. **Szenentitel im 3D:** Titel sichtbar am Eingang jeder Szene (siehe 1a, Punkt 2)? Heute tragen nur Gerwing, WBG und Zusammenarbeit einen sichtbaren Titel.
 4. **Länge:** Richtwert war 40 bis 50 Bildschirmhöhen (der Bestand hat über 70). Zugleich sollen Animationen langsamer werden und mehr Scrollweg bekommen. Beides geht nur, wenn Szenen weniger zeigen. Gilt der Richtwert?
 5. **Shop-Szene doppelt zu Gerwing:** Satz 1 („Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht“) beschreibt fast genau Gerwing, das direkt davor steht. Vorschlag: Die Szene erzählt nur den Wechsel von Shopify, Satz 1 wird kürzer und verweist auf Gerwing. Das ist eine Textänderung, deshalb Eriks Entscheidung.
 6. **Bild für „Wie ich arbeite“:** Das Fließband zeigt Takt und Prüfung, kann aber als Massenware gelesen werden, gerade zusammen mit KI. Behalten, oder ein Bild, das Sorgfalt zeigt (etwa ein Werktisch, auf dem jede Karte einzeln geprüft und abgezeichnet wird)?
@@ -172,3 +185,4 @@ Eine Frage nach der anderen, Entscheidung hier eintragen. Sortiert nach Gewicht 
 10. **Bewegungssprache:** mechanisch (anfahren, abbremsen, leicht überschwingen, einrasten) für alle Teile, nur langsamer als bisher?
 11. **Bildschirmfotos für „Außerdem“:** selbst von den Live-Seiten aufnehmen (Desktop und Handy) oder liefert Erik sie?
 12. **Reihenfolge für den Bau:** Eröffnung und Gerwing zuerst bis zur Abnahme, danach die übrigen Szenen, oder erst das ganze Level mit einfachen Platzhaltern und dann Szene für Szene?
+13. **Kanban-Tafel bei Zusammenarbeit:** Die Spalten passen nicht zu den Sätzen. „Agenturarbeit kenne ich von innen“ ist nicht „erledigt“, „Sie haben ein eigenes Webteam …?“ ist nicht „in Arbeit“, „Konditionen nenne ich Ihnen auf Anfrage“ ist nicht „als Nächstes“. Die Köpfe behaupten eine Ordnung, die der Text nicht hat (Grundsatz „Konstrukt ist, was der Text sagt“). Neu denken, aus den drei Wegen der Zusammenarbeit heraus?
