@@ -11,6 +11,9 @@
 <link rel="modulepreload" href="./vendor/three.core.js">
 <link rel="preload" href="./assets/modernisierung-breit.glb" as="fetch" crossorigin="anonymous" media="(min-aspect-ratio: 1/1)">
 <link rel="preload" href="./assets/modernisierung-hochkant.glb" as="fetch" crossorigin="anonymous" media="(max-aspect-ratio: 1/1)">
+<link rel="preload" href="./assets/modernisierung.szene.json" as="fetch" crossorigin="anonymous">
+<link rel="preload" href="./schriften/SchibstedGrotesk.ttf" as="font" type="font/ttf" crossorigin="anonymous">
+<link rel="preload" href="./schriften/Newsreader.ttf" as="font" type="font/ttf" crossorigin="anonymous">
 <style>
   :root { --dunst: #dfedf9; --tinte: #303033; }
   html, body { margin: 0; background: #eef3f9; color: var(--tinte); font: 400 16px/1.6 system-ui, sans-serif; }
@@ -30,10 +33,11 @@
 <body>
 <div class="vor" aria-hidden="true">Szene 4</div>
 <section class="szene" id="modernisierung" aria-labelledby="t-modernisierung">
+  <!-- Text der Szene: wird von bauen.py und vom Abspieler aus szenen/modernisierung.json nachgezogen -->
   <div class="sr">
-    <h2 id="t-modernisierung">Modernisierung</h2>
-    <p>Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen.</p>
-    <p>Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.</p>
+    <h2 id="t-modernisierung" data-szene="titel:0">Modernisierung</h2>
+    <p data-szene="lesestelle:0">Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen.</p>
+    <p data-szene="lesestelle:1">Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben.</p>
   </div>
   <div class="buehne" aria-hidden="true"><canvas></canvas></div>
 </section>
@@ -43,6 +47,7 @@
   spieleSzene(document.querySelector("#modernisierung .buehne"), {
     breit: "./assets/modernisierung-breit.glb",
     hochkant: "./assets/modernisierung-hochkant.glb",
+    szene: "./assets/modernisierung.szene.json",
   }).catch(e => { console.error(e); document.documentElement.classList.add("ohne-3d"); });
 </script>
 </body>

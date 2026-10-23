@@ -1,4 +1,5 @@
-# Szene 4 Modernisierung (DREHBUCH-NEUBAU, Abschnitt 3 → 4). Baut Szene, Animation und beide Kameraspuren, prüft und exportiert.
+# Szene 4 Modernisierung (DREHBUCH-NEUBAU, Abschnitt 3 → 4). Baut Form, Animation und beide Kameraspuren, prüft und exportiert.
+# Inhalte kommen aus neubau/szenen/modernisierung.json. Normalerweise ruft das neubau/bauen.py auf; einzeln:
 #   blender.exe -b --factory-startup --python neubau/blender/modernisierung.py -- [--hochkant] [--proben] [--export] [--frames=0,120]
 #   Zwei Anordnungen aus derselben Beschreibung (Drehbuch 1a.7: am Handy einfacher, nicht bloß kleiner):
 #     breit    (Desktop):  Röhrenmonitor links, Flachbildschirm rechts daneben, die Blöcke wandern quer durchs Bild.
@@ -27,47 +28,51 @@
 #     H3 Lesestelle (324–380): nur die Front mit beiden Sätzen, Text mindestens 16 px; ringsum Raum (Netz, Bogen). Neigung 58°.
 import importlib, json, math, os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import basis
+import basis, szene
 importlib.reload(basis)
 from basis import PAL, KARTON as T, SPALT as G, material, karton, prisma, leer, anhaengen, klappe, bewegung, fenster, smm, sm
 from mathutils import Vector, Euler, Matrix
 import bpy
 
+# Alle Inhaltswerte (Maße, Lagen, Zeiten, Kamera, Text) stehen in neubau/szenen/modernisierung.json; dieses Skript baut nur die Form.
+# Text wird hier nicht gedruckt: Blender legt benannte leere Druckflächen an ("druck:titel", "druck:lesestelle"), der Browser zeichnet.
 A = basis.args()
 HOCH = "--hochkant" in sys.argv
 ANORDNUNG = "hochkant" if HOCH else "breit"
-F_END = 380
+SZ = szene.lade("modernisierung")
+FORM_HASH = szene.form_hash(SZ)
+GEG, Z, BL = SZ["gegenstaende"], SZ["zeiten"], SZ["bloecke"]
+F_END = SZ["bilder"]
 NEU = os.path.join(basis.NEUBAU)
-PROBEN = os.path.join(NEU, "proben", "modernisierung")
+PROBEN = os.path.join(NEU, "proben", "modernisierung", "blender")
 os.makedirs(PROBEN, exist_ok=True)
+lage = lambda g: GEG[g]["lage"][ANORDNUNG]
 
-SATZ1 = "Viele WordPress-Seiten laufen seit Jahren auf veralteten Themes, Plugins und PHP-Versionen."
-SATZ2 = "Ich bringe sie technisch und gestalterisch auf den heutigen Stand und achte darauf, dass Inhalte und Adressen erhalten bleiben."
-TITEL = "Modernisierung"
-
-sc = basis.buehne(F_END, bogen=(-11, 11, -13, 15))
+sc = basis.buehne(F_END, bogen=tuple(SZ["bogen"]))
 
 # ---------------------------------------------------------------- Maße
 # Röhrenmonitor (links): Keilgehäuse, Front y in [-T,0], Rückwand y in [D, D+T]
-CX, W, D, HF, HB = (0.0 if HOCH else -1.5), 2.4, 1.8, 2.1, 1.15
+_am = GEG["alter_monitor"]["form"]
+CX, W, D, HF, HB = lage("alter_monitor")["x"], _am["breite"], _am["tiefe"], _am["hoehe_vorn"], _am["hoehe_hinten"]
 X0, X1 = CX - W / 2, CX + W / 2
 S_DACH = (HB - HF) / D                       # Steigung der Dachebene (z = HF + s*y)
 zp = lambda y: HF + S_DACH * y
 # Bildschirm (Glas) auf der Front: Maße in Druckkoordinaten der Front (von oben links)
 FW = W + 2 * T                               # Breite der Front
-DW, DH = 1.7, 1.3                            # Anzeigefläche alt
-DX0, DY0 = (FW - DW) / 2, .22                # oben links der Anzeigefläche auf der Front
+DW, DH = _am["anzeige"]["breite"], _am["anzeige"]["hoehe"]   # Anzeigefläche alt
+DX0, DY0 = (FW - DW) / 2, _am["anzeige"]["oben"]             # oben links der Anzeigefläche auf der Front
 # Flachbildschirm (rechts): Fuß, Hals, Bildschirm 16:10
-XF = .3 if HOCH else 1.6
-NW, NH, NT = .34, .78, .03
-SW_, SH_, ST = 2.86, 1.89, .03               # Bildschirmplatte
-BZ, BZU = .07, .12                           # Rand oben/seitlich, Kinn unten
-NDW, NDH = SW_ - 2 * BZ, SH_ - BZ - BZU      # neue Anzeigefläche (2,72 x 1,70)
-Y_HALS = 5.75 if HOCH else .45               # Rückseite des Halses = Scharnier (hochkant: hinter dem flachgelegten Deckel)
-Z_SCHIRM = .55                               # Unterkante Bildschirmplatte
+_nm = GEG["neuer_monitor"]["form"]
+XF = lage("neuer_monitor")["x"]
+NW, NH, NT = _nm["hals"]
+SW_, SH_, ST = _nm["schirm"]                 # Bildschirmplatte
+BZ, BZU = _nm["rand_oben"], _nm["kinn"]      # Rand oben/seitlich, Kinn unten
+NDW, NDH = SW_ - 2 * BZ, SH_ - BZ - BZU      # neue Anzeigefläche
+Y_HALS = lage("neuer_monitor")["y_hals"]     # Rückseite des Halses = Scharnier
+Z_SCHIRM = _nm["z_schirm"]                   # Unterkante Bildschirmplatte
 # Blöcke: alte Lage (Druckkoordinaten der alten Anzeige), neue Lage auf der neuen Anzeige, Maßstab S
-S = 1.35
-ALT = {"kopf": (.06, .06, 1.58, .22), "bild": (.06, .33, .765, .55), "text": (.875, .33, .765, .55), "karten": (.06, .93, 1.58, .31)}
+S = BL["skalierung"]
+ALT = {k: tuple(v) for k, v in BL["alte_lage"].items()}
 def neu_lage():
     hs = [ALT["kopf"][3] * S, ALT["bild"][3] * S, ALT["karten"][3] * S]
     gap = (NDH - sum(hs)) / 4
@@ -77,7 +82,7 @@ def neu_lage():
     cw = ALT["bild"][2] * S
     return {"kopf": (mx, y1, bw, hs[0]), "text": (mx, y2, cw, hs[1]), "bild": (mx + bw - cw, y2, cw, hs[1]), "karten": (mx, y3, bw, hs[2])}
 NEUL = neu_lage()
-BT = .012                                    # Dicke der Blöcke
+BT = BL["dicke"]                             # Dicke der Blöcke
 
 # ---------------------------------------------------------------- Drucke
 INK = PAL["tinte"]
@@ -102,11 +107,8 @@ for i in range(3):
     front_cmds.append({"line": [FW - .78 + i * .1, chin_y - .06, FW - .78 + i * .1, chin_y + .06], "stroke": ink(.3), "lw": .008})
 front_cmds.append({"rect": [.3, chin_y - .035, .5, .07], "fill": "#c4c7cd", "stroke": ink(.3), "lw": .005, "r": .03})
 auftraege.append({"name": "crt_front", "w": FW, "h": HF, "px": PX, "bg": PAL["grau3"], "cmds": front_cmds})
-# Innenseite der Front: Lesestelle mit beiden Sätzen (Text und Fläche ein Stück)
+# Innenseite der Front: Lesestelle – hier leer, der Text kommt im Browser auf die Druckfläche "druck:lesestelle"
 EM = .145
-TEXT_RAND = .2
-innen_text = {"absaetze": [SATZ1, SATZ2], "x": TEXT_RAND, "y": .0, "w": FW - 2 * TEXT_RAND, "size": EM, "lh": 1.32, "gap": .9, "font": "grotesk", "col": INK}
-auftraege.append({"name": "crt_innen", "w": FW, "h": HF, "px": 520, "bg": PAL["flaeche"], "cmds": [innen_text]})
 # Deckel außen: Lüftungsschlitze
 L_DACH = (D + 2 * T) * math.sqrt(1 + S_DACH ** 2)
 vent = []
@@ -122,11 +124,9 @@ for k, (x, y, w, h) in NEUL.items():
     scr.append({"rect": [BZ + x, BZ + y, w, h], "stroke": ink(.25), "lw": .006, "dash": [.04, .03]})
 scr.append({"circle": [SW_ / 2, SH_ - BZU / 2, .022], "fill": ink(.5)})
 auftraege.append({"name": "flach_front", "w": SW_, "h": SH_, "px": PX, "bg": PAL["flaeche"], "cmds": scr})
-# Titelkarte
-TW, TH = 3.0, .62
-auftraege.append({"name": "titel", "w": TW, "h": TH, "px": 360, "bg": PAL["flaeche"],
-                  "cmds": [{"text": [TITEL], "x": 0, "y": .06, "w": TW, "size": .40, "lh": 1.2, "font": "serif", "col": INK, "align": "center"},
-                           {"line": [.25, TH - .07, TW - .25, TH - .07], "stroke": ink(.2), "lw": .006}]})
+# Titelkarte: Fläche und Maße hier, der Titel selbst kommt im Browser auf "druck:titel"
+_tk = GEG["titelkarte"]["form"]
+TW, TH = _tk["breite"], _tk["hoehe"]
 
 # Blöcke: Vorderseite alte Gestaltung (Rahmen mit Fase, graue Flächen, Gedränge), Rückseite neue (weiß, Haarlinien, Luft).
 # Beide Seiten auf einem Bild: links alt, rechts neu (Atlas), die UVs der Rückseite zeigen auf die rechte Hälfte.
@@ -190,22 +190,19 @@ for k, (x, y, w, h) in ALT.items():
         cmds.append(c)
     auftraege.append({"name": "block_" + k, "w": 2 * w + .02, "h": h, "px": BPX, "bg": "#ffffff", "cmds": cmds})
 
-# erster Durchlauf misst den Text, zweiter setzt ihn senkrecht mittig auf die Innenseite
 erg = {a["name"]: r for a, r in zip(auftraege, basis.druck(auftraege))}
-zl = erg["crt_innen"]["zeilen"]
-hoehe = (zl[-1]["y"] + zl[-1]["h"] + EM * .25) - (zl[0]["y"] - EM * .25)
-innen_text["y"] = (HF - hoehe) / 2 - (zl[0]["y"] - EM * .25)
-erg["crt_innen"] = basis.druck([a for a in auftraege if a["name"] == "crt_innen"])[0]
-ZEILEN = erg["crt_innen"]["zeilen"]
-print("TEXT Zeilen:", [z["text"] for z in ZEILEN])
+def platzhalter(name):
+    """Kleines einfarbiges Bild, damit der Exporter UV und Textur-Steckplatz der leeren Druckfläche anlegt."""
+    fl = SZ["druckflaechen"][name]
+    return basis.druck([{"name": "platzhalter_" + name, "w": 1, "h": 1, "px": 4, "bg": PAL[fl["grund"]] if fl["grund"] in PAL else fl["grund"], "cmds": []}])[0]["out"]
 
 # ---------------------------------------------------------------- Zeitachse
-F_SCHNITT, F_RASTER, F_GERUEST = (12, 40), (24, 48), (36, 66)
-AUF = {"front": (68, 92), "seiten": (76, 100), "rueck": (84, 108), "deckel": (92, 118), "flach": (96, 126)}
-AB = {"rueck": (262, 288), "deckel": (268, 294), "seiten": (276, 298), "front": (286, 312)}
-F_TEXT = (306, 322)
-F_SEITE = (120, 134)   # alte Seite erscheint auf dem Röhrenmonitor
-F_LESEN = (324, F_END)
+F_SCHNITT, F_RASTER, F_GERUEST = tuple(Z["schnitt"]), tuple(Z["raster"]), tuple(Z["geruest"])
+AUF = {k: tuple(v) for k, v in Z["aufklappen"].items()}
+AB = {k: tuple(v) for k, v in Z["umlegen"].items()}
+F_TEXT = tuple(SZ["druckflaechen"]["lesestelle"]["einblenden"])
+F_SEITE = tuple(Z["alte_seite"])   # alte Seite erscheint auf dem Röhrenmonitor
+F_LESEN = tuple(Z["lesen"])
 
 # ---------------------------------------------------------------- Materialien
 M = {
@@ -216,10 +213,10 @@ M = {
     "metall": material("Metall", PAL["metall"]),
     "flaeche": material("Flaeche", PAL["flaeche"]),
     "crt_front": material("CRT_Front", PAL["grau3"], bild=erg["crt_front"]["out"]),
-    "crt_innen": material("CRT_Innen", PAL["flaeche"], bild=erg["crt_innen"]["out"], rau=.9, einblenden=F_TEXT),
+    "crt_innen": material("CRT_Innen", PAL["flaeche"], rau=.9),
     "crt_deckel": material("CRT_Deckel", PAL["grau2"], bild=erg["crt_deckel"]["out"]),
     "flach_front": material("Flach_Front", PAL["flaeche"], bild=erg["flach_front"]["out"]),
-    "titel": material("Titel", PAL["flaeche"], bild=erg["titel"]["out"], rau=.9),
+    "titel": material("Titel", PAL["flaeche"], rau=.9),
 }
 
 # ---------------------------------------------------------------- Röhrenmonitor
@@ -264,8 +261,9 @@ sch_rechts = klappe("Sch_Rechts", (X1 + G, 0, BODEN_T + G), "y", -90, AUF["seite
 sch_front = klappe("Sch_Front", (0, -T - G, 0), "x", 90, AUF["front"], AB["front"], [front])
 
 # ---------------------------------------------------------------- Flachbildschirm: steht nach dem Hochklappen rechts neben dem Röhrenmonitor
-fuss = karton("Flach_Fuss", 1.3, .6, .03, mats={"alle": M["metall"], "rand": M["kante"]}, liegend=True)
-fuss.location = (XF - .65, Y_HALS - NT - G - .6, 0)
+FUSS_B, FUSS_T, FUSS_D = _nm["fuss"]
+fuss = karton("Flach_Fuss", FUSS_B, FUSS_T, FUSS_D, mats={"alle": M["metall"], "rand": M["kante"]}, liegend=True)
+fuss.location = (XF - FUSS_B / 2, Y_HALS - NT - G - FUSS_T, 0)
 hals = karton("Flach_Hals", NW, NH, NT, mats={"alle": M["metall"], "rand": M["kante"]})
 hals.location = (XF - NW / 2, Y_HALS - NT, 0)
 schirm = karton("Flach_Schirm", SW_, SH_, ST, mats={"vorn": M["flach_front"], "hinten": M["metall"], "rand": M["kante"]})
@@ -273,26 +271,45 @@ schirm.location = (XF - SW_ / 2, Y_HALS - NT - ST - G, Z_SCHIRM)
 sch_flach = klappe("Sch_Flach", (0, Y_HALS, 0), "x", -90, AUF["flach"], None, [hals, schirm])
 
 # ---------------------------------------------------------------- Titelkarte (Zelt): Vorderseite lehnt 18° zurück, Stütze dahinter
-TY = -5.2 if HOCH else -3.9
-titel = karton("Titel", TW, TH, .02, mats={"vorn": M["titel"], "rand": M["kante"], "hinten": M["flaeche"]}, uv_hinten=(True, False))
-titel.location = (CX - TW / 2, TY, 0); titel.rotation_euler = (math.radians(-18), 0, 0)
-stuetze = karton("Titel_Stuetze", TW, TH, .02, mats={"alle": M["flaeche"], "rand": M["kante"]})
+TX, TY = lage("titelkarte")["x"], lage("titelkarte")["y"]
+TD, TNEIG = _tk["dicke"], math.radians(_tk["neigung_grad"])
+titel = karton("Titel", TW, TH, TD, mats={"vorn": M["titel"], "rand": M["kante"], "hinten": M["flaeche"]}, uv_hinten=(True, False))
+titel.location = (TX - TW / 2, TY, 0); titel.rotation_euler = (-TNEIG, 0, 0)
+stuetze = karton("Titel_Stuetze", TW, TH, TD, mats={"alle": M["flaeche"], "rand": M["kante"]})
 bpy.context.view_layer.update()
-top_y = TY + TH * math.sin(math.radians(18)) + .02
-stuetze.location = (CX - TW / 2, top_y + TH * math.sin(math.radians(18)) + .005, 0); stuetze.rotation_euler = (math.radians(18), 0, 0)
+top_y = TY + TH * math.sin(TNEIG) + TD
+stuetze.location = (TX - TW / 2, top_y + TH * math.sin(TNEIG) + .005, 0); stuetze.rotation_euler = (TNEIG, 0, 0)
+
+# ---------------------------------------------------------------- Druckflächen (leer; der Browser druckt den Text darauf)
+def fl_mat(name):
+    fl = SZ["druckflaechen"][name]
+    grund = PAL.get(fl["grund"], fl["grund"])
+    return material("Druck_" + name, grund, bild=platzhalter(name), rau=.9, einblenden=tuple(fl["einblenden"]) if fl.get("einblenden") else None)
+druck_lesestelle = basis.druckflaeche("lesestelle", front, "hinten", FW, HF - G, fl_mat("lesestelle"), T)
+druck_titel = basis.druckflaeche("titel", titel, "vorn", TW, TH, fl_mat("titel"), TD)
+
+# ---------------------------------------------------------------- Gegenstände als Gruppen (Versatz und Drehung aus der Szenendatei)
+def gruppen_bau(name, objekte, pivot):
+    g = GEG[name]
+    e, M_ = basis.gruppe(name, objekte, pivot, g.get("versatz", [0, 0, 0]), g.get("drehung_z", 0))
+    return M_
+M_ALT = gruppen_bau("alter_monitor", [crt_boden, sch_rueck, sch_links, sch_rechts, sch_front], (CX, D / 2, 0))
+M_NEU = gruppen_bau("neuer_monitor", [fuss, sch_flach], (XF, Y_HALS, 0))
+M_TIT = gruppen_bau("titelkarte", [titel, stuetze], (TX, TY, 0))
+ROT_Z = lambda name: math.radians(GEG[name].get("drehung_z", 0))
 
 # ---------------------------------------------------------------- Blöcke
-F_BLOCK = {"kopf": (150, 182), "bild": (172, 204), "text": (194, 226), "karten": (216, 248)}
-HOVER, RISE = {"kopf": .75, "bild": .9, "text": .8, "karten": .7}, {"kopf": .55, "bild": .8, "text": .65, "karten": .45}
+F_BLOCK = {k: tuple(v) for k, v in BL["zeiten"].items()}
+HOVER, RISE = dict(BL["schweben"]), dict(BL["anheben"])
 if HOCH:
-    RISE["karten"] = 1.1   # breitester Block: höher über den Deckel (Kollisionsprüfung)
+    RISE.update(BL.get("anheben_hochkant", {}))   # breitester Block: höher über den Deckel (Kollisionsprüfung)
 bpy.context.view_layer.update()
 blocks = {}
 def welt_front_alt(x, y):  # Druckkoordinate auf der alten Anzeige -> Weltpunkt vor der Front (außen)
-    return Vector((X0 - T + DX0 + x, -T - G - .004 - BT / 2, HF - G - (DY0 + y)))
+    return M_ALT @ Vector((X0 - T + DX0 + x, -T - G - .004 - BT / 2, HF - G - (DY0 + y)))
 def welt_schirm(x, y):     # Druckkoordinate auf der neuen Anzeige -> Weltpunkt vor dem Schirm (stehend)
     sx = XF - SW_ / 2 + BZ + x
-    return Vector((sx, Y_HALS - NT - ST - G - .004 - BT * S / 2, Z_SCHIRM + SH_ - (BZ + y)))
+    return M_NEU @ Vector((sx, Y_HALS - NT - ST - G - .004 - BT * S / 2, Z_SCHIRM + SH_ - (BZ + y)))
 for k, (x, y, w, h) in ALT.items():
     mat = material("Block_" + k, "#ffffff", bild=erg["block_" + k]["out"], rau=.8)
     b = karton("Block_" + k, w, h, BT, mats={"vorn": mat, "hinten": mat, "rand": M["kante"]}, uv_hinten=(False, True), zentriert=True)
@@ -324,22 +341,28 @@ for k, (x, y, w, h) in ALT.items():
         s_ = 1 + (S - 1) * smm((t - .1) / .75)
         if f < f0:   # die alte Seite erscheint erst, wenn der Röhrenmonitor steht (Bildschirm schaltet sich ein)
             s_ = smm((f - F_SEITE[0]) / (F_SEITE[1] - F_SEITE[0]))
-        return {"loc": p, "rot": Euler((math.pi * kr, 0, 0), "XYZ"), "scale": Vector((s_, s_, s_))}
+        return {"loc": p, "rot": Euler((math.pi * kr, 0, ROT_Z("alter_monitor") + (ROT_Z("neuer_monitor") - ROT_Z("alter_monitor")) * e), "XYZ"), "scale": Vector((s_, s_, s_))}
     bewegung(b, fn)
+    b["neubau"] = json.dumps({"block": k, "zeit": [f0, f1], "start": "alter_monitor", "ende": "neuer_monitor"})
     blocks[k] = b
 
 # ---------------------------------------------------------------- Faden und Punkt (flach auf dem Papier, rechts um alle Teile herum)
-FADEN_STUETZ = ([(.6, -12), (.8, -7.5), (1.9, -4.4), (2.45, -1.0), (2.5, 4.0), (2.35, 8.8), (1.3, 11.6), (.8, 14)] if HOCH else
-                [(.9, -10), (.9, -7.0), (1.5, -5.0), (3.4, -3.0), (4.35, -.6), (4.45, 2.6), (4.0, 5.6), (2.6, 7.6), (1.2, 9.3), (.9, 11)])
+FADEN_STUETZ = [tuple(p) for p in SZ["faden"]["stuetzpunkte"][ANORDNUNG]]
 bahn, laenge = basis.faden_bahn(FADEN_STUETZ)
-fd = basis.faden("Faden", bahn, breite=.05)
-pruef_faden = basis.faden_pruefkoerper(bahn, .05 + .08)
+fd = basis.faden("Faden", bahn, breite=SZ["faden"]["breite"])
+pruef_faden = basis.faden_pruefkoerper(bahn, SZ["faden"]["breite"] + .08)
+FP = SZ["faden"]["punkt"]
 def s_punkt(f):
     # gleichmäßig je Scrollweg, an der Lesestelle weich langsamer, kein Halt
-    if f <= 324:
-        return .06 + .56 * f / 324
-    k = (f - 324) / (F_END - 324)
-    return .62 + .0973 * (k - .35 * k * k)
+    if f <= F_LESEN[0]:
+        return FP["start"] + (FP["bis_lesen"] - FP["start"]) * f / F_LESEN[0]
+    k = (f - F_LESEN[0]) / (F_END - F_LESEN[0])
+    return FP["bis_lesen"] + FP["lesen_zuwachs"] * (k - FP["bremse"] * k * k)
+def faden_zustand(f):
+    """Lage des Punkts im Bild f und Laufrichtung des Fadens dort (Grad im Uhrzeigersinn von oben: 0 = nach +y, 90 = nach +x)."""
+    n = len(bahn) - 1; sv = min(1, max(0, s_punkt(f))) * n
+    i = min(n - 1, int(sv)); p = bahn[i].lerp(bahn[i + 1], sv - i); d = bahn[i + 1] - bahn[i]
+    return {"punkt": [round(p.x, 3), round(p.y, 3)], "richtung_grad": round(math.degrees(math.atan2(d.x, d.y)), 1)}
 pkt = basis.punkt("Punkt", bahn, laenge, s_punkt)
 
 # ---------------------------------------------------------------- Bewegung backen
@@ -354,63 +377,70 @@ ab_bogen = {"CRT_Front": AUF["front"][0], "CRT_Links": AUF["seiten"][0], "CRT_Re
 steht = {"CRT_Front": AUF["front"][1], "CRT_Links": AUF["seiten"][1], "CRT_Rechts": AUF["seiten"][1], "CRT_Rueck": AUF["rueck"][1],
          "CRT_Deckel": AUF["deckel"][1], "Flach_Hals": AUF["flach"][1], "Flach_Schirm": AUF["flach"][1], "CRT_Boden": AUF["front"][1], "Flach_Fuss": AUF["flach"][1]}
 bau.schnitt(klapp_teile, 0, *F_SCHNITT, ab_bogen, nachbarn=[crt_boden, fuss])
-bau.raster(-6.5, 6.5, -2.5, 6.5, *F_RASTER, aus=124)
-n_ger = bau.geruest([crt_boden, front, links, rechts, rueck, deckel, fuss, hals, schirm], *F_GERUEST, steht, frame_bauform=140)
+bau.raster(-6.5, 6.5, -2.5, 6.5, *F_RASTER, aus=Z["raster_aus"])
+n_ger = bau.geruest([crt_boden, front, links, rechts, rueck, deckel, fuss, hals, schirm], *F_GERUEST, steht, frame_bauform=Z["bauform"])
 bau.spur(klapp_teile, {k: v - 10 for k, v in ab_bogen.items()})
 bau_obs = bau.bauen()
 print(f"BAU: {sum(len(v) for v in bau.striche.values())} Striche, Gerüstkanten {n_ger}, Objekte {[o.name for o in bau_obs]}")
 
 # ---------------------------------------------------------------- Kameras: Einstellungen rahmen ihren Inhalt
-VF_D, ASP_D = 30, 16 / 9
-VF_H, ASP_H = 50, 9 / 19.5
+KC = SZ["kamera"][ANORDNUNG]
+VF = KC["vfov"]; ASP = KC["aspekt"][0] / KC["aspekt"][1]; BILD = tuple(KC["proben_aufloesung"])
+KNAME = "Kamera_Handy" if HOCH else "Kamera_Desktop"
 geraete_stehend = [crt_boden, front, rueck, links, rechts, deckel, fuss, hals, schirm]
 netz = [crt_boden, front, rueck, links, rechts, deckel]
-def text_punkte():
-    # Ecken des Textblocks auf der Innenseite der Front im liegenden Zustand (Bild 300)
-    sc.frame_set(F_END); bpy.context.view_layer.update()
-    mw = front.matrix_world
-    x0 = min(z["x"] for z in ZEILEN); x1 = max(z["x"] + z["w"] for z in ZEILEN)
-    y0 = ZEILEN[0]["y"] - EM * .3; y1 = ZEILEN[-1]["y"] + ZEILEN[-1]["h"] + EM * .3
-    pts = [mw @ Vector((x, T, y)) for x in (x0, x1) for y in (y0, y1)]
-    sc.frame_set(0)
-    return pts
+RAHMEN_TEXT = SZ["druckflaechen"]["lesestelle"]["rahmen"]   # Textblock auf der Innenseite der Front (Druckkoordinaten), nur zum Rahmen der Kamera
 def flaeche_zu_welt(x, y):
     return front.matrix_world @ Vector((x, T, y))
+def text_punkte():
+    # Ecken des Textblocks auf der Innenseite der Front im liegenden Zustand
+    sc.frame_set(F_END); bpy.context.view_layer.update()
+    x0, y0, x1, y1 = RAHMEN_TEXT
+    pts = [flaeche_zu_welt(x, y) for x in (x0, x1) for y in (y0, y1)]
+    sc.frame_set(0)
+    return pts
+def front_mitte_x():
+    sc.frame_set(F_END); bpy.context.view_layer.update()
+    x = (front.matrix_world @ Vector((FW / 2, 0, 0))).x
+    sc.frame_set(0)
+    return x
 H = basis.huellpunkte
 alles_flach = H([titel, stuetze] + klapp_teile + [crt_boden, fuss], [0])
-bauform = H(geraete_stehend, [140]) + H([front, links, rechts, rueck, deckel, hals, schirm], list(range(64, 130, 3)))
-X_TEXT = CX   # Lesestelle frontal: Kamera genau über der Textmitte (keine Scherung der Zeilen)
-E_D = [
-    {"name": "D1 Eingang und Bau", "f0": 0, "f1": 100, "neigung": 26, "gier": 0, "punkte": alles_flach + bauform, "rand": .05, "lage_v": .5},
-    {"name": "D2 Handlung", "f0": 140, "f1": 252, "neigung": 27, "gier": 0,
-     "punkte": H(geraete_stehend + list(blocks.values()), list(range(140, 253, 4))), "rand": .06, "lage_v": .5},
-    {"name": "D3 Lesestelle", "f0": F_LESEN[0], "f1": F_END, "neigung": 56, "gier": 0, "x_fest": X_TEXT,
-     "punkte": H([front, schirm, fuss], [F_END]) + text_punkte(), "rand": .06, "lage_v": .5},
-]
-E_H = [
-    {"name": "H1 Eingang und Bau", "f0": 0, "f1": 100, "neigung": 42, "gier": 0,
-     "punkte": alles_flach + bauform, "rand": .05, "lage_v": .5},
-    {"name": "H2 Handlung", "f0": 140, "f1": 252, "neigung": 38, "gier": 0,
-     "punkte": H(geraete_stehend + list(blocks.values()), list(range(140, 253, 4))), "rand": .05, "lage_v": .5},
-    {"name": "H3 Lesestelle", "f0": F_LESEN[0], "f1": F_END, "neigung": 58, "gier": 0, "x_fest": X_TEXT,
-     "punkte": text_punkte(), "rand": .1, "lage_v": .5},
-]
-if HOCH:
-    E, VF, ASP, BILD, KNAME = E_H, VF_H, ASP_H, (390, 845), "Kamera_Handy"
-else:
-    E, VF, ASP, BILD, KNAME = E_D, VF_D, ASP_D, (1440, 810), "Kamera_Desktop"
+bauform = H(geraete_stehend, [Z["bauform"]]) + H([front, links, rechts, rueck, deckel, hals, schirm], list(range(*Z["aufbau_bilder"])))
+def rahmt(r):
+    was = r["was"]
+    if was == "alles_flach": return alles_flach
+    if was == "bauform": return bauform
+    if was == "geraete_und_bloecke":
+        a_, b_, st = r["bilder"]; return H(geraete_stehend + list(blocks.values()), list(range(a_, b_ + 1, st)))
+    if was == "front_schirm_fuss": return H([front, schirm, fuss], [r.get("bild", F_END)])
+    if was == "lesetext": return text_punkte()
+    raise ValueError("unbekannt: rahmt " + was)
+E = []
+for e in KC["einstellungen"]:
+    pts = []
+    for r in e["rahmt"]:
+        pts += rahmt(r)
+    E.append({"name": e["name"], "f0": e["von"], "f1": e["bis"], "neigung": e["neigung"], "gier": e["gier"], "punkte": pts, "rand": e["rand"],
+              "lage_v": e.get("lage_v", .5), "x_fest": front_mitte_x() if e.get("x_fest") == "front_mitte" else None})
 for e in E:
-    e["ort"], e["verschiebung"] = basis.rahmen(e["punkte"], e["neigung"], e["gier"], VF, ASP, rand=e["rand"], lage_v=e.get("lage_v", .5), x_fest=e.get("x_fest"))
+    e["ort"], e["verschiebung"] = basis.rahmen(e["punkte"], e["neigung"], e["gier"], VF, ASP, rand=e["rand"], lage_v=e["lage_v"], x_fest=e["x_fest"])
 cam = basis.kamera(KNAME, VF)
 basis._spuren.clear()
 basis.kamerafahrt(cam, E, F_END, ASP)
 basis.backen(F_END)
-if True:
-    for e in E:
-        print(f"EINSTELLUNG {e['name']}: Ort {tuple(round(v, 2) for v in e['ort'])}, Neigung {e['neigung']}, Verschiebung {e['verschiebung']:.3f}")
+for e in E:
+    print(f"EINSTELLUNG {e['name']}: Ort {tuple(round(v, 2) for v in e['ort'])}, Neigung {e['neigung']}, Verschiebung {e['verschiebung']:.3f}")
 
-# ---------------------------------------------------------------- Prüfung
-bericht = {"einstellungen": {}, "kollisionen": {}, "text": {}}
+# ---------------------------------------------------------------- Eingang und Ausgang der Szene (Vorbereitung für Übergänge)
+def pose(e, f):
+    return {"bild": f, "faden": faden_zustand(f),
+            "kamera": {"ort": [round(v, 3) for v in e["ort"]], "neigung": e["neigung"], "gier": e["gier"], "vfov": VF, "verschiebung": round(e["verschiebung"], 4)}}
+UEBERGANG = {"eingang": pose(E[0], 0), "ausgang": pose(E[-1], F_END)}
+print("EINGANG", json.dumps(UEBERGANG["eingang"]), "AUSGANG", json.dumps(UEBERGANG["ausgang"]))
+
+# ---------------------------------------------------------------- Prüfung (Form; der Text wird im Browser geprüft: neubau/werkzeug/browser.mjs pruefen)
+bericht = {"form_hash": FORM_HASH, "einstellungen": {}, "kollisionen": {}, "hinweise": {}, "uebergang": UEBERGANG}
 teile = [crt_boden, front, rueck, links, rechts, deckel, fuss, hals, schirm, titel, stuetze, pkt] + list(blocks.values())
 # zulässig: Teile, die sich an ihrem gemeinsamen Falz berühren (der Karton biegt dort)
 erlaubt = [("Titel", "Titel_Stuetze"), ("CRT_Rueck", "CRT_Deckel")]
@@ -426,42 +456,38 @@ for e in E:
     for f in range(e["f0"], e["f1"] + 1, 4):
         aus += len(basis.im_bild(cam, ASP, e["punkte"], f, rand=.005))
     bericht["einstellungen"][e["name"]] = {"punkte_ausserhalb": aus}
-# Durchgehend: Röhrenmonitor-Netz beim Umlegen und Hochklappen ganz im Bild
-for asp, nm in ((ASP, ANORDNUNG),):
-    aus_um = sum(len(basis.im_bild(cam, asp, basis.huellpunkte(netz, [f]), f, rand=0)) for f in range(252, F_LESEN[0] + 1, 4))
-    aus_auf = sum(len(basis.im_bild(cam, asp, basis.huellpunkte([front, links, rueck, deckel], [f]), f, rand=0)) for f in range(60, 141, 4))
-    bericht["einstellungen"][f"{nm}: Netz beim Umlegen 252–324 im Bild"] = {"punkte_ausserhalb": aus_um}
-    bericht["einstellungen"][f"{nm}: Röhrenmonitor beim Hochklappen 60–140 im Bild"] = {"punkte_ausserhalb": aus_auf}
-# Text an der Lesestelle
-for asp, hpx, name in ((ASP, BILD[1], f"{ANORDNUNG}_{BILD[0]}x{BILD[1]}"),):
-    for f in (F_LESEN[0], 352, F_END):
-        r = basis.textpruefung(cam, asp, hpx, f, front, ZEILEN, flaeche_zu_welt, None)
-        bericht["text"][f"{name} Bild {f}"] = {"min_em_px": r["min_em_px"], "verdeckt": r["verdeckt"], "ausserhalb": r["ausserhalb"]}
+# Durchgehend (Hinweise, ohne Sollwert): Röhrenmonitor-Netz beim Umlegen und Hochklappen im Bild
+aus_um = sum(len(basis.im_bild(cam, ASP, basis.huellpunkte(netz, [f]), f, rand=0)) for f in range(252, F_LESEN[0] + 1, 4))
+aus_auf = sum(len(basis.im_bild(cam, ASP, basis.huellpunkte([front, links, rueck, deckel], [f]), f, rand=0)) for f in range(60, 141, 4))
+bericht["hinweise"][f"{ANORDNUNG}: Netz beim Umlegen 252–324 im Bild"] = {"punkte_ausserhalb": aus_um}
+bericht["hinweise"][f"{ANORDNUNG}: Röhrenmonitor beim Hochklappen 60–140 im Bild"] = {"punkte_ausserhalb": aus_auf}
 print("PRUEFUNG", json.dumps(bericht, ensure_ascii=False, indent=1))
 os.makedirs(os.path.join(NEU, "tmp"), exist_ok=True)
 json.dump(bericht, open(os.path.join(NEU, "tmp", f"modernisierung_{ANORDNUNG}_pruefung.json"), "w", encoding="utf8"), ensure_ascii=False, indent=1)
 
-# ---------------------------------------------------------------- Probebilder
+# ---------------------------------------------------------------- Probebilder (Form und Bewegung; Text zeigt nur der Browser)
 pruef_faden.hide_render = True
 if A["proben"]:
-    frames = A["frames"] or [0, 30, 52, 66, 84, 104, 140, 166, 200, 236, 280, 300, 352]
+    frames = A["frames"] or [52, 166, 236, 352]
     for f in frames:
-        if HOCH:
-            t1 = basis.probe(cam, f, os.path.join(PROBEN, f"handy_{f:03d}.png"), 390, 845, prozent=200)
-        else:
-            t1 = basis.probe(cam, f, os.path.join(PROBEN, f"desktop_{f:03d}.png"), 1440, 810)
+        t1 = basis.probe(cam, f, os.path.join(PROBEN, f"{ANORDNUNG}_{f:03d}.png"), BILD[0], BILD[1], prozent=200 if HOCH else 100)
         print(f"PROBE {f}: {t1:.1f}s")
 
 # ---------------------------------------------------------------- Export
 if A["export"]:
     extras = {
-        "szene": "modernisierung", "frames": F_END, "fps": basis.FPS,
+        "szene": "modernisierung", "frames": F_END, "fps": basis.FPS, "form_hash": FORM_HASH,
         "anordnung": ANORDNUNG, "kamera": {"name": KNAME, "vfov": VF, "aspekt": ASP},
         "licht": basis.LICHT, "pal": PAL,
         "einstellungen": [{k: e[k] for k in ("name", "f0", "f1")} for e in E],
         "lesestellen": [list(F_LESEN)],
         "verschiebung": json.loads(cam["neubau_verschiebung"]),
-        "text": [SATZ1, SATZ2], "titel": TITEL,
+        "gruppen": {n: {"pivot": json.loads(o["neubau"])["pivot"], "versatz": GEG[n].get("versatz", [0, 0, 0]), "drehung_z": GEG[n].get("drehung_z", 0)}
+                    for n, o in (("alter_monitor", bpy.data.objects["Gruppe_alter_monitor"]), ("neuer_monitor", bpy.data.objects["Gruppe_neuer_monitor"]),
+                                 ("titelkarte", bpy.data.objects["Gruppe_titelkarte"]))},
+        "bloecke": {k: json.loads(b["neubau"]) for k, b in blocks.items()},
+        "druckflaechen": {"lesestelle": {"w": FW, "h": HF - G}, "titel": {"w": TW, "h": TH}},
+        "uebergang": UEBERGANG,
     }
     out = os.path.join(NEU, "seite", "assets", f"modernisierung-{ANORDNUNG}.glb")
     n = basis.export_glb(out, extras, draco="--draco" in sys.argv)

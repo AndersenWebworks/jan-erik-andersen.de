@@ -162,7 +162,7 @@ _druck_n = [0]
 
 def druck(auftraege):
     """Rastert Druckbilder mit druck.py (System-Python mit PIL). Gibt je Auftrag {out, px, zeilen} zurück."""
-    d = os.path.join(NEUBAU, "tmp", "druck"); os.makedirs(d, exist_ok=True)
+    d = os.environ.get("NEUBAU_DRUCK") or os.path.join(NEUBAU, "tmp", "druck"); os.makedirs(d, exist_ok=True)
     for a in auftraege:
         a.setdefault("out", os.path.join(d, a["name"] + ".png"))
     radial = [a for a in auftraege if a.get("radial")]
@@ -253,6 +253,52 @@ def karton(name, w, h, t=KARTON, mats=None, uv_hinten=(True, False), liegend=Fal
         me.transform(Matrix.Rotation(-math.pi / 2, 4, "X") @ Matrix.Translation((0, -t, 0)))
     me.update()
     return ob
+
+
+# ---------- Druckflächen: benannte, leere Flächen für Text, der erst im Browser gedruckt wird ----------
+def druckflaeche(name, traeger, seite, w, h, mat, dicke, abstand=.001):
+    """Leere Druckfläche ("druck:<name>") dicht über einer Seite des Trägers (Kind des Trägers, bewegt sich mit ihm).
+    seite "hinten": Rückseite des Kartons bei y = dicke (Druckkoordinaten x -> x, y -> z, von unten gezählt wie die Rückseite der
+    Front); seite "vorn": Vorderseite bei y = 0 (Druckkoordinaten y von oben, also z = h - y). w, h: Maße in Einheiten, = Maße des
+    Druckbilds im Browser. Die UV füllt die Fläche (u nach rechts, v nach oben, Blender-Konvention). Der Abspieler liest Name, w und h aus
+    den Extras (neubau.druck, w, h) und legt das gezeichnete Bild als Textur auf."""
+    me = bpy.data.meshes.new("druck:" + name)
+    ob = bpy.data.objects.new("druck:" + name, me); bpy.context.scene.collection.objects.link(ob)
+    if seite == "hinten":
+        pt = lambda px, py: (px, dicke + abstand, py)
+        gewollt = 1
+    else:
+        pt = lambda px, py: (px, -abstand, h - py)
+        gewollt = -1
+    ecken = [(0, 0), (w, 0), (w, h), (0, h)]
+    me.from_pydata([pt(*e) for e in ecken], [], [[0, 1, 2, 3]])
+    me.update()
+    if me.polygons[0].normal.y * gewollt < 0:
+        me.polygons[0].flip()
+    uv = me.uv_layers.new()
+    for li in me.polygons[0].loop_indices:
+        e = ecken[me.loops[li].vertex_index]
+        uv.data[li].uv = (e[0] / w, 1 - e[1] / h)
+    me.materials.append(mat)
+    ob.parent = traeger
+    ob.matrix_parent_inverse = Matrix.Identity(4)
+    ob["neubau"] = json.dumps({"druck": name, "w": round(w, 5), "h": round(h, 5), "traeger": traeger.name, "seite": seite})
+    ob.visible_shadow = False
+    return ob
+
+
+def gruppe(name, objekte, pivot=(0, 0, 0), versatz=(0, 0, 0), drehung_z=0):
+    """Wurzelknoten für einen Gegenstand aus mehreren Teilen: Versatz und Drehung um die z-Achse (Grad, um pivot) aus der
+    Szenendatei. Der Abspieler setzt dieselbe Matrix aus der Szenendatei neu, ohne dass Blender läuft. Gibt (Knoten, Matrix) zurück."""
+    e = leer("Gruppe_" + name)
+    for o in objekte:
+        anhaengen(o, e)
+    pv = Vector(pivot)
+    M = Matrix.Translation(Vector(versatz)) @ Matrix.Translation(pv) @ Matrix.Rotation(math.radians(drehung_z), 4, "Z") @ Matrix.Translation(-pv)
+    e.matrix_basis = M
+    e["neubau"] = json.dumps({"gruppe": name, "pivot": [round(v, 5) for v in pivot], "versatz": list(versatz), "drehung_z": drehung_z})
+    bpy.context.view_layer.update()
+    return e, M
 
 
 def prisma(name, umriss, achse, dicke, mat, ursprung=(0, 0, 0)):
