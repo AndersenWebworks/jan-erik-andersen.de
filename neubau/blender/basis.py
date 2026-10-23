@@ -22,8 +22,8 @@ PAL = {
     "metall": "#a0abbd",
     "kante": "#7c879e",       # Schnittkante des Kartons (Dicke), zeichnet die Kontur mit der Fläche
     "boden": "#c2d1e4",       # Tisch unter dem Bogen: deutlich dunkler und kühler als der Bogen, damit der Bogen als Fläche steht
-    "dunst": "#d4e6fa",       # Horizont und Boden in der Ferne: helles Himmelblau (nach dem Tonemapping noch blau)
-    "himmel": "#6fa9e6",      # Zenit des Verlaufs über dem Horizont (nur ein Farbverlauf)
+    "dunst": "#e8f0fa",       # Horizont und Boden in der Ferne: sehr heller kühler Dunst, kaum von Papier zu unterscheiden (Mirror's Edge)
+    "himmel": "#dfebf8",      # Zenit des Verlaufs über dem Horizont: nur ein Hauch Himmelblau (nur ein Farbverlauf)
     "schatten": "#bccbe0",    # Schattenfarbe (bläulich)
     "tinte": "#303033",       # Schrift dunkel und kontrastreich
     "rot": "#d40235",         # einzige kräftige Farbe: Faden, Punkt, wenige Akzente

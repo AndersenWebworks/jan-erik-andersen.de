@@ -1751,6 +1751,38 @@ export default {
      "z_fest": 0.06
     },
     {
+     "name": "D1b Bau nah",
+     "bild": 165,
+     "von": 162,
+     "bis": 168,
+     "neigung": 46,
+     "gier": 0,
+     "rand": 0.09,
+     "lage_v": 0.5,
+     "rahmt": [
+      {
+       "was": "buehne",
+       "bilder": [
+        150,
+        150,
+        1
+       ]
+      },
+      {
+       "was": "punkt",
+       "bild": 160
+      },
+      {
+       "was": "punkt",
+       "bild": 165
+      },
+      {
+       "was": "punkt",
+       "bild": 170
+      }
+     ]
+    },
+    {
      "name": "D2 Bau und Schreibtisch",
      "bild": 328,
      "von": 325,
@@ -1798,7 +1830,7 @@ export default {
      "bis": 559,
      "neigung": 5,
      "gier": 0,
-     "rand": 0.035,
+     "rand": 0.06,
      "lage_v": 0.5,
      "rahmt": [
       {
@@ -1831,12 +1863,16 @@ export default {
      "bis": 670,
      "neigung": 14,
      "gier": 0,
-     "rand": 0.3,
+     "rand": 0.2,
      "lage_v": 0.5,
      "rahmt": [
       {
        "was": "rechner_welt",
        "bild": 670
+      },
+      {
+       "was": "austritt",
+       "laenge": 1.2
       }
      ]
     }

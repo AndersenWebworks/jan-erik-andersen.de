@@ -362,6 +362,7 @@ export async function spieleFolge(buehne, folge, opt = {}) {
     for (let i = 0; i < pos.count; i++) { const y = pos.getY(i) / 200, t = smm(Math.max(0, y) / ((abschnitte[0].meta.licht || {}).himmel_steil || 1.0)); cc.copy(c0).lerp(c1, t); col.set([cc.r, cc.g, cc.b], i * 3); }
     hg.setAttribute("color", new THREE.BufferAttribute(col, 3));
     himmel = new THREE.Mesh(hg, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide, depthWrite: false, fog: false }));
+    himmel.material.toneMapped = false;   // Dunst bleibt so hell wie angegeben und trifft den Bogen am Horizont ohne Kante
     himmel.renderOrder = -10; himmel.frustumCulled = false;
     welt.add(himmel);
     welt.background = new THREE.Color(pal.dunst || "#f7fbff");

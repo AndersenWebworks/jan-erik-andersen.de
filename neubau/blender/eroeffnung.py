@@ -456,6 +456,10 @@ def rahmt(r):
             return [P[0] + (P[1] - P[0]) * u + (P[3] - P[0]) * v for v in (a_, b_) for u in (0, 1)]
         return P
     if was == "rechner_welt": return H(objs_tower + [pkt], [r["bild"]])
+    if was == "punkt": return H([pkt], [r["bild"]])
+    if was == "austritt":   # Fadenpunkt des Ausgangs plus ein Stück weiter in Fadenrichtung: die Kamera zeigt, wohin der Faden die Szene verlässt
+        a_ = SZ["ausgang"][ANORDNUNG]["faden"]; w_ = math.radians(a_["richtung_grad"]); l_ = r.get("laenge", 5)
+        return [Vector((a_["punkt"][0] + math.sin(w_) * l_, a_["punkt"][1] + math.cos(w_) * l_, 0.05))]
     raise ValueError("unbekannt: rahmt " + was)
 E = []
 for e in KC["einstellungen"]:
