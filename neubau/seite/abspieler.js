@@ -90,7 +90,8 @@ async function bilderLaden(sz, art, ordner) {
   const urls = new Set();
   for (const fl of Object.values(sz.druckflaechen || {})) for (const roh of fl.elemente || []) { const el = aufloesen(roh, art); if (el.typ === "bild" && !(el.anordnung && el.anordnung !== art)) urls.add(el.quelle); }
   await Promise.all([...urls].filter(u => !BILDER.has(u)).map(u => new Promise(ok => {
-    const im = new Image(); im.onload = () => { BILDER.set(u, im); ok(); }; im.onerror = () => ok(); im.src = new URL(u, ordner).href;
+    // crossOrigin: in der abgeschotteten Webchat-Vorschau ist die Seite fremder Herkunft; ohne CORS-Bild wäre die Druckfläche „verschmutzt“ und WebGL verweigert die Textur
+    const im = new Image(); im.crossOrigin = "anonymous"; im.onload = () => { BILDER.set(u, im); ok(); }; im.onerror = () => ok(); im.src = new URL(u, ordner).href;
   })));
 }
 
