@@ -15,8 +15,9 @@ python neubau/bauen.py seite                       # ganze Seite: alle Szenen au
 python neubau/bauen.py seite --nur-neu             # nur, was sich geändert hat (Szenendatei bzw. Tore)
 python neubau/bauen.py modernisierung --nur-text   # ohne Blender: Szenendatei -> seite/assets, HTML-Text, Browserprüfung
 python neubau/bauen.py pruefen modernisierung      # nur Browserprüfung
+python neubau/bauen.py selbsttest eroeffnung        # Selbsttest der Bildprüfungen (je Prüfung ein provozierter Fehler muss erkannt werden)
 ```
-Optionen: `--ohne-proben`, `--bilder` (Browser-Bilder p=0.15/0.4/0.7/0.95 nach `proben/<szene>/browser/`), `--trotzdem` (`--nur-text` trotz geänderter Form). Am Ende steht eine kurze Zusammenfassung; Exitcode 0 = ok, 2 = Prüfung fehlgeschlagen, 3 = Blender nötig.
+Optionen: `--ohne-bildpruefung` (Anschnitt/Verdeckung/Bildschirm/Füllgrad/Platzierung auslassen), `--ohne-proben`, `--bilder` (Browser-Bilder p=0.15/0.4/0.7/0.95 nach `proben/<szene>/browser/`), `--trotzdem` (`--nur-text` trotz geänderter Form). Am Ende steht eine kurze Zusammenfassung; Exitcode 0 = ok, 2 = Prüfung fehlgeschlagen, 3 = Blender nötig.
 Einzelwerkzeug: `node neubau/werkzeug/browser.mjs bilder|pruefen ...` (playwright-core aus einem vorhandenen `node_modules`, Edge/Chrome; kurzer lokaler Server nur für die Dauer des Laufs). Ankerlink der Seite: `index.html#p=0.4` setzt den Fortschritt.
 Blender-Probebilder liegen in `proben/<szene>/blender/` (nur Form und Bewegung, ohne Text), Browserbilder in `proben/<szene>/browser/`.
 
@@ -34,7 +35,7 @@ Blender-Probebilder liegen in `proben/<szene>/blender/` (nur Form und Bewegung, 
 | `kamera.breit/hochkant` | `vfov`, `aspekt`, Stützposen (`bild` = Durchgangsbild, `von`/`bis` = Fenster, in dem der Inhalt im Bild sein muss, `neigung`, `gier`, `rand`, `rahmt`, optional `x_fest`, `z_fest`, `mittel`/`anflug`/`folgt` für Posen, die aus anderen abgeleitet werden) |
 | `eingang`, `ausgang` | je Ausrichtung: Fadenpunkt `punkt` [x,y], `richtung_grad` (0 = nach +y, 90 = nach +x), `kamera_tempo` (Tempo der Kamera am Anschluss in Einheiten je Bild, Richtung = Fadenrichtung) und Kamera-Pose (`ort`, `neigung`, `gier`, `vfov`, `verschiebung`) |
 | `skizze` | Haarlinien der Seite (`rect`, `line`, `circ`, Einheiten der Anzeige von oben links), die sich vor dem Einschalten auf dem Gerät zeichnen |
-| `pruefung` | `min_em_px` (16) |
+| `pruefung` | `min_em_px` (16), `tempo_min`, `bild` (Bildprüfungen: `teile`, `wichtig`, `sichtbar`, `bildschirme`, `regeln`; siehe `werkzeug/bildpruefung/README.md`) |
 
 ## Was ohne Blender geht (`--nur-text`)
 
@@ -88,3 +89,7 @@ Ein Übergang ist ein eigenes glb im Bezugssystem der ersten Szene: `uebergang-<
 - Textprüfung: `window.__neubau.pruefeText("<szene>:<fläche>", bild)` (siehe oben); die Ortszeile, der Kernsatz und die drei Sätze der Eröffnung laufen wie alle Sätze über Druckflächen (Mockup auf Monitor bzw. Smartphone). Der Name ist die Ausnahme: Papierlettern (Newsreader-Marke aus `schriften/NewsreaderMarke*.ttf`, erzeugt mit `werkzeug/schriften.py`) als Geometrie auf dem Bogen, weil ein Druck bei flacher Kamera einen Träger (Folie) bräuchte.
 - Bausteine in `basis.py`: `bahn_g2`, `schiene`, `faltpanel`, `gefaess`, `zylinder`, `lettern`, `huelle_xy`, `druckflaeche_oben`, `kamerafahrt` (`Kurve`), `Konstruktion.gestrichelt/schraffur/flaeche`; Szenen: `blender/eroeffnung.py`, `blender/modernisierung.py`, `blender/uebergang.py`.
 - Farbe: Palette in `basis.PAL` (Bogen `#f4f7fc`, Boden `#c2d1e4`, Dunst `#d4e6fa`, Himmel `#6fa9e6`, Verlauf über `HIMMEL_STEIL`), im glb unter `pal` und `licht`; der Abspieler liest sie von dort.
+
+## Bildprüfungen (Anschnitt, Verdeckung, Bildschirm, Füllgrad, Platzierung)
+
+Messbar statt Augenmaß; `werkzeug/bildpruefung/` (Messkern im Browser, Bewertung in Python, Grenzwerte als benannte Konstanten in `bewertung.py`). Die Szenendatei deklariert in `pruefung.bild`, was wichtig ist, welche Titel/Flächen unverdeckt sein müssen, welche Bildschirme lesbar stehen müssen und wo Teile liegen; geprüft wird für breit und hochkant an den Einstellungen bzw. Lesestellen. Läuft im Browserlauf der Textprüfung mit (+0,1 bis 0,5 s), braucht keinen Blender-Bau (`pruefung` gehört zum Browser-Teil) und setzt bei Fehlern den Exitcode 2. Einzelheiten, Grenzwerte, Deklarationsformat und Grenzen: `werkzeug/bildpruefung/README.md`.

@@ -13,6 +13,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "./vendor/addons/loaders/GLTFLoader.js";
 
+const sichtbarKette = o => { for (let p = o; p; p = p.parent) if (!p.visible) return false; return true; };   // sichtbar heißt: der Knoten und alle Eltern (Startbild blendet Gruppen aus)
 const lies = s => { try { return typeof s === "string" ? JSON.parse(s) : s || null; } catch { return null; } };
 const smm = x => { x = Math.min(1, Math.max(0, x)); return x * x * x * (x * (x * 6 - 15) + 10); };
 const farbe = (pal, c) => (pal && pal[c]) || c;
@@ -26,13 +27,16 @@ const SCHRIFTEN = {
   "serif": { familie: "Newsreader", datei: "Newsreader.ttf", stil: "normal" },
   "serif-kursiv": { familie: "Newsreader", datei: "NewsreaderItalic.ttf", stil: "italic" },
   "serif-titel": { familie: "Newsreader Titel", datei: "NewsreaderTitel.ttf", stil: "normal" },
+  // Schriften der heutigen Seite (Mockup auf Monitor und Smartphone): Inter (variabel, 400 bis 700), JetBrains Mono
+  "inter": { familie: "Inter", datei: "Inter.woff2", stil: "normal", gewicht: "400 700" },
+  "mono": { familie: "JetBrains Mono", datei: "JetBrainsMono.ttf", stil: "normal", gewicht: "500" },
 };
-const schriftString = (name, px) => { const s = SCHRIFTEN[name || "grotesk"]; return `${s.stil} 400 ${px}px "${s.familie}"`; };
+const schriftString = (name, px, gewicht) => { const s = SCHRIFTEN[name || "grotesk"]; return `${s.stil} ${gewicht || (s.gewicht || "400").split(" ")[0]} ${px}px "${s.familie}"`; };
 const geladen = new Set();
 async function schriftenLaden(namen, ordner) {
   await Promise.all([...namen].filter(n => !geladen.has(n)).map(async n => {
     const s = SCHRIFTEN[n];
-    const f = new FontFace(s.familie, `url(${new URL(s.datei, ordner).href})`, { style: s.stil, weight: "400" });
+    const f = new FontFace(s.familie, `url(${new URL(s.datei, ordner).href})`, { style: s.stil, weight: s.gewicht || "400" });
     document.fonts.add(await f.load());
     geladen.add(n);
   }));
@@ -49,9 +53,10 @@ function textVon(el, texte) {
 function textSetzen(el, w, h, ctx, texte) {
   const size = el.groesse, lh = (el.zeilenhoehe ?? 1.3) * size, gap = (el.abstand ?? .6) * size;
   const x0 = el.x ?? el.rand ?? 0, maxw = el.breite ?? (w - 2 * x0);
-  ctx.font = schriftString(el.schrift, REF);
+  ctx.font = schriftString(el.schrift, REF, el.gewicht);
+  ctx.letterSpacing = (el.laufweite || 0) * REF + "px";     // Laufweite in em (Kicker der Seite)
   const breite = s => ctx.measureText(s).width / REF * size;
-  const absaetze = textVon(el, texte);
+  const absaetze = textVon(el, texte).map(a => el.versal ? a.toLocaleUpperCase("de-DE") : a);
   const zl = [];
   absaetze.forEach((a, i) => {
     let cur = "", j = 0;
@@ -79,6 +84,16 @@ function textSetzen(el, w, h, ctx, texte) {
   return boxen;
 }
 
+// Bilder der Szenendatei (Element "bild", z. B. das Portrait im Mockup), vor dem Zeichnen geladen
+const BILDER = new Map();
+async function bilderLaden(sz, art, ordner) {
+  const urls = new Set();
+  for (const fl of Object.values(sz.druckflaechen || {})) for (const roh of fl.elemente || []) { const el = aufloesen(roh, art); if (el.typ === "bild" && !(el.anordnung && el.anordnung !== art)) urls.add(el.quelle); }
+  await Promise.all([...urls].filter(u => !BILDER.has(u)).map(u => new Promise(ok => {
+    const im = new Image(); im.onload = () => { BILDER.set(u, im); ok(); }; im.onerror = () => ok(); im.src = new URL(u, ordner).href;
+  })));
+}
+
 // Zeichnet eine Druckfläche (Grund, Linien, Text) auf ein Canvas; ppu = Pixel je Einheit.
 function druckZeichnen(def, w, h, ppu, pal, mess, art, texte) {
   const cv = document.createElement("canvas");
@@ -94,6 +109,15 @@ function druckZeichnen(def, w, h, ppu, pal, mess, art, texte) {
       ctx.beginPath(); ctx.roundRect(x, y, bw, bh, r);
       if (el.fuellung) { ctx.fillStyle = farbe(pal, el.fuellung); ctx.fill(); }
       if (el.strich) { ctx.strokeStyle = farbe(pal, el.strich); ctx.lineWidth = Math.max(1, (el.strichbreite || .006) * ppu); ctx.stroke(); }
+    } else if (el.typ === "bild") {
+      const im = BILDER.get(el.quelle);
+      if (im) {
+        const x = el.x * ppu, y = el.y * ppu, bw = el.breite * ppu, bh = el.hoehe * ppu, r = Math.min((el.radius || 0) * ppu, bw / 2, bh / 2);
+        ctx.save(); ctx.beginPath(); ctx.roundRect(x, y, bw, bh, r); ctx.clip();
+        const k = Math.max(bw / im.width, bh / im.height), dw = im.width * k, dh = im.height * k;     // füllend, mittig beschnitten (object-fit: cover)
+        ctx.drawImage(im, x + (bw - dw) / 2, y + (bh - dh) / 2, dw, dh); ctx.restore();
+        if (el.strich) { ctx.beginPath(); ctx.roundRect(x, y, bw, bh, r); ctx.strokeStyle = farbe(pal, el.strich); ctx.lineWidth = Math.max(1, (el.strichbreite || .006) * ppu); ctx.stroke(); }
+      }
     } else if (el.typ === "kreis") {
       ctx.beginPath(); ctx.arc(el.x * ppu, el.y * ppu, el.radius * ppu, 0, Math.PI * 2);
       if (el.fuellung) { ctx.fillStyle = farbe(pal, el.fuellung); ctx.fill(); }
@@ -104,8 +128,10 @@ function druckZeichnen(def, w, h, ppu, pal, mess, art, texte) {
     } else if (el.typ === "text" || el.typ === "absaetze") {
       const boxen = textSetzen(el, w, h, mess, texte);
       ctx.fillStyle = farbe(pal, el.farbe); ctx.textBaseline = "alphabetic"; ctx.textAlign = "left"; ctx.fontKerning = "normal";
-      ctx.font = schriftString(el.schrift, el.groesse * ppu);
+      ctx.font = schriftString(el.schrift, el.groesse * ppu, el.gewicht);
+      ctx.letterSpacing = (el.laufweite || 0) * el.groesse * ppu + "px";
       for (const b of boxen) ctx.fillText(b.text, b.x * ppu, b.base * ppu);
+      ctx.letterSpacing = "0px";
       zeilen.push(...boxen);
     }
   }
@@ -263,6 +289,7 @@ export async function spieleFolge(buehne, folge, opt = {}) {
     if (sz && Object.keys(druckNodes).length) {
       const namen = new Set();
       for (const fl of Object.values(sz.druckflaechen)) for (const roh of fl.elemente || []) { const el = aufloesen(roh, art); if (el.anordnung && el.anordnung !== art) continue; if (el.schrift) namen.add(el.schrift); else if (el.typ === "text" || el.typ === "absaetze") namen.add("grotesk"); }
+      await bilderLaden(sz, art, new URL("./", import.meta.url));
       await schriftenLaden(namen, schriftOrdner);
       await Promise.all([...namen].map(n => document.fonts.load(schriftString(n, 20))));
       const mess = document.createElement("canvas").getContext("2d");
@@ -413,6 +440,13 @@ export async function spieleFolge(buehne, folge, opt = {}) {
 
   // Zustand eines Abschnitts bei lokalem Bild f herstellen (Animation, Einblenden, mitgeführte Blöcke)
   function abschnittAnwenden(A, f) {
+    // Startbild: bis zum Bild sz.startbild.bis bleibt alles außer den genannten Teilen (Name, Punkt, Papier) unsichtbar; flache Teile würden bei
+    // Kamerahöhe nahe dem Papier als Streifen an der Horizontlinie stehen
+    const sb = A.sz && A.sz.startbild;
+    if (sb) {
+      const zeigen = f >= sb.bis;
+      for (const k of A.root.children) if (!k.isCamera && !sb.behalten.includes(k.name) && !(k.userData && k.userData.neubau_rolle === "punkt" && false)) k.visible = zeigen;
+    }
     A.mixer.setTime(Math.min(f / (A.meta.fps || 24), A.clipDauer - 1e-4));
     A.uFrame.value = f;
     for (const b of A.bloecke) {
@@ -505,7 +539,7 @@ export async function spieleFolge(buehne, folge, opt = {}) {
     };
     const proj = p => { const v = p.clone().applyMatrix4(inv); const tiefe = -v.z; v.applyMatrix4(cam.projectionMatrix); return { x: (v.x + 1) / 2, y: (v.y + 1) / 2, tiefe }; };
     const verdecker = [];
-    welt.traverse(o => { if (o.isMesh && !o.userData.bau && o !== d.mesh && o !== d.mesh.parent && o.visible && o.material && o.material.opacity !== 0 && o.userData.neubau_rolle !== "schiene" && o !== boden && o !== himmel) verdecker.push(o); });
+    welt.traverse(o => { if (o.isMesh && !o.userData.bau && o !== d.mesh && o !== d.mesh.parent && sichtbarKette(o) && o.material && o.material.opacity !== 0 && o.userData.neubau_rolle !== "schiene" && o !== boden && o !== himmel) verdecker.push(o); });
     const rc = new THREE.Raycaster();
     const erg = { bild: f, zeilen: d.zeilen.length, min_em_px: 1e9, verdeckt: 0, ausserhalb: 0, auf_flaeche: true, details: [] };
     for (const zl of d.zeilen) {
@@ -530,6 +564,18 @@ export async function spieleFolge(buehne, folge, opt = {}) {
     erg.viewport = [W, H]; erg.textur = d.px;
     erg.saetze = d.zeilen.map(zl => zl.text).join(" ");
     return erg;
+  }
+
+  // ---------- Messhaken für die Bildprüfung (werkzeug/bildpruefung, nur vom Baubefehl benutzt) ----------
+  // Stellt Szene `name` auf das lokale Bild f (Animation, Einblenden, Kamera samt Objektivverschiebung) und gibt Abschnitt, Welt und Kamera zurück.
+  function messung(name, f) {
+    const A = abschnitte.find(a => a.name === name) || abschnitte[0];
+    abschnitte.forEach(a => { a.lastF = null; });         // erzwingt neues Anwenden (Prüfungen dürfen die Welt zwischendurch verändert haben)
+    const aktiv = anwenden(A.start + f);
+    welt.updateMatrixWorld(true);
+    weltNachfuehren(aktiv.camKnoten);
+    aktiv.camKnoten.updateMatrixWorld(true);
+    return { A: aktiv, welt, cam: aktiv.camKnoten };
   }
 
   // ---------- Nahtmessung ----------
@@ -585,6 +631,7 @@ export async function spieleFolge(buehne, folge, opt = {}) {
     get bilder() { return gesamt; }, get abschnitte() { return abschnitte.map(a => ({ name: a.name, art: a.art, start: a.start, frames: a.frames })); }, get szene() { return abschnitte[0].sz; },
     get art() { return art; }, fertig: Promise.resolve(true), pruefeText, messeNaht, renderer,
     posen: (name, f) => { const A = abschnitte.find(a => a.name === name); return posen(A, f); },
+    messung, get breite() { return buehne.clientWidth; }, get hoehe() { return buehne.clientHeight; },
   };
   buehne.classList.add("bereit");
   document.documentElement.classList.add("bereit");

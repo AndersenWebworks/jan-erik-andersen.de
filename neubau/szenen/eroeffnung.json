@@ -15,6 +15,15 @@
   "satz2": "Unternehmen arbeiten direkt mit mir.",
   "satz3": "Auf Wunsch arbeite ich auch befristet im Team mit."
  },
+ "startbild": {
+  "bis": 26,
+  "behalten": [
+   "Marke",
+   "Marke_Punkt",
+   "Bogen",
+   "Boden"
+  ]
+ },
  "marke": {
   "text": "Jan-Erik Andersen",
   "kursiv_ab": 9,
@@ -41,7 +50,7 @@
     "tiefe": 4.4,
     "hoehe": 1.55,
     "platte": 0.06,
-    "bein": 0.05
+    "bein": 0.08
    },
    "lage": {
     "breit": {
@@ -93,16 +102,28 @@
     "dicke": 0.07,
     "rand": 0.05,
     "oben": 0.12,
-    "unten": 0.08
+    "unten": 0.08,
+    "fuss": [
+     1.0,
+     0.6,
+     0.03
+    ],
+    "hals": [
+     0.32,
+     0.6,
+     0.03
+    ],
+    "z_schirm": 0.26,
+    "neigung": 7
    },
    "lage": {
     "breit": {
      "x": 4.05,
-     "y": 0.25
+     "y_hals": 1.25
     },
     "hochkant": {
      "x": 4.05,
-     "y": 0.25
+     "y_hals": 1.25
     }
    }
   },
@@ -165,12 +186,12 @@
    },
    "lage": {
     "breit": {
-     "x": 3.5,
-     "y": 3.5
+     "x": 2.9,
+     "y": 3.6
     },
     "hochkant": {
-     "x": 3.5,
-     "y": 3.5
+     "x": 2.9,
+     "y": 3.6
     }
    }
   },
@@ -233,22 +254,22 @@
   },
   "rechner": {
    "form": {
-    "breite": 1.1,
+    "breite": 0.9,
     "tiefe": 1.7,
-    "hoehe": 1.85,
+    "hoehe": 1.28,
     "led": [
      0.3,
-     0.32
+     0.27
     ]
    },
    "lage": {
     "breit": {
-     "x": 8.0,
-     "y_vorn": -5.6
+     "x": 2.65,
+     "y_vorn": 0.12
     },
     "hochkant": {
-     "x": 4.4,
-     "y_vorn": -5.6
+     "x": 2.65,
+     "y_vorn": 0.12
     }
    }
   }
@@ -268,307 +289,446 @@
    "elemente": [
     {
      "typ": "rechteck",
-     "x": 0,
-     "y": 0,
+     "x": 0.0,
+     "y": 0.0,
      "breite": 3.04,
-     "hoehe": 1.78,
+     "hoehe": 1.77967,
      "fuellung": "#ffffff"
     },
     {
      "typ": "rechteck",
-     "x": 0,
-     "y": 0,
+     "x": 0.0,
+     "y": 1.17378,
      "breite": 3.04,
-     "hoehe": 0.2,
-     "fuellung": "#f6f8fc"
+     "hoehe": 0.60589,
+     "fuellung": "#f5f4ee"
     },
     {
      "typ": "linie",
      "von": [
-      0,
-      0.2
+      0.0,
+      0.152
      ],
      "bis": [
       3.04,
-      0.2
+      0.152
      ],
-     "farbe": "#dfe5ee",
-     "breite": 0.006
+     "farbe": "#e2e1da",
+     "breite": 0.00253
     },
     {
      "typ": "rechteck",
-     "x": 0.16,
-     "y": 0.068,
-     "breite": 0.3,
-     "hoehe": 0.064,
-     "fuellung": "#303033",
-     "radius": 0.03
+     "x": 0.32089,
+     "y": 0.03589,
+     "breite": 0.00844,
+     "hoehe": 0.08022,
+     "fuellung": "#a83a3a",
+     "radius": 0.00422
+    },
+    {
+     "typ": "text",
+     "x": 0.35044,
+     "y": 0.03758,
+     "breite": 4.22222,
+     "groesse": 0.02533,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#1a1a18",
+     "text": "JAN-ERIK",
+     "laufweite": 0.06
+    },
+    {
+     "typ": "text",
+     "x": 0.35044,
+     "y": 0.05953,
+     "breite": 4.22222,
+     "groesse": 0.05911,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#1a1a18",
+     "text": "Andersen",
+     "laufweite": -0.01
     },
     {
      "typ": "kreis",
-     "x": 0.52,
-     "y": 0.1,
-     "radius": 0.024,
-     "fuellung": "#d40235"
+     "x": 0.63222,
+     "y": 0.11506,
+     "radius": 0.00591,
+     "fuellung": "#a83a3a"
     },
     {
-     "typ": "rechteck",
-     "x": 1.74,
-     "y": 0.088,
-     "breite": 0.26,
-     "hoehe": 0.026,
-     "fuellung": "#c3cbd8",
-     "radius": 0.013
-    },
-    {
-     "typ": "rechteck",
-     "x": 2.08,
-     "y": 0.088,
-     "breite": 0.26,
-     "hoehe": 0.026,
-     "fuellung": "#c3cbd8",
-     "radius": 0.013
-    },
-    {
-     "typ": "rechteck",
-     "x": 2.42,
-     "y": 0.088,
-     "breite": 0.26,
-     "hoehe": 0.026,
-     "fuellung": "#c3cbd8",
-     "radius": 0.013
-    },
-    {
-     "typ": "rechteck",
-     "x": 2.76,
-     "y": 0.088,
-     "breite": 0.26,
-     "hoehe": 0.026,
-     "fuellung": "#c3cbd8",
-     "radius": 0.013
-    },
-    {
-     "typ": "rechteck",
-     "x": 0,
-     "y": 0.2,
-     "breite": 3.04,
-     "hoehe": 0.8,
-     "fuellung": "#eef3fa"
-    },
-    {
-     "typ": "kreis",
-     "x": 2.52,
-     "y": 0.58,
-     "radius": 0.4,
-     "fuellung": "#e4ecf7"
-    },
-    {
-     "typ": "kreis",
-     "x": 2.8,
-     "y": 0.82,
-     "radius": 0.2,
-     "fuellung": "#d8e3f2"
-    },
-    {
-     "typ": "kreis",
-     "x": 2.28,
-     "y": 0.3,
-     "radius": 0.06,
-     "fuellung": "#d40235"
+     "typ": "text",
+     "x": 0.81067,
+     "y": 0.05573,
+     "breite": 4.22222,
+     "groesse": 0.03378,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 400,
+     "farbe": "#4a4a46",
+     "text": "Leistungen"
     },
     {
      "typ": "linie",
      "von": [
-      0,
-      1.66
+      1.00159,
+      0.07178
      ],
      "bis": [
-      3.04,
-      1.66
+      1.01215,
+      0.08233
      ],
-     "farbe": "#dfe5ee",
-     "breite": 0.006
+     "farbe": "#4a4a46",
+     "breite": 0.00338
+    },
+    {
+     "typ": "linie",
+     "von": [
+      1.01215,
+      0.08233
+     ],
+     "bis": [
+      1.0227,
+      0.07178
+     ],
+     "farbe": "#4a4a46",
+     "breite": 0.00338
+    },
+    {
+     "typ": "text",
+     "x": 1.08181,
+     "y": 0.05573,
+     "breite": 4.22222,
+     "groesse": 0.03378,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 400,
+     "farbe": "#4a4a46",
+     "text": "Projekte"
+    },
+    {
+     "typ": "text",
+     "x": 1.27173,
+     "y": 0.05573,
+     "breite": 4.22222,
+     "groesse": 0.03378,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 400,
+     "farbe": "#4a4a46",
+     "text": "Preise"
+    },
+    {
+     "typ": "text",
+     "x": 1.42996,
+     "y": 0.05573,
+     "breite": 4.22222,
+     "groesse": 0.03378,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 400,
+     "farbe": "#4a4a46",
+     "text": "FAQ"
+    },
+    {
+     "typ": "text",
+     "x": 1.55393,
+     "y": 0.05573,
+     "breite": 4.22222,
+     "groesse": 0.03378,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 400,
+     "farbe": "#4a4a46",
+     "text": "Über mich"
+    },
+    {
+     "typ": "text",
+     "x": 1.7778,
+     "y": 0.05573,
+     "breite": 4.22222,
+     "groesse": 0.03378,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 400,
+     "farbe": "#4a4a46",
+     "text": "Kontakt"
     },
     {
      "typ": "rechteck",
-     "x": 0.16,
-     "y": 1.72,
-     "breite": 0.5,
-     "hoehe": 0.02,
-     "fuellung": "#c3cbd8",
-     "radius": 0.01
+     "x": 2.15122,
+     "y": 0.04011,
+     "breite": 0.07178,
+     "hoehe": 0.07178,
+     "fuellung": "#ffffff",
+     "strich": "#cdcbc1",
+     "strichbreite": 0.00253,
+     "radius": 0.019
+    },
+    {
+     "typ": "kreis",
+     "x": 2.18711,
+     "y": 0.076,
+     "radius": 0.01372,
+     "strich": "#1a1a18",
+     "strichbreite": 0.00338
     },
     {
      "typ": "rechteck",
-     "x": 2.4,
-     "y": 1.72,
-     "breite": 0.48,
-     "hoehe": 0.02,
-     "fuellung": "#c3cbd8",
-     "radius": 0.01
+     "x": 2.24622,
+     "y": 0.04011,
+     "breite": 0.14567,
+     "hoehe": 0.07178,
+     "fuellung": "#ffffff",
+     "strich": "#cdcbc1",
+     "strichbreite": 0.00253,
+     "radius": 0.019
     },
     {
      "typ": "rechteck",
-     "x": 0.16,
-     "y": 0.34,
-     "breite": 1.1,
-     "hoehe": 0.03,
-     "fuellung": "#c3cbd8",
-     "radius": 0.015,
-     "anordnung": "hochkant"
+     "x": 2.24833,
+     "y": 0.04222,
+     "breite": 0.07178,
+     "hoehe": 0.06756,
+     "fuellung": "#1a1a18",
+     "radius": 0.01689
+    },
+    {
+     "typ": "text",
+     "x": 2.26902,
+     "y": 0.0608,
+     "breite": 4.22222,
+     "groesse": 0.02533,
+     "zeilenhoehe": 1.2,
+     "schrift": "mono",
+     "gewicht": 500,
+     "farbe": "#ffffff",
+     "text": "DE"
+    },
+    {
+     "typ": "text",
+     "x": 2.3408,
+     "y": 0.0608,
+     "breite": 4.22222,
+     "groesse": 0.02533,
+     "zeilenhoehe": 1.2,
+     "schrift": "mono",
+     "gewicht": 500,
+     "farbe": "#4a4a46",
+     "text": "EN"
     },
     {
      "typ": "rechteck",
-     "x": 0.16,
-     "y": 0.5,
-     "breite": 2.0,
-     "hoehe": 0.09,
-     "fuellung": "#aab4c4",
-     "radius": 0.03,
-     "anordnung": "hochkant"
+     "x": 2.413,
+     "y": 0.03167,
+     "breite": 0.30611,
+     "hoehe": 0.08867,
+     "fuellung": "#a83a3a",
+     "radius": 0.019
+    },
+    {
+     "typ": "text",
+     "x": 2.451,
+     "y": 0.05573,
+     "breite": 4.22222,
+     "groesse": 0.03378,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#ffffff",
+     "text": "Erstgespräch"
+    },
+    {
+     "typ": "linie",
+     "von": [
+      2.6876,
+      0.076
+     ],
+     "bis": [
+      2.71715,
+      0.076
+     ],
+     "farbe": "#ffffff",
+     "breite": 0.0038
+    },
+    {
+     "typ": "linie",
+     "von": [
+      2.70765,
+      0.0665
+     ],
+     "bis": [
+      2.71715,
+      0.076
+     ],
+     "farbe": "#ffffff",
+     "breite": 0.0038
+    },
+    {
+     "typ": "linie",
+     "von": [
+      2.70765,
+      0.0855
+     ],
+     "bis": [
+      2.71715,
+      0.076
+     ],
+     "farbe": "#ffffff",
+     "breite": 0.0038
     },
     {
      "typ": "rechteck",
-     "x": 0.16,
-     "y": 0.64,
-     "breite": 1.7,
-     "hoehe": 0.09,
-     "fuellung": "#aab4c4",
-     "radius": 0.03,
-     "anordnung": "hochkant"
+     "x": 0.32089,
+     "y": 0.88667,
+     "breite": 0.69667,
+     "hoehe": 0.11822,
+     "fuellung": "#a83a3a",
+     "radius": 0.019
+    },
+    {
+     "typ": "text",
+     "x": 0.37578,
+     "y": 0.92298,
+     "breite": 4.22222,
+     "groesse": 0.038,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#ffffff",
+     "text": "Erstgespräch vereinbaren"
+    },
+    {
+     "typ": "linie",
+     "von": [
+      0.87535,
+      0.94578
+     ],
+     "bis": [
+      0.90701,
+      0.94578
+     ],
+     "farbe": "#ffffff",
+     "breite": 0.0038
+    },
+    {
+     "typ": "linie",
+     "von": [
+      0.89646,
+      0.93522
+     ],
+     "bis": [
+      0.90701,
+      0.94578
+     ],
+     "farbe": "#ffffff",
+     "breite": 0.0038
+    },
+    {
+     "typ": "linie",
+     "von": [
+      0.89646,
+      0.95633
+     ],
+     "bis": [
+      0.90701,
+      0.94578
+     ],
+     "farbe": "#ffffff",
+     "breite": 0.0038
     },
     {
      "typ": "rechteck",
-     "x": 0.16,
-     "y": 0.78,
-     "breite": 1.2,
-     "hoehe": 0.09,
-     "fuellung": "#aab4c4",
-     "radius": 0.03,
-     "anordnung": "hochkant"
+     "x": 1.81556,
+     "y": 0.21956,
+     "breite": 0.90356,
+     "hoehe": 0.89511,
+     "fuellung": "#ffffff",
+     "strich": "#e2e1da",
+     "strichbreite": 0.00253,
+     "radius": 0.038
+    },
+    {
+     "typ": "bild",
+     "quelle": "assets/portrait.webp",
+     "x": 1.85778,
+     "y": 0.26178,
+     "breite": 0.81911,
+     "hoehe": 0.71356,
+     "radius": 0.02111
+    },
+    {
+     "typ": "linie",
+     "von": [
+      1.85778,
+      1.00911
+     ],
+     "bis": [
+      2.67689,
+      1.00911
+     ],
+     "farbe": "#e2e1da",
+     "breite": 0.00253
+    },
+    {
+     "typ": "text",
+     "x": 1.85778,
+     "y": 1.02896,
+     "breite": 4.22222,
+     "groesse": 0.03378,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#1a1a18",
+     "text": "Jan-Erik Andersen"
+    },
+    {
+     "typ": "text",
+     "x": 1.85778,
+     "y": 1.07751,
+     "breite": 4.22222,
+     "groesse": 0.02322,
+     "zeilenhoehe": 1.2,
+     "schrift": "mono",
+     "gewicht": 500,
+     "farbe": "#66645e",
+     "text": "Webentwickler & Berater",
+     "laufweite": 0.04
     },
     {
      "typ": "rechteck",
-     "x": 0.12,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.44,
-     "fuellung": "#f8fafd",
-     "strich": "#dbe2ec",
-     "strichbreite": 0.006,
-     "radius": 0.03,
-     "anordnung": "hochkant"
+     "x": 0.32089,
+     "y": 1.25822,
+     "breite": 0.76,
+     "hoehe": 0.41378,
+     "fuellung": "#ffffff",
+     "strich": "#e2e1da",
+     "strichbreite": 0.00253,
+     "radius": 0.02956
     },
     {
      "typ": "rechteck",
-     "x": 0.12,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.012,
-     "fuellung": "#d40235",
-     "anordnung": "hochkant"
+     "x": 1.14,
+     "y": 1.25822,
+     "breite": 0.76,
+     "hoehe": 0.41378,
+     "fuellung": "#ffffff",
+     "strich": "#e2e1da",
+     "strichbreite": 0.00253,
+     "radius": 0.02956
     },
     {
      "typ": "rechteck",
-     "x": 0.19,
-     "y": 1.26,
-     "breite": 0.7066666666666666,
-     "hoehe": 0.03,
-     "fuellung": "#c3cbd8",
-     "radius": 0.015,
-     "anordnung": "hochkant"
-    },
-    {
-     "typ": "rechteck",
-     "x": 0.19,
-     "y": 1.34,
-     "breite": 0.5199999999999999,
-     "hoehe": 0.03,
-     "fuellung": "#c3cbd8",
-     "radius": 0.015,
-     "anordnung": "hochkant"
-    },
-    {
-     "typ": "rechteck",
-     "x": 1.0866666666666664,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.44,
-     "fuellung": "#f8fafd",
-     "strich": "#dbe2ec",
-     "strichbreite": 0.006,
-     "radius": 0.03,
-     "anordnung": "hochkant"
-    },
-    {
-     "typ": "rechteck",
-     "x": 1.0866666666666664,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.012,
-     "fuellung": "#d40235",
-     "anordnung": "hochkant"
-    },
-    {
-     "typ": "rechteck",
-     "x": 1.1566666666666665,
-     "y": 1.26,
-     "breite": 0.7066666666666666,
-     "hoehe": 0.03,
-     "fuellung": "#c3cbd8",
-     "radius": 0.015,
-     "anordnung": "hochkant"
-    },
-    {
-     "typ": "rechteck",
-     "x": 1.1566666666666665,
-     "y": 1.34,
-     "breite": 0.5199999999999999,
-     "hoehe": 0.03,
-     "fuellung": "#c3cbd8",
-     "radius": 0.015,
-     "anordnung": "hochkant"
-    },
-    {
-     "typ": "rechteck",
-     "x": 2.0533333333333332,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.44,
-     "fuellung": "#f8fafd",
-     "strich": "#dbe2ec",
-     "strichbreite": 0.006,
-     "radius": 0.03,
-     "anordnung": "hochkant"
-    },
-    {
-     "typ": "rechteck",
-     "x": 2.0533333333333332,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.012,
-     "fuellung": "#d40235",
-     "anordnung": "hochkant"
-    },
-    {
-     "typ": "rechteck",
-     "x": 2.123333333333333,
-     "y": 1.26,
-     "breite": 0.7066666666666666,
-     "hoehe": 0.03,
-     "fuellung": "#c3cbd8",
-     "radius": 0.015,
-     "anordnung": "hochkant"
-    },
-    {
-     "typ": "rechteck",
-     "x": 2.123333333333333,
-     "y": 1.34,
-     "breite": 0.5199999999999999,
-     "hoehe": 0.03,
-     "fuellung": "#c3cbd8",
-     "radius": 0.015,
-     "anordnung": "hochkant"
+     "x": 1.95911,
+     "y": 1.25822,
+     "breite": 0.76,
+     "hoehe": 0.41378,
+     "fuellung": "#ffffff",
+     "strich": "#e2e1da",
+     "strichbreite": 0.00253,
+     "radius": 0.02956
     }
    ]
   },
@@ -580,46 +740,50 @@
    "ebene": 1,
    "aufloesung": 300,
    "einblenden": [
-    412,
-    432
+    404,
+    420
    ],
    "elemente": [
     {
-     "typ": "rechteck",
-     "x": 0.16,
-     "y": 0.3,
-     "breite": 0.28,
-     "hoehe": 0.012,
-     "fuellung": "#d40235"
+     "typ": "kreis",
+     "x": 0.32933,
+     "y": 0.26811,
+     "radius": 0.0095,
+     "fuellung": "#a83a3a"
     },
     {
      "typ": "text",
-     "ref": "ort",
-     "x": 0.16,
-     "y": 0.34,
-     "breite": 2.6,
-     "groesse": 0.054,
+     "x": 0.36311,
+     "y": 0.24067,
+     "breite": 1.35111,
+     "groesse": 0.04644,
      "zeilenhoehe": 1.3,
-     "schrift": "grotesk",
-     "farbe": "#5b6472"
+     "schrift": "mono",
+     "gewicht": 500,
+     "farbe": "#66645e",
+     "ref": "ort",
+     "laufweite": 0.06,
+     "versal": true
     },
     {
      "typ": "text",
+     "x": 0.32089,
+     "y": 0.33778,
+     "breite": 1.47778,
+     "groesse": 0.09922,
+     "zeilenhoehe": 1.13,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#1a1a18",
      "ref": "kern",
-     "x": 0.16,
-     "y": 0.5,
-     "breite": 2.5,
-     "groesse": 0.115,
-     "zeilenhoehe": 1.2,
-     "schrift": "serif",
-     "farbe": "tinte"
+     "laufweite": -0.02
     }
    ],
    "pruefen": {
     "bilder": [
-     438,
-     468,
-     498
+     440,
+     470,
+     500
     ]
    },
    "nur": "breit"
@@ -632,46 +796,37 @@
    "ebene": 2,
    "aufloesung": 300,
    "einblenden": [
-    454,
-    474
+    432,
+    448
    ],
    "elemente": [
     {
      "typ": "rechteck",
-     "x": 0.12,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.44,
-     "fuellung": "#f8fafd",
-     "strich": "#dbe2ec",
-     "strichbreite": 0.006,
-     "radius": 0.03
-    },
-    {
-     "typ": "rechteck",
-     "x": 0.12,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.012,
-     "fuellung": "#d40235"
+     "x": 0.38,
+     "y": 1.31733,
+     "breite": 0.08022,
+     "hoehe": 0.00739,
+     "fuellung": "#a83a3a"
     },
     {
      "typ": "text",
-     "ref": "satz1",
-     "x": 0.18,
-     "y": 1.24,
-     "breite": 0.7466666666666666,
-     "groesse": 0.054,
+     "x": 0.38,
+     "y": 1.36378,
+     "breite": 0.64178,
+     "groesse": 0.057,
      "zeilenhoehe": 1.3,
-     "schrift": "grotesk",
-     "farbe": "tinte"
+     "schrift": "inter",
+     "gewicht": 500,
+     "farbe": "#1a1a18",
+     "ref": "satz1",
+     "laufweite": -0.005
     }
    ],
    "pruefen": {
     "bilder": [
-     478,
-     508,
-     538
+     470,
+     500,
+     530
     ]
    },
    "nur": "breit"
@@ -684,46 +839,37 @@
    "ebene": 3,
    "aufloesung": 300,
    "einblenden": [
-    490,
-    510
+    460,
+    474
    ],
    "elemente": [
     {
      "typ": "rechteck",
-     "x": 1.0866666666666664,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.44,
-     "fuellung": "#f8fafd",
-     "strich": "#dbe2ec",
-     "strichbreite": 0.006,
-     "radius": 0.03
-    },
-    {
-     "typ": "rechteck",
-     "x": 1.0866666666666664,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.012,
-     "fuellung": "#d40235"
+     "x": 1.19911,
+     "y": 1.31733,
+     "breite": 0.08022,
+     "hoehe": 0.00739,
+     "fuellung": "#a83a3a"
     },
     {
      "typ": "text",
-     "ref": "satz2",
-     "x": 1.1466666666666665,
-     "y": 1.24,
-     "breite": 0.7466666666666666,
-     "groesse": 0.054,
+     "x": 1.19911,
+     "y": 1.36378,
+     "breite": 0.64178,
+     "groesse": 0.057,
      "zeilenhoehe": 1.3,
-     "schrift": "grotesk",
-     "farbe": "tinte"
+     "schrift": "inter",
+     "gewicht": 500,
+     "farbe": "#1a1a18",
+     "ref": "satz2",
+     "laufweite": -0.005
     }
    ],
    "pruefen": {
     "bilder": [
-     514,
-     540,
-     560
+     480,
+     510,
+     540
     ]
    },
    "nur": "breit"
@@ -736,46 +882,37 @@
    "ebene": 4,
    "aufloesung": 300,
    "einblenden": [
-    526,
-    546
+    486,
+    500
    ],
    "elemente": [
     {
      "typ": "rechteck",
-     "x": 2.0533333333333332,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.44,
-     "fuellung": "#f8fafd",
-     "strich": "#dbe2ec",
-     "strichbreite": 0.006,
-     "radius": 0.03
-    },
-    {
-     "typ": "rechteck",
-     "x": 2.0533333333333332,
-     "y": 1.14,
-     "breite": 0.8666666666666666,
-     "hoehe": 0.012,
-     "fuellung": "#d40235"
+     "x": 2.01822,
+     "y": 1.31733,
+     "breite": 0.08022,
+     "hoehe": 0.00739,
+     "fuellung": "#a83a3a"
     },
     {
      "typ": "text",
-     "ref": "satz3",
-     "x": 2.1133333333333333,
-     "y": 1.24,
-     "breite": 0.7466666666666666,
-     "groesse": 0.054,
+     "x": 2.01822,
+     "y": 1.36378,
+     "breite": 0.64178,
+     "groesse": 0.057,
      "zeilenhoehe": 1.3,
-     "schrift": "grotesk",
-     "farbe": "tinte"
+     "schrift": "inter",
+     "gewicht": 500,
+     "farbe": "#1a1a18",
+     "ref": "satz3",
+     "laufweite": -0.005
     }
    ],
    "pruefen": {
     "bilder": [
-     550,
-     560,
-     572
+     510,
+     540,
+     570
     ]
    },
    "nur": "breit"
@@ -794,97 +931,217 @@
    "elemente": [
     {
      "typ": "rechteck",
-     "x": 0,
-     "y": 0,
+     "x": 0.0,
+     "y": 0.0,
      "breite": 0.85,
-     "hoehe": 1.9,
+     "hoehe": 1.90069,
      "fuellung": "#ffffff"
     },
     {
      "typ": "rechteck",
-     "x": 0,
-     "y": 0,
+     "x": 0.0,
+     "y": 0.90667,
      "breite": 0.85,
-     "hoehe": 0.12,
-     "fuellung": "#f6f8fc"
+     "hoehe": 1.90069,
+     "fuellung": "#f5f4ee"
     },
     {
      "typ": "linie",
      "von": [
-      0,
-      0.12
+      0.0,
+      0.14639
      ],
      "bis": [
       0.85,
-      0.12
+      0.14639
      ],
-     "farbe": "#dfe5ee",
-     "breite": 0.006
+     "farbe": "#e2e1da",
+     "breite": 0.00283
     },
     {
      "typ": "rechteck",
-     "x": 0.06,
-     "y": 0.04,
-     "breite": 0.2,
-     "hoehe": 0.04,
-     "fuellung": "#303033",
-     "radius": 0.02
+     "x": 0.04722,
+     "y": 0.02833,
+     "breite": 0.00944,
+     "hoehe": 0.08972,
+     "fuellung": "#a83a3a",
+     "radius": 0.00472
+    },
+    {
+     "typ": "text",
+     "x": 0.08028,
+     "y": 0.03164,
+     "breite": 4.72222,
+     "groesse": 0.02597,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#1a1a18",
+     "text": "JAN-ERIK",
+     "laufweite": 0.06
+    },
+    {
+     "typ": "text",
+     "x": 0.08028,
+     "y": 0.05903,
+     "breite": 4.72222,
+     "groesse": 0.05903,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#1a1a18",
+     "text": "Andersen",
+     "laufweite": -0.01
     },
     {
      "typ": "kreis",
-     "x": 0.3,
-     "y": 0.06,
-     "radius": 0.014,
-     "fuellung": "#d40235"
+     "x": 0.36149,
+     "y": 0.11451,
+     "radius": 0.0059,
+     "fuellung": "#a83a3a"
     },
     {
      "typ": "rechteck",
-     "x": 0.66,
-     "y": 0.045,
-     "breite": 0.13,
-     "hoehe": 0.012,
-     "fuellung": "#c3cbd8",
-     "radius": 0.006
+     "x": 0.69889,
+     "y": 0.02597,
+     "breite": 0.10389,
+     "hoehe": 0.09444,
+     "fuellung": "#ffffff",
+     "strich": "#cdcbc1",
+     "strichbreite": 0.00283,
+     "radius": 0.02361
+    },
+    {
+     "typ": "linie",
+     "von": [
+      0.72722,
+      0.05903
+     ],
+     "bis": [
+      0.77444,
+      0.05903
+     ],
+     "farbe": "#1a1a18",
+     "breite": 0.00472
+    },
+    {
+     "typ": "linie",
+     "von": [
+      0.72722,
+      0.07319
+     ],
+     "bis": [
+      0.77444,
+      0.07319
+     ],
+     "farbe": "#1a1a18",
+     "breite": 0.00472
+    },
+    {
+     "typ": "linie",
+     "von": [
+      0.72722,
+      0.08736
+     ],
+     "bis": [
+      0.77444,
+      0.08736
+     ],
+     "farbe": "#1a1a18",
+     "breite": 0.00472
     },
     {
      "typ": "rechteck",
-     "x": 0.66,
-     "y": 0.066,
-     "breite": 0.13,
-     "hoehe": 0.012,
-     "fuellung": "#c3cbd8",
-     "radius": 0.006
+     "x": 0.04722,
+     "y": 0.76972,
+     "breite": 0.70833,
+     "hoehe": 0.11806,
+     "fuellung": "#a83a3a",
+     "radius": 0.02125
+    },
+    {
+     "typ": "text",
+     "x": 0.09444,
+     "y": 0.80467,
+     "breite": 4.72222,
+     "groesse": 0.04014,
+     "zeilenhoehe": 1.2,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#ffffff",
+     "text": "Erstgespräch vereinbaren"
+    },
+    {
+     "typ": "linie",
+     "von": [
+      0.61899,
+      0.82875
+     ],
+     "bis": [
+      0.64968,
+      0.82875
+     ],
+     "farbe": "#ffffff",
+     "breite": 0.00425
+    },
+    {
+     "typ": "linie",
+     "von": [
+      0.63905,
+      0.81812
+     ],
+     "bis": [
+      0.64968,
+      0.82875
+     ],
+     "farbe": "#ffffff",
+     "breite": 0.00425
+    },
+    {
+     "typ": "linie",
+     "von": [
+      0.63905,
+      0.83937
+     ],
+     "bis": [
+      0.64968,
+      0.82875
+     ],
+     "farbe": "#ffffff",
+     "breite": 0.00425
     },
     {
      "typ": "rechteck",
-     "x": 0,
-     "y": 0.12,
-     "breite": 0.85,
-     "hoehe": 0.74,
-     "fuellung": "#eef3fa"
-    },
-    {
-     "typ": "kreis",
-     "x": 0.7,
-     "y": 0.33,
-     "radius": 0.2,
-     "fuellung": "#e4ecf7"
-    },
-    {
-     "typ": "kreis",
-     "x": 0.78,
-     "y": 0.43,
-     "radius": 0.1,
-     "fuellung": "#d8e3f2"
+     "x": 0.03778,
+     "y": 0.935,
+     "breite": 0.77444,
+     "hoehe": 0.2975,
+     "fuellung": "#ffffff",
+     "strich": "#e2e1da",
+     "strichbreite": 0.00283,
+     "radius": 0.02833
     },
     {
      "typ": "rechteck",
-     "x": 0.33,
-     "y": 1.865,
-     "breite": 0.2,
-     "hoehe": 0.01,
-     "fuellung": "#c3cbd8",
-     "radius": 0.005
+     "x": 0.03778,
+     "y": 1.25139,
+     "breite": 0.77444,
+     "hoehe": 0.2975,
+     "fuellung": "#ffffff",
+     "strich": "#e2e1da",
+     "strichbreite": 0.00283,
+     "radius": 0.02833
+    },
+    {
+     "typ": "rechteck",
+     "x": 0.03778,
+     "y": 1.56778,
+     "breite": 0.77444,
+     "hoehe": 0.2975,
+     "fuellung": "#ffffff",
+     "strich": "#e2e1da",
+     "strichbreite": 0.00283,
+     "radius": 0.02833
     }
    ],
    "nur": "hochkant"
@@ -897,46 +1154,50 @@
    "ebene": 1,
    "aufloesung": 300,
    "einblenden": [
-    412,
-    432
+    404,
+    420
    ],
    "elemente": [
     {
-     "typ": "rechteck",
-     "x": 0.06,
-     "y": 0.19,
-     "breite": 0.14,
-     "hoehe": 0.008,
-     "fuellung": "#d40235"
+     "typ": "kreis",
+     "x": 0.06139,
+     "y": 0.21486,
+     "radius": 0.01063,
+     "fuellung": "#a83a3a"
     },
     {
      "typ": "text",
+     "x": 0.09444,
+     "y": 0.17944,
+     "breite": 0.70833,
+     "groesse": 0.05431,
+     "zeilenhoehe": 1.25,
+     "schrift": "mono",
+     "gewicht": 500,
+     "farbe": "#66645e",
      "ref": "ort",
-     "x": 0.06,
-     "y": 0.215,
-     "breite": 0.73,
-     "groesse": 0.062,
-     "zeilenhoehe": 1.3,
-     "schrift": "grotesk",
-     "farbe": "#5b6472"
+     "laufweite": 0.03,
+     "versal": true
     },
     {
      "typ": "text",
+     "x": 0.04722,
+     "y": 0.34472,
+     "breite": 0.76028,
+     "groesse": 0.06375,
+     "zeilenhoehe": 1.14,
+     "schrift": "inter",
+     "gewicht": 600,
+     "farbe": "#1a1a18",
      "ref": "kern",
-     "x": 0.06,
-     "y": 0.44,
-     "breite": 0.73,
-     "groesse": 0.07,
-     "zeilenhoehe": 1.2,
-     "schrift": "serif",
-     "farbe": "tinte"
+     "laufweite": -0.02
     }
    ],
    "pruefen": {
     "bilder": [
-     438,
-     458,
-     478
+     440,
+     460,
+     480
     ]
    },
    "nur": "hochkant"
@@ -949,46 +1210,37 @@
    "ebene": 2,
    "aufloesung": 300,
    "einblenden": [
-    454,
-    474
+    432,
+    448
    ],
    "elemente": [
     {
      "typ": "rechteck",
-     "x": 0.03,
-     "y": 0.92,
-     "breite": 0.79,
-     "hoehe": 0.28,
-     "fuellung": "#f8fafd",
-     "strich": "#dbe2ec",
-     "strichbreite": 0.006,
-     "radius": 0.025
-    },
-    {
-     "typ": "rechteck",
-     "x": 0.03,
-     "y": 0.92,
-     "breite": 0.79,
-     "hoehe": 0.01,
-     "fuellung": "#d40235"
+     "x": 0.085,
+     "y": 0.99167,
+     "breite": 0.08028,
+     "hoehe": 0.00826,
+     "fuellung": "#a83a3a"
     },
     {
      "typ": "text",
+     "x": 0.085,
+     "y": 1.03417,
+     "breite": 0.68,
+     "groesse": 0.05431,
+     "zeilenhoehe": 1.28,
+     "schrift": "inter",
+     "gewicht": 500,
+     "farbe": "#1a1a18",
      "ref": "satz1",
-     "x": 0.06,
-     "y": 0.99,
-     "breite": 0.73,
-     "groesse": 0.056,
-     "zeilenhoehe": 1.3,
-     "schrift": "grotesk",
-     "farbe": "tinte"
+     "laufweite": -0.005
     }
    ],
    "pruefen": {
     "bilder": [
-     478,
-     508,
-     538
+     470,
+     500,
+     530
     ]
    },
    "nur": "hochkant"
@@ -1001,46 +1253,37 @@
    "ebene": 3,
    "aufloesung": 300,
    "einblenden": [
-    490,
-    510
+    460,
+    474
    ],
    "elemente": [
     {
      "typ": "rechteck",
-     "x": 0.03,
-     "y": 1.235,
-     "breite": 0.79,
-     "hoehe": 0.28,
-     "fuellung": "#f8fafd",
-     "strich": "#dbe2ec",
-     "strichbreite": 0.006,
-     "radius": 0.025
-    },
-    {
-     "typ": "rechteck",
-     "x": 0.03,
-     "y": 1.235,
-     "breite": 0.79,
-     "hoehe": 0.01,
-     "fuellung": "#d40235"
+     "x": 0.085,
+     "y": 1.30806,
+     "breite": 0.08028,
+     "hoehe": 0.00826,
+     "fuellung": "#a83a3a"
     },
     {
      "typ": "text",
+     "x": 0.085,
+     "y": 1.35056,
+     "breite": 0.68,
+     "groesse": 0.05431,
+     "zeilenhoehe": 1.28,
+     "schrift": "inter",
+     "gewicht": 500,
+     "farbe": "#1a1a18",
      "ref": "satz2",
-     "x": 0.06,
-     "y": 1.3050000000000002,
-     "breite": 0.73,
-     "groesse": 0.056,
-     "zeilenhoehe": 1.3,
-     "schrift": "grotesk",
-     "farbe": "tinte"
+     "laufweite": -0.005
     }
    ],
    "pruefen": {
     "bilder": [
-     514,
-     540,
-     560
+     480,
+     510,
+     540
     ]
    },
    "nur": "hochkant"
@@ -1053,46 +1296,37 @@
    "ebene": 4,
    "aufloesung": 300,
    "einblenden": [
-    526,
-    546
+    486,
+    500
    ],
    "elemente": [
     {
      "typ": "rechteck",
-     "x": 0.03,
-     "y": 1.55,
-     "breite": 0.79,
-     "hoehe": 0.28,
-     "fuellung": "#f8fafd",
-     "strich": "#dbe2ec",
-     "strichbreite": 0.006,
-     "radius": 0.025
-    },
-    {
-     "typ": "rechteck",
-     "x": 0.03,
-     "y": 1.55,
-     "breite": 0.79,
-     "hoehe": 0.01,
-     "fuellung": "#d40235"
+     "x": 0.085,
+     "y": 1.62444,
+     "breite": 0.08028,
+     "hoehe": 0.00826,
+     "fuellung": "#a83a3a"
     },
     {
      "typ": "text",
+     "x": 0.085,
+     "y": 1.66694,
+     "breite": 0.68,
+     "groesse": 0.05431,
+     "zeilenhoehe": 1.28,
+     "schrift": "inter",
+     "gewicht": 500,
+     "farbe": "#1a1a18",
      "ref": "satz3",
-     "x": 0.06,
-     "y": 1.62,
-     "breite": 0.73,
-     "groesse": 0.056,
-     "zeilenhoehe": 1.3,
-     "schrift": "grotesk",
-     "farbe": "tinte"
+     "laufweite": -0.005
     }
    ],
    "pruefen": {
     "bilder": [
-     550,
-     560,
-     572
+     510,
+     535,
+     556
     ]
    },
    "nur": "hochkant"
@@ -1110,120 +1344,128 @@
    [
     "line",
     0,
-    0.2,
+    0.152,
     3.04,
-    0.2
+    0.152
    ],
    [
     "rect",
-    0.16,
-    0.068,
-    0.3,
-    0.064
+    0.32089,
+    0.03589,
+    0.38,
+    0.08022
    ],
    [
     "rect",
-    1.74,
-    0.08,
-    1.2,
-    0.04
+    2.413,
+    0.03167,
+    0.30611,
+    0.08867
    ],
    [
     "rect",
-    0.16,
-    0.3,
-    0.28,
-    0.02
+    0.36311,
+    0.24067,
+    1.01333,
+    0.05067
    ],
    [
     "line",
-    0.16,
-    0.5,
-    2.4,
-    0.5
+    0.32089,
+    0.37156,
+    1.64667,
+    0.37156
    ],
    [
     "line",
-    0.16,
-    0.68,
-    2.2,
-    0.68
+    0.32089,
+    0.48978,
+    1.60444,
+    0.48978
    ],
    [
     "line",
-    0.16,
-    0.86,
-    1.6,
-    0.86
-   ],
-   [
-    "circ",
-    2.52,
-    0.58,
-    0.4
+    0.32089,
+    0.608,
+    1.47778,
+    0.608
    ],
    [
     "rect",
-    0.12,
+    0.32089,
+    0.88667,
+    0.69667,
+    0.11822
+   ],
+   [
+    "rect",
+    1.81556,
+    0.21956,
+    0.90356,
+    0.89511
+   ],
+   [
+    "rect",
+    0.32089,
+    1.25822,
+    0.76,
+    0.41378
+   ],
+   [
+    "line",
+    0.38,
+    1.41867,
+    0.99644,
+    1.41867
+   ],
+   [
+    "line",
+    0.38,
+    1.51156,
+    0.84867,
+    1.51156
+   ],
+   [
+    "rect",
     1.14,
-    0.8666666666666666,
-    0.44
+    1.25822,
+    0.76,
+    0.41378
    ],
    [
     "line",
-    0.19,
-    1.28,
-    0.8866666666666666,
-    1.28
+    1.19911,
+    1.41867,
+    1.81556,
+    1.41867
    ],
    [
     "line",
-    0.19,
-    1.4,
-    0.7266666666666666,
-    1.4
+    1.19911,
+    1.51156,
+    1.66778,
+    1.51156
    ],
    [
     "rect",
-    1.0866666666666664,
-    1.14,
-    0.8666666666666666,
-    0.44
+    1.95911,
+    1.25822,
+    0.76,
+    0.41378
    ],
    [
     "line",
-    1.1566666666666665,
-    1.28,
-    1.853333333333333,
-    1.28
+    2.01822,
+    1.41867,
+    2.63467,
+    1.41867
    ],
    [
     "line",
-    1.1566666666666665,
-    1.4,
-    1.693333333333333,
-    1.4
-   ],
-   [
-    "rect",
-    2.0533333333333332,
-    1.14,
-    0.8666666666666666,
-    0.44
-   ],
-   [
-    "line",
-    2.123333333333333,
-    1.28,
-    2.82,
-    1.28
-   ],
-   [
-    "line",
-    2.123333333333333,
-    1.4,
-    2.6599999999999997,
-    1.4
+    2.01822,
+    1.51156,
+    2.48689,
+    1.51156
    ]
   ],
   "handy": [
@@ -1237,114 +1479,128 @@
    [
     "line",
     0,
-    0.12,
+    0.14639,
     0.85,
-    0.12
+    0.14639
    ],
    [
     "rect",
-    0.06,
-    0.04,
-    0.2,
-    0.04
+    0.04722,
+    0.02833,
+    0.35417,
+    0.08972
    ],
    [
     "rect",
-    0.07,
-    0.19,
-    0.14,
-    0.012
-   ],
-   [
-    "line",
-    0.07,
-    0.38,
-    0.78,
-    0.38
-   ],
-   [
-    "line",
-    0.07,
-    0.5,
-    0.7,
-    0.5
-   ],
-   [
-    "line",
-    0.07,
-    0.62,
-    0.76,
-    0.62
-   ],
-   [
-    "line",
-    0.07,
-    0.74,
-    0.6,
-    0.74
+    0.69889,
+    0.02597,
+    0.10389,
+    0.09444
    ],
    [
     "rect",
-    0.05,
-    0.92,
-    0.75,
-    0.3
+    0.09444,
+    0.17944,
+    0.59028,
+    0.05667
    ],
    [
     "line",
-    0.1,
-    1.04,
-    0.7,
-    1.04
+    0.04722,
+    0.34472,
+    0.80278,
+    0.34472
    ],
    [
     "line",
-    0.1,
-    1.12,
-    0.5,
-    1.12
+    0.04722,
+    0.44861,
+    0.77917,
+    0.44861
+   ],
+   [
+    "line",
+    0.04722,
+    0.5525,
+    0.70833,
+    0.5525
+   ],
+   [
+    "line",
+    0.04722,
+    0.65639,
+    0.59028,
+    0.65639
    ],
    [
     "rect",
-    0.05,
-    1.235,
-    0.75,
-    0.3
-   ],
-   [
-    "line",
-    0.1,
-    1.355,
-    0.7,
-    1.355
-   ],
-   [
-    "line",
-    0.1,
-    1.435,
-    0.5,
-    1.435
+    0.04722,
+    0.76972,
+    0.70833,
+    0.11806
    ],
    [
     "rect",
-    0.05,
-    1.55,
-    0.75,
-    0.3
+    0.03778,
+    0.935,
+    0.77444,
+    0.2975
    ],
    [
     "line",
-    0.1,
-    1.67,
-    0.7,
-    1.67
+    0.085,
+    1.08139,
+    0.75556,
+    1.08139
    ],
    [
     "line",
-    0.1,
-    1.75,
-    0.5,
-    1.75
+    0.085,
+    1.15222,
+    0.59028,
+    1.15222
+   ],
+   [
+    "rect",
+    0.03778,
+    1.25139,
+    0.77444,
+    0.2975
+   ],
+   [
+    "line",
+    0.085,
+    1.39778,
+    0.75556,
+    1.39778
+   ],
+   [
+    "line",
+    0.085,
+    1.46861,
+    0.59028,
+    1.46861
+   ],
+   [
+    "rect",
+    0.03778,
+    1.56778,
+    0.77444,
+    0.2975
+   ],
+   [
+    "line",
+    0.085,
+    1.71417,
+    0.75556,
+    1.71417
+   ],
+   [
+    "line",
+    0.085,
+    1.785,
+    0.59028,
+    1.785
    ]
   ]
  },
@@ -1373,20 +1629,16 @@
   ],
   "rechner": {
    "front": [
-    208,
-    236
+    258,
+    284
    ],
    "seiten": [
-    216,
-    244
+    264,
+    290
    ],
    "rueck": [
-    224,
-    252
-   ],
-   "deckel": [
-    236,
-    262
+    270,
+    296
    ]
   },
   "monitor": [
@@ -1429,15 +1681,15 @@
    358
   ],
   "lesen": [
-   412,
+   404,
    576
   ]
  },
  "faden": {
   "breite": 0.06,
   "tor_schritt": {
-   "breit": 1.2,
-   "hochkant": 1.8
+   "breit": 3.0,
+   "hochkant": 3.0
   },
   "kontrolle": {
    "breit": [],
@@ -1496,38 +1748,26 @@
      "z_fest": 0.06
     },
     {
-     "name": "D2 Bau",
-     "bild": 170,
-     "von": 167,
-     "bis": 173,
-     "neigung": 40,
+     "name": "D2 Bau und Schreibtisch",
+     "bild": 328,
+     "von": 325,
+     "bis": 331,
+     "neigung": 36,
      "gier": 0,
-     "rand": 0.05,
+     "rand": 0.07,
      "lage_v": 0.5,
      "rahmt": [
       {
        "was": "buehne",
        "bilder": [
         0,
-        330,
-        110
+        345,
+        115
        ]
-      }
-     ]
-    },
-    {
-     "name": "D3 Schreibtisch fertig",
-     "bild": 330,
-     "von": 327,
-     "bis": 333,
-     "neigung": 33,
-     "gier": 0,
-     "rand": 0.09,
-     "lage_v": 0.1,
-     "rahmt": [
+      },
       {
-       "was": "tisch_fertig",
-       "bild": 345
+       "was": "name",
+       "bild": 0
       }
      ]
     },
@@ -1536,14 +1776,13 @@
      "bild": 430,
      "von": 427,
      "bis": 433,
-     "neigung": 7,
+     "neigung": 14,
      "gier": 0,
-     "rand": 0.3,
+     "rand": 0.2,
      "lage_v": 0.5,
      "rahmt": [
       {
-       "was": "flaeche",
-       "name": "m_seite",
+       "was": "schirm",
        "bild": 430
       }
      ],
@@ -1554,14 +1793,13 @@
      "bild": 556,
      "von": 553,
      "bis": 559,
-     "neigung": 7,
+     "neigung": 5,
      "gier": 0,
-     "rand": 0.05,
+     "rand": 0.035,
      "lage_v": 0.5,
      "rahmt": [
       {
-       "was": "flaeche",
-       "name": "m_seite",
+       "was": "schirm",
        "bild": 556
       }
      ],
@@ -1588,9 +1826,9 @@
      "bild": 670,
      "von": 668,
      "bis": 670,
-     "neigung": 36,
+     "neigung": 14,
      "gier": 0,
-     "rand": 0.26,
+     "rand": 0.3,
      "lage_v": 0.5,
      "rahmt": [
       {
@@ -1646,6 +1884,10 @@
         330,
         110
        ]
+      },
+      {
+       "was": "name",
+       "bild": 0
       }
      ]
     },
@@ -1670,7 +1912,7 @@
      "bild": 380,
      "von": 377,
      "bis": 383,
-     "neigung": 52,
+     "neigung": 32,
      "gier": 0,
      "rand": 0.08,
      "lage_v": 0.5,
@@ -1692,50 +1934,40 @@
      "lage_v": 0.5,
      "rahmt": [],
      "anflug": {
-      "von": "H4a Smartphone Kopf",
+      "von": "H4a Smartphone Anfahrt",
       "zurueck": 3.2
      }
     },
     {
-     "name": "H4a Smartphone Kopf",
+     "name": "H4a Smartphone Anfahrt",
      "bild": 430,
      "von": 427,
      "bis": 433,
-     "neigung": 64,
+     "neigung": 16,
      "gier": 0,
-     "rand": 0.06,
+     "rand": 0.24,
      "lage_v": 0.5,
      "rahmt": [
       {
-       "was": "flaeche",
-       "name": "h_seite",
-       "bild": 430,
-       "teil": [
-        0,
-        0.5
-       ]
+       "was": "handy",
+       "bild": 430
       }
      ],
      "x_fest": "mitte"
     },
     {
-     "name": "H4b Smartphone Abschnitte",
+     "name": "H4b Smartphone Lesen",
      "bild": 556,
      "von": 553,
      "bis": 559,
-     "neigung": 64,
+     "neigung": 4,
      "gier": 0,
-     "rand": 0.06,
+     "rand": 0.2,
      "lage_v": 0.5,
      "rahmt": [
       {
-       "was": "flaeche",
-       "name": "h_seite",
-       "bild": 556,
-       "teil": [
-        0.45,
-        1.0
-       ]
+       "was": "handy",
+       "bild": 556
       }
      ],
      "x_fest": "mitte"
@@ -1745,13 +1977,13 @@
      "bild": 612,
      "von": 609,
      "bis": 615,
-     "neigung": 50,
+     "neigung": 40,
      "gier": 0,
      "rand": 0,
      "lage_v": 0.5,
      "rahmt": [],
      "mittel": {
-      "von": "H4b Smartphone Abschnitte",
+      "von": "H4b Smartphone Lesen",
       "bis": "H5 Rechner und Statuspunkt",
       "anteil": 0.5
      }
@@ -1761,9 +1993,9 @@
      "bild": 670,
      "von": 668,
      "bis": 670,
-     "neigung": 38,
+     "neigung": 16,
      "gier": 0,
-     "rand": 0.32,
+     "rand": 0.4,
      "lage_v": 0.5,
      "rahmt": [
       {
@@ -1780,18 +2012,18 @@
    "bild": 0,
    "faden": {
     "punkt": [
-     3.9,
-     -8.8
+     -9,
+     -12.4
     ],
-    "richtung_grad": 40
+    "richtung_grad": 0
    }
   },
   "hochkant": {
    "bild": 0,
    "faden": {
     "punkt": [
-     3.2,
-     -12.2
+     -9,
+     -12.4
     ],
     "richtung_grad": 0
    }
@@ -1803,8 +2035,8 @@
    "kamera_tempo": 0.05,
    "faden": {
     "punkt": [
-     7.75,
-     -6.05
+     2.5,
+     -0.2
     ],
     "richtung_grad": 90
    }
@@ -1814,8 +2046,8 @@
    "kamera_tempo": 0.05,
    "faden": {
     "punkt": [
-     4.15,
-     -6.05
+     2.5,
+     -0.2
     ],
     "richtung_grad": 90
    }
@@ -1823,6 +2055,57 @@
  },
  "pruefung": {
   "min_em_px": 16,
-  "tempo_min": 0.004
+  "tempo_min": 0.004,
+  "bild": {
+   "teile": {
+    "name": ["Marke", "Marke_Punkt"],
+    "tower": ["T_*"],
+    "tischplatte": ["D_Platte"],
+    "tischbein_rechts": ["D_BeinR"],
+    "tischbein_links": ["D_BeinL"],
+    "monitor": ["M_Hals", "M_Schirm", "M_Fuss"],
+    "monitor_schirm": ["M_Schirm"],
+    "smartphone": ["H_Handy"],
+    "tastatur": ["E_Tastatur"]
+   },
+   "wichtig": [
+    {"teil": "name", "bei": [0]},
+    {"teil": "tischplatte", "bei": {"breit": ["D2 Bau"], "hochkant": ["H3 Schreibtisch"]}},
+    {"teil": "monitor_schirm", "nur": "breit", "bei": ["D4a", "D4b"]},
+    {"teil": "smartphone", "nur": "hochkant", "bei": ["H4a", "H4b"]},
+    {"teil": "tower", "bei": {"breit": ["D5"], "hochkant": ["H5"]}}
+   ],
+   "sichtbar": [{"teil": "name", "bei": [0, 12, 26]}],
+   "bildschirme": [
+    {
+     "name": "Monitor",
+     "nur": "breit",
+     "flaechen": ["m_seite", "m_hero", "m_satz1", "m_satz2", "m_satz3"],
+     "grenzen": {"anteil_min": 0.35}
+    },
+    {
+     "name": "Smartphone",
+     "nur": "hochkant",
+     "flaechen": ["h_seite", "h_hero", "h_satz1", "h_satz2", "h_satz3"],
+     "grenzen": {"anteil_min": 0.35}
+    }
+   ],
+   "regeln": [
+    {
+     "teil": "tower",
+     "unter": "tischplatte",
+     "neben": "tischbein_rechts",
+     "front": {"flaeche": "T_Front", "zur": "kamera"},
+     "aufrecht": "T_Boden"
+    },
+    {"teil": "monitor", "auf": "tischplatte", "hinter": "tastatur"},
+    {"teil": "tastatur", "auf": "tischplatte"}
+   ]
+  }
+ },
+ "kabel": {
+  "y_bein": 1.5,
+  "y_hinten": 2.2,
+  "x_knick": 4.15
  }
 }

@@ -628,6 +628,125 @@ export default {
  },
  "pruefung": {
   "min_em_px": 16,
-  "tempo_min": 0.004
+  "tempo_min": 0.004,
+  "bild": {
+   "teile": {
+    "alter_monitor": [
+     "Gruppe_alter_monitor"
+    ],
+    "alter_schirm": [
+     "CRT_Front"
+    ],
+    "neuer_monitor": [
+     "Gruppe_neuer_monitor"
+    ],
+    "neuer_schirm": [
+     "Flach_Schirm"
+    ],
+    "titelkarte": [
+     "Gruppe_titelkarte"
+    ]
+   },
+   "wichtig": [
+    {
+     "teil": "titelkarte",
+     "bei": {
+      "breit": [
+       "D1a",
+       "D1b"
+      ],
+      "hochkant": [
+       "H1a",
+       "H1b"
+      ]
+     }
+    },
+    {
+     "teil": "alter_monitor",
+     "bei": {
+      "breit": [
+       "D1a",
+       "D1b",
+       "D2"
+      ],
+      "hochkant": [
+       "H1a",
+       "H1b",
+       "H2"
+      ]
+     }
+    },
+    {
+     "teil": "neuer_monitor",
+     "bei": {
+      "breit": [
+       "D1a",
+       "D1b",
+       "D2",
+       "D3",
+       "D4"
+      ],
+      "hochkant": [
+       "H1a",
+       "H1b",
+       "H2",
+       "H4"
+      ]
+     }
+    },
+    {
+     "teil": "alter_schirm",
+     "nur": "breit",
+     "bei": [
+      "D3"
+     ]
+    }
+   ],
+   "sichtbar": [
+    {
+     "flaeche": "titel",
+     "bei": [
+      0
+     ]
+    },
+    {
+     "flaeche": "lesestelle",
+     "bei": [
+      350,
+      362,
+      374
+     ]
+    }
+   ],
+   "bildschirme": [
+    {
+     "name": "Alter Monitor, Lesestelle",
+     "flaechen": [
+      "lesestelle"
+     ],
+     "fuellung": false,
+     "grenzen": {
+      "anteil_min": 0.1
+     }
+    }
+   ],
+   "regeln": [
+    {
+     "teil": "neuer_monitor",
+     "bei": [
+      440
+     ],
+     "auf": "Bogen",
+     "aufrecht": "Flach_Fuss"
+    },
+    {
+     "teil": "alter_monitor",
+     "bei": [
+      440
+     ],
+     "auf": "Bogen"
+    }
+   ]
+  }
  }
 };

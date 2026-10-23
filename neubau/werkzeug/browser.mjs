@@ -38,8 +38,9 @@ const MIME = { ".html": "text/html; charset=utf-8", ".js": "text/javascript; cha
 function server(wurzel) {
   const s = http.createServer((req, res) => {
     let p = decodeURIComponent(req.url.split("?")[0]); if (p.endsWith("/")) p += "index.html";
-    const f = path.join(wurzel, p);
-    if (!f.startsWith(wurzel) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end("nicht gefunden"); return; }
+    // /werkzeug/... liefert die Prüfmodule (bildpruefung/*.js) aus diesem Ordner; die Seite selbst kennt sie nicht
+    const wz = p.startsWith("/werkzeug/"), f = wz ? path.join(HIER, p.slice("/werkzeug/".length)) : path.join(wurzel, p);
+    if (!f.startsWith(wz ? HIER : wurzel) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end("nicht gefunden"); return; }
     res.writeHead(200, { "content-type": MIME[path.extname(f)] || "application/octet-stream", "cache-control": "no-store" });
     fs.createReadStream(f).pipe(res);
   });
@@ -138,12 +139,41 @@ async function pruefen() {
           if (ordner && f === frames[frames.length - 1]) await page.screenshot({ path: path.join(ordner, `${praefix}_${name}_${fname}_b${f}.png`) });
         }
       }
+      // Bildprüfung (werkzeug/bildpruefung): Anschnitt, Verdeckung, Bildschirm, Füllgrad, Platzierung; Messwerte, bewertet wird in Python
+      if (szene.pruefung && szene.pruefung.bild && !flag("ohne-bildpruefung")) {
+        const t0 = Date.now();
+        a.bildpruefung = await page.evaluate(async au => { const m = await import("/werkzeug/bildpruefung/anbindung-neubau.js"); return m.neubauMessung(window.__neubau, au); }, { szene: arg("nur"), bild: szene.pruefung.bild });
+        a.bildpruefung.ms = Date.now() - t0;
+      }
       await ctx.close();
     }
   } finally { await browser.close(); s.close(); }
   bericht.ok = bericht.fehler.length === 0 && !bericht.logs.some(l => l.startsWith("pageerror"));
   console.log(JSON.stringify(bericht));
   process.exitCode = bericht.ok ? 0 : 2;
+}
+
+// Selbsttest der Bildprüfung: je Prüfung wird die gebaute Welt im Speicher absichtlich verdorben (Teil aus dem Bild, Platte vor den Titel, Kamera schräg,
+// Bildschirminhalt gelöscht, Teil verschoben); die Messung muss danach anschlagen und nach dem Zurücksetzen wieder den Ausgangswert liefern.
+async function selbsttest() {
+  const szeneDatei = path.resolve(arg("szene"));
+  const szene = JSON.parse(fs.readFileSync(szeneDatei, "utf8"));
+  const wurzel = path.resolve(arg("wurzel", path.join(NEUBAU, "seite")));
+  const { s, port } = await server(wurzel);
+  const pw = playwrightLaden(), browser = await starten(pw);
+  const bericht = { ansichten: {}, fehler: [], logs: [] };
+  const au = { szene: arg("nur"), bild: (szene.pruefung || {}).bild || {} };
+  try {
+    for (const [name, vp, dpr, mobil] of ANSICHTEN) {
+      const { ctx, page } = await seiteOeffnen(browser, seitenUrl(port, "index.html"), vp, dpr, mobil, bericht.logs);
+      const lauf = opt => page.evaluate(async ([au, opt]) => { const m = await import("/werkzeug/bildpruefung/anbindung-neubau.js"); return m.neubauMessung(window.__neubau, au, opt); }, [au, opt]);
+      const r = bericht.ansichten[name] = { basis: await lauf({}), provokation: {} };
+      for (const typ of ["anschnitt", "verdeckung", "bildschirm", "fuellung", "platzierung"]) r.provokation[typ] = await lauf({ provokation: typ });
+      r.danach = await lauf({});              // nach allen Provokationen: muss der Basis gleichen (Zurücksetzen geprüft)
+      await ctx.close();
+    }
+  } finally { await browser.close(); s.close(); }
+  console.log(JSON.stringify(bericht));
 }
 
 async function naht() {
@@ -209,4 +239,4 @@ async function fpsMessen() {
 }
 
 const befehl = process.argv[2];
-(befehl === "bilder" ? bilder() : befehl === "pruefen" ? pruefen() : befehl === "naht" ? naht() : befehl === "fps" ? fpsMessen() : Promise.reject(new Error("Befehl: bilder | pruefen | naht | fps"))).catch(e => { console.error(e); process.exit(1); });
+(befehl === "bilder" ? bilder() : befehl === "pruefen" ? pruefen() : befehl === "naht" ? naht() : befehl === "selbsttest" ? selbsttest() : befehl === "fps" ? fpsMessen() : Promise.reject(new Error("Befehl: bilder | pruefen | naht | fps"))).catch(e => { console.error(e); process.exit(1); });

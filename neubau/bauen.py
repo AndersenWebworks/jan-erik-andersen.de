@@ -5,7 +5,8 @@
 #   python neubau/bauen.py pruefen eroeffnung          nur die Browserprüfung (Text an den Lesestellen, breit und hochkant)
 #   python neubau/bauen.py uebergang eroeffnung modernisierung   Übergangsstück aus Ausgang der einen und Eingang der anderen Szene
 #   python neubau/bauen.py seite                       ganze Seite: alle Szenen der Folge (szenen/folge.json), alle Übergänge, folge.js, Prüfungen, Nähte
-# Optionen: --ohne-proben (keine Blender-Probebilder), --bilder (Browser-Bilder nach proben/<szene>/browser),
+#   python neubau/bauen.py selbsttest eroeffnung       Selbsttest der Bildprüfungen: je Prüfung ein absichtlich provozierter Fehler muss erkannt werden
+# Optionen: --ohne-bildpruefung (Anschnitt/Verdeckung/Bildschirm/Füllgrad/Platzierung auslassen), --ohne-proben (keine Blender-Probebilder), --bilder (Browser-Bilder nach proben/<szene>/browser),
 #           --trotzdem (--nur-text auch bei geänderter Form; der Browser zeigt dann den alten Bau mit neuem Text),
 #           --nur-neu (bei "seite": Szenen und Übergänge, deren Szenendatei sich nicht geändert hat, nicht neu bauen)
 # Exitcode 0 = ok, 2 = Prüfung fehlgeschlagen, 3 = Blender nötig.
@@ -14,6 +15,8 @@ import hashlib, json, os, re, shutil, subprocess, sys, time, html
 HIER = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HIER, "blender"))
 import szene as szn
+sys.path.insert(0, os.path.join(HIER, "werkzeug", "bildpruefung"))
+import bewertung as bildbew      # Bildprüfung: Messwerte -> OK/WARNUNG/FEHLER (projektneutral, Grenzwerte dort)
 
 BLENDER = os.environ.get("BLENDER") or r"D:\Tools\blender\blender-5.2.3-windows-x64\blender.exe"
 ASSETS = os.path.join(HIER, "seite", "assets")
@@ -104,6 +107,38 @@ def browser(befehl, *args):
     if not zeilen:
         return {"ok": False, "fehler": ["Browserlauf ohne Ergebnis: " + (r.stderr or r.stdout)[-600:]], "ansichten": {}, "logs": []}
     return json.loads(zeilen[-1])
+
+
+FORMAT_NAME = {"anschnitt": "Anschnitt", "verdeckung": "Verdeckung", "bildschirm": "Bildschirm", "fuellung": "Füllgrad", "platzierung": "Platzierung"}
+
+
+def bild_bewerten(bericht):
+    """Bildprüfung (Messwerte aus dem Browser) bewerten. Rückgabe: (fehler, hinweise, zeilen, ms). Fehler und Warnungen nennen Teil, Zeitpunkt und Format."""
+    fehler, hinweise, zeilen, ms, alle = [], [], [], 0, {}
+    for a, v in (bericht or {}).get("ansichten", {}).items():
+        bp = v.get("bildpruefung")
+        if not bp:
+            continue
+        ms += bp.get("ms", 0)
+        bf = bildbew.bewerte(bp, a)
+        alle[a] = bf
+        z = bildbew.zusammenfassung(bf)
+        for typ, name in FORMAT_NAME.items():
+            if typ not in z:
+                zeilen.append(f"  Bild {a:9s} {name:12s} nichts deklariert"); continue
+            s = z[typ]
+            urteil = "FEHLER" if s["FEHLER"] else ("WARNUNG" if s["WARNUNG"] else "OK")
+            zeilen.append(f"  Bild {a:9s} {name:12s} {urteil:7s} {s['n']} Messungen, {s['FEHLER']} Fehler, {s['WARNUNG']} Warnungen; {bildbew.kennzahl(typ, bf)}")
+        gruppen = {}      # gleiche Meldung zu mehreren Zeitpunkten (z. B. ruhender Bildschirminhalt) nur einmal, mit allen Zeitpunkten
+        for b in bf:
+            if b["status"] in ("FEHLER", "WARNUNG"):
+                gruppen.setdefault((b["status"], b["pruefung"], b["text"]), []).append(b["zeitpunkt"])
+        for (status, pruefung, text), zp in gruppen.items():
+            zp = [z for z in zp if z]
+            wo = (" bei " + (zp[0] if len(zp) == 1 else f"{len(zp)} Zeitpunkten ({', '.join(zp[:3])}{', ...' if len(zp) > 3 else ''})")) if zp else ""
+            (fehler if status == "FEHLER" else hinweise).append(("" if status == "FEHLER" else "Warnung ") + f"Bild {a} {FORMAT_NAME.get(pruefung, pruefung)}{wo}: {text}")
+    bericht["bild_befunde"] = alle
+    return fehler, hinweise, zeilen, ms
 
 
 def flach(d, p=""):
@@ -212,9 +247,12 @@ def szene_bauen(name, flags, ausgabe=True):
     if not (modus == "voll" and fehler):
         t = time.time()
         ordner = os.path.join(HIER, "proben", name, "browser")
-        bericht = browser("pruefen", "--szene", szn.datei(name), "--nur", name, "--ordner", ordner, "--praefix", "text")
+        bericht = browser("pruefen", "--szene", szn.datei(name), "--nur", name, "--ordner", ordner, "--praefix", "text", *(["--ohne-bildpruefung"] if "--ohne-bildpruefung" in flags else []))
         zeiten["browser"] = time.time() - t
         fehler += bericht.get("fehler", []) + [l for l in bericht.get("logs", []) if l.startswith("pageerror")]
+        bf, bh, bz, bms = bild_bewerten(bericht)
+        fehler += bf; hinweise += bh; bericht["bild_zeilen"] = bz
+        if bms: zeiten["davon Bildprüfung"] = bms / 1000
         if "--bilder" in flags:
             browser("bilder", "--nur", name, "--ordner", ordner, "--praefix", "p")
     zeiten["gesamt"] = time.time() - t_ges
@@ -236,9 +274,39 @@ def szene_ausgeben(name, modus, fehler, hinweise, gebaut, bericht, zeiten, h):
                 es = fl["bilder"].values()
                 if not es: continue
                 print(f"  Browser {a:9s} {fn:10s} min {min(e['min_em_px'] for e in es):5.1f} px, verdeckt {sum(e['verdeckt'] for e in es)}, außerhalb {sum(e['ausserhalb'] for e in es)}, Bilder {list(fl['bilder'])}")
+    if bericht:
+        for z in bericht.get("bild_zeilen", []): print(z)
     for hw in hinweise: print("  Hinweis:", hw)
     for f in fehler: print("  FEHLER:", f)
     print("  Zeiten: " + ", ".join(f"{k} {v:.1f} s" for k, v in zeiten.items()))
+
+
+# ------------------------------------------------------------------ Selbsttest der Bildprüfung
+def selbsttest(name):
+    """Je Prüfung ein absichtlich provozierter Fehler an der gebauten Welt (im Speicher, nichts auf der Platte): muss als FEHLER erkannt werden;
+    danach muss die unveränderte Messung wieder gleich der ersten sein (Zurücksetzen)."""
+    r = browser("selbsttest", "--szene", szn.datei(name), "--nur", name)
+    ok = bool(r.get("ansichten")) and not r.get("fehler")
+    print("=" * 60)
+    print(f"selbsttest {name}:")
+    for f in r.get("fehler", []): print("  FEHLER:", f)
+    for a, v in r.get("ansichten", {}).items():
+        basis = bildbew.bewerte(v["basis"], a)
+        for typ, pn in FORMAT_NAME.items():
+            prov = bildbew.bewerte(v["provokation"].get(typ, {}), a)
+            for b in prov:
+                if b["pruefung"] == "messung": print(f"  {a:9s} {pn:12s} Messfehler: {b['text']}")
+            if not any(b["pruefung"] == typ for b in prov):
+                print(f"  {a:9s} {pn:12s} nichts deklariert, nicht getestet"); continue
+            gut, text = bildbew.selbsttest_pruefen(typ, [b for b in basis if b["pruefung"] == typ], prov)
+            ok &= gut
+            print(f"  {a:9s} {pn:12s} {'ERKANNT' if gut else 'NICHT ERKANNT'}: {text}")
+        danach = bildbew.bewerte(v["danach"], a)
+        gleich = [(b["pruefung"], b["id"], b["zeitpunkt"], b["status"], b["text"]) for b in basis] == [(b["pruefung"], b["id"], b["zeitpunkt"], b["status"], b["text"]) for b in danach]
+        ok &= gleich
+        print(f"  {a:9s} Zurücksetzen   {'OK, Messung nach allen Provokationen gleich der ersten' if gleich else 'FEHLER: Messung nach den Provokationen weicht ab'}")
+    print("selbsttest:", "OK" if ok else "FEHLER")
+    return 0 if ok else 2
 
 
 # ------------------------------------------------------------------ Übergang
@@ -369,6 +437,8 @@ def main():
         fehler, hinweise, gebaut, zeiten, rc = uebergang_bauen(args[1], args[2], flags)
         uebergang_ausgeben(args[1], args[2], fehler, hinweise, gebaut, zeiten)
         return rc
+    if args[0] == "selbsttest":
+        return selbsttest(args[1] if len(args) > 1 else "modernisierung")
     if args[0] == "pruefen":
         args = args[1:]; flags = flags + ["pruefen"]
     name = args[0]

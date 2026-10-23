@@ -155,16 +155,30 @@ Z_MON = tuple(Z["monitor"])
 sch_mon = klappe("Sch_Monitor", (0, Y_HALS, Z_TOP + G), "x", -90, Z_MON, None, [hals, schirm])
 anhaengen(fuss, tisch_wurzel); anhaengen(sch_mon, tisch_wurzel)
 
-# ---------------------------------------------------------------- Smartphone: liegt flach auf dem Tisch (trägt am Handy die mobile Fassung der Seite)
-HF = form("handy")
+# ---------------------------------------------------------------- Smartphone: steht aufrecht auf einem kleinen Ständer (Fuß, Hals), leicht nach hinten geneigt
+# (trägt am Handy die mobile Fassung der Seite; klappt wie der Monitor aus dem Bogen hoch)
+HF = form("handy"); HLg = lage("handy")
 HW_, HL_, HT_, HR, HO, HU = HF["breite"], HF["laenge"], HF["dicke"], HF["rand"], HF["oben"], HF["unten"]
 HDW, HDH = HW_ - 2 * HR, HL_ - HO - HU
-hx, hy = auf_platte("handy")
+HFB, HFT, HFD = HF["fuss"]; HNW, HNH, HNT = HF["hals"]; HZ = HF["z_schirm"]; HNEIG = HF["neigung"]
+HX, HY_HALS = DX + HLg["x"], DY + HLg["y_hals"]
 hand_cmds = [{"rect": [0, 0, HW_, HL_], "fill": "#394152", "r": .13}, {"rect": [HR, HO, HDW, HDH], "fill": "#121824", "r": .05},
              {"rect": [HW_ / 2 - .11, HO / 2 - .013, .22, .026], "fill": "#0b0f17", "r": .013}, {"circle": [HW_ / 2 + .16, HO / 2, .016], "fill": "#0b0f17"}]
 m_hand = material("H_Handy", PAL["flaeche"], bild=druck_bild("handy_front", HW_, HL_, 300, "#394152", hand_cmds), rau=.45)
-handy = karton("H_Handy", HW_, HL_, HT_, mats={"vorn": m_hand, "hinten": M["grau"], "rand": M["kante"]}, liegend=True, mitte_x=True)
-handy.location = (hx, hy, Z_TOP + G)
+h_fuss = karton("H_Fuss", HFB, HFT, HFD, mats={"alle": M["metall"], "rand": M["kante"]}, liegend=True)
+h_fuss.location = (HX - HFB / 2, HY_HALS - HNT - G - HFT, Z_TOP + G)
+h_hals = karton("H_Hals", HNW, HNH, HNT, mats={"alle": M["metall"], "rand": M["kante"]})
+h_hals.location = (HX - HNW / 2, HY_HALS - HNT, Z_TOP + G)
+handy = karton("H_Handy", HW_, HL_, HT_, mats={"vorn": m_hand, "hinten": M["grau"], "rand": M["kante"]})
+handy.location = (HX - HW_ / 2, HY_HALS - HNT - HT_ - G, Z_TOP + G + HZ)
+Z_HANDY = (Z["monitor"][0] + 8, Z["monitor"][1] + 8)
+h_neig = leer("H_Neigung", (HX, HY_HALS, Z_TOP + G))
+bpy.context.view_layer.update()
+anhaengen(h_hals, h_neig); anhaengen(handy, h_neig)
+h_neig.rotation_euler = (-math.radians(HNEIG), 0, 0)             # Kopf nach hinten geneigt (Drehung um die Unterkante)
+bpy.context.view_layer.update()
+sch_handy = klappe("Sch_Handy", (0, HY_HALS, Z_TOP + G), "x", -(90 - HNEIG), Z_HANDY, None, [h_neig])    # flach: Neigung und Falz heben sich auf, das Gerät liegt im Bogen
+anhaengen(h_fuss, tisch_wurzel); anhaengen(sch_handy, tisch_wurzel)
 
 # ---------------------------------------------------------------- Dinge auf dem Tisch
 # Tablett (Deko, ohne Text) mit Stift: liegt von Anfang an auf der Platte
@@ -195,7 +209,7 @@ maus_cmds = [{"rect": [.03, .03, MsF["breite"] - .06, MsF["tiefe"] - .06], "fill
 m_maus = material("E_maus", C["hell"], bild=druck_bild("maus", MsF["breite"], MsF["tiefe"], 240, C["hell"], maus_cmds))
 maus = karton("E_Maus", MsF["breite"], MsF["tiefe"], MsF["dicke"], mats={"vorn": m_maus, "hinten": M["grau"], "rand": M["kante"]}, liegend=True, mitte_x=True)
 maus.location = (mx_, my_, Z_TOP + G)
-for o in (tablett, stift, tastatur, maus, handy):
+for o in (tablett, stift, tastatur, maus):
     anhaengen(o, tisch_wurzel)
 
 # Tasse, Becher (mit Stiften), Pflanze: Papiernetze, die sich aufstellen
@@ -243,7 +257,7 @@ for o in bpy.data.objects:
     if o.type == "EMPTY" and o.parent is None and any(o.name.startswith(p) for p in ("Tasse_w", "Becher_w", "Topf_w", "Stift", "Blatt", "Sch_Lampe")):
         anhaengen(o, tisch_wurzel)
 
-# ================================================================ Rechner (Tower): Netz aus Boden, vier Wänden und Deckel
+# ================================================================ Rechner (Tower): Netz aus Boden und vier Wänden (offen oben, die Tischplatte verdeckt die Oberseite)
 RF = form("rechner"); RL = lage("rechner")
 RW, RD, RHH = RF["breite"], RF["tiefe"], RF["hoehe"]
 RX, RY = RL["x"], RL["y_vorn"]
@@ -277,20 +291,10 @@ def seite(name, x_hinge, rot):
     return s
 tlinks = seite("T_Links", X0 - T - G, -math.pi / 2)
 trechts = seite("T_Rechts", X1 + T + G, math.pi / 2)
-tdeckel = karton("T_Deckel", FWR, RD + 2 * T, T, mats={"vorn": M["gehaeuse"], "hinten": M["gehaeuse"], "rand": M["kante"]}, liegend=True)
-tdeckel.location = (X0 - T, RY - T, RHH + G)
 bpy.context.view_layer.update()
 sch_tf = klappe("Sch_TFront", (0, RY - T - G, 0), "x", 90, ZR["front"], None, [tfront])
 y_h = RY + RD + T + G
-sch_tr = klappe("Sch_TRueck", (0, y_h, 0), "x", -90, ZR["rueck"], None, [trueck])
-A0 = tdeckel.matrix_world @ Vector((0, RD + 2 * T, 0)); B0 = tdeckel.matrix_world @ Vector((0, 0, 0))
-L_D = RD + 2 * T; H_R = RHH - G
-A1 = Vector((0, y_h + H_R + 2 * G, T)); B1 = Vector((0, y_h + H_R + 2 * G + L_D, T))
-zur = lambda p: Vector((0, y_h - p.z, p.y - y_h))
-A1r, B1r = zur(A1), zur(B1)
-(py_d, pz_d), ang_d = basis.drehpunkt_2d((A0.y, A0.z), (B0.y, B0.z), (A1r.y, A1r.z), (B1r.y, B1r.z))
-sch_td = klappe("Sch_TDeckel", (0, py_d, pz_d), "x", ang_d, ZR["deckel"], None, [tdeckel])
-anhaengen(sch_td, sch_tr)
+sch_tr = klappe("Sch_TRueck", (0, y_h, 0), "x", -90, ZR["rueck"], None, [trueck])   # ohne Deckel: unter dem Tisch käme der Deckel beim Aufklappen an die Platte; die Oberseite verdeckt die Platte
 sch_tl = klappe("Sch_TLinks", (X0 - T - G, 0, 0), "y", -90, ZR["seiten"], None, [tlinks])
 sch_trr = klappe("Sch_TRechts", (X1 + T + G, 0, 0), "y", 90, ZR["seiten"], None, [trechts])
 # Statuspunkt: roter Punkt in der Fassung auf der Front, bewegt sich mit der Front
@@ -309,7 +313,7 @@ for name, fl in SZ["druckflaechen"].items():
     if fl["traeger"] == "M_Schirm":
         DRUCK[name] = basis.druckflaeche(name, schirm, "vorn", NDW, NDH, fl_mat(name), ST, abstand=ab, x0=BZ, z0=BZU)
     elif fl["traeger"] == "H_Handy":
-        DRUCK[name] = basis.druckflaeche_oben(name, handy, HDW, HDH, fl_mat(name), HT_ + ab, x0=-HW_ / 2 + HR, y0=HU)
+        DRUCK[name] = basis.druckflaeche(name, handy, "vorn", HDW, HDH, fl_mat(name), HT_, abstand=ab, x0=HR, z0=HU)
     else:
         raise ValueError("Träger unbekannt: " + fl["traeger"])
 TRAGER = "h_seite" if HOCH else "m_seite"     # Fläche, auf die die Kamera zum Lesen fährt
@@ -367,8 +371,8 @@ def skizze_strecken(liste):
                 yield (cx + r * math.cos(a), cy + r * math.sin(a), cx + r * math.cos(b), cy + r * math.sin(b))
 segs = list(skizze_strecken(SK))
 if HOCH:
-    ort = lambda px, py: Vector((-HW_ / 2 + HR + px, HL_ - HO - py, HT_))
-    tr, nrm = handy, (0, 0, 1)
+    ort = lambda px, py: Vector((HR + px, 0, HL_ - HO - py))
+    tr, nrm = handy, (0, -1, 0)
 else:
     ort = lambda px, py: Vector((BZ + px, 0, SH_ - BZ - py))
     tr, nrm = schirm, (0, -1, 0)
@@ -376,15 +380,15 @@ for k, (a, b, c, d) in enumerate(segs):
     e0 = sk0 + (sk1 - sk0 - 6) * k / max(1, len(segs) - 1)
     bau.strich(ort(a, b), ort(c, d), e0, 6, .8, normal=nrm, eltern=tr, breite=.011, aus=Z["bildschirm"][0] + 6)
 
-klapp_teile = [plate, beinL, beinR, hals, schirm, tfront, tlinks, trechts, trueck, tdeckel]
+klapp_teile = [plate, beinL, beinR, hals, schirm, tfront, tlinks, trechts, trueck]
 ab_bogen = {"D_Platte": Z_TISCH[0], "D_BeinL": Z_TISCH[0], "D_BeinR": Z_TISCH[0], "M_Hals": Z_MON[0], "M_Schirm": Z_MON[0], "T_Front": ZR["front"][0],
-            "T_Links": ZR["seiten"][0], "T_Rechts": ZR["seiten"][0], "T_Rueck": ZR["rueck"][0], "T_Deckel": ZR["rueck"][0]}
+            "T_Links": ZR["seiten"][0], "T_Rechts": ZR["seiten"][0], "T_Rueck": ZR["rueck"][0]}
 steht = {"D_Platte": Z_TISCH[1], "D_BeinL": Z_TISCH[1], "D_BeinR": Z_TISCH[1], "M_Hals": Z_MON[1], "M_Schirm": Z_MON[1], "T_Front": ZR["front"][1], "T_Links": ZR["seiten"][1],
-         "T_Rechts": ZR["seiten"][1], "T_Rueck": ZR["rueck"][1], "T_Deckel": ZR["deckel"][1], "T_Boden": ZR["front"][1], "D_Abdruck": Z_TISCH[1], "M_Fuss": Z_MON[1]}
+         "T_Rechts": ZR["seiten"][1], "T_Rueck": ZR["rueck"][1], "T_Boden": ZR["front"][1], "D_Abdruck": Z_TISCH[1], "M_Fuss": Z_MON[1]}
 bau.schnitt(klapp_teile, 0, *Z["schnitt"], ab_bogen, nachbarn=[boden_r, abdruck_t, fuss])
 bau.raster(-5.5, RX + 3.5, -3.5, DY + DD + 2.5, *Z["raster"], aus=Z["raster_aus"])
 bauform_frame = Z["tisch"][1] + 60   # Tisch, Monitor und Rechner stehen (nach dem Aufstellen, vor dem Leben auf dem Tisch)
-n_ger = bau.geruest([plate, beinL, beinR, tfront, tlinks, trechts, trueck, tdeckel], *Z["geruest"], steht, frame_bauform=bauform_frame)
+n_ger = bau.geruest([plate, beinL, beinR, tfront, tlinks, trechts, trueck], *Z["geruest"], steht, frame_bauform=bauform_frame)
 bau.spur([plate, beinL, beinR, tfront, tlinks, trechts, trueck], {k: v - 10 for k, v in ab_bogen.items()})
 # Falzlinie der Marke (gestrichelt, bleibt) auf dem Bogen unter den Lettern
 fx0 = NAME_X + nx0 - .1 * EM; fx1 = NAME_X + nx0 + ges_w + .1 * EM
@@ -392,25 +396,22 @@ bau.gestrichelt((fx0, NAME_Y + MK["dicke"] / 2, .0016), (fx1, NAME_Y + MK["dicke
 # Kabel: Bildschirm -> Platte -> Tischbein -> Bogen -> Rechner (zeichnet sich nach dem Aufstellen)
 k0, k1 = Z["kabel"]
 cable_w = .055
+CAB = SZ["kabel"]
 def lokal_platte(x, y):  # Weltpunkt (x, y) auf der Platte -> lokal im Plattenobjekt
     return Vector((x - DX, y - DY, DP))
-yk = DY + DD - .4
-wp = [(XM, Y_HALS + .03), (XM, yk), (DX + DW / 2, yk)]
+yk = DY + CAB["y_bein"]
+wp = [(XM, Y_HALS + .03), (XM, DY + CAB["y_hinten"]), (DX + CAB["x_knick"], DY + CAB["y_hinten"]), (DX + CAB["x_knick"], yk), (DX + DW / 2, yk)]
 segs_k = list(zip(wp, wp[1:]))
 t_ = k0
+lg_gesamt = sum((Vector(q) - Vector(p)).length for p, q in segs_k)
 for a, b in segs_k:
-    L = (Vector(b) - Vector(a)).length; d_ = (k1 - k0) * .22 * L / 2.0
+    L = (Vector(b) - Vector(a)).length; d_ = (k1 - k0) * .3 * L / lg_gesamt
     bau.strich(lokal_platte(*a), lokal_platte(*b), t_, d_, .92, normal=(0, 0, 1), eltern=plate, breite=cable_w); t_ += d_
 # über die Kante und am Bein hinunter (Außenfläche des rechten Beins, lokal: x entlang der Tiefe, z Höhe, y = Außenfläche)
 xl = yk - (DY + DD / 2)
 bau.strich(Vector((xl, -0.0, DH + DP)), Vector((xl, -0.0, .0)), t_, (k1 - k0) * .2, .92, normal=(0, -1, 0), eltern=beinR, breite=cable_w); t_ += (k1 - k0) * .2
-# über den Bogen zum Rechner (weiche Kurve), dann an der Außenseite der linken Rechnerwand hoch
-kb, kk, kl = basis.bahn_g2(((DX + DW / 2 + .02, yk), 90), ((X0 - T - G - .35, RY + RD / 2), 90), [], schritt=1.2, n=60)
-dur = (k1 - k0) * .46 / len(kb)
-for i, (p, q) in enumerate(zip(kb, kb[1:])):
-    bau.strich(Vector((p.x, p.y, .0011)), Vector((q.x, q.y, .0011)), t_ + dur * i, dur * 1.4, .92, normal=(0, 0, 1), breite=cable_w)
-t_ += dur * len(kb)
-bau.strich(Vector((X0 - T - G - .35, RY + RD / 2, .0011)), Vector((X0 - T - G - .0, RY + RD / 2, .0011)), t_, 3, .92, normal=(0, 0, 1), breite=cable_w)
+# unter dem Bein durch, auf dem Bogen gerade zur rechten Rechnerwand (gleiche Tiefe: kein Knick, keine Schleife)
+bau.strich(Vector((DX + DW / 2 + .02, yk, .0011)), Vector((X1 + T + G, yk, .0011)), t_, (k1 - k0) * .3, .92, normal=(0, 0, 1), breite=cable_w)
 bau_obs = bau.bauen()
 print(f"BAU: {sum(len(v) for v in bau.striche.values())} Striche, {len(bau.flaechen)} Abdrücke, Gerüstkanten {n_ger}, Objekte {[o.name for o in bau_obs][:8]}")
 
@@ -421,9 +422,9 @@ KNAME = "Kamera_Handy" if HOCH else "Kamera_Desktop"
 H = basis.huellpunkte
 objs_name = [name_ob, dot_ob]
 objs_tisch = [plate, beinL, beinR, abdruck_t]
-objs_dinge = [tablett, tastatur, maus, handy, tasse_boden, becher_boden, topf_boden, lampe_fuss, lampe_arm, lampe_kopf] + tasse_w + becher_w + topf_w
+objs_dinge = [tablett, tastatur, maus, handy, h_fuss, h_hals, tasse_boden, becher_boden, topf_boden, lampe_fuss, lampe_arm, lampe_kopf] + tasse_w + becher_w + topf_w
 objs_monitor = [fuss, hals, schirm]
-objs_tower = [boden_r, tfront, trueck, tlinks, trechts, tdeckel]
+objs_tower = [boden_r, tfront, trueck, tlinks, trechts]
 def flaeche_ecken(ob, frame):
     sc.frame_set(frame); bpy.context.view_layer.update()
     pts = [ob.matrix_world @ v.co for v in ob.data.vertices]
@@ -435,7 +436,9 @@ def rahmt(r):
     if was == "buehne":
         a_, b_, st = r["bilder"]
         return H(objs_tisch + objs_monitor + objs_tower + objs_dinge, list(range(a_, b_ + 1, st)))
-    if was == "handy_umgebung": return H([handy, maus, tastatur, becher_boden, tasse_boden] + becher_w + tasse_w, [r["bild"]])
+    if was == "handy_umgebung": return H([handy, h_fuss, h_hals, maus, tastatur, becher_boden, tasse_boden] + becher_w + tasse_w, [r["bild"]])
+    if was == "handy": return H([handy, h_fuss], [r["bild"]])
+    if was == "schirm": return H([schirm], [r["bild"]])
     if was == "schreibtisch_fertig": return H(objs_tisch + objs_monitor + objs_dinge, [r["bild"]])
     if was == "tisch_fertig": return H(objs_tisch + objs_monitor + objs_dinge + objs_tower, [r["bild"]])
     if was == "flaeche":
@@ -499,7 +502,7 @@ alle_meshes = [o for o in bpy.data.objects if o.type == "MESH" and not o.name.st
 teile = [o for o in alle_meshes if o.name not in ("D_Abdruck", "T_Boden")] + [pruef_faden]
 # zulässig: Teile, die sich an ihrem gemeinsamen Falz berühren (der Karton biegt dort); der Faden ist auf das Papier gedruckt und
 # liegt unter der Rechner-Front, solange sie noch flach im Bogen liegt
-erlaubt = [("T_Rueck", "T_Deckel"), ("Pruef_Faden", "T_Front"), ("Pruef_Faden", "T_Led"), ("Punkt", "Pruef_Faden")]
+erlaubt = [("Pruef_Faden", "T_Front"), ("Pruef_Faden", "T_Led"), ("Punkt", "Pruef_Faden")]
 kol = basis.kollisionen(teile, F_END, erlaubt=erlaubt, schritt=2)
 for (a, b), fs in kol.items():
     bericht["kollisionen"][f"{a} x {b}"] = {"bilder": [f for f, n in fs][:12], "anzahl_bilder": len(fs)}
