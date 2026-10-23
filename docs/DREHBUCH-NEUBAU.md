@@ -184,6 +184,13 @@ Erik will modular bauen, weil die Seite öfter angepasst wird: Text tauschen und
 
 **Aus dem Bestand übernommen, geprüft statt kopiert:** `wortmarke.js`, Faltmechanik und Einrasten aus `falt.js`, Palette und Post-Processing aus `kern.js`, Schreibtischdinge aus `schreibtisch.js`, Leporello-Faltung aus `stimmen.js`, Gerwing-Bilder aus `bilder/`, Schriften, `vendor/`, Kopf und Fallback aus `index.html`, Weg auf main (`docs/weg-auf-main.sh`).
 
+### Bildregeln und Messlatte (23.10.2026, Erik: „Messlatte so setzen“)
+
+Nach einem halben Tag war das Ergebnis nicht besser oder schneller als der Bestand; die Bildfehler wurden mit dem Auge auf Probebildern gesucht. Grundsatz: Ideen, die nicht zum Ziel führen, werden beendet, auch wenn schon viel investiert ist.
+
+- **Bildfehler sind Prüfungen, keine Sichtschleifen:** Anschnitt wichtiger Teile, Verdeckung von Titel und Text, Blickwinkel auf Bildschirme, Füllgrad der Mockups und Lageregeln aus der Szenendatei misst der Baubefehl. Das Auge bleibt nur für Geschmack.
+- **Messlatte:** Mit diesen Prüfungen bekommt die Eröffnung genau eine Runde. Ist sie danach nicht sichtbar besser als die Eröffnung im Bestand, endet der Blender-Weg. Mitgenommen wird, was ohne Blender trägt: Prüfungen, Szenendateien, durchgehende Kamera.
+
 **Ort:** neuer Ordner neben `seite/`. Der Weg auf main zeigt erst nach Eriks Abnahme auf den Neubau. Push nur nach Eriks Klick.
 
 ## 5 Offen – vor dem Bau mit Erik klären
