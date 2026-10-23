@@ -66,7 +66,7 @@ Befund im Bestand: Die Kamera kannte nur zwei Regeln, „Punkt im Bild“ und �
 - **Kein Scroll-Lock, kein Hijack.** Animationen langsam genug zum Ansehen.
 
 ### Startbild
-- Beim Laden steht **nur der Name**, scharf, auf großen Bildschirmen nicht zu groß. Kamera flach vor der Marke, man sieht keine Fläche.
+- Beim Laden steht **nur der Name**, scharf, auf großen Bildschirmen nicht zu groß. Kamera flach vor der Marke, man sieht keine Fläche. Bestätigt von Erik am 23.10.2026 gegen die Alternativen „Name plus feste Zeile“ und „Name plus Kernsatz“: Die Marke hat Vorrang vor dem Fünf-Sekunden-Maßstab im allerersten Bild.
 - Ortszeile, Kernsatz und Podest kommen erst mit dem Scrollen, ohne dass sich etwas durch die Buchstaben schiebt.
 - Nie zwei Namen übereinander (HTML-Vorbild und 3D), keine Animation über dem Startbild. Name und Text laden sofort, das 3D darf nachladen.
 
@@ -91,7 +91,7 @@ Reihenfolge, Kernaussage, Text, Bild. Texte wörtlich wie heute im Seitentext.
 - **Ziel:** Nach dem ersten Bild steht fest: Name, Webentwickler, für wen. Dass sich alles aus Papier präzise aufbaut, ist der erste Beleg fürs Niveau. Die drei Sätze zeigen jeder Zielgruppe ihren Weg zur Zusammenarbeit. Prüfen: Reicht das erste Bild, wenn jemand nach fünf Sekunden geht?
 - **Kernaussage:** Wer ich bin und was ich mache.
 - **Text:** Name; Ortszeile „Webentwicklung · Raum Plau am See · remote“; Kernsatz „Ich entwickle Websites und Onlineshops, binde sie an Ihre übrigen Systeme an und betreue sie, solange sie laufen.“ Danach drei Sätze: „Agenturen holen mich als Entwickler ins Projekt.“ · „Unternehmen arbeiten direkt mit mir.“ · „Auf Wunsch arbeite ich auch befristet im Team mit.“
-- **Bild:** Name steht auf einem Pop-up-Podest aus dem Bogen; Kernsatz auf dessen Vorderseite. Beim Scrollen hebt sich die Kamera, aus dem Bogen baut sich der Schreibtisch auf (Variante C: Skizze auf der Platte wird zum Bildschirm, Rechner mit Statuspunkt und Kabel). Auf dem Tisch Leben: Grafiktablett, Tasse, Pflanze, Tastatur, Maus, Lampe, Stiftebecher. Die drei Sätze erscheinen nacheinander auf dem Grafiktablett, gesetzt, nicht als Handschrift.
+- **Bild:** Name steht auf einem Pop-up-Podest aus dem Bogen; Kernsatz auf dessen Vorderseite. Beim Scrollen hebt sich die Kamera, aus dem Bogen baut sich der Schreibtisch auf (Variante C: Skizze auf der Platte wird zum Bildschirm, Rechner mit Statuspunkt und Kabel). Auf dem Tisch Leben: Grafiktablett, Tasse, Pflanze, Tastatur, Maus, Lampe, Stiftebecher. Die drei Sätze erscheinen nacheinander auf einem eigenen Träger aus dem Bogen am Schreibtisch, gedruckt ins Papier; das Grafiktablett bleibt Deko ohne Text (Erik, 23.10.2026).
 - **Übergang:** Der Punkt startet am Statuspunkt des Rechners und läuft zu Gerwing.
 
 ### 2 Gerwing (Leitreferenz)
@@ -175,14 +175,14 @@ Fehler werden nicht hinterher gesucht, sondern durch die Bauweise ausgeschlossen
 
 Eine Frage nach der anderen, Entscheidung hier eintragen. Sortiert nach Gewicht für das Ziel der Seite.
 
-1. **Startbild gegen Fünf-Sekunden-Maßstab:** Grundsatz 5 der Fassung verlangt Name, Angebot und Niveau im ersten Bild ohne Scrollen. Die spätere feste Regel lautet: Beim Laden steht nur der Name, alles andere kommt mit dem Scrollen. Wer nach fünf Sekunden geht, kennt dann nur den Namen. Kommt beim Laden eine ruhige Zeile unter den Namen, die fest zur Marke gehört und nicht animiert wird?
-2. **Bastelbogen in jeder Szene?** Heute läuft die volle Konstruktionsphase (Schnitt- und Falzlinien, Raster, Gerüst mit Mehrfachstrichen, Bleistiftspur, dann Hochklappen) in allen Szenen. Das ist ein großer Teil von Länge und Unruhe. Volle Phase nur in der Eröffnung und danach ein kürzeres Aufklappen, oder überall gleich?
+1. ~~**Startbild gegen Fünf-Sekunden-Maßstab**~~ Entschieden 23.10.2026, Erik: „Nur der Name“ (siehe 2, Startbild).
+2. ~~**Bastelbogen in jeder Szene?**~~ Entschieden 23.10.2026, Erik: „Überall gleich, aber kürzer“. Jede Szene behält die Konstruktionsphase (Schnitt- und Falzlinien, Raster, Gerüst, Bleistiftspur, Hochklappen) in gleicher Abfolge, aber gestrafft; gilt auch für die Eröffnung.
 3. **Szenentitel im 3D:** Titel sichtbar am Eingang jeder Szene (siehe 1a, Punkt 2)? Heute tragen nur Gerwing, WBG und Zusammenarbeit einen sichtbaren Titel.
 4. **Länge:** Richtwert war 40 bis 50 Bildschirmhöhen (der Bestand hat über 70). Zugleich sollen Animationen langsamer werden und mehr Scrollweg bekommen. Beides geht nur, wenn Szenen weniger zeigen. Gilt der Richtwert?
 5. **Shop-Szene doppelt zu Gerwing:** Satz 1 („Produkte, die in kein Standardformular passen, etwa mit Mengen nach Fläche oder Fracht nach Gewicht“) beschreibt fast genau Gerwing, das direkt davor steht. Vorschlag: Die Szene erzählt nur den Wechsel von Shopify, Satz 1 wird kürzer und verweist auf Gerwing. Das ist eine Textänderung, deshalb Eriks Entscheidung.
 6. **Bild für „Wie ich arbeite“:** Das Fließband zeigt Takt und Prüfung, kann aber als Massenware gelesen werden, gerade zusammen mit KI. Behalten, oder ein Bild, das Sorgfalt zeigt (etwa ein Werktisch, auf dem jede Karte einzeln geprüft und abgezeichnet wird)?
 7. **Navigation:** heute Projekte, Leistungen, Kontakt. Kommt „Werdegang“ dazu, weil Recruiter ihn zuerst suchen?
-8. **Grafiktablett in der Eröffnung:** Erik wünschte die drei Sätze auf dem Tablett mit Heranfahren. Das ist Text auf einem Gerät mit Zoom, was die Regel „kein Satz auf Geräten, ruhige Kamera“ sonst ausschließt. Bleibt das Tablett als bewusste Ausnahme?
+8. ~~**Grafiktablett in der Eröffnung**~~ Entschieden 23.10.2026, Erik: „Sätze ins Papier“. Die drei Sätze stehen auf einem eigenen Träger aus dem Bogen am Schreibtisch; das Tablett bleibt Deko ohne Text, keine Heranfahrt. Die Regel „kein Satz auf Geräten“ gilt ohne Ausnahme.
 9. **Handy:** Einige Sätze (WBG, Außerdem, „Damit schaffe ich …“, Werdegang-Stufen) sind bei 16 px breiter als 390 px. Am Handy anders umbrechen auf höheren Trägern, oder kürzere Handyfassungen der Sätze?
 10. **Bewegungssprache:** mechanisch (anfahren, abbremsen, leicht überschwingen, einrasten) für alle Teile, nur langsamer als bisher?
 11. **Bildschirmfotos für „Außerdem“:** selbst von den Live-Seiten aufnehmen (Desktop und Handy) oder liefert Erik sie?
