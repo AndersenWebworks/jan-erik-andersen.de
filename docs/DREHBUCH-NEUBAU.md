@@ -2,6 +2,14 @@
 
 Stand: 23.10.2026. Verdichtet aus `docs/FASSUNG-2026-11.md` (Entscheidungen vom 21. bis 23.10.2026) und dem Seitentext in `entwurf-2026-11/seite/index.html`. Hier steht nur noch, was heute gilt. Wo sich Entscheidungen widersprochen haben, gilt die jüngere; strittige Punkte stehen unter „Offen“ und werden vor dem Bau mit Erik geklärt.
 
+### Leitbild
+**Vorschlag (Clautz), bis Erik es bestätigt.** Zusammengezogen aus Abschnitt 1 und der Messlatte.
+- **Wofür:** Eriks Aushängeschild für Bewerbungen und Projektanfragen. Die Seite selbst ist der Beweis, dass er Websites gestalten und bauen kann.
+- **Für wen:** Projektvermittler, Recruiter, Agenturen und Unternehmen, die aus seiner Bewerbung oder seinem Profil kommen, oft am Handy, mit wenig Zeit.
+- **Erfolg:** Nach fünf Sekunden weiß der Besucher, wer Erik ist, was er macht und auf welchem Niveau, und er schreibt ihm eher als vorher.
+- **Große Frage jetzt:** Trägt der Blender-Weg? Die neu gebaute Eröffnung muss sichtbar besser als die alte sein und kleine Änderungen billig machen. Sonst endet der Blender-Weg.
+- **Außerdem:** Die Seite muss rechtzeitig fertig werden, damit sie die Bewerbungen tragen kann. Eine vollkommene Szene ohne fertige Seite ist kein Erfolg.
+
 Die Fassung bleibt als Protokoll erhalten. `entwurf-2026-11/seite/` bleibt als Bestand liegen und ist Teilelager und Vorlage, nicht Grundlage.
 
 **Pflege:** Eine Entscheidung ersetzt die alte Stelle, sie wird nicht als „überholt“ angehängt; die Geschichte steht in Git. Was Erik nicht selbst gesagt oder ausdrücklich bestätigt hat, steht als **Vorschlag (Clautz)** da.

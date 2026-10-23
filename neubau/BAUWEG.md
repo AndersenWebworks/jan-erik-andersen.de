@@ -1,5 +1,7 @@
 # Bauweg des Neubaus
 
+Was gebaut wird, steht allein im Drehbuch (`docs/DREHBUCH-NEUBAU.md`), dort auch die Arbeitsweise. Dieser Bauweg beschreibt nur das Wie.
+
 Drei Schichten, damit kleine Änderungen keinen Blender-Lauf brauchen.
 
 1. **Szenendatei** `neubau/szenen/<szene>.json`: einzige Quelle für alle Inhaltswerte.
@@ -68,7 +70,7 @@ Gleiche Abfolge in jeder Szene, gestrafft: Schnitt (gestrichelte Linie) und Falz
 
 ## Mockup (Eröffnung)
 
-**Soll ab 23.10.2026 (Drehbuch, Eröffnung):** Mockup nur auf dem Monitor, in Desktop- und Mobilansicht; das Smartphone in der Szene zeigt keinen Text. Der folgende Absatz beschreibt den gebauten Zwischenstand, der mit dem Neubau der Eröffnung ersetzt wird.
+**Soll:** steht im Drehbuch (Feste Regeln, „Ganzer Satz auf eigenem Träger“, und Eröffnung). Stand 23.10.2026 abends: Desktopansicht Mockup auf dem Monitor, Mobilansicht auf einem aufrechten, großen Smartphone. Der folgende Absatz beschreibt den gebauten Zwischenstand, der mit dem Neubau der Eröffnung ersetzt wird.
 
 Der Name steht allein als Papierlettern auf dem Bogen (Wortmarke aus `schriften/NewsreaderMarke*.ttf`, gestrichelte Falzlinie darunter). Ortszeile, Kernsatz und die drei Sätze erscheinen als Website auf dem Monitor (Desktop) bzw. auf dem Smartphone, das flach auf dem Tisch liegt (Hochkant, `druckflaeche_oben`). Jede Fläche ist eine durchsichtige Überlagerung auf dem Bildschirm (`m_seite` Rahmen der Seite, `m_hero`, `m_satz1..3`, am Handy `h_*`), die der Browser aus der Szenendatei zeichnet und zum genannten Zeitpunkt weich einblendet; die Textquelle ist nur der Block `texte`. Das Gerät, das den Text nicht trägt, zeigt die Seite ohne Text (Monitor: Platzhalterbalken) bzw. bleibt dunkel (Handy am Desktop).
 
