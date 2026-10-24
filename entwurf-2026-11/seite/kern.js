@@ -341,7 +341,7 @@ export function seite(renderer, SEQ, opt = {}) {
       const obsU = obstaclesOf(I);
       for (const a of I.tl.an) {
         if (a.kind !== "text" || a.h0 === undefined) continue;
-        const q = I.route.at(I.tl.sAt((a.h0 + a.h1) / 2)), st0 = a.stop; st0.fixP = [q.x, q.z];
+        const q = I.route.at(I.tl.sAt((a.h0 + a.h1) / 2)), st0 = a.stop; st0.fixP = [q.x, q.z, q.y];
         let obsB = obsU; if (I.sb) { let bs = I.sb.steps[0]; for (const t of I.sb.steps) if (Math.abs(t.b - st0.b) < Math.abs(bs.b - st0.b)) bs = t; obsB = [...bs.list, ...I.sb.extra].filter(b => !b.isEmpty() && b.max.y > .12 && (b.max.x - b.min.x) * (b.max.z - b.min.z) < 400); }
         const fit = readingFit(I, st0, [], obsB); st0.fixP = null;
         if (fit) st0.fitPose = { cam: fit.cam, tgt: fit.tgt, px: fit.px };
@@ -481,7 +481,7 @@ export function seite(renderer, SEQ, opt = {}) {
     def.allKeys = def.keys;
     def.keys = (cfg.keys ? cfg.keys(def) : def.keys).map((k, i) => i === 0 ? { ...k, w: 0 } : k);
     Object.assign(I, { group, lines, prints, anims, sheets, sheetBox, bMats, rissMat, F, K, M, def, built: true });
-    if (cfg.stops) { let n = 0; const seen = new Set(); for (const k of def.keys) if (k.stop && !seen.has(k.stop)) { seen.add(k.stop); n++; const ov = cfg.stops[n]; if (!ov) continue; const o = { ...ov, ...((narrow ? ov.n : ov.d) || {}) }; if (o.pose) Object.assign(k.stop, o.pose); if (o.at) k.stop.at = o.at; if (o.near) k.stop.near = o.near; if (o.nearR !== undefined) k.stop.nearR = o.nearR; if (o.hold !== undefined) k.stop.hold = o.hold; } }
+    if (cfg.stops) { let n = 0; const seen = new Set(); for (const k of def.keys) if (k.stop && !seen.has(k.stop)) { seen.add(k.stop); n++; const ov = cfg.stops[n]; if (!ov) continue; const o = { ...ov, ...((narrow ? ov.n : ov.d) || {}) }; if (o.pose) Object.assign(k.stop, o.pose); if (o.at) k.stop.at = o.at; if (o.near) k.stop.near = o.near; if (o.nearR !== undefined) k.stop.nearR = o.nearR; if (o.hold !== undefined) k.stop.hold = o.hold; if (o.kehre) k.stop.kehre = true; } }
     prep(I);
     I.b0 = clamp(def.bOfU(0), 0, 1);
     I.bMax = cfg.bMax !== undefined ? cfg.bMax : 1;
@@ -769,7 +769,7 @@ export function seite(renderer, SEQ, opt = {}) {
     if (s.near && !cands.length) cands.push({ P: V(s.near[0], THREAD_Y, s.near[1]), c: 0 });
     cands.sort((a, b) => a.c - b.c);
     if (textOnly && !cands.length) cands.push({ P: V(s.C.x, THREAD_Y, s.C.z), c: 50 });
-    if (s.fixP) { cands.length = 0; cands.push({ P: V(s.fixP[0], THREAD_Y, s.fixP[1]), c: 0 }); }
+    if (s.fixP) { cands.length = 0; cands.push({ P: V(s.fixP[0], s.fixP[2] !== undefined ? s.fixP[2] : THREAD_Y, s.fixP[1]), c: 0 }); }
     const pc = new THREE.PerspectiveCamera(FOVC(), aspect, .1, 300), ob2 = obsAll.filter(bx => bx.max.y > .12);
     const lim = { x: DOT_FRAME.x - .1, y0: DOT_FRAME.y0 + .1, y1: DOT_FRAME.y1 - .1, ty: 1 - 2 * 70 / H, by: -1 + 2 * 80 / H };
     const d0 = base.cam.distanceTo(base.tgt), F0 = base.tgt.clone().sub(base.cam).normalize();
@@ -813,7 +813,7 @@ export function seite(renderer, SEQ, opt = {}) {
           // Text gewinnt: der Punkt darf außerhalb liegen, aber so nah am Bild wie möglich (je NDC-Einheit draußen 40)
           tot += out * 40; if (best && tot >= best.cost) continue;
           dbgC.inFrame++;
-          const occl = ob2.some(bx => segBox(cam, V(cd.P.x, THREAD_Y + .05, cd.P.z), bx, .1));
+          const occl = ob2.some(bx => segBox(cam, V(cd.P.x, cd.P.y + .05, cd.P.z), bx, .1));
           if (occl && !textOnly) { dbgC.occl++; continue; }
           if (occl) tot += 15;
           if (best && tot >= best.cost) continue;
@@ -843,9 +843,14 @@ export function seite(renderer, SEQ, opt = {}) {
   }
   // Hindernisse der Szene (Szenenkoordinaten, x0, x1, z0, z1): was in irgendeinem Zustand zwischen Eintreffen und Ende steht (flach liegende Faltpläne zählen nicht),
   // ohne Teile in cfg.faden.free (Überschriften, die vor dem Weg ausblenden)
+  // Untergründe (faden.flaechen, aus werkzeug/beats/*.mjs: [x0, x1, z0, z1, Höhe]): Tisch, Regal, Ablage, auf denen der Punkt läuft. Was zur Fläche gehört oder unter ihr
+  // liegt (Platte, Beine, Zarge) und was hoch über ihr hängt (oberer Boden, Blende), ist kein Hindernis; was auf ihr steht (Monitor, Tasse, Paket), bleibt eines, so hält
+  // der Lauf auch auf der Fläche Abstand zu den Bauteilen.
+  const flaechenOf = I => pickN(I.fcfg && I.fcfg.flaechen) || [];
+  const aufFlaeche = (b, F) => F.some(f => b.min.x >= f[0] - .2 && b.max.x <= f[1] + .2 && b.min.z >= f[2] - .2 && b.max.z <= f[3] + .2 && (b.max.y <= f[4] + .12 || b.min.y >= f[4] + .45));
   function obstaclesOf(I) {
-    const SB = I.sb, fr = (I.fcfg && I.fcfg.free) || [], seen = new Set(), out = [];
-    const ok = b => !b.isEmpty() && b.max.y > .15 && b.min.y < 3 && (b.max.x - b.min.x) * (b.max.z - b.min.z) < 400 && !fr.some(r => b.min.x >= r[0] && b.max.x <= r[1] && b.min.z >= r[2] && b.max.z <= r[3]);
+    const SB = I.sb, fr = (I.fcfg && I.fcfg.free) || [], FL = flaechenOf(I), seen = new Set(), out = [];
+    const ok = b => !b.isEmpty() && b.max.y > .15 && b.min.y < 3 && (b.max.x - b.min.x) * (b.max.z - b.min.z) < 400 && !fr.some(r => b.min.x >= r[0] && b.max.x <= r[1] && b.min.z >= r[2] && b.max.z <= r[3]) && !aufFlaeche(b, FL);
     const cl = I.clip;
     // nur Zustände, in denen der Punkt durch die Szene läuft (ab kurz vor der ersten Lesestelle): Teile, die vorher aufklappen und dabei die Fläche überstreichen, hindern ihn nicht
     const bFrom = Math.max(I.b0, Math.min(...I.def.keys.filter(k => k.stop).map(k => k.stop.b), I.bMax) - .04);
@@ -882,7 +887,7 @@ export function seite(renderer, SEQ, opt = {}) {
     if (fl !== false && out.length > 1) {
       const zs = out.map(o => o.p[1]).sort((a, b) => a - b), lz = typeof fl === "number" ? fl : zs[Math.floor(zs.length / 2)];
       for (const o of out) {
-        if (o.same || Math.abs(o.p[1] - lz) > 2.5) continue;
+        if (o.same || o.stop.at || Math.abs(o.p[1] - lz) > 2.5) continue;          // feste Stationen (at, z. B. auf einem Tisch) bleiben, wo sie stehen
         if (!obsUnion.some(bx => boxNear(bx, o.p[0], lz, CLEAR * 1.1))) { o.p = [o.p[0], lz]; o.lane = true; }
       }
       for (let i = 1; i < out.length; i++) if (out[i].same) out[i].p = out[i - 1].p;
@@ -892,7 +897,8 @@ export function seite(renderer, SEQ, opt = {}) {
 
   // Ausgleichskurve: Punktfolge P ([x, z]), feste Punkte pins (Index → [x, z]), weiche Bindungen soft (Index → { p, w }). Minimiert Σ|Δ³|² + a2·Σ|Δ²|² + Σ w·|x − p|²
   // (dritte Differenzen: die Krümmung ändert sich stetig und gleichmäßig, wie bei Klothoiden; keine Ecken). Bandmatrix der Breite 3, Cholesky.
-  function fair(P, pins, soft, a2 = .002) {
+  // corners (Set von Indizes, fest gepinnt): Kehren; über eine Kehre hinweg gibt es keine Krümmungsterme, die Kurve darf dort abknicken
+  function fair(P, pins, soft, a2 = .002, corners = null) {
     const n = P.length, idx = new Int32Array(n).fill(-1), fr = [];
     for (let j = 0; j < n; j++) if (!pins.has(j)) { idx[j] = fr.length; fr.push(j); }
     const m = fr.length, B = 3, W = B + 1;
@@ -907,8 +913,9 @@ export function seite(renderer, SEQ, opt = {}) {
         }
       }
     };
-    for (let r = 0; r + 3 < n; r++) term([r, r + 1, r + 2, r + 3], [-1, 3, -3, 1], 1);
-    if (a2) for (let r = 0; r + 2 < n; r++) term([r, r + 1, r + 2], [1, -2, 1], a2);
+    const kn = j => corners && corners.has(j);
+    for (let r = 0; r + 3 < n; r++) if (!kn(r + 1) && !kn(r + 2)) term([r, r + 1, r + 2, r + 3], [-1, 3, -3, 1], 1);
+    if (a2) for (let r = 0; r + 2 < n; r++) if (!kn(r + 1)) term([r, r + 1, r + 2], [1, -2, 1], a2);
     if (soft) for (const [j, s] of soft) { const i = idx[j]; if (i < 0) continue; A[i * W] += s.w; bx[i] += s.w * s.p[0]; bz[i] += s.w * s.p[1]; }
     for (let i = 0; i < m; i++) A[i * W] += 1e-10;
     for (let i = 0; i < m; i++) {
@@ -932,14 +939,14 @@ export function seite(renderer, SEQ, opt = {}) {
   // Ergebnis: Punkte [x, z] und für jeden Zwischenknoten seinen Index (nd.j)
   function fairPath(nodes, o) {
     const ds = o.ds || .25, lead = Math.max(2, Math.round((o.lead || .5) / ds)), t0 = o.t0, t1 = o.t1;
-    const P0 = nodes[0].p, P1 = nodes[nodes.length - 1].p, pts = [], pins = new Map(), soft = new Map();
+    const P0 = nodes[0].p, P1 = nodes[nodes.length - 1].p, pts = [], pins = new Map(), soft = new Map(), corners = new Set();
     for (let k = 0; k <= lead; k++) { const q = [P0[0] + t0[0] * ds * k, P0[1] + t0[1] * ds * k]; pins.set(pts.length, q); pts.push(q); }
     const endLead = []; for (let k = lead; k >= 0; k--) endLead.push([P1[0] - t1[0] * ds * k, P1[1] - t1[1] * ds * k]);
     let prev = pts[pts.length - 1];
     for (const nd of [...nodes.slice(1, -1), { p: endLead[0], end: true }]) {
       const a = nd.p, L = Math.hypot(a[0] - prev[0], a[1] - prev[1]), n = Math.max(1, Math.round(L / ds));
       for (let k = 1; k <= n; k++) pts.push([prev[0] + (a[0] - prev[0]) * k / n, prev[1] + (a[1] - prev[1]) * k / n]);
-      if (nd.end) pins.set(pts.length - 1, a.slice()); else if (nd.w) soft.set(pts.length - 1, { p: a.slice(), w: nd.w });
+      if (nd.end) pins.set(pts.length - 1, a.slice()); else if (nd.kehre) { pins.set(pts.length - 1, a.slice()); corners.add(pts.length - 1); } else if (nd.w) soft.set(pts.length - 1, { p: a.slice(), w: nd.w });
       nd.j = pts.length - 1; prev = a;
     }
     for (let k = 1; k < endLead.length; k++) { pins.set(pts.length, endLead[k]); pts.push(endLead[k]); }
@@ -947,7 +954,7 @@ export function seite(renderer, SEQ, opt = {}) {
     let P = pts;
     for (let it = 0; it < 60; it++) {
       const sf = new Map(soft); for (const [j, q] of push) sf.set(j, q);
-      P = fair(pts, pins, sf, o.a2);
+      P = fair(pts, pins, sf, o.a2, corners);
       let bad = 0;
       const inside = (q, b) => q[0] > b[0] - m && q[0] < b[1] + m && q[1] > b[2] - m && q[1] < b[3] + m;
       obs.forEach((b, bi) => {
@@ -973,7 +980,7 @@ export function seite(renderer, SEQ, opt = {}) {
       if (!bad) break;
       if (it === 59) dbg("Ausgleichskurve: " + bad + " Punkte noch an Hindernissen");
     }
-    P.nodes = nodes;
+    P.nodes = nodes; P.corners = corners;
     return P;
   }
   // Mindestradius erzwingen: wo drei aufeinanderfolgende Punkte (Abstand ds) einen kleineren Radius als rmin bilden, werden sie örtlich geglättet (Laplace), die ersten und
@@ -1054,7 +1061,7 @@ export function seite(renderer, SEQ, opt = {}) {
     const nodes = [];
     for (let i = 0; i <= st.length; i++) {
       for (const w of way) if ((w.k === i) || (i === st.length && w.k > st.length)) nodes.push({ p: w.p, w: w.w });
-      if (i < st.length && !st[i].same) nodes.push({ p: st[i].p, w: pickN(f.stW) || LAY.ST_W, st: st[i] });
+      if (i < st.length && !st[i].same) nodes.push({ p: st[i].p, w: pickN(f.stW) || LAY.ST_W, st: st[i], kehre: !!st[i].stop.kehre });
     }
     const X = I.outL;
     const start = def.dotStart ? def.dotStart.p : I.inL, t0 = def.dotStart ? def.dotStart.t : [0, -1];
@@ -1070,25 +1077,52 @@ export function seite(renderer, SEQ, opt = {}) {
     const P = fairPath(full, { t0, t1: [0, -1], obs, disc, lead: 1.2, clear: f.clear, a2: pickN(f.a2) || LAY.A2 });
     const head = def.dotStart && def.dotStart.head ? def.dotStart.head.map(q => q.clone()) : [];
     // gleichmäßig neu abtasten (Abstand .2): keine doppelten oder sehr nahen Punkte (die Catmull-Rom-Kurve des Bandes bildet dort sonst kleine Schleifen)
-    const flat0 = mkPoly(P.map(q => V(q[0], THREAD_Y, q[1]))), nR0 = Math.max(4, Math.round(flat0.len / .2));
-    // keine engen Kehren: Mindestradius 2,6 (örtlich geglättet), danach erneut gleichmäßig
-    // Stationen bleiben bei der Entspannung fest (der Lauf muss sie treffen), gerundet wird um sie herum
-    const samp0 = Array.from({ length: nR0 + 1 }, (_, k) => flat0.at(flat0.len * k / nR0)), fixIdx = [];
-    for (const nd of nodes) if (nd.st && P[nd.j]) { let bi = 0, bd = 1e9; samp0.forEach((q, k) => { const d = Math.hypot(q.x - P[nd.j][0], q.z - P[nd.j][1]); if (d < bd) { bd = d; bi = k; } }); fixIdx.push(bi); }
+    // Kehren (Stationen mit kehre): dort wird der Lauf in Stücke geteilt; jedes Stück wird für sich abgetastet und entspannt, die Ecke an der Station bleibt
+    const cuts = [...new Set([0, ...[...(P.corners || [])].sort((a, b) => a - b), P.length - 1])];
+    const samp = ps => { const f0 = mkPoly(ps), n0 = Math.max(4, Math.round(f0.len / .2)); return Array.from({ length: n0 + 1 }, (_, k) => f0.at(f0.len * k / n0)); };
+    const parts0 = []; for (let k = 0; k + 1 < cuts.length; k++) if (cuts[k + 1] > cuts[k]) parts0.push(samp(P.slice(cuts[k], cuts[k + 1] + 1).map(q => V(q[0], THREAD_Y, q[1]))));
+    const joinP = ps => ps.reduce((a, q, k) => a.concat(k ? q.slice(1) : q), []);
+    // keine engen Kurven: Mindestradius (örtlich geglättet), danach erneut gleichmäßig
+    const relaxAll = rr => parts0.map(q => relaxRadius(q, rr, 2, 4000)), minRAll = ps => Math.min(...ps.map(q => minRadiusOf(q, p => [p.x, p.z]).r));
     // möglichst großer Mindestradius (ruhiger Faden, auch auf der Karte ohne Haken): von R_MAX abwärts der größte, bei dem der Faden kein Bauteil schneidet
     const mOb = Math.min(.3, cl * .6), hitsN = P2 => P2.reduce((n, q) => n + (obs.some(b => q.x > b[0] - mOb && q.x < b[1] + mOb && q.z > b[2] - mOb && q.z < b[3] + mOb) ? 1 : 0), 0);
-    const base0 = relaxRadius(samp0, LAY.R_MIN, 2, 4000), hit0 = hitsN(base0), hitsObs = P2 => hitsN(P2) > hit0;      // enge Durchlässe (faden.clear) zählen nicht gegen einen größeren Radius
+    const base0 = relaxAll(LAY.R_MIN), hit0 = hitsN(joinP(base0)), hitsObs = ps => hitsN(joinP(ps)) > hit0;      // enge Durchlässe (faden.clear) zählen nicht gegen einen größeren Radius
     let relaxed = null; const rTop = pickN(f.rMin) || LAY.R_MAX, rLow = LAY.R_MIN;
-    for (let rr = rTop; rr >= rLow - 1e-6; rr -= .5) { const q = relaxRadius(samp0, rr, 2, 4000); relaxed = q; R_USED = rr; if (!hitsObs(q) && minRadiusOf(q, p => [p.x, p.z]).r > rr * .8) break; }
-    if (hitsObs(relaxed) || minRadiusOf(relaxed, p => [p.x, p.z]).r < R_USED * .8) { relaxed = base0; R_USED = rLow; }
-    const flat = mkPoly(relaxed), nR = Math.max(4, Math.round(flat.len / .2)), Pr = Array.from({ length: nR + 1 }, (_, k) => flat.at(flat.len * k / nR));
-    const pts = [...head, ...Pr.slice(head.length ? 1 : 0)];
+    for (let rr = rTop; rr >= rLow - 1e-6; rr -= .5) { const q = relaxAll(rr); relaxed = q; R_USED = rr; if (!hitsObs(q) && minRAll(q) > rr * .8) break; }
+    if (hitsObs(relaxed) || minRAll(relaxed) < R_USED * .8) { relaxed = base0; R_USED = rLow; }
+    const Pr = joinP(relaxed.map(samp));
+    let pts = [...head, ...Pr.slice(head.length ? 1 : 0)];
     // Szenen mit Höhe (Treppe): def.lift(x, z) hebt den Lauf über den Boden, der Faden klettert mit
     if (def.lift) for (const q of pts) q.y = THREAD_Y + def.lift(q.x, q.z);
     // Ebenen im Bild (faden.hub, aus werkzeug/beats/*.mjs: [x0, x1, z0, z1, Höhe, Auslauf in x, Auslauf in z]): der Lauf steigt auf Tische, Regale, Ablagen und läuft dort, der Punkt steht im Motiv statt davor
     const hub = pickN(f.hub); if (hub && hub.length) for (const q of pts) { let hy = 0; for (const h of hub) { const dx = Math.max(h[0] - q.x, 0, q.x - h[1]), dz = Math.max(h[2] - q.z, 0, q.z - h[3]), sx = Math.max(0, 1 - dx / (h[5] || .01)), sz = Math.max(0, 1 - dz / (h[6] || .01)); hy = Math.max(hy, h[4] * (sx * sx * (3 - 2 * sx)) * (sz * sz * (3 - 2 * sz))); } q.y = Math.max(q.y, THREAD_Y + hy); }
+    // Untergründe (faden.flaechen [x0, x1, z0, z1, Höhe]): auf der Fläche läuft der Punkt in ihrer Höhe, an der Kante steigt er senkrecht auf bzw. ab
+    // (knapp vor der Kante, damit der Faden nicht in der Wand liegt); so läuft er über Tisch, Regal und Ablage und steht an den Stationen im Motiv
+    const FL = flaechenOf(I); let kanten = 0;
+    if (FL.length) {
+      const hAt = (x, z) => { let h = 0; for (const fl of FL) if (x >= fl[0] && x <= fl[1] && z >= fl[2] && z <= fl[3]) h = Math.max(h, fl[4]); return h; };
+      const out = [], near = (p, q) => Math.hypot(p.x - q.x, p.z - q.z) < .06;
+      let skip = false;
+      for (let i = 0; i < pts.length; i++) {
+        const a = pts[i], ha = hAt(a.x, a.z);
+        if (!skip) { a.y = Math.max(a.y, THREAD_Y + ha); out.push(a); }
+        skip = false;
+        const b = pts[i + 1]; if (!b) break;
+        const hb = hAt(b.x, b.z); if (Math.abs(hb - ha) < 1e-6) continue;
+        let lo = 0, hi = 1;
+        for (let it = 0; it < 24; it++) { const m = (lo + hi) / 2; if (Math.abs(hAt(a.x + (b.x - a.x) * m, a.z + (b.z - a.z) * m) - ha) < 1e-6) lo = m; else hi = m; }
+        const L = Math.hypot(b.x - a.x, b.z - a.z), e = Math.min(.45, .03 / Math.max(1e-6, L)), up = hb > ha;
+        const at = t => V(a.x + (b.x - a.x) * t, 0, a.z + (b.z - a.z) * t), c = at(up ? Math.max(0, lo - e) : Math.min(1, hi + e)), ce = at(up ? hi : lo);
+        const yLo = THREAD_Y + Math.min(ha, hb), yHi = THREAD_Y + Math.max(ha, hb);
+        const ins = up ? [V(c.x, yLo, c.z), V(c.x, yHi, c.z), V(ce.x, yHi, ce.z)] : [V(ce.x, yHi, ce.z), V(c.x, yHi, c.z), V(c.x, yLo, c.z)];
+        if (out.length > 1 && near(out[out.length - 1], ins[0])) out.pop();                 // keine Kleinststücke (das Band bildet dort sonst Schlaufen)
+        out.push(...ins); kanten++;
+        if (i + 2 < pts.length && near(b, ins[2])) skip = true;
+      }
+      pts = out;
+    }
     const R = mkPoly(pts);
-    R.minR = minRadiusOf(Pr); R.rUsed = R_USED;
+    R.minR = { r: minRAll(relaxed), at: 0 }; R.rUsed = R_USED; R.kanten = kanten;
     R.st = st;
     let sMin = 0;
     for (const o of st) {
@@ -1783,7 +1817,7 @@ export function seite(renderer, SEQ, opt = {}) {
         const p = sp[i], q = sp[Math.min(N, i + 1)], r = sp[Math.max(0, i - 1)];
         const d = V().subVectors(q, r); const vert = Math.abs(d.y) > .5 * d.length();
         let sd;
-        if (vert) sd = V(hw, 0, 0); else { d.y = 0; d.normalize(); sd = V().crossVectors(d, UP).multiplyScalar(hw); }
+        if (vert) sd = prev ? prev.clone() : V(hw, 0, 0); else {           // senkrechtes Stück (Aufstieg an einer Kante): Breite wie davor, das Band liegt flach an der Wand d.y = 0; d.normalize(); sd = V().crossVectors(d, UP).multiplyScalar(hw); }
         if (prev && sd.dot(prev) < 0) sd.negate();
         prev = sd;
         pos.set([p.x - sd.x, p.y, p.z - sd.z, p.x, p.y + hT, p.z, p.x + sd.x, p.y, p.z + sd.z], i * 9);

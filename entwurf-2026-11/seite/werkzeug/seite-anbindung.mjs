@@ -51,9 +51,9 @@ export async function messen(pg, szene, schritte = 120) {
     // Bauzustand b über u (nur Szenen mit Aufbau, z. B. die Eröffnung: dort legen Beats ihr Zeitfenster über den Bauzustand fest, `bei`)
     const bAuf = []; if (I.tl && I.tl.bAt) for (let i = 0; i <= n; i++) { const u = -.1 + 1.2 * i / n; bAuf.push({ u, b: +I.tl.bAt(Math.max(0, u * len)).toFixed(4) }); }
     const boxes = I.boxes.map(b => ({ min: b.min.toArray(), max: b.max.toArray() }));
-    const rt = A.route(I.idx), st = rt ? rt.st.map(o => ({ p: o.p, d: +o.d.toFixed(2), how: o.how })) : [];
+    const rt = A.route(I.idx), st = rt ? rt.st.map(o => ({ p: o.p, d: +o.d.toFixed(2), how: o.how, y: o.s !== undefined ? +rt.at(o.s).y.toFixed(2) : null })) : [];
     const alle = A.inst().map(q => ({ name: q.name, v0: q.body.v0, v1: q.body.v1 }));
-    return { alle, st, M, yaw: isl.yaw, v0, v1, T, stops, dot, boxes, rot: I.rot, bAuf };
+    return { alle, st, kanten: rt ? rt.kanten || 0 : 0, M, yaw: isl.yaw, v0, v1, T, stops, dot, boxes, rot: I.rot, bAuf };
   }, [szene, schritte]);
 }
 

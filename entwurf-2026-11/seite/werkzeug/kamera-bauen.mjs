@@ -32,13 +32,21 @@ function routenSchreiben() {
   const bisher = alt.includes("ROUTEN") ? JSON.parse(alt.slice(alt.indexOf("= ") + 2, alt.lastIndexOf(";"))) : {};
   for (const n of namen) {
     const B = beatsVon[n], stops = {}, way = { d: [...((B.weg && B.weg.d) || B.weg || [])], n: [...((B.weg && B.weg.n) || B.weg || [])] };
-    for (const b of B.beats) if (b.stop !== undefined && b.punkt) { const ort = m => ({ near: punktIn(b, m), ...(b.fest ? { at: punktIn(b, m) } : {}), ...(b.nearR ? { nearR: b.nearR } : {}) }); stops[b.stop] = { d: ort("d"), n: ort("n") }; }   // near gewinnt in kern.js vor at, überschreibt so auch Grundwerte aus stationen.js; fest: true setzt zusätzlich at
+    // Untergründe der Szene (flaechen: { name: [x0, x1, z0, z1, Höhe] }, auch je Format): der Punkt läuft dort in ihrer Höhe, an den Kanten steigt er auf und ab
+    const FL = m => { const f = B.flaechen && (B.flaechen.d || B.flaechen.n ? B.flaechen[m] : B.flaechen); return f || {}; };
+    for (const b of B.beats) if (b.auf) for (const m of ["d", "n"]) {
+      const f = FL(m)[proM(b.auf, m)], p = b.punkt && punktIn(b, m);
+      if (!f) throw new Error(`${n}: Untergrund "${proM(b.auf, m)}" fehlt in flaechen (${m})`);
+      if (p && !(p[0] > f[0] && p[0] < f[1] && p[1] > f[2] && p[1] < f[3])) throw new Error(`${n}: Punkt [${p}] liegt nicht auf "${proM(b.auf, m)}" (${m})`);
+    }
+    for (const b of B.beats) if (b.stop !== undefined && b.punkt) { const ort = m => ({ near: punktIn(b, m), ...(b.fest || b.auf ? { at: punktIn(b, m) } : {}), ...(b.nearR ? { nearR: b.nearR } : {}), ...(b.kehre ? { kehre: true } : {}) }); stops[b.stop] = { d: ort("d"), n: ort("n") }; }   // near gewinnt in kern.js vor at, überschreibt so auch Grundwerte aus stationen.js; fest: true (oder auf) setzt zusätzlich at; kehre: der Lauf darf an der Station abknicken
     // Beats ohne Lesestelle: Wegpunkt nach der zuletzt davor liegenden Lesestelle
     let zuletzt = 0;
     for (const b of B.beats) if (b.stop !== undefined) zuletzt = b.stop; else if (b.punkt) for (const m of ["d", "n"]) way[m].push([...punktIn(b, m), zuletzt, b.gewicht || 8]);
     const r = {};
     if (Object.keys(stops).length) r.stops = stops;
-    if (way.d.length || B.faden) r.faden = { ...(B.faden || {}), ...(way.d.length ? { way } : {}) };
+    const fl = { d: Object.values(FL("d")), n: Object.values(FL("n")) };
+    if (way.d.length || B.faden || fl.d.length || fl.n.length) r.faden = { ...(B.faden || {}), ...(way.d.length ? { way } : {}), ...(fl.d.length || fl.n.length ? { flaechen: fl } : {}) };
     bisher[n] = r;
   }
   const zeilen = Object.keys(bisher).map(k => ` ${JSON.stringify(k)}: ${JSON.stringify(bisher[k])}`).join(",\n");
@@ -79,7 +87,7 @@ async function rechnen(o, m) {
   const pg = await o.seite(m), fmt = FORMATE[m];
   for (const n of namen) {
     const B = beatsVon[n], me = await messen(pg, n, 240), R = rahmenVon(me);
-    console.log(`${n} ${m} Stationen (Abstand des Laufs zur Station, Weise): ` + me.st.map((o, i) => `${i + 1}: ${o.d} ${o.how}`).join(" | "));
+    console.log(`${n} ${m} Stationen (Abstand des Laufs zur Station, Weise, Höhe): ` + me.st.map((o, i) => `${i + 1}: ${o.d} ${o.how} y ${o.y}`).join(" | ") + (me.kanten ? `  Kanten (Auf-/Abstiege): ${me.kanten}` : ""));
     const dots = me.dot.filter(d => d.p).map(d => ({ u: d.u, p: R.rahW(d.p) }));
     const punktBei = u => { let i = 0; while (i < dots.length - 2 && dots[i + 1].u < u) i++; const a = dots[i], b = dots[i + 1], t = Math.max(0, Math.min(1, (u - a.u) / (b.u - a.u))); return a.p.map((v, k) => v + (b.p[k] - v) * t); };
     const stops = me.stops.slice().sort((a, b) => a.u0 - b.u0);
