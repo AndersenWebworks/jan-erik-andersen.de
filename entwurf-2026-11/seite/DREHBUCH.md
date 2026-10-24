@@ -9,6 +9,15 @@ Alle Einzelszenen aus `entwurf-2026-11/*/` laufen hier auf einer gemeinsamen Kam
 - Kamera und Route werden nicht von Hand gestellt, sondern aus Erzähllisten erzeugt: `werkzeug/beats/<szene>.mjs`, ein Befehl `node werkzeug/kamera-bauen.mjs <szene>`, Anleitung in `werkzeug/README.md`. Umgestellt: ausserdem, arbeitsweise, gestaltung, modernisierung, gerwing, betreuung, shop, schnittstellen, werdegang, agenturen. Auch eroeffnung (keyed, eigene Schlüsselfahrt ohne Stationen: Zeitfenster über `stop`/`nach`, `bei` (Bauzustand) oder `u`, Startbild und Aufbau mit `behalten`; der Punkt steht dort unsichtbar am Statuspunkt, darum `ohnePunkt`).
 - Punkt im Motiv: `faden.hub` (kern.js, routeFor) hebt den Lauf auf Ablagen und Tische (ausserdem: Ablage, gestaltung: Staffelei-Ablage); in Bodenszenen steht er weiter vor dem Motiv, weil die Route Abstand zu Bauteilen hält und Kehren an Stationen nicht fahren kann. Offen in der Engine (alt): Der Punkt steht bisher vor dem Motiv im unteren Bildband. Für „über den Tisch laufen“ und „Schilder mitnehmen“ fehlt die Mechanik (Klettern gibt es nur in werdegang, `def.lift`).
 
+### Stand und Übergabe (24.10.2026 abends, weiter ab Dienstag, 27.10.2026)
+
+- Alle Szenen laufen über die Beat-Engine, auch die Eröffnung. Motive stehen an den Lesestellen ganz im Bild (Breitbild und hochkant), Text lesbar. Nur Standbilder gesehen, keine Fahrt in Bewegung geprüft.
+- Punkt im Motiv: ausserdem und gestaltung. In shop, schnittstellen, gerwing, arbeitsweise, agenturen, betreuung (teilweise) steht er noch auf dem Boden vor dem Motiv, in der Eröffnung unsichtbar (`ohnePunkt`). Agenturen: bei den Tafelspalten `ohnePunkt`, damit die Spalte nicht auf rund 40 % schrumpft.
+- Modernisierung hochkant: Röhrenmonitor oben nicht mehr angeschnitten, aber noch klein (der flache Monitor davor wirkt größer).
+- Eröffnung hochkant, Kernsatz: ein grauer Streifen schneidet hinter „Jan-Erik“ durch den Namen, die Kante ist hart. Prüfen.
+- Nächster Schritt: Mechanik für „über den Tisch laufen“, Kehren an Stationen und „Schilder mitnehmen“. Angefangen und nicht fertig auf dem Zweig `wip-punkt-mechanik` (Commit a2005fe: 3D-Untergrund `auf`, `kehre` in `kern.js`, `werkzeug/kamera-bauen.mjs`, `werkzeug/seite-anbindung.mjs`), ungeprüft und nicht in `entwuerfe-2026-10`. Vorher den Stand lesen, nicht blind übernehmen.
+- Live gegangen ist nichts. Push auf main nur über `weg-auf-main.sh` und mit Eriks ausdrücklichem Ja.
+
 ## Aufbau
 
 - `index.html`: Marke N4 im Header, Navigation (Projekte, Leistungen, Kontakt), Vor/Zurück zu den Szenenanfängen, HTML-Vorbild mit Name und Unterzeile (steht sofort, bis die Lettern im 3D stehen). Ohne WebGL der ganze Seitentext mit Kontaktlinks.
