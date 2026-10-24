@@ -8,7 +8,7 @@ set -euo pipefail
 HAUPT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WT="${WT:-C:/Andersen/Webworks/GitHub/Webworks/jea-veroeffentlichung}"
 SEITE="$HAUPT/entwurf-2026-11/seite"
-STAND="2026-10-22"
+STAND="2026-10-24"
 SITE="https://jan-erik-andersen.de"
 MANIFEST_DIR="$HAUPT/tmp/weg-auf-main"
 MANIFEST="$MANIFEST_DIR/kopiert.txt"
@@ -31,8 +31,8 @@ WTW="$(cd "$WT" && pwd -W)"; HAUPTW="$(cd "$HAUPT" && pwd -W)"; SEITEW="$(cd "$S
 # Nicht ausgeliefert: _pruefung/, *.md (DREHBUCH, Notizen), übrige bilder/*.jpg (nur Quellbilder der eingebetteten Daten), OFL-Lizenztexte werden mitgegeben.
 ( cd "$SEITE"
   ls index.html *.js apple-touch-icon.png favicon.svg favicon-16.png favicon-32.png
-  ls bilder/*.js bilder/vorschau.jpg
-  ls fonts/*.woff2 fonts/schriften.js fonts/OFL-*.txt
+  ls bilder/*.js bilder/vorschau.jpg bilder/portrait.webp
+  ls fonts/*.woff2 fonts/*.ttf fonts/schriften.js fonts/OFL-*.txt
   find vendor -type f
 ) > "$MANIFEST.neu"
 sort -u "$MANIFEST.neu" -o "$MANIFEST.neu"

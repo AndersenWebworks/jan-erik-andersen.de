@@ -62,6 +62,8 @@ else {
       onFirstFrame() { if (vorbild) setTimeout(() => vorbild.classList.add("weg"), 1500); }
     });
     const lbl = document.getElementById("szene");
-    if (lbl) setInterval(() => { const st = api.state(); if (st) { lbl.textContent = (st.kind === "t" ? "→ " : "") + api.labelAt(api.p()); } }, 250);
+    // Szenenname nur nachführen, wenn die Seite sichtbar ist und sich der Fortschritt geändert hat (kein Dauer-Timer-Aufwand im Ruhezustand)
+    let lp = -1;
+    if (lbl) setInterval(() => { if (document.hidden || api.p() === lp) return; lp = api.p(); const st = api.state(); if (st) { lbl.textContent = (st.kind === "t" ? "→ " : "") + api.labelAt(lp); } }, 250);
   }).catch(e => { console.error(e); document.documentElement.classList.add("nogl"); textlinks.forEach(a => a.removeAttribute("tabindex")); });
 }

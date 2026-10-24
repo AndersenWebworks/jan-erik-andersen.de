@@ -15,6 +15,7 @@
 // Hinterkante des Bogens (von dort führt der gemeinsame Faden der Seite weiter).
 import { wortmarke, faltkante } from "./wortmarke.js";
 import { schreibtisch } from "./schreibtisch.js";
+import { MOCK_D, MOCK_H, zeichneMock } from "./mockup.js";
 
 const ink = a => `rgba(48,48,51,${a})`;
 const RED = "#d40235";
@@ -232,7 +233,10 @@ export default function (K) {
   K.onPanel(scr, K.decal(SW * PXU, SL * PXU, (x, W, H) => {
     const bz = .055 * PXU, dx = (SW - DX) / 2 * PXU, dy = (SL - CH - DY) * PXU;
     x.fillStyle = ink(.84); rr(x, dx - bz, dy - bz, DX * PXU + 2 * bz, DY * PXU + 2 * bz, bz * .5); x.fill();
-    x.save(); x.translate(dx, dy); x.beginPath(); x.rect(0, 0, DX * PXU, DY * PXU); x.clip(); webDraw(x, DX * PXU, DY * PXU); x.restore();
+    // Breitbild: das Mockup der Website (Kopfzeile, Menü, Ortszeile, Kernsatz, Button, drei Karten); hochkant trägt das Smartphone den Text, der Monitor zeigt dort keine Schrift
+    x.save(); x.translate(dx, dy); x.beginPath(); x.rect(0, 0, DX * PXU, DY * PXU); x.clip();
+    if (N) webDraw(x, DX * PXU, DY * PXU); else zeichneMock(x, DX * PXU, DY * PXU, MOCK_D, "#f5f4ee");
+    x.restore();
   }, SW, SL, .405, .05), U(0), SL / 2, -1);
   // Das Kinn bleibt leer (der Kernsatz steht ganz auf dem Podest)
 
@@ -247,6 +251,21 @@ export default function (K) {
   const ty = HT + .026, xe = X1 + .05, zd = -.6, gap = PX0 - xe;
   K.cable([V(MX, 2.62, ZFB - .05), V(MX + .15, ty, ZFB - .08), V(Math.max(X1 * .5, MX + .75), ty, ZFB - .02), V(X1 * .82, ty, -1.25), V(X1 - .14, ty, zd - .12), V(X1 - .01, ty - .004, zd - .02),
     V(xe, HT - .1, zd), V(xe + .02, 1.4, zd + .02), V(xe + .05, .3, zd + .03), V(xe + .22, .025, zd), V(xe + gap * .45, .025, zd - .12), V(PX0 - .3, .03, -.78), V(PX0 - .07, .12, -.8), V(PX0, .2, -.8)], .024, "#88898d", .44, .05);
+
+  // ---------- Smartphone (nur hochkant): schmales Gerät aufrecht auf einem kleinen Ständer, trägt das Mockup in der mobilen Fassung ----------
+  // 0,62 × 1,30 (Seitenverhältnis wie ein Telefon), dünn, schmaler Rahmen; der Ständer ist eine flache Auflage vor dem Gerät, kein Monitorfuß
+  const PHONE = { x: 1.9, z: 1.0, W: .62, H: 1.3, T: .07 };
+  if (N) {
+    const PH = c3("#4d4f55"), pb = K.box(top, PHONE.x - PHONE.W / 2, PHONE.x + PHONE.W / 2, PHONE.z + PHONE.T, PHONE.z, PHONE.H, .33, .07, { col: PH, fcol: PH, roof: PH });
+    const sx = .035, sy = .035, SWd = PHONE.W - 2 * sx, SHd = PHONE.H - 2 * sy, PP = 700;
+    K.onPanel(pb.fr, K.decal(Math.round(PHONE.W * PP), Math.round(PHONE.H * PP), (x, W, H) => {
+      x.fillStyle = "#3a3c42"; rr(x, 0, 0, W, H, .06 * PP); x.fill();
+      x.save(); x.translate(sx * PP, sy * PP); x.beginPath(); x.roundRect(0, 0, SWd * PP, SHd * PP, .03 * PP); x.clip();
+      zeichneMock(x, SWd * PP, SHd * PP, MOCK_H, "#f5f4ee"); x.restore();
+    }, PHONE.W, PHONE.H, .4), PHONE.W / 2, PHONE.H / 2, -1);
+    // Auflage: niedrige Platte vor dem Gerät, hält es aufrecht
+    K.slab(top, PHONE.x - PHONE.W / 2 - .12, PHONE.x + PHONE.W / 2 + .12, PHONE.z + .3, PHONE.z - .12, .06, .34, .05, { col: METAL, top: METAL });
+  }
 
   // ---------- Roter Faden: eine ruhige Linie ----------
   // Der Faden läuft vom Statuspunkt über den Bogen an der Vorderseite des Tisches vorbei (außen um die Abdrücke der liegenden Vorderbeine herum),

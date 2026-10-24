@@ -21,6 +21,7 @@
 import * as THREE from "three";
 import { SCHRIFTEN } from "./fonts/schriften.js";
 import { BAHN, RIG } from "./stationen.js";
+import { ladeMock } from "./mockup.js";
 import { Model, kit, paperMaterial, edgeMaterial, rissMaterial, geruestMaterial, gridOn, frameOn, FAR, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
 import { EffectComposer } from "./vendor/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "./vendor/addons/postprocessing/RenderPass.js";
@@ -163,6 +164,7 @@ export async function loadFonts() {
     const ff = new FontFace(fam, bytes(SCHRIFTEN[key]), { style });
     await ff.load(); document.fonts.add(ff);
   }));
+  await ladeMock(import.meta.url).catch(e => console.warn("Mockup-Schriften:", e));
   // Marke N4: variable Newsreader aus der Seite (@font-face "Newsreader N4"), Gewichte 380 / 340 im Canvas
   await Promise.all(['380 120px "Newsreader N4"', 'italic 340 120px "Newsreader N4"'].map(f => document.fonts.load(f, "Jan-Erik Andersen"))).catch(() => {});
 }
@@ -185,6 +187,9 @@ function pchip(xs, ys) {
   };
 }
 export function seite(renderer, SEQ, opt = {}) {
+  // Renderschleife nur bei Bedarf (siehe frame()): pulse meldet den Puls des roten Punktes (einzige Daueranimation), wake() weckt die Schleife
+  const pulse = { on: false }, PULSE_T = 1.4, _pulseP = new THREE.Vector3();
+  let wake = () => {};
   const dbg = m => { if (typeof window !== "undefined" && window.__dbg) window.__dbg(m); };       // Diagnose (Hash "dbg"), siehe index.html
   dbg("Kern gestartet");
   const canvas = renderer.domElement;
@@ -429,7 +434,9 @@ export function seite(renderer, SEQ, opt = {}) {
         F.attach(nd, g, p, q, side, .004);
         anims.push((b, t) => {
           const k = win(b, on, .02); g.visible = k > 0; m.scale.setScalar(sm(k));
-          const ph = (t % 1.4) / 1.4, beat = ph < .12 ? Math.sin(ph / .12 * PI) : 0;
+          // Daueranimation nur melden, wenn der Punkt voll da ist und im Bild steht (sonst darf die Schleife ruhen)
+          if (k >= 1) { _pulseP.setFromMatrixPosition(m.matrixWorld).project(camera); if (_pulseP.z < 1 && Math.abs(_pulseP.x) < 1.3 && Math.abs(_pulseP.y) < 1.3) pulse.on = true; }
+          const ph = (t % PULSE_T) / PULSE_T, beat = ph < .12 ? Math.sin(ph / .12 * PI) : 0;
           if (k >= 1) m.scale.setScalar(1 + .18 * beat);
           ring.material.opacity = k >= 1 ? .55 * (1 - ph) * (ph < .7 ? 1 : 0) : 0;
           ring.scale.setScalar(1 + ph * .9);
@@ -1998,6 +2005,7 @@ export function seite(renderer, SEQ, opt = {}) {
     // Zeit der Lettern: läuft ab dem Eintreffen der Szene (Fahrt in die Szene beginnt)
     const time = now / 1000, dtS = Math.min(.05, Math.max(0, (now - lastApply) / 1000)); lastApply = now;
     for (const I of INST) if (I.built && I.tStart === undefined && (I.idx < st.i || (I.idx === st.i))) I.tStart = now;
+    pulse.on = false;
     let fov = poseOf(st, camera.position, _t);
     FAR.set(70, 140);
     if (table) table.mat.uniforms.uFar.value.set(160, 1100);                  // der Boden läuft viel weiter aus als die Papiere der Szenen
@@ -2123,7 +2131,7 @@ export function seite(renderer, SEQ, opt = {}) {
     // Sprung: frühere Szenen stehen schon fertig da (Lettern nach der Zeit eingeschlossen), die aktuelle auch, wenn p > 0
     for (const I of INST) if (I.built && (I.idx < st.i || (I.idx === st.i && pp > 0))) I.tStart = -1e9;
     target = p = pp; pVel = 0; hold = true;
-    scrollTo(0, pp * maxScroll());
+    scrollTo(0, pp * maxScroll()); wake();
   }
   // Sprung beim Laden weit nach hinten: erst vorn malen, dann Szene für Szene bauen (zwischen den Schritten wird gemalt), dann springen; liegt das Ziel in der
   // Karte (ab Zoom-Beginn), erst bei Kontakt landen und die Kamera von dort zur Karte fahren lassen, nicht im ersten Bild alles auf einmal zeigen
@@ -2147,9 +2155,9 @@ export function seite(renderer, SEQ, opt = {}) {
     if (hs) { const a = ANCH.find(a => a.name === hs); if (a) { jumpAny(anchorP(a) + 1e-6); return true; } }
     return false;
   }
-  addEventListener("hashchange", applyHash);
-  addEventListener("scroll", () => { if (!hold) target = clamp(scrollY / maxScroll(), 0, 1); }, { passive: true });
-  for (const ev of ["wheel", "touchstart", "keydown", "pointerdown"]) addEventListener(ev, () => { hold = false; pendingJump = null; }, { passive: true });
+  addEventListener("hashchange", () => { applyHash(); wake(); });
+  addEventListener("scroll", () => { if (!hold) target = clamp(scrollY / maxScroll(), 0, 1); wake(); }, { passive: true });
+  for (const ev of ["wheel", "touchstart", "keydown", "pointerdown"]) addEventListener(ev, () => { hold = false; pendingJump = null; wake(); }, { passive: true });
   // Vor/Zurück und Navigation: normales (weiches) Scrollen an den Anfang einer Szene, kein Einrasten
   function scrollToP(pp) { hold = false; scrollTo({ top: clamp(pp, 0, 1) * maxScroll(), behavior: "smooth" }); }
   function go(dir) {
@@ -2221,11 +2229,12 @@ export function seite(renderer, SEQ, opt = {}) {
     const n = VW() / VH() < 1;
     if (n !== narrow) { const keep = target; init(); jumpTo(keep); } else resize();
     if (hold) scrollTo(0, target * maxScroll());
+    wake();
   });
   if (!applyHash()) { target = p = clamp(scrollY / maxScroll(), 0, 1); pVel = 0; }
   initPhase = false;
   // übrige Szenen im Hintergrund nacheinander bauen, erst nach dem ersten Bild (das Startbild steht vorher)
-  function more() { const n = INST.find(I => !I.built); if (!n) return; build(n); setTimeout(more, 40); }
+  function more() { const n = INST.find(I => !I.built); if (!n) return; build(n); wake(); setTimeout(more, 40); }
 
   // Zeichnen mit Nachbearbeitung (FX): Stufe voll am Desktop, leicht (nur Tonemapping + SMAA) hochkant/Handy und bei Software-Rendering, aus per Hash fx=aus.
   // Gelingt der Aufbau nicht, wird ohne Nachbearbeitung gezeichnet (wie bisher).
@@ -2242,6 +2251,7 @@ export function seite(renderer, SEQ, opt = {}) {
   let last = performance.now(), first = true;
   function frameStep(now) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
+    const p0 = p;
     // Dargestellter Fortschritt folgt dem Scrollfortschritt wie eine kritisch gedämpfte Feder (Eigenfrequenz SMOOTH_W, bildratenunabhängig,
     // ohne Überschwingen aus der Ruhe): Mausrad-Sprünge und schnelles Wischen werden weich, Beschleunigung und Abbremsen sind stetig
     {
@@ -2254,6 +2264,8 @@ export function seite(renderer, SEQ, opt = {}) {
     document.body.classList.toggle("scrolled", scrollY > innerHeight * .6 || p > INST[0].body.p1 * .1);
     if (bar) bar.style.width = (p * 100).toFixed(2) + "%";
     applyState(st, now);
+    // Bewegt sich noch etwas? (Feder, Anzeige-b, Lettern-Uhr 6 s, Texturstufen) -> Schleife läuft weiter, sonst ruht sie nach SETTLE_MS
+    if (p !== p0 || p !== target || pVel !== 0 || INST.some(I => I.easing || I.lodPos !== undefined) || [...visible].some(I => I.tStart !== undefined && now - I.tStart < 6100)) lastChange = now;
     try { shadowPass(st); } catch (e) { console.error("Schatten abgeschaltet:", e); SM.off = true; U.smp.value.x = 0; scene.overrideMaterial = null; renderer.setRenderTarget(null); }
     drawScene();
     if (first) dbg("erster Frame gezeichnet");
@@ -2263,17 +2275,31 @@ export function seite(renderer, SEQ, opt = {}) {
       const vb = document.querySelector(".vorbild"); if (vb) { vb.style.transition = "none"; vb.classList.add("weg"); }
     }
   }
-  // Ein Fehler im Bild darf die Seite nie weiß lassen: der nächste Frame wird immer geplant; liegt es an der Karte, wird sie abgeschaltet
-  let frameErrors = 0;
+  // Renderschleife nur bei Bedarf: gezeichnet wird bei Scroll/Resize/Eingabe, laufender Bewegung (Feder, Lettern, Ein-/Ausblenden, Texturtausch) und danach noch
+  // SETTLE_MS; in Ruhe steht die Schleife still (kein requestAnimationFrame, 0 Bilder). Einzige Daueranimation: der Puls des roten Punktes, nur solange er im Bild
+  // steht, mit höchstens 30 Bildern/s und nur in den Phasen, in denen sich am Bild etwas ändert. Verstecktes Fenster: nichts. Das Bild selbst bleibt unverändert.
+  const SETTLE_MS = 1000, PULSE_MIN_MS = 30;
+  let frameErrors = 0, rafId = 0, lastChange = performance.now(), lastDraw = -1e9;
+  const pulseHide = t => ((t / 1000) % PULSE_T) / PULSE_T >= .7;       // Ring unsichtbar, Punkt in Ruhe: nichts ändert sich
   function frame(now) {
+    rafId = 0;
+    if (document.hidden) return;
+    const settled = now - lastChange >= SETTLE_MS;
+    if (settled && !pulse.on) return;                                   // Ruhe: Schleife stoppt, wake() startet sie wieder
+    // nur Puls: gedrosselt, und ohne Zeichnen, solange er in der unveränderten Ruhephase steht (letztes Bild lag schon darin)
+    if (settled && (now - lastDraw < PULSE_MIN_MS || (pulseHide(now) && pulseHide(lastDraw)))) { rafId = requestAnimationFrame(frame); return; }
+    lastDraw = now;
     try { frameStep(now); }
     catch (e) {
-      console.error(e); frameErrors++;
+      console.error(e); frameErrors++; lastChange = now;
       if (first) { first = false; try { opt.onFirstFrame && opt.onFirstFrame(); } catch (e3) { /* nichts */ } setTimeout(more, 250); }
     }
-    requestAnimationFrame(frame);
+    rafId = requestAnimationFrame(frame);
   }
-  requestAnimationFrame(frame);
+  wake = () => { lastChange = performance.now(); if (!rafId && !document.hidden) { last = performance.now(); rafId = requestAnimationFrame(frame); } };
+  document.addEventListener("visibilitychange", () => { if (document.hidden) { if (rafId) cancelAnimationFrame(rafId); rafId = 0; } else wake(); });
+  renderer.domElement.addEventListener("webglcontextrestored", () => wake());
+  wake();
 
   // Prüfhilfe (nur Entwurf): Zustände ohne Atem setzen, Lesestellen und Abschnitte als p
   const api = {
@@ -2297,7 +2323,7 @@ export function seite(renderer, SEQ, opt = {}) {
     camTgt: () => _t,
     route: i => { const I = INST[i]; ensure(i); if (!I.route) return null; const R = I.route; return { pts: R.pts.map(p => [p.x, p.z]), len: R.len, st: (R.st || []).map(o => ({ p: o.p, s: o.s, d: o.d, how: o.how, c: o.stop.C.toArray() })), nodes: (R.nodes || []).map(n => n.p), obs: (R.obs || []).map(b => [b.min.x, b.max.x, b.min.z, b.max.z, b.max.y]), cell: I.cell, disc: I.disc, inL: I.inL, outL: I.outL, content: I.content, minR: R.minR.r, minAt: [R.pts[R.minR.at] ? R.pts[R.minR.at].x : 0, R.pts[R.minR.at] ? R.pts[R.minR.at].z : 0], tl: { T: I.tl.T, V0: I.tl.V0, Tpre: I.tl.Tpre, tDot0: I.tl.tDot0, bIn: I.tl.bIn, an: I.tl.an.map(a => ({ kind: a.kind, ki: a.ki, s: a.s, h0: a.h0, h1: a.h1, b: a.b })) } }; },
     chunk: i => CHUNKS[i] ? CHUNKS[i] : null,
-    free(sceneName, camLocal, tgtLocal) { if (!sceneName) { FREE = null; return; } const I = INST.find(q => q.name === sceneName); FREE = { cam: V(...camLocal).applyMatrix4(I.M4), tgt: V(...tgtLocal).applyMatrix4(I.M4) }; },
+    free(sceneName, camLocal, tgtLocal) { wake(); if (!sceneName) { FREE = null; return; } const I = INST.find(q => q.name === sceneName); FREE = { cam: V(...camLocal).applyMatrix4(I.M4), tgt: V(...tgtLocal).applyMatrix4(I.M4) }; },
     dot: v => { const D = V(), d = dotAt(clamp(v, 0, TOTAL), D); return d ? { p: D.toArray(), vis: d.vis, kind: d.kind } : null; },
     lay: () => { const L = layoutOf(); return { isl: L.isl.map(q => ({ C: q.C.toArray(), yaw: q.yaw, R: q.R, door: q.door, E: q.E.toArray(), X: q.X.toArray() })), rivers: L.rivers.map(r => r ? r.len : 0) }; },
     // Anordnung und Karte (Prüfung): Bahn, Parzellen, Tisch, Kartenstellung, Segment der Karte
