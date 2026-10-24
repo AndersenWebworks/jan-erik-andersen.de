@@ -12,14 +12,14 @@ export default {
   szene: "arbeitsweise",
   motive: M,
   blick: { az: 0, el: 8 },
-  faden: { stW: 60, rMin: 2.85, a2: .05 },
+  faden: { lane: false, stW: 60, rMin: 2.85, a2: .05 },
   // Titel hochkant ohne Punkt im Bild: der Punkt steht für die Titelkurve weit links, der Titel soll groß bleiben
   beats: [
     { zeigt: "titel", stop: 1, punkt: [-11.2, 6.2], blick: { el: 30 }, ohnePunkt: { n: true } },
-    { zeigt: "platz1", stop: 2, punkt: [-8.2, 2.2] },
-    { zeigt: "platz2", stop: 3, punkt: [-6.2, 2.2] },
-    { zeigt: "platz3", stop: 4, punkt: [-4.2, 2.2] },
-    { zeigt: "rahmen", stop: 5, punkt: [-1.5, 2.2] },
-    { zeigt: "bandende", stop: 6, punkt: [7.2, 2.2], blick: { el: 20 } }
+    { zeigt: "platz1", stop: 2, fest: true, punkt: [-8.2, 1.3] },
+    { zeigt: "platz2", stop: 3, fest: true, punkt: [-6.2, 1.3] },
+    { zeigt: "platz3", stop: 4, fest: true, punkt: [-4.2, 1.3] },
+    { zeigt: "rahmen", stop: 5, fest: true, punkt: [-1.5, 1.05] },
+    { zeigt: "bandende", stop: 6, fest: true, punkt: [7.2, .55], blick: { el: 20 } }
   ]
 };

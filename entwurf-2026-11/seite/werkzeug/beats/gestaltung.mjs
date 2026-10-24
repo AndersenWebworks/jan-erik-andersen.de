@@ -9,11 +9,13 @@ export default {
     for (const m of ["d", "n"]) for (const k of ["saetze", "plakat", "novum", "audi"]) (o[m] ||= {})[k] = { box: staffelei[m], text: .16 };
     return o;
   },
-  weg: [[-4.6, 3.4, 0, 2], [4.6, 3.2, 4, 2], [7.8, 2, 4, 2], [8.4, -4.6, 4, 2]],
+  // Der Punkt steigt links auf die Ablage der Staffelei (hub: [x0, x1, z0, z1, Höhe, Auslauf x, Auslauf z]), läuft dort unter den Blättern entlang und steigt rechts wieder ab
+  faden: { stW: 400, a2: .02, free: [[-1.8, 1.8, .7, 2.0]], hub: [[-1.6, 1.6, 1.4, 2.2, 1.94, 2.4, .5]] },
+  weg: [[-4.6, 2.6, 0, 2], [4.6, 2.6, 4, 2], [7.8, 2, 4, 2], [8.4, -4.6, 4, 2]],
   beats: [
-    { zeigt: "saetze", stop: 1, punkt: [-1.2, 3.4] },
-    { zeigt: "plakat", stop: 2, punkt: [-.4, 3.4] },
-    { zeigt: "novum", stop: 3, punkt: [.4, 3.4] },
-    { zeigt: "audi", stop: 4, punkt: [1.2, 3.4] }
+    { zeigt: "saetze", stop: 1, fest: true, punkt: [0, 1.75] },
+    { zeigt: "plakat", stop: 2, fest: true, punkt: [0, 1.75] },
+    { zeigt: "novum", stop: 3, fest: true, punkt: [0, 1.75] },
+    { zeigt: "audi", stop: 4, fest: true, punkt: [0, 1.75] }
   ]
 };

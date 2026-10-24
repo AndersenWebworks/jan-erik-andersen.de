@@ -872,7 +872,7 @@ export function seite(renderer, SEQ, opt = {}) {
     for (const s of stops) {
       const fit = s.at ? null : readingFit(I, s, obsUnion, obsAllOf(s.b));
       s.fitPose = fit ? { cam: fit.cam, tgt: fit.tgt, px: fit.px } : null;
-      const st = { stop: s, ...(fit ? { p: fit.p, how: fit.how } : s.near ? { p: s.near.slice(), how: "Wunschlage" } : stationFor(I, s, obsOne(s.b), obsAllOf(s.b))) }, prev = out[out.length - 1];
+      const st = { stop: s, ...(fit ? { p: fit.p, how: fit.how } : s.near && !s.at ? { p: s.near.slice(), how: "Wunschlage" } : stationFor(I, s, obsOne(s.b), obsAllOf(s.b))) }, prev = out[out.length - 1];
       // gleiche Stelle wie die vorige Lesestelle (z. B. Blätter auf einer Staffelei): der Punkt bleibt dort (eine Station für alle)
       if (prev && Math.hypot(prev.p[0] - st.p[0], prev.p[1] - st.p[1]) < .8) { st.p = prev.p; st.same = true; }
       out.push(st);
@@ -1085,6 +1085,8 @@ export function seite(renderer, SEQ, opt = {}) {
     const pts = [...head, ...Pr.slice(head.length ? 1 : 0)];
     // Szenen mit Höhe (Treppe): def.lift(x, z) hebt den Lauf über den Boden, der Faden klettert mit
     if (def.lift) for (const q of pts) q.y = THREAD_Y + def.lift(q.x, q.z);
+    // Ebenen im Bild (faden.hub, aus werkzeug/beats/*.mjs: [x0, x1, z0, z1, Höhe, Auslauf in x, Auslauf in z]): der Lauf steigt auf Tische, Regale, Ablagen und läuft dort, der Punkt steht im Motiv statt davor
+    const hub = pickN(f.hub); if (hub && hub.length) for (const q of pts) { let hy = 0; for (const h of hub) { const dx = Math.max(h[0] - q.x, 0, q.x - h[1]), dz = Math.max(h[2] - q.z, 0, q.z - h[3]), sx = Math.max(0, 1 - dx / (h[5] || .01)), sz = Math.max(0, 1 - dz / (h[6] || .01)); hy = Math.max(hy, h[4] * (sx * sx * (3 - 2 * sx)) * (sz * sz * (3 - 2 * sz))); } q.y = Math.max(q.y, THREAD_Y + hy); }
     const R = mkPoly(pts);
     R.minR = minRadiusOf(Pr); R.rUsed = R_USED;
     R.st = st;

@@ -32,7 +32,7 @@ function routenSchreiben() {
   const bisher = alt.includes("ROUTEN") ? JSON.parse(alt.slice(alt.indexOf("= ") + 2, alt.lastIndexOf(";"))) : {};
   for (const n of namen) {
     const B = beatsVon[n], stops = {}, way = { d: [...((B.weg && B.weg.d) || B.weg || [])], n: [...((B.weg && B.weg.n) || B.weg || [])] };
-    for (const b of B.beats) if (b.stop !== undefined && b.punkt) stops[b.stop] = { d: { near: punktIn(b, "d"), ...(b.nearR ? { nearR: b.nearR } : {}) }, n: { near: punktIn(b, "n"), ...(b.nearR ? { nearR: b.nearR } : {}) } };
+    for (const b of B.beats) if (b.stop !== undefined && b.punkt) { const ort = m => ({ near: punktIn(b, m), ...(b.fest ? { at: punktIn(b, m) } : {}), ...(b.nearR ? { nearR: b.nearR } : {}) }); stops[b.stop] = { d: ort("d"), n: ort("n") }; }   // near gewinnt in kern.js vor at, überschreibt so auch Grundwerte aus stationen.js; fest: true setzt zusätzlich at
     // Beats ohne Lesestelle: Wegpunkt nach der zuletzt davor liegenden Lesestelle
     let zuletzt = 0;
     for (const b of B.beats) if (b.stop !== undefined) zuletzt = b.stop; else if (b.punkt) for (const m of ["d", "n"]) way[m].push([...punktIn(b, m), zuletzt, b.gewicht || 8]);
