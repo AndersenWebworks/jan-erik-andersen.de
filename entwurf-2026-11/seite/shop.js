@@ -176,11 +176,12 @@ export default function (K) {
   F.spur({ tags: ["schild", "mass", "karton", "bruecke"], quiet: [legL, mass.sign, ksign, apron], a: .3 });
 
   // ---------- Lesestellen ----------
-  const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
+  const pxD = (W, H) => Math.min(30, Math.max(27, 27 + (H - 900) / 540 * 2.5));
   const S = {
-    head: { prints: [HEAD], b: .31, px: 30, pitch: 22, sy: .42, pxN: 24, fitN: .9, npitch: 22, nsy: .5 },
-    s1: { prints: [T1], b: .5, px: pxD, pitch: 14, yaw: 8, sx: .25, sy: .42, npitch: 14, nyaw: 0, nsy: .5 },
-    s2: { prints: [T2], b: .66, px: pxD, pitch: 14, yaw: -6, sx: -.1, sy: .3, npitch: 14, nyaw: 0, nsy: .35 }
+    // Folgefahrt (kern.js): frontal vor dem Text, Text oberhalb der Mitte (Platz unten für den Punkt)
+    head: { prints: [HEAD], b: .31, px: 30, pxN: 26, fitN: .9, frontal: true, tilt: 3, ntilt: 3, sx: 0, sy: .34, nsx: 0, nsy: .4 },
+    s1: { prints: [T1], b: .5, px: pxD, frontal: true, tilt: 12, ntilt: 12, sx: .15, sy: .1, nsx: 0, nsy: .1 },
+    s2: { prints: [T2], b: .66, px: pxD, frontal: true, tilt: 12, ntilt: 12, sx: -.1, sy: .1, nsx: 0, nsy: .1 }
   };
   return {
     fov: 32, fovN: 44,

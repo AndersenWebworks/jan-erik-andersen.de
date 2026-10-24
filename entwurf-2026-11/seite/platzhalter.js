@@ -213,15 +213,18 @@ export function ausserdem(K, o = {}) {
   const HD = Math.max(...PROJEKTE.map(p => { const sp = SPEC[p.geraet] || SPEC.monitor, k = SC * (p.groesse || 1); return (sp.dh + sp.bt + sp.bb + (sp.neck || (sp.base ? sp.base : 0))) * k; }));
   const ty = (HF + HD) / 2, tz = ZW + DS * .5, DIST = N ? 9.2 : 10.2, EL = 9;
   const slot = i => { const az = n > 1 ? -3 + 6 * i / (n - 1) : 0, c = look(cxs[i], ty, tz, EL, az, DIST), t = tg(cxs[i], ty, tz); return { cam: c, tgt: t, camN: c, tgtN: t }; };
+  // Lesestellen (Folgefahrt, 23.10.): je Gerät Name, Satz und Adresse auf der Front, frontal; der Satz bestimmt die Schriftgröße (Großbuchstaben mindestens 16 px, Handy 13 px)
+  const pxD = (W, H) => Math.min(30, Math.max(27, 27 + (H - 900) / 540 * 2.5));
+  const stops = items.map((it, i) => ({ prints: [it.name, it.satz, it.adr].filter(Boolean), e0: eS, b: T(BS[i]), px: pxD, pxN: 22, frontal: true, tilt: 4, ntilt: 4, sx: 0, nsx: 0, sy: .05, nsy: .05, fit: .96, fitN: .98 }));
   const keys = [
     { w: 0, b: T(0), cam: look(cxs[0] + 3, 1.2, ZW + 1, 40, 0, 27), tgt: tg(cxs[0] + 3, 1.2, ZW + 1), camN: look(cxs[0] + 3.2, 1.4, ZW + 1, 40, 0, 31), tgtN: tg(cxs[0] + 3.2, 1.4, ZW + 1) },
-    ...PROJEKTE.map((p, i) => ({ w: i === 0 ? 1.1 : 1, b: T(BS[i]), ...slot(i) })),
+    ...stops.map((st, i) => ({ w: i === 0 ? 1.1 : 1, stop: st })),
     { w: .8, b: T(1), cam: look(cxs[n - 1] + 1.6, ty + .3, tz, 16, 3, DIST + 3), tgt: tg(cxs[n - 1] + 1.6, ty + .3, tz), camN: look(cxs[n - 1] + 1.6, ty + .3, tz, 16, 3, DIST + 3), tgtN: tg(cxs[n - 1] + 1.6, ty + .3, tz) }
   ];
   return {
     fov: 32, fovN: 44, track: 640,
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: T(.004), wave: .0025 * SP, d: .04 * SP, out: T(.4) },
-    names: {}, stops: [],
+    names: {}, stops,
     info: { x0: X0 - .9 + ox, x1: -X0 + .9 + ox, z0: BZ0 + oz, z1: BZ1 + oz, b0: B0, b1: B1, heights: { ridge: HF + HD } },
     dbg: { wall, shelf, front, screens, items, HF, HW, DS, PITCH, cxs },
     keys

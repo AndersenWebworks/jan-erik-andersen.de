@@ -384,14 +384,15 @@ export default function (K, o = {}) {
     const sx = (W, H) => o2.bx + du * hp(W, H) / SH / (W / 2), sy = (W, H) => o2.by + dv * hp(W, H) / SH / (H / 2);
     return { px, pxN: px, sx, sy, nsx: sx, nsy: sy };
   };
-  const view = N ? { fh: .6, fw: .9, bx: 0, by: .02 } : { fh: .6, fw: .6, bx: 0, by: .015 };
+  // Schrift: Großbuchstaben der Bildunterschriften mindestens 16 px (Handy 13 px): die Tafel füllt dafür mehr vom Bild
+  const view = N ? { fh: .66, fw: .96, bx: 0, by: .04 } : { fh: .8, fw: .78, bx: 0, by: .04 };
   const viewDeck = N ? view : { ...view, bx: -.16 };
   const stopOf = (prints, b, v) => ({ prints, b: T(b), ...v });
   const S = {
-    g0: stopOf(deckTxt, STOPB[0], { ...lay(0, e1, viewDeck), pitch: 14, yaw: 0, npitch: 14, nyaw: 0 }),
-    g1: stopOf(sheetPrints[1].slice(0, 2), STOPB[1], { ...lay(1, eT, view), pitch: 14, yaw: 0, npitch: 14, nyaw: 0 }),
-    g2: stopOf(sheetPrints[2].slice(0, 2), STOPB[2], { ...lay(2, eT, view), pitch: 14, yaw: 0, npitch: 14, nyaw: 0 }),
-    g3: stopOf(sheetPrints[3].slice(0, 2), STOPB[3], { ...lay(3, eT, view), pitch: 14, yaw: 0, npitch: 14, nyaw: 0 })
+    g0: stopOf(deckTxt, STOPB[0], { ...lay(0, e1, viewDeck), frontal: true, tilt: 14, ntilt: 14 }),
+    g1: stopOf(sheetPrints[1].slice(0, 2), STOPB[1], { ...lay(1, eT, view), frontal: true, tilt: 14, ntilt: 14 }),
+    g2: stopOf(sheetPrints[2].slice(0, 2), STOPB[2], { ...lay(2, eT, view), frontal: true, tilt: 14, ntilt: 14 }),
+    g3: stopOf(sheetPrints[3].slice(0, 2), STOPB[3], { ...lay(3, eT, view), frontal: true, tilt: 14, ntilt: 14 })
   };
   const look = (tx, ty, tz, el, az, dist) => { const e = el * PI / 180, a = az * PI / 180; return P3(tx + dist * Math.cos(e) * Math.sin(a), ty + dist * Math.sin(e), tz + dist * Math.cos(e) * Math.cos(a)); };
   const tg = (x, y, z) => P3(x, y, z);

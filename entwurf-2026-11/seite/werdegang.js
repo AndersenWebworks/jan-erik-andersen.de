@@ -339,7 +339,7 @@ export default function (K) {
   const span = (sK(8) - sK(1)) / (f8 - f1), tt0 = sK(1) + S - f1 * span, tt1 = tt0 + span;
 
   // ---------- Lesestellen ----------
-  const pxD = (Wp, Hp) => Math.min(21, Math.max(19, 19 + (Hp - 700) / 500 * 2));
+  const pxD = (Wp, Hp) => Math.min(30, Math.max(27, 27 + (Hp - 900) / 540 * 2.5));
   const SH = { prints: [head], e0: HE, b: 0, px: 130, fit: .5, pxN: 90, fitN: .72, pitch: 14, npitch: 16, sy: -.12, nsy: -.1 };
   // Waagerechte Bildlage: nicht der Text, sondern die Stufe steht mittig (Desktop: Text links, Zeichen rechts, beide ganz im Bild;
   // Handy: gemeinsame Textkante, der Block der breitesten Zeile mittig). sx aus der Tiefe der Lesestellung zurückgerechnet.
@@ -371,7 +371,8 @@ export default function (K) {
   const SY8N = [[667, -.52], [740, -.49], [844, -.43], [915, -.41]];
   const ST = steps.map(st => {
     const top = st.k === 8;
-    const s = { prints: st.prints, e0: ED, b: st.s + S, px: pxD, pitch: top ? 45 : globalThis.WP ?? 32, yaw: -6 + (st.k - 1) * .8, sy: top ? (Wp, Hp) => interp(SY8D, Hp) : globalThis.WSY ?? syD, pxN: 16, npitch: top ? 45 : globalThis.WNP ?? 32, nyaw: 0, nsy: top ? (Wp, Hp) => interp(SY8N, Hp) : globalThis.WNSY ?? syN };
+    // Kamera-Umbau 23.10.2026: frontal vor der Setzstufe (Schräge höchstens 15°), die Kamera steigt Stufe für Stufe mit; Bildlage wie bisher (Text oben, die Stufe darunter im Bild)
+    const s = { prints: st.prints, e0: ED, b: st.s + S, px: pxD, frontal: true, tilt: 7, ntilt: 7, yaw: -6 + (st.k - 1) * .8, sy: top ? .2 : syD, pxN: 22, nyaw: 0, nsy: top ? .25 : syN };
     s.sx = sxOf(s, false); s.nsx = sxOf(s, true);
     return s;
   });

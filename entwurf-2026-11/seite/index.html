@@ -132,7 +132,7 @@ body.kartenmodus .karte a { pointer-events: auto; }
 .karte polygon { fill: rgba(255,255,255,.012); stroke: rgba(48,48,51,.22); stroke-width: 1; stroke-dasharray: 3 3; stroke-linejoin: round; transition: fill .2s, stroke .2s; }
 .karte text { font: 500 12.5px/1 var(--sans); letter-spacing: .03em; fill: var(--ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; transition: fill .2s; }
 .karte rect { fill: #f8fafd; stroke: rgba(48,48,51,.5); stroke-width: 1; rx: 2px; ry: 2px; transition: stroke .2s; }
-.karte a.hier polygon { stroke: var(--red); stroke-dasharray: none; stroke-width: 1.6; }
+.karte a.hier polygon { stroke: var(--red); stroke-opacity: .5; }   /* gestrichelt wie die übrigen Parzellen: kein durchgezogener roter Kreis, der wie eine Schlaufe des Fadens wirkt */
 .karte a:hover polygon, .karte a:focus-visible polygon { fill: rgba(212,2,53,.09); stroke: var(--red); stroke-dasharray: none; stroke-width: 1.6; }
 .karte a:hover text, .karte a:focus-visible text { fill: var(--red); }
 .karte a:hover rect, .karte a:focus-visible rect, .karte a.hier rect { stroke: var(--red); }

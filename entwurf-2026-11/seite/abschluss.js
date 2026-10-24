@@ -75,7 +75,7 @@ export default function (K) {
   // Kamera auf der Kugel um das Ziel (Blickhöhe el, Gier az, Abstand dist); Handy: eigener Abstand und eigene Blickhöhe (sonst würde die Breitbild-Stellung gestreckt)
   const ring = (tgt, el, az, dist) => { const e = el * PI / 180, a = az * PI / 180; return tgt.clone().add(V(Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e)).multiplyScalar(dist)); };
   const orbit = (tgt, el, az, dist, distN, elN, tgtN) => ({ tgt, cam: ring(tgt, el, az, dist), tgtN: tgtN || tgt, camN: ring(tgtN || tgt, elN || el + 6, az * .6, distN || dist * .7) });
-  const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
+  const pxD = (W, H) => Math.min(30, Math.max(27, 27 + (H - 900) / 540 * 2.5));
   const ZH = -1.0;                  // Mitte des Papierbandes (Szene 1)
   const stops = {};
   const carriers = []; // Textträger mit ihren Drucken (Prüfung: ganz im Bild oder ganz draußen)
@@ -230,12 +230,12 @@ export default function (K) {
     carriers.push({ n: "h1", nodes: [], prints: H1 }, { n: "T4", nodes: [fr], prints: [T4] });
     cards.forEach((cd, i) => carriers.push({ n: "K" + (i + 1), nodes: [], prints: [cd.pr] }));
     carriers.push({ n: "K5", nodes: [], prints: [cards5.pr] });
-    stops.h1 = { prints: H1, pitch: 9, sy: 0, nsy: 0, px: (W, H) => H * .075, pxN: 38, fit: .74, fitN: .86, b: .06 };
-    const lese = (pr, b, sy = -.05) => ({ prints: [pr], px: pxD, pitch: 22, yaw: 0, sy, nsy: sy, npitch: 24, nyaw: 0, b });
+    stops.h1 = { prints: H1, frontal: true, tilt: 4, ntilt: 4, sy: .3, nsy: .3, px: (W, H) => H * .075, pxN: 38, fit: .74, fitN: .86, b: .06 };
+    const lese = (pr, b, sy = .3) => ({ prints: [pr], px: pxD, frontal: true, tilt: 7, ntilt: 7, sx: 0, sy, nsy: sy, b });
     stops.t1 = lese(cards[0].pr, .172);
     stops.t2 = lese(cards[1].pr, .207);
     stops.t3 = lese(cards[2].pr, .242);
-    stops.f = { ...lese(T4, .315, -.05), carrier: [fr] };
+    stops.f = { ...lese(T4, .315, .1), tilt: 13, ntilt: 13, carrier: [fr] };
     stops.t5 = lese(cards5.pr, .352);
   }
 
@@ -342,9 +342,9 @@ export default function (K) {
     F.spur({ tags: ["tisch", "monitore", "tafel"], quiet: [apron, bd, ...mons], a: .3 });
 
     carriers.push({ n: "h2", nodes: [], prints: H2 });
-    stops.h2 = { prints: H2, pitch: 10, sy: 0, nsy: 0, px: (W, H) => H * .075, pxN: 38, fit: .74, fitN: .86, b: .43 };
+    stops.h2 = { prints: H2, frontal: true, tilt: 4, ntilt: 4, sy: .3, nsy: .3, px: (W, H) => H * .075, pxN: 38, fit: .74, fitN: .86, b: .43 };
     // Lesestellen: Spalte für Spalte von links nach rechts, gleiche Schriftgröße (e0), Kamera frontal
-    const spalte = (i, b) => ({ prints: colPrints[i], e0: E, px: pxD, pitch: 15, yaw: 0, sy: 0, nsy: 0, npitch: 17, nyaw: 0, fit: .9, fitN: .95, b });
+    const spalte = (i, b) => ({ prints: colPrints[i], e0: E, px: pxD, frontal: true, tilt: 6, ntilt: 6, sx: 0, sy: .25, nsy: .25, fit: .9, fitN: .95, b });
     stops.c1 = spalte(0, .585); stops.c2 = spalte(1, .625); stops.c3 = spalte(2, .665);
   }
 

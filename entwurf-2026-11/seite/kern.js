@@ -22,6 +22,7 @@
 // Zustände: #p=0…1 (ganze Seite), #s=<szene> (Szenenanfang), Handy-Ausschnitt #…&w=390&h=844 (Prüfhilfe).
 import * as THREE from "three";
 import { SCHRIFTEN } from "./fonts/schriften.js";
+import { BAHN, RIG } from "./stationen.js";
 import { Model, kit, paperMaterial, edgeMaterial, rissMaterial, geruestMaterial, gridOn, frameOn, FAR, COL, PI, Q, EPS, clamp, sm, mech } from "./falt.js";
 import { EffectComposer } from "./vendor/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "./vendor/addons/postprocessing/RenderPass.js";
@@ -203,13 +204,13 @@ export function seite(renderer, SEQ, opt = {}) {
     ground: "#e7edf4",            // Boden (Tisch) unter den Parzellen
     plate: "#f8fafd",             // Bogen jeder Parzelle
     gridInk: "#6a7584",           // Linienfarbe des Rasters am Boden
-    gridMinor: .09, gridMajor: .17,      // Deckkraft der feinen Linien (alle 2 Einheiten) und der kräftigen (alle 10)
+    gridMinor: .035, gridMajor: .07,     // Deckkraft der feinen Linien (alle 2 Einheiten) und der kräftigen (alle 10): nur noch ganz zart unter den Höhenlinien
     penumbra: 1.8,                // Weichzeichner der Schattenkante in Texeln der Schattenkarte (klein = klarer umrissen)
     light: [-.45, .8, .5]         // Richtung zum Licht (Welt), bestimmt die Richtung der Schatten
   };
   // Gemeinsame Uniforms aller Papier-Shader. uHaze/uHazeF: Dunstfarbe nah und fern, uSM/uSMM/uSMP: Schattenkarte (Tiefe aus Richtung des Lichts), ihre Matrix
   // Welt → Licht und (an, Texelgröße, Stärke, Bias), uShC: Schattenfarbe.
-  const WHITE = new THREE.Color(PAL.hazeStart), hazeN = new THREE.Color(PAL.hazeNear), hazeF = new THREE.Color(PAL.hazeFar), hazeC = new THREE.Color(), hazeCF = new THREE.Color();
+  const GROUND_C = new THREE.Color(PAL.ground), WHITE = new THREE.Color(PAL.hazeStart), hazeN = new THREE.Color(PAL.hazeNear), hazeF = new THREE.Color(PAL.hazeFar), hazeC = new THREE.Color(), hazeCF = new THREE.Color();
   const U = { haze: { value: new THREE.Vector3(1, 1, 1) }, hazeF: { value: new THREE.Vector3(1, 1, 1) }, sm: { value: null }, smm: { value: new THREE.Matrix4() },
     smp: { value: new THREE.Vector4(0, 1 / 1024, PAL.shadowStrength, .03) }, shc: { value: new THREE.Vector3() } };
   { const c = new THREE.Color(PAL.shadow); U.shc.value.set(c.r, c.g, c.b); }
@@ -298,18 +299,60 @@ export function seite(renderer, SEQ, opt = {}) {
   const FORCE = fq.get("w") && fq.get("h") ? { w: +fq.get("w"), h: +fq.get("h") } : null;
   const VW = () => FORCE ? FORCE.w : innerWidth, VH = () => FORCE ? Math.min(FORCE.h, innerHeight) : innerHeight;
   let aspect = VW() / VH(), narrow = aspect < 1;
-  const fovOf = I => narrow ? (I.def.fovN || 44) : (I.def.fov || 36);
+  const fovOf = () => narrow ? 44 : 32;                              // Sichtfeld überall gleich (kein Zoom über die Brennweite)
 
   // ---------- Szenen ----------
   const links3 = [];
   let INST = [], SEGS = [], ANCH = [], TOTAL = 1, thread = null, ZSEG = null;
   // Länge des Schluss-Zooms in vh (Breitbild, hochkant)
-  const ZOOM = { d: 320, n: 320 };
+  const ZOOM = { d: 520, n: 520 };
 
   function newInstance(cfg, idx) {
     return { cfg, idx, name: cfg.name, built: false, O: V(), rot: 0, M4: new THREE.Matrix4(), R4: new THREE.Matrix4(), fp: null, tStart: undefined, parked: false, lastKey: "" };
   }
 
+  // Planung je Szene (hängt von der Fenstergröße ab, weil die Lesestellungen es tun): Stationen, Szenenlauf, Zeitplan, Haltestellungen, Faden, Kameraspur
+  function plan(I) {
+    if (I.cfg.keyed) buildPath(I);
+    if (!I.cfg.keyed) { const ob = obstaclesOf(I); const fz = pickN(I.cfg.lane); I.laneZ = fz !== undefined ? fz : ob.length ? Math.min(I.disc.cz + I.disc.R - 4, Math.max(...ob.map(b => b.max.z)) + 1.1) : undefined; }
+    I.stations = I.cfg.keyed ? [] : stationsOf(I);
+    I.route = routeFor(I);
+    // zweiter Durchgang: Stationen auf den nächsten Punkt des geglätteten Laufs setzen, Lesestellung dafür neu anpassen, Lauf erneut rechnen
+    if (!I.cfg.keyed && I.stations.some(o => o.d > .4)) {
+      const obsU = obstaclesOf(I);
+      for (const o of I.stations) {
+        if (o.d <= .4 || o.same) continue;
+        const q = I.route.at(o.s), s0 = o.stop, keepNear = s0.near; s0.near = [q.x, q.z];
+        const fit = readingFit(I, s0, obsU, obsU);
+        s0.near = keepNear;
+        if (fit && Math.hypot(fit.p[0] - q.x, fit.p[1] - q.z) < 1.2) { o.p = fit.p; o.how = fit.how + " (2)"; s0.fitPose = { cam: fit.cam, tgt: fit.tgt, px: fit.px }; }
+        else { o.p = [q.x, q.z]; o.how = "auf dem Lauf"; }
+      }
+      for (let k = 1; k < I.stations.length; k++) if (I.stations[k].same) I.stations[k].p = I.stations[k - 1].p;
+      I.route = routeFor(I);
+    }
+    I.tl = timeline(I); I.lenNeed = I.tl.lenNeed;
+    // jede Lesestellung an die tatsächliche Lage des Punktes in der Mitte ihres Haltefensters anpassen (feste Station)
+    if (!I.cfg.keyed) {
+      const obsU = obstaclesOf(I);
+      for (const a of I.tl.an) {
+        if (a.kind !== "text" || a.h0 === undefined) continue;
+        const q = I.route.at(I.tl.sAt((a.h0 + a.h1) / 2)), st0 = a.stop; st0.fixP = [q.x, q.z];
+        let obsB = obsU; if (I.sb) { let bs = I.sb.steps[0]; for (const t of I.sb.steps) if (Math.abs(t.b - st0.b) < Math.abs(bs.b - st0.b)) bs = t; obsB = [...bs.list, ...I.sb.extra].filter(b => !b.isEmpty() && b.max.y > .12 && (b.max.x - b.min.x) * (b.max.z - b.min.z) < 400); }
+        const fit = readingFit(I, st0, [], obsB); st0.fixP = null;
+        if (fit) st0.fitPose = { cam: fit.cam, tgt: fit.tgt, px: fit.px };
+      }
+    }
+    I.anW = anchorsWorld(I);
+    buildThreadFor(I);
+    for (const j of [I.idx - 1, I.idx, I.idx + 1]) if (INST[j] && INST[j].built && INST[j].tl) computeChunk(j);
+  }
+  // alle Szenen gebaut: Füllung am Fluss, Wortmarke, Höhenlinien
+  function allBuilt() {
+    try { buildFiller(); } catch (e) { console.error("Füllung:", e); }
+    try { buildEyeMark(); } catch (e) { console.error("Wortmarke:", e); }
+    try { buildContours(); } catch (e) { console.error("Höhenlinien:", e); }
+  }
   // Eine Szene bauen: Modul ausführen, Faltmodell abschließen, Drucke und Netze in die Gruppe der Szene hängen
   function build(I) {
     const cfg = I.cfg;
@@ -323,7 +366,7 @@ export function seite(renderer, SEQ, opt = {}) {
       const w = t.w * e, h = t.h * e;
       const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat);
       mesh.renderOrder = 3; mesh.frustumCulled = false; group.add(mesh);
-      const pr = { mesh, mat, on, e, w, h, t, map: t.tex, sc, mk: sx => printTex(lines, { ...o, scale: sx }).tex.image, fade: o.fade || .02, off: o.off, grp: o.grp, I };
+      const pr = { mesh, mat, on, e, w, h, t, map: t.tex, sc, mk: sx => printTex(lines, { ...o, scale: sx }).tex.image, fade: o.fade || .02, off: o.off, grp: o.grp, fnt: o.font || "grotesk", I };
       prints.push(pr); return pr;
     }
     function mkDecal(wpx, hpx, draw, w, h, on, fade = .025) {
@@ -430,27 +473,23 @@ export function seite(renderer, SEQ, opt = {}) {
     if (M.geoG) { const gm = geruestMaterial(), gl = add(new THREE.LineSegments(M.geoG, gm)); gl.frustumCulled = false; gl.renderOrder = 1; bMats.push(gm); I.gerLine = gl; }
     bMats.push(rissMat);
     I.buildLines = [riss]; if (I.gerLine) I.buildLines.push(I.gerLine);        // Bastel- und Gerüstlinien: nur in der eigenen Szene sichtbar
-    // Schlüssel: Ausschnitt aus der Bahn der Szene (cfg.keys), erster Schlüssel ohne Vorlauf (sonst stünde die Kamera am Szenenanfang still)
+    // Schlüssel: Ausschnitt aus der Bahn der Szene (cfg.keys), erster Schlüssel ohne Vorlauf. Die Schlüssel tragen nur noch den Bauzustand (b) und die Lesestellen;
+    // die Kamera kommt aus der Spur der Seite (computeChunk), nur die Eröffnung (cfg.keyed) fährt bis zum Tablett ihre eigenen Schlüssel.
     def.allKeys = def.keys;
-    let keys = (cfg.keys ? cfg.keys(def) : def.keys).map((k, i) => i === 0 ? { ...k, w: 0 } : k);
-    // cfg.lead / cfg.tail: beginnt bzw. endet die Szene mit einer Lesestelle, kommt die Kamera aus etwas weiterem Abstand an bzw.
-    // zieht sich danach langsam zurück; so liegt die Lesestelle ganz in der Szene und nicht direkt an der Fahrt zur Nachbarszene
-    if (cfg.lead && keys[0].stop) keys = [{ w: 0, b: keys[0].stop.b, fromStop: keys[0].stop, back: 1.25, up: .4 }, { ...keys[0], w: .35 }, ...keys.slice(1)];
-    const lk = keys[keys.length - 1];
-    if (cfg.tail && lk.stop) keys = [...keys, { w: .35, b: lk.stop.b, fromStop: lk.stop, back: 1.2, up: .3 }];
-    def.keys = keys;
+    def.keys = (cfg.keys ? cfg.keys(def) : def.keys).map((k, i) => i === 0 ? { ...k, w: 0 } : k);
     Object.assign(I, { group, lines, prints, anims, sheets, sheetBox, bMats, rissMat, F, K, M, def, built: true });
+    if (cfg.stops) { let n = 0; const seen = new Set(); for (const k of def.keys) if (k.stop && !seen.has(k.stop)) { seen.add(k.stop); n++; const ov = cfg.stops[n]; if (!ov) continue; const o = { ...ov, ...((narrow ? ov.n : ov.d) || {}) }; if (o.pose) Object.assign(k.stop, o.pose); if (o.at) k.stop.at = o.at; if (o.near) k.stop.near = o.near; if (o.nearR !== undefined) k.stop.nearR = o.nearR; if (o.hold !== undefined) k.stop.hold = o.hold; } }
     prep(I);
     I.b0 = clamp(def.bOfU(0), 0, 1);
-    I.bLast = clamp(def.bOfU(1), 0, 1);
     I.bMax = cfg.bMax !== undefined ? cfg.bMax : 1;
+    I.bLast = I.bMax;
     // Ausschnitt: Szenen, die nur einen Teil eines Bogens zeigen (abschluss), oder deren Bogen weit nach hinten reicht (stimmen)
     I.clip = cfg.clip || null;
-    I.fcfg = cfg.faden ? cfg.faden(def, I) : null;                      // Eingang und Ausgang des Fadens (Szenenkoordinaten), vor dem Zuschnitt der Bögen gerechnet
-    layout(I);
+    I.fcfg = typeof cfg.faden === "function" ? cfg.faden(def, I) : cfg.faden || null;                      // Wegpunkte und Ausnahmen des Fadens (Szenenkoordinaten)
+    I.sb = stateBoxes(I, 24);                                            // Umgrenzungen je Zustand (Szenenkoordinaten, die Gruppe steht noch am Ursprung)
+    placeScene(I);
     group.position.copy(I.O); group.rotation.y = I.rot; group.updateMatrixWorld(true);
     I.boxes = partBoxes(I);
-    laneArrival(I);
     // Ausschnitt für Materialien ohne eigenen Shader: Ebenen in Szenenkoordinaten, mit der Gruppe in die Welt gedreht
     const planes = I.clip ? [
       new THREE.Plane(V(1, 0, 0), -I.clip[0]), new THREE.Plane(V(-1, 0, 0), I.clip[1]),
@@ -462,15 +501,17 @@ export function seite(renderer, SEQ, opt = {}) {
     I.shadowPlanes = planes;
     I.mesh = mesh; mesh.layers.enable(1 + I.idx);                             // Schattenwerfer: das Modell der Szene (Ebene 1 + Nummer der Szene, siehe shadowPass())
     fitSheets(I, group, sheets, sheetBox);
+    I.ext = extentOf(I);
     // Dunst je Szene: eigene Grenzen (I.far), damit Nachbarszenen aus dem Dunst auftauchen und nicht im Hintergrund stehen (applyState)
-    I.far = new THREE.Vector2(FAR.x, FAR.y); I.farS = new THREE.Vector2(FAR.x, FAR.y);       // farS: die Bögen (Karten) bleiben länger sichtbar als stehende Teile
-    group.traverse(o => { const ms = o.material ? (Array.isArray(o.material) ? o.material : [o.material]) : []; for (const m of ms) if (m.uniforms && m.uniforms.uFar) m.uniforms.uFar = { value: I.far }; });
+    I.far = new THREE.Vector2(FAR.x, FAR.y); I.farS = new THREE.Vector2(FAR.x, FAR.y); I.farP = new THREE.Vector2(FAR.x, FAR.y);       // farS: die Bögen (Karten) bleiben länger sichtbar als stehende Teile
+    group.traverse(o => { const ms = o.material ? (Array.isArray(o.material) ? o.material : [o.material]) : []; for (const m of ms) if (m.uniforms && m.uniforms.uFar) m.uniforms.uFar = { value: I.farP }; });
     for (const sh of sheets) if (sh.material.uniforms && sh.material.uniforms.uFar) sh.material.uniforms.uFar = { value: I.farS };
-    buildThreadFor(I);
     I.M.update(I.b0, 0); I.curB = I.b0; I.curT = 0;
+    plan(I);
     dbg("Szene " + (I.idx + 1) + " " + I.name + " gebaut");
     try { updateTable(); } catch (e) { mapFail(e); }
     group.visible = false;
+    if (INST.every(X => X.built)) allBuilt();
     return I;
   }
 
@@ -480,9 +521,14 @@ export function seite(renderer, SEQ, opt = {}) {
     const v = V(), pts = [];
     for (const pr of s.prints) for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) pts.push(v.set(sx * pr.w / 2, sy * pr.h / 2, 0).applyMatrix4(pr.mesh.matrix).clone());
     const m = s.prints[0].mesh.matrix;
+    s.pts = pts;                                                      // Ecken aller Drucke (Szenenkoordinaten), für die Lage des Punktes an der Lesestelle (routeFor)
+    // Mitte, Normale und Schriftgröße je Textdruck im Lesezustand (Schräge und Schrift je Druck, readingFit)
+    s.prT = s.prints.filter(pr => pr.t && pr.t.rows).map(pr => ({ c: V().setFromMatrixPosition(pr.mesh.matrix), n: V().setFromMatrixColumn(pr.mesh.matrix, 2).normalize(), e: pr.e }));
     s.C = pts.reduce((a, p) => a.add(p), V()).multiplyScalar(1 / pts.length);
     s.N = V().setFromMatrixColumn(m, 2).normalize(); s.Y = V().setFromMatrixColumn(m, 1).normalize();
-    s.e = s.e0 || Math.max(...s.prints.map(pr => pr.e));
+    // Schriftgröße der Lesestellung bemisst sich am größten Druck (Vorgabe) bzw. am kleinsten Text (minE, alle frontalen Lesestellen): dann hat auch die kleinste Zeile die verlangte Größe
+    const te = s.prints.filter(pr => pr.t && pr.t.rows).map(pr => pr.e);
+    s.e = s.e0 || ((s.minE || s.frontal) && te.length ? Math.min(...te) : Math.max(...s.prints.map(pr => pr.e)));
     s.wm = Math.max(...pts.map(p => p.clone().sub(s.C).dot(V().setFromMatrixColumn(m, 0).normalize()))) * 2;
     if (s.b === undefined) s.b = Math.max(...s.prints.map(pr => pr.on)) + .03;
   }
@@ -512,6 +558,7 @@ export function seite(renderer, SEQ, opt = {}) {
   // (Glocke, ohne Einrasten und Stillstand), übers Bild gerechnet daher noch höher als TEMPO_F der mittleren Szenengeschwindigkeit.
   const TEMPO_F = .6;
   function applyWarp(def) {
+    if (def.noWarp) { def.pOfU = u => clamp(u, 0, 1); def.uOfP = p => clamp(p, 0, 1); return; }
     const ks = def.keys, NW = 3000, BW = def.warpW || .028, F = TEMPO_F;
     const su = ks.filter(k => (k.stop || k.slow) && !k.noWarp).map(k => k.u);
     const sp = u => { let m = 0; for (const c of su) m = Math.max(m, Math.exp(-(((u - c) / BW) ** 2))); return 1 - (1 - F) * m; };
@@ -540,10 +587,19 @@ export function seite(renderer, SEQ, opt = {}) {
       cum[j] = cum[j - 1] + c1.distanceTo(c0) + RETIME_R * Math.acos(clamp(d1.dot(d0), -1, 1));
       c0.copy(c1); d0.copy(d1);
     }
-    const sw = ks.reduce((a, k, i) => a + (i ? k.w : 0), 0) || 1, sm = cum[tot] || 1, dur = [0];
-    for (let i = 1; i < n; i++) { const a = ks[i].w / sw, m = (cum[i * SUB] - cum[(i - 1) * SUB]) / sm; dur.push(Math.max(RETIME_MIN * a, (1 - RETIME_B) * a + RETIME_B * m)); }
-    const sd = dur.reduce((a, b) => a + b, 0); let acc = 0;
-    ks.forEach((k, i) => { acc += dur[i]; k.u = acc / sd; });
+    // Haltepunkte (k.hold in vh, Folgefahrt): feste Dauer, keine Bewegung; die Fahrt zwischen den Schlüsseln füllt den Rest der Szene
+    const lenVh = I.cfg.len[narrow ? "n" : "d"], isH = i => !!ks[i].hold;
+    const rb = I.cfg.retimeB !== undefined ? I.cfg.retimeB : RETIME_B;
+    const sw = ks.reduce((a, k, i) => a + (i && !isH(i) ? k.w : 0), 0) || 1, sm = cum[tot] || 1, dur = [0];
+    for (let i = 1; i < n; i++) { if (isH(i)) { dur.push(0); continue; } const a = ks[i].w / sw, m = (cum[i * SUB] - cum[(i - 1) * SUB]) / sm; dur.push(Math.max(RETIME_MIN * a, (1 - rb) * a + rb * m)); }
+    {
+      let hs = ks.reduce((a, k, i) => a + (isH(i) ? k.hold / lenVh : 0), 0); const hf = hs > .8 ? .8 / hs : 1;
+      if (hf < 1) console.warn("Haltezeiten zu lang für die Szene", I.name, (hs * lenVh).toFixed(0), "von", lenVh, "vh");
+      hs *= hf; I.holdShare = hs;
+      const sd = dur.reduce((a, b) => a + b, 0) || 1; let acc = 0;
+      ks.forEach((k, i) => { acc += isH(i) ? k.hold / lenVh * hf : dur[i] / sd * (1 - hs); k.u = acc; });
+      const kU = ks[n - 1].u; ks.forEach(k => { k.u /= kU; });
+    }
     const keyU = ks.map(k => k.u), keyS = ks.map((k, i) => cum[i * SUB]);
     def.bOfU = pchip(keyU, ks.map(k => k.b));
     const sOfU = pchip(keyU, keyS);
@@ -561,9 +617,10 @@ export function seite(renderer, SEQ, opt = {}) {
     const W = VW(), H = VH(), nar = aspect < 1, TAN = Math.tan(fovOf(I) * PI / 360);
     let px = nar ? s.pxN : s.px;
     if (typeof px === "function") px = px(W, H, s);
-    if (px === undefined) px = nar ? 16 : clamp(20.5 + (H - 900) / 540 * 2.5, 19.5, 23);
+    if (px === undefined) px = nar ? 22 : clamp(27 + (H - 900) / 540 * 2.5, 27, 30);          // Großbuchstaben mindestens 16 px (Handy 13 px): Schibsted Grotesk H = 0,703 em
     const fit = nar ? s.fitN : s.fit;
     if (fit) px = Math.min(px, fit * W / (s.wm / s.e));
+    px = Math.max(px, nar ? 19.6 : 23.8);
     const depth = s.e * H / (2 * TAN * px);
     const yaw = (nar && s.nyaw !== undefined ? s.nyaw : s.yaw || 0) * PI / 180, pitch = (nar && s.npitch !== undefined ? s.npitch : s.pitch) * PI / 180;
     // sx/sy dürfen auch Funktionen (W, H) sein (Bildaufteilung je Seitenverhältnis)
@@ -572,6 +629,20 @@ export function seite(renderer, SEQ, opt = {}) {
     // s.face (stimmen): waagerechte Blickrichtung vorgeben (Zickzack aus Flächen mit wechselnder Normale)
     const h = s.face ? s.face.clone() : Math.abs(s.N.y) > .7 ? s.Y.clone() : s.N.clone().negate(); h.y = 0; h.normalize();
     const c = Math.cos(yaw), sn = Math.sin(yaw); h.set(h.x * c + h.z * sn, 0, -h.x * sn + h.z * c);
+    // s.frontal (Folgefahrt): die Sehlinie zum Text liegt fest (waagerecht entgegen der Normale, um tilt Grad nach unten geneigt, um yaw gedreht), die Kamera wird so gedreht,
+    // dass der Text bei (sx, sy) im Bild steht. Die Kamera steht damit auf der Sehlinie vor dem Text, die Schräge des Textes ist genau tilt (Vorgabe 0).
+    if (s.frontal) {
+      const tilt = (nar && s.ntilt !== undefined ? s.ntilt : s.tilt || 0) * PI / 180;
+      const Dv = h.clone().multiplyScalar(Math.cos(tilt)).add(V(0, -Math.sin(tilt), 0)).normalize(), Fw2 = Dv.clone(), Rt2 = V(), U2 = V();
+      const sx2 = nar ? fv(s.nsx) : fv(s.sx), sy2 = nar ? fv(s.nsy) : fv(s.sy);
+      for (let it = 0; it < 8; it++) {
+        Rt2.crossVectors(Fw2, UP).normalize(); U2.crossVectors(Rt2, Fw2);
+        const Dn = Fw2.clone().addScaledVector(Rt2, sx2 * TAN * aspect).addScaledVector(U2, sy2 * TAN).normalize();
+        Fw2.add(Dv.clone().sub(Dn)).normalize();
+      }
+      const P2 = s.C.clone().addScaledVector(Dv, -depth / Dv.dot(Fw2));
+      return { cam: P2, tgt: P2.clone().addScaledVector(Fw2, depth), px };
+    }
     const Fw = h.clone().multiplyScalar(Math.cos(pitch)).add(V(0, -Math.sin(pitch), 0)).normalize();
     const Rt = V().crossVectors(Fw, UP).normalize(), U = V().crossVectors(Rt, Fw);
     const D = Fw.clone().addScaledVector(Rt, sx * TAN * aspect).addScaledVector(U, sy * TAN).normalize();
@@ -589,6 +660,519 @@ export function seite(renderer, SEQ, opt = {}) {
     const cam = (t, out) => out.set(fx(t), fy(t), fz(t));
     const tgt = (t, out) => { cam(t, out); return out.addScaledVector(dirAng(fw(t), fp(t), _c0), Math.exp(fl(t))); };
     return { cam, tgt };
+  }
+  // ---------- Faden, Punkt und Lesestellen in der Szene (Kamera-Umbau 23.10.2026) ----------
+  // Ein Faden für die ganze Seite. In jeder Insel ein Szenenlauf: Eingang vorn (Tür der Insel), an den Lesestellen vorbei (je Lesestelle eine Station links unter dem Satz,
+  // „Lesezeichen“), um die Bauteile herum zum Ausgang hinten; zwischen den Inseln der Fluss (Lage der Inseln). Jeder Lauf ist eine Ausgleichskurve (fair(): kleinste Änderung
+  // der Krümmung, Übergänge wie Klothoiden, keine Ecken), Anfang und Ende gerade (Krümmung 0), so schließen Insel und Fluss ohne Krümmungssprung aneinander.
+  // Der Punkt läuft mit gleichem Tempo je Scrollweg; an Lesestellen wird er weich langsamer (SLOW_F des Tempos) und fließt weiter, er rastet nie ein (Erik 23.10.2026).
+  const CLEAR = .75, HOLD_PER_CHAR = .46, HOLD_MIN = 24;
+  const boxNear = (bx, x, z, m) => x > bx.min.x - m && x < bx.max.x + m && z > bx.min.z - m && z < bx.max.z + m;
+  // Strecke a→b trifft die Box (mit Rand m)?
+  function segBox(a, b, bx, m) {
+    let t0 = 0, t1 = 1;
+    for (const ax of ["x", "y", "z"]) {
+      const d = b[ax] - a[ax], lo = bx.min[ax] - m, hi = bx.max[ax] + m;
+      if (Math.abs(d) < 1e-9) { if (a[ax] < lo || a[ax] > hi) return false; continue; }
+      let u = (lo - a[ax]) / d, w = (hi - a[ax]) / d; if (u > w) { const t = u; u = w; w = t; }
+      t0 = Math.max(t0, u); t1 = Math.min(t1, w); if (t0 > t1) return false;
+    }
+    return true;
+  }
+  const textChars = s => s.prints.reduce((a, pr) => a + (pr.t && pr.t.lines ? pr.t.lines.join("").replace(/\s/g, "").length : 0), 0);
+  // Station des Punktes an einer Lesestelle („Lesezeichen“, Erik 23.10.2026): immer an derselben Stelle zum Text, links unter dem Satz. Gesucht wird der Boden im Bild der
+  // Lesestellung, der dem Punkt links unter dem Textrahmen am nächsten liegt (Abstand BM_DX links der Textkante, BM_DY unter der Unterkante), frei von Bauteilen und ungedeckt.
+  const BM_DX = .07, BM_DY = .15;
+  function stationFor(I, s, obs, obsAll = obs) {
+    if (s.at) return { p: s.at.slice(), how: "fest" };
+    const pose = readingPose(I, s), pc = new THREE.PerspectiveCamera(fovOf(I), aspect, .1, 300);
+    pc.position.copy(pose.cam); pc.lookAt(pose.tgt); pc.updateMatrixWorld(); pc.updateProjectionMatrix();
+    let rx0 = 1e9, ry0 = 1e9, rx1 = -1e9, ry1 = -1e9;
+    for (const p of s.pts) { const q = p.clone().project(pc); if (q.z > 1) continue; rx0 = Math.min(rx0, q.x); rx1 = Math.max(rx1, q.x); ry0 = Math.min(ry0, q.y); ry1 = Math.max(ry1, q.y); }
+    if (rx0 > rx1) { rx0 = ry0 = -.2; rx1 = ry1 = .2; }
+    const ob2 = obsAll.filter(bx => bx.max.y > .12), front = Math.abs(s.N.y) > .7 ? null : V(s.N.x, 0, s.N.z).normalize();
+    // Rahmen ohne Kopfzeile und Knopfleiste (Pixel → NDC); der Punkt bleibt innerhalb der Grenzen der Nachführung (DOT_FRAME), sonst zöge sie die stehende Kamera nach
+    const H = VH(), W = VW(), topN = Math.min(DOT_FRAME.y1 - .14, 1 - 2 * 84 / H), botN = Math.max(DOT_FRAME.y0 + .18, -1 + 2 * 96 / H), sideN = Math.min(DOT_FRAME.x - .14, 1 - 2 * 28 / W);
+    const tx = clamp(rx0 - BM_DX, -sideN, sideN), ty = clamp(ry0 - BM_DY, botN, topN);
+    const d = V(), q = V(), cand = [];
+    // bevorzugt: auf der Laufbahn der Szene (I.laneZ, vor den Bauteilen), knapp links der linken Textkante, sofern frei, im Bild und ungedeckt
+    if (I.laneZ !== undefined && front) {
+      const xl = Math.min(...s.pts.map(p => p.x));
+      for (const dx of [.35, .8, 1.3, 0, -.4]) {
+        const x = xl - dx, z = I.laneZ, P = V(x, THREAD_Y + .05, z), pr = P.clone().project(pc);
+        if (Math.hypot(x - I.disc.cx, z - I.disc.cz) > I.disc.R - 2.2 || obs.some(bx => boxNear(bx, x, z, CLEAR * .8))) continue;
+        if (pr.z > 1 || Math.abs(pr.x) > sideN || pr.y < botN || pr.y > topN || ((x - s.C.x) * front.x + (z - s.C.z) * front.z) < .9) continue;
+        if (pr.x > rx0 + .02 && pr.y > ry0 - .02) continue;                                            // nicht rechts im Text
+        if (ob2.some(bx => segBox(pc.position, P, bx, .1))) continue;
+        return { p: [x, z], how: "Laufbahn", ndc: [pr.x, pr.y], off: 0 };
+      }
+    }
+    for (let iy = 0; iy <= 70; iy++) for (let ix = 0; ix <= 50; ix++) {
+      const nx = -sideN + 2 * sideN * ix / 50, ny = botN + (topN - botN) * iy / 70;
+      if (nx > rx0 - .02 && nx < rx1 + .02 && ny > ry0 - .02 && ny < ry1 + .02) continue;          // nicht auf den Text
+      cand.push([Math.hypot((nx - tx) * (W / H) * .5, ny - ty), nx, ny]);
+    }
+    cand.sort((a, b) => a[0] - b[0]);
+    let best = null, nOk = 0;
+    for (const [cost, nx, ny] of cand) {
+      if (nOk > 80) break;
+      q.set(nx, ny, .5).unproject(pc); d.copy(q).sub(pc.position).normalize();
+      if (d.y > -.02) continue;
+      const t = (THREAD_Y - pc.position.y) / d.y; if (t < 0 || t > 80) continue;
+      const x = pc.position.x + d.x * t, z = pc.position.z + d.z * t;
+      if (Math.hypot(x - I.disc.cx, z - I.disc.cz) > I.disc.R - 2.2) continue;
+      if (obs.some(bx => boxNear(bx, x, z, CLEAR * .8))) continue;
+      if (front && ((x - s.C.x) * front.x + (z - s.C.z) * front.z) < .9) continue;          // vor der Textfläche, nicht dahinter
+      const P = V(x, THREAD_Y + .05, z);
+      if (ob2.some(bx => segBox(pc.position, P, bx, .1))) continue;
+      // hinter der Laufbahn (zwischen den Bauteilen) kostet: der Faden müsste sonst eine Kehre machen
+      const c2 = cost + (I.laneZ !== undefined ? Math.max(0, I.laneZ - z) * .06 : 0);
+      nOk++; if (!best || c2 < best.c2) best = { p: [x, z], how: "ndc " + nx.toFixed(2) + "," + ny.toFixed(2) + " (Ziel " + tx.toFixed(2) + "," + ty.toFixed(2) + ")", ndc: [nx, ny], off: cost, c2 };
+    }
+    if (best) return best;
+    // keine freie Bodenstelle im Bild: Boden vor dem Text (Notlösung)
+    const h = V(s.N.x, 0, s.N.z).normalize();
+    dbg("Station " + I.name + ": keine freie Stelle im Bild, Notlösung");
+    return { p: [s.C.x + h.x * 1.5, s.C.z + h.z * 1.5], how: "Notlösung", off: 9 };
+  }
+  // Lesestellung samt Station (Kamera-Umbau 23.10.2026): zuerst freie Bodenstellen links unter dem Satz (vor dem Text, sonst daneben bzw. dahinter), dann wird die
+  // Lesestellung aus readingPose() minimal angepasst (zurück, um den Textmittelpunkt leicht nach unten geneigt, Bild nach oben verschoben), bis Text und Station sicher im
+  // Rahmen stehen, die Schräge höchstens FIT_SLANT ist und die Schrift nicht unter die Mindestgröße fällt. Ergebnis: { cam, tgt, p (Station), how }
+  const FIT_SLANT = 14.5;
+  function readingFit(I, s, obs, obsAll, level = 0) {
+    // Stufen: 0 Text, Nachbartexte und Punkt im Bild; 1 Text und Nachbarn (Punkt so nah wie möglich); 2 nur der Text (angeschnittene Nachbarn kosten);
+    // 3 nur wenn der Text bei Mindestschrift gar nicht ins Bild passt (schmale Handys): ganzer Text bei bis zu 15 % kleinerer Schrift statt angeschnitten
+    const textOnly = level > 0, nbSoft = level > 1;
+    const base = readingPose(I, s), nar = aspect < 1, H = VH(), W = VW(), pxMin = (nar ? 18.7 : 23.0) * (level > 2 ? .85 : 1), pxGood = nar ? 21.4 : 26.3;
+    // Schrift: maßgeblich ist der kleinste Textdruck der Lesestelle; Mitten aller Drucke für die Schräge
+    const te = s.prT || [], eMin = te.length ? Math.min(...te.map(q => q.e)) : s.e, pxS = base.px * eMin / s.e;
+    const pcs = te.length ? te.map(q => q.c) : [s.C], nrms = te.length ? te.map(q => q.n) : [s.N];
+    const flat = Math.abs(s.N.y) > .7, Nn = s.N.clone(), Yt = s.Y.clone();
+    const Rt = V().crossVectors(Yt, Nn).normalize();                                     // Leserichtung
+    const fwd = flat ? V(-Yt.x, 0, -Yt.z).normalize() : V(Nn.x, 0, Nn.z).normalize();     // „vor“ dem Text auf dem Boden
+    const Rh = V(Rt.x, 0, Rt.z).normalize();
+    let uL = 1e9, uR = -1e9, vF = -1e9; for (const p of s.pts) { const d = p.clone().sub(s.C); uL = Math.min(uL, d.dot(Rh)); uR = Math.max(uR, d.dot(Rh)); vF = Math.max(vF, d.dot(fwd)); }
+    const Cf = V(s.C.x, 0, s.C.z);
+    // Bodenstellen (Szenenkoordinaten): frei von Bauteilen, im Boden der Insel
+    const cands = [];
+    // hochkant ist das Bild schmal: die Station darf auch unter dem Satz liegen (bis zur rechten Textkante)
+    for (let u = uL - 7.5; u <= (nar ? Math.max(uL + 1, uR) : uL + 1) + .01; u += .6) for (let v = -9.4; v <= 4.01; v += .6) {
+      const vv = vF + v, P = Cf.clone().addScaledVector(Rh, u).addScaledVector(fwd, vv);
+      if (Math.hypot(P.x - I.disc.cx, P.z - I.disc.cz) > I.disc.R - 2.2 || obs.some(bx => boxNear(bx, P.x, P.z, CLEAR * 1.1))) continue;
+      if (s.near && Math.hypot(P.x - s.near[0], P.z - s.near[1]) > (s.nearR !== undefined ? s.nearR : nar ? 2.6 : 1.7)) continue;
+      cands.push({ P: V(P.x, THREAD_Y, P.z), c: s.near ? Math.hypot(P.x - s.near[0], P.z - s.near[1]) : Math.abs(u - (uL - .4)) + .6 * Math.abs(v - 1.2) + (v < .5 ? 2.5 : 0) });
+    }
+    // Wunschlage aus der Tabelle gilt auch, wenn ringsum kein Rasterpunkt frei ist (die Bahn führt ohnehin dorthin)
+    if (s.near && !cands.length) cands.push({ P: V(s.near[0], THREAD_Y, s.near[1]), c: 0 });
+    cands.sort((a, b) => a.c - b.c);
+    if (textOnly && !cands.length) cands.push({ P: V(s.C.x, THREAD_Y, s.C.z), c: 50 });
+    if (s.fixP) { cands.length = 0; cands.push({ P: V(s.fixP[0], THREAD_Y, s.fixP[1]), c: 0 }); }
+    const pc = new THREE.PerspectiveCamera(FOVC(), aspect, .1, 300), ob2 = obsAll.filter(bx => bx.max.y > .12);
+    const lim = { x: DOT_FRAME.x - .1, y0: DOT_FRAME.y0 + .1, y1: DOT_FRAME.y1 - .1, ty: 1 - 2 * 70 / H, by: -1 + 2 * 80 / H };
+    const d0 = base.cam.distanceTo(base.tgt), F0 = base.tgt.clone().sub(base.cam).normalize();
+    const others = []; { const seenO = new Set([s]); for (const k of I.def.keys) if (k.stop && !seenO.has(k.stop)) { seenO.add(k.stop); if (k.stop.pts && k.stop.pts.length) others.push(k.stop.pts); } }
+    let best = null; const dbgC = { cands: cands.length, poses: 0, textOk: 0, inFrame: 0, occl: 0, slant: 0, px: base.px };
+    const bMax = pxS / pxMin;
+    // Schriftgröße (px der Schrift): nie unter pxMin (Messflug: Großbuchstaben 16 px Breitbild, 13 px hochkant), jeder Pixel unter pxGood (Ampel grün) kostet; lieber etwas kleiner als Text oder Punkt außerhalb des Bildes
+    for (const b of [.6, .66, .72, .8, .88, .95, 1, 1.12, 1.25, 1.38, 1.52, 1.68]) {
+      if (b > bMax + 1e-6 && b > .7) continue;
+      // näher als die Grundstellung (b < 1) ist erlaubt: größere Schrift (bis pxGood) wiegt die Abweichung auf, sofern Text und Punkt im Bild bleiben
+      for (const dt of flat ? [0] : [0, 5, 10, 15]) for (const dy of [0, .2, .4, .6]) for (const dx of [0, .2, -.2, .35, -.35, .5, -.5, .6, -.6, .7, -.7]) {
+        let poseCost = Math.abs(b - 1) * 30 + dt * .35 + dy * 4 + Math.abs(dx) * 5 + Math.max(0, pxGood - pxS / b) * 6; if (best && poseCost >= best.cost) continue;
+        // Kamera um den Textmittelpunkt um dt nach oben schwenken (Blick neigt sich), dann zurück, dann senkrecht verschieben
+        const rel = base.cam.clone().sub(s.C).applyAxisAngle(Rh, dt * PI / 180 * (Rh.dot(V().crossVectors(UP, F0)) >= 0 ? 1 : -1));
+        const cam = s.C.clone().add(rel.multiplyScalar(b)), tgt0 = base.tgt.clone().sub(base.cam).applyAxisAngle(Rh, 0);
+        const Fd = s.C.clone().sub(cam).normalize().lerp(F0, 0).normalize(), tgt = cam.clone().addScaledVector(s.C.clone().sub(base.cam).applyAxisAngle(V(0, 1, 0), 0).length() ? Fd : F0, d0 * b);
+        // Bildlage des Textes wie in der Grundstellung (Text im gleichen Bildort): Blick parallel zur alten Richtung, gekippt mit dt
+        const Fn = F0.clone().applyAxisAngle(Rh, dt * PI / 180 * (Rh.dot(V().crossVectors(UP, F0)) >= 0 ? 1 : -1));
+        tgt.copy(cam).addScaledVector(Fn, d0 * b);
+        const slant = Math.acos(clamp(cam.clone().sub(s.C).normalize().dot(flat ? Nn : Nn), -1, 1)) * 180 / PI;
+        dbgC.poses++;
+        const Up = V().crossVectors(V().crossVectors(Fn, UP).normalize(), Fn), hh = d0 * b * Math.tan(FOVC() * PI / 360);
+        const RtC = V().crossVectors(Fn, UP).normalize();
+        cam.addScaledVector(Up, -dy * hh).addScaledVector(RtC, -dx * hh * aspect); tgt.addScaledVector(Up, -dy * hh).addScaledVector(RtC, -dx * hh * aspect);
+        // Schräge nach dem Verschieben: Winkel zwischen Textnormale und Sicht auf die Textmitte
+        if (pcs.some((c0, k) => Math.acos(clamp(Math.abs(cam.clone().sub(c0).normalize().dot(nrms[k])), -1, 1)) * 180 / PI > FIT_SLANT)) { dbgC.slant++; continue; }
+        pc.position.copy(cam); pc.lookAt(tgt); pc.updateMatrixWorld(); pc.updateProjectionMatrix();
+        // der ganze Text steht im Bild, frei von Kopfzeile und Knopfleiste (Erik: ganzer Satz vollständig und frontal im Bild, vor Punkt und Schriftgröße)
+        let ok = true; for (const p of s.pts) { const q = p.clone().project(pc); if (q.z > 1 || Math.abs(q.x) > .96 || q.y > lim.ty || q.y < lim.by) { ok = false; break; } }
+        if (!ok) continue;
+        dbgC.textOk++;
+        // andere Texte der Szene nicht am Bildrand anschneiden: ganz im Bild oder ganz draußen
+        let cut = 0; for (const o of others) { let inn = 0; for (const p of o) { const q = p.clone().project(pc); if (q.z < 1 && Math.abs(q.x) < 1 && Math.abs(q.y) < 1) inn++; } if (inn && inn < o.length) cut++; }
+        if (cut && !nbSoft) continue;
+        poseCost += cut * 30;
+        for (const cd of cands) {
+          let tot = poseCost + cd.c; if (best && tot >= best.cost) break;
+          const q = cd.P.clone().project(pc);
+          const out = q.z > 1 ? 9 : Math.max(0, Math.abs(q.x) - lim.x) + Math.max(0, lim.y0 - q.y) + Math.max(0, q.y - lim.y1);
+          if (out > 0 && !textOnly) continue;
+          // Text gewinnt: der Punkt darf außerhalb liegen, aber so nah am Bild wie möglich (je NDC-Einheit draußen 40)
+          tot += out * 40; if (best && tot >= best.cost) continue;
+          dbgC.inFrame++;
+          const occl = ob2.some(bx => segBox(cam, V(cd.P.x, THREAD_Y + .05, cd.P.z), bx, .1));
+          if (occl && !textOnly) { dbgC.occl++; continue; }
+          if (occl) tot += 15;
+          if (best && tot >= best.cost) continue;
+          best = { cost: tot, cam: cam.clone(), tgt: tgt.clone(), p: [cd.P.x, cd.P.z], how: "fit b" + b + " t" + dt + " y" + dy + " x" + dx + (textOnly ? " (Text vor Punkt)" : ""), px: base.px / b };
+          if (!textOnly) break;
+        }
+      }
+    }
+    s.fitDbg = dbgC;
+    if (best) return best;
+    // keine Stellung, in der Text und Punkt zusammen passen: zweiter Versuch, in dem der Text gewinnt (ganz und frontal im Bild, Mindestschrift), der Punkt darf außerhalb liegen
+    if (level < 3) return readingFit(I, s, obs, obsAll, level + 1);      // zuletzt: Text gewinnt, der Punkt darf außerhalb des Bildes liegen
+    dbg("Lesestelle " + I.name + ": keine Station im Bild, Grundstellung");
+    return null;
+  }
+  // kleinster Krümmungsradius einer Punktfolge (Dreipunkt-Radius, ab Abstand ≥ 0,05 zwischen den Punkten)
+  function minRadiusOf(pts, key = p => [p.x, p.z]) {
+    let rmin = 1e9, at = 0;
+    for (let i = 1; i < pts.length - 1; i++) {
+      const a = key(pts[i - 1]), b = key(pts[i]), c = key(pts[i + 1]);
+      const ab = Math.hypot(b[0] - a[0], b[1] - a[1]), bc = Math.hypot(c[0] - b[0], c[1] - b[1]), ca = Math.hypot(a[0] - c[0], a[1] - c[1]);
+      const ar = Math.abs((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]));
+      if (ar < 1e-9 || ab < .05 || bc < .05) continue;
+      const r = ab * bc * ca / (2 * ar); if (r < rmin) { rmin = r; at = i; }
+    }
+    return { r: rmin, at };
+  }
+  // Hindernisse der Szene (Szenenkoordinaten, x0, x1, z0, z1): was in irgendeinem Zustand zwischen Eintreffen und Ende steht (flach liegende Faltpläne zählen nicht),
+  // ohne Teile in cfg.faden.free (Überschriften, die vor dem Weg ausblenden)
+  function obstaclesOf(I) {
+    const SB = I.sb, fr = (I.fcfg && I.fcfg.free) || [], seen = new Set(), out = [];
+    const ok = b => !b.isEmpty() && b.max.y > .15 && b.min.y < 3 && (b.max.x - b.min.x) * (b.max.z - b.min.z) < 400 && !fr.some(r => b.min.x >= r[0] && b.max.x <= r[1] && b.min.z >= r[2] && b.max.z <= r[3]);
+    const cl = I.clip;
+    // nur Zustände, in denen der Punkt durch die Szene läuft (ab kurz vor der ersten Lesestelle): Teile, die vorher aufklappen und dabei die Fläche überstreichen, hindern ihn nicht
+    const bFrom = Math.max(I.b0, Math.min(...I.def.keys.filter(k => k.stop).map(k => k.stop.b), I.bMax) - .04);
+    for (const st of SB.steps.filter(q => q.b >= bFrom - 1e-6 || q === SB.steps[SB.steps.length - 1])) for (const b0 of [...st.list, ...SB.extra]) {
+      let b = b0;
+      if (cl) { if (b.max.x < cl[0] || b.min.x > cl[1] || b.max.z < cl[2] || b.min.z > cl[3]) continue; b = b.clone(); b.min.x = Math.max(b.min.x, cl[0]); b.max.x = Math.min(b.max.x, cl[1]); b.min.z = Math.max(b.min.z, cl[2]); b.max.z = Math.min(b.max.z, cl[3]); }
+      if (!ok(b)) continue;
+      const key = [b.min.x, b.max.x, b.min.z, b.max.z].map(q => Math.round(q * 10)).join(); if (seen.has(key)) continue; seen.add(key);
+      out.push(b);
+    }
+    return out;
+  }
+  // Stationen aller Lesestellen der Szene in Reihenfolge der Schlüssel (Szenenkoordinaten)
+  function stationsOf(I) {
+    const SB = I.sb, fr = (I.fcfg && I.fcfg.free) || [];
+    const cl = I.clip, inClip = b => !cl || !(b.max.x < cl[0] || b.min.x > cl[1] || b.max.z < cl[2] || b.min.z > cl[3]);
+    const okBox = b => !b.isEmpty() && inClip(b) && b.max.y > .08 && b.min.y < 3 && (b.max.x - b.min.x) * (b.max.z - b.min.z) < 400 && !fr.some(r => b.min.x >= r[0] && b.max.x <= r[1] && b.min.z >= r[2] && b.max.z <= r[3]);
+    const stepOf = bq => { let bs = SB.steps[0]; for (const t of SB.steps) if (Math.abs(t.b - bq) < Math.abs(bs.b - bq)) bs = t; return bs; };
+    const obsOne = bq => { const bs = stepOf(bq); return [...bs.list, ...SB.extra].filter(okBox); };
+    const obsAllOf = bq => { const bs = stepOf(bq); return [...bs.list, ...SB.extra].filter(b => !b.isEmpty() && inClip(b) && b.max.y > .12 && (b.max.x - b.min.x) * (b.max.z - b.min.z) < 400); };
+    const seen = new Set(), stops = []; for (const k of I.def.keys) if (k.stop && !seen.has(k.stop)) { seen.add(k.stop); stops.push(k.stop); }
+    const obsUnion = obstaclesOf(I);
+    const out = [];
+    for (const s of stops) {
+      const fit = s.at ? null : readingFit(I, s, obsUnion, obsAllOf(s.b));
+      s.fitPose = fit ? { cam: fit.cam, tgt: fit.tgt, px: fit.px } : null;
+      const st = { stop: s, ...(fit ? { p: fit.p, how: fit.how } : s.near ? { p: s.near.slice(), how: "Wunschlage" } : stationFor(I, s, obsOne(s.b), obsAllOf(s.b))) }, prev = out[out.length - 1];
+      // gleiche Stelle wie die vorige Lesestelle (z. B. Blätter auf einer Staffelei): der Punkt bleibt dort (eine Station für alle)
+      if (prev && Math.hypot(prev.p[0] - st.p[0], prev.p[1] - st.p[1]) < .8) { st.p = prev.p; st.same = true; }
+      out.push(st);
+    }
+    // Bahn: alle Stationen auf derselben Tiefe (Mittel), sofern dort frei: der Faden läuft dann ruhig an den Texten vorbei statt zu zacken (f.lane = Tiefe oder false)
+    const fl = I.fcfg && I.fcfg.lane;
+    if (fl !== false && out.length > 1) {
+      const zs = out.map(o => o.p[1]).sort((a, b) => a - b), lz = typeof fl === "number" ? fl : zs[Math.floor(zs.length / 2)];
+      for (const o of out) {
+        if (o.same || Math.abs(o.p[1] - lz) > 2.5) continue;
+        if (!obsUnion.some(bx => boxNear(bx, o.p[0], lz, CLEAR * 1.1))) { o.p = [o.p[0], lz]; o.lane = true; }
+      }
+      for (let i = 1; i < out.length; i++) if (out[i].same) out[i].p = out[i - 1].p;
+    }
+    return out;
+  }
+
+  // Ausgleichskurve: Punktfolge P ([x, z]), feste Punkte pins (Index → [x, z]), weiche Bindungen soft (Index → { p, w }). Minimiert Σ|Δ³|² + a2·Σ|Δ²|² + Σ w·|x − p|²
+  // (dritte Differenzen: die Krümmung ändert sich stetig und gleichmäßig, wie bei Klothoiden; keine Ecken). Bandmatrix der Breite 3, Cholesky.
+  function fair(P, pins, soft, a2 = .002) {
+    const n = P.length, idx = new Int32Array(n).fill(-1), fr = [];
+    for (let j = 0; j < n; j++) if (!pins.has(j)) { idx[j] = fr.length; fr.push(j); }
+    const m = fr.length, B = 3, W = B + 1;
+    if (!m) return P.map((p, j) => pins.get(j).slice());
+    const A = new Float64Array(m * W), bx = new Float64Array(m), bz = new Float64Array(m);
+    const term = (cs, ws, g) => {
+      for (let a = 0; a < cs.length; a++) {
+        const ia = idx[cs[a]]; if (ia < 0) continue;
+        for (let b = 0; b < cs.length; b++) {
+          const jb = cs[b], v = g * ws[a] * ws[b], ib = idx[jb];
+          if (ib >= 0) { if (ib <= ia) A[ia * W + (ia - ib)] += v; } else { const pp = pins.get(jb); bx[ia] -= v * pp[0]; bz[ia] -= v * pp[1]; }
+        }
+      }
+    };
+    for (let r = 0; r + 3 < n; r++) term([r, r + 1, r + 2, r + 3], [-1, 3, -3, 1], 1);
+    if (a2) for (let r = 0; r + 2 < n; r++) term([r, r + 1, r + 2], [1, -2, 1], a2);
+    if (soft) for (const [j, s] of soft) { const i = idx[j]; if (i < 0) continue; A[i * W] += s.w; bx[i] += s.w * s.p[0]; bz[i] += s.w * s.p[1]; }
+    for (let i = 0; i < m; i++) A[i * W] += 1e-10;
+    for (let i = 0; i < m; i++) {
+      for (let k = Math.max(0, i - B); k <= i; k++) {
+        let s = A[i * W + (i - k)];
+        for (let l = Math.max(0, i - B); l < k; l++) s -= A[i * W + (i - l)] * A[k * W + (k - l)];
+        if (i === k) A[i * W] = Math.sqrt(Math.max(s, 1e-16)); else A[i * W + (i - k)] = s / A[k * W];
+      }
+    }
+    const solve = b => {
+      const y = new Float64Array(m);
+      for (let i = 0; i < m; i++) { let s = b[i]; for (let k = Math.max(0, i - B); k < i; k++) s -= A[i * W + (i - k)] * y[k]; y[i] = s / A[i * W]; }
+      for (let i = m - 1; i >= 0; i--) { let s = y[i]; for (let k = i + 1; k <= Math.min(m - 1, i + B); k++) s -= A[k * W + (k - i)] * y[k]; y[i] = s / A[i * W]; }
+      return y;
+    };
+    const sx = solve(bx), sz = solve(bz);
+    return P.map((p, j) => pins.has(j) ? pins.get(j).slice() : [sx[idx[j]], sz[idx[j]]]);
+  }
+  // Weg durch Knoten: Anfang und Ende fest mit Richtung (t0, t1) und geradem Stück (lead), Zwischenknoten mit weicher Bindung w; stößt die Kurve an Hindernisse (Rechtecke
+  // [x0, x1, z0, z1] mit Rand clear) oder verlässt sie den Boden (disc), wird sie dort schrittweise hinausgedrückt (die Kurve bleibt dabei eine Ausgleichskurve).
+  // Ergebnis: Punkte [x, z] und für jeden Zwischenknoten seinen Index (nd.j)
+  function fairPath(nodes, o) {
+    const ds = o.ds || .25, lead = Math.max(2, Math.round((o.lead || .5) / ds)), t0 = o.t0, t1 = o.t1;
+    const P0 = nodes[0].p, P1 = nodes[nodes.length - 1].p, pts = [], pins = new Map(), soft = new Map();
+    for (let k = 0; k <= lead; k++) { const q = [P0[0] + t0[0] * ds * k, P0[1] + t0[1] * ds * k]; pins.set(pts.length, q); pts.push(q); }
+    const endLead = []; for (let k = lead; k >= 0; k--) endLead.push([P1[0] - t1[0] * ds * k, P1[1] - t1[1] * ds * k]);
+    let prev = pts[pts.length - 1];
+    for (const nd of [...nodes.slice(1, -1), { p: endLead[0], end: true }]) {
+      const a = nd.p, L = Math.hypot(a[0] - prev[0], a[1] - prev[1]), n = Math.max(1, Math.round(L / ds));
+      for (let k = 1; k <= n; k++) pts.push([prev[0] + (a[0] - prev[0]) * k / n, prev[1] + (a[1] - prev[1]) * k / n]);
+      if (nd.end) pins.set(pts.length - 1, a.slice()); else if (nd.w) soft.set(pts.length - 1, { p: a.slice(), w: nd.w });
+      nd.j = pts.length - 1; prev = a;
+    }
+    for (let k = 1; k < endLead.length; k++) { pins.set(pts.length, endLead[k]); pts.push(endLead[k]); }
+    const m = o.clear !== undefined ? o.clear : CLEAR * .47, obs = o.obs || [], push = new Map(), sideOf = new Map();
+    let P = pts;
+    for (let it = 0; it < 60; it++) {
+      const sf = new Map(soft); for (const [j, q] of push) sf.set(j, q);
+      P = fair(pts, pins, sf, o.a2);
+      let bad = 0;
+      const inside = (q, b) => q[0] > b[0] - m && q[0] < b[1] + m && q[1] > b[2] - m && q[1] < b[3] + m;
+      obs.forEach((b, bi) => {
+        let j = 0;
+        while (j < P.length) {
+          if (pins.has(j) || !inside(P[j], b)) { j++; continue; }
+          let j1 = j; while (j1 + 1 < P.length && !pins.has(j1 + 1) && inside(P[j1 + 1], b)) j1++;
+          const key = bi + ":" + Math.round((j + j1) / 2 / 12);
+          let side = sideOf.get(key);
+          if (side === undefined) {
+            const cost = [0, 0, 0, 0];
+            for (let k = j; k <= j1; k++) { const q = P[k]; cost[0] += q[0] - (b[0] - m); cost[1] += (b[1] + m) - q[0]; cost[2] += q[1] - (b[2] - m); cost[3] += (b[3] + m) - q[1]; }
+            side = cost.indexOf(Math.min(...cost)); sideOf.set(key, side);
+          }
+          for (let k = j; k <= j1; k++) {
+            const q = P[k], tgt = side === 0 ? [b[0] - m - .25, q[1]] : side === 1 ? [b[1] + m + .25, q[1]] : side === 2 ? [q[0], b[2] - m - .25] : [q[0], b[3] + m + .25];
+            const old = push.get(k); push.set(k, { p: tgt, w: old ? Math.min(300, old.w * 1.6) : 1.5 }); bad++;
+          }
+          j = j1 + 1;
+        }
+      });
+      if (o.disc) P.forEach((q, j) => { if (pins.has(j)) return; const dx = q[0] - o.disc.cx, dz = q[1] - o.disc.cz, r = Math.hypot(dx, dz), lim = o.disc.R - 1; if (r > lim) { const old = push.get(j); push.set(j, { p: [o.disc.cx + dx / r * (lim - .3), o.disc.cz + dz / r * (lim - .3)], w: old ? Math.min(4000, old.w * 1.8) : 2 }); bad++; } });
+      if (!bad) break;
+      if (it === 59) dbg("Ausgleichskurve: " + bad + " Punkte noch an Hindernissen");
+    }
+    P.nodes = nodes;
+    return P;
+  }
+  // Mindestradius erzwingen: wo drei aufeinanderfolgende Punkte (Abstand ds) einen kleineren Radius als rmin bilden, werden sie örtlich geglättet (Laplace), die ersten und
+  // letzten keep Punkte bleiben fest (gerade Ein- und Austritte). Danach gleichmäßig neu abgetastet. Punkte als Vector3 (y bleibt).
+  function relaxRadius(pts, rmin, keep = 8, iters = 2000, fixed = [], maxD = 1e9) {
+    const P = pts.map(p => p.clone()), n = P.length; if (n < 2 * keep + 3) return P;
+    const P0 = pts.map(p => p.clone());
+    const fix = new Uint8Array(n); for (const i of fixed) if (i >= 0 && i < n) fix[i] = 1;
+    const rad = i => { const a = P[i - 1], b = P[i], c = P[i + 1], ab = Math.hypot(b.x - a.x, b.z - a.z), bc = Math.hypot(c.x - b.x, c.z - b.z), ca = Math.hypot(a.x - c.x, a.z - c.z), ar = Math.abs((b.x - a.x) * (c.z - a.z) - (b.z - a.z) * (c.x - a.x)); return ar < 1e-12 ? 1e9 : ab * bc * ca / (2 * ar); };
+    for (let it = 0; it < iters; it++) {
+      let bad = 0;
+      for (let i = keep; i < n - keep; i++) {
+        if (rad(i) >= rmin) continue; bad++;
+        for (let j = Math.max(keep, i - 3); j <= Math.min(n - keep - 1, i + 3); j++) { if (fix[j]) continue; const w = j === i ? .5 : .5 / (1 + Math.abs(j - i)); const mx = (P[j - 1].x + P[j + 1].x) / 2, mz = (P[j - 1].z + P[j + 1].z) / 2; P[j].x += (mx - P[j].x) * w; P[j].z += (mz - P[j].z) * w; const dx = P[j].x - P0[j].x, dz = P[j].z - P0[j].z, dd = Math.hypot(dx, dz); if (dd > maxD) { P[j].x = P0[j].x + dx / dd * maxD; P[j].z = P0[j].z + dz / dd * maxD; } }
+      }
+      if (!bad) break;
+    }
+    return P;
+  }
+  // Polygonzug mit Bogenlänge (Vector3): at(s), tan(s); dazu die Schnittstelle einer three.js-Kurve (getLength, getPointAt, getSpacedPoints) für Prüfwerkzeuge
+  function mkPoly(pts) {
+    const cum = [0]; for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + pts[i].distanceTo(pts[i - 1]));
+    const len = cum[cum.length - 1];
+    const seg = s => { let lo = 0, hi = pts.length - 1; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (cum[m] <= s) lo = m; else hi = m; } return lo; };
+    const at = (s, out = V()) => { if (s <= 0) return out.copy(pts[0]); if (s >= len) return out.copy(pts[pts.length - 1]); const i = seg(s), d = cum[i + 1] - cum[i]; return out.copy(pts[i]).lerp(pts[i + 1], d > 1e-9 ? (s - cum[i]) / d : 0); };
+    const tan = (s, out = V()) => { const a = at(Math.max(0, Math.min(len - .5, s - .25))), b = at(Math.min(len, Math.max(.5, s + .25))); return out.subVectors(b, a).normalize(); };
+    const near = (x, z) => { let bi = 0, bd = 1e9; for (let i = 0; i < pts.length; i++) { const d = Math.hypot(pts[i].x - x, pts[i].z - z); if (d < bd) { bd = d; bi = i; } } return { s: cum[bi], d: bd }; };
+    return { pts, cum, len, at, tan, near, getLength: () => len, getPointAt: (u, out) => at(u * len, out || V()), getPoint: (u, out) => at(u * len, out || V()),
+      getSpacedPoints: n => Array.from({ length: n + 1 }, (_, k) => at(len * k / n)), getPoints: n => Array.from({ length: n + 1 }, (_, k) => at(len * k / n)) };
+  }
+  // Korridor zwischen zwei Punkten (Szenenkoordinaten) um die Hindernisse (Rechtecke mit Rand cl) herum, im Boden (disc): Rastersuche (A*, Raster .25, Wege nahe an
+  // Bauteilen kosten mehr), danach auf die Eckpunkte vereinfacht (längste freie Sichtlinie). Die Eckpunkte dienen nur als weiche Leitpunkte der Ausgleichskurve.
+  function corridor(a, b, obs, disc, cl) {
+    const res = .25, x0 = disc.cx - disc.R, z0 = disc.cz - disc.R, nx = Math.floor(2 * disc.R / res) + 1, nz = nx, N = nx * nz, blk = new Uint8Array(N);
+    for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) if (Math.hypot(x0 + i * res - disc.cx, z0 + j * res - disc.cz) > disc.R - 1.1) blk[j * nx + i] = 1;
+    for (const o of obs) {
+      const i0 = Math.max(0, Math.floor((o[0] - cl - x0) / res)), i1 = Math.min(nx - 1, Math.ceil((o[1] + cl - x0) / res)), j0 = Math.max(0, Math.floor((o[2] - cl - z0) / res)), j1 = Math.min(nz - 1, Math.ceil((o[3] + cl - z0) / res));
+      for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) blk[j * nx + i] = 1;
+    }
+    // Anfang und Ende liegen oft knapp an Bauteilen (Stationen): dort frei geben statt weit entfernt einzurasten
+    for (const p of [a, b]) { const ci = Math.round((p[0] - x0) / res), cj = Math.round((p[1] - z0) / res), r = Math.ceil(.7 / res); for (let dj = -r; dj <= r; dj++) for (let di = -r; di <= r; di++) { const i = ci + di, j = cj + dj; if (i >= 0 && j >= 0 && i < nx && j < nz && di * di + dj * dj <= r * r) blk[j * nx + i] = 0; } }
+    const dst = new Float32Array(N).fill(12); for (let k = 0; k < N; k++) if (blk[k]) dst[k] = 0;
+    for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) { const k = j * nx + i; let d = dst[k]; if (i) d = Math.min(d, dst[k - 1] + 1); if (j) { d = Math.min(d, dst[k - nx] + 1); if (i) d = Math.min(d, dst[k - nx - 1] + 1.4); if (i < nx - 1) d = Math.min(d, dst[k - nx + 1] + 1.4); } dst[k] = d; }
+    for (let j = nz - 1; j >= 0; j--) for (let i = nx - 1; i >= 0; i--) { const k = j * nx + i; let d = dst[k]; if (i < nx - 1) d = Math.min(d, dst[k + 1] + 1); if (j < nz - 1) { d = Math.min(d, dst[k + nx] + 1); if (i < nx - 1) d = Math.min(d, dst[k + nx + 1] + 1.4); if (i) d = Math.min(d, dst[k + nx - 1] + 1.4); } dst[k] = d; }
+    const cell = p => [clamp(Math.round((p[0] - x0) / res), 0, nx - 1), clamp(Math.round((p[1] - z0) / res), 0, nz - 1)];
+    const snap = c => { if (!blk[c[1] * nx + c[0]]) return c; for (let r = 1; r < 60; r++) for (let dj = -r; dj <= r; dj++) for (let di = -r; di <= r; di++) { if (Math.max(Math.abs(di), Math.abs(dj)) !== r) continue; const i = c[0] + di, j = c[1] + dj; if (i >= 0 && j >= 0 && i < nx && j < nz && !blk[j * nx + i]) return [i, j]; } return c; };
+    const s0 = snap(cell(a)), g0 = snap(cell(b)), S = s0[1] * nx + s0[0], G = g0[1] * nx + g0[0];
+    const gs = new Float32Array(N).fill(1e9), from = new Int32Array(N).fill(-1), closed = new Uint8Array(N), heap = [];
+    const push = (f, k) => { heap.push([f, k]); let i = heap.length - 1; while (i > 0) { const p = (i - 1) >> 1; if (heap[p][0] <= heap[i][0]) break; [heap[p], heap[i]] = [heap[i], heap[p]]; i = p; } };
+    const pop = () => { const t = heap[0], l = heap.pop(); if (heap.length) { heap[0] = l; let i = 0; for (;;) { let c = 2 * i + 1; if (c >= heap.length) break; if (c + 1 < heap.length && heap[c + 1][0] < heap[c][0]) c++; if (heap[i][0] <= heap[c][0]) break; [heap[i], heap[c]] = [heap[c], heap[i]]; i = c; } } return t; };
+    const gi = G % nx, gj = (G / nx) | 0, hx = k => Math.hypot((k % nx) - gi, ((k / nx) | 0) - gj);
+    gs[S] = 0; push(hx(S), S);
+    while (heap.length) {
+      const [, k] = pop(); if (closed[k]) continue; closed[k] = 1; if (k === G) break;
+      const ki = k % nx, kj = (k / nx) | 0;
+      for (let dj = -1; dj <= 1; dj++) for (let di = -1; di <= 1; di++) {
+        if (!di && !dj) continue; const i = ki + di, j = kj + dj; if (i < 0 || j < 0 || i >= nx || j >= nz) continue;
+        const q = j * nx + i; if (blk[q] || closed[q] || (di && dj && (blk[kj * nx + i] || blk[j * nx + ki]))) continue;
+        const near = Math.max(0, 8 - dst[q]) / 8, g = gs[k] + (di && dj ? 1.414 : 1) * (1 + 2 * near * near);
+        if (g < gs[q]) { gs[q] = g; from[q] = k; push(g + hx(q), q); }
+      }
+    }
+    if (from[G] < 0 && G !== S) return [a.slice(), b.slice()];
+    const path = []; for (let k = G; k >= 0; k = from[k]) path.push([x0 + (k % nx) * res, z0 + ((k / nx) | 0) * res]);
+    path.reverse();
+    const pts = [a.slice(), ...path.slice(1, -1), b.slice()];
+    const free = (p, q) => { const L = Math.hypot(q[0] - p[0], q[1] - p[1]), n = Math.max(1, Math.ceil(L / .15)); for (let t = 1; t < n; t++) { const x = p[0] + (q[0] - p[0]) * t / n, z = p[1] + (q[1] - p[1]) * t / n; const c = cell([x, z]); if (blk[c[1] * nx + c[0]]) return false; } return true; };
+    const out = [pts[0]]; let i = 0;
+    while (i < pts.length - 1) { let j = pts.length - 1; while (j > i + 1 && !free(pts[i], pts[j])) j--; out.push(pts[j]); i = j; }
+    return out;
+  }
+  // Szenenlauf (Szenenkoordinaten): Eingang (oder Start der Szene, def.dotStart) → Stationen der Lesestellen bzw. Wegpunkte der Szene (def.way, cfg.faden.way: [x, z, k],
+  // nach k Lesestellen) → rechts um die Bauteile herum → Ausgang. Ergebnis: Polygonzug (Szenenkoordinaten, y = THREAD_Y; bei dotStart vorn die Punkte im Raum)
+  let R_USED = 0;
+  function routeFor(I) {
+    const def = I.def, f = I.fcfg || {}, disc = I.disc, obsB = obstaclesOf(I), obs = obsB.map(b => [b.min.x, b.max.x, b.min.z, b.max.z]);
+    const st = I.stations || [], way = [...(def.way || []), ...(pickN(f.way) || [])].map(w => ({ p: [w[0], w[1]], k: w[2] === undefined ? 1e9 : w[2], w: w[3] || 4 }));
+    const nodes = [];
+    for (let i = 0; i <= st.length; i++) {
+      for (const w of way) if ((w.k === i) || (i === st.length && w.k > st.length)) nodes.push({ p: w.p, w: w.w });
+      if (i < st.length && !st[i].same) nodes.push({ p: st[i].p, w: pickN(f.stW) || LAY.ST_W, st: st[i] });
+    }
+    const X = I.outL;
+    const start = def.dotStart ? def.dotStart.p : I.inL, t0 = def.dotStart ? def.dotStart.t : [0, -1];
+    // Teilstücke zwischen den Knoten: Korridor um die Bauteile (beginnt nach dem geraden Eintritt und endet vor dem geraden Austritt), seine Ecken als weiche Leitpunkte
+    const cl = (f.clear !== undefined ? f.clear : CLEAR * .6) + .1, all = [{ p: start }, ...nodes, { p: X }], full = [all[0]];
+    const sA = [start[0] + t0[0] * 1.6, start[1] + t0[1] * 1.6], xB = [X[0], X[1] + 1.6];
+    for (let k = 1; k < all.length; k++) {
+      const a = k === 1 ? sA : all[k - 1].p, b = k === all.length - 1 ? xB : all[k].p;
+      const c = corridor(a, b, obs, disc, cl);
+      for (let q = 1; q < c.length - 1; q++) full.push({ p: c[q], w: LAY.GUIDE_W, guide: true });
+      full.push(all[k]);
+    }
+    const P = fairPath(full, { t0, t1: [0, -1], obs, disc, lead: 1.2, clear: f.clear, a2: pickN(f.a2) || LAY.A2 });
+    const head = def.dotStart && def.dotStart.head ? def.dotStart.head.map(q => q.clone()) : [];
+    // gleichmäßig neu abtasten (Abstand .2): keine doppelten oder sehr nahen Punkte (die Catmull-Rom-Kurve des Bandes bildet dort sonst kleine Schleifen)
+    const flat0 = mkPoly(P.map(q => V(q[0], THREAD_Y, q[1]))), nR0 = Math.max(4, Math.round(flat0.len / .2));
+    // keine engen Kehren: Mindestradius 2,6 (örtlich geglättet), danach erneut gleichmäßig
+    // Stationen bleiben bei der Entspannung fest (der Lauf muss sie treffen), gerundet wird um sie herum
+    const samp0 = Array.from({ length: nR0 + 1 }, (_, k) => flat0.at(flat0.len * k / nR0)), fixIdx = [];
+    for (const nd of nodes) if (nd.st && P[nd.j]) { let bi = 0, bd = 1e9; samp0.forEach((q, k) => { const d = Math.hypot(q.x - P[nd.j][0], q.z - P[nd.j][1]); if (d < bd) { bd = d; bi = k; } }); fixIdx.push(bi); }
+    // möglichst großer Mindestradius (ruhiger Faden, auch auf der Karte ohne Haken): von R_MAX abwärts der größte, bei dem der Faden kein Bauteil schneidet
+    const mOb = Math.min(.3, cl * .6), hitsN = P2 => P2.reduce((n, q) => n + (obs.some(b => q.x > b[0] - mOb && q.x < b[1] + mOb && q.z > b[2] - mOb && q.z < b[3] + mOb) ? 1 : 0), 0);
+    const base0 = relaxRadius(samp0, LAY.R_MIN, 2, 4000), hit0 = hitsN(base0), hitsObs = P2 => hitsN(P2) > hit0;      // enge Durchlässe (faden.clear) zählen nicht gegen einen größeren Radius
+    let relaxed = null; const rTop = pickN(f.rMin) || LAY.R_MAX, rLow = LAY.R_MIN;
+    for (let rr = rTop; rr >= rLow - 1e-6; rr -= .5) { const q = relaxRadius(samp0, rr, 2, 4000); relaxed = q; R_USED = rr; if (!hitsObs(q) && minRadiusOf(q, p => [p.x, p.z]).r > rr * .8) break; }
+    if (hitsObs(relaxed) || minRadiusOf(relaxed, p => [p.x, p.z]).r < R_USED * .8) { relaxed = base0; R_USED = rLow; }
+    const flat = mkPoly(relaxed), nR = Math.max(4, Math.round(flat.len / .2)), Pr = Array.from({ length: nR + 1 }, (_, k) => flat.at(flat.len * k / nR));
+    const pts = [...head, ...Pr.slice(head.length ? 1 : 0)];
+    const R = mkPoly(pts);
+    R.minR = minRadiusOf(Pr); R.rUsed = R_USED;
+    R.st = st;
+    let sMin = 0;
+    for (const o of st) {
+      const nd = nodes.find(n => n.st === o) || nodes.find(n => n.st && n.st.p === o.p), q = nd && full.includes(nd) && P[nd.j] ? P[nd.j] : o.p;
+      let bi = -1, bd = 1e9; for (let i = 0; i < R.pts.length; i++) { if (R.cum[i] < sMin - 1e-6) continue; const d = Math.hypot(R.pts[i].x - q[0], R.pts[i].z - q[1]); if (d < bd) { bd = d; bi = i; } }
+      o.s = bi >= 0 ? R.cum[bi] : sMin; o.d = bd; sMin = o.s;
+    }
+    R.nodes = nodes; R.obs = obsB;
+    if (R.minR.r < 2.5) dbg("Fadenlauf " + I.name + ": kleinster Radius " + R.minR.r.toFixed(2));
+    return R;
+  }
+  // Haltezeit je Lesestelle in vh (Standzeit: mindestens 40 vh je 100 Zeichen, hier etwas mehr)
+  const holdVh = s => s.hold !== undefined ? s.hold : Math.max(HOLD_MIN, textChars(s) * HOLD_PER_CHAR);
+  // Tempo des Punktes (Erik 23.10.2026: „gleiches Tempo je Scrollweg“): DOT_V Welteinheiten je vh, in Flügen genau, in den Szenen so, dass der Lauf die Länge der Szene füllt
+  // (folge.js: Längen so gewählt, dass dort fast dasselbe Tempo herauskommt). An Lesestellen sinkt das Tempo weich auf SLOW_F (Schulter SLOW_SH Einheiten), dort steht die Kamera.
+  const { DOT_V, SLOW_F, SLOW_SH, GROUP_GAP } = BAHN;               // stationen.js
+  // Zeitplan der Szene (vh ab Szenenanfang): Lage des Punktes (sAt), Bauzustand (bAt), Lesestellen und Ansichten mit Haltefenster (an)
+  function timeline(I) {
+    const def = I.def, R = I.route, T = I.cfg.len[narrow ? "n" : "d"], keyed = !!I.cfg.keyed, an = [];
+    const seen = new Set();
+    def.keys.forEach((k, ki) => {
+      if (k.stop && !seen.has(k.stop)) { seen.add(k.stop); const o = R.st.find(q => q.stop === k.stop); an.push({ kind: "text", ki, stop: k.stop, s: o && o.s !== undefined ? o.s : null, hold: holdVh(k.stop), b: k.stop.b }); }
+      else if (k.view) an.push({ kind: "view", ki, key: k, s: R.near(k.view.at[0], k.view.at[1]).s, hold: k.view.hold || 40, b: k.b, b1: k.view.b1 !== undefined ? k.view.b1 : k.b });
+    });
+    const slow = (def.slow || []).map(o => ({ kind: "slow", s: R.near(o.at[0], o.at[1]).s, b: o.b, f: o.f || .4 }));
+    // Eröffnung: vorne der Schlüsselteil (Startbild, Podest, Aufbau, Tablett), danach läuft der Punkt vom Statuspunkt zum Ausgang
+    let Tpre = 0, preAn = null;
+    const dotAn = an.filter(a => !keyed && a.s !== null);
+    // Zonen (in s): Lesestellen mit gleicher Station bilden eine Zone, ihre Haltefenster folgen nacheinander
+    const zones = [];
+    for (const a of dotAn) { const z = zones.find(q => Math.abs(q.s - a.s) < .6); if (z) z.list.push(a); else zones.push({ s: a.s, list: [a], f: SLOW_F }); }
+    for (const z of zones) z.H = z.list.reduce((x, a) => x + a.hold, 0) + (z.list.length - 1) * GROUP_GAP;
+    for (const o of slow) if (!zones.some(q => Math.abs(q.s - o.s) < .6)) zones.push({ s: o.s, list: [], f: o.f, H: 0, slowOnly: true });
+    zones.sort((a, b) => a.s - b.s);
+    let tDot0 = 0, tVis = 0;
+    if (keyed) {
+      const tab = an[an.length - 1];
+      tab.hold = holdVh(tab.stop);
+      tDot0 = T - R.len / DOT_V - .0001;                 // vorläufig, genau unten
+    }
+    const L = R.len, NS = Math.max(400, Math.ceil(L / .04)), dsS = L / NS;
+    const fz = (z, V0) => z.slowOnly ? z.f : Math.min(z.f, 1.1 / Math.max(1e-6, V0 * z.H));             // Tempo in der Zone: der Punkt kriecht dort höchstens gut eine Einheit
+    // Tempo (Anteil von V0) weich überblendet: 1 auf freier Strecke, f in der Zone, dazwischen eine Kosinus-Schulter; Zeit je Weg = 1 / Tempo
+    const slowAt = (s, V0) => { let g = 1; for (const z of zones) { const f = fz(z, V0), hw = z.slowOnly ? .25 : f * V0 * z.H / 2, sh = z.slowOnly ? 1.6 : SLOW_SH, d = Math.abs(s - z.s); const pl = d <= hw ? 1 : d < hw + sh ? .5 * (1 + Math.cos(PI * (d - hw) / sh)) : 0; g = Math.min(g, 1 - (1 - f) * pl); } return 1 / g; };
+    const runT = V0 => { let t = 0; for (let k = 0; k < NS; k++) t += slowAt((k + .5) * dsS, V0) * dsS / V0; return t; };
+    let V0 = DOT_V, Tavail = T;
+    if (keyed) {
+      // Schlüsselteil: Dauer so, dass der Punkt danach mit DOT_V zum Ausgang läuft; Tablett-Halt und Wechsel zur Verfolgung dazwischen
+      const tab = an[an.length - 1], Trun = runT(DOT_V);
+      const rOut = I.cfg.rampOut || RAMP_OUT;
+      Tpre = Math.max(200, T - Trun - tab.hold - rOut);
+      tab.h0 = Tpre; tab.h1 = Tpre + tab.hold;
+      tDot0 = tab.h1 + rOut; tVis = tab.h1 + rOut * .7; Tavail = T - tDot0;
+      for (const a of an.slice(0, -1)) { const u = a.ki < def.keys.length ? def.keys[a.ki].u : 0; a.h0 = a.h1 = Tpre * (def.pOfU ? def.pOfU(u) : u); }
+      preAn = { T: Tpre };
+    }
+    for (let it = 0; it < 40; it++) { const t = runT(V0); V0 = clamp(V0 * t / Tavail, DOT_V * .4, DOT_V * 3); }
+    if (Math.abs(V0 / DOT_V - 1) > .12) console.warn("Punkttempo in", I.name, (V0 / DOT_V * 100).toFixed(0) + " % von DOT_V (Länge in stationen.js: " + Math.round(runT(DOT_V) + (T - Tavail)) + " vh)");
+    // Zeit je Bogenlänge (Tabelle) und Umkehrung
+    const tS = new Float64Array(NS + 1); for (let k = 0; k < NS; k++) tS[k + 1] = tS[k] + slowAt((k + .5) * dsS, V0) * dsS / V0;
+    const tOfS = s => { const f = clamp(s / dsS, 0, NS), k = Math.min(NS - 1, Math.floor(f)); return tDot0 + tS[k] + (tS[k + 1] - tS[k]) * (f - k); };
+    const sOfT = t => { const u = t - tDot0; if (u <= 0) return 0; if (u >= tS[NS]) return L; let lo = 0, hi = NS; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (tS[m] <= u) lo = m; else hi = m; } return (lo + (u - tS[lo]) / Math.max(1e-12, tS[hi] - tS[lo])) * dsS; };
+    // Haltefenster: Zone um ihre Mitte, Lesestellen einer Zone nacheinander
+    for (const z of zones) {
+      if (z.slowOnly) { z.t = tOfS(z.s); continue; }
+      const hw = fz(z, V0) * V0 * z.H / 2, ta = tOfS(z.s - hw), tb = tOfS(z.s + hw), sc = (tb - ta) / z.H;
+      let t = ta; for (const a of z.list) { a.h0 = t; a.h1 = t + a.hold * sc; t = a.h1 + GROUP_GAP * sc; }
+    }
+    // Bauzustand: monotone Kurve durch (0, b beim Eintreffen), die Haltefenster (Text steht ab stop.b) und die Langsamstellen (Gerwing: Stempel), zuletzt bMax
+    const kn = [];
+    const firstB = an.length ? an[0].b : slow.length ? slow[0].b : I.bMax;
+    const bIn = keyed ? I.b0 : I.b0 + .5 * Math.max(0, firstB - I.b0);
+    kn.push([0, bIn]);
+    if (keyed) {
+      const NP = 60; for (let k = 1; k <= NP; k++) { const q = k / NP; kn.push([Tpre * q, clamp(def.bOfU(def.uOfP(q)), 0, 1)]); }
+    }
+    const evs = [];
+    for (const a of an) if (!keyed || a === an[an.length - 1]) evs.push({ t0: a.h0, t1: a.h1, b0: a.b, b1: a.kind === "view" ? a.b1 : a.b });
+    for (const z of zones) if (z.slowOnly) { const o = slow.find(q => Math.abs(q.s - z.s) < .6); evs.push({ t0: z.t, t1: z.t, b0: o.b, b1: o.b }); }
+    for (const o of slow) { const z = zones.find(q => !q.slowOnly && Math.abs(q.s - o.s) < .6); if (z && z.list.length) { const a = z.list[0]; evs.push({ t0: (a.h0 + a.h1) / 2, t1: (a.h0 + a.h1) / 2, b0: o.b, b1: o.b }); } }
+    evs.sort((a, b) => a.t0 - b.t0);
+    for (const e of evs) {
+      const lastK = kn[kn.length - 1];
+      if (e.t0 <= lastK[0] + 1) continue;
+      kn.push([e.t0, Math.max(lastK[1], e.b0)]);
+      if (e.t1 > e.t0 + 1) kn.push([e.t1, Math.max(e.b0, e.b1, e.b0 + .004)]);
+    }
+    if (kn[kn.length - 1][0] < T - 1) kn.push([T, Math.max(kn[kn.length - 1][1], I.bMax)]);
+    for (let k = 1; k < kn.length; k++) kn[k][1] = Math.max(kn[k][1], kn[k - 1][1]);
+    const bP = pchip(kn.map(q => q[0]), kn.map(q => q[1]));
+    return { lenNeed: Math.round(runT(DOT_V) + (T - Tavail)), T, Tpre, preAn, tDot0, tVis, V0, an, zones, sAt: sOfT, tOfS, bAt: t => clamp(bP(t), 0, I.bMax), bIn, bEnd: clamp(bP(T), 0, I.bMax) };
   }
   function buildPath(I) {
     const def = I.def, k = aspect < 1.25 ? Math.pow(1.25 / aspect, .55) : 1, nar = aspect < 1;
@@ -613,21 +1197,106 @@ export function seite(renderer, SEQ, opt = {}) {
     return { u, b: clamp(def.bOfU(u), 0, 1) };
   }
 
-  // ---------- Lage der Szenen in der Welt ----------
-  // Raster wie ein Setzkasten (Erik, 22.10.2026): alle Parzellen sind gleich groß (cl quer zur Bahn, cf entlang der Bahn) und stehen in einem Raster mit
-  // gleichen Abständen (gl quer, gf längs). Je Bahn (eine Spalte) stehen per Szenen hintereinander, die Bahnen wechseln die Richtung
-  // (Schlangenlinie): Bahn 0 läuft nach S, Bahn 1 zurück nach N, und so fort; elf Szenen füllen Breitbild 4 × 3, hochkant 3 × 4 Felder, das letzte bleibt frei.
-  // Jede Szene ist eine Gruppe, gedreht um y (Blickrichtung der Bahn) und verschoben um O; Welt = R · Szene + O. Die Kamera fährt in jeder Szene von vorn (+z)
-  // nach hinten (−z), also in Blickrichtung der Bahn. Die Parzelle ist ein Papierbogen in Einheitsgröße (Mitte auf der Mitte des Inhalts der Szene);
-  // die Bögen der Szenen selbst werden auf diese Fläche zugeschnitten (Bauteile, Lesestellen und Kamerabahnen bleiben, wie sie sind).
-  // Maße gerechnet mit tmp/raster/inhalt.mjs (größter Inhalt aller Szenen plus Rand PAD). Hinweis: gf deckt den Anlauf der Kamera vor der nächsten Parzelle ab (die erste Stellung von Zusammenarbeit steht bis 24 Einheiten vor der Parzelle).
-  const GRID = { d: { cl: 34, cf: 22, gl: 12, gf: 24, per: 3 }, n: { cl: 34, cf: 26, gl: 12, gf: 24, per: 4 } };
+  // ---------- Lage der Inseln: Fluss in zwei Reihen (Kamera-Umbau 23.10.2026, Erik: „Flusslauf mit Höhenlinien“) ----------
+  // Die Szenen liegen als runde Inseln (Radius cfg.R, Gerwing etwas größer) in zwei Reihen: die erste fließt nach rechts (+x), die mittlere Insel liegt im Scheitel, die zweite
+  // Reihe fließt zurück; danach mündet der Fluss in einer weiten Schleife in der Mitte der Karte im roten Schlusspunkt, links daneben steht die Wortmarke. Jede Insel hat
+  // feste Türen (cfg.door: seitliche Lage von Eingang vorn und Ausgang hinten), Laufrichtung = Blickrichtung der Szene (−z der Szene). Zwischen zwei Inseln einer Reihe
+  // fließt der Fluss als immer gleicher ruhiger S-Bogen (Länge LAY.FL, seitlich LAY.FA zurück: die Insel versetzt den Lauf nach rechts, der Fluss zurück; gleiche Amplitude),
+  // um die Scheitelinsel in Viertelbögen (Radius LAY.RT, die Kamera dreht dort langsam mit). Lage und Fluss hängen nur von der Szenenfolge ab, nicht vom Inhalt der Szenen:
+  // Fluglängen stehen damit beim Laden fest.
+  const LAY = BAHN;                                                // Fluss: Zahlen in stationen.js (BAHN)
   const PAD = 1.2;                // Rand zwischen Inhalt und Kante der Parzelle
-  const BRIDGE_R = 8;             // Radius der Ecken des Fadens zwischen zwei Parzellen einer Bahn (Versatz)
-  const U_R = 9, U_E = 21;        // Wende zwischen zwei Bahnen: Radius der Ecken und Länge des Auslaufs über die Parzelle hinaus
-  const HEAD = { N: 0, E: -PI / 2, S: PI, W: PI / 2 };
-  const headOf = I => V(-Math.sin(I.rot), 0, -Math.cos(I.rot));
+  let LAYC = null;
+  const hdir = yaw => V(Math.sin(yaw), 0, -Math.cos(yaw));       // Laufrichtung zur Gier (wie yawOf)
+  const hright = yaw => V(Math.cos(yaw), 0, Math.sin(yaw));      // rechts davon (Blick von oben)
   const setXf = I => { I.R4.makeRotationY(I.rot); I.M4.copy(I.R4).setPosition(I.O); };
+  const pickN = v => v && !Array.isArray(v) && typeof v === "object" ? v[narrow ? "n" : "d"] : v;
+  const doorOf = cfg => pickN(cfg.door) || [-6, 6];
+  function islandAt(C, yaw, R, door) {
+    const f = hdir(yaw), r = hright(yaw), de = Math.sqrt(Math.max(0, R * R - door[0] * door[0])), dx = Math.sqrt(Math.max(0, R * R - door[1] * door[1]));
+    return { C, yaw, R, door, E: C.clone().addScaledVector(r, door[0]).addScaledVector(f, -de), X: C.clone().addScaledVector(r, door[1]).addScaledVector(f, dx) };
+  }
+  // Flussstück von P0 (Richtung y0) nach P1 (Richtung y1) durch Leitpunkte (weich): Ausgleichskurve, an beiden Enden gerade
+  function riverPath(P0, y0, P1, y1, guides = []) {
+    const t0 = hdir(y0), t1 = hdir(y1);
+    const P = fairPath([{ p: [P0.x, P0.z] }, ...guides.map(g => ({ p: [g.x, g.z], w: g.w || 1 })), { p: [P1.x, P1.z] }], { t0: [t0.x, t0.z], t1: [t1.x, t1.z], ds: .5, lead: 2, a2: .0005 });
+    const f = mkPoly(P.map(q => V(q[0], THREAD_Y, q[1]))), n = Math.max(4, Math.round(f.len / .4));
+    return mkPoly(Array.from({ length: n + 1 }, (_, k) => f.at(f.len * k / n)));
+  }
+  // Viertel- bzw. Halbbogen nach rechts: Leitpunkte auf dem Kreis (Radius r) nach einem geraden Stück l0
+  function arcGuides(P0, y0, r, ang, l0) {
+    const f = hdir(y0), rt = hright(y0), O = P0.clone().addScaledVector(f, l0).addScaledVector(rt, r), out = [];
+    for (let k = 0; k <= 8; k++) { const a = ang * k / 8; out.push(O.clone().addScaledVector(rt, -r * Math.cos(a)).addScaledVector(f, r * Math.sin(a))); }
+    return out;
+  }
+  function layoutOf() {
+    const n = INST.length, key = narrow + ":" + n;
+    if (LAYC && LAYC.key === key) return LAYC;
+    const cf = INST.map(I => I.cfg), isl = [], rivers = [null], apex = Math.floor(n / 2);
+    isl.push(islandAt(V(0, 0, 0), PI / 2, cf[0].R || 18, doorOf(cf[0])));
+    for (let i = 1; i < n; i++) {
+      const A = isl[i - 1], R = cf[i].R || 18, door = doorOf(cf[i]), turn = n > 3 && (i === apex || i === apex + 1);
+      const y1 = A.yaw + (turn ? PI / 2 : 0), f0 = hdir(A.yaw), r0 = hright(A.yaw);
+      let E, guides = [];
+      if (!turn) E = A.X.clone().addScaledVector(f0, LAY.FL).addScaledVector(r0, -LAY.FA);
+      else { E = A.X.clone().addScaledVector(f0, LAY.L0 + LAY.RT).addScaledVector(r0, LAY.RT + LAY.L1); guides = arcGuides(A.X, A.yaw, LAY.RT, PI / 2, LAY.L0).slice(1, -1); }
+      const f1 = hdir(y1), r1 = hright(y1), de = Math.sqrt(Math.max(0, R * R - door[0] * door[0]));
+      const C = E.clone().addScaledVector(r1, -door[0]).addScaledVector(f1, de);
+      isl.push(islandAt(C, y1, R, door));
+      rivers.push(riverPath(A.X, A.yaw, E, y1, guides));
+    }
+    // Karte: Mitte zwischen den Reihen; die Wortmarke steht dort, ihr Schlusspunkt ist das Ende des Flusses (Mündung)
+    let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9;
+    for (const s of isl) { x0 = Math.min(x0, s.C.x - s.R); x1 = Math.max(x1, s.C.x + s.R); z0 = Math.min(z0, s.C.z - s.R); z1 = Math.max(z1, s.C.z + s.R); }
+    const psi = KARTE[narrow ? "n" : "d"].yaw * PI / 180, right = V(Math.cos(psi), 0, Math.sin(psi)), upS = V(Math.sin(psi), 0, -Math.cos(psi));
+    const E = narrow ? 5.6 : 8.4, w1 = printTex(["Jan-Erik"], { font: "marke", scale: .02 }), w2 = printTex(["Andersen"], { font: "marke", italic: true, scale: .02 }), wx = printTex(["x x"], { font: "marke", scale: .02 }), wy = printTex(["xx"], { font: "marke", scale: .02 });
+    w1.tex.dispose(); w2.tex.dispose(); wx.tex.dispose(); wy.tex.dispose();
+    const Wm = (w1.tw + w2.tw + (wx.tw - wy.tw)) * E + .01 * E + .085 * E + .9;
+    // Mitte der Insellagen der beiden Reihen (in Kartenrichtung „oben“ und „unten“)
+    const rowA = isl.slice(0, apex), rowB = isl.slice(apex + 1);
+    const ctr = V((x0 + x1) / 2, 0, 0);
+    const mid = (a, b) => (a.reduce((s, q) => s + q.C.z, 0) / a.length + b.reduce((s, q) => s + q.C.z, 0) / b.length) / 2;
+    ctr.z = mid(rowA, rowB);
+    // Schlusspunkt: Marke mittig zwischen den Reihen; Grundlinie leicht unter der Mitte (Breitbild), am Handy steht die Marke quer über dem Band
+    const D = ctr.clone().addScaledVector(right, Wm / 2).addScaledVector(upS, -.28 * E); D.y = THREAD_Y;
+    const mk0 = { Wm };
+    // Mündung: hinter der letzten Insel ein halber Bogen nach rechts in die Mitte, dann am Band entlang zum Schlusspunkt; im Breitbild läuft der Fluss unter der Marke
+    // (Abstand LAY.Q unter der Grundlinie) und biegt von unten in den Punkt, am Handy kommt er von oben in den Punkt
+    const Z = isl[n - 1], yz = Z.yaw, fz = hdir(yz), rz = hright(yz);
+    let fin;
+    if (!narrow) {
+      // upS zeigt auf der Karte nach oben: „unter der Marke“ ist −upS, der Fluss biegt von unten (Richtung +upS) in den Punkt
+      const zr = D.clone().addScaledVector(upS, -LAY.Q);                                   // Linie unter der Marke
+      const lat = zr.clone().sub(Z.X).dot(rz), RM = Math.max(10, (lat - LAY.L1) / 2);
+      const g = arcGuides(Z.X, yz, RM, PI, LAY.L0).slice(1, -1);
+      const endArc = Z.X.clone().addScaledVector(fz, LAY.L0).addScaledVector(rz, 2 * RM);
+      const turnIn = D.clone().addScaledVector(right, -LAY.Q * 1.1).addScaledVector(upS, -LAY.Q);       // erst hinter dem Schriftzug nach oben in den Punkt (der Faden kreuzt die Marke nicht)
+      // vom Ende des Bogens bis vor die Marke in ruhigen Wellen (halbe Amplitude der Flüge), dann gerade unter der Marke entlang
+      const ul = D.clone().addScaledVector(right, -mk0.Wm - 6).addScaledVector(upS, -LAY.Q), runL = ul.clone().sub(endArc).dot(right), nW = Math.max(0, Math.round(runL / 34));
+      for (let k = 1; k <= nW; k++) { const q = k / (nW + 1), pt = endArc.clone().addScaledVector(right, runL * q).addScaledVector(upS, (k % 2 ? 1 : -1) * LAY.FA * .5); g.push(pt); }
+      // bis vor die Marke als Ausgleichskurve (Ende waagerecht), dann fest gelegt: gerade unter dem Schriftzug entlang und im Viertelkreis (Radius Q) hinter ihm
+      // nach oben in den Schlusspunkt, so kreuzt der Faden die Marke nie
+      void turnIn;
+      const head = riverPath(Z.X, yz, ul, Math.atan2(right.x, -right.z), g), Cc = D.clone().addScaledVector(right, -LAY.Q * 4), tail = [];
+      const c0 = Cc.clone().addScaledVector(upS, -LAY.Q), runU = c0.clone().sub(ul).dot(right);
+      for (let s = .4; s < runU; s += .4) tail.push(ul.clone().addScaledVector(right, s));
+      // weicher Schwung (S-Kurve, Anfang und Ende waagerecht) über 4 Q in den Punkt hinter dem Namen
+      for (let k = 0; k <= 32; k++) { const u = k / 32, h = u * u * (3 - 2 * u); tail.push(Cc.clone().addScaledVector(right, LAY.Q * 4 * u).addScaledVector(upS, -LAY.Q * (1 - h))); }
+      tail.forEach(q => q.y = THREAD_Y);
+      const all = [...head.pts, ...tail], fl = mkPoly(all), nF = Math.max(4, Math.round(fl.len / .4));
+      fin = mkPoly(Array.from({ length: nF + 1 }, (_, k) => fl.at(fl.len * k / nF)));
+    } else {
+      const lat = D.clone().sub(Z.X).dot(rz), RM = Math.max(10, lat / 2);
+      const g = arcGuides(Z.X, yz, RM, PI, LAY.L0).slice(1, -1);
+      // nach dem Halbbogen gerade durch die Mitte zwischen den Reihen zum Schlusspunkt (Leitpunkte, sonst baucht die Ausgleichskurve in die Inseln aus)
+      const a0 = Z.X.clone().addScaledVector(fz, LAY.L0).addScaledVector(rz, 2 * RM), run = D.clone().sub(a0).dot(fz) * -1, nG = Math.max(1, Math.round(run / 25));
+      for (let k = 1; k < nG; k++) { const q = a0.clone().addScaledVector(fz, -run * k / nG); q.addScaledVector(rz, D.clone().sub(q).dot(rz) * k / nG); q.w = 4; g.push(q); }
+      fin = riverPath(Z.X, yz, D, yz + PI, g);
+    }
+    LAYC = { key, isl, rivers, fin, mark: { D, psi, E, Wm, right, upS }, apex, box: [x0, x1, z0, z1] };
+    return LAYC;
+  }
+  const slotOf = idx => layoutOf().isl[idx];
   function extentOf(I) {
     const box = new THREE.Box3();
     const cl = (x0, x1, z0, z1) => I.clip ? [Math.max(x0, I.clip[0]), Math.min(x1, I.clip[1]), Math.max(z0, I.clip[2]), Math.min(z1, I.clip[3])] : [x0, x1, z0, z1];
@@ -643,11 +1312,6 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     I.M.update(I.b0, 0);
     return box;
-  }
-  function camExtent(I) {
-    const c = V(), t = V(); let zmax = -1e9, xmin = 1e9, xmax = -1e9;
-    for (let i = 0; i <= 400; i++) { localPose(I, i / 400, c, t); zmax = Math.max(zmax, c.z); xmin = Math.min(xmin, c.x); xmax = Math.max(xmax, c.x); }
-    return { zmax, xmin, xmax };
   }
   // Inhalt der Szene (Szenenkoordinaten x0, x1, z0, z1): alle Teile (ohne die Wurzel) in mehreren Zuständen, alle Drucke, im Ausschnitt der Szene
   function contentRect(I) {
@@ -675,49 +1339,29 @@ export function seite(renderer, SEQ, opt = {}) {
     return r;
   }
   const ptX = a => a.isVector3 ? a.x : a[0], ptZ = a => a.isVector3 ? a.z : a.length === 3 ? a[2] : a[1];
-  // Parzelle der Szene (Szenenkoordinaten): Einheitsgröße, Mitte auf der Mitte von Inhalt samt Eingang und Ausgang des Fadens
+  // Parzelle der Szene (Szenenkoordinaten): Rechteck um den Inhalt samt Rand (die Bögen der Szene bleiben darin, sie liegen auf dem runden Boden)
   function cellOf(I) {
-    const G = GRID[narrow ? "n" : "d"], c = contentRect(I), f = I.fcfg;
-    const [x0, x1, z0, z1] = c;
-    const ends = f ? [f.in, f.out].filter(Boolean) : [];
-    let lo = z0, hi = z1, xl = x0, xh = x1;
-    for (const a of ends) { lo = Math.min(lo, ptZ(a)); hi = Math.max(hi, ptZ(a)); xl = Math.min(xl, ptX(a)); xh = Math.max(xh, ptX(a)); }
-    if (hi - lo > G.cf - 2 * PAD) { lo = z0; hi = z1; }                 // Eingang oder Ausgang liegen weiter draußen (Anlauf): der Inhalt hat Vorrang, die Enden werden an die Kante gelegt
-    if (xh - xl > G.cl - 2 * PAD) { xl = x0; xh = x1; }
-    if (hi - lo > G.cf - 2 * PAD + .01 || xh - xl > G.cl - 2 * PAD + .01) console.warn("Parzelle zu klein für", I.name, (xh - xl).toFixed(1), "x", (hi - lo).toFixed(1));
-    const cx = (xl + xh) / 2, cz = (lo + hi) / 2;
+    const c = contentRect(I), [x0, x1, z0, z1] = c;
     I.content = c;
-    return [cx - G.cl / 2, cx + G.cl / 2, cz - G.cf / 2, cz + G.cf / 2];
+    return [x0 - PAD, x1 + PAD, z0 - PAD, z1 + PAD];
   }
-  // lokales Rechteck → Rechteck der Welt (x0, x1, z0, z1) für Ursprung O und Drehung rot
-  function worldRect(lr, O, rot) {
-    const m = new THREE.Matrix4().makeRotationY(rot).setPosition(O), out = [1e9, -1e9, 1e9, -1e9];
-    for (const [x, z] of [[lr[0], lr[2]], [lr[1], lr[2]], [lr[1], lr[3]], [lr[0], lr[3]]]) {
-      const w = V(x, 0, z).applyMatrix4(m); out[0] = Math.min(out[0], w.x); out[1] = Math.max(out[1], w.x); out[2] = Math.min(out[2], w.z); out[3] = Math.max(out[3], w.z);
-    }
-    return out;
-  }
-  // Platz im Raster: Bahn t (Spalte), Platz j in der Bahn; gerade Bahnen laufen nach S, ungerade zurück nach N (Breitbild: vier Spalten zu drei Feldern, hochkant: drei Spalten zu vier Feldern)
-  function slotOf(idx) {
-    const G = GRID[narrow ? "n" : "d"], per = G.per, nL = Math.ceil(INST.length / per), t = Math.floor(idx / per), j = idx % per, fw = t % 2 === 0;
-    const PL = G.cl + G.gl, PF = G.cf + G.gf, a = (fw ? j - (per - 1) / 2 : (per - 1) / 2 - j) * PF, l = (t - (nL - 1) / 2) * PL;
-    return { rot: fw ? HEAD.S : HEAD.N, P: V(l, 0, a) };
-  }
-  function layout(I) {
-    buildPath(I);
-    I.ext = extentOf(I); I.cext = camExtent(I);
-    const c = V(), t = V();
-    localPose(I, 0, c, t); I.camStart = c.clone(); I.tgtStart = t.clone();
-    localPose(I, 1, c, t); I.camEnd = c.clone(); I.tgtEnd = t.clone();
-    const sl = slotOf(I.idx);
-    I.rot = sl.rot;
-    I.cell = cellOf(I); I.lf = I.cell;
-    const cc = V((I.cell[0] + I.cell[1]) / 2, 0, (I.cell[2] + I.cell[3]) / 2);
-    I.O.copy(sl.P).sub(cc.applyMatrix4(new THREE.Matrix4().makeRotationY(I.rot)));
+  // Szene in ihre Insel setzen: Mitte des Bodens = Mitte des Inhalts (+ cfg.ctr), Blickrichtung der Szene = Laufrichtung der Insel. Eingang und Ausgang (Türen) in Szenenkoordinaten.
+  function placeScene(I) {
+    const sl = slotOf(I.idx), R = sl.R;
+    I.slot = sl; I.cell = cellOf(I); I.lf = I.cell;
+    const ctr = pickN(I.cfg.ctr) || [0, 0];
+    const cx = (I.cell[0] + I.cell[1]) / 2 + ctr[0], cz = (I.cell[2] + I.cell[3]) / 2 + ctr[1];
+    const far = Math.max(...[[0, 2], [0, 3], [1, 2], [1, 3]].map(([a, b]) => Math.hypot(I.cell[a] - cx, I.cell[b] - cz)));
+    if (far > R + .01) console.warn("Insel zu klein für", I.name, "Inhalt bis", far.toFixed(1), "Radius", R);
+    I.disc = { cx, cz, R };
+    I.rot = -sl.yaw; I.theta = 0;
+    const [xe, xx] = sl.door;
+    I.inL = [cx + xe, cz + Math.sqrt(Math.max(0, R * R - xe * xe))]; I.outL = [cx + xx, cz - Math.sqrt(Math.max(0, R * R - xx * xx))];
+    I.O.copy(sl.C).sub(V(cx, 0, cz).applyAxisAngle(UP, I.rot));
     setXf(I);
-    I.fp = worldRect(I.cell, I.O, I.rot);
+    I.fp = [sl.C.x - R, sl.C.x + R, sl.C.z - R, sl.C.z + R];
   }
-  // Parzelle als Papierbogen unter dem Bogen der Szene; die Bögen der Szene werden auf die Parzelle zugeschnitten (Skalierung der Platte, Haarkante aus)
+  // Parzelle als runder Papierboden unter dem Bogen der Szene; die Bögen der Szene werden auf das Rechteck um den Inhalt zugeschnitten (Skalierung der Platte, Haarkante aus)
   function fitSheets(I, group, sheets, sheetBox) {
     const [x0, x1, z0, z1] = I.cell;
     sheets.forEach((g, i) => {
@@ -726,54 +1370,14 @@ export function seite(renderer, SEQ, opt = {}) {
       if (b > a && d > c) { g.scale.set((b - a) / (s[1] - s[0]), 1, (d - c) / (s[3] - s[2])); g.position.x = (a + b) / 2; g.position.z = (c + d) / 2; sheetBox[i] = [a, b, c, d]; }
       else { g.scale.set(1e-4, 1, 1e-4); sheetBox[i] = [s[0], s[0], s[2], s[2]]; }
     });
-    const pl = new THREE.Mesh(new THREE.BoxGeometry(x1 - x0, .03, z1 - z0), paperMaterial(PAL.plate));
-    pl.position.set((x0 + x1) / 2, -.0192, (z0 + z1) / 2);
-    pl.add(new THREE.LineSegments(new THREE.EdgesGeometry(pl.geometry), new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: .32, depthWrite: false })));
+    const D = I.disc, pl = new THREE.Mesh(new THREE.CylinderGeometry(D.R, D.R, .03, 96), paperMaterial(PAL.plate));
+    pl.position.set(D.cx, -.0192, D.cz);
+    pl.add(new THREE.LineSegments(new THREE.EdgesGeometry(pl.geometry, 40), new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: .32, depthWrite: false })));
     group.add(pl); sheets.push(pl);
     frameOn(pl.material, I.O, null, I.rot); patchPaper(pl.material);
     return pl;
   }
 
-
-  // Ankunft des Fadens in der Parzelle (Szenen ohne eigenen Faden: der Faden läuft als gerade Bahn vom Eingang zum Ausgang): die erste Stellung der Kamera
-  // zeigt meist nur die Überschrift auf dem Papier, die Bahn am Rand der Parzelle läge außerhalb des Bildes. Die Bahn rückt deshalb so weit zur Mitte, bis
-  // sie in der ersten Stellung im Bild steht (|x| ≤ ARR_X), und der Punkt kommt erst dort an, wo sie ins Bild tritt (I.arrive = z der Ankunft, y im Bild ≥ ARR_Y):
-  // so bleibt er bis zum Ende des Flugs im Bild.
-  const ARR_X = .9, ARR_Y = -.62;
-  function laneArrival(I) {
-    const f = I.fcfg, own = I.cfg.ownThread === false ? null : I.def.thread;
-    I.arrive = null;
-    if (I.idx === 0 || !f || own || !f.in || !f.out || f.in.length !== 2 || f.out.length !== 2 || f.via) return;
-    const pc = new THREE.PerspectiveCamera(fovOf(I), aspect, .1, 300);
-    pc.position.copy(I.camStart); pc.lookAt(I.tgtStart); pc.updateMatrixWorld(); pc.updateProjectionMatrix();
-    const zf = I.cell[3] - .2, zb = I.cell[2] + .2, p = V();
-    const firstVisible = x => {
-      for (let z = zf; z >= zb; z -= .25) { p.set(x, .02, z).project(pc); if (p.z < 1 && p.y >= ARR_Y && p.y <= .6 && Math.abs(p.x) <= ARR_X) return z; }
-      return null;
-    };
-    // Bahn möglichst frei von Bauteilen (Faden läuft um sie herum, nicht durch sie): Abstand zu den Kanten aller Bauteile über 5 cm Höhe
-    const inv = I.M4.clone().invert(), bx = I.boxes.map(b => b.clone().applyMatrix4(inv)).filter(b => b.max.y > .1);
-    const free = x => !bx.some(b => x > b.min.x - .35 && x < b.max.x + .35 && b.max.z > zb && b.min.z < zf);
-    // Seite der Bahn: wo die Kamera am Ende der Szene steht (mehr als 4 Einheiten neben der Mitte des Inhalts), dort läuft auch die Bahn, damit der Punkt beim Abflug
-    // nicht hinter den Bauteilen der Szene verschwindet; sonst bleibt sie, wo sie war (gespiegelt an der Mitte des Inhalts)
-    const mid = (I.content[0] + I.content[1]) / 2, side = I.camEnd.x - mid > 4 ? 1 : I.camEnd.x - mid < -4 ? -1 : 0;
-    let xo = f.in[0]; if (side && Math.sign(xo - mid) !== side) xo = 2 * mid - xo;
-    const x0 = clamp(xo, I.cell[0] + .4, I.cell[1] - .4);
-    let best = null, fallback = null;
-    for (let k = 0; k <= 160 && !best; k++) {
-      for (const sg of k ? [-1, 1] : [1]) {
-        const x = x0 + sg * k * .25; if (x < I.cell[0] + .4 || x > I.cell[1] - .4) continue;
-        const z = firstVisible(x); if (z === null) continue;
-        if (free(x)) { best = { x, z }; break; }
-        if (!fallback) fallback = { x, z };
-      }
-    }
-    const pick = best || fallback; if (!pick) return;
-    const x = pick.x, zA = pick.z;
-    if (!best) dbg("Bahn " + I.name + " liegt in der ersten Stellung nur an Bauteilen im Bild");
-    f.in = [x, f.in[1]]; f.out = [x, f.out[1]];
-    I.arrive = zA < zf - .05 ? zA : null;
-  }
 
   // Umgrenzungen der Teile (je Knoten) im Anfangs- und im Endzustand und der eigenen Objekte (Kabel usw.), Welt
   function partBoxes(I) {
@@ -798,17 +1402,59 @@ export function seite(renderer, SEQ, opt = {}) {
     I.M.update(I.b0, 0);
     return out;
   }
-  // ---------- Abschnitte der Seite: Szene, Übergang, Szene, … ----------
-  // Längen in vh aus der Szenenfolge (cfg.len, cfg.tr), fest, damit #p-Werte schon vor dem Bau aller Szenen gelten
+  // Umgrenzungen je Zustand b (Szenenkoordinaten, die Gruppe steht noch am Ursprung) für den Fadenlauf: je Teil im jeweiligen Zustand, nur was dort steht (flach liegende
+  // Faltpläne zählen nicht), dazu stehende Textdrucke (Lettern der Überschrift sind Drucke an Gelenken ohne eigene Fläche) und die festen Zusatzobjekte (Kabel usw.)
+  function stateBoxes(I, nSteps) {
+    const steps = [], v = V();
+    for (let k = 0; k <= nSteps; k++) {
+      const bb = I.b0 + (I.bMax - I.b0) * k / nSteps, list = [], seen = new Set();
+      I.M.update(bb, 1e9);
+      const { posT, nT, nodes } = I.M.dbg, per = new Map();
+      for (let j = 0; j < nT.length; j++) {
+        const nd = nodes[nT[j]]; if (nd === nodes[0]) continue;
+        v.set(posT[j * 3], posT[j * 3 + 1], posT[j * 3 + 2]);
+        if (I.clip && (v.x < I.clip[0] || v.x > I.clip[1] || v.z < I.clip[2] || v.z > I.clip[3])) continue;
+        let bx = per.get(nd); if (!bx) { bx = new THREE.Box3(); per.set(nd, bx); } bx.expandByPoint(v);
+      }
+      const add = (bx, pre) => {
+        if (bx.max.y < .15) return;
+        const key = pre + [bx.min.x, bx.max.x, bx.min.z, bx.max.z, bx.max.y].map(q => Math.round(q * 5)).join();
+        if (!seen.has(key)) { seen.add(key); list.push(bx); }
+      };
+      for (const bx of per.values()) add(bx, "n");
+      for (const pr of I.prints) {
+        if (!(pr.t && pr.t.rows)) continue;
+        // nur Drucke, die in diesem Zustand sichtbar sind (Überschriften blenden aus)
+        let o = pr.sched ? pr.sched(bb) : (pr.on < 0 ? 1 : sm((bb - pr.on) / pr.fade));
+        if (!pr.sched && pr.off !== undefined) o *= 1 - sm((bb - pr.off) / .03);
+        if (o < .3) continue;
+        const m = pr.mesh.matrix, bx = new THREE.Box3();
+        for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) bx.expandByPoint(v.set(sx * pr.w / 2, sy * pr.h / 2, 0).applyMatrix4(m));
+        if (bx.max.y - bx.min.y < .1) continue;
+        add(bx, "p");
+      }
+      steps.push({ b: bb, list });
+    }
+    const skip = new Set([I.M.geoT, I.M.geoL, I.M.geoR, I.M.geoG]), extra = [];
+    I.group.updateMatrixWorld(true);
+    for (const ch of I.group.children) {
+      if ((ch.geometry && skip.has(ch.geometry)) || I.sheets.includes(ch) || I.prints.some(pr => pr.mesh === ch)) continue;
+      const bx = new THREE.Box3().setFromObject(ch); if (!bx.isEmpty() && bx.max.y > .05) extra.push(bx);
+    }
+    I.M.update(I.b0, 0);
+    return { steps, extra };
+  }
+  // ---------- Abschnitte der Seite: Szene, Flug, Szene, … ----------
+  // Längen in vh: Szenen aus der Szenenfolge (cfg.len), Flüge aus der Länge des Flusses (Punkt mit DOT_V), Schluss aus der Mündung; alles steht beim Laden fest
   function makeSegments() {
-    SEGS = []; let acc = 0;
+    SEGS = []; let acc = 0; const LA = layoutOf();
     INST.forEach((I, i) => {
-      const L = I.cfg.len[narrow ? "n" : "d"], T = i ? I.cfg.tr[narrow ? "n" : "d"] : 0;
+      const L = I.cfg.len[narrow ? "n" : "d"], T = i ? Math.round(LA.rivers[i].len / DOT_V) : 0;
       if (i) { SEGS.push({ kind: "t", i, v0: acc, v1: acc + T }); acc += T; }
       SEGS.push({ kind: "b", i, v0: acc, v1: acc + L }); acc += L;
     });
-    // Schluss: Zoom-out aus der letzten Stellung zur Karte (letztes Fünftel steht), danach ist die Seite zu Ende
-    const ZL = ZOOM[narrow ? "n" : "d"];
+    // Schluss: der Punkt läuft die Mündung hinab (Tempo DOT_V, am Ende weich auslaufend), die Kamera zoomt dabei lang und weich zur Karte heraus
+    const ZL = ZSEG_LEN();
     SEGS.push({ kind: "z", i: INST.length - 1, v0: acc, v1: acc + ZL }); acc += ZL;
     TOTAL = acc;
     for (const s of SEGS) { s.p0 = s.v0 / TOTAL; s.p1 = s.v1 / TOTAL; }
@@ -830,8 +1476,8 @@ export function seite(renderer, SEQ, opt = {}) {
   const anchorP = a => {
     if (a.p === null && a.inst) {
       ensure(a.inst.idx);
-      const ki = typeof a.ki === "function" ? a.ki(a.inst.def) : a.ki, k = a.inst.def.keys[ki];
-      a.p = k ? a.inst.body.p0 + a.inst.def.pOfU(k.u) * (a.inst.body.p1 - a.inst.body.p0) : a.inst.body.p0;
+      const ki = typeof a.ki === "function" ? a.ki(a.inst.def) : a.ki, an = a.inst.tl && a.inst.tl.an.find(q => q.ki === ki && q.h0 !== undefined);
+      a.p = an ? (a.inst.body.v0 + (an.h0 + an.h1) / 2) / TOTAL : a.inst.body.p0;
     }
     return a.p;
   };
@@ -847,14 +1493,13 @@ export function seite(renderer, SEQ, opt = {}) {
   }
   function bOf(I, st) {
     if (!I.built) return 0;
-    if (st.kind === "b") {
-      if (I.idx < st.i) return I.bMax;
-      if (I.idx > st.i) return I.b0;
-      return clamp(I.def.bOfU(I.def.uOfP(st.q)), 0, 1);
-    }
-    if (st.kind === "z") return I.idx < st.i ? I.bMax : I.bLast + (I.bMax - I.bLast) * sm(st.q * 3);
-    if (I.idx < st.i - 1) return I.bMax;
-    if (I.idx === st.i - 1) return I.bLast + (I.bMax - I.bLast) * sm(st.q);
+    const tl = I.tl, bEnd = tl ? tl.bEnd : I.bMax;
+    if (st.kind === "z") return I.idx < st.i ? I.bMax : bEnd + (I.bMax - bEnd) * sm(st.q * 3);
+    if (I.idx < st.i - 1 || (st.kind === "b" && I.idx < st.i)) return I.bMax;
+    if (st.kind === "t" && I.idx === st.i - 1) return bEnd + (I.bMax - bEnd) * sm(st.q);
+    if (st.kind === "b" && I.idx === st.i) return tl ? tl.bAt(st.q * (I.body.v1 - I.body.v0)) : I.b0;
+    // Flug in die Szene: sie beginnt sich schon aufzubauen (aus der Mausperspektive ragt sie auf)
+    if (st.kind === "t" && I.idx === st.i) return tl ? I.b0 + (tl.bIn - I.b0) * smoother(st.q) : I.b0;
     return I.b0;
   }
   // Übergangsanteil der Fahrt in Szene i (0 davor, 1 danach)
@@ -871,168 +1516,505 @@ export function seite(renderer, SEQ, opt = {}) {
   const dirAng = (yaw, pitch, out) => out.set(Math.sin(yaw) * Math.cos(pitch), -Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch));
   const smoother = x => { x = clamp(x, 0, 1); return x * x * x * (x * (x * 6 - 15) + 10); };
   const _c0 = V();
-  // ---------- Verfolgungsfahrt zwischen den Szenen ----------
-  // Zwischen zwei Szenen läuft der rote Punkt am Faden von der verlassenen zur kommenden Parzelle (Teil des Fadens der Szene, falls er erst im Übergang
-  // gezeichnet wird, danach die Brücke), gleichmäßig nach Bogenlänge an den Scrollweg des Flugs gebunden (linkTimes). Die Kamera folgt ihm nah und flach:
-  // auf dem Faden hinter und über dem Punkt (nie über ihm, auch nicht in Haarnadeln), Blick auf die Stelle vor ihm. Position und Blickpunkt folgen dieser
-  // Idealstellung wie kritisch gedämpfte Federn (Zeitkonstante in vh Scrollweg), gerechnet über die Bogenlänge vorab als Spur, damit die Stellung bei jedem
-  // p gilt; sie starten an der letzten Stellung der verlassenen Szene. Eine weiche Nachführung hält den Punkt im Bild, die Höhe weicht Bauteilen aus.
-  // Im letzten Teil blendet die Spur zur ersten Stellung der kommenden Szene (Winkel und Logarithmus des Abstands, kein Schnitt, kein Knick).
-  const CHASE = { back: 8.5, hgt: 3.2, ahead: 12, tauC: 8, tauT: 7 };
-  const CHASE_N = { back: 9.5, hgt: 3.8, ahead: 15, tauC: 8, tauT: 7 };       // hochkant: etwas weiter zurück, Blick weiter voraus
-  const CHASE_MAXH = 14;                                                // höchste Kamerahöhe der Verfolgung (Sicht über Bauteile)
-  const CHASE_I0 = 18, CHASE_I1 = 4;                                      // Weg (Einheiten) vor dem Ende, in dem die Idealstellung zur ersten Stellung der kommenden Szene läuft (ab I0 bis I1)
-const CHASE_END = 8;                                                  // letztes Stück des Weges (Einheiten): Blende zur ersten Stellung der kommenden Szene
-  const threadPieces = B => pieces.filter(pc => pc.time.tr === B.idx);
-  // Zeitfenster der Fadenstücke eines Übergangs nach Bogenlänge (gleichmäßige Geschwindigkeit des Punktes über den ganzen Flug).
-  // Stücke der verlassenen Szene, die am Ende ihrer Bahn noch nicht fertig gezeichnet sind (b läuft im Übergang weiter), laufen in den Übergang hinein
-  // (time.k0: Anteil bei Beginn, time.lin0: Verlauf in der Szene selbst), sonst spränge der Punkt beim Losfahren auf das Stück des Übergangs
-  function linkTimes(B) {
-    const A = INST[B.idx - 1];
-    if (A && A.built) {
-      let end = null;
-      for (const pc of pieces) {
-        const tm = pc.time; if (tm.I !== A || tm.tr !== undefined || tm.b1 <= A.bLast + 1e-6) continue;
-        if (end && pc.curve.getPointAt(0).distanceTo(end) > .5) break;
-        const w0 = win(A.bLast, tm.b0, Math.max(1e-4, tm.b1 - tm.b0));
-        tm.lin0 = !!tm.lin; tm.k0 = tm.lin ? w0 : sm(w0); tm.tr = B.idx; tm.s0 = 0; tm.s1 = 1; end = pc.curve.getPointAt(1);
-      }
-    }
-    const pcs = threadPieces(B); if (!pcs.length) return;
-    const len = pcs.map(pc => pc.curve.getLength() * (1 - (pc.time.k0 || 0))), tot = len.reduce((a, b) => a + b, 0); if (tot < 1e-3) return;
-    let a = 0; pcs.forEach((pc, i) => { pc.time.s0 = a / tot; a += len[i]; pc.time.s1 = a / tot; pc.time.lin = true; });
+  // ---------- Kamera: eine stetige Spur über die ganze Seite (Kamera-Umbau 23.10.2026) ----------
+  // Erik: „Die Kamera muss ein einziger Fluss sein, genauso stetig wie der Faden.“ Die Stellung (Ort und Blickpunkt) wird für jeden vh Scrollweg vorab gerechnet (je Szene ein
+  // Stück: Flug in die Szene und die Szene selbst) und zwischen den Stützstellen kubisch gelesen. Sie setzt sich zusammen aus
+  // - Grundstellung: folgt dem Punkt. Im Fluss knapp über dem Papier hinter ihm (Mausperspektive), Blick in die über YAW_WIN gemittelte Laufrichtung (zu YAW_K in die
+  //   eigene Richtung des Fadens), so dreht sie in S-Bögen kaum und um den Scheitel gleichmäßig. In der Insel mit fester Blickrichtung der Szene etwas höher (FOLLOW),
+  //   Wechsel weich über LAMBDA_T. Nie in einem Bauteil (Mindesthöhe, geglättet).
+  // - Haltestellungen: Lesestellen frontal vor dem Text (readingPose), Ansichten (k.view); dort steht die Kamera still, solange gelesen wird. Aufstieg zur ersten Lesestelle
+  //   über RAMP_IN, Rückkehr in die Verfolgung über RAMP_OUT, nahe Lesestellen gehen ohne Zwischenstellung ineinander über (JOIN).
+  // - Nachführung: steht der Punkt außerhalb von DOT_FRAME, dreht der Blick weich mit (Totzone, keine Wirkung, solange er im Rahmen steht).
+  // - Glättung: Gaußfilter (SMOOTH_S vh) über Ort und Blickpunkt; das Startbild und die Schlüsselfahrt der Eröffnung bleiben unberührt.
+  // Rig-Vorgaben: stationen.js (RIG)
+  const RAMP_IN = RIG.rampIn, RAMP_OUT = RIG.rampOut, RAMP_MID = RIG.rampMid, JOIN = RIG.join, LAMBDA_T = RIG.lambda, SMOOTH_S = RIG.smooth, FIN_DEC = 70;
+  const CHASE = RIG.chase, FOLLOW = RIG.follow, YAW_K = RIG.yawK, YAW_WIN = RIG.yawWin, DOT_FRAME = RIG.frame;
+  const segAtV = v => { for (let k = 0; k < SEGS.length; k++) if (v <= SEGS[k].v1 + 1e-9) return k; return SEGS.length - 1; };
+  function finS(t) {
+    const L = layoutOf().fin.len, T = .72 * ZSEG_LEN(), u = clamp(t / T, 0, 1), a = Math.min(2.5, DOT_V * T / L);
+    return L * (a * (u * u * u - 2 * u * u + u) + 3 * u * u - 2 * u * u * u);
   }
-  // Weg des Punktes im Übergang als Polygonzug
-  function dotPath(A, B) {
-    const pts = [];
-    for (const pc of threadPieces(B)) {
-      const k0 = pc.time.k0 || 0, L = pc.curve.getLength() * (1 - k0), n = Math.max(8, Math.ceil(L * 4));
-      for (let i = 0; i <= n; i++) { const r = pc.curve.getPointAt(k0 + (1 - k0) * i / n); if (r.y < THREAD_Y) r.y = THREAD_Y; if (!pts.length || r.distanceTo(pts[pts.length - 1]) > 1e-4) pts.push(r); }
-    }
-    if (pts.length < 2) { pts.length = 0; pts.push(A.exit ? A.exit.clone() : V(), B.entry ? B.entry.clone() : V(1, 0, 1)); }
-    return pts;
+  const ZSEG_LEN = () => ZOOM[narrow ? "n" : "d"];
+  // Punkt bei Scrollweg v (vh der ganzen Seite): Lage (Welt, in out), Art, Insel, Laufrichtung (Gier); null, solange es ihn noch nicht gibt (Eröffnung vor dem Statuspunkt)
+  function dotAt(v, out) {
+    const sg = SEGS[segAtV(v)], LA = layoutOf();
+    if (sg.kind === "t") { const R = LA.rivers[sg.i], q = clamp((v - sg.v0) / Math.max(1e-9, sg.v1 - sg.v0), 0, 1), s = q * R.len; R.at(s, out); return { kind: "t", i: sg.i, s, vis: true, yaw: yawOf(R.tan(s, _d0)) }; }
+    if (sg.kind === "z") { const F = LA.fin, s = finS(v - sg.v0); F.at(s, out); return { kind: "z", i: sg.i, s, vis: true, yaw: yawOf(F.tan(s, _d0)) }; }
+    const I = INST[sg.i]; if (!I.built || !I.tl) return null;
+    const t = v - sg.v0, tl = I.tl;
+    if (t < tl.tBase0) return null;
+    const s = tl.sAt(t); I.route.at(s, out).applyMatrix4(I.M4);
+    return { kind: "b", i: sg.i, I, s, t, vis: t >= tl.tVis, yaw: I.slot.yaw };
   }
-  function mixPose(c0, t0, c1, t1, w, cOut, tOut) {
-    const D0 = t0.clone().sub(c0), D1 = t1.clone().sub(c1), y0 = yawOf(D0), p0 = pitchOf(D0), d0 = Math.max(.5, D0.length()), d1 = Math.max(.5, D1.length());
-    cOut.copy(c0).lerp(c1, w);
-    // zuerst dreht sich der Blick (flach, Gier), dann erst neigt er sich (steil gerechnet wird die Gierrichtung unruhig)
-    dirAng(y0 + wrapPi(yawOf(D1) - y0) * smoother(w * 1.6), p0 + (pitchOf(D1) - p0) * smoother((w - .4) / .6), _c0);
-    tOut.copy(cOut).addScaledVector(_c0, Math.exp(Math.log(d0) + (Math.log(d1) - Math.log(d0)) * w));
+  const _d0 = V(), _m0 = V(), _m1 = V(), _m2 = V(), _k0 = V(), _k1 = V(), _k2 = V();
+  // Gier des Laufs bei v (Signal für die gemittelte Blickrichtung): Fluss = Richtung des Fadens, Insel = Blickrichtung der Szene (auch ungebaut, aus der Lage)
+  function yawSignal(v) {
+    v = clamp(v, 0, TOTAL);
+    const sg = SEGS[segAtV(v)], LA = layoutOf();
+    if (sg.kind === "t") { const R = LA.rivers[sg.i], q = clamp((v - sg.v0) / Math.max(1e-9, sg.v1 - sg.v0), 0, 1); return yawOf(R.tan(q * R.len, _d0)); }
+    if (sg.kind === "z") { const F = LA.fin; return yawOf(F.tan(finS(v - sg.v0), _d0)); }
+    return LA.isl[sg.i].yaw;
   }
-  function chaseTrack(A, B) {
-    const K = narrow ? CHASE_N : CHASE, pts = dotPath(A, B), cum = [0];
-    for (let i = 1; i < pts.length; i++) cum.push(cum[i - 1] + pts[i].distanceTo(pts[i - 1]));
-    const L = Math.max(1e-3, cum[cum.length - 1]);
-    // Punkt bei Bogenlänge s; vor dem Anfang und hinter dem Ende geradeaus in Richtung des ersten bzw. letzten Stücks verlängert
-    const last = pts.length - 1, f0 = V(), f1 = V();
-    { let j = 1; while (j < last && cum[j] < .5) j++; f0.copy(pts[j]).sub(pts[0]).setY(0).normalize(); j = last - 1; while (j > 0 && L - cum[j] < .5) j--; f1.copy(pts[last]).sub(pts[j]).setY(0).normalize(); }
-    const at = (s, out) => {
-      if (s <= 0) return out.copy(pts[0]).addScaledVector(f0, s);
-      if (s >= L) return out.copy(pts[last]).addScaledVector(f1, s - L);
-      let lo = 0, hi = last; while (hi - lo > 1) { const m = (lo + hi) >> 1; if (cum[m] <= s) lo = m; else hi = m; }
-      return out.copy(pts[lo]).lerp(pts[hi], (s - cum[lo]) / Math.max(1e-9, cum[hi] - cum[lo]));
-    };
-    const n = Math.round(clamp(L * 6, 90, 900)), ds = L / n, sub = 4, hs = ds / sub;
-    const P1 = B.camStart.clone().applyMatrix4(B.M4), T1 = B.tgtStart.clone().applyMatrix4(B.M4);
-    const c = A.camEnd.clone().applyMatrix4(A.M4), t = A.tgtEnd.clone().applyMatrix4(A.M4), cv = V(), tv = V();
-    const cams = [], tgts = [], D = V(), a = V(), b = V(), ci = V(), ti = V();
-    const vh = Math.max(1, B.trIn.v1 - B.trIn.v0), upv = L / vh;                      // Einheiten Bogenlänge je vh Scrollweg
-    const wc = 1 / (K.tauC * upv), wt = 1 / (K.tauT * upv);                         // Zeitkonstanten in vh Scrollweg
-    // Mindesthöhe der Kamera über Bauteilen der Parzellen (Kamera nie in einem Bauteil): je Stelle des Weges die Oberkante der Bauteile unter der Kamera plus Abstand,
-    // über ein Fenster vor und hinter der Stelle aufgeweitet, damit die gedämpfte Kamera schon vor dem Bauteil steigt und erst danach sinkt
-    const need = new Float32Array(n + 1), boxes = []; for (const X of INST) if (X.boxes) boxes.push(...X.boxes);
-    for (let j = 0; j <= n; j++) {
-      at(j * ds - K.back, ci); let m = 0;
-      for (const bx of boxes) if (ci.x > bx.min.x - 1.5 && ci.x < bx.max.x + 1.5 && ci.z > bx.min.z - 1.5 && ci.z < bx.max.z + 1.5) m = Math.max(m, bx.max.y + 1.8);
-      // Sicht auf den Punkt: steht ein Bauteil zwischen der Idealkamera und dem Punkt, muss die Kamera so hoch stehen, dass der Blick über seine Oberkante geht
-      at(j * ds, D);
-      for (const bx of boxes) {
-        if (bx.max.y < D.y + .1) continue;
-        let t0 = 0, t1 = 1, ok = true;
-        for (const ax of ["x", "z"]) {
-          const d = ci[ax] - D[ax];
-          if (Math.abs(d) < 1e-9) { if (D[ax] < bx.min[ax] || D[ax] > bx.max[ax]) ok = false; continue; }
-          const u = (bx.min[ax] - D[ax]) / d, w = (bx.max[ax] - D[ax]) / d; t0 = Math.max(t0, Math.min(u, w)); t1 = Math.min(t1, Math.max(u, w));
-        }
-        if (ok && t0 > 1e-3 && t0 < t1) m = Math.max(m, Math.min(CHASE_MAXH, D.y + (bx.max.y + .4 - D.y) / t0));
+  // zwei Stellungen mischen: Ort linear, Blickrichtung über Gier und Neigung, Abstand zum Blickpunkt logarithmisch
+  function mixP(c0, t0, c1, t1, w, cO, tO) {
+    if (w <= 0) { cO.copy(c0); tO.copy(t0); return; }
+    if (w >= 1) { cO.copy(c1); tO.copy(t1); return; }
+    const D0 = _m0.subVectors(t0, c0), D1 = _m1.subVectors(t1, c1), y0 = yawOf(D0), p0 = pitchOf(D0), l0 = Math.log(Math.max(.3, D0.length())), l1 = Math.log(Math.max(.3, D1.length())), y1 = yawOf(D1), p1 = pitchOf(D1);
+    cO.lerpVectors(c0, c1, w);
+    dirAng(y0 + wrapPi(y1 - y0) * w, p0 + (p1 - p0) * w, _m2);
+    tO.copy(cO).addScaledVector(_m2, Math.exp(l0 + (l1 - l0) * w));
+  }
+  // Mischung über den Blickpunkt: Ort und Blickpunkt linear (der Blick wandert vom einen Gegenstand zum anderen, beide bleiben dabei im Bild)
+  function mixT(c0, t0, c1, t1, w, cO, tO) { if (w <= 0) { cO.copy(c0); tO.copy(t0); return; } if (w >= 1) { cO.copy(c1); tO.copy(t1); return; } cO.lerpVectors(c0, c1, w); tO.lerpVectors(t0, t1, w); }
+  // Überschreitung von x über [lo, hi] mit weicher Totzone (δ): 0 im Rahmen, dann stetig steigend
+  const softOver = (x, lo, hi, d = .05) => { const e = x > hi ? x - hi : x < lo ? x - lo : 0, a = Math.abs(e); return a <= 0 ? 0 : Math.sign(e) * (a < d ? a * a / (2 * d) : a - d / 2); };
+  // Blick so nachführen, dass der Punkt D im Rahmen DOT_FRAME bleibt (Winkel, Totzone)
+  const _kc = new THREE.PerspectiveCamera(32, 1, .1, 300);
+  function keepDot(cam, tgt, D, k = 1) {
+    if (k <= 0) return;
+    // über die tatsächliche Bildlage (NDC): Überschreitung des Rahmens weich (Totzone), in Gier und Neigung zurückgedreht, drei Durchgänge
+    _kc.fov = FOVC(); _kc.aspect = aspect; _kc.updateProjectionMatrix();
+    const tanV = Math.tan(FOVC() * PI / 360), tanH = tanV * aspect, dist = tgt.distanceTo(cam);
+    for (let it = 0; it < 3; it++) {
+      _kc.position.copy(cam); _kc.lookAt(tgt); _kc.updateMatrixWorld();
+      const q = _k1.copy(D).applyMatrix4(_kc.matrixWorldInverse);
+      if (q.z > -.2) { // hinter der Kamera: in Richtung des Punktes drehen
+        const Dv = _k0.subVectors(tgt, cam), yv = yawOf(Dv), pv = pitchOf(Dv), Dd = _k2.subVectors(D, cam);
+        dirAng(yv + wrapPi(yawOf(Dd) - yv) * .5 * k, pv + (pitchOf(Dd) - pv) * .5 * k, _k2); tgt.copy(cam).addScaledVector(_k2, dist); continue;
       }
-      need[j] = m;
+      const nx = q.x / (-q.z * tanH), ny = q.y / (-q.z * tanV);
+      const ex = softOver(nx, -DOT_FRAME.x, DOT_FRAME.x, .08), ey = softOver(ny, DOT_FRAME.y0, DOT_FRAME.y1, .08);
+      if (!ex && !ey) return;
+      const Dv = _k0.subVectors(tgt, cam), yv = yawOf(Dv), pv = pitchOf(Dv);
+      const dyaw = (Math.atan(nx * tanH) - Math.atan((nx - ex) * tanH)) * k, dpit = (Math.atan(ny * tanV) - Math.atan((ny - ey) * tanV)) * k;
+      dirAng(yv + dyaw, pv - dpit, _k2); tgt.copy(cam).addScaledVector(_k2, dist);
     }
-    // Länge des Weges, auf dem die Idealstellung zur ersten Stellung läuft: je weiter diese von der Stellung hinter dem letzten Punkt des Weges entfernt ist,
-    // desto früher beginnt es (die Kamera bewegt sich dann höchstens etwa so schnell wie der Punkt), nie früher als bei 80 % des Weges
-    at(L - K.back, ci); at(L + K.ahead, ti); ti.y = pts[last].y + .2;
-    const dEnd = ci.distanceTo(P1), dAng = Math.acos(clamp(ti.clone().sub(ci).normalize().dot(T1.clone().sub(P1).normalize()), -1, 1)) * 180 / PI;
-    const i0 = clamp(1.3 * dEnd + CHASE_I1 + 2, CHASE_I0, .8 * L), endW = clamp(.2 * dAng, CHASE_END, 2 * CHASE_END), i0o = clamp(i0 + .5 * dAng, i0, .9 * L);       // i0o: der Blick dreht schon früher (weniger Drehung je Weg), der Punkt bleibt durch die Nachführung im Bild
-    const D1v = T1.clone().sub(P1), y1 = yawOf(D1v), p1 = pitchOf(D1v);
-    // Steht der Punkt am Ende in der ersten Stellung im Bild? Dann hält die Nachführung ihn bis kurz vor dem Ende dort, sonst lässt sie früher los (der Blick dreht sich dann
-    // über einen längeren Weg zur ersten Stellung, statt in den letzten Schritten)
-    const vc = new THREE.PerspectiveCamera(fovOf(B), aspect, .1, 300); vc.position.copy(P1); vc.lookAt(T1); vc.updateMatrixWorld(); vc.updateProjectionMatrix();
-    at(L, ci); ci.y = Math.max(ci.y, THREAD_Y); ci.project(vc);
-    const endSeen = ci.z < 1 && Math.abs(ci.x) <= .95 && Math.abs(ci.y) <= .95;
-    const hw = Math.ceil(Math.max(K.back, 3 * K.tauC * upv) / ds), hmin = new Float32Array(n + 1);
-    for (let j = 0; j <= n; j++) { let m = 0; for (let i = Math.max(0, j - hw); i <= Math.min(n, j + hw); i++) m = Math.max(m, need[i]); hmin[j] = m; }
-    for (let j = 0; j <= n; j++) {
-      // Idealstellung auf dem Faden: Kamera um K.back hinter dem Punkt auf dem Weg (nie über ihm, auch nicht in Haarnadeln), Blick auf die Stelle K.ahead davor
-      const s = j * ds; at(s, D); at(s - K.back, ci); ci.y = Math.max(D.y + K.hgt, hmin[j]); at(s + K.ahead, ti); ti.y = D.y + .2;
-      // gegen Ende wandert schon die Idealstellung zur ersten Stellung der kommenden Szene (CHASE_I0 … CHASE_I1 des Weges): die gedämpfte Kamera kommt so
-      // ohne weiten Sprung dort an, der Rest der Blende (CHASE_END) ist kurz
-      const wI = smoother(win(s, L - i0, i0 - CHASE_I1)); if (wI > 0) mixPose(ci.clone(), ti.clone(), P1, T1, wI, ci, ti);
-      const wO = smoother(win(s, L - i0o, i0o - CHASE_I1)) * (1 - wI);
-      if (wO > 0) { const Dd = ti.clone().sub(ci), dl = Math.max(.5, Dd.length()), yy = yawOf(Dd), pp = pitchOf(Dd); dirAng(yy + wrapPi(y1 - yy) * wO, pp + (p1 - pp) * wO, _c0); ti.copy(ci).addScaledVector(_c0, dl); }
-      // Der Punkt bleibt im Bild (unteres Drittel bis Mitte): läuft die gedämpfte Blickrichtung zu weit hinter ihm her, wird sie weich (tanh) so nachgeführt,
-      // dass er höchstens bis zu einer Grenze aus der Mitte wandert (Gier 45 % der halben Bildbreite, Neigung zwischen etwa 8 % und 68 % der halben Bildhöhe)
-      const hV = (fovOf(A) + (fovOf(B) - fovOf(A)) * sm(j / n)) * PI / 360, hH = Math.atan(Math.tan(hV) * aspect), ly = .45 * hH, lp = .3 * hV, cp = .38 * hV;
-      a.copy(t).sub(c); b.copy(D).sub(c);
-      const dl = Math.max(.5, a.length()), yd = yawOf(b), pd = pitchOf(b), ey = wrapPi(yd - yawOf(a)), ep = pd - pitchOf(a);
-      // (die Gier-Nachführung entfällt, wenn der Punkt fast senkrecht unter der Kamera liegt: dort ist seine Richtung unbestimmt)
-      const wk = smoother(win(s / L, 0, .2));                           // am Anfang gilt noch die Stellung der verlassenen Szene (kein Sprung), dann greift die Nachführung
-      dirAng(yd - (ey + (ly * Math.tanh(ey / ly) - ey) * wk * (1 - smoother(win(pd, 1, .5)))), pd - (ep + (cp + lp * Math.tanh((ep - cp) / lp) - ep) * wk), a);
-      cams.push(c.clone()); tgts.push(c.clone().addScaledVector(a, dl));
-      for (let k = 0; k < sub; k++) {
-        cv.addScaledVector(_nn.copy(ci).sub(c).multiplyScalar(wc * wc), hs).multiplyScalar(1 - 2 * wc * hs); c.addScaledVector(cv, hs);
-        tv.addScaledVector(_nn.copy(ti).sub(t).multiplyScalar(wt * wt), hs).multiplyScalar(1 - 2 * wt * hs); t.addScaledVector(tv, hs);
+  }
+  // Lesestellung und Punkt: die Kamera wird (frontal, ohne Drehung) parallel zur Bildebene verschoben, bis der Text ganz und der Punkt über das ganze Haltefenster
+  // sicher im Rahmen stehen (der Lauf trifft die Station nicht immer genau); notfalls etwas zurück. Ist der Punkt verdeckt, seitlich bis die Sicht frei ist. Szenenkoordinaten.
+  function fitDot(I, a, c, t) {
+    const obsA = (I.sb ? (() => { let bs = I.sb.steps[0]; for (const q of I.sb.steps) if (Math.abs(q.b - a.b) < Math.abs(bs.b - a.b)) bs = q; return [...bs.list, ...I.sb.extra]; })() : []).filter(b => !b.isEmpty() && b.max.y > .12 && (b.max.x - b.min.x) * (b.max.z - b.min.z) < 400);
+    const hidden = cc => [a.h0, (a.h0 + a.h1) / 2, a.h1].some(tt => { const d = I.route.at(I.tl.sAt(tt)).clone(); d.y = THREAD_Y + .05; return obsA.some(bx => segBox(cc, d, bx, .05)); });
+    if (hidden(c)) {
+      const F1 = t.clone().sub(c).normalize(), R1 = V().crossVectors(F1, UP).normalize(), dist = c.distanceTo(a.stop.C), hw = dist * Math.tan(FOVC() * PI / 360) * aspect;
+      let done = false;
+      for (const k of [.12, -.12, .24, -.24, .36, -.36]) { const cN = c.clone().addScaledVector(R1, k * hw); if (!hidden(cN)) { const dd = cN.clone().sub(c); c.add(dd); t.add(dd); done = true; break; } }
+      if (!done) dbg("Lesestelle " + I.name + " " + a.ki + ": Punkt verdeckt");
+    }
+    const pc = new THREE.PerspectiveCamera(FOVC(), aspect, .1, 300), F0 = t.clone().sub(c).normalize(), Rt = V().crossVectors(F0, UP).normalize(), Up = V().crossVectors(Rt, F0);
+    const dots = [a.h0, (a.h0 + a.h1) / 2, a.h1].map(tt => I.route.at(I.tl.sAt(tt)).clone());
+    const H = VH(), lim = { x: DOT_FRAME.x - .04, y0: DOT_FRAME.y0 + .04, y1: DOT_FRAME.y1 - .04, ty: 1 - 2 * 70 / H, by: -1 + 2 * 80 / H };
+    const c0 = c.clone(), t0 = t.clone();
+    for (let back = 0; back <= 4; back++) {
+      if (back) { c.copy(c0).addScaledVector(F0, -c0.distanceTo(a.stop.C) * .055 * back); t.copy(t0).addScaledVector(F0, -c0.distanceTo(a.stop.C) * .055 * back); }
+      if (fitShift()) return true;
+    }
+    c.copy(c0); t.copy(t0); fitShift(); return false;
+    function fitShift() {
+      for (let it = 0; it < 24; it++) {
+        pc.position.copy(c); pc.lookAt(t); pc.updateMatrixWorld(); pc.updateProjectionMatrix();
+        let dx = 0, dy = 0;
+        for (const d of dots) { const q = d.clone().project(pc); if (q.z > 1) continue; if (q.x > lim.x) dx = Math.max(dx, q.x - lim.x); if (q.x < -lim.x) dx = Math.min(dx, q.x + lim.x); if (q.y > lim.y1) dy = Math.max(dy, q.y - lim.y1); if (q.y < lim.y0) dy = Math.min(dy, q.y - lim.y0); }
+        if (!dx && !dy) return true;
+        let tx0 = 1e9, tx1 = -1e9, ty0 = 1e9, ty1 = -1e9; for (const p of a.stop.pts) { const q = p.clone().project(pc); tx0 = Math.min(tx0, q.x); tx1 = Math.max(tx1, q.x); ty0 = Math.min(ty0, q.y); ty1 = Math.max(ty1, q.y); }
+        if (dy < 0 && ty1 - dy * .5 > lim.ty) dy = 0; if (dy > 0 && ty0 - dy * .5 < lim.by) dy = 0;
+        if (dx < 0 && tx1 - dx * .5 > .98) dx = 0; if (dx > 0 && tx0 - dx * .5 < -.98) dx = 0;
+        if (!dx && !dy) return false;
+        const dist = c.distanceTo(a.stop.C), kx = dist * Math.tan(FOVC() * PI / 360) * aspect * .5, ky = dist * Math.tan(FOVC() * PI / 360) * .5;
+        const cN = c.clone().addScaledVector(Rt, dx * kx).addScaledVector(Up, dy * ky);
+        if ((a.stop.prT || []).some(q => Math.acos(clamp(Math.abs(cN.clone().sub(q.c).normalize().dot(q.n)), -1, 1)) * 180 / PI > FIT_SLANT + .5)) return false;
+        c.addScaledVector(Rt, dx * kx).addScaledVector(Up, dy * ky); t.addScaledVector(Rt, dx * kx).addScaledVector(Up, dy * ky);
       }
+      return false;
     }
-    return { cams, tgts, n, L, P1, T1, endW, at, endSeen };
+  }
+  // Haltestellungen einer Szene (Welt, v der ganzen Seite)
+  function anchorsWorld(I) {
+    const tl = I.tl, v0 = I.body.v0, out = [], M = I.M4;
+    if (I.cfg.keyed) {
+      // Eröffnung: Startbild, Podest, Aufbau und Tablett als eine lange Haltestellung mit eigener Fahrt (Schlüssel der Szene), danach die Verfolgung
+      const tab = tl.an[tl.an.length - 1], Tp = tl.Tpre, pc = V(), pt = V();
+      localPose(I, 1, pc, pt); pc.applyMatrix4(M); pt.applyMatrix4(M);
+      out.push({ v0, v1: v0 + tab.h1, keyed: true, scene: I.idx, first: true, last: true, cam: pc, tgt: pt,
+        fn: (v, c, t) => { const tt = v - v0; if (tt >= Tp) { c.copy(pc); t.copy(pt); return; } localPose(I, clamp(tt / Tp, 0, 1), c, t); c.applyMatrix4(M); t.applyMatrix4(M); } });
+      return out;
+    }
+    const k = aspect < 1.25 ? Math.pow(1.25 / aspect, .55) : 1;
+    for (const a of tl.an) {
+      if (a.h0 === undefined || (a.kind !== "text" && a.kind !== "view")) continue;
+      let c, t;
+      // die Lesestellung aus readingFit ist endgültig (Text ganz und frontal im Bild, Nachbartexte nicht angeschnitten); fitDot nur ohne sie
+      if (a.kind === "text") { const ps = a.stop.fitPose || readingPose(I, a.stop); c = ps.cam.clone(); t = ps.tgt.clone(); if (!a.stop.fitPose && !fitDot(I, a, c, t)) dbg("Lesestelle " + I.name + " " + a.ki + ": Punkt nicht ganz im Rahmen"); a.stop.pose = { cam: c.clone(), tgt: t.clone(), px: ps.px }; }
+      else { const key = a.key; if (narrow && key.camN) { c = key.camN.clone(); t = key.tgtN.clone(); } else { t = key.tgt.clone(); c = key.tgt.clone().addScaledVector(key.cam.clone().sub(key.tgt), k); } }
+      out.push({ v0: v0 + a.h0, v1: v0 + a.h1, cam: c.applyMatrix4(M), tgt: t.applyMatrix4(M), scene: I.idx, a, dotW: I.route.at(tl.sAt((a.h0 + a.h1) / 2)).clone().applyMatrix4(M) });
+    }
+    if (out.length) { out[0].first = true; out[out.length - 1].last = true; }
+    return out;
+  }
+  // Haltegewicht w (0 … 1) und Haltestellung bei v aus der Liste ans (zeitlich geordnet)
+  const _h0 = V(), _h1 = V(), _h2 = V(), _h3 = V();
+  let HOLDK = 0;                                                    // Nähe zu einem Haltefenster (1 im Halt, weich auf 0 binnen 30 vh): dort keine Nachführung
+  const RAMP_HOLD = 130;
+  var _hB;                                                          // Hilfsvektoren (var: holdAt läuft schon beim Aufbau, vor dieser Zeile)
+  function holdAt(ans, v, cO, tO) {
+    let prev = null, next = null; HOLDK = 0;
+    for (const a of ans) { const d = v < a.v0 ? a.v0 - v : v > a.v1 ? v - a.v1 : 0; HOLDK = Math.max(HOLDK, 1 - smoother(d / 90)); }
+    for (const a of ans) {
+      if (v >= a.v0 && v <= a.v1) { if (a.fn) a.fn(v, cO, tO); else { cO.copy(a.cam); tO.copy(a.tgt); } HOLDK = 1; return 1; }
+      if (a.v1 < v) prev = a; else if (a.v0 > v && !next) next = a;
+    }
+    const P = (a, end, c, t) => { if (a.fn) a.fn(end ? a.v1 : a.v0, c, t); else { c.copy(a.cam); t.copy(a.tgt); } };
+    const rO = prev ? (prev.keyed ? (prev.rOut || RAMP_OUT) : RAMP_HOLD) : 1, rI = next ? RAMP_HOLD : 1;
+    const wO = prev ? 1 - smoother((v - prev.v1) / rO) : 0, wI = next ? smoother(1 - (next.v0 - v) / rI) : 0;
+    if (wO <= 0 && wI <= 0) return 0;
+    // überlappen sich Auslauf der vorigen und Anlauf der nächsten Lesestellung, werden beide gemischt (vorher: harter Wechsel zur stärkeren, ein Sprung im Abstand)
+    if (wO > 0 && wI > 0) { const h = _hB || (_hB = [V(), V(), V(), V()]); P(prev, true, h[0], h[1]); P(next, false, h[2], h[3]); mixT(h[0], h[1], h[2], h[3], wI / (wO + wI), cO, tO); return Math.max(wO, wI); }
+    if (wO >= wI) { P(prev, true, cO, tO); return wO; }
+    P(next, false, cO, tO); return wI;
+  }
+  // Insel-Grundstellung (Dolly): Ausrichtung der vorigen bzw. nächsten Lesestellung, mit dem Punkt parallel verschoben (er bleibt an seiner Stelle im Bild);
+  // zwischen zwei Lesestellungen wird die Ausrichtung weich übergeblendet
+  const _i0 = V(), _i1 = V(), _i2 = V(), _i3 = V(), _ip = V();
+  function islandPose(I, v, D, cO, tO) {
+    const an = (I.anW || []).filter(a => !a.keyed); if (!an.length) return false;
+    let prev = null, next = null;
+    for (const a of an) { if (v >= a.v0 && v <= a.v1) { prev = next = a; break; } if (a.v1 < v) prev = a; else if (!next && a.v0 > v) next = a; }
+    const put = (a, c, t) => { _ip.subVectors(D, a.dotW); c.copy(a.cam).add(_ip); t.copy(a.tgt).add(_ip); };
+    if (prev && next && prev !== next) { put(prev, _i0, _i1); put(next, _i2, _i3); mixT(_i0, _i1, _i2, _i3, smoother((v - prev.v1) / Math.max(1, next.v0 - prev.v1)), cO, tO); }
+    else put(prev || next, cO, tO);
+    return true;
+  }
+  // Wechsel Fluss ↔ Insel je Insel: Gewicht der Insel-Grundstellung (0 im Fluss, 1 zwischen erster und letzter Lesestelle), Dauer nach Winkel (I.lamIn, I.lamOut)
+  function islandWeight(I, v) {
+    const an = (I.anW || []).filter(a => !a.keyed); if (!an.length || I.cfg.keyed || I.cfg.view) return 0;
+    const a0 = an[0].v0 - 30, b0 = an[an.length - 1].v1 + 30, Li = I.lamIn || 260, Lo = I.lamOut || 260;
+    return smoother((v - (a0 - Li)) / Li) * (1 - smoother((v - b0) / Lo));
+  }
+  // Grundstellung bei v (Punkt bei D, Info d): Verfolgung im Fluss, mit fester Blickrichtung in der Insel
+  const _b0 = V(), _b1 = V(), _b2 = V(), _b3 = V(); let LAMK = 0;
+  function basePose(v, d, D, yawC, cO, tO) {
+    const K = CHASE[narrow ? "n" : "d"], f = hdir(yawC), y = Math.max(0, D.y - THREAD_Y);
+    _b0.copy(D).addScaledVector(f, -K.back); _b0.y = K.h + y;
+    _b1.copy(D).addScaledVector(f, K.ahead); _b1.y = K.ty + y;
+    LAMK = 0;
+    // Eröffnung nach dem Tablett und Szenen mit eigenen Rig-Werten (view, Gerwing: Lieferschein): szenenfeste Verfolgung (vor dem Ausgang zur Verfolgung im Fluss)
+    if (d.kind === "b" && (d.I.cfg.keyed || d.I.cfg.view)) {
+      const T = d.I.body.v1 - d.I.body.v0, lam = (d.I.cfg.keyed ? 1 : smoother(d.t / LAMBDA_T)) * smoother((T - d.t) / LAMBDA_T); LAMK = lam;
+      if (lam <= 0) { cO.copy(_b0); tO.copy(_b1); return; }
+      const I = d.I, Fo = { ...FOLLOW[narrow ? "n" : "d"], ...(pickN(I.cfg.view) || {}) }, fs = hdir(I.slot.yaw), rs = hright(I.slot.yaw);
+      _b2.copy(D).addScaledVector(fs, -Fo.back).addScaledVector(rs, Fo.side); _b2.y = Fo.h + y;
+      _b3.copy(D).addScaledVector(fs, Fo.ahead).addScaledVector(rs, Fo.tx); _b3.y = Fo.ty + y;
+      mixP(_b0, _b1, _b2, _b3, lam, cO, tO); return;
+    }
+    // Insel, deren Wechselfenster v enthält (die Szene des Abschnitts oder, im Flug, die kommende bzw. die verlassene)
+    // überlappen sich die Wechsel zweier Inseln (Flug zwischen ihnen), werden beide Insel-Stellungen nach ihren Gewichten gemischt (kein Umschalten)
+    const ws = [];
+    for (const j of [d.i - 1, d.i, d.i + 1]) { const I = INST[j]; if (!I || !I.built || !I.anW) continue; const w = islandWeight(I, v); if (w > 1e-4) ws.push({ I, w }); }
+    const best = ws.reduce((m, q) => Math.max(m, q.w), 0); LAMK = best;
+    if (!ws.length) { cO.copy(_b0); tO.copy(_b1); return; }
+    let sw = 0; const pc = V(), pt = V(), qc = V(), qt = V();
+    for (const q of ws) { if (!islandPose(q.I, v, D, qc, qt)) continue; if (!sw) { pc.copy(qc); pt.copy(qt); sw = q.w; } else { const f = q.w / (sw + q.w); pc.lerp(qc, f); pt.lerp(qt, f); sw += q.w; } }
+    if (!sw) { cO.copy(_b0); tO.copy(_b1); return; }
+    mixT(_b0, _b1, pc, pt, best, cO, tO);
+  }
+  // Grenze der Drehrate (Grad je vh): Schwelle des Messflugs 3° je 0,001 p, mit Rand
+  const RATE_LIM = () => .8 * 3 / (TOTAL / 1000);
+  // Grundstellung an beliebigem v (gemittelte Laufrichtung numerisch), für die Länge der Rampen
+  function baseAt(v, cO, tO) {
+    const D = V(), d = dotAt(clamp(v, 0, TOTAL), D); if (!d) return false;
+    let s0 = yawSignal(v), acc = 0, n = 0, prev = s0; for (let k = -YAW_WIN; k <= YAW_WIN; k += 5) { let y = yawSignal(v + k); y = prev + wrapPi(y - prev); prev = y; acc += y; n++; }
+    const ya = acc / n; basePose(v, d, D, ya + YAW_K * wrapPi(s0 - ya), cO, tO); return true;
+  }
+  const angDeg = (c0, t0, c1, t1) => Math.acos(clamp(_m0.subVectors(t0, c0).normalize().dot(_m1.subVectors(t1, c1).normalize()), -1, 1)) * 180 / PI;
+  function rampLengths(I) {
+    const an = (I.anW || []).filter(a => !a.keyed);
+    if (I.cfg.keyed) { const k = (I.anW || [])[0]; if (k && k.rOut === undefined) { const c = V(), t = V(); k.rOut = I.cfg.rampOut || RAMP_OUT; if (baseAt(k.v1 + k.rOut, c, t)) k.rOut = clamp(10.4 * angDeg(k.cam, k.tgt, c, t), I.cfg.rampOut || RAMP_OUT, 700); } return; }
+    if (!an.length || I.lamIn !== undefined) return;
+    const D = V(), c0 = V(), t0 = V(), c1 = V(), t1 = V();
+    // Winkel zwischen Verfolgung und Insel-Grundstellung an den Rändern der Insel
+    const ang = v => { const d = dotAt(clamp(v, 0, TOTAL), D); if (!d) return 20; const ya = yawSignal(v); const K = CHASE[narrow ? "n" : "d"], f = hdir(ya); c0.copy(D).addScaledVector(f, -K.back); c0.y = K.h; t0.copy(D).addScaledVector(f, K.ahead); t0.y = K.ty; if (!islandPose(I, v, D, c1, t1)) return 20; return angDeg(c0, t0, c1, t1); };
+    I.lamIn = clamp(10.4 * ang(an[0].v0 - 30), 160, 640);
+    I.lamOut = clamp(10.4 * ang(an[an.length - 1].v1 + 30), 160, 640);
+  }
+  // Spur eines Stücks (Flug in Szene i und Szene i, die letzte samt Schluss): Ort und Blickpunkt je vh
+  const CHUNKS = [];
+  function computeChunk(i) {
+    const I = INST[i]; if (!I.built || !I.tl) return;
+    for (const X of [INST[i - 1], I, INST[i + 1]]) if (X && X.built && X.anW) rampLengths(X);
+    const va = I.trIn ? I.trIn.v0 : 0, vb = i === INST.length - 1 ? ZSEG.v1 : I.body.v1, PADS = 120;
+    const a0 = Math.floor(va) - PADS, n = Math.ceil(vb) - a0 + PADS + 1;
+    const ans = [...(INST[i - 1] && INST[i - 1].anW ? INST[i - 1].anW : []), ...(I.anW || []), ...(INST[i + 1] && INST[i + 1].anW ? INST[i + 1].anW : [])].sort((a, b) => a.v0 - b.v0);
+    // gemittelte Laufrichtung (Gier, entfaltet) über ±YAW_WIN
+    const W2 = YAW_WIN, ny = n + 2 * W2, sig = new Float64Array(ny);
+    for (let k = 0; k < ny; k++) { const y = yawSignal(a0 - W2 + k); sig[k] = k ? sig[k - 1] + wrapPi(y - sig[k - 1]) : y; }
+    const pre = new Float64Array(ny + 1); for (let k = 0; k < ny; k++) pre[k + 1] = pre[k] + sig[k];
+    const avg = k => { const lo = Math.max(0, k), hi = Math.min(ny, k + 2 * W2 + 1); return (pre[hi] - pre[lo]) / (hi - lo); };
+    const cam = new Float64Array(3 * n), tgt = new Float64Array(3 * n), hasB = new Uint8Array(n), wA = new Float64Array(n), lamA = new Float64Array(n), hkA = new Float64Array(n), liftA = new Float64Array(n), dotP = new Float64Array(3 * n), dotV = new Uint8Array(n);
+    const bc = V(), bt = V(), D = V(), hc = V(), ht = V();
+    const boxes = []; for (const X of [INST[i - 1], I, INST[i + 1]]) if (X && X.built && X.boxes) boxes.push(...X.boxes);
+    const need = new Float64Array(n);
+    const baseC = new Float64Array(3 * n), baseT = new Float64Array(3 * n);
+    for (let k = 0; k < n; k++) {
+      const v = clamp(a0 + k, 0, TOTAL), d = dotAt(v, D);
+      if (!d) continue;
+      hasB[k] = 1; dotP[3 * k] = D.x; dotP[3 * k + 1] = D.y; dotP[3 * k + 2] = D.z; dotV[k] = d.vis ? 1 : 0;
+      const ya = avg(k), sk = sig[k + W2], yawC = ya + YAW_K * wrapPi(sk - ya);
+      basePose(v, d, D, yawC, bc, bt); lamA[k] = LAMK;
+      baseC.set([bc.x, bc.y, bc.z], 3 * k); baseT.set([bt.x, bt.y, bt.z], 3 * k);
+      let m = .35; for (const bx of boxes) if (bc.x > bx.min.x - .45 && bc.x < bx.max.x + .45 && bc.z > bx.min.z - .45 && bc.z < bx.max.z + .45) m = Math.max(m, Math.min(bc.y + 3, bx.max.y + .9));
+      need[k] = m;
+    }
+    // Mindesthöhe: über ±40 vh aufgeweitet und zweimal geglättet (die Kamera steigt vor einem Bauteil und sinkt erst danach)
+    const nd = new Float64Array(n); for (let k = 0; k < n; k++) { let m = 0; for (let j = Math.max(0, k - 30); j <= Math.min(n - 1, k + 30); j++) m = Math.max(m, need[j]); nd[k] = m; }
+    const box = (src, r) => { const out = new Float64Array(n); let s = 0, c = 0; for (let k = 0; k < n; k++) { let a = 0, cc = 0; for (let j = Math.max(0, k - r); j <= Math.min(n - 1, k + r); j++) { a += src[j]; cc++; } out[k] = a / cc; } return out; };
+    const ndS = box(box(nd, 20), 20);
+    for (let k = 0; k < n; k++) {
+      const v = clamp(a0 + k, 0, TOTAL);
+      if (hasB[k]) {
+        bc.set(baseC[3 * k], baseC[3 * k + 1], baseC[3 * k + 2]); bt.set(baseT[3 * k], baseT[3 * k + 1], baseT[3 * k + 2]);
+        const lift = Math.max(0, ndS[k] - bc.y); liftA[k] = lift; if (lift > 0) { bc.y += lift; bt.y += lift * .5; }
+      }
+      const w = holdAt(ans, v, hc, ht), hk = HOLDK; wA[k] = w; hkA[k] = hk;
+      if (!hasB[k]) { bc.copy(hc); bt.copy(ht); }
+      else mixT(bc, bt, hc, ht, w, bc, bt);
+      // Eröffnung: die Nachführung setzt nach dem Erscheinen des Punktes am Statuspunkt weich ein
+      const kv = I.cfg.keyed && v < I.body.v1 ? smoother((v - I.body.v0 - I.tl.tVis + 40) / 80) : 1;
+      if (hasB[k] && dotV[k]) keepDot(bc, bt, D.set(dotP[3 * k], dotP[3 * k + 1], dotP[3 * k + 2]), (1 - hk) * kv);
+      cam.set([bc.x, bc.y, bc.z], 3 * k); tgt.set([bt.x, bt.y, bt.z], 3 * k);
+    }
+    // Glättung (Gauß, SMOOTH_S vh); ausgenommen die Schlüsselfahrt der Eröffnung (Startbild bleibt genau)
+    const S = SMOOTH_S, R3 = Math.ceil(3 * S), ker = []; for (let j = -R3; j <= R3; j++) ker.push(Math.exp(-j * j / (2 * S * S)));
+    const keyedEnd = I.cfg.keyed && I.anW && I.anW[0] ? I.anW[0].v1 : -1e9;
+    const smooth = arr => { const out = new Float64Array(arr.length); for (let k = 0; k < n; k++) for (let c = 0; c < 3; c++) { let s = 0, ws = 0; for (let j = -R3; j <= R3; j++) { const q = k + j; if (q < 0 || q >= n) continue; s += arr[3 * q + c] * ker[j + R3]; ws += ker[j + R3]; } out[3 * k + c] = s / ws; } return out; };
+    const cS = smooth(cam), tS = smooth(tgt);
+    for (let k = 0; k < n; k++) {
+      const v = a0 + k, m = smoother((v - keyedEnd) / (3 * S));
+      for (let c = 0; c < 3; c++) { cam[3 * k + c] += (cS[3 * k + c] - cam[3 * k + c]) * m; tgt[3 * k + c] += (tS[3 * k + c] - tgt[3 * k + c]) * m; }
+    }
+    CHUNKS[i] = { va, vb, a0, n, cam, tgt, w: wA, lam: lamA, hk: hkA, lift: liftA, ans: ans.map(a => ({ v0: a.v0, v1: a.v1, scene: a.scene, rIn: a.rIn, rOut: a.rOut, first: !!a.first, last: !!a.last, cam: a.cam.toArray(), tgt: a.tgt.toArray() })) };
+  }
+  // Stellung bei v aus der Spur (kubisch zwischen den Stützstellen je vh)
+  const _q0 = V(), _q1 = V(), _q2 = V(), _q3 = V();
+  function trackAt(v, cam, tgt) {
+    let C = null;
+    for (let i = CHUNKS.length - 1; i >= 0; i--) { const c = CHUNKS[i]; if (c && v >= c.va - 1e-6 && v <= c.vb + 1e-6) { C = c; break; } }
+    if (!C) { for (const c of CHUNKS) if (c) { C = c; break; } }
+    if (!C) { cam.set(0, 5, 20); tgt.set(0, 0, 0); return false; }
+    const u = clamp(v - C.a0, 1, C.n - 3), k = Math.floor(u), f = u - k;
+    for (const [arr, out] of [[C.cam, cam], [C.tgt, tgt]]) {
+      _q0.fromArray(arr, 3 * (k - 1)); _q1.fromArray(arr, 3 * k); _q2.fromArray(arr, 3 * (k + 1)); _q3.fromArray(arr, 3 * (k + 2));
+      cr(_q0, _q1, _q2, _q3, f, out);
+    }
+    return true;
   }
   // Catmull-Rom durch vier Stützwerte
   const cr = (p0, p1, p2, p3, u, out) => out.set(0, 0, 0).addScaledVector(p0, -.5 * u + u * u - .5 * u * u * u).addScaledVector(p1, 1 - 2.5 * u * u + 1.5 * u * u * u).addScaledVector(p2, .5 * u + 2 * u * u - 1.5 * u * u * u).addScaledVector(p3, -.5 * u * u + .5 * u * u * u);
+  // Sichtfeld überall gleich (Breitbild 32°, hochkant 44°): kein Zoom über die Brennweite
+  const FOVC = () => narrow ? 44 : 32;
   function poseOf(st, cam, tgt) {
-    const I = INST[st.i];
-    if (st.kind === "b") { localPose(I, st.q, cam, tgt); cam.applyMatrix4(I.M4); tgt.applyMatrix4(I.M4); return fovOf(I); }
-    // nach der letzten Szene (Schluss-Zoom, Karte): die Kamera startet an der letzten Stellung der letzten Szene, die Karte blendet kern (blendMap)
-    if (st.kind === "z") { localPose(I, 1, cam, tgt); cam.applyMatrix4(I.M4); tgt.applyMatrix4(I.M4); return fovOf(I); }
-    const A = INST[st.i - 1], B = I;
-    if (!B.trVel || B.trVelKey !== aspect) { B.trVel = chaseTrack(A, B); B.trVelKey = aspect; }
-    const tr = B.trVel, q = clamp(st.q, 0, 1), u = q * tr.n, i = Math.min(tr.n - 1, Math.floor(u)), f = u - i, g = k => clamp(k, 0, tr.n);
-    cr(tr.cams[g(i - 1)], tr.cams[i], tr.cams[i + 1], tr.cams[g(i + 2)], f, cam);
-    cr(tr.tgts[g(i - 1)], tr.tgts[i], tr.tgts[i + 1], tr.tgts[g(i + 2)], f, tgt);
-    const wo = smoother(win(q * tr.L, tr.L - tr.endW, tr.endW));
-    if (wo > 0) mixPose(cam.clone(), tgt.clone(), tr.P1, tr.T1, wo, cam, tgt);
-    const fovP = fovOf(A) + (fovOf(B) - fovOf(A)) * sm(q);
-    // Der Punkt bleibt im Bild, auch in der Blende zur ersten Stellung: steht er außerhalb der Grenze (Gier 50 %, Neigung 75 % der halben Bildbreite bzw. -höhe),
-    // wird der Blick weich (tanh) so nachgeführt, dass er an der Grenze bleibt; die Führung läuft in den letzten 10 % des Flugs aus (die Stellung am Ende ist die der Szene)
-    const qa = tr.endSeen ? .9 : .55, pw = 1 - smoother(win(q, qa, 1 - qa));
-    if (pw > 0) {
-      tr.at(q * tr.L, _t2); if (_t2.y < THREAD_Y) _t2.y = THREAD_Y;
-      const Dv = tgt.clone().sub(cam), Dd = _t2.clone().sub(cam), yv = yawOf(Dv), pv = pitchOf(Dv), yd = yawOf(Dd), pd = pitchOf(Dd), ey = wrapPi(yd - yv), ep = pd - pv;
-      if (Math.abs(ey) < 1.9 && Dd.length() > .5) {
-        const hV = fovP * PI / 360, hH = Math.atan(Math.tan(hV) * aspect), ly = .5 * hH, lp = .75 * hV;
-        const wy = pw * (1 - smoother(win(Math.abs(pd), 1, .5)));
-        dirAng(yv + (ey - ly * Math.tanh(ey / ly)) * wy, pv + (ep - lp * Math.tanh(ep / lp)) * pw, _c0);
-        tgt.copy(cam).addScaledVector(_c0, Dv.length());
+    const v = st.sg.v0 + clamp(st.q, 0, 1) * (st.sg.v1 - st.sg.v0);
+    trackAt(v, cam, tgt);
+    return FOVC();
+  }
+
+  // ---------- Wortmarke an der Mündung (Erik 23.10.2026): beim Herauszoomen steht „Jan-Erik Andersen“ gerade im Kartenbild, der rote Schlusspunkt des Fadens ist ihr Punkt ----------
+  // Dieselben Schnitte wie die Marke der Eröffnung (Newsreader N4, aufrecht und kursiv, Tinte, Laufweite −0,018 em), flach auf den Boden gelegt; sie liest im Kartenbild von links
+  // nach rechts und endet am Schlusspunkt (Lage aus layoutOf().mark).
+  let eyeMark = null;
+  function buildEyeMark() {
+    if (eyeMark) { scene.remove(eyeMark.group); eyeMark.group.traverse(o => { if (o.geometry) o.geometry.dispose(); }); eyeMark = null; }
+    const mk = layoutOf().mark, eye = mk.D, E = mk.E, DOT = .085;
+    const up = { font: "marke" }, it = { font: "marke", italic: true };
+    const w1 = printTex(["Jan-Erik"], { ...up, scale: .02 }), w2 = printTex(["Andersen"], { ...it, scale: .02 }), wx = printTex(["x x"], { ...up, scale: .02 }), wy = printTex(["xx"], { ...up, scale: .02 });
+    for (const w of [w1, w2, wx, wy]) w.tex.dispose();
+    const space = (wx.tw - wy.tw) * E, dw = .01 * E;
+    const group = new THREE.Group(), right = mk.right, upT = mk.upS, nrm = V(0, 1, 0);
+    const place = (t, startS) => {
+      const mat = new THREE.MeshBasicMaterial({ map: t.tex, transparent: true, opacity: 0, depthWrite: false, toneMapped: false, side: THREE.DoubleSide });
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(t.w * E, t.h * E), mat);
+      mesh.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(right, upT, nrm));
+      const yb = t.h / 2 - (t.padY + .94);                                                // Grundlinie über der Mitte (em)
+      const cRead = startS + (t.w * E) / 2 - t.padX * E;                                   // Mitte in Leserichtung
+      mesh.position.copy(eye).addScaledVector(right, cRead).addScaledVector(upT, -yb * E); mesh.position.y = .012;
+      mesh.renderOrder = 1; mesh.frustumCulled = false; group.add(mesh); return mesh;
+    };
+    const wA = w1.tw * E, wB = w2.tw * E, tot = wA + space + wB, endS = -(dw + DOT * E) - .9;       // Ende von „Andersen“ vor dem Punkt (der Punkt steht an der Mündung)
+    const startS = endS - tot;
+    const printA = printTex(["Jan-Erik"], { ...up, scale: .5 }), printB = printTex(["Andersen"], { ...it, scale: .5 });
+    const mA = place(printA, startS), mB = place(printB, startS + wA + space);
+    scene.add(group); eyeMark = { group, mats: [mA.material, mB.material], tot };
+  }
+
+  // ---------- Höhenlinien (Erik 23.10.2026): zarte, ins Papier geprägte Linien, die dem Fluss folgen und die Inseln umgeben (Wanderkarte, keine Flecken) ----------
+  // Feld: weiches Minimum aus Abstand zum Fluss und Abstand zum Inselrand; Linien in gleichen Abständen CONT_DZ (marching squares), nach außen schwächer. Kurze geschlossene
+  // Linien (Flecken zwischen den Inseln) fallen weg. Textur über dem Gebiet der Karte (mit Mipmaps, kein Moiré); sichtbar nur in der Übersicht (uContA mit M).
+  const CONT_DZ = 4.2, CONT_N = 6, CONT_CELL = 1, CONT_PX = 4, CONT_MINLEN = 60;
+  let contour = null;
+  function buildContours() {
+    if (contour) { contour.tex.dispose(); contour = null; }
+    const LA = layoutOf(), R = tableRect(), x0 = R.x0 - 20, x1 = R.x1 + 20, z0 = R.z0 - 20, z1 = R.z1 + 20;
+    const nx = Math.ceil((x1 - x0) / CONT_CELL) + 1, nz = Math.ceil((z1 - z0) / CONT_CELL) + 1, d = new Float32Array(nx * nz);
+    const rp = []; for (const P of [...LA.rivers.filter(Boolean), LA.fin]) for (let s = 0; s <= P.len; s += 1.5) { const p = P.at(s); rp.push(p.x, p.z); }
+    const kS = 3.5;
+    for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) {
+      const x = x0 + i * CONT_CELL, z = z0 + j * CONT_CELL; let m = 1e9;
+      for (let k = 0; k < rp.length; k += 2) { const dx = rp[k] - x, dz = rp[k + 1] - z, q = dx * dx + dz * dz; if (q < m) m = q; }
+      let dr = Math.sqrt(m) + 1.5, di = 1e9;
+      for (const sl of LA.isl) di = Math.min(di, Math.hypot(x - sl.C.x, z - sl.C.z) - sl.R);
+      di = Math.max(0, di);
+      // weiches Minimum (keine Kanten, wo Fluss und Insel zusammenlaufen)
+      d[j * nx + i] = -kS * Math.log(Math.exp(-dr / kS) + Math.exp(-di / kS));
+    }
+    const W = Math.round((x1 - x0) * CONT_PX), H = Math.round((z1 - z0) * CONT_PX);
+    const cv = document.createElement("canvas"); cv.width = Math.min(MAXTEX, W); cv.height = Math.min(MAXTEX, H);
+    const g = cv.getContext("2d"), kx = cv.width / (x1 - x0), kz = cv.height / (z1 - z0);
+    g.fillStyle = "#000"; g.fillRect(0, 0, cv.width, cv.height); g.lineCap = "round"; g.lineJoin = "round";
+    for (let lv = 1; lv <= CONT_N; lv++) {
+      const L = lv * CONT_DZ, a = .9 * Math.pow(.8, lv - 1), segs = [];
+      for (let j = 0; j < nz - 1; j++) for (let i = 0; i < nx - 1; i++) {
+        const v = [d[j * nx + i], d[j * nx + i + 1], d[(j + 1) * nx + i + 1], d[(j + 1) * nx + i]];
+        const bits = (v[0] > L ? 1 : 0) | (v[1] > L ? 2 : 0) | (v[2] > L ? 4 : 0) | (v[3] > L ? 8 : 0);
+        if (bits === 0 || bits === 15) continue;
+        const X = [x0 + i * CONT_CELL, x0 + (i + 1) * CONT_CELL], Z = [z0 + j * CONT_CELL, z0 + (j + 1) * CONT_CELL];
+        const pt = e => {
+          const [a0, a1] = e === 0 ? [0, 1] : e === 1 ? [1, 2] : e === 2 ? [3, 2] : [0, 3], t = (L - v[a0]) / (v[a1] - v[a0] || 1e-9);
+          return e === 0 ? [X[0] + t * CONT_CELL, Z[0]] : e === 1 ? [X[1], Z[0] + t * CONT_CELL] : e === 2 ? [X[0] + t * CONT_CELL, Z[1]] : [X[0], Z[0] + t * CONT_CELL];
+        };
+        const pairs = { 1: [[3, 0]], 2: [[0, 1]], 3: [[3, 1]], 4: [[1, 2]], 5: [[3, 0], [1, 2]], 6: [[0, 2]], 7: [[3, 2]], 8: [[2, 3]], 9: [[0, 2]], 10: [[0, 3], [2, 1]], 11: [[1, 2]], 12: [[1, 3]], 13: [[0, 1]], 14: [[0, 3]] }[bits] || [];
+        for (const [e1, e2] of pairs) segs.push([pt(e1), pt(e2)]);
+      }
+      // Strecken zu Linien verketten (Endpunkte gerastert), kurze Linien weglassen
+      const keyOf = p => Math.round(p[0] * 200) + ":" + Math.round(p[1] * 200), at = new Map();
+      segs.forEach((s, k) => { for (const e of [0, 1]) { const kk = keyOf(s[e]); if (!at.has(kk)) at.set(kk, []); at.get(kk).push(k); } });
+      const used = new Uint8Array(segs.length);
+      g.strokeStyle = `rgba(255,255,255,${a.toFixed(3)})`; g.lineWidth = lv === 1 ? 1.6 : 1.2;
+      for (let k0 = 0; k0 < segs.length; k0++) {
+        if (used[k0]) continue;
+        used[k0] = 1; const chain = [segs[k0][0], segs[k0][1]];
+        for (const dir of [1, 0]) {
+          for (;;) {
+            const end = dir ? chain[chain.length - 1] : chain[0], cand = (at.get(keyOf(end)) || []).find(k => !used[k]);
+            if (cand === undefined) break;
+            used[cand] = 1; const s = segs[cand], nxt = keyOf(s[0]) === keyOf(end) ? s[1] : s[0];
+            if (dir) chain.push(nxt); else chain.unshift(nxt);
+          }
+        }
+        let len = 0; for (let q = 1; q < chain.length; q++) len += Math.hypot(chain[q][0] - chain[q - 1][0], chain[q][1] - chain[q - 1][1]);
+        if (len < CONT_MINLEN) continue;
+        g.beginPath(); chain.forEach((p, q) => { const X = (p[0] - x0) * kx, Y = (p[1] - z0) * kz; if (q) g.lineTo(X, Y); else g.moveTo(X, Y); }); g.stroke();
       }
     }
-    return fovP;
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.NoColorSpace; tex.minFilter = THREE.LinearMipmapLinearFilter; tex.anisotropy = maxAniso; tex.needsUpdate = true;
+    contour = { tex, box: [x0, z0, 1 / (x1 - x0), 1 / (z1 - z0)] };
+    if (table) { table.mat.uniforms.uCont.value = tex; table.mat.uniforms.uContBox.value.set(...contour.box); }
+  }
+
+  // ---------- Füllung entlang des Fadens zwischen den Parzellen (Erik 22.10.2026: „Mit Mausperspektive zusammen“) ----------
+  // Niedrige weiße Papierblöcke (Kästen, Stufen, Kanten wie die Dachaufbauten in Mirror's Edge), locker gestreut, dazu feine Schnitt- und Falzspuren im Boden.
+  // Nie höher als die Szenen (FILL_H), nie zwischen Kamera und Punkt (Abstand zum Faden mindestens FILL_GAP: die Kamera fährt auf dem Faden), nie auf einer Parzelle,
+  // ohne Text, ohne Rot, Farben der Seite (PAL). Fester Zufallssamen je Brücke (deterministisch). Handy sparsamer. Die Füllung entsteht, sobald alle Szenen gebaut sind,
+  // weil sie allen Fäden ausweicht; in der Karte (M) sinkt sie flach ab.
+  const FILL_H = 1.3, FILL_GAP = 3.2;
+  let fill = null;
+  const rng32 = seed => () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  function boxTris(x0, x1, y0, y1, z0, z1, pos) {
+    const P = (x, y, z) => pos.push(x, y, z);
+    const q = (a, b, c, d) => { P(...a); P(...b); P(...c); P(...a); P(...c); P(...d); };
+    q([x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1]);                       // oben
+    q([x0, y0, z1], [x1, y0, z1], [x1, y1, z1], [x0, y1, z1]);                       // vorn (+z)
+    q([x1, y0, z0], [x0, y0, z0], [x0, y1, z0], [x1, y1, z0]);                       // hinten
+    q([x0, y0, z0], [x0, y0, z1], [x0, y1, z1], [x0, y1, z0]);                       // links
+    q([x1, y0, z1], [x1, y0, z0], [x1, y1, z0], [x1, y1, z1]);                       // rechts
+  }
+  function boxEdges(x0, x1, y0, y1, z0, z1, e) {
+    const c = [[x0, y0, z0], [x1, y0, z0], [x1, y0, z1], [x0, y0, z1], [x0, y1, z0], [x1, y1, z0], [x1, y1, z1], [x0, y1, z1]];
+    for (const [a, b] of [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]]) e.push(...c[a], ...c[b]);
+  }
+  function buildFiller() {
+    if (fill) { scene.remove(fill.group); fill.group.traverse(o => { if (o.geometry) o.geometry.dispose(); }); fill = null; }
+    const bridges = pieces.filter(pc => pc.time.br);
+    if (!bridges.length) return;
+    const dens = narrow ? .55 : 1, tone = [PAL.plate, "#eef2f8", "#e3e9f1"].map(c => new THREE.Color(c));
+    // Parzellen (Welt, runde Böden), mit Rand
+    const cells = INST.map((_, i) => { const sl = slotOf(i); return [sl.C.x, sl.C.z, sl.R + .8]; });
+    // alle Fäden (Brücken und Szenenfäden) als Punktwolke, dicht genug für den Abstand
+    const thr = []; for (const pc of pieces) for (const p of pc.curve.getSpacedPoints(Math.max(8, Math.round(pc.curve.getLength() / 1.2)))) thr.push([p.x, p.z]);
+    const nearThr = (x, z, m) => { for (const t of thr) if (Math.abs(t[0] - x) < m && Math.abs(t[1] - z) < m && Math.hypot(t[0] - x, t[1] - z) < m) return true; return false; };
+    const inCell = (x, z, m) => cells.some(c => Math.hypot(x - c[0], z - c[1]) < c[2] + m);
+    const pos = [[], [], []], ed = [], placed = [], lines = [];
+    const addBox = (ci, x, z, w, d, y0, h, rot) => {
+      // Fuß (w × d) um (x, z), um y gedreht rot; Dreiecke und Kanten in Weltkoordinaten
+      const c = Math.cos(rot), s = Math.sin(rot), tmp = [], te = [];
+      boxTris(-w / 2, w / 2, y0, y0 + h, -d / 2, d / 2, tmp); boxEdges(-w / 2, w / 2, y0, y0 + h, -d / 2, d / 2, te);
+      for (let i = 0; i < tmp.length; i += 3) pos[ci].push(x + tmp[i] * c + tmp[i + 2] * s, tmp[i + 1], z - tmp[i] * s + tmp[i + 2] * c);
+      for (let i = 0; i < te.length; i += 3) ed.push(x + te[i] * c + te[i + 2] * s, te[i + 1], z - te[i] * s + te[i + 2] * c);
+    };
+    bridges.forEach((pc, bi) => {
+      const rnd = rng32(1000 + 77 * bi), L = pc.curve.getLength(), n = Math.max(6, Math.round(L / 1.5)), sp = pc.curve.getSpacedPoints(n);
+      const tangent = i => { const a = sp[Math.max(0, i - 1)], b = sp[Math.min(n, i + 1)]; return Math.atan2(b.x - a.x, b.z - a.z); };
+      for (let d0 = 2 + rnd() * 3; d0 < L - 2; d0 += (4.5 + rnd() * 5) / dens) {
+        const i = Math.min(n, Math.round(d0 / L * n)), p = sp[i], th = tangent(i), nx = Math.cos(th), nz = -Math.sin(th);      // Normale (quer zum Faden)
+        for (const sd of [-1, 1]) {
+          if (rnd() > .62 * dens + .12) continue;
+          const off = FILL_GAP + .8 + rnd() * rnd() * 11, w = .8 + rnd() * 2.4, dd = .8 + rnd() * 2.2, rot = rnd() < .5 ? 0 : th, along = (rnd() - .5) * 3;
+          const x = p.x + sd * nx * off + Math.sin(th) * along, z = p.z + sd * nz * off + Math.cos(th) * along, hw = Math.hypot(w, dd) / 2 + .3;
+          if (inCell(x, z, hw) || nearThr(x, z, FILL_GAP + hw - 1) || placed.some(q => Math.hypot(q[0] - x, q[1] - z) < q[2] + hw + .5)) continue;
+          placed.push([x, z, hw]);
+          const ci = Math.floor(rnd() * 3), kind = rnd();
+          const hs = [.22, .35, .5, .7, .95, 1.3], h1 = hs[Math.floor(rnd() * rnd() * hs.length)];
+          if (kind < .28) {
+            // Stufen: zwei bis drei Lagen, jede kleiner und höher
+            const steps = 2 + (rnd() < .4 ? 1 : 0); let y = 0, ww = w + .8, ddd = dd + .6;
+            for (let k = 0; k < steps; k++) { const hh = Math.min(h1 * .55, FILL_H / steps); addBox(ci, x + (k * .35) * Math.cos(rot), z - (k * .35) * Math.sin(rot), ww, ddd, y, hh, rot); y += hh; ww *= .66; ddd *= .7; }
+          } else if (kind < .42) {
+            // lange niedrige Kante (Mauer)
+            addBox(ci, x, z, w + 2.4, .45 + rnd() * .35, 0, Math.min(h1, .7), rot);
+          } else if (kind < .55) {
+            // Winkel aus zwei Kästen
+            addBox(ci, x, z, w + 1, .8, 0, h1, rot); addBox((ci + 1) % 3, x + Math.cos(rot) * (w + 1) / 2 - .4 * Math.sin(rot), z - Math.sin(rot) * (w + 1) / 2 - .4 * Math.cos(rot), .8, dd + 1, 0, Math.min(h1 * .7, FILL_H), rot);
+          } else addBox(ci, x, z, w, dd, 0, h1, rot);
+        }
+      }
+      // Schnitt- und Falzspuren im Boden: lange feine Linien parallel zum Faden (Schnitt durchgehend, Falz gestrichelt) und kurze Passermarken
+      for (let d0 = 1 + rnd() * 3; d0 < L - 1; d0 += (3 + rnd() * 5) / dens) {
+        const i = Math.min(n, Math.round(d0 / L * n)), p = sp[i], th = tangent(i), nx = Math.cos(th), nz = -Math.sin(th), sd = rnd() < .5 ? -1 : 1, off = 1.4 + rnd() * 7, len = 2.5 + rnd() * 8, fold = rnd() < .45;
+        const x0 = p.x + sd * nx * off, z0 = p.z + sd * nz * off, dx = Math.sin(th), dz = Math.cos(th);
+        if (inCell(x0, z0, 0) || inCell(x0 + dx * len, z0 + dz * len, 0)) continue;
+        if (fold) { for (let t = 0; t < len; t += .55) lines.push([x0 + dx * t, z0 + dz * t, x0 + dx * Math.min(len, t + .3), z0 + dz * Math.min(len, t + .3), .13]); }
+        else lines.push([x0, z0, x0 + dx * len, z0 + dz * len, .2]);
+        if (rnd() < .4) lines.push([x0, z0, x0 + nx * sd * (1 + rnd() * 2.5), z0 + nz * sd * (1 + rnd() * 2.5), .17]);
+      }
+    });
+    const group = new THREE.Group(); group.renderOrder = -2;
+    pos.forEach((arr, ci) => {
+      if (!arr.length) return;
+      const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(arr, 3));
+      const m = paperMaterial("#" + tone[ci].getHexString()); patchPaper(m);
+      const mesh = new THREE.Mesh(g, m); mesh.frustumCulled = false; group.add(mesh);
+    });
+    const ink = new THREE.Color(INK);
+    if (ed.length) {
+      const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(ed, 3));
+      const cols = []; for (let i = 0; i < ed.length / 3; i++) cols.push(ink.r, ink.g, ink.b, .34); g.setAttribute("aCol", new THREE.Float32BufferAttribute(cols, 4));
+      const ls = new THREE.LineSegments(g, edgeMaterial()); ls.frustumCulled = false; ls.renderOrder = 1; group.add(ls);
+    }
+    if (lines.length) {
+      const arr = [], cols = [];
+      for (const [a, b, c, d, al] of lines) { arr.push(a, .006, b, c, .006, d); for (let k = 0; k < 2; k++) cols.push(ink.r, ink.g, ink.b, al); }
+      const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(arr, 3)); g.setAttribute("aCol", new THREE.Float32BufferAttribute(cols, 4));
+      const ls = new THREE.LineSegments(g, edgeMaterial()); ls.frustumCulled = false; ls.renderOrder = 0; group.add(ls);
+    }
+    scene.add(group); fill = { group, n: placed.length, built: INST.length };
+    dbg("Füllung: " + placed.length + " Blöcke, " + lines.length + " Spuren");
   }
 
   // ---------- Roter Faden ----------
-  // Ein Faden durch alle Szenen: je Szene Eingang (Vorderkante des Bogens), der eigene Faden der Szene (def.thread) und Ausgang
-  // (Hinterkante), dazwischen Brücken über die Lücke. Stücke laufen nach b ihrer Szene oder nach dem Anteil eines Übergangs.
+  // Ein Faden durch die ganze Seite, als Bänder: je Szene der Flug hinein (Fluss, „Brücke“), der Szenenlauf und am Schluss die Mündung. Der Faden ist bis zum Punkt gezeichnet;
+  // der Punkt sitzt auf seinem Ende (Zeitlage: dotAt, Szenenlauf: tl.sAt). Keine Markierungen an Lesestellen (Erik 23.10.2026: Ringe fallen ersatzlos weg).
   const pieces = [];
   let dot = null;
   const tmat = new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 });
-  const THREAD_HW = .022;
+  const THREAD_HW = .03;
   let threadHW = THREAD_HW;
   // Faden und Punkt liegen immer über jeder flachen Bodenfläche: Teile und Abdrücke liegen auf Ebenen y = Ebene · EPS (bis etwa .01), der
   // Bogen auf 0; Stützpunkte darunter werden auf THREAD_Y angehoben (Stehende Teile verdecken den Faden weiterhin über die Tiefe)
@@ -1040,163 +2022,87 @@ const CHASE_END = 8;                                                  // letztes
   function ribbon(pts0) {
     const pts = pts0.map(p => p.y < THREAD_Y ? V(p.x, THREAD_Y, p.z) : p);
     const curve = new THREE.CatmullRomCurve3(pts, false, "centripetal", .5);
-    const len = curve.getLength(), N = Math.round(clamp(len * 18, 24, 1400)), sp = curve.getSpacedPoints(N);
-    // Catmull-Rom schwingt zwischen steilem Abstieg und flachem Lauf unter die Stützpunkte (am Rechner bis y −0,08: Lücke unter dem Bogen): nie unter THREAD_Y
+    const len = curve.getLength(), N = Math.round(clamp(len * 12, 24, 4000)), sp = curve.getSpacedPoints(N);
     for (const q of sp) if (q.y < THREAD_Y) q.y = THREAD_Y;
-    const pos = new Float32Array((N + 1) * 6), idx = [];
+    // Querschnitt als flacher Giebel (links, Mitte oben, rechts): von oben ein flaches Band, aus der Mausperspektive eine Kante mit Höhe (sonst flimmert das dünne Band im flachen Blick)
+    const pos = new Float32Array((N + 1) * 9), idx = [];
     // fill(hw): Halbbreite des Bandes neu schreiben (in der Karte wächst sie mit dem Abstand, damit der Faden ~2,5 px breit bleibt)
     const fill = hw => {
-      let prev = null;
+      let prev = null; const hT = Math.min(hw * 1.5, .06);
       for (let i = 0; i <= N; i++) {
         const p = sp[i], q = sp[Math.min(N, i + 1)], r = sp[Math.max(0, i - 1)];
         const d = V().subVectors(q, r); const vert = Math.abs(d.y) > .5 * d.length();
         let sd;
         if (vert) sd = V(hw, 0, 0); else { d.y = 0; d.normalize(); sd = V().crossVectors(d, UP).multiplyScalar(hw); }
-        // Seite des Bandes stetig halten: beim Übergang von steil zu flach kehrte sich sonst die Seite um, das Band verdrehte sich (Schleife, Lücke)
         if (prev && sd.dot(prev) < 0) sd.negate();
         prev = sd;
-        pos.set([p.x - sd.x, p.y, p.z - sd.z, p.x + sd.x, p.y, p.z + sd.z], i * 6);
+        pos.set([p.x - sd.x, p.y, p.z - sd.z, p.x, p.y + hT, p.z, p.x + sd.x, p.y, p.z + sd.z], i * 9);
       }
     };
     fill(THREAD_HW);
-    for (let i = 0; i < N; i++) idx.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2);
+    for (let i = 0; i < N; i++) { const a = i * 3, b = (i + 1) * 3; idx.push(a, a + 1, b, a + 1, b + 1, b, a + 1, a + 2, b + 1, a + 2, b + 2, b + 1); }
     const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(pos, 3)); g.setIndex(idx);
     const mesh = new THREE.Mesh(g, tmat); mesh.renderOrder = 2; mesh.frustumCulled = false; scene.add(mesh);
     return { curve, N, g, mesh, fill };
   }
-  // Punkt (x, z) oder (x, y, z) in Szenenkoordinaten → Welt
-  const wpt = (I, a) => (a.isVector3 ? a.clone() : a.length === 3 ? V(a[0], a[1], a[2]) : V(a[0], .004, a[1])).applyMatrix4(I.M4);
-  function addPiece(I, pts, time) {
-    if (pts.length < 2) return;
-    const r = ribbon(pts); r.time = time; r.I = I; r.end = pts[pts.length - 1].clone(); pieces.push(r);
-  }
-  // Weg des Fadens über den Tisch von der Hinterkante von A zur Vorderkante von I (wie bei einem U-Bahn-Plan: gerade Strecken, Ecken als Kreisbögen).
-  // Gleiche Richtung (Parzellen einer Bahn): aus A gerade hinaus, in der Mitte der Gasse quer (Versatz), gerade in I hinein. Gegenrichtung (Wende zwischen
-  // zwei Bahnen): aus A gerade hinaus, über die Parzellen hinaus (U_E) quer zur Nachbarbahn, gerade zurück in I hinein; Ecken mit Radius U_R, keine Schleifen.
-  const along = (r, h) => { let mx = -1e9, mn = 1e9; for (const [x, z] of [[r[0], r[2]], [r[1], r[2]], [r[1], r[3]], [r[0], r[3]]]) { const d = x * h.x + z * h.z; mx = Math.max(mx, d); mn = Math.min(mn, d); } return [mn, mx]; };
-  function bridge(A, I) {
-    const e0 = A.exit.clone().setY(.004), e1 = I.entry.clone().setY(.004), hA = headOf(A), hB = headOf(I), pa = V(-hA.z, 0, hA.x);
-    const f0 = e0.dot(hA), f1 = e1.dot(hA), lat = e1.clone().sub(e0).dot(pa);
-    const [, backA] = along(A.fp, hA);
-    const pt = (f, base, ref) => base.clone().addScaledVector(hA, f - ref);       // Punkt auf der Längslinie von base bei Längskoordinate f
-    if (hA.dot(hB) > .9) {
-      // gerade hinaus, schräg über die Gasse (Versatz), gerade hinein: Ecken als Bögen, kein rechtwinkliger Zickzack
-      if (Math.abs(lat) < .3 || f1 - f0 < 4) return fillet([e0, e0.clone().lerp(e1, .5), e1], BRIDGE_R);
-      const stub = clamp((f1 - f0) * .3, 2, 7), P1 = pt(f0 + stub, e0, f0), P2 = pt(f1 - stub, e1, f1);
-      return fillet([e0, P1, P2, e1], BRIDGE_R);
-    }
-    if (hA.dot(hB) < -.9) {
-      const fu = backA + U_E, W1 = pt(fu, e0, f0), W2 = pt(fu, e1, f1);
-      return fillet([e0, W1, W2, e1], U_R);
-    }
-    return fillet([e0, e0.clone().lerp(e1, .5), e1], BRIDGE_R);
-  }
-  // Polygonzug mit Ecken als Kreisbögen (Radius r, bei kurzen Schenkeln kleiner): je Ecke Anfang und Ende des Bogens und Zwischenpunkte
-  function fillet(W, r) {
-    const out = [W[0].clone()];
-    for (let i = 1; i < W.length - 1; i++) {
-      const a = W[i - 1], c = W[i], b = W[i + 1], din = c.clone().sub(a), dout = b.clone().sub(c), li = din.length(), lo = dout.length();
-      din.normalize(); dout.normalize();
-      const th = Math.acos(clamp(din.dot(dout), -1, 1));
-      if (th < 1e-3 || li < 1e-6 || lo < 1e-6) { out.push(c.clone()); continue; }
-      const tl = Math.tan(th / 2), tmax = Math.min(i === 1 ? .98 * li : .5 * li, i === W.length - 2 ? .98 * lo : .5 * lo), rr = Math.min(r, tmax / tl), t = rr * tl;
-      const p0 = c.clone().addScaledVector(din, -t), p1 = c.clone().addScaledVector(dout, t);
-      const ctr = c.clone().addScaledVector(dout.clone().sub(din).normalize(), rr / Math.cos(th / 2));
-      const v0 = p0.clone().sub(ctr), v1 = p1.clone().sub(ctr), n = Math.max(6, Math.ceil(th / (PI / 20)));
-      out.push(p0);
-      for (let k = 1; k < n; k++) { const u = k / n; out.push(ctr.clone().addScaledVector(v0, Math.sin((1 - u) * th) / Math.sin(th)).addScaledVector(v1, Math.sin(u * th) / Math.sin(th))); }
-      out.push(p1);
-    }
-    out.push(W[W.length - 1].clone());
-    return out;
-  }
-  // Ankunft auf einem Zulauf (Weltpunkte): erster Punkt, der in der ersten Stellung der Szene im Bild steht (|x| ≤ ARR_X, y von ARR_Y bis .6), sonst null;
-  // steht schon der Anfang im Bild (oder erst gar nichts), ebenfalls null. Ergebnis: Zulauf bis zur Ankunft (head) und der Rest ab dort (tail, kann fehlen).
-  function preArrival(I, pre) {
-    if (I.idx === 0) return null;
-    const pc = new THREE.PerspectiveCamera(fovOf(I), aspect, .1, 300), P1 = I.camStart.clone().applyMatrix4(I.M4), T1 = I.tgtStart.clone().applyMatrix4(I.M4);
-    pc.position.copy(P1); pc.lookAt(T1); pc.updateMatrixWorld(); pc.updateProjectionMatrix();
-    const seen = p => { const q = p.clone().project(pc); return q.z < 1 && q.y >= ARR_Y && q.y <= .6 && Math.abs(q.x) <= ARR_X + .06; };
-    if (seen(pre[0])) return null;
-    for (let i = 0; i < pre.length - 1; i++) {
-      const a = pre[i], b = pre[i + 1], len = a.distanceTo(b), n = Math.max(1, Math.ceil(len / .25));
-      for (let k = 1; k <= n; k++) {
-        const p = a.clone().lerp(b, k / n); if (!seen(p)) continue;
-        const head = [...pre.slice(0, i + 1), p], tail = k / n < 1 || i + 1 < pre.length - 1 ? [p, ...pre.slice(i + 1)] : null;
-        return { head, tail: tail && tail.length > 1 && tail[0].distanceTo(tail[tail.length - 1]) > .05 ? tail : null };
-      }
-    }
-    return null;
+  function addPiece(pts, info) {
+    if (pts.length < 2) return null;
+    const r = ribbon(pts); Object.assign(r, info); pieces.push(r); return r;
   }
   function buildThreadFor(I) {
     if (!dot) {
       dot = new THREE.Mesh(new THREE.CircleGeometry(1, 40), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 })); dot.renderOrder = 6; dot.visible = false; scene.add(dot);
-      const ring = new THREE.Mesh(new THREE.RingGeometry(1.6, 1.95, 48), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, depthWrite: false, transparent: true, opacity: .75, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 })); ring.renderOrder = 6; ring.visible = false; dot.add(ring); dot.userData.ring = ring;
+      // „Sie sind hier“ in der Karte (kein Lesestellen-Ring): dünner Ring um den Punkt, nur in der Übersicht
+      const ring = new THREE.Mesh(new THREE.RingGeometry(1.45, 1.6, 48), new THREE.MeshBasicMaterial({ color: RED, toneMapped: false, depthWrite: false, transparent: true, opacity: .35, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -4 })); ring.renderOrder = 6; ring.visible = false; dot.add(ring); dot.userData.ring = ring;
     }
-    const f = I.fcfg; if (!f) return;
-    // Eingang und Ausgang liegen innerhalb der Parzelle (Anlauf vor der Kante entfällt), sonst bliebe der Faden außerhalb des Bogens
-    const [cx0, cx1, cz0, cz1] = I.cell, inCell = a => a && !a.isVector3 && a.length === 2 ? [clamp(a[0], cx0 + .4, cx1 - .4), clamp(a[1], cz0 + .2, cz1 - .2)] : a;
-    f.in = inCell(f.in); f.out = inCell(f.out);
-    const own = I.cfg.ownThread === false ? null : I.def.thread;
-    const ownPts = own ? own.pts.slice(f.ownFrom || 0).map(p => p.clone().applyMatrix4(I.M4)) : null;
-    I.entry = f.in ? wpt(I, f.in) : (ownPts ? ownPts[0] : null);
-    // own.arms / own.post (Eröffnung): der Faden verzweigt sich; Arme laufen von der Teilung (Ende von pts) zur Vereinigung (Anfang von post)
-    const postPts = own && own.post ? own.post.pts.map(p => p.clone().applyMatrix4(I.M4)) : null;
-    I.exit = f.out ? wpt(I, f.out) : (postPts ? postPts[postPts.length - 1] : ownPts ? ownPts[ownPts.length - 1] : null);
-    // Brücke aus der vorigen Szene: läuft im zweiten Teil der Fahrt hinüber
-    const A = INST[I.idx - 1];
-    if (A && A.exit && I.entry) addPiece(I, bridge(A, I), { tr: I.idx, s0: .3, s1: 1 });
-    const outTime = (b1) => b1 + .06 <= I.bMax ? { I, b0: b1, b1: b1 + .06 } : { tr: I.idx + 1, s0: 0, s1: .3 };
-    if (ownPts) {
-      const t0 = Math.max(own.t0, I.b0), t1 = Math.max(own.t1, t0 + .01);
-      if (f.in) {
-        // Zulauf zum eigenen Faden: steht sein Anfang nicht im Bild der ersten Stellung, kommt der Punkt im Flug bis dorthin, wo der Zulauf ins Bild tritt (Rest in der Szene)
-        const pre = [I.entry, ...(f.viaPre || []).map(a => wpt(I, a)), ownPts[0]], cut = preArrival(I, pre), tm = { I, b0: Math.max(I.b0, t0 - .05), b1: t0 };
-        if (cut) { addPiece(I, cut.head, { tr: I.idx, s0: .3, s1: 1 }); if (cut.tail) addPiece(I, cut.tail, tm); } else addPiece(I, pre, tm);
-      }
-      addPiece(I, ownPts, { I, b0: t0, b1: Math.min(t1, I.bMax), lin: !!own.lin });
-      if (own.arms) for (const a of own.arms) addPiece(I, a.pts.map(p => p.clone().applyMatrix4(I.M4)), { I, b0: a.t0, b1: a.t1, lin: !!a.lin });
-      if (postPts) addPiece(I, postPts, { I, b0: own.post.t0, b1: own.post.t1, lin: !!own.post.lin });
-      if (f.out) addPiece(I, [ownPts[ownPts.length - 1], ...(f.viaPost || []).map(a => wpt(I, a)), I.exit], outTime(Math.min(t1, I.bMax)));
-    } else if (I.entry && I.exit) {
-      // Bahn durch die Parzelle: bis zur Ankunft (zeigt die erste Stellung) im Flug in diese Szene, der Rest im Flug aus ihr heraus
-      if (I.arrive !== null && I.arrive !== undefined) {
-        const A = wpt(I, [f.in[0], I.arrive]);
-        addPiece(I, [I.entry, A], { tr: I.idx, s0: .3, s1: 1 });
-        addPiece(I, [A, ...(f.via || []).map(a => wpt(I, a)), I.exit], { tr: I.idx + 1, s0: 0, s1: .3 });
-      } else addPiece(I, [I.entry, ...(f.via || []).map(a => wpt(I, a)), I.exit], { tr: I.idx + 1, s0: 0, s1: .3 });
+    for (let k = pieces.length - 1; k >= 0; k--) if (pieces[k].i === I.idx) { scene.remove(pieces[k].mesh); pieces[k].g.dispose(); pieces.splice(k, 1); }
+    const LA = layoutOf();
+    if (I.idx > 0) addPiece(LA.rivers[I.idx].pts, { i: I.idx, kind: "br", time: { br: true, tr: I.idx }, I, poly: LA.rivers[I.idx] });
+    addPiece(I.route.pts.map(p => p.clone().applyMatrix4(I.M4)), { i: I.idx, kind: "route", time: { route: true, I }, I, poly: I.route });
+    if (I.idx === INST.length - 1) addPiece(LA.fin.pts, { i: I.idx, kind: "fin", time: { fin: true }, I, poly: LA.fin });
+  }
+  // Fortschritt je Band (0 … 1) im Zustand st; dazu das Band des Punktes
+  function threadK(pc, st) {
+    const i = pc.i;
+    if (pc.kind === "br") return st.kind === "z" || st.i > i ? 1 : st.i === i ? (st.kind === "t" ? st.q : 1) : 0;
+    if (pc.kind === "route") {
+      if (st.kind === "z" || st.i > i) return 1;
+      if (st.i < i || st.kind !== "b" || !pc.I.tl) return 0;
+      const t = st.q * (pc.I.body.v1 - pc.I.body.v0); return t < pc.I.tl.tBase0 ? 0 : pc.I.tl.sAt(t) / pc.I.route.len;
     }
-    linkTimes(I);       // Punkt im Übergang in diese Szene: gleichmäßig nach Bogenlänge über den ganzen Flug
+    return st.kind === "z" ? finS(st.q * (st.sg.v1 - st.sg.v0)) / pc.poly.len : 0;
   }
   function updateThread(st) {
-    let last = null;
-    // Karte: Faden und Punkt behalten eine feste Größe in Pixeln (Faden ~2,5 px breit, Punkt ~7 px Radius mit dünnem Ring)
-    const kk = smoother(win(Mcur, .25, .85)), mp0 = kk > 0 ? mapPose() : null;
+    // Karte: Faden und Punkt behalten eine feste Größe in Pixeln (Faden ~2,5 px breit, Punkt ~7 px Radius mit dünnem Ring); dort ist der ganze Faden zu sehen
+    const kk = smoother(win(Mcur, .25, .85)), mp0 = kk > 0 ? mapPose() : null, mapK = smoother(win(Mcur, .12, .6));
     const wpp = mp0 ? 2 * Math.tan(camera.fov * PI / 360) * camera.position.distanceTo(mp0.tgt) / VH() : 0;
     const hwT = THREAD_HW + (Math.max(THREAD_HW, 1.3 * wpp) - THREAD_HW) * kk;
     if (Math.abs(hwT - threadHW) > .004 * Math.max(1, threadHW / THREAD_HW) || (kk === 0 && threadHW !== THREAD_HW)) {
       threadHW = hwT; for (const pc of pieces) { pc.fill(hwT); pc.g.attributes.position.needsUpdate = true; }
     }
+    let own = null, ownK = 0;
     for (const pc of pieces) {
-      const tm = pc.time; let k;
-      if (tm.k0 !== undefined && sInto(tm.tr, st) <= 0) { const w0 = win(bOf(tm.I, st), tm.b0, Math.max(1e-4, tm.b1 - tm.b0)); k = tm.lin0 ? w0 : sm(w0); }     // noch in der Szene
-      else if (tm.tr !== undefined) { const w = win(sInto(tm.tr, st), tm.s0, tm.s1 - tm.s0); k = tm.tr >= INST.length ? 0 : (tm.k0 || 0) + (1 - (tm.k0 || 0)) * (tm.lin ? w : sm(w)); }
-      else { const b = bOf(tm.I, st), w0 = win(b, tm.b0, Math.max(1e-4, tm.b1 - tm.b0)); k = tm.lin ? w0 : sm(w0); }
-      pc.mesh.visible = k > 0;
-      pc.g.setDrawRange(0, Math.floor(k * pc.N) * 6);
-      if (k > 0) last = { pc, k };
+      const k = threadK(pc, st), kd = Math.max(k, mapK);
+      pc.mesh.visible = kd > 0;
+      pc.g.setDrawRange(0, Math.floor(kd * pc.N) * 12);
+      const mine = (st.kind === "t" && pc.kind === "br" && pc.i === st.i) || (st.kind === "b" && pc.kind === "route" && pc.i === st.i) || (st.kind === "z" && pc.kind === "fin");
+      if (mine) { own = pc; ownK = k; }
     }
-    dot.visible = !!last;
-    if (last) {
-      last.pc.curve.getPointAt(last.k, dot.position); if (dot.position.y < THREAD_Y) dot.position.y = THREAD_Y;
+    let vis = !!own;
+    if (own && own.kind === "route" && own.I.tl) { const t = st.q * (own.I.body.v1 - own.I.body.v0); vis = t >= own.I.tl.tVis; }
+    dot.visible = vis;
+    if (vis) {
+      own.curve.getPointAt(clamp(ownK, 0, 1), dot.position); if (dot.position.y < THREAD_Y) dot.position.y = THREAD_Y;
       dot.quaternion.copy(camera.quaternion);
       const dd = camera.position.distanceTo(dot.position), rN = Math.max(.05, dd * .0065), rM = 7 * 2 * Math.tan(camera.fov * PI / 360) * dd / VH();
       dot.scale.setScalar(rN + (rM - rN) * kk); if (dot.userData.ring) dot.userData.ring.visible = kk > .3;
       // Tiefentest wie beim Faden (Bauteile verdecken den Punkt); die Scheibe steht senkrecht zum Blick und würde zur Hälfte im Boden stecken:
-      // entlang des Sehstrahls um ihren Ring-Radius nach vorn (die Lage im Bild ändert sich dabei nicht), nie über die halbe Entfernung
+      // entlang des Sehstrahls um ihren Radius nach vorn (die Lage im Bild ändert sich dabei nicht), nie über die halbe Entfernung
+      (dot.userData.base || (dot.userData.base = V())).copy(dot.position);                                // Lage auf dem Faden (Prüfhilfe)
       dot.position.addScaledVector(_nn.copy(camera.position).sub(dot.position).normalize(), Math.min(dot.scale.x * 2.1, dd * .5));
     }
-    return last;
+    // Gerwing: der Lieferschein reist mit dem Punkt (Lage in Szenenkoordinaten für die Szene, siehe applyState)
+    return own;
   }
 
   // ---------- Text ganz im Bild oder ganz draußen ----------
@@ -1242,23 +2148,28 @@ const CHASE_END = 8;                                                  // letztes
     try { const b = document.getElementById("uebersicht"); if (b && b.style) b.style.display = "none"; const k = document.getElementById("karte"); if (k && k.style) k.style.display = "none"; } catch (e2) { /* nichts */ }
   }
   const TM = 5.5;                                                       // Rand des Tisches um die Parzellen (der Faden läuft nirgends näher an der Kante)
-  const KARTE = { d: { pitch: 48, yaw: 0, fov: 25 }, n: { pitch: 60, yaw: 0, fov: 30 } };
+  // Blickrichtung der Karte: fast senkrecht von oben; Breitbild mit den Reihen quer (yaw 0), hochkant um 90° gedreht (die Reihen stehen dann senkrecht), die Wortmarke liest
+  // in beiden von links nach rechts
+  const KARTE = { d: { pitch: 87, yaw: 0, fov: 25 }, n: { pitch: 87, yaw: -90, fov: 30 } };
   // Fläche des Rasters samt Wenden des Fadens (Welt): aus den Plätzen aller Szenen, auch solange erst ein Teil gebaut ist
   function tableRect() {
-    const G = GRID[narrow ? "n" : "d"];
     let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9, h = 0;
     for (let i = 0; i < INST.length; i++) {
-      const P = slotOf(i).P; x0 = Math.min(x0, P.x - G.cl / 2); x1 = Math.max(x1, P.x + G.cl / 2); z0 = Math.min(z0, P.z - G.cf / 2); z1 = Math.max(z1, P.z + G.cf / 2);
+      const sl = slotOf(i); x0 = Math.min(x0, sl.C.x - sl.R); x1 = Math.max(x1, sl.C.x + sl.R); z0 = Math.min(z0, sl.C.z - sl.R); z1 = Math.max(z1, sl.C.z + sl.R);
     }
-    x0 -= TM; x1 += TM; z0 -= TM + U_E; z1 += TM + U_E;                  // oben und unten laufen die Wenden aus
-    for (const I of INST) if (I.built) h = Math.max(h, I.ext.max.y);
-    for (const pc of pieces) for (const pt of pc.curve.getPoints(40)) { x0 = Math.min(x0, pt.x - 5); x1 = Math.max(x1, pt.x + 5); z0 = Math.min(z0, pt.z - 5); z1 = Math.max(z1, pt.z + 5); }
+    // Fluss, Mündung und Wortmarke (links vom Schlusspunkt im Kartenbild) gehören zum Gebiet der Karte (aus der Lage, auch solange erst ein Teil gebaut ist)
+    const LA = layoutOf(), mk = LA.mark, ex = (x, z) => { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); };
+    for (const [a, b] of [[0, 0], [-mk.Wm, 0], [-mk.Wm, 1.1 * mk.E], [0, 1.1 * mk.E], [0, -.4 * mk.E], [-mk.Wm, -.4 * mk.E]]) ex(mk.D.x + mk.right.x * a + mk.upS.x * b, mk.D.z + mk.right.z * a + mk.upS.z * b);
+    for (const P of [...LA.rivers.filter(Boolean), LA.fin]) for (let q = 0; q <= 40; q++) { const pt = P.at(P.len * q / 40); ex(pt.x - 2, pt.z - 2); ex(pt.x + 2, pt.z + 2); }
+    x0 -= TM; x1 += TM; z0 -= TM; z1 += TM;
+    for (const I of INST) if (I.built && I.ext) h = Math.max(h, I.ext.max.y);
     return { x0, x1, z0, z1, h };
   }
   // Der Tisch ist der Boden unter allen Parzellen: ein sehr großer Bogen im Papierton mit zartem Raster (Schneidematte; Linien alle 2 Einheiten, kräftiger alle 10, die
   // Parzellen sitzen genau auf Linien), der außerhalb des Rasters und zum Horizont weich in den Dunst ausläuft (keine Kante, kein Weiß). Mit Schatten wie das Papier der Szenen.
   const GROUND_FRAG = `
     uniform vec3 uPaper; uniform vec3 uInk; uniform vec2 uGW; uniform vec2 uFar; uniform vec2 uC; uniform vec2 uH; uniform vec2 uGO; uniform vec2 uFade;
+    uniform sampler2D uCont; uniform vec4 uContBox; uniform float uContA;
     varying vec3 vW; varying float vDepth;
     float gridLine(vec2 q) {
       vec2 fw = max(fwidth(q), vec2(1e-4));
@@ -1271,6 +2182,9 @@ const CHASE_END = 8;                                                  // letztes
       vec2 q = (vW.xz - uGO) / 2.0;
       float gl = max(gridLine(q) * uGW.x, gridLine(q / 5.0) * uGW.y);
       vec3 c = mix(uPaper, uInk, gl);
+      // Höhenlinien (ins Papier geprägt, nur in der Übersicht): Textur über dem Gebiet der Karte, Liniendichte 1 in Rot
+      vec2 cuv = (vW.xz - uContBox.xy) * uContBox.zw;
+      if (uContA > 0.001 && cuv.x > 0.0 && cuv.x < 1.0 && cuv.y > 0.0 && cuv.y < 1.0) { float cl = texture2D(uCont, cuv).r; c = mix(c, uInk, cl * uContA); }
       c = shaded(c, shadowAmt(vW, vec3(0.0, 1.0, 0.0)));
       float k = 1.0 - smoothstep(uFar.x, uFar.y, vDepth);
       c = mix(hazeAt(1.0 - k), c, k);
@@ -1282,7 +2196,7 @@ const CHASE_END = 8;                                                  // letztes
     const R = tableRect(); if (R.x0 > R.x1) return;
     if (!table) {
       const mat = new THREE.ShaderMaterial({
-        uniforms: { uPaper: { value: new THREE.Color(PAL.ground) }, uInk: { value: new THREE.Color(PAL.gridInk) }, uGW: { value: new THREE.Vector2(PAL.gridMinor, PAL.gridMajor) }, uFar: { value: new THREE.Vector2(160, 1100) }, uC: { value: new THREE.Vector2() }, uH: { value: new THREE.Vector2(1, 1) }, uGO: { value: new THREE.Vector2() }, uFade: { value: new THREE.Vector2(4, 90) },
+        uniforms: { uPaper: { value: new THREE.Color(PAL.ground) }, uInk: { value: new THREE.Color(PAL.gridInk) }, uGW: { value: new THREE.Vector2(PAL.gridMinor, PAL.gridMajor) }, uFar: { value: new THREE.Vector2(160, 1100) }, uC: { value: new THREE.Vector2() }, uH: { value: new THREE.Vector2(1, 1) }, uGO: { value: new THREE.Vector2() }, uFade: { value: new THREE.Vector2(4, 90) }, uCont: { value: null }, uContBox: { value: new THREE.Vector4(0, 0, 1, 1) }, uContA: { value: 0 },
           uHaze: U.haze, uHazeF: U.hazeF, uShC: U.shc, uSM: U.sm, uSMM: U.smm, uSMP: U.smp },
         vertexShader: "varying vec3 vW; varying float vDepth; void main() { vec4 wp = modelMatrix * vec4(position, 1.0); vW = wp.xyz; vec4 mv = viewMatrix * wp; vDepth = -mv.z; gl_Position = projectionMatrix * mv; }",
         fragmentShader: SHADOW_GLSL + GROUND_FRAG, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 4
@@ -1290,11 +2204,12 @@ const CHASE_END = 8;                                                  // letztes
       const ground = new THREE.Mesh(new THREE.PlaneGeometry(1, 1).rotateX(-PI / 2), mat);
       ground.frustumCulled = false; ground.renderOrder = -3; ground.position.y = -.04; ground.scale.set(6000, 1, 6000);
       scene.add(ground); table = { ground, mat };
+      if (contour) { mat.uniforms.uCont.value = contour.tex; mat.uniforms.uContBox.value.set(...contour.box); }
     }
     const cx = (R.x0 + R.x1) / 2, cz = (R.z0 + R.z1) / 2, u = table.mat.uniforms;
     u.uC.value.set(cx, cz); u.uH.value.set((R.x1 - R.x0) / 2, (R.z1 - R.z0) / 2);
     // Raster liegt auf den Kanten der Parzellen (die erste Parzelle als Ursprung; die Maße der Raster sind Vielfache von 2)
-    const o = slotOf(0).P, G = GRID[narrow ? "n" : "d"]; u.uGO.value.set(o.x - G.cl / 2, o.z - G.cf / 2);
+    u.uGO.value.set(0, 0);                                                // Raster am Ursprung der Spirale (das Auge liegt auf einer Linie)
     MAP = null;
   }
   // Kartenstellung: Blickrichtung fest (Neigung, Drehung um y), Abstand so, dass der ganze Tisch samt Bauteilen im Rahmen steht
@@ -1382,8 +2297,9 @@ const CHASE_END = 8;                                                  // letztes
   // Fläche der Parzelle (Einheitsgröße) als Viereck der Welt
   function cardCorners(I) {
     if (I.card) return I.card;
-    const [x0, x1, z0, z1] = I.cell;
-    return I.card = [[x0, z0], [x1, z0], [x1, z1], [x0, z1]].map(([x, z]) => V(x, 0, z).applyMatrix4(I.M4));
+    const sl = I.slot, pts = [];
+    for (let k = 0; k < 40; k++) { const a = k / 40 * 2 * PI; pts.push(V(sl.C.x + sl.R * Math.cos(a), 0, sl.C.z + sl.R * Math.sin(a))); }
+    return I.card = pts;
   }
   function updateCards(M, active) {
     if (!cardHost) return;
@@ -1467,7 +2383,9 @@ const CHASE_END = 8;                                                  // letztes
     // Dunstfarbe: am Startbild weiß (wie das HTML-Vorbild), mit den ersten Scrollschritten zu den Farben der Palette (PAL); die Ferne ist zugleich die Hintergrundfarbe
     { const hk = st.kind === "b" && st.i === 0 ? smoother(win(st.q, .02, .25)) : 1;
       hazeC.copy(WHITE).lerp(hazeN, hk); hazeCF.copy(WHITE).lerp(hazeF, hk);
-      U.haze.value.set(hazeC.r, hazeC.g, hazeC.b); U.hazeF.value.set(hazeCF.r, hazeCF.g, hazeCF.b); renderer.setClearColor(hazeCF, 1); }
+      U.haze.value.set(hazeC.r, hazeC.g, hazeC.b); U.hazeF.value.set(hazeCF.r, hazeCF.g, hazeCF.b); renderer.setClearColor(hazeCF, 1);
+      // Startbild: auch der Boden ist weiß (breite Fenster zeigen sonst den blauen Boden neben dem Boden der Parzelle: im Startbild steht nur der Name)
+      if (table) { table.mat.uniforms.uPaper.value.copy(WHITE).lerp(GROUND_C, hk); table.mat.uniforms.uGW.value.set(PAL.gridMinor * hk, PAL.gridMajor * hk); table.mat.uniforms.uContA.value = contour ? .5 * smoother(win(M, .15, .8)) : 0; } }
     // Nahebene: in der Karte weit weg vom Tisch (Abstand mindestens 300, die Tiefengenauigkeit bleibt sonst bei großem Tisch zu grob, der Schatten unter dem Tisch flimmert)
     let nearV = .1 + 2.9 * smoother(win(M, .1, .6));
     if (mapOn) { try { nearV = .1 + (Math.max(3, mapPose().dist * .3) - .1) * smoother(win(M, .1, .6)); } catch (e) { mapFail(e); } }
@@ -1481,9 +2399,15 @@ const CHASE_END = 8;                                                  // letztes
       for (const bl of I.buildLines) bl.visible = wI >= .5;
       I.far.set(FOREIGN[0] + (FAR.x - FOREIGN[0]) * wI, FOREIGN[1] + (FAR.y - FOREIGN[1]) * wI);
       I.farS.set(FOREIGN_S[0] + (FAR.x - FOREIGN_S[0]) * wI, FOREIGN_S[1] + (FAR.y - FOREIGN_S[1]) * wI);
+      // Startbild am Handy (Erik: „nur der Name“): das Podest steht dort schon (zwei Stufen), liegt aber im Dunst: bis zu den ersten Scrollschritten ist alles Papier der Eröffnung
+      // in den weißen Dunst getaucht, nur der Name (Drucke) steht; mit dem Scrollen taucht das Papier auf
+      I.farP.copy(I.far);
+      if (narrow && I.idx === 0) { const kk0 = st.kind === "b" && st.i === 0 ? smoother(win(st.q, .004, .045)) : 1; I.farP.set(2 + (I.farP.x - 2) * kk0, 6 + (I.farP.y - 6) * kk0); I.farS.set(2 + (I.farS.x - 2) * kk0, 6 + (I.farS.y - 6) * kk0); }
       // Uhr der Lettern: nach 6 s ist alles aufgestanden und jeder Abdruck geschlossen (danach rechnet das Modell nur, wenn sich b ändert)
       // Anzeige-b: bricht b beim Sprung aus der Karte um (Parzellen vorn bauen sich zurück), läuft es mit begrenztem Tempo nach
       let b = bOf(I, st);
+      // Karte: auf jeder Insel steht das fertige Modell (die Teile klappen beim Öffnen der Übersicht weich auf)
+      if (mapOn) b += (I.bMax - b) * smoother(win(M, .12, .55));
       if (I.bShown === undefined || opts.still || (!mapOn && !I.easing)) { I.bShown = b; I.easing = false; }
       else {
         const stp = 1.3 * dtS, dlt = b - I.bShown;
@@ -1496,6 +2420,8 @@ const CHASE_END = 8;                                                  // letztes
       for (const m of I.bMats) { if (m.uniforms.uGB) m.uniforms.uGB.value = b; else m.uniforms.uB.value = b; }
       // def.linesFrom: Haarkanten der Teile erst ab diesem b (Startbild flach über Papierhöhe: sonst liegen alle Kanten als Linie auf dem Horizont)
       if (I.def.linesFrom !== undefined) I.lines.visible = b >= I.def.linesFrom;
+      // Lage des Punktes auf dem Lauf der Szene (Szenenkoordinaten) für Bauteile, die mit ihm reisen (Gerwing: Lieferschein)
+      if (I.route && I.tl) { const sI = st.kind === "b" && st.i === I.idx ? I.tl.sAt(st.q * (I.body.v1 - I.body.v0)) : (st.i > I.idx || st.kind === "z") ? I.route.len : 0; I.K.dotS = sI; I.K.dotL = I.route.at(sI, I.K.dotL || V()); }
       for (const a of I.anims) a(b, time);
       I.group.updateMatrixWorld(true);
       const gfr = groupFrac(I, cw, ch);
@@ -1527,6 +2453,8 @@ const CHASE_END = 8;                                                  // letztes
     for (const I of visible) I.fadeReady = true;
     // Haarkanten der Bögen (LineBasicMaterial, ohne eigenen Shader) folgen dem Dunst ihrer Szene
     for (const I of visible) for (const sh of I.sheets) { const e = sh.children[0]; if (e && e.material) { _pp.setFromMatrixPosition(sh.matrixWorld); e.material.opacity = (camera.position.y > 2.5 ? .32 : 0) * (1 - sm((camera.position.distanceTo(_pp) - I.farS.x) / Math.max(1, I.farS.y - I.farS.x))); } }
+    if (fill) { const kf = 1 - smoother(win(M, 0, .3)); fill.group.scale.y = Math.max(1e-3, kf); fill.group.visible = kf > .01; }
+    if (eyeMark) { const ko = smoother(win(M, .45, .95)); for (const m of eyeMark.mats) m.opacity = ko; eyeMark.group.visible = ko > .01; }
     updateThread(st);
     try { updateCards(M, M > .92); } catch (e) { mapFail(e); }
     state = st;
@@ -1696,14 +2624,17 @@ const CHASE_END = 8;                                                  // letztes
     aspect = w / h;
     camera.aspect = aspect; camera.updateProjectionMatrix();
     // Lesestellungen hängen von der Fenstergröße ab: Bahnen neu (Lage der Szenen bleibt)
-    for (const I of INST) if (I.built) { buildPath(I); const c = V(), t = V(); localPose(I, 0, c, t); I.camStart = c.clone(); I.tgtStart = t.clone(); localPose(I, 1, c, t); I.camEnd = c.clone(); I.tgtEnd = t.clone(); I.trVel = null; }
+    for (const I of INST) if (I.built) plan(I);
+    if (INST.length && INST.every(I => I.built)) try { buildFiller(); } catch (e) { console.error("Füllung:", e); }
   }
 
   // ---------- Aufbau ----------
   function init() {
     for (const I of INST) if (I.built) { scene.remove(I.group); I.group.traverse(o => { if (o.geometry) o.geometry.dispose(); }); }
     for (const pc of pieces) { scene.remove(pc.mesh); pc.g.dispose(); }
-    pieces.length = 0; links3.length = 0;
+    pieces.length = 0; links3.length = 0; CHUNKS.length = 0; LAYC = null;
+    if (fill) { scene.remove(fill.group); fill.group.traverse(o => { if (o.geometry) o.geometry.dispose(); }); fill = null; }
+    if (eyeMark) { scene.remove(eyeMark.group); eyeMark = null; }
     if (table) { scene.remove(table.ground); table.ground.geometry.dispose(); table.mat.dispose(); table = null; }
     MAP = null; Muser = 0; Mextra = 0;
     aspect = VW() / VH(); narrow = aspect < 1;
@@ -1787,20 +2718,26 @@ const CHASE_END = 8;                                                  // letztes
   // Prüfhilfe (nur Entwurf): Zustände ohne Atem setzen, Lesestellen und Abschnitte als p
   const api = {
     THREE, scene, camera, frameFrac, readingPose, stateAt, poseOf, bOf, ensure,
-    labelAt: pp => { const st = stateAt(pp), I = INST[st.i]; if (st.kind === "z") return "Übersicht"; if (st.kind === "b" && I.cfg.labels) { ensure(I.idx); let lb = I.cfg.label; for (const L of I.cfg.labels) { const ki = typeof L.ki === "function" ? L.ki(I.def) : L.ki, kk = I.def.keys[ki]; if (kk && pp >= I.body.p0 + I.def.pOfU(kk.u) * (I.body.p1 - I.body.p0)) lb = L.label; } return lb; } return I.cfg.label; },
+    labelAt: pp => { const st = stateAt(pp), I = INST[st.i]; if (st.kind === "z") return "Übersicht"; if (st.kind === "b" && I.cfg.labels) { ensure(I.idx); let lb = I.cfg.label; for (const L of I.cfg.labels) { const ki = typeof L.ki === "function" ? L.ki(I.def) : L.ki, kk = I.def.keys[ki]; const an = kk && I.tl && I.tl.an.find(q => q.ki === ki); if (an && pp >= (I.body.v0 + an.h0) / TOTAL) lb = L.label; } return lb; } return I.cfg.label; },
     inst: () => INST, segs: () => SEGS, total: () => TOTAL, anchors: () => ANCH.map(a => ({ name: a.name, p: anchorP(a) })),
     setP(v) { jumpTo(v); },
     // Zustand bei p ohne Atem anwenden (für Rechnungen), liefert den Zustand
-    at(v, now = 1e9, still = true) { const st = stateAt(v); applyState(st, now, { still }); return st; },
+    at(v, now = 1e9, still = true) { const st = stateAt(v); for (const I of INST) if (I.built && I.idx <= st.i) I.tStart = -1e9; applyState(st, now, { still }); return st; },       // Lettern stehen (die Uhr der Lettern läuft über 6 s)
     state: () => state, p: () => p,
     // Lesestellen aller Szenen als p der ganzen Seite
     stops() {
       ensure(INST.length - 1);
       const out = [];
-      for (const I of INST) I.def.keys.forEach((k, ki) => { if (k.stop || k.slow) out.push({ scene: I.name, ki, stop: k.stop || null, slow: !!k.slow, p: I.body.p0 + I.def.pOfU(k.u) * (I.body.p1 - I.body.p0), b: k.b }); });
+      // Lesestellen (Text) mit der Mitte ihres Haltefensters als p
+      for (const I of INST) for (const a of I.tl.an) if (a.kind === "text" && a.h0 !== undefined) out.push({ scene: I.name, ki: a.ki, stop: a.stop, slow: false, p: (I.body.v0 + (a.h0 + a.h1) / 2) / TOTAL, b: a.b, hold: a.h1 - a.h0 });
       return out;
     },
-    pieces: () => pieces,
+    pieces: () => pieces, dotV: DOT_V,
+    // aktueller Blickpunkt der Kamera (Messflug: Abstand Kamera–Blickpunkt)
+    camTgt: () => _t,
+    route: i => { const I = INST[i]; ensure(i); if (!I.route) return null; const R = I.route; return { pts: R.pts.map(p => [p.x, p.z]), len: R.len, st: (R.st || []).map(o => ({ p: o.p, s: o.s, d: o.d, how: o.how, c: o.stop.C.toArray() })), nodes: (R.nodes || []).map(n => n.p), obs: (R.obs || []).map(b => [b.min.x, b.max.x, b.min.z, b.max.z, b.max.y]), cell: I.cell, disc: I.disc, inL: I.inL, outL: I.outL, content: I.content, minR: R.minR.r, minAt: [R.pts[R.minR.at] ? R.pts[R.minR.at].x : 0, R.pts[R.minR.at] ? R.pts[R.minR.at].z : 0], tl: { T: I.tl.T, V0: I.tl.V0, Tpre: I.tl.Tpre, tDot0: I.tl.tDot0, bIn: I.tl.bIn, an: I.tl.an.map(a => ({ kind: a.kind, ki: a.ki, s: a.s, h0: a.h0, h1: a.h1, b: a.b })) } }; },
+    chunk: i => CHUNKS[i] ? CHUNKS[i] : null,
+    lay: () => { const L = layoutOf(); return { isl: L.isl.map(q => ({ C: q.C.toArray(), yaw: q.yaw, R: q.R, door: q.door, E: q.E.toArray(), X: q.X.toArray() })), rivers: L.rivers.map(r => r ? r.len : 0), fin: L.fin.len, mark: { D: L.mark.D.toArray(), Wm: L.mark.Wm } }; },
     // Anordnung und Karte (Prüfung): Bahn, Parzellen, Tisch, Kartenstellung, Segment der Karte
     layout: () => INST.map(I => ({ name: I.name, rot: Math.round(I.rot * 180 / PI), O: I.O.toArray(), fp: I.fp, cell: I.cell, content: I.content })),
     cards: () => INST.map(I => { const c = cardCorners(I); return [Math.min(...c.map(v => v.x)), Math.max(...c.map(v => v.x)), Math.min(...c.map(v => v.z)), Math.max(...c.map(v => v.z))]; }),

@@ -306,7 +306,7 @@ export default function (K) {
   // ---------- Lesestellen und Kamera ----------
   // Eine Lesestelle auf dem flachgelegten Monitor (Fläche liegt, Blick schräg von oben, Leserichtung zur Kamera hin aufwärts = -z)
   const ST = {
-    tx: { prints: [TX], px: 19, pxN: 17, fb: 1, pitch: 87, yaw: 0, sx: -.4, sy: -.06, npitch: 87, nyaw: 0, nsx: 0, nsy: .1 }
+    tx: { prints: [TX], px: 27, pxN: 22, fb: 1, pitch: 87, yaw: 0, sx: -.4, sy: -.06, npitch: 87, nyaw: 0, nsx: 0, nsy: .1 }
   };
   return {
     info: { head: { cx: HCX, z: HZ, w: hw, h: .8 } },

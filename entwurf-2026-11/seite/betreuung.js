@@ -245,13 +245,14 @@ export default function (K) {
   F.spur({ tags: ["monitor", "uhr", "kalender"], quiet: [ck.fr, cf], filter: nd => nd !== scr, a: .3 });
 
   // ---------- Lesestellen ----------
-  const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
+  const pxD = (W, H) => Math.min(30, Math.max(27, 27 + (H - 900) / 540 * 2.5));
   const S = {
     // Bildlagen gerechnet (tmp/seite-pruefung/rechnen.mjs): Textträger ganz im Bild (x 0…W, y 64…H−70)
     // Uhr-Lesestelle: Bildschirm mit laufendem Update und Uhr zusammen im Bild (Text rechts), am Handy nur die Uhr
-    t1: { prints: [T1], px: pxD, pitch: 8, yaw: -2, sy: -.4, sx: .7, b: .56, npitch: 8, nyaw: -6, nsy: -.2, nsx: 0 },
+    // Folgefahrt (kern.js): frontal vor dem Text (Sehlinie senkrecht zur Fläche, tilt = Neigung der Fläche), Text bei (sx, sy) im Bild: Platz unten für den Punkt
+    t1: { prints: [T1], px: pxD, frontal: true, tilt: 3, sx: .3, sy: .3, b: .56, ntilt: 3, nsx: 0, nsy: .3 },
     // Kalender: Update ist durch, Abstand mit Luft nach oben für die umschlagenden Blätter, Uhr ganz draußen
-    t2: { prints: [T2], px: pxD, pitch: 16, yaw: -12, sy: -.45, sx: .2, b: .86, npitch: 16, nyaw: -4, nsy: -.2, nsx: 0 }
+    t2: { prints: [T2], px: pxD, frontal: true, tilt: 20, sx: .1, sy: .3, b: .86, ntilt: 20, nsx: 0, nsy: .3 }
   };
   return {
     fov: 32, fovN: 44,

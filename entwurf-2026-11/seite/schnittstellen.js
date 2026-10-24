@@ -447,20 +447,21 @@ export default function (K) {
   // ===================================================================================================
   // Kamera
   // ===================================================================================================
-  const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
+  const pxD = (W, H) => Math.min(30, Math.max(27, 27 + (H - 900) / 540 * 2.5));
   const look = (tx, ty, tz, el, az, dist) => { const e = el * PI / 180, a = az * PI / 180; return V(tx + dist * Math.cos(e) * Math.sin(a), ty + dist * Math.sin(e), tz + dist * Math.cos(e) * Math.cos(a)); };
   const S = {};
   // Handy übernimmt Lage und Einpassung des Desktops, solange nichts Eigenes (n…) angegeben ist; Schriftgröße dort immer 16 px
   const frontStop = (prints, o) => { const s = { prints, px: pxD, pitch: 14, yaw: 0, sx: 0, sy: 0, ...o }; s.nsx = o.nsx !== undefined ? o.nsx : s.sx; s.nsy = o.nsy !== undefined ? o.nsy : s.sy; s.fitN = o.fitN !== undefined ? o.fitN : s.fit; return s; };
-  S.h1 = { prints: [H1], b: 0, px: 999, pxN: 999, fit: .72, fitN: .84, pitch: 12, sy: -.1, nsy: -.05, nsx: 0, sx: 0 };
+  S.h1 = { prints: [H1], b: 0, px: 999, pxN: 999, fit: .72, fitN: .84, frontal: true, tilt: 3, ntilt: 3, sy: .3, nsy: .3, nsx: 0, sx: 0 };
   // Die drei Lesestellen stehen frontal vor den Leporello-Seiten (Blickrichtung waagerecht nach hinten, wie in stimmen.js), ruhig, ohne Zoom auf Geräte
   // a: nach dem Einstecken von CRM und Bewerbermanagement; b: Adapter ist eingerastet, Seite 2 steht; c: Portal, Drehteller und Login-Tafel stehen, Seite 3 steht
   const LOOK = V(0, 0, -1);
-  const pxP = (W, H, s) => pxD(W, H) * s.e / .2, pxPN = (W, H, s) => 16 * Math.max(1, W / 390) * s.e / .2;
-  const pageStop = (pr, b, yaw) => frontStop(pr, { face: LOOK, b, px: pxP, pxN: pxPN, pitch: 22, yaw, nyaw: yaw, sx: 0, sy: -.34 });   // yaw 0 bei allen: kein Pendeln zwischen den Seiten (sie stehen ±16° im Zickzack)
-  S.a = pageStop([prA], .345, 0);
-  S.b = pageStop([prB], .575, 0);
-  S.c = pageStop([prH, prC], .93, 0);
+  const pxP = (W, H, s) => pxD(W, H) * s.e / .2, pxPN = (W, H, s) => 22 * Math.max(1, W / 390) * s.e / .2;
+  // Folgefahrt: frontal vor der Seite (Sehlinie halb zwischen Blickrichtung und Seitennormale: die Seiten stehen im Zickzack ±16°, die Kamera dreht nur ±8°)
+  const pageStop = (pr, b, yaw) => frontStop(pr, { face: LOOK, b, px: pxP, pxN: pxPN, frontal: true, tilt: 5, ntilt: 5, yaw, nyaw: yaw, sx: 0, sy: .28, nsy: .28 });   // yaw 0 bei allen: kein Pendeln zwischen den Seiten (sie stehen ±16° im Zickzack)
+  S.a = pageStop([prA], .345, 8);
+  S.b = pageStop([prB], .575, -8);
+  S.c = pageStop([prH, prC], .93, 8);
   const OVX = (BX0 + BX1) / 2 - 1.2, GX = XC0 + 3.8;                // Mitte des Gesamtüberblicks (Desktop) bzw. der WBG-Gruppe (Handy)
   const stops = Object.values(S);
 

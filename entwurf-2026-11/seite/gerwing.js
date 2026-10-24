@@ -387,7 +387,7 @@ export default function (K) {
   F.spur({ tags: ["haus", "terrasse", "laptop", "palette", "haendler"], quiet: [house, scr, ph, pal.fr, pal.lf, pal.rt, base.top, ...halls.map(h => h.fr)], a: .3 });
 
   // ---------- Lesestelle: genau eine, die Wand ----------
-  const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
+  const pxD = (W, H) => Math.min(30, Math.max(27, 27 + (H - 900) / 540 * 2.5));
   const S = {
     // Fließtext (e0) bestimmt die Schriftgröße; Gerwing, Kennzeile und Überschrift sind größer und passen mit in den Rahmen
     wand: { name: "wand", prints: [gw, mt, hd, t1, t2], e0: eB, px: pxD, pitch: 8, yaw: -6, sy: .04, sx: -.05, pxN: 18.5, fitN: .9, npitch: 10, nyaw: -4, nsy: .18, nsx: -.056 }
@@ -427,7 +427,8 @@ export default function (K) {
     x.fillStyle = "rgba(255,255,255,.92)"; x.beginPath(); x.arc(W / 2, H / 2, W * .5, 0, 2 * PI); x.fill();
     x.fillStyle = "#d40235"; x.beginPath(); x.arc(W / 2, H / 2, W * .36, 0, 2 * PI); x.fill();
   };
-  ST.forEach(([x, z], i) => K.onFlat(R, K.decal(96, 96, dotDraw, .3, .3, HOLD[i][0] - .006, .01), x, z, .005));
+  // (Kamera-Umbau 23.10.2026: keine Markierungen an den Stationen mehr, Erik: „keine Stopp-Markierungen“; dotDraw bleibt als Bestand)
+  void dotDraw;
 
   // ---------- Der Lieferschein: Papierblatt auf Stützstreifen, steht am Laptop auf und reist mit dem Punkt ----------
   const SW = .84, SCW = 512, SCH = 720, SHT2 = SW * SCH / SCW;
@@ -499,7 +500,10 @@ export default function (K) {
   K.anim(b => {
     const born = K.sm((b - B_BORN) / .03);
     slip.visible = born > .001; if (!slip.visible) return;
-    const p = slipAt(b); slip.position.set(p.x, 0, p.z); slip.scale.setScalar(Math.max(.001, born));
+    // der Lieferschein reist mit dem Punkt (kern.js: K.dotL, Lage auf dem Lauf der Szene); am Haus bleibt er stehen
+    const pd = K.dotL || slipAt(b), kH = K.sm((b - HOLD[6][0]) / Math.max(.001, (HOLD[6][0] + HOLD[6][1]) / 2 - HOLD[6][0]));
+    const p = tmpP.set(pd.x + (SH6[0] - pd.x) * kH, 0, pd.z + (SH6[1] - pd.z) * kH);
+    slip.position.set(p.x, 0, p.z); slip.scale.setScalar(Math.max(.001, born));
     const ps = STAMP_B.map(t0 => K.win(b, t0, STAMP_D));
     // Stempel drückt kurz auf: der Bogen weicht beim Aufsetzen ein wenig nach hinten
     const bump = Math.max(...ps.map(q => Math.sin(PI * K.win(q, .38, .3))));
@@ -526,7 +530,7 @@ export default function (K) {
     // Kamera gleitet vor der Wand nach rechts zum Laptop (Laptop und Handy klappen dabei auf)
     key(1.0, .165, V(-4.4, 1.0, ZFR - 1.2), 17, -8, 7.5, V(-4.0, 1.2, ZFR - 1.2), 20, -6, 8.5),
     // Zoom auf den Laptop mit dem Shop: die Bestellung, Quadratmeter rein
-    key(1.2, .205, V(LX0 + LW / 2 + .15, .55, ZFR - .5), 17, -9, 4.2, V(LX0 + LW / 2, .6, ZFR - .5), 19, -6, 4.7),
+    { ...key(1.2, .205, V(LX0 + LW / 2 + .15, .55, ZFR - .5), 17, -9, 4.2, V(LX0 + LW / 2, .6, ZFR - .5), 19, -6, 4.7), view: { at: [-1.9, ZL], hold: 44, b1: .232 } },
     // Station 0: der Lieferschein steht am Laptop auf
     ...hold(0, 1.0, 20, 16, 5.4, 4.1, { dx: -1.4, dxN: .15 }),
     // Station Fläche (m²): Fläche mit Kontur, etwas höherer Blick
@@ -546,8 +550,12 @@ export default function (K) {
     ...hold(6, .9, 20, 16, 5.2, 4.0, { dx: .8, dxN: .12, y: .75 }),
     // Rückzug beginnt, während der letzte Stein sich legt (die Kamera hebt sich über den Lieferschein), zuletzt Haus mit Terrasse, Deko und fertigem Pflaster als Schlussbild
     key(1.2, .935, V(SH6[0] - .6, .7, SH6[1] - 1.2), 22, -9, 8.0, V(SH6[0] - .8, .8, SH6[1] - 1.6), 24, -6, 10.5),
-    key(1.7, 1, V(16.8, 1.35, -9.0), 26, -9, 17.0, V(16.8, 1.5, -8.8), 28, -6, 26.0)
+    { ...key(1.7, .965, V(16.8, 1.35, -9.0), 26, -9, 17.0, V(16.8, 1.5, -8.8), 28, -6, 26.0), view: { at: [SH6[0] + 2.2, SH6[1]], hold: 60, b1: 1 } }
   ];
+  // Kamera-Umbau 23.10.2026 (kern.js): Lauf des Punktes durch die Szene (Wegpunkte nach der Lesestelle an der Wand: Laptop, Stationen auf der Lauflinie, Lücke zwischen
+  // den Hallen, Haus) und Langsamstellen an den Stationen (dort wird gestempelt, der Punkt fließt langsam weiter); Kamera in der Insel: cfg.view (folge.js)
+  const WAY = [[-1.9, ZL, 1, 6], ...SXS.map(x => [x, ZL, 1, 8]), [GX - .3, ZL - 1.2, 1, 1], [GX, GZ2, 1, 2], [SH6[0], SH6[1], 1, 6], [SH6[0] + 2.2, SH6[1], 1, 3]];
+  const SLOW = [...SXS.map((x, i) => ({ at: [x, ZL], b: (HOLD[i][0] + HOLD[i][1]) / 2 })), { at: SH6, b: (HOLD[6][0] + HOLD[6][1]) / 2 }];
 
   return {
     fov: 32, fovN: 44,
@@ -558,6 +566,7 @@ export default function (K) {
     // Eingang des Fadens (Szenenkoordinaten): von vorn, ein Viertelbogen führt auf die Lauflinie; Ausgang ist das Ende von thread.post (hinten rechts)
     faden: { in: [-3.2, 3.2], viaPre: PRE },
     stops: [S.wand],
+    way: WAY, slow: SLOW,
     keys: KEYS
   };
 }

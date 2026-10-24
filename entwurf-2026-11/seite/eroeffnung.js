@@ -286,7 +286,7 @@ export default function (K) {
   F.spur({ tags: ["tisch", "blatt", "rechner"], quiet: [scr, pc.fr], a: .3 });
 
   // Fließtext Desktop 19–21 px je nach Höhe, Handy 16 px
-  const pxD = (W, H) => Math.min(21, Math.max(19, 19 + (H - 700) / 500 * 2));
+  const pxD = (W, H) => Math.min(30, Math.max(27, 27 + (H - 900) / 540 * 2.5));
   // niedrige Fenster zeigen bei gleicher Schriftgröße weniger Welt: Text dort tiefer setzen, damit der Monitor oben im Bild bleibt
   const syH = (lo, hi) => (W, H) => Math.min(hi, Math.max(lo, lo + (H - 720) / 180 * .15 * (hi > lo ? 1 : -1)));
   // Abstand D der Startkamera zur Ebene der Lettern (z = PZ). Desktop: Name rund 70 % der Breite, Schrift höchstens H/6, und das Podest
@@ -327,12 +327,20 @@ export default function (K) {
     // nach rechts mit den Bastellinien ein (b ab .004, voll bis rund .085), geht auf den Teilen weg, sobald sie hochklappen, verblasst b .40–.46
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: N ? .004 : PB + .002, wave: .0025, d: .04, out: .40 },
     thread: THR,
+    // Kamera-Umbau 23.10.2026 (kern.js): der Punkt startet nach dem Tablett am Statuspunkt, fällt an der Front des Rechners auf den Bogen (head, im Raum),
+    // schwingt in einem weiten Bogen rechts um den Rechner und läuft an seiner rechten Seite nach hinten zum Ausgang der Insel
+    // Startstück: vom Statuspunkt an der Front nach rechts über die Kante des Rechners auf den Bogen (Laufrichtung rechts), dann in einem weiten Bogen
+    // an der rechten Seite des Rechners nach hinten zum Ausgang der Insel (kern.js: dotStart, way)
+    dotStart: { head: Array.from({ length: 7 }, (_, k) => { const q = k / 6; return V(LED.x + (PX0 + TW + .06 - LED.x) * q, LED.y + (AY - LED.y) * q, LED.z); }), p: [PX0 + TW + .06, LED.z], t: [1, 0] },
+    way: [[PX0 + TW + 3.4, PZ0 - 1.6, 0, 1.5]],
     stops: Object.values(S),
     keys: [
       { w: 0, stop: S.name },
       // Kamera hebt sich über den Bogen und gibt die Fläche frei, b bleibt 0 (noch keine Linien): Blickhöhe 0° -> 18°, Abstand 10,8 -> 19;
       // Handy 0° -> 19°, Abstand 13,2 -> 22 (vorher 27,5, dann wieder heran: jetzt wächst der Abstand stetig bis zum nächsten Schlüssel)
       { w: 1, stop: S.kern },
+      // Kernsatz: die Kamera steht dort, bis er gelesen ist (zweiter Schlüssel mit derselben Lesestellung)
+      { w: .55, stop: S.kern },
       { w: .4, b: N ? .004 : PB, cam: V(.1, 6.6, 21.6), tgt: V(.6, .7, 3.5), camN: V(.5, 8.06, 26.8), tgtN: V(.5, .9, 6.0) },
       // Bastellinien fertig, Tisch beginnt sich zu heben: Überblick über den Bogen (el 38°, az −4°, Abstand 22,7; Handy el 42°, 25,4).
       // Eingepasst bei 1280 × 900 (tmp-Rechnung, Podest eingeschlossen): fertiges Modell, flach liegende Beine, Name und Podest 72 bis 815 px,
