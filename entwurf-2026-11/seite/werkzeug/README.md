@@ -29,6 +29,10 @@ export default {
 
 `zeigt` nimmt ein Motiv oder eine Liste (dann zählt die Gesamtbox). Weitere Beat-Felder: `halb` (halbe Fensterbreite in u bei Beats ohne Lesestelle), `gewicht` (Zug eines Wegpunkts, Standard 8), `ohnePunkt: true` oder `{ n: true }` (Punkt darf aus dem Bild laufen, setzt `o: 1`). Nach dem Lauf rückt der Anlauf der Folgeszene hinter den letzten Halt (die Kurve der Folgeszene übernimmt sonst die Kamera). `behalten: true` lässt die vorhandenen Stützstellen des Beats unverändert. Maße der Szene: `node werkzeug/messen.mjs d <szene>` schreibt die Boxen nach `_pruefung/motiv/messung-*.json`, `node werkzeug/zeige.mjs <szene> d` listet sie lokal; `node werkzeug/ueber.mjs` macht eine freie Übersichtsansicht.
 
+### Szenen mit Schlüsselfahrt (keyed, Eröffnung)
+
+Die Eröffnung hat keine Stationen und keine Route (`beats/eroeffnung.mjs`, Route bleibt leer). Zeitfenster der Beats: `stop` mit `nach` (Verlängerung in u) bzw. `halb` (Lesestelle ohne Haltefenster: Fenster ± halb), `bei: b` (Fenster um den Zeitpunkt, an dem der Bauzustand b erreicht ist, ± `halb`) oder `u` von Hand. `u`, `halb`, `nach`, `bei`, `behalten` dürfen je Format `{ d: ..., n: ... }` stehen, `zeigt` auch. `ohneFoto: true` lässt das Probebild weg (Überblicke mit `behalten`). Da der Punkt dort bis zum Tablett unsichtbar am Statuspunkt steht, bekommen die Beats `ohnePunkt: true`.
+
 ## Ausgabe und Bilder
 
 Je Szene und Format: Stationen (Abstand des Fadens zur Station), je Beat Abstand L, Schriftgröße in Pixeln, Zeitfenster. Je Beat und Format ein Bild `_pruefung/motiv/<tag>-<szene>-<nr>-<motiv>-<d|n>.png` mit Zeile „motiv ganz im Bild / ABGESCHNITTEN“, freiem Rand in Prozent, Lage des Punkts und Abweichung Kamera-Ist/Soll (über die echte Kamera der Seite gemessen). Die Bilder sind Prüfmaterial, nicht committen.

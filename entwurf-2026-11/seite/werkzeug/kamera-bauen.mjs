@@ -50,13 +50,27 @@ const zeigtIn = (b, m) => { const z = b.zeigt && !Array.isArray(b.zeigt) && type
 // Punkt eines Beats für ein Bildformat: [x, z] oder { d: [x, z], n: [x, z] }
 const punktIn = (b, m) => Array.isArray(b.punkt) ? b.punkt : b.punkt[m];
 
-// Zeitfenster eines Beats: Lesestelle (stop) bzw. nächste Annäherung des Punktes an punkt (ohne Lesestelle) bzw. u von Hand
-function fensterVon(b, stops, dots, R, n, m) {
-  if (b.u) return b.u;
-  if (b.stop !== undefined) { const s = stops[b.stop - 1]; if (!s) throw new Error(`${n}: Lesestelle ${b.stop} gibt es nicht (${stops.length})`); return [s.u0, s.u1]; }
+// Wert je Bildformat: Zahl bzw. Liste oder { d: ..., n: ... }
+const proM = (v, m) => v && !Array.isArray(v) && typeof v === "object" ? v[m] : v;
+// Zeitfenster eines Beats: u von Hand | Lesestelle (stop; ohne Haltefenster ±halb, nach = Verlängerung) | Bauzustand (bei: b, nur Szenen mit Aufbau wie die Eröffnung) | nächste Annäherung des Punktes an punkt
+function fensterVon(b, stops, dots, R, n, m, bAuf = []) {
+  const u = proM(b.u, m), hw0 = proM(b.halb, m);
+  if (u) return u;
+  if (b.stop !== undefined) {
+    const s = stops[b.stop - 1]; if (!s) throw new Error(`${n}: Lesestelle ${b.stop} gibt es nicht (${stops.length})`);
+    let a = s.u0, e = s.u1;
+    if (e - a < .004) { const hw = hw0 || .015; a -= hw; e += hw; }   // Lesestelle ohne Haltefenster (Eröffnung: Schlüsselfahrt)
+    return [a, e + (proM(b.nach, m) || 0)];
+  }
+  const bei = proM(b.bei, m);
+  if (bei !== undefined) {
+    const i = bAuf.findIndex(q => q.b >= bei); if (i < 1) throw new Error(`${n}: Bauzustand ${bei} wird nicht erreicht`);
+    const p = bAuf[i - 1], q = bAuf[i], uc = p.u + (q.u - p.u) * (bei - p.b) / Math.max(1e-9, q.b - p.b), hw = hw0 || .013;
+    return [uc - hw, uc + hw];
+  }
   const pp = punktIn(b, m), P = R.lok([pp[0], 0, pp[1]]); let best = 1e9, bu = .5;
   for (const d of dots) { if (d.u < 0 || d.u > 1) continue; const dd = Math.hypot(d.p[0] - P[0], d.p[2] - P[2]); if (dd < best) { best = dd; bu = d.u; } }
-  const hw = b.halb || .035; return [bu - hw, bu + hw];
+  const hw = hw0 || .035; return [bu - hw, bu + hw];
 }
 
 // ---- 2. Kamera rechnen (je Bildformat eine Messung der Seite)
@@ -74,7 +88,7 @@ async function rechnen(o, m) {
       let text = 0;
       for (const k of z) { const MO = B.motive.d ? B.motive[m] : B.motive, mo = MO[k]; if (!mo) throw new Error(`${n}: Motiv "${k}" fehlt`); pts.push(...ecken(mo.box).map(R.lok)); text = Math.max(text, mo.text || 0); }
       const bl = b.blick || {}, ba = bl[m] || bl, bb = B.blick || {}, bm = bb[m] || bb;
-      return { name: z.join("+"), punkte: pts, u: fensterVon(b, stops, dots, R, n, m), az: ba.az ?? bm.az ?? 0, el: ba.el ?? bm.el ?? 12, text, behalten: b.behalten, ohnePunkt: b.ohnePunkt && (b.ohnePunkt === true || b.ohnePunkt[m]) };
+      return { name: z.join("+"), punkte: pts, u: fensterVon(b, stops, dots, R, n, m, me.bAuf), az: ba.az ?? bm.az ?? 0, el: ba.el ?? bm.el ?? 12, text, behalten: proM(b.behalten, m), ohnePunkt: b.ohnePunkt && (b.ohnePunkt === true || b.ohnePunkt[m]) };
     });
     // überlappende Haltefenster (nahe Lesestellen gehen ineinander über) in der Mitte der Überlappung trennen
     const ord = beats.filter(b => !b.behalten).sort((a, b) => a.u[0] - b.u[0]);
@@ -136,7 +150,8 @@ async function fotos(o, m) {
     const dots = me.dot.filter(d => d.p).map(d => ({ u: d.u, p: R.rahW(d.p) }));
     for (let i = 0; i < B.beats.length; i++) {
       const b = B.beats[i], z = zeigtIn(b, m);
-      const u = (kameras[n] && kameras[n].fenster[m] && kameras[n].fenster[m][i]) || fensterVon(b, stops, dots, R, n, m), um = (u[0] + u[1]) / 2;
+      if (b.ohneFoto) continue;
+      const u = (kameras[n] && kameras[n].fenster[m] && kameras[n].fenster[m][i]) || fensterVon(b, stops, dots, R, n, m, me.bAuf), um = (u[0] + u[1]) / 2;
       const welt = []; for (const k of z) welt.push(...ecken((B.motive.d ? B.motive[m] : B.motive)[k].box).map(P => R.welt(P)));
       const fn = `${tag}-${n}-${String(i + 1).padStart(2, "0")}-${z.join("+")}-${m}.png`;
       await foto(pg, n, um, fn, 1500);

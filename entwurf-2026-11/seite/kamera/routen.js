@@ -10,5 +10,6 @@ export const ROUTEN = {
  "gerwing": {},
  "schnittstellen": {},
  "werdegang": {},
- "agenturen": {}
+ "agenturen": {},
+ "eroeffnung": {}
 };
