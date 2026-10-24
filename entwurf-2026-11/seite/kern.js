@@ -2125,6 +2125,10 @@ export function seite(renderer, SEQ, opt = {}) {
   const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - innerHeight);
   let target = 0, p = 0, pVel = 0, hold = false;
   const SMOOTH_W = 4.2;                                                  // 1/s: Zeitkonstante der Feder rund 0,24 s, 90 % des Weges nach rund 0,9 s
+  // Höchstgeschwindigkeit der Fahrt in Bildschirmhöhen je Sekunde: Mausrad und Wischen liefern je nach Kraft sehr unterschiedliche Sprünge;
+  // langsames Scrollen bleibt eins zu eins, schnelles wird gedeckelt. Zum Ausprobieren: ?vmax=2 in der Adresse (0 = aus).
+  const VMAX = (() => { const q = parseFloat(new URLSearchParams(location.search).get("vmax")); return isFinite(q) && q >= 0 ? q : 1.6; })();
+  let navFahrt = false;                                                   // Sprung über Navigation/Vor/Zurück: ohne Deckel
   function jumpTo(pp, instant) {
     pp = clamp(pp, 0, 1);
     const st = stateAt(pp); ensure(st.i);
@@ -2157,9 +2161,9 @@ export function seite(renderer, SEQ, opt = {}) {
   }
   addEventListener("hashchange", () => { applyHash(); wake(); });
   addEventListener("scroll", () => { if (!hold) target = clamp(scrollY / maxScroll(), 0, 1); wake(); }, { passive: true });
-  for (const ev of ["wheel", "touchstart", "keydown", "pointerdown"]) addEventListener(ev, () => { hold = false; pendingJump = null; wake(); }, { passive: true });
+  for (const ev of ["wheel", "touchstart", "keydown", "pointerdown"]) addEventListener(ev, () => { hold = false; navFahrt = false; pendingJump = null; wake(); }, { passive: true });
   // Vor/Zurück und Navigation: normales (weiches) Scrollen an den Anfang einer Szene, kein Einrasten
-  function scrollToP(pp) { hold = false; scrollTo({ top: clamp(pp, 0, 1) * maxScroll(), behavior: "smooth" }); }
+  function scrollToP(pp) { hold = false; navFahrt = true; scrollTo({ top: clamp(pp, 0, 1) * maxScroll(), behavior: "smooth" }); }
   function go(dir) {
     const list = ANCH.filter(a => a.main).map(anchorP).filter(v => v !== null).sort((a, b) => a - b);
     const now = target;
@@ -2250,7 +2254,7 @@ export function seite(renderer, SEQ, opt = {}) {
   }
   let last = performance.now(), first = true;
   function frameStep(now) {
-    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    const dtRoh = Math.min(.25, (now - last) / 1000), dt = Math.min(.05, dtRoh); last = now;
     const p0 = p;
     // Dargestellter Fortschritt folgt dem Scrollfortschritt wie eine kritisch gedämpfte Feder (Eigenfrequenz SMOOTH_W, bildratenunabhängig,
     // ohne Überschwingen aus der Ruhe): Mausrad-Sprünge und schnelles Wischen werden weich, Beschleunigung und Abbremsen sind stetig
@@ -2258,6 +2262,9 @@ export function seite(renderer, SEQ, opt = {}) {
       const x = p - target, ex = Math.exp(-SMOOTH_W * dt), tm = (pVel + SMOOTH_W * x) * dt;
       pVel = (pVel - SMOOTH_W * tm) * ex; p = clamp(target + (x + tm) * ex, 0, 1);
       if (Math.abs(target - p) < 1e-5 && Math.abs(pVel) < 1e-4) { p = target; pVel = 0; }
+      const lim = VMAX * innerHeight / maxScroll() * dtRoh;   // echte Zeit: auch bei niedriger Bildrate gilt dasselbe Tempo
+      if (VMAX > 0 && !navFahrt && Math.abs(p - p0) > lim) { p = p0 + Math.sign(p - p0) * lim; pVel = (p - p0) / dt; }
+      if (navFahrt && Math.abs(target - p) < 1e-4) navFahrt = false;
     }
     const st = stateAt(p);
     hint && hint.classList.toggle("off", p > .004);
