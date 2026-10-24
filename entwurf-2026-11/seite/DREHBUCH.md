@@ -2,6 +2,13 @@
 
 Alle Einzelszenen aus `entwurf-2026-11/*/` laufen hier auf einer gemeinsamen Kamerabahn hintereinander, von der Eröffnung bis zum Kontakt. Stil „Bogen + Bastellinien“, Regeln aus `docs/FASSUNG-2026-11.md` und `docs/ENTWURFSRUNDE-2026-10.md`. Zustände über `#p=0…1`, Szenenanfänge über `#s=<name>`, Handy-Ansicht in der Vorschau über `&w=390&h=844`.
 
+## Kamera und Punkt (24.10.2026, Erik; gilt vor allen Kameraangaben weiter unten)
+
+- Der Punkt ist der Erzähler und führt die Kamera. Er fährt in jeder Szene die Motive in Erzählreihenfolge an; die Linie ist nur seine Spur und ergibt sich daraus. Er darf dafür über den Tisch laufen, an Gegenständen hochklettern und Schilder mitnehmen, voll in die Szene integriert mit seiner Schiene (Erik: „über den tisch laufen, schilder mitnehmen, alles, voll in die szene integriert mit seiner schiene“).
+- Motiv vor Text: An jeder Lesestelle steht das Motiv (Screen, Geräte, Werk, Arbeitsplätze) ganz im Bild, der Text ist Bildunterschrift und muss nur lesbar und unbeschnitten sein. Lesestellen, die nach Textgröße gerechnet sind, gelten als überholt.
+- Kamera und Route werden nicht von Hand gestellt, sondern aus Erzähllisten erzeugt: `werkzeug/beats/<szene>.mjs`, ein Befehl `node werkzeug/kamera-bauen.mjs <szene>`, Anleitung in `werkzeug/README.md`. Umgestellt: ausserdem, arbeitsweise, gestaltung, modernisierung. Offen: eroeffnung, gerwing, betreuung, shop, schnittstellen, werdegang, agenturen.
+- Offen in der Engine: Der Punkt steht bisher immer vor dem Motiv im unteren Bildband, nicht im Motiv. Für „über den Tisch laufen“ und „Schilder mitnehmen“ fehlt die Mechanik (Klettern gibt es nur in werdegang, `def.lift`).
+
 ## Aufbau
 
 - `index.html`: Marke N4 im Header, Navigation (Projekte, Leistungen, Kontakt), Vor/Zurück zu den Szenenanfängen, HTML-Vorbild mit Name und Unterzeile (steht sofort, bis die Lettern im 3D stehen). Ohne WebGL der ganze Seitentext mit Kontaktlinks.
