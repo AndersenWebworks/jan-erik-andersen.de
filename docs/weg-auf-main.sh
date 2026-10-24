@@ -30,7 +30,7 @@ WTW="$(cd "$WT" && pwd -W)"; HAUPTW="$(cd "$HAUPT" && pwd -W)"; SEITEW="$(cd "$S
 # bilder/vorschau.jpg: Vorschaubild 1200 × 630 für Open Graph / Twitter-Card (aus dem Startbild).
 # Nicht ausgeliefert: _pruefung/, *.md (DREHBUCH, Notizen), übrige bilder/*.jpg (nur Quellbilder der eingebetteten Daten), OFL-Lizenztexte werden mitgegeben.
 ( cd "$SEITE"
-  ls index.html *.js apple-touch-icon.png favicon.svg favicon-16.png favicon-32.png
+  ls index.html *.js kamera/*.js apple-touch-icon.png favicon.svg favicon-16.png favicon-32.png
   ls bilder/*.js bilder/vorschau.jpg bilder/portrait.webp
   ls fonts/*.woff2 fonts/*.ttf fonts/schriften.js fonts/OFL-*.txt
   find vendor -type f
