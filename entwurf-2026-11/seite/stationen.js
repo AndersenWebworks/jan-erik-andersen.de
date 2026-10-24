@@ -52,16 +52,19 @@ export const STATIONEN = {
   ausserdem: { len: { d: 925, n: 880 }, R: 18, door: [-13, 11] },
   // Wie ich arbeite: Titel vorn, dann in weitem Bogen links herum zu den Armen, an Band und Prüfrahmen entlang nach rechts, rechts nach hinten
   arbeitsweise: { len: { d: 898, n: 911 }, R: 18, door: [-6, 11],
-    faden: { way: [[-8, 6.4, 1, 2], [9.3, .8, 6, 2], [9.8, -5, 6, 2]] } },
+    // der Punkt läuft vor den Texten entlang (Station je Text auf gleicher Tiefe vor ihm), so steht er beim Lesen immer mit im Bild
+    stops: { 2: { near: [-8.0, 2.6] }, 3: { near: [-6.0, 2.6] }, 4: { near: [-4.0, 2.6] }, 5: { near: [-1.4, 3.4] }, 6: { near: [7.2, 2.6] } },
+    faden: { lane: false, way: [[9.8, 1.6, 6, 2], [9.8, -5, 6, 2]] } },
   // Werdegang: Eingang rechts vor dem Titel, der Punkt läuft vor der Treppe nach links und an ihrem Fuß links entlang nach hinten; die Kamera liest jede Setzstufe
   // tief von links (Text oben rechts im Bild, der Punkt unten links auf dem Boden neben der Treppe)
   werdegang: { len: { d: 1280, n: 1258 }, R: 18, door: [9, -6],
-    // Lesestellung der Setzstufen: frontal (Erik: Stufen frontal lesbar), der Punkt am Treppenfuß darf dabei am Bildrand oder knapp außerhalb sein
-    stops: Object.fromEntries([2, 3, 4, 5, 6, 7, 8, 9].map(n => [n, { near: [-4.8, 4.3 - 1.9 * n], nearR: .3, d: { pose: { frontal: true, tilt: 6, sx: 0, sy: 0, px: 28 } }, n: { pose: { frontal: true, ntilt: 6, nsx: 0, nsy: 0, pxN: 22 } } }])),
-    // gerade am Treppenfuß entlang (die Stationen ziehen kaum, der Faden zackt nicht)
-    faden: { stW: .01, way: [[-4.8, 2.5, 1, 4], ...[1, 2, 3, 4, 5, 6, 7, 8].map(i => [-4.8, 4.3 - 1.9 * (i + 1) - .95, i + 1, 4])] } },
+    // Der Faden klettert auf der linken Textkante die Treppe hinauf (def.lift, def.way, def.free in werdegang.js): der Punkt steht an jeder Lesestelle oben links neben dem Text
+    faden: def => ({ lane: false, free: [def.free] }) },
   // Zusammenarbeit: ruhiger Weg (Erik: lieber ruhig als um jedes Bauteil): vom Titel links an der linken Station vorbei nach hinten, hinter der Tafel in weitem Bogen nach
   // rechts zur rechten Station und zum Ausgang. Hinter der Tafel ist der Punkt verdeckt, an den Lesestellen steht er links bzw. rechts neben der Wand.
-  agenturen: { len: { d: 1128, n: 1315 }, R: 18, stops: { 1: { near: [12.4, 6.8] }, 2: { near: [9.4, -3.4] }, 3: { near: [23.6, -9.6] }, 4: { near: [23.6, -9.6] } },
-    faden: { clear: .5, way: [[9.8, 2, 1, 2], [10.6, -8.6, 2, 2], [16.5, -10.8, 2, 2]] } }
+  agenturen: { len: { d: 1128, n: 1315 }, R: 18,
+    // Der Faden läuft vor dem Teamtisch entlang (links, Mitte, rechts, je eine Station vor einer Spalte der Tafel), dann rechts am Tisch vorbei nach hinten: die Kamera zeigt
+    // damit den Raum mit den Arbeitsplätzen und der Tafel dahinter, der Punkt steht immer unten im Bild
+    stops: { 1: { near: [12.4, 6.8] }, 2: { near: [13.4, 3.6] }, 3: { near: [17.0, 3.6] }, 4: { near: [20.6, 3.6] } },
+    faden: { clear: .5, lane: false, way: [[11.6, 5.0, 1, 2], [24.6, 2.0, 4, 2], [24.6, -9.0, 4, 2]] } }
 };

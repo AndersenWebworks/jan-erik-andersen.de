@@ -11,6 +11,7 @@ import schnittstellen from "./schnittstellen.js";
 import werdegang from "./werdegang.js";
 import abschluss from "./abschluss.js";
 import { STATIONEN } from "./stationen.js";
+import { KAMERA } from "./kamera/index.js";
 
 // Kamera-Umbau 23.10.2026 (kern.js: Lage der Inseln, Szenenlauf, Zeitplan, Kameraspur). Je Szene:
 // - len: Scrollweg der Szene in vh (d: Breitbild, n: hochkant), fest, damit #p schon vor dem Bau aller Szenen gilt. So gewählt, dass der Punkt in der Szene fast genau
@@ -44,7 +45,7 @@ const RAW = [
 ];
 
 // Zahlen (Länge, Insel, Türen, Rig-Werte, Lesestellen) aus der Stationstabelle (stationen.js)
-export const SEQ = RAW.map(c => ({ ...c, ...(STATIONEN[c.name] || {}) }));
+export const SEQ = RAW.map(c => ({ ...c, ...(STATIONEN[c.name] || {}), kamera: KAMERA[c.name] }));
 
 // Szenen eines anderen Helfers (Gestaltung, Außerdem): fehlen sie, entfällt ihr Abschnitt (Hinweis in der Konsole)
 export async function optional(cfg) {

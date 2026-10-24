@@ -122,22 +122,6 @@ main.sr:focus { outline: none; }
 .controls button:hover { color: var(--red); border-color: var(--red); }
 .controls svg { width: 16px; height: 16px; }
 .controls button.an { color: var(--red); border-color: var(--red); }
-/* Übersicht: Knopf mit Beschriftung (am Handy nur das Zeichen) */
-.controls #uebersicht { width: auto; padding: 0 13px; gap: 9px; grid-auto-flow: column; font: 500 12px/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; }
-.controls #uebersicht .lbl { display: inline; }
-/* Karte: anklickbare Parzellen über dem Tisch (SVG, Lage aus kern.js), Beschriftung mit weißem Rand */
-.karte { position: fixed; z-index: 1; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; }
-.karte a { pointer-events: none; cursor: pointer; outline: none; }
-body.kartenmodus .karte a { pointer-events: auto; }
-.karte polygon { fill: rgba(255,255,255,.012); stroke: rgba(48,48,51,.22); stroke-width: 1; stroke-dasharray: 3 3; stroke-linejoin: round; transition: fill .2s, stroke .2s; }
-.karte text { font: 500 12.5px/1 var(--sans); letter-spacing: .03em; fill: var(--ink); text-anchor: middle; dominant-baseline: central; pointer-events: none; transition: fill .2s; }
-.karte rect { fill: #f8fafd; stroke: rgba(48,48,51,.5); stroke-width: 1; rx: 2px; ry: 2px; transition: stroke .2s; }
-.karte a.hier polygon { stroke: var(--red); stroke-opacity: .5; }   /* gestrichelt wie die übrigen Parzellen: kein durchgezogener roter Kreis, der wie eine Schlaufe des Fadens wirkt */
-.karte a:hover polygon, .karte a:focus-visible polygon { fill: rgba(212,2,53,.09); stroke: var(--red); stroke-dasharray: none; stroke-width: 1.6; }
-.karte a:hover text, .karte a:focus-visible text { fill: var(--red); }
-.karte a:hover rect, .karte a:focus-visible rect, .karte a.hier rect { stroke: var(--red); }
-.kartenhinweis { position: fixed; z-index: 2; left: 50%; bottom: 58px; transform: translateX(-50%); font: 500 12px/1 var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); opacity: 0; transition: opacity .5s; pointer-events: none; text-shadow: 0 0 3px var(--bg), 0 0 8px var(--bg); white-space: nowrap; }
-body.kartenmodus .kartenhinweis { opacity: 1; }
 
 .bar { position: fixed; z-index: 2; left: var(--pad); right: var(--pad); bottom: 0; height: 1px; background: rgba(48,48,51,.15); }
 .bar i { display: block; height: 100%; width: 0; background: var(--ink); }
@@ -158,7 +142,7 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 .nogl main.sr dt { font-size: 14px; color: var(--muted); letter-spacing: .03em; margin-top: .9em; }
 .nogl main.sr dd { font-size: 18px; margin: .1em 0 0; }
 .nogl main.sr footer { margin-top: 3em; font-size: 14px; color: var(--muted); }
-.nogl #stage, .nogl .controls, .nogl .hint, .nogl .track, .nogl .bar, .nogl .karte, .nogl .kartenhinweis { display: none; }
+.nogl #stage, .nogl .controls, .nogl .hint, .nogl .track, .nogl .bar { display: none; }
 .nogl .draft { position: static; padding: 0 var(--pad) 2rem; }
 
 /* Rechtliche Links: dauerhaft, dezent am unteren Rand (3D-Ansicht), im Fallback am Ende der Seite */
@@ -174,10 +158,6 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
   .draft b { display: none; }
   .draft { gap: 10px; bottom: 34px; }
   .hint { bottom: 86px; }
-  .controls #uebersicht { padding: 0; width: 42px; }
-  .controls #uebersicht .lbl { display: none; }
-  .kartenhinweis { bottom: 72px; font-size: 11px; }
-  .karte text { font-size: 10.5px; }
 }
 </style>
 <script type="application/ld+json">
@@ -333,7 +313,6 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 <body>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <canvas id="stage" aria-hidden="true"></canvas>
-<svg id="karte" class="karte" role="group" aria-label="Übersicht der Seite: Parzellen anklicken" aria-hidden="true"></svg>
 <header class="top">
   <a class="mark n4" href="#start" data-scene="eroeffnung" aria-label="Jan-Erik Andersen"><span aria-hidden="true">Jan-Erik <i>Andersen</i><span class="dot"></span><span class="fold"></span></span></a>
   <nav aria-label="Hauptnavigation"><a href="#arbeit" data-scene="gerwing">Projekte</a><a href="#leistungen" data-scene="betreuung">Leistungen</a><button type="button" class="kontaktknopf" id="kontaktknopf" aria-expanded="false" aria-controls="kontaktblatt">Kontakt</button></nav>
@@ -427,11 +406,9 @@ body.kartenmodus .kartenhinweis { opacity: 1; }
 <div class="track"></div>
 <div class="hint" id="hint" aria-hidden="true">Scrollen</div>
 <div class="controls">
-  <button id="uebersicht" type="button" aria-label="Übersicht" aria-pressed="false" title="Übersicht"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2" y="2" width="5" height="5"/><rect x="9" y="2" width="5" height="5"/><rect x="2" y="9" width="5" height="5"/><rect x="9" y="9" width="5" height="5"/></svg><span class="lbl">Übersicht</span></button>
   <button id="prev" type="button" aria-label="Vorige Szene"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M10 3 5 8l5 5"/></svg></button>
   <button id="next" type="button" aria-label="Nächste Szene"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="m6 3 5 5-5 5"/></svg></button>
 </div>
-<p class="kartenhinweis" id="kartenhinweis" aria-hidden="true">Parzelle anklicken</p>
 <div class="draft"><b>Entwurf Seite</b><span id="szene" aria-hidden="true"></span></div>
 <div class="bar"><i id="bar"></i></div>
 <footer class="rechtlich" aria-label="Kontakt und Rechtliches"><a href="mailto:mail@andersen-webworks.de">mail@andersen-webworks.de</a><span aria-hidden="true">·</span><a href="tel:+4938733270015">+49 38733 270015</a><span aria-hidden="true">·</span><a href="https://www.linkedin.com/in/andersen-erik/" target="_blank" rel="noopener">LinkedIn</a><span aria-hidden="true">·</span><a href="/de/impressum.html">Impressum</a><span aria-hidden="true">·</span><a href="/de/datenschutz.html">Datenschutz</a></footer>

@@ -372,7 +372,7 @@ export default function (K) {
   const ST = steps.map(st => {
     const top = st.k === 8;
     // Kamera-Umbau 23.10.2026: frontal vor der Setzstufe (Schräge höchstens 15°), die Kamera steigt Stufe für Stufe mit; Bildlage wie bisher (Text oben, die Stufe darunter im Bild)
-    const s = { prints: st.prints, e0: ED, b: st.s + S, px: pxD, frontal: true, tilt: 7, ntilt: 7, yaw: -6 + (st.k - 1) * .8, sy: top ? .2 : syD, pxN: 22, nyaw: 0, nsy: top ? .25 : syN };
+    const s = { near: [XL - .16, Zf(st.k) - .12], nearR: .3, prints: st.prints, e0: ED, b: st.s + S, px: pxD, frontal: true, tilt: 7, ntilt: 7, yaw: -6 + (st.k - 1) * .8, sy: top ? .2 : syD, pxN: 22, nyaw: 0, nsy: top ? .25 : syN };
     s.sx = sxOf(s, false); s.nsx = sxOf(s, true);
     return s;
   });
@@ -388,6 +388,17 @@ export default function (K) {
     // Raster (seite/): mit den Bastellinien, weg bevor die erste Stufe steht
     grid: { step: .5, every: 5, a: .12, aM: .22, t0: .004, wave: .0025, d: .04, out: .1 },
     thread: { pts, t0: tt0, t1: tt1, lin: true },
+    // Der Faden der Seite (kern.js, routeFor) klettert mit: Höhe über dem Boden zu einem Punkt (x, z) des Laufs. Auf der linken Textkante ein Anstieg über jede Trittstufe zur
+    // Oberkante der nächsten Setzstufe (der Punkt steht an jeder Lesestelle oben links neben dem Text, immer im Bild), vor der Treppe und hinter der obersten Stufe gleitet er wieder zum Boden.
+    lift: (x, z) => {
+      const nodes = [[Z1 + 1.2, 0]]; for (let k = 1; k <= 8; k++) nodes.push([Zf(k), k * H]); nodes.push([ZB, 8 * H], [ZB - 5.6, 0]);
+      if (z >= nodes[0][0]) return 0; if (z <= nodes[nodes.length - 1][0]) return 0;
+      for (let i = 1; i < nodes.length; i++) if (z >= nodes[i][0]) { const f = (nodes[i - 1][0] - z) / (nodes[i - 1][0] - nodes[i][0]); return nodes[i - 1][1] + (nodes[i][1] - nodes[i - 1][1]) * (f * f * (3 - 2 * f) * .5 + f * .5); }
+      return 0;
+    },
+    // Lauf auf der linken Textkante (Szenenkoordinaten), nach jeder Lesestelle ein Wegpunkt; der Punkt steht an der Oberkante der jeweiligen Setzstufe
+    way: [[XL - .16, Z1 + 1.0, 1, 4]],
+    free: [X0 - .6, X1 + .6, ZB - 1, Z1 + 2],
     stops: [SH, ...ST],
     keys: [
       { w: 0, stop: SH, noWarp: true },

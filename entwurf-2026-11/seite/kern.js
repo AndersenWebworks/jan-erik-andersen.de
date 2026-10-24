@@ -1,11 +1,9 @@
 // Durchgehende Startseite jan-erik-andersen.de, Fassung 2026-11 (entwurf-2026-11/seite/). Gemeinsamer Kern für alle Szenen.
 // Grundlage: entwurf-2026-11/bogen/kern.js. Jede Szene ist ein Modul im bisherigen Format (default (K) => { keys, stops, track, … }),
-// sie wird als Parzelle auf einen gemeinsamen Tisch gestellt (Raster wie ein Setzkasten: gleich große Parzellen mit gleichen Abständen, Schlangenlinie durch das
-// Raster, siehe layout() und slotOf()). Die Kamera folgt zwischen zwei Szenen dem roten Punkt am Faden (chaseTrack(), eine stetige Verfolgungsfahrt ohne Überblick);
-// in der Szene läuft ihre eigene Bahn (Zeitverzerrung, Lesestellungen aus readingPose()). Am Ende zoomt die Kamera aus der letzten Szene weit heraus zur Karte des
-// Tisches von oben (Segment "z"), dort sind die Parzellen anklickbar; der Knopf „Übersicht“ öffnet dieselbe Karte an jeder Stelle (M, blendMap()).
-// Boden: sehr großer Bogen mit zartem Raster, der zum Horizont in den Dunst ausläuft; weiche Schatten der Modelle (Tiefenkarte, shadowPass()); Farben von Dunst,
-// Schatten und Licht an einer Stelle (PAL).
+// sie wird als Insel auf den gemeinsamen Boden gestellt (siehe layoutOf() und slotOf()). Die Kamera fährt eine vorab festgelegte, stetige Bahn, die dem roten Punkt am Faden
+// folgt: zwischen den Szenen in Mausperspektive hinter dem Punkt, in den Szenen durch die Stützstellen aus kamera/<szene>.js (Ort und Blickziel relativ zum Punkt).
+// Es gibt keine Karte und keine Draufsicht. Der Boden ist ein sehr großer Bogen, der zum Horizont in den Dunst ausläuft; weiche Schatten der Modelle (Tiefenkarte,
+// shadowPass()); Farben von Dunst, Schatten und Licht an einer Stelle (PAL).
 // Ein roter Faden mit Punkt läuft von der Eröffnung durch alle Szenen bis zum Kontakt-Umschlag.
 //
 // Zusammengeführt aus den Kern-Kopien der Szenen (Herkunft in Klammern):
@@ -250,6 +248,9 @@ export function seite(renderer, SEQ, opt = {}) {
   // Auflösung der Drucke: buildScale 1 = volle Pixeldichte, kleiner = Canvas von Anfang an klein gezeichnet (Zeichnen unter ctx.scale, die Maße
   // der Drucke bleiben gleich), nie größer als 1024 px. Entfernte Szenen und die Karte zeigen kleine Drucke, nahe Szenen volle (setScale()).
   const SMALL = .25, SMALL_MAX = 1024;
+  // Abstand der Drucke zur Fläche, auf der sie stehen: größer als die Staffelung der Papierebenen (EPS je Ebene, übereinander gestapelte Seiten eines Leporello),
+  // sonst liegt der Druck hinter einer Nachbarebene und verschwindet im Raster der Tiefenprüfung (Z-Fighting: ausgefranste, halb verschwundene Schrift)
+  const PRINT_LIFT = .014;
   let buildScale = 1;
   const PXEM = 120, MAXTEX = Math.min(4096, renderer.capabilities.maxTextureSize || 4096);
   const texOf = cv => { const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = maxAniso; t.minFilter = THREE.LinearMipmapLinearFilter; return t; };
@@ -303,9 +304,7 @@ export function seite(renderer, SEQ, opt = {}) {
 
   // ---------- Szenen ----------
   const links3 = [];
-  let INST = [], SEGS = [], ANCH = [], TOTAL = 1, thread = null, ZSEG = null;
-  // Länge des Schluss-Zooms in vh (Breitbild, hochkant)
-  const ZOOM = { d: 520, n: 520 };
+  let INST = [], SEGS = [], ANCH = [], TOTAL = 1, thread = null;
 
   function newInstance(cfg, idx) {
     return { cfg, idx, name: cfg.name, built: false, O: V(), rot: 0, M4: new THREE.Matrix4(), R4: new THREE.Matrix4(), fp: null, tStart: undefined, parked: false, lastKey: "" };
@@ -343,15 +342,12 @@ export function seite(renderer, SEQ, opt = {}) {
         if (fit) st0.fitPose = { cam: fit.cam, tgt: fit.tgt, px: fit.px };
       }
     }
-    I.anW = anchorsWorld(I);
     buildThreadFor(I);
     for (const j of [I.idx - 1, I.idx, I.idx + 1]) if (INST[j] && INST[j].built && INST[j].tl) computeChunk(j);
   }
   // alle Szenen gebaut: Füllung am Fluss, Wortmarke, Höhenlinien
   function allBuilt() {
     try { buildFiller(); } catch (e) { console.error("Füllung:", e); }
-    try { buildEyeMark(); } catch (e) { console.error("Wortmarke:", e); }
-    try { buildContours(); } catch (e) { console.error("Höhenlinien:", e); }
   }
   // Eine Szene bauen: Modul ausführen, Faltmodell abschließen, Drucke und Netze in die Gruppe der Szene hängen
   function build(I) {
@@ -391,7 +387,7 @@ export function seite(renderer, SEQ, opt = {}) {
       link(pr, href) { links3.push({ pr, href, I }); return pr; },
       measure(lines, o = {}) { const t = printTex(lines, { ...o, scale: .02 }); t.tex.dispose(); return t; },
       // Druck auf eine Fläche K.panel: Mitte bei (u entlang des Scharniers, v vom Scharnier weg); side wie bei F.attach
-      onPanel(nd, pr, u, v, side = 1, q = null, lift = .002) { F.attach(nd, pr.mesh, nd.uv(u, v), q || nd.n, side, lift); return pr; },
+      onPanel(nd, pr, u, v, side = 1, q = null, lift = PRINT_LIFT) { F.attach(nd, pr.mesh, nd.uv(u, v), q || nd.n, side, lift); return pr; },
       // Druck flach auf eine waagerechte Fläche (Bogen, Hubplatte), liest sich von vorn (+z)
       onFlat(nd, pr, x, z, lift = .002) { F.attach(nd, pr.mesh, [x, z], [0, -1], 1, lift); return pr; },
       // Lettern: Zeile steht aus dem Bogen auf (Scharnier an der Grundlinie), im Bogen bleibt ihr Abdruck.
@@ -509,7 +505,7 @@ export function seite(renderer, SEQ, opt = {}) {
     I.M.update(I.b0, 0); I.curB = I.b0; I.curT = 0;
     plan(I);
     dbg("Szene " + (I.idx + 1) + " " + I.name + " gebaut");
-    try { updateTable(); } catch (e) { mapFail(e); }
+    try { updateTable(); } catch (e) { console.error("Boden:", e); }
     group.visible = false;
     if (INST.every(X => X.built)) allBuilt();
     return I;
@@ -1080,6 +1076,8 @@ export function seite(renderer, SEQ, opt = {}) {
     if (hitsObs(relaxed) || minRadiusOf(relaxed, p => [p.x, p.z]).r < R_USED * .8) { relaxed = base0; R_USED = rLow; }
     const flat = mkPoly(relaxed), nR = Math.max(4, Math.round(flat.len / .2)), Pr = Array.from({ length: nR + 1 }, (_, k) => flat.at(flat.len * k / nR));
     const pts = [...head, ...Pr.slice(head.length ? 1 : 0)];
+    // Szenen mit Höhe (Treppe): def.lift(x, z) hebt den Lauf über den Boden, der Faden klettert mit
+    if (def.lift) for (const q of pts) q.y = THREAD_Y + def.lift(q.x, q.z);
     const R = mkPoly(pts);
     R.minR = minRadiusOf(Pr); R.rUsed = R_USED;
     R.st = st;
@@ -1245,55 +1243,7 @@ export function seite(renderer, SEQ, opt = {}) {
       isl.push(islandAt(C, y1, R, door));
       rivers.push(riverPath(A.X, A.yaw, E, y1, guides));
     }
-    // Karte: Mitte zwischen den Reihen; die Wortmarke steht dort, ihr Schlusspunkt ist das Ende des Flusses (Mündung)
-    let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9;
-    for (const s of isl) { x0 = Math.min(x0, s.C.x - s.R); x1 = Math.max(x1, s.C.x + s.R); z0 = Math.min(z0, s.C.z - s.R); z1 = Math.max(z1, s.C.z + s.R); }
-    const psi = KARTE[narrow ? "n" : "d"].yaw * PI / 180, right = V(Math.cos(psi), 0, Math.sin(psi)), upS = V(Math.sin(psi), 0, -Math.cos(psi));
-    const E = narrow ? 5.6 : 8.4, w1 = printTex(["Jan-Erik"], { font: "marke", scale: .02 }), w2 = printTex(["Andersen"], { font: "marke", italic: true, scale: .02 }), wx = printTex(["x x"], { font: "marke", scale: .02 }), wy = printTex(["xx"], { font: "marke", scale: .02 });
-    w1.tex.dispose(); w2.tex.dispose(); wx.tex.dispose(); wy.tex.dispose();
-    const Wm = (w1.tw + w2.tw + (wx.tw - wy.tw)) * E + .01 * E + .085 * E + .9;
-    // Mitte der Insellagen der beiden Reihen (in Kartenrichtung „oben“ und „unten“)
-    const rowA = isl.slice(0, apex), rowB = isl.slice(apex + 1);
-    const ctr = V((x0 + x1) / 2, 0, 0);
-    const mid = (a, b) => (a.reduce((s, q) => s + q.C.z, 0) / a.length + b.reduce((s, q) => s + q.C.z, 0) / b.length) / 2;
-    ctr.z = mid(rowA, rowB);
-    // Schlusspunkt: Marke mittig zwischen den Reihen; Grundlinie leicht unter der Mitte (Breitbild), am Handy steht die Marke quer über dem Band
-    const D = ctr.clone().addScaledVector(right, Wm / 2).addScaledVector(upS, -.28 * E); D.y = THREAD_Y;
-    const mk0 = { Wm };
-    // Mündung: hinter der letzten Insel ein halber Bogen nach rechts in die Mitte, dann am Band entlang zum Schlusspunkt; im Breitbild läuft der Fluss unter der Marke
-    // (Abstand LAY.Q unter der Grundlinie) und biegt von unten in den Punkt, am Handy kommt er von oben in den Punkt
-    const Z = isl[n - 1], yz = Z.yaw, fz = hdir(yz), rz = hright(yz);
-    let fin;
-    if (!narrow) {
-      // upS zeigt auf der Karte nach oben: „unter der Marke“ ist −upS, der Fluss biegt von unten (Richtung +upS) in den Punkt
-      const zr = D.clone().addScaledVector(upS, -LAY.Q);                                   // Linie unter der Marke
-      const lat = zr.clone().sub(Z.X).dot(rz), RM = Math.max(10, (lat - LAY.L1) / 2);
-      const g = arcGuides(Z.X, yz, RM, PI, LAY.L0).slice(1, -1);
-      const endArc = Z.X.clone().addScaledVector(fz, LAY.L0).addScaledVector(rz, 2 * RM);
-      const turnIn = D.clone().addScaledVector(right, -LAY.Q * 1.1).addScaledVector(upS, -LAY.Q);       // erst hinter dem Schriftzug nach oben in den Punkt (der Faden kreuzt die Marke nicht)
-      // vom Ende des Bogens bis vor die Marke in ruhigen Wellen (halbe Amplitude der Flüge), dann gerade unter der Marke entlang
-      const ul = D.clone().addScaledVector(right, -mk0.Wm - 6).addScaledVector(upS, -LAY.Q), runL = ul.clone().sub(endArc).dot(right), nW = Math.max(0, Math.round(runL / 34));
-      for (let k = 1; k <= nW; k++) { const q = k / (nW + 1), pt = endArc.clone().addScaledVector(right, runL * q).addScaledVector(upS, (k % 2 ? 1 : -1) * LAY.FA * .5); g.push(pt); }
-      // bis vor die Marke als Ausgleichskurve (Ende waagerecht), dann fest gelegt: gerade unter dem Schriftzug entlang und im Viertelkreis (Radius Q) hinter ihm
-      // nach oben in den Schlusspunkt, so kreuzt der Faden die Marke nie
-      void turnIn;
-      const head = riverPath(Z.X, yz, ul, Math.atan2(right.x, -right.z), g), Cc = D.clone().addScaledVector(right, -LAY.Q * 4), tail = [];
-      const c0 = Cc.clone().addScaledVector(upS, -LAY.Q), runU = c0.clone().sub(ul).dot(right);
-      for (let s = .4; s < runU; s += .4) tail.push(ul.clone().addScaledVector(right, s));
-      // weicher Schwung (S-Kurve, Anfang und Ende waagerecht) über 4 Q in den Punkt hinter dem Namen
-      for (let k = 0; k <= 32; k++) { const u = k / 32, h = u * u * (3 - 2 * u); tail.push(Cc.clone().addScaledVector(right, LAY.Q * 4 * u).addScaledVector(upS, -LAY.Q * (1 - h))); }
-      tail.forEach(q => q.y = THREAD_Y);
-      const all = [...head.pts, ...tail], fl = mkPoly(all), nF = Math.max(4, Math.round(fl.len / .4));
-      fin = mkPoly(Array.from({ length: nF + 1 }, (_, k) => fl.at(fl.len * k / nF)));
-    } else {
-      const lat = D.clone().sub(Z.X).dot(rz), RM = Math.max(10, lat / 2);
-      const g = arcGuides(Z.X, yz, RM, PI, LAY.L0).slice(1, -1);
-      // nach dem Halbbogen gerade durch die Mitte zwischen den Reihen zum Schlusspunkt (Leitpunkte, sonst baucht die Ausgleichskurve in die Inseln aus)
-      const a0 = Z.X.clone().addScaledVector(fz, LAY.L0).addScaledVector(rz, 2 * RM), run = D.clone().sub(a0).dot(fz) * -1, nG = Math.max(1, Math.round(run / 25));
-      for (let k = 1; k < nG; k++) { const q = a0.clone().addScaledVector(fz, -run * k / nG); q.addScaledVector(rz, D.clone().sub(q).dot(rz) * k / nG); q.w = 4; g.push(q); }
-      fin = riverPath(Z.X, yz, D, yz + PI, g);
-    }
-    LAYC = { key, isl, rivers, fin, mark: { D, psi, E, Wm, right, upS }, apex, box: [x0, x1, z0, z1] };
+    LAYC = { key, isl, rivers, apex };
     return LAYC;
   }
   const slotOf = idx => layoutOf().isl[idx];
@@ -1453,13 +1403,9 @@ export function seite(renderer, SEQ, opt = {}) {
       if (i) { SEGS.push({ kind: "t", i, v0: acc, v1: acc + T }); acc += T; }
       SEGS.push({ kind: "b", i, v0: acc, v1: acc + L }); acc += L;
     });
-    // Schluss: der Punkt läuft die Mündung hinab (Tempo DOT_V, am Ende weich auslaufend), die Kamera zoomt dabei lang und weich zur Karte heraus
-    const ZL = ZSEG_LEN();
-    SEGS.push({ kind: "z", i: INST.length - 1, v0: acc, v1: acc + ZL }); acc += ZL;
     TOTAL = acc;
     for (const s of SEGS) { s.p0 = s.v0 / TOTAL; s.p1 = s.v1 / TOTAL; }
     INST.forEach(I => { I.body = SEGS.find(s => s.kind === "b" && s.i === I.idx); I.trIn = SEGS.find(s => s.kind === "t" && s.i === I.idx) || null; });
-    ZSEG = SEGS[SEGS.length - 1];
     document.querySelector(".track").style.height = (TOTAL + 100) + "vh";
   }
   const segAt = p => { for (let k = 0; k < SEGS.length; k++) if (p <= SEGS[k].p1 + 1e-12) return k; return SEGS.length - 1; };
@@ -1470,7 +1416,6 @@ export function seite(renderer, SEQ, opt = {}) {
       out.push({ name: I.name, label: I.cfg.label, p: I.body.p0, main: true });
       if (I.cfg.anchors) for (const [nm, ki] of Object.entries(I.cfg.anchors)) out.push({ name: nm, label: nm, p: null, inst: I, ki, main: true });
     }
-    out.push({ name: "uebersicht", label: "Übersicht", p: 1, main: false });                 // die stehende Karte am Seitenende
     return out;
   }
   const anchorP = a => {
@@ -1494,7 +1439,6 @@ export function seite(renderer, SEQ, opt = {}) {
   function bOf(I, st) {
     if (!I.built) return 0;
     const tl = I.tl, bEnd = tl ? tl.bEnd : I.bMax;
-    if (st.kind === "z") return I.idx < st.i ? I.bMax : bEnd + (I.bMax - bEnd) * sm(st.q * 3);
     if (I.idx < st.i - 1 || (st.kind === "b" && I.idx < st.i)) return I.bMax;
     if (st.kind === "t" && I.idx === st.i - 1) return bEnd + (I.bMax - bEnd) * sm(st.q);
     if (st.kind === "b" && I.idx === st.i) return tl ? tl.bAt(st.q * (I.body.v1 - I.body.v0)) : I.b0;
@@ -1530,16 +1474,10 @@ export function seite(renderer, SEQ, opt = {}) {
   const RAMP_IN = RIG.rampIn, RAMP_OUT = RIG.rampOut, RAMP_MID = RIG.rampMid, JOIN = RIG.join, LAMBDA_T = RIG.lambda, SMOOTH_S = RIG.smooth, FIN_DEC = 70;
   const CHASE = RIG.chase, FOLLOW = RIG.follow, YAW_K = RIG.yawK, YAW_WIN = RIG.yawWin, DOT_FRAME = RIG.frame;
   const segAtV = v => { for (let k = 0; k < SEGS.length; k++) if (v <= SEGS[k].v1 + 1e-9) return k; return SEGS.length - 1; };
-  function finS(t) {
-    const L = layoutOf().fin.len, T = .72 * ZSEG_LEN(), u = clamp(t / T, 0, 1), a = Math.min(2.5, DOT_V * T / L);
-    return L * (a * (u * u * u - 2 * u * u + u) + 3 * u * u - 2 * u * u * u);
-  }
-  const ZSEG_LEN = () => ZOOM[narrow ? "n" : "d"];
   // Punkt bei Scrollweg v (vh der ganzen Seite): Lage (Welt, in out), Art, Insel, Laufrichtung (Gier); null, solange es ihn noch nicht gibt (Eröffnung vor dem Statuspunkt)
   function dotAt(v, out) {
     const sg = SEGS[segAtV(v)], LA = layoutOf();
     if (sg.kind === "t") { const R = LA.rivers[sg.i], q = clamp((v - sg.v0) / Math.max(1e-9, sg.v1 - sg.v0), 0, 1), s = q * R.len; R.at(s, out); return { kind: "t", i: sg.i, s, vis: true, yaw: yawOf(R.tan(s, _d0)) }; }
-    if (sg.kind === "z") { const F = LA.fin, s = finS(v - sg.v0); F.at(s, out); return { kind: "z", i: sg.i, s, vis: true, yaw: yawOf(F.tan(s, _d0)) }; }
     const I = INST[sg.i]; if (!I.built || !I.tl) return null;
     const t = v - sg.v0, tl = I.tl;
     if (t < tl.tBase0) return null;
@@ -1552,7 +1490,6 @@ export function seite(renderer, SEQ, opt = {}) {
     v = clamp(v, 0, TOTAL);
     const sg = SEGS[segAtV(v)], LA = layoutOf();
     if (sg.kind === "t") { const R = LA.rivers[sg.i], q = clamp((v - sg.v0) / Math.max(1e-9, sg.v1 - sg.v0), 0, 1); return yawOf(R.tan(q * R.len, _d0)); }
-    if (sg.kind === "z") { const F = LA.fin; return yawOf(F.tan(finS(v - sg.v0), _d0)); }
     return LA.isl[sg.i].yaw;
   }
   // zwei Stellungen mischen: Ort linear, Blickrichtung über Gier und Neigung, Abstand zum Blickpunkt logarithmisch
@@ -1590,208 +1527,102 @@ export function seite(renderer, SEQ, opt = {}) {
       dirAng(yv + dyaw, pv - dpit, _k2); tgt.copy(cam).addScaledVector(_k2, dist);
     }
   }
-  // Lesestellung und Punkt: die Kamera wird (frontal, ohne Drehung) parallel zur Bildebene verschoben, bis der Text ganz und der Punkt über das ganze Haltefenster
-  // sicher im Rahmen stehen (der Lauf trifft die Station nicht immer genau); notfalls etwas zurück. Ist der Punkt verdeckt, seitlich bis die Sicht frei ist. Szenenkoordinaten.
-  function fitDot(I, a, c, t) {
-    const obsA = (I.sb ? (() => { let bs = I.sb.steps[0]; for (const q of I.sb.steps) if (Math.abs(q.b - a.b) < Math.abs(bs.b - a.b)) bs = q; return [...bs.list, ...I.sb.extra]; })() : []).filter(b => !b.isEmpty() && b.max.y > .12 && (b.max.x - b.min.x) * (b.max.z - b.min.z) < 400);
-    const hidden = cc => [a.h0, (a.h0 + a.h1) / 2, a.h1].some(tt => { const d = I.route.at(I.tl.sAt(tt)).clone(); d.y = THREAD_Y + .05; return obsA.some(bx => segBox(cc, d, bx, .05)); });
-    if (hidden(c)) {
-      const F1 = t.clone().sub(c).normalize(), R1 = V().crossVectors(F1, UP).normalize(), dist = c.distanceTo(a.stop.C), hw = dist * Math.tan(FOVC() * PI / 360) * aspect;
-      let done = false;
-      for (const k of [.12, -.12, .24, -.24, .36, -.36]) { const cN = c.clone().addScaledVector(R1, k * hw); if (!hidden(cN)) { const dd = cN.clone().sub(c); c.add(dd); t.add(dd); done = true; break; } }
-      if (!done) dbg("Lesestelle " + I.name + " " + a.ki + ": Punkt verdeckt");
-    }
-    const pc = new THREE.PerspectiveCamera(FOVC(), aspect, .1, 300), F0 = t.clone().sub(c).normalize(), Rt = V().crossVectors(F0, UP).normalize(), Up = V().crossVectors(Rt, F0);
-    const dots = [a.h0, (a.h0 + a.h1) / 2, a.h1].map(tt => I.route.at(I.tl.sAt(tt)).clone());
-    const H = VH(), lim = { x: DOT_FRAME.x - .04, y0: DOT_FRAME.y0 + .04, y1: DOT_FRAME.y1 - .04, ty: 1 - 2 * 70 / H, by: -1 + 2 * 80 / H };
-    const c0 = c.clone(), t0 = t.clone();
-    for (let back = 0; back <= 4; back++) {
-      if (back) { c.copy(c0).addScaledVector(F0, -c0.distanceTo(a.stop.C) * .055 * back); t.copy(t0).addScaledVector(F0, -c0.distanceTo(a.stop.C) * .055 * back); }
-      if (fitShift()) return true;
-    }
-    c.copy(c0); t.copy(t0); fitShift(); return false;
-    function fitShift() {
-      for (let it = 0; it < 24; it++) {
-        pc.position.copy(c); pc.lookAt(t); pc.updateMatrixWorld(); pc.updateProjectionMatrix();
-        let dx = 0, dy = 0;
-        for (const d of dots) { const q = d.clone().project(pc); if (q.z > 1) continue; if (q.x > lim.x) dx = Math.max(dx, q.x - lim.x); if (q.x < -lim.x) dx = Math.min(dx, q.x + lim.x); if (q.y > lim.y1) dy = Math.max(dy, q.y - lim.y1); if (q.y < lim.y0) dy = Math.min(dy, q.y - lim.y0); }
-        if (!dx && !dy) return true;
-        let tx0 = 1e9, tx1 = -1e9, ty0 = 1e9, ty1 = -1e9; for (const p of a.stop.pts) { const q = p.clone().project(pc); tx0 = Math.min(tx0, q.x); tx1 = Math.max(tx1, q.x); ty0 = Math.min(ty0, q.y); ty1 = Math.max(ty1, q.y); }
-        if (dy < 0 && ty1 - dy * .5 > lim.ty) dy = 0; if (dy > 0 && ty0 - dy * .5 < lim.by) dy = 0;
-        if (dx < 0 && tx1 - dx * .5 > .98) dx = 0; if (dx > 0 && tx0 - dx * .5 < -.98) dx = 0;
-        if (!dx && !dy) return false;
-        const dist = c.distanceTo(a.stop.C), kx = dist * Math.tan(FOVC() * PI / 360) * aspect * .5, ky = dist * Math.tan(FOVC() * PI / 360) * .5;
-        const cN = c.clone().addScaledVector(Rt, dx * kx).addScaledVector(Up, dy * ky);
-        if ((a.stop.prT || []).some(q => Math.acos(clamp(Math.abs(cN.clone().sub(q.c).normalize().dot(q.n)), -1, 1)) * 180 / PI > FIT_SLANT + .5)) return false;
-        c.addScaledVector(Rt, dx * kx).addScaledVector(Up, dy * ky); t.addScaledVector(Rt, dx * kx).addScaledVector(Up, dy * ky);
-      }
-      return false;
-    }
+  // ---------- Kamerabahn aus Stützstellen ----------
+  // Je Szene eine Datei kamera/<szene>.js: Ort und Blickziel der Kamera RELATIV ZUM PUNKT, in Blickrichtung der Szene, über der Szenenzeit u. Eine glatte Kurve (pchip je Wert)
+  // läuft durch diese Stützstellen; weil die Werte auf den Punkt bezogen sind, hält die Kamera nie an: auch beim Lesen schwimmt sie mit dem langsamen Punkt mit.
+  // Zwischen den Szenen (und wo keine Stützstellen stehen) folgt die Kamera dem Punkt in Mausperspektive (RIG.chase) und blendet über KAM_FADE vh zur Kurve über.
+  const KAM_FADE = 30, KAM_REF = { d: 1.6, n: .462 };
+  function kameraKurve(I) {
+    const key = narrow ? "n" : "d", dat = I.cfg.kamera && I.cfg.kamera[key]; if (!dat || dat.length < 2 || !I.body) return null;
+    const sig = key + ":" + I.body.v0 + ":" + I.body.v1;
+    if (I.kam && I.kam.sig === sig) return I.kam;
+    const v0 = I.body.v0, len = I.body.v1 - v0, xs = [];
+    dat.forEach((k, j) => { let x = v0 + k.u * len; if (j && x <= xs[j - 1] + .01) x = xs[j - 1] + .01; xs.push(x); });
+    const fs = [0, 1, 2, 3, 4, 5].map(c => pchip(xs, dat.map(k => c < 3 ? k.c[c] : k.t[c - 3])));
+    // o = 1 an zwei aufeinanderfolgenden Stützstellen: Text hat Vorrang, der Punkt darf dort aus dem Bild laufen (nur wo beides zugleich nicht passt); sonst bleibt der Punkt immer im Bild
+    const pl = []; dat.forEach((k, j) => { if (k.o && dat[j + 1] && dat[j + 1].o) pl.push([xs[j], xs[j + 1]]); });
+    return I.kam = { sig, xs, fs, x0: xs[0], x1: xs[xs.length - 1], pl };
   }
-  // Haltestellungen einer Szene (Welt, v der ganzen Seite)
-  function anchorsWorld(I) {
-    const tl = I.tl, v0 = I.body.v0, out = [], M = I.M4;
-    if (I.cfg.keyed) {
-      // Eröffnung: Startbild, Podest, Aufbau und Tablett als eine lange Haltestellung mit eigener Fahrt (Schlüssel der Szene), danach die Verfolgung
-      const tab = tl.an[tl.an.length - 1], Tp = tl.Tpre, pc = V(), pt = V();
-      localPose(I, 1, pc, pt); pc.applyMatrix4(M); pt.applyMatrix4(M);
-      out.push({ v0, v1: v0 + tab.h1, keyed: true, scene: I.idx, first: true, last: true, cam: pc, tgt: pt,
-        fn: (v, c, t) => { const tt = v - v0; if (tt >= Tp) { c.copy(pc); t.copy(pt); return; } localPose(I, clamp(tt / Tp, 0, 1), c, t); c.applyMatrix4(M); t.applyMatrix4(M); } });
-      return out;
-    }
-    const k = aspect < 1.25 ? Math.pow(1.25 / aspect, .55) : 1;
-    for (const a of tl.an) {
-      if (a.h0 === undefined || (a.kind !== "text" && a.kind !== "view")) continue;
-      let c, t;
-      // die Lesestellung aus readingFit ist endgültig (Text ganz und frontal im Bild, Nachbartexte nicht angeschnitten); fitDot nur ohne sie
-      if (a.kind === "text") { const ps = a.stop.fitPose || readingPose(I, a.stop); c = ps.cam.clone(); t = ps.tgt.clone(); if (!a.stop.fitPose && !fitDot(I, a, c, t)) dbg("Lesestelle " + I.name + " " + a.ki + ": Punkt nicht ganz im Rahmen"); a.stop.pose = { cam: c.clone(), tgt: t.clone(), px: ps.px }; }
-      else { const key = a.key; if (narrow && key.camN) { c = key.camN.clone(); t = key.tgtN.clone(); } else { t = key.tgt.clone(); c = key.tgt.clone().addScaledVector(key.cam.clone().sub(key.tgt), k); } }
-      out.push({ v0: v0 + a.h0, v1: v0 + a.h1, cam: c.applyMatrix4(M), tgt: t.applyMatrix4(M), scene: I.idx, a, dotW: I.route.at(tl.sAt((a.h0 + a.h1) / 2)).clone().applyMatrix4(M) });
-    }
-    if (out.length) { out[0].first = true; out[out.length - 1].last = true; }
-    return out;
+  // Länge der Blende zur Verfolgung am Anfang bzw. Ende der Kurve (0, wenn die Nachbarkurve ohne Lücke anschließt oder die Seite dort beginnt bzw. endet)
+  function kameraBlende(I, K) {
+    const pk = INST[I.idx - 1] && kameraKurve(INST[I.idx - 1]), nk = INST[I.idx + 1] && kameraKurve(INST[I.idx + 1]);
+    return { f0: I.idx === 0 || (pk && pk.x1 >= K.x0 - 2.5) ? 0 : KAM_FADE, f1: I.idx === INST.length - 1 || (nk && nk.x0 <= K.x1 + 2.5) ? 0 : KAM_FADE };
   }
-  // Haltegewicht w (0 … 1) und Haltestellung bei v aus der Liste ans (zeitlich geordnet)
-  const _h0 = V(), _h1 = V(), _h2 = V(), _h3 = V();
-  let HOLDK = 0;                                                    // Nähe zu einem Haltefenster (1 im Halt, weich auf 0 binnen 30 vh): dort keine Nachführung
-  const RAMP_HOLD = 130;
-  var _hB;                                                          // Hilfsvektoren (var: holdAt läuft schon beim Aufbau, vor dieser Zeile)
-  function holdAt(ans, v, cO, tO) {
-    let prev = null, next = null; HOLDK = 0;
-    for (const a of ans) { const d = v < a.v0 ? a.v0 - v : v > a.v1 ? v - a.v1 : 0; HOLDK = Math.max(HOLDK, 1 - smoother(d / 90)); }
-    for (const a of ans) {
-      if (v >= a.v0 && v <= a.v1) { if (a.fn) a.fn(v, cO, tO); else { cO.copy(a.cam); tO.copy(a.tgt); } HOLDK = 1; return 1; }
-      if (a.v1 < v) prev = a; else if (a.v0 > v && !next) next = a;
-    }
-    const P = (a, end, c, t) => { if (a.fn) a.fn(end ? a.v1 : a.v0, c, t); else { c.copy(a.cam); t.copy(a.tgt); } };
-    const rO = prev ? (prev.keyed ? (prev.rOut || RAMP_OUT) : RAMP_HOLD) : 1, rI = next ? RAMP_HOLD : 1;
-    const wO = prev ? 1 - smoother((v - prev.v1) / rO) : 0, wI = next ? smoother(1 - (next.v0 - v) / rI) : 0;
-    if (wO <= 0 && wI <= 0) return 0;
-    // überlappen sich Auslauf der vorigen und Anlauf der nächsten Lesestellung, werden beide gemischt (vorher: harter Wechsel zur stärkeren, ein Sprung im Abstand)
-    if (wO > 0 && wI > 0) { const h = _hB || (_hB = [V(), V(), V(), V()]); P(prev, true, h[0], h[1]); P(next, false, h[2], h[3]); mixT(h[0], h[1], h[2], h[3], wI / (wO + wI), cO, tO); return Math.max(wO, wI); }
-    if (wO >= wI) { P(prev, true, cO, tO); return wO; }
-    P(next, false, cO, tO); return wI;
+  // Fensterbreite: schmalere Bilder als die Bezugsform ziehen die Kamera entlang der Blickachse zurück, damit Text und Gerät nicht seitlich anschneiden
+  const kameraZug = () => { const r = KAM_REF[narrow ? "n" : "d"]; return aspect < r ? Math.min(1.8, Math.pow(r / aspect, .85)) : 1; };
+  function kameraPose(I, K, v, D, cO, tO) {
+    const yw = slotOf(I.idx).yaw, fw = hdir(yw), rt = hright(yw), f = K.fs;
+    const c0 = f[0](v), c1 = f[1](v), c2 = f[2](v), t0 = f[3](v), t1 = f[4](v), t2 = f[5](v);
+    tO.set(D.x + rt.x * t0 + fw.x * t2, D.y + t1, D.z + rt.z * t0 + fw.z * t2);
+    cO.set(D.x + rt.x * c0 - fw.x * c2, D.y + c1, D.z + rt.z * c0 - fw.z * c2);
+    const z = kameraZug(); if (z !== 1) cO.sub(tO).multiplyScalar(z).add(tO);
   }
-  // Insel-Grundstellung (Dolly): Ausrichtung der vorigen bzw. nächsten Lesestellung, mit dem Punkt parallel verschoben (er bleibt an seiner Stelle im Bild);
-  // zwischen zwei Lesestellungen wird die Ausrichtung weich übergeblendet
-  const _i0 = V(), _i1 = V(), _i2 = V(), _i3 = V(), _ip = V();
-  function islandPose(I, v, D, cO, tO) {
-    const an = (I.anW || []).filter(a => !a.keyed); if (!an.length) return false;
-    let prev = null, next = null;
-    for (const a of an) { if (v >= a.v0 && v <= a.v1) { prev = next = a; break; } if (a.v1 < v) prev = a; else if (!next && a.v0 > v) next = a; }
-    const put = (a, c, t) => { _ip.subVectors(D, a.dotW); c.copy(a.cam).add(_ip); t.copy(a.tgt).add(_ip); };
-    if (prev && next && prev !== next) { put(prev, _i0, _i1); put(next, _i2, _i3); mixT(_i0, _i1, _i2, _i3, smoother((v - prev.v1) / Math.max(1, next.v0 - prev.v1)), cO, tO); }
-    else put(prev || next, cO, tO);
-    return true;
-  }
-  // Wechsel Fluss ↔ Insel je Insel: Gewicht der Insel-Grundstellung (0 im Fluss, 1 zwischen erster und letzter Lesestelle), Dauer nach Winkel (I.lamIn, I.lamOut)
-  function islandWeight(I, v) {
-    const an = (I.anW || []).filter(a => !a.keyed); if (!an.length || I.cfg.keyed || I.cfg.view) return 0;
-    const a0 = an[0].v0 - 30, b0 = an[an.length - 1].v1 + 30, Li = I.lamIn || 260, Lo = I.lamOut || 260;
-    return smoother((v - (a0 - Li)) / Li) * (1 - smoother((v - b0) / Lo));
-  }
-  // Grundstellung bei v (Punkt bei D, Info d): Verfolgung im Fluss, mit fester Blickrichtung in der Insel
-  const _b0 = V(), _b1 = V(), _b2 = V(), _b3 = V(); let LAMK = 0;
-  function basePose(v, d, D, yawC, cO, tO) {
+  // Verfolgung im Fluss: hinter dem Punkt, Blick in die gemittelte Laufrichtung (Vorgaben RIG.chase)
+  function chasePose(D, yawC, cO, tO) {
     const K = CHASE[narrow ? "n" : "d"], f = hdir(yawC), y = Math.max(0, D.y - THREAD_Y);
-    _b0.copy(D).addScaledVector(f, -K.back); _b0.y = K.h + y;
-    _b1.copy(D).addScaledVector(f, K.ahead); _b1.y = K.ty + y;
-    LAMK = 0;
-    // Eröffnung nach dem Tablett und Szenen mit eigenen Rig-Werten (view, Gerwing: Lieferschein): szenenfeste Verfolgung (vor dem Ausgang zur Verfolgung im Fluss)
-    if (d.kind === "b" && (d.I.cfg.keyed || d.I.cfg.view)) {
-      const T = d.I.body.v1 - d.I.body.v0, lam = (d.I.cfg.keyed ? 1 : smoother(d.t / LAMBDA_T)) * smoother((T - d.t) / LAMBDA_T); LAMK = lam;
-      if (lam <= 0) { cO.copy(_b0); tO.copy(_b1); return; }
-      const I = d.I, Fo = { ...FOLLOW[narrow ? "n" : "d"], ...(pickN(I.cfg.view) || {}) }, fs = hdir(I.slot.yaw), rs = hright(I.slot.yaw);
-      _b2.copy(D).addScaledVector(fs, -Fo.back).addScaledVector(rs, Fo.side); _b2.y = Fo.h + y;
-      _b3.copy(D).addScaledVector(fs, Fo.ahead).addScaledVector(rs, Fo.tx); _b3.y = Fo.ty + y;
-      mixP(_b0, _b1, _b2, _b3, lam, cO, tO); return;
-    }
-    // Insel, deren Wechselfenster v enthält (die Szene des Abschnitts oder, im Flug, die kommende bzw. die verlassene)
-    // überlappen sich die Wechsel zweier Inseln (Flug zwischen ihnen), werden beide Insel-Stellungen nach ihren Gewichten gemischt (kein Umschalten)
-    const ws = [];
-    for (const j of [d.i - 1, d.i, d.i + 1]) { const I = INST[j]; if (!I || !I.built || !I.anW) continue; const w = islandWeight(I, v); if (w > 1e-4) ws.push({ I, w }); }
-    const best = ws.reduce((m, q) => Math.max(m, q.w), 0); LAMK = best;
-    if (!ws.length) { cO.copy(_b0); tO.copy(_b1); return; }
-    let sw = 0; const pc = V(), pt = V(), qc = V(), qt = V();
-    for (const q of ws) { if (!islandPose(q.I, v, D, qc, qt)) continue; if (!sw) { pc.copy(qc); pt.copy(qt); sw = q.w; } else { const f = q.w / (sw + q.w); pc.lerp(qc, f); pt.lerp(qt, f); sw += q.w; } }
-    if (!sw) { cO.copy(_b0); tO.copy(_b1); return; }
-    mixT(_b0, _b1, pc, pt, best, cO, tO);
+    cO.copy(D).addScaledVector(f, -K.back); cO.y = K.h + y;
+    tO.copy(D).addScaledVector(f, K.ahead); tO.y = K.ty + y;
   }
-  // Grenze der Drehrate (Grad je vh): Schwelle des Messflugs 3° je 0,001 p, mit Rand
-  const RATE_LIM = () => .8 * 3 / (TOTAL / 1000);
-  // Grundstellung an beliebigem v (gemittelte Laufrichtung numerisch), für die Länge der Rampen
-  function baseAt(v, cO, tO) {
-    const D = V(), d = dotAt(clamp(v, 0, TOTAL), D); if (!d) return false;
-    let s0 = yawSignal(v), acc = 0, n = 0, prev = s0; for (let k = -YAW_WIN; k <= YAW_WIN; k += 5) { let y = yawSignal(v + k); y = prev + wrapPi(y - prev); prev = y; acc += y; n++; }
-    const ya = acc / n; basePose(v, d, D, ya + YAW_K * wrapPi(s0 - ya), cO, tO); return true;
-  }
-  const angDeg = (c0, t0, c1, t1) => Math.acos(clamp(_m0.subVectors(t0, c0).normalize().dot(_m1.subVectors(t1, c1).normalize()), -1, 1)) * 180 / PI;
-  function rampLengths(I) {
-    const an = (I.anW || []).filter(a => !a.keyed);
-    if (I.cfg.keyed) { const k = (I.anW || [])[0]; if (k && k.rOut === undefined) { const c = V(), t = V(); k.rOut = I.cfg.rampOut || RAMP_OUT; if (baseAt(k.v1 + k.rOut, c, t)) k.rOut = clamp(10.4 * angDeg(k.cam, k.tgt, c, t), I.cfg.rampOut || RAMP_OUT, 700); } return; }
-    if (!an.length || I.lamIn !== undefined) return;
-    const D = V(), c0 = V(), t0 = V(), c1 = V(), t1 = V();
-    // Winkel zwischen Verfolgung und Insel-Grundstellung an den Rändern der Insel
-    const ang = v => { const d = dotAt(clamp(v, 0, TOTAL), D); if (!d) return 20; const ya = yawSignal(v); const K = CHASE[narrow ? "n" : "d"], f = hdir(ya); c0.copy(D).addScaledVector(f, -K.back); c0.y = K.h; t0.copy(D).addScaledVector(f, K.ahead); t0.y = K.ty; if (!islandPose(I, v, D, c1, t1)) return 20; return angDeg(c0, t0, c1, t1); };
-    I.lamIn = clamp(10.4 * ang(an[0].v0 - 30), 160, 640);
-    I.lamOut = clamp(10.4 * ang(an[an.length - 1].v1 + 30), 160, 640);
-  }
-  // Spur eines Stücks (Flug in Szene i und Szene i, die letzte samt Schluss): Ort und Blickpunkt je vh
+  // Spur eines Stücks (Flug in Szene i und Szene i): Ort und Blickpunkt je vh
   const CHUNKS = [];
   function computeChunk(i) {
     const I = INST[i]; if (!I.built || !I.tl) return;
-    for (const X of [INST[i - 1], I, INST[i + 1]]) if (X && X.built && X.anW) rampLengths(X);
-    const va = I.trIn ? I.trIn.v0 : 0, vb = i === INST.length - 1 ? ZSEG.v1 : I.body.v1, PADS = 120;
+    const va = I.trIn ? I.trIn.v0 : 0, vb = I.body.v1, PADS = 120;
     const a0 = Math.floor(va) - PADS, n = Math.ceil(vb) - a0 + PADS + 1;
-    const ans = [...(INST[i - 1] && INST[i - 1].anW ? INST[i - 1].anW : []), ...(I.anW || []), ...(INST[i + 1] && INST[i + 1].anW ? INST[i + 1].anW : [])].sort((a, b) => a.v0 - b.v0);
+    // Kurven aller Szenen, die in diesen Bereich reichen (die Pads greifen in die Nachbarn)
+    const curves = []; for (const X of INST) { const K = kameraKurve(X); if (K && K.x1 >= a0 - 5 && K.x0 <= a0 + n + 5) curves.push({ X, K, ...kameraBlende(X, K) }); }
+    const hasCurve = v => { let hit = null; for (const c of curves) if (v >= c.K.x0 - (c.f0 ? 0 : 2.5) && v <= c.K.x1 + (c.f1 ? 0 : 2.5)) hit = c; return hit; };
     // gemittelte Laufrichtung (Gier, entfaltet) über ±YAW_WIN
     const W2 = YAW_WIN, ny = n + 2 * W2, sig = new Float64Array(ny);
     for (let k = 0; k < ny; k++) { const y = yawSignal(a0 - W2 + k); sig[k] = k ? sig[k - 1] + wrapPi(y - sig[k - 1]) : y; }
     const pre = new Float64Array(ny + 1); for (let k = 0; k < ny; k++) pre[k + 1] = pre[k] + sig[k];
     const avg = k => { const lo = Math.max(0, k), hi = Math.min(ny, k + 2 * W2 + 1); return (pre[hi] - pre[lo]) / (hi - lo); };
-    const cam = new Float64Array(3 * n), tgt = new Float64Array(3 * n), hasB = new Uint8Array(n), wA = new Float64Array(n), lamA = new Float64Array(n), hkA = new Float64Array(n), liftA = new Float64Array(n), dotP = new Float64Array(3 * n), dotV = new Uint8Array(n);
-    const bc = V(), bt = V(), D = V(), hc = V(), ht = V();
+    const cam = new Float64Array(3 * n), tgt = new Float64Array(3 * n), hasB = new Uint8Array(n), hkA = new Float64Array(n), dotP = new Float64Array(3 * n), dotV = new Uint8Array(n);
+    const bc = V(), bt = V(), D = V(), kc = V(), kt = V();
     const boxes = []; for (const X of [INST[i - 1], I, INST[i + 1]]) if (X && X.built && X.boxes) boxes.push(...X.boxes);
-    const need = new Float64Array(n);
-    const baseC = new Float64Array(3 * n), baseT = new Float64Array(3 * n);
+    const need = new Float64Array(n), D0 = I.route.at(0).clone().applyMatrix4(I.M4);
     for (let k = 0; k < n; k++) {
-      const v = clamp(a0 + k, 0, TOTAL), d = dotAt(v, D);
-      if (!d) continue;
-      hasB[k] = 1; dotP[3 * k] = D.x; dotP[3 * k + 1] = D.y; dotP[3 * k + 2] = D.z; dotV[k] = d.vis ? 1 : 0;
+      const v = clamp(a0 + k, 0, TOTAL), d = dotAt(v, D), c = hasCurve(v);
+      if (d) { hasB[k] = 1; dotP[3 * k] = D.x; dotP[3 * k + 1] = D.y; dotP[3 * k + 2] = D.z; dotV[k] = d.vis ? 1 : 0; }
+      else if (c && c.X.cfg.keyed) D.copy(D0);                          // Eröffnung vor dem Statuspunkt: die Stützstellen sind auf den Startpunkt des Fadens bezogen
+      else { if (k) { for (let q = 0; q < 3; q++) { cam[3 * k + q] = cam[3 * k - 3 + q]; tgt[3 * k + q] = tgt[3 * k - 3 + q]; } need[k] = need[k - 1]; } continue; }
       const ya = avg(k), sk = sig[k + W2], yawC = ya + YAW_K * wrapPi(sk - ya);
-      basePose(v, d, D, yawC, bc, bt); lamA[k] = LAMK;
-      baseC.set([bc.x, bc.y, bc.z], 3 * k); baseT.set([bt.x, bt.y, bt.z], 3 * k);
+      if (d) chasePose(D, yawC, bc, bt); else { bc.copy(D0); bt.copy(D0); }
+      if (c) {
+        kameraPose(c.X, c.K, clamp(v, c.K.x0, c.K.x1), D, kc, kt);
+        let w = (c.f0 ? smoother((v - c.K.x0) / c.f0) : 1) * (c.f1 ? 1 - smoother((v - (c.K.x1 - c.f1)) / c.f1) : 1);
+        if (!d) w = 1;
+        mixT(bc, bt, kc, kt, w, bc, bt);
+        let hk = 0; for (const [p0, p1] of c.K.pl) { const dd = v < p0 ? p0 - v : v > p1 ? v - p1 : 0; hk = Math.max(hk, 1 - smoother(dd / 90)); } hkA[k] = hk;
+      }
+      // Mindesthöhe über Bauteilen unter der Kamera
       let m = .35; for (const bx of boxes) if (bc.x > bx.min.x - .45 && bc.x < bx.max.x + .45 && bc.z > bx.min.z - .45 && bc.z < bx.max.z + .45) m = Math.max(m, Math.min(bc.y + 3, bx.max.y + .9));
       need[k] = m;
+      cam[3 * k] = bc.x; cam[3 * k + 1] = bc.y; cam[3 * k + 2] = bc.z; tgt[3 * k] = bt.x; tgt[3 * k + 1] = bt.y; tgt[3 * k + 2] = bt.z;
     }
-    // Mindesthöhe: über ±40 vh aufgeweitet und zweimal geglättet (die Kamera steigt vor einem Bauteil und sinkt erst danach)
+    // Mindesthöhe: über ±30 vh aufgeweitet und zweimal geglättet (die Kamera steigt vor einem Bauteil und sinkt erst danach)
     const nd = new Float64Array(n); for (let k = 0; k < n; k++) { let m = 0; for (let j = Math.max(0, k - 30); j <= Math.min(n - 1, k + 30); j++) m = Math.max(m, need[j]); nd[k] = m; }
-    const box = (src, r) => { const out = new Float64Array(n); let s = 0, c = 0; for (let k = 0; k < n; k++) { let a = 0, cc = 0; for (let j = Math.max(0, k - r); j <= Math.min(n - 1, k + r); j++) { a += src[j]; cc++; } out[k] = a / cc; } return out; };
+    const box = (src, r) => { const out = new Float64Array(n); for (let k = 0; k < n; k++) { let a = 0, cc = 0; for (let j = Math.max(0, k - r); j <= Math.min(n - 1, k + r); j++) { a += src[j]; cc++; } out[k] = a / cc; } return out; };
     const ndS = box(box(nd, 20), 20);
+    const keyedEnd = I.cfg.keyed ? I.body.v0 + I.tl.an[I.tl.an.length - 1].h1 : -1e9;
     for (let k = 0; k < n; k++) {
-      const v = clamp(a0 + k, 0, TOTAL);
-      if (hasB[k]) {
-        bc.set(baseC[3 * k], baseC[3 * k + 1], baseC[3 * k + 2]); bt.set(baseT[3 * k], baseT[3 * k + 1], baseT[3 * k + 2]);
-        const lift = Math.max(0, ndS[k] - bc.y); liftA[k] = lift; if (lift > 0) { bc.y += lift; bt.y += lift * .5; }
-      }
-      const w = holdAt(ans, v, hc, ht), hk = HOLDK; wA[k] = w; hkA[k] = hk;
-      if (!hasB[k]) { bc.copy(hc); bt.copy(ht); }
-      else mixT(bc, bt, hc, ht, w, bc, bt);
+      const v = a0 + k;
+      bc.set(cam[3 * k], cam[3 * k + 1], cam[3 * k + 2]); bt.set(tgt[3 * k], tgt[3 * k + 1], tgt[3 * k + 2]);
+      const lift = Math.max(0, ndS[k] - bc.y); if (lift > 0) { bc.y += lift; bt.y += lift * .5; }
       // Eröffnung: die Nachführung setzt nach dem Erscheinen des Punktes am Statuspunkt weich ein
       const kv = I.cfg.keyed && v < I.body.v1 ? smoother((v - I.body.v0 - I.tl.tVis + 40) / 80) : 1;
-      if (hasB[k] && dotV[k]) keepDot(bc, bt, D.set(dotP[3 * k], dotP[3 * k + 1], dotP[3 * k + 2]), (1 - hk) * kv);
-      cam.set([bc.x, bc.y, bc.z], 3 * k); tgt.set([bt.x, bt.y, bt.z], 3 * k);
+      if (hasB[k] && dotV[k]) keepDot(bc, bt, D.set(dotP[3 * k], dotP[3 * k + 1], dotP[3 * k + 2]), (1 - hkA[k]) * kv);
+      cam[3 * k] = bc.x; cam[3 * k + 1] = bc.y; cam[3 * k + 2] = bc.z; tgt[3 * k] = bt.x; tgt[3 * k + 1] = bt.y; tgt[3 * k + 2] = bt.z;
     }
     // Glättung (Gauß, SMOOTH_S vh); ausgenommen die Schlüsselfahrt der Eröffnung (Startbild bleibt genau)
     const S = SMOOTH_S, R3 = Math.ceil(3 * S), ker = []; for (let j = -R3; j <= R3; j++) ker.push(Math.exp(-j * j / (2 * S * S)));
-    const keyedEnd = I.cfg.keyed && I.anW && I.anW[0] ? I.anW[0].v1 : -1e9;
     const smooth = arr => { const out = new Float64Array(arr.length); for (let k = 0; k < n; k++) for (let c = 0; c < 3; c++) { let s = 0, ws = 0; for (let j = -R3; j <= R3; j++) { const q = k + j; if (q < 0 || q >= n) continue; s += arr[3 * q + c] * ker[j + R3]; ws += ker[j + R3]; } out[3 * k + c] = s / ws; } return out; };
     const cS = smooth(cam), tS = smooth(tgt);
     for (let k = 0; k < n; k++) {
       const v = a0 + k, m = smoother((v - keyedEnd) / (3 * S));
       for (let c = 0; c < 3; c++) { cam[3 * k + c] += (cS[3 * k + c] - cam[3 * k + c]) * m; tgt[3 * k + c] += (tS[3 * k + c] - tgt[3 * k + c]) * m; }
     }
-    CHUNKS[i] = { va, vb, a0, n, cam, tgt, w: wA, lam: lamA, hk: hkA, lift: liftA, ans: ans.map(a => ({ v0: a.v0, v1: a.v1, scene: a.scene, rIn: a.rIn, rOut: a.rOut, first: !!a.first, last: !!a.last, cam: a.cam.toArray(), tgt: a.tgt.toArray() })) };
+    CHUNKS[i] = { va, vb, a0, n, cam, tgt };
   }
   // Stellung bei v aus der Spur (kubisch zwischen den Stützstellen je vh)
   const _q0 = V(), _q1 = V(), _q2 = V(), _q3 = V();
@@ -1811,109 +1642,19 @@ export function seite(renderer, SEQ, opt = {}) {
   const cr = (p0, p1, p2, p3, u, out) => out.set(0, 0, 0).addScaledVector(p0, -.5 * u + u * u - .5 * u * u * u).addScaledVector(p1, 1 - 2.5 * u * u + 1.5 * u * u * u).addScaledVector(p2, .5 * u + 2 * u * u - 1.5 * u * u * u).addScaledVector(p3, -.5 * u * u + .5 * u * u * u);
   // Sichtfeld überall gleich (Breitbild 32°, hochkant 44°): kein Zoom über die Brennweite
   const FOVC = () => narrow ? 44 : 32;
+  let FREE = null;                                                    // Prüfhilfe: feste Kamera (Szenenkoordinaten) zum Entwerfen der Stützstellen
   function poseOf(st, cam, tgt) {
     const v = st.sg.v0 + clamp(st.q, 0, 1) * (st.sg.v1 - st.sg.v0);
     trackAt(v, cam, tgt);
+    if (FREE) { cam.copy(FREE.cam); tgt.copy(FREE.tgt); }
     return FOVC();
-  }
-
-  // ---------- Wortmarke an der Mündung (Erik 23.10.2026): beim Herauszoomen steht „Jan-Erik Andersen“ gerade im Kartenbild, der rote Schlusspunkt des Fadens ist ihr Punkt ----------
-  // Dieselben Schnitte wie die Marke der Eröffnung (Newsreader N4, aufrecht und kursiv, Tinte, Laufweite −0,018 em), flach auf den Boden gelegt; sie liest im Kartenbild von links
-  // nach rechts und endet am Schlusspunkt (Lage aus layoutOf().mark).
-  let eyeMark = null;
-  function buildEyeMark() {
-    if (eyeMark) { scene.remove(eyeMark.group); eyeMark.group.traverse(o => { if (o.geometry) o.geometry.dispose(); }); eyeMark = null; }
-    const mk = layoutOf().mark, eye = mk.D, E = mk.E, DOT = .085;
-    const up = { font: "marke" }, it = { font: "marke", italic: true };
-    const w1 = printTex(["Jan-Erik"], { ...up, scale: .02 }), w2 = printTex(["Andersen"], { ...it, scale: .02 }), wx = printTex(["x x"], { ...up, scale: .02 }), wy = printTex(["xx"], { ...up, scale: .02 });
-    for (const w of [w1, w2, wx, wy]) w.tex.dispose();
-    const space = (wx.tw - wy.tw) * E, dw = .01 * E;
-    const group = new THREE.Group(), right = mk.right, upT = mk.upS, nrm = V(0, 1, 0);
-    const place = (t, startS) => {
-      const mat = new THREE.MeshBasicMaterial({ map: t.tex, transparent: true, opacity: 0, depthWrite: false, toneMapped: false, side: THREE.DoubleSide });
-      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(t.w * E, t.h * E), mat);
-      mesh.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(right, upT, nrm));
-      const yb = t.h / 2 - (t.padY + .94);                                                // Grundlinie über der Mitte (em)
-      const cRead = startS + (t.w * E) / 2 - t.padX * E;                                   // Mitte in Leserichtung
-      mesh.position.copy(eye).addScaledVector(right, cRead).addScaledVector(upT, -yb * E); mesh.position.y = .012;
-      mesh.renderOrder = 1; mesh.frustumCulled = false; group.add(mesh); return mesh;
-    };
-    const wA = w1.tw * E, wB = w2.tw * E, tot = wA + space + wB, endS = -(dw + DOT * E) - .9;       // Ende von „Andersen“ vor dem Punkt (der Punkt steht an der Mündung)
-    const startS = endS - tot;
-    const printA = printTex(["Jan-Erik"], { ...up, scale: .5 }), printB = printTex(["Andersen"], { ...it, scale: .5 });
-    const mA = place(printA, startS), mB = place(printB, startS + wA + space);
-    scene.add(group); eyeMark = { group, mats: [mA.material, mB.material], tot };
-  }
-
-  // ---------- Höhenlinien (Erik 23.10.2026): zarte, ins Papier geprägte Linien, die dem Fluss folgen und die Inseln umgeben (Wanderkarte, keine Flecken) ----------
-  // Feld: weiches Minimum aus Abstand zum Fluss und Abstand zum Inselrand; Linien in gleichen Abständen CONT_DZ (marching squares), nach außen schwächer. Kurze geschlossene
-  // Linien (Flecken zwischen den Inseln) fallen weg. Textur über dem Gebiet der Karte (mit Mipmaps, kein Moiré); sichtbar nur in der Übersicht (uContA mit M).
-  const CONT_DZ = 4.2, CONT_N = 6, CONT_CELL = 1, CONT_PX = 4, CONT_MINLEN = 60;
-  let contour = null;
-  function buildContours() {
-    if (contour) { contour.tex.dispose(); contour = null; }
-    const LA = layoutOf(), R = tableRect(), x0 = R.x0 - 20, x1 = R.x1 + 20, z0 = R.z0 - 20, z1 = R.z1 + 20;
-    const nx = Math.ceil((x1 - x0) / CONT_CELL) + 1, nz = Math.ceil((z1 - z0) / CONT_CELL) + 1, d = new Float32Array(nx * nz);
-    const rp = []; for (const P of [...LA.rivers.filter(Boolean), LA.fin]) for (let s = 0; s <= P.len; s += 1.5) { const p = P.at(s); rp.push(p.x, p.z); }
-    const kS = 3.5;
-    for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) {
-      const x = x0 + i * CONT_CELL, z = z0 + j * CONT_CELL; let m = 1e9;
-      for (let k = 0; k < rp.length; k += 2) { const dx = rp[k] - x, dz = rp[k + 1] - z, q = dx * dx + dz * dz; if (q < m) m = q; }
-      let dr = Math.sqrt(m) + 1.5, di = 1e9;
-      for (const sl of LA.isl) di = Math.min(di, Math.hypot(x - sl.C.x, z - sl.C.z) - sl.R);
-      di = Math.max(0, di);
-      // weiches Minimum (keine Kanten, wo Fluss und Insel zusammenlaufen)
-      d[j * nx + i] = -kS * Math.log(Math.exp(-dr / kS) + Math.exp(-di / kS));
-    }
-    const W = Math.round((x1 - x0) * CONT_PX), H = Math.round((z1 - z0) * CONT_PX);
-    const cv = document.createElement("canvas"); cv.width = Math.min(MAXTEX, W); cv.height = Math.min(MAXTEX, H);
-    const g = cv.getContext("2d"), kx = cv.width / (x1 - x0), kz = cv.height / (z1 - z0);
-    g.fillStyle = "#000"; g.fillRect(0, 0, cv.width, cv.height); g.lineCap = "round"; g.lineJoin = "round";
-    for (let lv = 1; lv <= CONT_N; lv++) {
-      const L = lv * CONT_DZ, a = .9 * Math.pow(.8, lv - 1), segs = [];
-      for (let j = 0; j < nz - 1; j++) for (let i = 0; i < nx - 1; i++) {
-        const v = [d[j * nx + i], d[j * nx + i + 1], d[(j + 1) * nx + i + 1], d[(j + 1) * nx + i]];
-        const bits = (v[0] > L ? 1 : 0) | (v[1] > L ? 2 : 0) | (v[2] > L ? 4 : 0) | (v[3] > L ? 8 : 0);
-        if (bits === 0 || bits === 15) continue;
-        const X = [x0 + i * CONT_CELL, x0 + (i + 1) * CONT_CELL], Z = [z0 + j * CONT_CELL, z0 + (j + 1) * CONT_CELL];
-        const pt = e => {
-          const [a0, a1] = e === 0 ? [0, 1] : e === 1 ? [1, 2] : e === 2 ? [3, 2] : [0, 3], t = (L - v[a0]) / (v[a1] - v[a0] || 1e-9);
-          return e === 0 ? [X[0] + t * CONT_CELL, Z[0]] : e === 1 ? [X[1], Z[0] + t * CONT_CELL] : e === 2 ? [X[0] + t * CONT_CELL, Z[1]] : [X[0], Z[0] + t * CONT_CELL];
-        };
-        const pairs = { 1: [[3, 0]], 2: [[0, 1]], 3: [[3, 1]], 4: [[1, 2]], 5: [[3, 0], [1, 2]], 6: [[0, 2]], 7: [[3, 2]], 8: [[2, 3]], 9: [[0, 2]], 10: [[0, 3], [2, 1]], 11: [[1, 2]], 12: [[1, 3]], 13: [[0, 1]], 14: [[0, 3]] }[bits] || [];
-        for (const [e1, e2] of pairs) segs.push([pt(e1), pt(e2)]);
-      }
-      // Strecken zu Linien verketten (Endpunkte gerastert), kurze Linien weglassen
-      const keyOf = p => Math.round(p[0] * 200) + ":" + Math.round(p[1] * 200), at = new Map();
-      segs.forEach((s, k) => { for (const e of [0, 1]) { const kk = keyOf(s[e]); if (!at.has(kk)) at.set(kk, []); at.get(kk).push(k); } });
-      const used = new Uint8Array(segs.length);
-      g.strokeStyle = `rgba(255,255,255,${a.toFixed(3)})`; g.lineWidth = lv === 1 ? 1.6 : 1.2;
-      for (let k0 = 0; k0 < segs.length; k0++) {
-        if (used[k0]) continue;
-        used[k0] = 1; const chain = [segs[k0][0], segs[k0][1]];
-        for (const dir of [1, 0]) {
-          for (;;) {
-            const end = dir ? chain[chain.length - 1] : chain[0], cand = (at.get(keyOf(end)) || []).find(k => !used[k]);
-            if (cand === undefined) break;
-            used[cand] = 1; const s = segs[cand], nxt = keyOf(s[0]) === keyOf(end) ? s[1] : s[0];
-            if (dir) chain.push(nxt); else chain.unshift(nxt);
-          }
-        }
-        let len = 0; for (let q = 1; q < chain.length; q++) len += Math.hypot(chain[q][0] - chain[q - 1][0], chain[q][1] - chain[q - 1][1]);
-        if (len < CONT_MINLEN) continue;
-        g.beginPath(); chain.forEach((p, q) => { const X = (p[0] - x0) * kx, Y = (p[1] - z0) * kz; if (q) g.lineTo(X, Y); else g.moveTo(X, Y); }); g.stroke();
-      }
-    }
-    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.NoColorSpace; tex.minFilter = THREE.LinearMipmapLinearFilter; tex.anisotropy = maxAniso; tex.needsUpdate = true;
-    contour = { tex, box: [x0, z0, 1 / (x1 - x0), 1 / (z1 - z0)] };
-    if (table) { table.mat.uniforms.uCont.value = tex; table.mat.uniforms.uContBox.value.set(...contour.box); }
   }
 
   // ---------- Füllung entlang des Fadens zwischen den Parzellen (Erik 22.10.2026: „Mit Mausperspektive zusammen“) ----------
   // Niedrige weiße Papierblöcke (Kästen, Stufen, Kanten wie die Dachaufbauten in Mirror's Edge), locker gestreut, dazu feine Schnitt- und Falzspuren im Boden.
   // Nie höher als die Szenen (FILL_H), nie zwischen Kamera und Punkt (Abstand zum Faden mindestens FILL_GAP: die Kamera fährt auf dem Faden), nie auf einer Parzelle,
   // ohne Text, ohne Rot, Farben der Seite (PAL). Fester Zufallssamen je Brücke (deterministisch). Handy sparsamer. Die Füllung entsteht, sobald alle Szenen gebaut sind,
-  // weil sie allen Fäden ausweicht; in der Karte (M) sinkt sie flach ab.
+  // weil sie allen Fäden ausweicht.
   const FILL_H = 1.3, FILL_GAP = 3.2;
   let fill = null;
   const rng32 = seed => () => { seed = (seed + 0x6D2B79F5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -2059,33 +1800,25 @@ export function seite(renderer, SEQ, opt = {}) {
     const LA = layoutOf();
     if (I.idx > 0) addPiece(LA.rivers[I.idx].pts, { i: I.idx, kind: "br", time: { br: true, tr: I.idx }, I, poly: LA.rivers[I.idx] });
     addPiece(I.route.pts.map(p => p.clone().applyMatrix4(I.M4)), { i: I.idx, kind: "route", time: { route: true, I }, I, poly: I.route });
-    if (I.idx === INST.length - 1) addPiece(LA.fin.pts, { i: I.idx, kind: "fin", time: { fin: true }, I, poly: LA.fin });
   }
   // Fortschritt je Band (0 … 1) im Zustand st; dazu das Band des Punktes
   function threadK(pc, st) {
     const i = pc.i;
-    if (pc.kind === "br") return st.kind === "z" || st.i > i ? 1 : st.i === i ? (st.kind === "t" ? st.q : 1) : 0;
+    if (pc.kind === "br") return st.i > i ? 1 : st.i === i ? (st.kind === "t" ? st.q : 1) : 0;
     if (pc.kind === "route") {
-      if (st.kind === "z" || st.i > i) return 1;
+      if (st.i > i) return 1;
       if (st.i < i || st.kind !== "b" || !pc.I.tl) return 0;
       const t = st.q * (pc.I.body.v1 - pc.I.body.v0); return t < pc.I.tl.tBase0 ? 0 : pc.I.tl.sAt(t) / pc.I.route.len;
     }
-    return st.kind === "z" ? finS(st.q * (st.sg.v1 - st.sg.v0)) / pc.poly.len : 0;
+    return 0;
   }
   function updateThread(st) {
-    // Karte: Faden und Punkt behalten eine feste Größe in Pixeln (Faden ~2,5 px breit, Punkt ~7 px Radius mit dünnem Ring); dort ist der ganze Faden zu sehen
-    const kk = smoother(win(Mcur, .25, .85)), mp0 = kk > 0 ? mapPose() : null, mapK = smoother(win(Mcur, .12, .6));
-    const wpp = mp0 ? 2 * Math.tan(camera.fov * PI / 360) * camera.position.distanceTo(mp0.tgt) / VH() : 0;
-    const hwT = THREAD_HW + (Math.max(THREAD_HW, 1.3 * wpp) - THREAD_HW) * kk;
-    if (Math.abs(hwT - threadHW) > .004 * Math.max(1, threadHW / THREAD_HW) || (kk === 0 && threadHW !== THREAD_HW)) {
-      threadHW = hwT; for (const pc of pieces) { pc.fill(hwT); pc.g.attributes.position.needsUpdate = true; }
-    }
     let own = null, ownK = 0;
     for (const pc of pieces) {
-      const k = threadK(pc, st), kd = Math.max(k, mapK);
+      const k = threadK(pc, st), kd = k;
       pc.mesh.visible = kd > 0;
       pc.g.setDrawRange(0, Math.floor(kd * pc.N) * 12);
-      const mine = (st.kind === "t" && pc.kind === "br" && pc.i === st.i) || (st.kind === "b" && pc.kind === "route" && pc.i === st.i) || (st.kind === "z" && pc.kind === "fin");
+      const mine = (st.kind === "t" && pc.kind === "br" && pc.i === st.i) || (st.kind === "b" && pc.kind === "route" && pc.i === st.i);
       if (mine) { own = pc; ownK = k; }
     }
     let vis = !!own;
@@ -2094,8 +1827,8 @@ export function seite(renderer, SEQ, opt = {}) {
     if (vis) {
       own.curve.getPointAt(clamp(ownK, 0, 1), dot.position); if (dot.position.y < THREAD_Y) dot.position.y = THREAD_Y;
       dot.quaternion.copy(camera.quaternion);
-      const dd = camera.position.distanceTo(dot.position), rN = Math.max(.05, dd * .0065), rM = 7 * 2 * Math.tan(camera.fov * PI / 360) * dd / VH();
-      dot.scale.setScalar(rN + (rM - rN) * kk); if (dot.userData.ring) dot.userData.ring.visible = kk > .3;
+      const dd = camera.position.distanceTo(dot.position), rN = Math.max(.05, dd * .0065);
+      dot.scale.setScalar(rN); if (dot.userData.ring) dot.userData.ring.visible = false;
       // Tiefentest wie beim Faden (Bauteile verdecken den Punkt); die Scheibe steht senkrecht zum Blick und würde zur Hälfte im Boden stecken:
       // entlang des Sehstrahls um ihren Radius nach vorn (die Lage im Bild ändert sich dabei nicht), nie über die halbe Entfernung
       (dot.userData.base || (dot.userData.base = V())).copy(dot.position);                                // Lage auf dem Faden (Prüfhilfe)
@@ -2132,41 +1865,22 @@ export function seite(renderer, SEQ, opt = {}) {
     return { f: ox * oy / A, r: [x0, y0, x1, y1], a: A, ia: ox * oy };
   }
 
-  // ---------- Tisch und Karte ----------
-  // Der Tisch ist der gemeinsame Bogen unter allen Parzellen (etwas dunkler als die Bögen der Szenen, mit Haarkante und weichem Schatten).
-  // Die Karte ist die halb isometrische Draufsicht auf den ganzen Tisch: Zustand M (0 = Fahrt der Seite, 1 = Karte). M kommt aus dem Schluss-
-  // Zoom (Segment "z", an p gebunden) oder aus dem Knopf „Übersicht“ (Mextra, zeitlich geglättet); die Kamera blendet von ihrer Stellung zur
-  // Kartenstellung (zuerst hoch, dann seitlich, die Blickrichtung dreht ruhig über die Mitte).
-  let Muser = 0, Mextra = 0, MAP = null, table = null;
-  const mSeg = st => st.kind === "z" ? smoother(win(st.q, 0, .88)) : 0;
-  let mapOK = true, revealN = 0, lowRatio = false;                       // lowRatio: in der Karte geringere Pixeldichte (weniger Füllrate)                                        // mapOK: bricht ein Teil der Karte, bleibt die Seite ohne Karte nutzbar
-  const mNow = st => mapOK ? Math.max(mSeg(st), Mextra) : 0;
-  function mapFail(e) {
-    console.error("Karte abgeschaltet:", e); dbg("Karte abgeschaltet: " + (e && e.message));
-    if (!mapOK) return;
-    mapOK = false; Muser = 0; Mextra = 0;
-    try { const b = document.getElementById("uebersicht"); if (b && b.style) b.style.display = "none"; const k = document.getElementById("karte"); if (k && k.style) k.style.display = "none"; } catch (e2) { /* nichts */ }
-  }
-  const TM = 5.5;                                                       // Rand des Tisches um die Parzellen (der Faden läuft nirgends näher an der Kante)
-  // Blickrichtung der Karte: fast senkrecht von oben; Breitbild mit den Reihen quer (yaw 0), hochkant um 90° gedreht (die Reihen stehen dann senkrecht), die Wortmarke liest
-  // in beiden von links nach rechts
-  const KARTE = { d: { pitch: 87, yaw: 0, fov: 25 }, n: { pitch: 87, yaw: -90, fov: 30 } };
-  // Fläche des Rasters samt Wenden des Fadens (Welt): aus den Plätzen aller Szenen, auch solange erst ein Teil gebaut ist
+  // ---------- Boden ----------
+  // Der Boden ist ein sehr großer Bogen im Papierton, der zum Horizont weich in den Dunst ausläuft (keine Kante, kein Raster, keine Karte).
+  const TM = 5.5;
+  let table = null;
+  const revealN = 99;
+  let lowRatio = false;
+  // Fläche des Bodens aus den Plätzen aller Szenen
   function tableRect() {
     let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9, h = 0;
-    for (let i = 0; i < INST.length; i++) {
-      const sl = slotOf(i); x0 = Math.min(x0, sl.C.x - sl.R); x1 = Math.max(x1, sl.C.x + sl.R); z0 = Math.min(z0, sl.C.z - sl.R); z1 = Math.max(z1, sl.C.z + sl.R);
-    }
-    // Fluss, Mündung und Wortmarke (links vom Schlusspunkt im Kartenbild) gehören zum Gebiet der Karte (aus der Lage, auch solange erst ein Teil gebaut ist)
-    const LA = layoutOf(), mk = LA.mark, ex = (x, z) => { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); };
-    for (const [a, b] of [[0, 0], [-mk.Wm, 0], [-mk.Wm, 1.1 * mk.E], [0, 1.1 * mk.E], [0, -.4 * mk.E], [-mk.Wm, -.4 * mk.E]]) ex(mk.D.x + mk.right.x * a + mk.upS.x * b, mk.D.z + mk.right.z * a + mk.upS.z * b);
-    for (const P of [...LA.rivers.filter(Boolean), LA.fin]) for (let q = 0; q <= 40; q++) { const pt = P.at(P.len * q / 40); ex(pt.x - 2, pt.z - 2); ex(pt.x + 2, pt.z + 2); }
+    for (let i = 0; i < INST.length; i++) { const sl = slotOf(i); x0 = Math.min(x0, sl.C.x - sl.R); x1 = Math.max(x1, sl.C.x + sl.R); z0 = Math.min(z0, sl.C.z - sl.R); z1 = Math.max(z1, sl.C.z + sl.R); }
+    const LA = layoutOf();
+    for (const P of LA.rivers.filter(Boolean)) for (let q = 0; q <= 40; q++) { const pt = P.at(P.len * q / 40); x0 = Math.min(x0, pt.x - 2); x1 = Math.max(x1, pt.x + 2); z0 = Math.min(z0, pt.z - 2); z1 = Math.max(z1, pt.z + 2); }
     x0 -= TM; x1 += TM; z0 -= TM; z1 += TM;
     for (const I of INST) if (I.built && I.ext) h = Math.max(h, I.ext.max.y);
     return { x0, x1, z0, z1, h };
   }
-  // Der Tisch ist der Boden unter allen Parzellen: ein sehr großer Bogen im Papierton mit zartem Raster (Schneidematte; Linien alle 2 Einheiten, kräftiger alle 10, die
-  // Parzellen sitzen genau auf Linien), der außerhalb des Rasters und zum Horizont weich in den Dunst ausläuft (keine Kante, kein Weiß). Mit Schatten wie das Papier der Szenen.
   const GROUND_FRAG = `
     uniform vec3 uPaper; uniform vec3 uInk; uniform vec2 uGW; uniform vec2 uFar; uniform vec2 uC; uniform vec2 uH; uniform vec2 uGO; uniform vec2 uFade;
     uniform sampler2D uCont; uniform vec4 uContBox; uniform float uContA;
@@ -2196,7 +1910,7 @@ export function seite(renderer, SEQ, opt = {}) {
     const R = tableRect(); if (R.x0 > R.x1) return;
     if (!table) {
       const mat = new THREE.ShaderMaterial({
-        uniforms: { uPaper: { value: new THREE.Color(PAL.ground) }, uInk: { value: new THREE.Color(PAL.gridInk) }, uGW: { value: new THREE.Vector2(PAL.gridMinor, PAL.gridMajor) }, uFar: { value: new THREE.Vector2(160, 1100) }, uC: { value: new THREE.Vector2() }, uH: { value: new THREE.Vector2(1, 1) }, uGO: { value: new THREE.Vector2() }, uFade: { value: new THREE.Vector2(4, 90) }, uCont: { value: null }, uContBox: { value: new THREE.Vector4(0, 0, 1, 1) }, uContA: { value: 0 },
+        uniforms: { uPaper: { value: new THREE.Color(PAL.ground) }, uInk: { value: new THREE.Color(PAL.gridInk) }, uGW: { value: new THREE.Vector2(0, 0) }, uFar: { value: new THREE.Vector2(160, 1100) }, uC: { value: new THREE.Vector2() }, uH: { value: new THREE.Vector2(1, 1) }, uGO: { value: new THREE.Vector2() }, uFade: { value: new THREE.Vector2(4, 90) }, uCont: { value: null }, uContBox: { value: new THREE.Vector4(0, 0, 1, 1) }, uContA: { value: 0 },
           uHaze: U.haze, uHazeF: U.hazeF, uShC: U.shc, uSM: U.sm, uSMM: U.smm, uSMP: U.smp },
         vertexShader: "varying vec3 vW; varying float vDepth; void main() { vec4 wp = modelMatrix * vec4(position, 1.0); vW = wp.xyz; vec4 mv = viewMatrix * wp; vDepth = -mv.z; gl_Position = projectionMatrix * mv; }",
         fragmentShader: SHADOW_GLSL + GROUND_FRAG, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 2, polygonOffsetUnits: 4
@@ -2204,54 +1918,12 @@ export function seite(renderer, SEQ, opt = {}) {
       const ground = new THREE.Mesh(new THREE.PlaneGeometry(1, 1).rotateX(-PI / 2), mat);
       ground.frustumCulled = false; ground.renderOrder = -3; ground.position.y = -.04; ground.scale.set(6000, 1, 6000);
       scene.add(ground); table = { ground, mat };
-      if (contour) { mat.uniforms.uCont.value = contour.tex; mat.uniforms.uContBox.value.set(...contour.box); }
     }
     const cx = (R.x0 + R.x1) / 2, cz = (R.z0 + R.z1) / 2, u = table.mat.uniforms;
     u.uC.value.set(cx, cz); u.uH.value.set((R.x1 - R.x0) / 2, (R.z1 - R.z0) / 2);
     // Raster liegt auf den Kanten der Parzellen (die erste Parzelle als Ursprung; die Maße der Raster sind Vielfache von 2)
     u.uGO.value.set(0, 0);                                                // Raster am Ursprung der Spirale (das Auge liegt auf einer Linie)
-    MAP = null;
   }
-  // Kartenstellung: Blickrichtung fest (Neigung, Drehung um y), Abstand so, dass der ganze Tisch samt Bauteilen im Rahmen steht
-  // (oben 74 px Kopfzeile, unten 82 px Knöpfe und Fortschritt), danach die Mitte in den Rahmen geschoben
-  function mapPose() {
-    const key = [aspect.toFixed(3), narrow, INST.filter(I => I.built).length, VW(), VH()].join();
-    if (MAP && MAP.key === key) return MAP;
-    const R = tableRect(), P = KARTE[narrow ? "n" : "d"], W = VW(), H = VH();
-    const yaw = P.yaw * PI / 180, pitch = P.pitch * PI / 180, fwd = dirAng(yaw, pitch, V());
-    const ctr = V((R.x0 + R.x1) / 2, 0, (R.z0 + R.z1) / 2), pts = [];
-    for (const x of [R.x0, R.x1]) for (const z of [R.z0, R.z1]) for (const y of [-.2, R.h + 1]) pts.push(V(x, y, z));
-    const tc = new THREE.PerspectiveCamera(P.fov, W / H, 1, 6000);
-    const mx = 2 * 14 / W, mt = 2 * 62 / H, mb = 2 * 74 / H;
-    const place = (c, d) => { tc.position.copy(c).addScaledVector(fwd, -d); tc.lookAt(c); tc.updateMatrixWorld(); tc.updateProjectionMatrix(); };
-    const box = () => { let a = 1e9, b = -1e9, c = 1e9, e = -1e9; for (const p of pts) { const v = p.clone().project(tc); a = Math.min(a, v.x); b = Math.max(b, v.x); c = Math.min(c, v.y); e = Math.max(e, v.y); } return [a, b, c, e]; };
-    let c0 = ctr.clone(), d = 100;
-    const fits = dd => { place(c0, dd); const [a, b, c, e] = box(); return a >= -1 + mx && b <= 1 - mx && c >= -1 + mb && e <= 1 - mt; };
-    for (let it = 0; it < 3; it++) {
-      let lo = 5, hi = 3000; for (let k = 0; k < 34; k++) { const m = (lo + hi) / 2; if (fits(m)) hi = m; else lo = m; }
-      d = hi; place(c0, d); const [a, b, c, e] = box();
-      // Mitte des Kastens soll auf der Mitte des freien Rahmens liegen: Ziel entlang rechts/oben verschieben
-      const ty = (mb - mt) / 2, ox = (a + b) / 2, oy = (c + e) / 2 - ty;
-      const hh = d * Math.tan(P.fov * PI / 360), ww = hh * (W / H), right = V().setFromMatrixColumn(tc.matrixWorld, 0), up = V().setFromMatrixColumn(tc.matrixWorld, 1);
-      c0.addScaledVector(right, ox * ww).addScaledVector(up, oy * hh);
-    }
-    place(c0, d); d *= 1.015; dbg("Kartenstellung fertig, Abstand " + d.toFixed(0));
-    MAP = { key, tgt: c0.clone(), cam: c0.clone().addScaledVector(fwd, -d), fov: P.fov, yaw, pitch, dist: d, R };
-    return MAP;
-  }
-  // Kamera von der Fahrtstellung zur Kartenstellung blenden (M 0 … 1); verändert cam und tgt, liefert das Sichtfeld
-  function blendMap(cam, tgt, fov, M) { return M <= 0 ? fov : blendPose(cam, tgt, fov, mapPose(), M); }
-  // allgemein: von der Stellung (cam, tgt, fov) zur Stellung mp = { cam, yaw, pitch, dist, fov } blenden (M 0 … 1): zuerst hoch, dann seitlich,
-  // Blickrichtung (Drehung, Neigung) und Abstand in Winkeln und Logarithmen, nicht als Punkte (sonst schwenkt der Blick am Rand schneller)
-  function blendPose(cam, tgt, fov, mp, M) {
-    const D = tgt.clone().sub(cam), yB = yawOf(D), pB = pitchOf(D), dB = Math.max(.5, D.length());
-    const eY = smoother(win(M, 0, .72)), eXZ = smoother(win(M, .16, .84)), eO = smoother(win(M, .04, .96));
-    cam.x += (mp.cam.x - cam.x) * eXZ; cam.z += (mp.cam.z - cam.z) * eXZ; cam.y += (mp.cam.y - cam.y) * eY;
-    const yaw = yB + wrapPi(mp.yaw - yB) * eO, pitch = pB + (mp.pitch - pB) * eO, dist = Math.exp(Math.log(dB) + (Math.log(mp.dist) - Math.log(dB)) * eO);
-    dirAng(yaw, pitch, _c0); tgt.copy(cam).addScaledVector(_c0, dist);
-    return fov + (mp.fov - fov) * eO;
-  }
-
   // Texturen: entfernte Szenen (und alle in der Karte) zeigen ihre Drucke in kleiner Auflösung (höchstens 512 px Kantenlänge), nahe Szenen
   // voll. Der Tausch kostet ein neues Hochladen, daher höchstens LOD_BUDGET Drucke je Bild; kleine Texturen werden gleich hochgeladen.
   const LOD_BUDGET = 3;
@@ -2277,54 +1949,10 @@ export function seite(renderer, SEQ, opt = {}) {
     }
   }
 
-  // ---------- Übersicht: anklickbare Parzellen (SVG über der Karte) ----------
-  const SVGNS = "http://www.w3.org/2000/svg";
-  let cards = [], cardHost = null, hereI = null;
-  function buildCards() {
-    cards = []; cardHost = document.getElementById("karte");
-    if (!cardHost || !cardHost.appendChild || !document.createElementNS) { cardHost = null; return; }
-    while (cardHost.firstChild) cardHost.removeChild(cardHost.firstChild);
-    INST.forEach(I => {
-      const a = document.createElementNS(SVGNS, "a"), poly = document.createElementNS(SVGNS, "polygon"), txt = document.createElementNS(SVGNS, "text"), rect = document.createElementNS(SVGNS, "rect");
-      a.setAttribute("href", "#s=" + I.name); a.setAttribute("data-scene", I.name); a.setAttribute("tabindex", "-1");
-      a.setAttribute("aria-label", (I.idx + 1) + ". " + I.cfg.label);
-      txt.textContent = (I.idx + 1 < 10 ? "0" : "") + (I.idx + 1) + "  " + (I.cfg.short || I.cfg.label);
-      rect.setAttribute("rx", 2); rect.setAttribute("ry", 2);
-      a.appendChild(poly); a.appendChild(rect); a.appendChild(txt); cardHost.appendChild(a);
-      cards.push({ I, a, poly, txt, rect, tw: 0, twW: 0 });
-    });
-  }
-  // Fläche der Parzelle (Einheitsgröße) als Viereck der Welt
-  function cardCorners(I) {
-    if (I.card) return I.card;
-    const sl = I.slot, pts = [];
-    for (let k = 0; k < 40; k++) { const a = k / 40 * 2 * PI; pts.push(V(sl.C.x + sl.R * Math.cos(a), 0, sl.C.z + sl.R * Math.sin(a))); }
-    return I.card = pts;
-  }
-  function updateCards(M, active) {
-    if (!cardHost) return;
-    const W = VW(), H = VH();
-    cardHost.setAttribute("viewBox", "0 0 " + W + " " + H);
-    cardHost.style.opacity = String(clamp((M - .55) / .4, 0, 1));
-    for (const c of cards) {
-      if (!c.I.built) continue;
-      const pts = cardCorners(c.I).map(p => { const v = p.clone().project(camera); return [(v.x + 1) / 2 * W, (1 - v.y) / 2 * H]; });
-      c.poly.setAttribute("points", pts.map(p => p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" "));
-      // Beschriftung als kleine Papier-Pille an der Vorderkante der Parzelle (untere Kante im Bild, mittig, bei allen im gleichen Abstand), nie auf der Miniatur
-      const low = pts.slice().sort((p, q) => q[1] - p[1]).slice(0, 2), cx = (low[0][0] + low[1][0]) / 2, yb = (low[0][1] + low[1][1]) / 2, ph = W < 560 ? 17 : 21;
-      if (!c.tw || c.twW !== W) { c.twW = W; c.tw = c.txt.getComputedTextLength ? c.txt.getComputedTextLength() : c.txt.textContent.length * 6.5; if (!c.tw) c.tw = c.txt.textContent.length * 6.5; }
-      const ly = Math.min(yb + 5 + ph / 2, H - 80), lx = clamp(cx, c.tw / 2 + 12, W - c.tw / 2 - 12), bw = c.tw + 14;
-      c.txt.setAttribute("x", lx.toFixed(1)); c.txt.setAttribute("y", (ly + .5).toFixed(1));
-      c.rect.setAttribute("x", (lx - bw / 2).toFixed(1)); c.rect.setAttribute("y", (ly - ph / 2).toFixed(1)); c.rect.setAttribute("width", bw.toFixed(1)); c.rect.setAttribute("height", ph);
-      c.a.setAttribute("tabindex", active ? "0" : "-1");
-      if (c.a.classList) c.a.classList.toggle("hier", c.I === hereI);
-    }
-  }
-
   // ---------- Bild zu einem Zustand ----------
   const visible = new Set(), _pp = V(), _nn = V(), _vv = V();
   const FOREIGN_S = [70, 140], FOREIGN = [70, 140];                    // Dunst der Nachbarszenen (wie FAR: Nachbarparzellen bleiben klar sichtbar, nur Schrift von hinten fällt weg)
-  let state = null, Mcur = 0, lastApply = 0;
+  let state = null, lastApply = 0;
   // Text (nicht Bilder) steht, solange sein Träger im Bild ist, und läuft am Bildrand natürlich hinaus (Anschnitt wie bei jedem Inhalt der Seite);
   // erst wenn weniger als rund ein Viertel seiner Fläche im Bild steht, blendet er weich aus (voll ab 25 %, null bei 1 %). Drucke einer Gruppe
   // (pr.grp, z. B. die Wortmarke) bemessen sich an ihrer gemeinsamen Fläche und blenden zusammen aus: ein Name steht ganz oder gar nicht.
@@ -2332,9 +1960,8 @@ export function seite(renderer, SEQ, opt = {}) {
   // In der Karte zusätzlich erst ab ein paar Pixeln Höhe (sonst flimmert die Schrift)
   const FADE_T = .3;                                                    // Sekunden, kürzeste Dauer jedes Ein- und Ausblendens von Drucken
   const FR0 = .01, FR1 = .24, BAND_TOP = 0, BAND_BOT = 0;
-  const textFactor = (pr, cw, ch, M, gf) => {
+  const textFactor = (pr, cw, ch, gf) => {
     const fr = frameFrac(pr, cw, ch), f = gf !== undefined ? gf : fr.f; let o = sm((f - FR0) / FR1);
-    if (M > .02 && fr.r) o *= sm((fr.r[3] - fr.r[1] - 3) / 5);
     return o;
   };
   const isText = pr => (pr.t && pr.t.rows) || pr.textual;
@@ -2350,45 +1977,37 @@ export function seite(renderer, SEQ, opt = {}) {
     return g;
   }
   function applyState(st, now, opts = {}) {
-    // Karte: M > 0 zeigt alle Parzellen; sonst sichtbar: aktuelle Szene und ihre Nachbarn (im Übergang beide Szenen und die davor)
-    const M = opts.M !== undefined ? opts.M : mNow(st), mapOn = M > .001;
-    Mcur = M;
-    if (!mapOn) revealN = 0; else if (opts.still) revealN = 99; else { revealN++; if (revealN <= INST.length + 1 || revealN % 30 === 0) dbg("Karte: aufgedeckt " + revealN + " M=" + M.toFixed(2)); }       // Karte: Parzellen erscheinen eine je Bild (Hochladen verteilen)
-    const want = new Set(st.kind === "b" ? [st.i - 1, st.i, st.i + 1] : st.kind === "z" ? [st.i - 1, st.i] : [st.i - 2, st.i - 1, st.i, st.i + 1]);
+    // sichtbar: aktuelle Szene und ihre Nachbarn (im Übergang beide Szenen und die davor)
+    const want = new Set(st.kind === "b" ? [st.i - 1, st.i, st.i + 1] : [st.i - 2, st.i - 1, st.i, st.i + 1]);
     // nötig ist nur die aktuelle Szene (im Übergang: beide); Nachbarn erscheinen, sobald der Hintergrundbau sie fertig hat
-    ensure(mapOn ? INST.length - 1 : st.i);
+    ensure(st.i);
     visible.clear();
     for (const I of INST) {
       if (!I.built) continue;
-      const on = mapOn ? (I.idx === st.i || I.idx < revealN) : want.has(I.idx);
+      const on = want.has(I.idx);
       I.group.visible = on; if (on) visible.add(I); else I.fadeReady = false;
     }
     if (!opts.still) {
       // volle Auflösung nur für die Szene der Kamera (im Übergang beide Enden, kurz vor dem Übergang schon die nächste)
       const full = new Set();
-      if (!mapOn) { if (st.kind === "t") { full.add(st.i - 1); full.add(st.i); } else { full.add(st.i); if (st.kind === "b" && st.q > .6) full.add(st.i + 1); } }
-      try { lodStep(full, st.i); } catch (e) { mapFail(e); }
+      if (st.kind === "t") { full.add(st.i - 1); full.add(st.i); } else { full.add(st.i); if (st.kind === "b" && st.q > .6) full.add(st.i + 1); }
+      try { lodStep(full, st.i); } catch (e) { console.error("Texturstufe:", e); }
     }
-    hereI = INST[st.i];
     // Dunst: die Szene, in der die Kamera ist, sieht weit (FAR); Nachbarszenen werden ab FOREIGN ausgeblendet und tauchen beim Näherkommen auf
-    const wOf = I => mapOn ? 1 : st.kind === "t" ? (I.idx === st.i ? sm(st.q) : I.idx === st.i - 1 ? 1 - sm(st.q) : 0) : I.idx === st.i ? 1 : 0;
+    const wOf = I => st.kind === "t" ? (I.idx === st.i ? sm(st.q) : I.idx === st.i - 1 ? 1 - sm(st.q) : 0) : I.idx === st.i ? 1 : 0;
     // Zeit der Lettern: läuft ab dem Eintreffen der Szene (Fahrt in die Szene beginnt)
     const time = now / 1000, dtS = Math.min(.05, Math.max(0, (now - lastApply) / 1000)); lastApply = now;
     for (const I of INST) if (I.built && I.tStart === undefined && (I.idx < st.i || (I.idx === st.i))) I.tStart = now;
     let fov = poseOf(st, camera.position, _t);
-    if (mapOn) { try { fov = blendMap(camera.position, _t, fov, M); } catch (e) { mapFail(e); } }
-    // Dunst der Ferne und Nahebene folgen der Karte (aus der Karte heraus: Vorgabe)
-    const hz = smoother(win(M, 0, .5)); FAR.set(70 + 830 * hz, 140 + 1660 * hz);
-    if (table) table.mat.uniforms.uFar.value.set(160 + 740 * hz, 1100 + 1300 * hz);                  // der Boden läuft viel weiter aus als die Papiere der Szenen
+    FAR.set(70, 140);
+    if (table) table.mat.uniforms.uFar.value.set(160, 1100);                  // der Boden läuft viel weiter aus als die Papiere der Szenen
     // Dunstfarbe: am Startbild weiß (wie das HTML-Vorbild), mit den ersten Scrollschritten zu den Farben der Palette (PAL); die Ferne ist zugleich die Hintergrundfarbe
     { const hk = st.kind === "b" && st.i === 0 ? smoother(win(st.q, .02, .25)) : 1;
       hazeC.copy(WHITE).lerp(hazeN, hk); hazeCF.copy(WHITE).lerp(hazeF, hk);
       U.haze.value.set(hazeC.r, hazeC.g, hazeC.b); U.hazeF.value.set(hazeCF.r, hazeCF.g, hazeCF.b); renderer.setClearColor(hazeCF, 1);
       // Startbild: auch der Boden ist weiß (breite Fenster zeigen sonst den blauen Boden neben dem Boden der Parzelle: im Startbild steht nur der Name)
-      if (table) { table.mat.uniforms.uPaper.value.copy(WHITE).lerp(GROUND_C, hk); table.mat.uniforms.uGW.value.set(PAL.gridMinor * hk, PAL.gridMajor * hk); table.mat.uniforms.uContA.value = contour ? .5 * smoother(win(M, .15, .8)) : 0; } }
-    // Nahebene: in der Karte weit weg vom Tisch (Abstand mindestens 300, die Tiefengenauigkeit bleibt sonst bei großem Tisch zu grob, der Schatten unter dem Tisch flimmert)
-    let nearV = .1 + 2.9 * smoother(win(M, .1, .6));
-    if (mapOn) { try { nearV = .1 + (Math.max(3, mapPose().dist * .3) - .1) * smoother(win(M, .1, .6)); } catch (e) { mapFail(e); } }
+      if (table) { table.mat.uniforms.uPaper.value.copy(WHITE).lerp(GROUND_C, hk); table.mat.uniforms.uGW.value.set(0, 0); } }
+    const nearV = .1;
     if (camera.fov !== fov || camera.near !== nearV || camera.far !== 1500) { camera.fov = fov; camera.near = nearV; camera.far = 1500; camera.updateProjectionMatrix(); }
     // Kein Atem: die Kamera bewegt sich nur, wenn gescrollt wird (Erik: „sinnloses Kamerageeier“)
     camera.lookAt(_t);
@@ -2406,9 +2025,7 @@ export function seite(renderer, SEQ, opt = {}) {
       // Uhr der Lettern: nach 6 s ist alles aufgestanden und jeder Abdruck geschlossen (danach rechnet das Modell nur, wenn sich b ändert)
       // Anzeige-b: bricht b beim Sprung aus der Karte um (Parzellen vorn bauen sich zurück), läuft es mit begrenztem Tempo nach
       let b = bOf(I, st);
-      // Karte: auf jeder Insel steht das fertige Modell (die Teile klappen beim Öffnen der Übersicht weich auf)
-      if (mapOn) b += (I.bMax - b) * smoother(win(M, .12, .55));
-      if (I.bShown === undefined || opts.still || (!mapOn && !I.easing)) { I.bShown = b; I.easing = false; }
+      if (I.bShown === undefined || opts.still || !I.easing) { I.bShown = b; I.easing = false; }
       else {
         const stp = 1.3 * dtS, dlt = b - I.bShown;
         if (Math.abs(dlt) <= Math.max(1e-4, stp)) { I.bShown = b; I.easing = false; } else { I.bShown += Math.sign(dlt) * stp; I.easing = true; }
@@ -2421,7 +2038,7 @@ export function seite(renderer, SEQ, opt = {}) {
       // def.linesFrom: Haarkanten der Teile erst ab diesem b (Startbild flach über Papierhöhe: sonst liegen alle Kanten als Linie auf dem Horizont)
       if (I.def.linesFrom !== undefined) I.lines.visible = b >= I.def.linesFrom;
       // Lage des Punktes auf dem Lauf der Szene (Szenenkoordinaten) für Bauteile, die mit ihm reisen (Gerwing: Lieferschein)
-      if (I.route && I.tl) { const sI = st.kind === "b" && st.i === I.idx ? I.tl.sAt(st.q * (I.body.v1 - I.body.v0)) : (st.i > I.idx || st.kind === "z") ? I.route.len : 0; I.K.dotS = sI; I.K.dotL = I.route.at(sI, I.K.dotL || V()); }
+      if (I.route && I.tl) { const sI = st.kind === "b" && st.i === I.idx ? I.tl.sAt(st.q * (I.body.v1 - I.body.v0)) : (st.i > I.idx) ? I.route.len : 0; I.K.dotS = sI; I.K.dotL = I.route.at(sI, I.K.dotL || V()); }
       for (const a of I.anims) a(b, time);
       I.group.updateMatrixWorld(true);
       const gfr = groupFrac(I, cw, ch);
@@ -2434,7 +2051,7 @@ export function seite(renderer, SEQ, opt = {}) {
           if (pr.tOff !== undefined) o *= 1 - sm((tl - pr.tOff) / pr.tDur);
         }
         // Text (nicht Bilder) nur ganz im Bild oder gar nicht; Decals mit Text (Kontaktkarten) tragen pr.textual
-        if (o > .001 && isText(pr)) o *= textFactor(pr, cw, ch, M, pr.grp && gfr ? gfr.get(pr.grp).f : undefined);
+        if (o > .001 && isText(pr)) o *= textFactor(pr, cw, ch, pr.grp && gfr ? gfr.get(pr.grp).f : undefined);
         // Dunst auch auf den Drucken; fremde Schrift nur von vorn (nie von hinten gelesen)
         if (o > .001) {
           _pp.setFromMatrixPosition(pr.mesh.matrixWorld);
@@ -2453,10 +2070,7 @@ export function seite(renderer, SEQ, opt = {}) {
     for (const I of visible) I.fadeReady = true;
     // Haarkanten der Bögen (LineBasicMaterial, ohne eigenen Shader) folgen dem Dunst ihrer Szene
     for (const I of visible) for (const sh of I.sheets) { const e = sh.children[0]; if (e && e.material) { _pp.setFromMatrixPosition(sh.matrixWorld); e.material.opacity = (camera.position.y > 2.5 ? .32 : 0) * (1 - sm((camera.position.distanceTo(_pp) - I.farS.x) / Math.max(1, I.farS.y - I.farS.x))); } }
-    if (fill) { const kf = 1 - smoother(win(M, 0, .3)); fill.group.scale.y = Math.max(1e-3, kf); fill.group.visible = kf > .01; }
-    if (eyeMark) { const ko = smoother(win(M, .45, .95)); for (const m of eyeMark.mats) m.opacity = ko; eyeMark.group.visible = ko > .01; }
     updateThread(st);
-    try { updateCards(M, M > .92); } catch (e) { mapFail(e); }
     state = st;
   }
 
@@ -2470,8 +2084,7 @@ export function seite(renderer, SEQ, opt = {}) {
     const on = !SM.off && !narrow && aspect >= 1 && INST[0].built;
     if (!on) { U.smp.value.x = 0; return; }
     let x0, x1, z0, z1;
-    if (Mcur > .5) { const R = tableRect(); [x0, x1, z0, z1] = [R.x0, R.x1, R.z0, R.z1]; }
-    else {
+    {
       const ids = st.kind === "t" ? [st.i - 1, st.i] : [st.i]; x0 = z0 = 1e9; x1 = z1 = -1e9;
       for (const i of ids) { const fp = INST[i].fp; x0 = Math.min(x0, fp[0] - 12); x1 = Math.max(x1, fp[1] + 12); z0 = Math.min(z0, fp[2] - 12); z1 = Math.max(z1, fp[3] + 12); }
     }
@@ -2523,7 +2136,7 @@ export function seite(renderer, SEQ, opt = {}) {
       if (pendingJump === null) return;
       if (!INST[st.i].built) { build(INST.find(I => !I.built)); setTimeout(step, 30); return; }
       const pj = pendingJump; pendingJump = null; dbg("Szenen gebaut, springe");
-      if (pj >= ZSEG.p0) { jumpTo(ZSEG.p0); setTimeout(() => { if (!pendingJump) scrollToP(pj); }, 600); } else jumpTo(pj);
+      jumpTo(pj);
     };
     setTimeout(step, 400);
   }
@@ -2531,50 +2144,12 @@ export function seite(renderer, SEQ, opt = {}) {
     const q = hashQ();
     const hp = q.get("p"), hs = q.get("s");
     if (hp !== null && hp !== "" && isFinite(+hp)) { jumpAny(+hp); return true; }
-    if (hs) { const a = ANCH.find(a => a.name === hs); if (a) { if (Mcur > .05) Mextra = Math.max(Mextra, Mcur); Muser = 0; jumpAny(anchorP(a) + 1e-6); syncMapUi(); return true; } }
+    if (hs) { const a = ANCH.find(a => a.name === hs); if (a) { jumpAny(anchorP(a) + 1e-6); return true; } }
     return false;
   }
   addEventListener("hashchange", applyHash);
-  // Übersicht (Karte): Knopf, Esc, Klick auf eine Parzelle. Die Karte schließt, sobald jemand scrollt oder eine Taste drückt.
-  const mapBtn = document.getElementById("uebersicht"), mapNote = document.getElementById("kartenhinweis");
-  let mapUiKey = "";
-  function syncMapUi() {
-    const st = stateAt(p), open = Muser > 0 || mSeg(st) > .5;
-    if (mapUiKey === String(open)) return; mapUiKey = String(open);
-    if (mapBtn) { mapBtn.setAttribute("aria-pressed", open ? "true" : "false"); mapBtn.setAttribute("aria-label", open ? "Übersicht schließen" : "Übersicht"); if (mapBtn.classList) mapBtn.classList.toggle("an", open); }
-    if (cardHost) cardHost.setAttribute("aria-hidden", open ? "false" : "true");
-  }
-  // Karte öffnen: fehlen noch Szenen, werden sie erst Bild für Bild gebaut (zwischendurch wird gemalt), danach fährt M hoch
-  function openMap() {
-    if (INST.every(I => I.built)) { Muser = 1; syncMapUi(); return; }
-    const step = () => { const n = INST.find(I => !I.built); if (!n) { Muser = 1; syncMapUi(); return; } build(n); setTimeout(step, 20); };
-    setTimeout(step, 0);
-  }
-  function closeMap() {
-    const st = stateAt(p);
-    // am Seitenende steht die Karte an p: zurück an die letzte Stellung der letzten Szene, die Kamera sinkt dorthin
-    if (mSeg(st) > .02) { Mextra = Math.max(Mextra, mNow(st)); Muser = 0; jumpTo(ZSEG.p0); } else Muser = 0;
-    syncMapUi();
-  }
-  function flyTo(name) {
-    const a = ANCH.find(a => a.name === name); if (!a) return;
-    Mextra = Math.max(Mextra, mNow(stateAt(p))); Muser = 0;
-    jumpTo(anchorP(a) + 1e-6); syncMapUi();
-  }
-  addEventListener("scroll", () => { if (!hold) { target = clamp(scrollY / maxScroll(), 0, 1); if (Muser) { Muser = 0; syncMapUi(); } } }, { passive: true });
+  addEventListener("scroll", () => { if (!hold) target = clamp(scrollY / maxScroll(), 0, 1); }, { passive: true });
   for (const ev of ["wheel", "touchstart", "keydown", "pointerdown"]) addEventListener(ev, () => { hold = false; pendingJump = null; }, { passive: true });
-  addEventListener("wheel", () => { if (Muser) { Muser = 0; syncMapUi(); } }, { passive: true });
-  addEventListener("keydown", ev => {
-    if (ev.key === "Escape") { if (Muser > 0 || mSeg(stateAt(p)) > .5) closeMap(); return; }
-    if (Muser && ev.key !== "Tab" && ev.key !== "Enter" && ev.key !== " ") { Muser = 0; syncMapUi(); }
-  });
-  if (mapBtn) mapBtn.addEventListener("click", () => { const open = Muser > 0 || mSeg(stateAt(p)) > .5; if (open) closeMap(); else openMap(); });
-  const karteEl = document.getElementById("karte");
-  if (karteEl && karteEl.addEventListener) karteEl.addEventListener("click", ev => {
-    const l = ev.target.closest && ev.target.closest("a"); if (!l) return;
-    ev.preventDefault(); ev.stopPropagation();
-    if (Mcur > .8) flyTo(l.getAttribute("data-scene"));
-  });
   // Vor/Zurück und Navigation: normales (weiches) Scrollen an den Anfang einer Szene, kein Einrasten
   function scrollToP(pp) { hold = false; scrollTo({ top: clamp(pp, 0, 1) * maxScroll(), behavior: "smooth" }); }
   function go(dir) {
@@ -2585,19 +2160,18 @@ export function seite(renderer, SEQ, opt = {}) {
     scrollToP(to);
   }
   const nx = document.getElementById("next"), pv = document.getElementById("prev");
-  if (nx) nx.addEventListener("click", () => { if (Muser) closeMap(); else go(1); });
-  if (pv) pv.addEventListener("click", () => { if (Muser) closeMap(); else go(-1); });
+  if (nx) nx.addEventListener("click", () => go(1));
+  if (pv) pv.addEventListener("click", () => go(-1));
   addEventListener("click", ev => {
     const l = ev.target.closest && ev.target.closest("[data-scene]"); if (!l) return;
     const a = ANCH.find(a => a.name === l.dataset.scene); if (!a) return;
     ev.preventDefault();
-    if (Mcur > .3) flyTo(l.dataset.scene); else scrollToP(anchorP(a) + 1e-6);
+    scrollToP(anchorP(a) + 1e-6);
   });
 
   // ---------- Klickbare Drucke (Kontaktwege) ----------
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
   function linkAt(ev) {
-    if (Mcur > .3) return null;                          // in der Karte gehören Klicks den Parzellen
     const r = canvas.getBoundingClientRect();
     ndc.set((ev.clientX - r.left) / r.width * 2 - 1, -((ev.clientY - r.top) / r.height) * 2 + 1);
     ray.setFromCamera(ndc, camera);
@@ -2634,15 +2208,12 @@ export function seite(renderer, SEQ, opt = {}) {
     for (const pc of pieces) { scene.remove(pc.mesh); pc.g.dispose(); }
     pieces.length = 0; links3.length = 0; CHUNKS.length = 0; LAYC = null;
     if (fill) { scene.remove(fill.group); fill.group.traverse(o => { if (o.geometry) o.geometry.dispose(); }); fill = null; }
-    if (eyeMark) { scene.remove(eyeMark.group); eyeMark = null; }
     if (table) { scene.remove(table.ground); table.ground.geometry.dispose(); table.mat.dispose(); table = null; }
-    MAP = null; Muser = 0; Mextra = 0;
     aspect = VW() / VH(); narrow = aspect < 1;
     INST = SEQ.map((cfg, i) => newInstance(cfg, i));
     resize();
     makeSegments();
     ANCH = anchorsOf();
-    try { buildCards(); } catch (e) { mapFail(e); }
     build(INST[0]); INST[0].tStart = performance.now();
   }
   init();
@@ -2668,7 +2239,7 @@ export function seite(renderer, SEQ, opt = {}) {
     }
     renderer.toneMapping = THREE.NoToneMapping; renderer.setRenderTarget(null); renderer.render(scene, camera);
   }
-  let last = performance.now(), first = true, drawKey = "";
+  let last = performance.now(), first = true;
   function frameStep(now) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
     // Dargestellter Fortschritt folgt dem Scrollfortschritt wie eine kritisch gedämpfte Feder (Eigenfrequenz SMOOTH_W, bildratenunabhängig,
@@ -2678,20 +2249,10 @@ export function seite(renderer, SEQ, opt = {}) {
       pVel = (pVel - SMOOTH_W * tm) * ex; p = clamp(target + (x + tm) * ex, 0, 1);
       if (Math.abs(target - p) < 1e-5 && Math.abs(pVel) < 1e-4) { p = target; pVel = 0; }
     }
-    // Übersicht per Knopf: M läuft zeitlich (ruhig an und aus), unabhängig vom Scrollen
-    Mextra += (Muser - Mextra) * (1 - Math.exp(-dt * 3.2)); if (Math.abs(Muser - Mextra) < .002) Mextra = Muser;
     const st = stateAt(p);
     hint && hint.classList.toggle("off", p > .004);
     document.body.classList.toggle("scrolled", scrollY > innerHeight * .6 || p > INST[0].body.p1 * .1);
-    document.body.classList.toggle("kartenmodus", mNow(st) > .5);
     if (bar) bar.style.width = (p * 100).toFixed(2) + "%";
-    syncMapUi();
-    const lr = mNow(st) > .6 && (devicePixelRatio || 1) > 1.25;
-    if (lr !== lowRatio) { lowRatio = lr; renderer.setPixelRatio(lr ? 1.25 : Math.min(devicePixelRatio || 1, 2)); renderer.setSize(VW(), VH(), false); if (post) post.resize(VW(), VH(), renderer.getPixelRatio()); drawKey = ""; }
-    // steht die Karte still (alle Szenen fertig, keine Textur im Tausch), wird nichts neu gezeichnet
-    const key = p.toFixed(6) + "|" + mNow(st).toFixed(5) + "|" + aspect.toFixed(4) + "|" + INST.filter(I => I.built).length;
-    if (mNow(st) >= .9999 && key === drawKey && INST.every(I => I.built && I.lodSmall === true && !I.easing) && revealN >= INST.length) return;
-    drawKey = key;
     applyState(st, now);
     try { shadowPass(st); } catch (e) { console.error("Schatten abgeschaltet:", e); SM.off = true; U.smp.value.x = 0; scene.overrideMaterial = null; renderer.setRenderTarget(null); }
     drawScene();
@@ -2708,7 +2269,6 @@ export function seite(renderer, SEQ, opt = {}) {
     try { frameStep(now); }
     catch (e) {
       console.error(e); frameErrors++;
-      if (mapOK && (Mextra > 0 || Muser > 0 || mSeg(stateAt(p)) > 0)) { mapFail(e); if (mSeg(stateAt(p)) > 0) { try { jumpTo(ZSEG.p0); } catch (e2) { /* nichts */ } } }
       if (first) { first = false; try { opt.onFirstFrame && opt.onFirstFrame(); } catch (e3) { /* nichts */ } setTimeout(more, 250); }
     }
     requestAnimationFrame(frame);
@@ -2718,7 +2278,7 @@ export function seite(renderer, SEQ, opt = {}) {
   // Prüfhilfe (nur Entwurf): Zustände ohne Atem setzen, Lesestellen und Abschnitte als p
   const api = {
     THREE, scene, camera, frameFrac, readingPose, stateAt, poseOf, bOf, ensure,
-    labelAt: pp => { const st = stateAt(pp), I = INST[st.i]; if (st.kind === "z") return "Übersicht"; if (st.kind === "b" && I.cfg.labels) { ensure(I.idx); let lb = I.cfg.label; for (const L of I.cfg.labels) { const ki = typeof L.ki === "function" ? L.ki(I.def) : L.ki, kk = I.def.keys[ki]; const an = kk && I.tl && I.tl.an.find(q => q.ki === ki); if (an && pp >= (I.body.v0 + an.h0) / TOTAL) lb = L.label; } return lb; } return I.cfg.label; },
+    labelAt: pp => { const st = stateAt(pp), I = INST[st.i]; if (st.kind === "b" && I.cfg.labels) { ensure(I.idx); let lb = I.cfg.label; for (const L of I.cfg.labels) { const ki = typeof L.ki === "function" ? L.ki(I.def) : L.ki, kk = I.def.keys[ki]; const an = kk && I.tl && I.tl.an.find(q => q.ki === ki); if (an && pp >= (I.body.v0 + an.h0) / TOTAL) lb = L.label; } return lb; } return I.cfg.label; },
     inst: () => INST, segs: () => SEGS, total: () => TOTAL, anchors: () => ANCH.map(a => ({ name: a.name, p: anchorP(a) })),
     setP(v) { jumpTo(v); },
     // Zustand bei p ohne Atem anwenden (für Rechnungen), liefert den Zustand
@@ -2737,12 +2297,13 @@ export function seite(renderer, SEQ, opt = {}) {
     camTgt: () => _t,
     route: i => { const I = INST[i]; ensure(i); if (!I.route) return null; const R = I.route; return { pts: R.pts.map(p => [p.x, p.z]), len: R.len, st: (R.st || []).map(o => ({ p: o.p, s: o.s, d: o.d, how: o.how, c: o.stop.C.toArray() })), nodes: (R.nodes || []).map(n => n.p), obs: (R.obs || []).map(b => [b.min.x, b.max.x, b.min.z, b.max.z, b.max.y]), cell: I.cell, disc: I.disc, inL: I.inL, outL: I.outL, content: I.content, minR: R.minR.r, minAt: [R.pts[R.minR.at] ? R.pts[R.minR.at].x : 0, R.pts[R.minR.at] ? R.pts[R.minR.at].z : 0], tl: { T: I.tl.T, V0: I.tl.V0, Tpre: I.tl.Tpre, tDot0: I.tl.tDot0, bIn: I.tl.bIn, an: I.tl.an.map(a => ({ kind: a.kind, ki: a.ki, s: a.s, h0: a.h0, h1: a.h1, b: a.b })) } }; },
     chunk: i => CHUNKS[i] ? CHUNKS[i] : null,
-    lay: () => { const L = layoutOf(); return { isl: L.isl.map(q => ({ C: q.C.toArray(), yaw: q.yaw, R: q.R, door: q.door, E: q.E.toArray(), X: q.X.toArray() })), rivers: L.rivers.map(r => r ? r.len : 0), fin: L.fin.len, mark: { D: L.mark.D.toArray(), Wm: L.mark.Wm } }; },
+    free(sceneName, camLocal, tgtLocal) { if (!sceneName) { FREE = null; return; } const I = INST.find(q => q.name === sceneName); FREE = { cam: V(...camLocal).applyMatrix4(I.M4), tgt: V(...tgtLocal).applyMatrix4(I.M4) }; },
+    dot: v => { const D = V(), d = dotAt(clamp(v, 0, TOTAL), D); return d ? { p: D.toArray(), vis: d.vis, kind: d.kind } : null; },
+    lay: () => { const L = layoutOf(); return { isl: L.isl.map(q => ({ C: q.C.toArray(), yaw: q.yaw, R: q.R, door: q.door, E: q.E.toArray(), X: q.X.toArray() })), rivers: L.rivers.map(r => r ? r.len : 0) }; },
     // Anordnung und Karte (Prüfung): Bahn, Parzellen, Tisch, Kartenstellung, Segment der Karte
     layout: () => INST.map(I => ({ name: I.name, rot: Math.round(I.rot * 180 / PI), O: I.O.toArray(), fp: I.fp, cell: I.cell, content: I.content })),
     cards: () => INST.map(I => { const c = cardCorners(I); return [Math.min(...c.map(v => v.x)), Math.max(...c.map(v => v.x)), Math.min(...c.map(v => v.z)), Math.max(...c.map(v => v.z))]; }),
-    table: () => tableRect(), mapPose: () => { ensure(INST.length - 1); return mapPose(); }, zseg: () => ZSEG, mAt: pp => mNow(stateAt(pp)),
-    openMap(v) { Muser = v ? 1 : 0; Mextra = Muser; }
+    table: () => tableRect()
   };
   window.__seite = api;
   return api;
