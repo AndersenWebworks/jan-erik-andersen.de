@@ -1,0 +1,10 @@
+import fs from "node:fs"; import path from "node:path"; import { OUT } from "./seite-anbindung.mjs";
+const [s, m = "d"] = process.argv.slice(2); const j = JSON.parse(fs.readFileSync(path.join(OUT, `messung-${s}-${m}.json`)));
+const e = j.M, O = [e[12], e[13], e[14]];
+const loc = P => { const w = [P[0] - O[0], P[1] - O[1], P[2] - O[2]]; return [e[0] * w[0] + e[1] * w[1] + e[2] * w[2], e[4] * w[0] + e[5] * w[1] + e[6] * w[2], e[8] * w[0] + e[9] * w[1] + e[10] * w[2]]; };
+const r = v => v.map(x => +x.toFixed(2));
+console.log("yaw", j.yaw, "rot", j.rot, "v", j.v0, j.v1);
+console.log("stops", j.stops.map(s => `k${s.ki} u${s.u0.toFixed(3)}-${s.u1.toFixed(3)}`).join("  "));
+const bx = j.boxes.map(b => { const cs = []; for (const x of [b.min[0], b.max[0]]) for (const y of [b.min[1], b.max[1]]) for (const z of [b.min[2], b.max[2]]) cs.push(loc([x, y, z])); const mn = [0, 1, 2].map(i => Math.min(...cs.map(c => c[i]))), mx = [0, 1, 2].map(i => Math.max(...cs.map(c => c[i]))); return { mn, mx, vol: (mx[0] - mn[0]) * (mx[1] - mn[1]) * (mx[2] - mn[2]) }; });
+bx.sort((a, b) => b.vol - a.vol); bx.forEach((b, i) => console.log("box", i, r(b.mn), r(b.mx)));
+console.log("dot lokal (u:x,y,z):"); j.dot.filter((_, i) => i % 6 === 0).forEach(d => d.p && console.log(d.u.toFixed(2), r(loc(d.p)), d.vis));

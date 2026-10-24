@@ -1,3 +1,4 @@
+import { ROUTEN } from "./kamera/routen.js";
 // Stationstabelle der Seite (Kamera-Umbau 23.10.2026): alle Zahlen, die Bahn, Inseln, Punkt und Kamera bestimmen, an einer Stelle.
 // Eine Station verschieben = eine Zahl hier ändern. kern.js baut daraus die eine Bahn (Szenenläufe und Fluss), die Lage der Inseln (Karte) und die Spur des Kamera-Rigs.
 //
@@ -24,7 +25,7 @@ export const RIG = {
 //   view   Rig-Werte in der Insel (überschreibt RIG.follow), faden: { way: [[x, z, k, Gewicht]], free: [[x0, x1, z0, z1]], noGuide }
 //   stops  je Lesestelle (Nummer in der Szene ab 1): near [x, z] Wunschlage des Punktes (Umkreis nearR, sonst 1,7 bzw. 2,6 hochkant), at [x, z] feste Station, hold Haltezeit (vh), pose: Werte der Lesestellung (px, tilt, sx, sy, yaw …)
 //   Werte mit { d, n } gelten je Breitbild bzw. hochkant.
-export const STATIONEN = {
+const STATIONEN_BASIS = {
   // Eröffnung: Tablett (Lesestelle 3) steil von oben, damit die liegende Schrift kaum schräg steht
   // Eröffnung: vom Tablett (steil von oben) langer, weicher Wechsel zur Verfolgung (rampOut, vh)
   eroeffnung: { len: { d: 1650, n: 1650 }, rampOut: 520, R: 18, door: { d: [0, 11.2], n: [0, 9.6] }, stops: { 3: { pose: { pitch: 83, npitch: 83, px: 28, pxN: 22 } } } },
@@ -68,3 +69,12 @@ export const STATIONEN = {
     stops: { 1: { near: [12.4, 6.8] }, 2: { near: [13.4, 3.6] }, 3: { near: [17.0, 3.6] }, 4: { near: [20.6, 3.6] } },
     faden: { clear: .5, lane: false, way: [[11.6, 5.0, 1, 2], [24.6, 2.0, 4, 2], [24.6, -9.0, 4, 2]] } }
 };
+
+// Route aus den Beats (kamera/routen.js, erzeugt von werkzeug/kamera-bauen.mjs) über die Grundwerte mischen: Lesestellen-Wünsche (stops) je Nummer, faden flach (way ersetzt).
+function mischen(a = {}, b = {}) {
+  const r = { ...a, ...b };
+  if (b.stops) { r.stops = { ...(a.stops || {}) }; for (const k of Object.keys(b.stops)) r.stops[k] = { ...(r.stops[k] || {}), ...b.stops[k] }; }
+  if (b.faden && typeof a.faden !== "function") r.faden = { ...(a.faden || {}), ...b.faden };
+  return r;
+}
+export const STATIONEN = Object.fromEntries([...new Set([...Object.keys(STATIONEN_BASIS), ...Object.keys(ROUTEN)])].map(k => [k, mischen(STATIONEN_BASIS[k], ROUTEN[k])]));
